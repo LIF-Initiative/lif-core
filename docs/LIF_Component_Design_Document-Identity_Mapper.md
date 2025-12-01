@@ -30,12 +30,6 @@ Version 1.0.0
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Identity Mapper Service](#identity-mapper-service)
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Design Requirements](#design-requirements-1)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Performance](#performance-1)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Concurrency](#concurrency-1)
-
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Dependencies](#dependencies)
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Exceptions and Errors](#exceptions-and-errors)
@@ -46,101 +40,7 @@ Version 1.0.0
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Example Usage](#example-usage)
 
-[Detailed Design](#detailed-design)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Implementation Model](#implementation-model)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Tools and Technologies](#tools-and-technologies)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Implementation Requirements](#implementation-requirements)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Data Storage](#data-storage)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[State](#state)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Concurrency](#concurrency-2)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Sync/Async](#syncasync)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[External Services](#external-services)
-
-[Deployment Design](#deployment-design)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Deployment Environment](#deployment-environment)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Deployment Model](#deployment-model)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Deployment Requirements](#deployment-requirements)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Dependencies](#dependencies-1)
-
-[Motivation](#motivation)
-
-[Design Proposal](#design-proposal)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Key Concept](#key-concept)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Functional Requirements](#functional-requirements)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Interaction with Other LIF Components](#interaction-with-other-lif-components)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Design Assumptions](#design-assumptions)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Design Requirements](#design-requirements)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Performance](#performance)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Concurrency](#concurrency)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[High Level Design](#high-level-design)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Identity Mapper Storage](#identity-mapper-storage)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Identity Mapper Service](#identity-mapper-service)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Design Requirements](#design-requirements-1)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Performance](#performance-1)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Concurrency](#concurrency-1)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Dependencies](#dependencies)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Exceptions and Errors](#exceptions-and-errors)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Data validation exception](#data-validation-exception)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Mapping exception](#_Toc198241137)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Example Usage](#example-usage)
-
-[Detailed Design](#detailed-design)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Implementation Model](#implementation-model)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Tools and Technologies](#tools-and-technologies)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Implementation Requirements](#implementation-requirements)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Data Storage](#data-storage)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[State](#state)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Concurrency](#concurrency-2)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Sync/Async](#syncasync)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[External Services](#external-services)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Deployment Design](#deployment-design)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Deployment Environment](#deployment-environment)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Deployment Model](#deployment-model)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Deployment Requirements](#deployment-requirements)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Dependencies](#dependencies-1)
+[Possible Future Roadmap Items](#possible-future-roadmap-items)
 
 # Overview
 
@@ -158,7 +58,7 @@ The **Identity Mapper** component addresses this need by resolving person identi
 
 The **Identity Mapper** is a standalone component that maps person identifiers of two organizations. The **Identity Mapper** is intended to be populated by an internal system having knowledge of the relationship between identifiers used by two organizations. It is invoked by the **Query Planner** when there is a need to translate an external person identifier into an internal identifier.
 
-![](media/image_identityMapper_1.png)
+![](media/image_identityMapper_4.png)
 
 *Image 1: A simple diagram depicting how the Identity Mapper functions at a high-level*
 
@@ -173,7 +73,7 @@ This component has the following specific requirements:
     via an API
 
 3.  Ability to populate identity mapping database through a bulk upload
-    process
+    process (Possible Future Roadmap Item)
 
 ## Interaction with Other LIF Components
 
@@ -197,7 +97,7 @@ This component primarily interacts with the **Query Planner**, which invokes it 
 
 ### Performance
 
-The component should provide consistent performance irrespective of the volume of the requests and number of identity mapping records.
+(Possible Future Roadmap Item) The component should provide consistent performance irrespective of the volume of the requests and number of identity mapping records.
 
 ### Concurrency
 
@@ -207,7 +107,7 @@ Concurrent endpoint requests are addressed through parallel threads implemented 
 
 The **Identity Mapper** is a standalone component that enables the conversion of a person identifier from an external organization to an internal identifier. As depicted below, the proposed design envisions Identity Mapper storage, along with an Identity Mapper service that provides CRUD operation endpoints.
 
-![](media/image_identityMapper_2.png)
+![](media/image_identityMapper_5.png)
 
 *Image 2: Simple diagram depicting the relationship between the ID Mapper Service and ID Mapper Storage*
 
@@ -233,29 +133,29 @@ A uniqueness constraint should be enforced on the combination of LIF Organizatio
 
 The following methods should be implemented in the Identity Mapper Service to save, retrieve, and delete mappings:
 
-1.  **Save Mappings:** POST Organizations/{Org id}/Persons/{Person id}/mappings
+1.  **Save Mappings:** POST organizations/{org_id}/persons/{person_id}/mappings
 
-2.  **List Mappings:** GET Organizations/{Org id}/Persons/{Person id}/
+2.  **List Mappings:** GET organizations/{org_id}/persons/{person_id}/mappings
 
-3.  **Delete Mappings:** DELETE Organizations/{Org id}/Persons/{Person id}/mappings/{mapping id}
+3.  **Delete Mappings:** DELETE organizations/{org_id}/persons/{person_id}/mappings/{mapping_id}
 
 The diagrams in the following section illustrate the internal steps the service should implement to enable the above methods.
 
 1.  **Save Mappings:** A collection of mappings should be passed to the method for saving the mappings in the storage.
 
-![](media/image_identityMapper_3.pdf)
+![](media/image_identityMapper_3.png)
 
 *Image 3: Workflow diagram for the Save Mappings method*
 
 2.  **List Mappings:** The workflow below illustrates the steps the service should implement to list the mappings for a given organization and person.
 
-![](media/image_identityMapper_4.png)
+![](media/image_identityMapper_2.png)
 
 *Image 4: Workflow diagram for the List Mappings method*
 
 3.  **Delete Mappings:** The workflow below illustrates the steps the service should implement to delete the mapping for a given organization and person.
 
-![](media/image_identityMapper_5.png)
+![](media/image_identityMapper_1.png)
 
 *Image 5: Workflow diagram for the Delete Mappings method*
 
@@ -263,7 +163,7 @@ The diagrams in the following section illustrate the internal steps the service 
 
 ### Performance
 
-The component should provide consistent performance irrespective of the volume of the requests and number of identity mapping records.
+(Possible Future Roadmap Item) The component should provide consistent performance irrespective of the volume of the requests and number of identity mapping records.
 
 ### Concurrency
 
@@ -283,54 +183,7 @@ This exception occurs when uniqueness constrains for External and Internal Ident
 
 TBD
 
-# Detailed Design
+## Possible Future Roadmap Items
 
-This component is designed to be implemented as a serverless component that can be scaled on demand.
-
-## Implementation Model
-
-TBD
-
-## Tools and Technologies
-
-The component is implemented using Python.
-
-## Implementation Requirements
-
-### Data Storage
-
-This component stores data in a SQL database.
-
-### State
-
-This component is stateless and does not maintain any information about any run.
-
-### Concurrency
-
-Being a stateless component, it should be able to scale on demand to address multiple concurrent requests.
-
-### Sync/Async
-
-This component operates in sync mode and the client waits for it to return the result before performing any other activity.
-
-### External Services
-
-This component does not call any external services.
-
-# Deployment Design
-
-## Deployment Environment
-
-The component can be deployed in the cloud using serverless infrastructure such as AWS Step Function or Azure Function. In the on-prem deployment environment, the component can be deployed in a docker container running the data pipeline.
-
-## Deployment Model
-
-TBD
-
-## Deployment Requirements
-
-TBD
-
-## Dependencies
-
-TBD 
+- [Issue #12: Add Identity Mapper Support for Bulk Upload Process](https://github.com/LIF-Initiative/lif-core/issues/12)
+- [Issue #13: Investigate and Improve Identity Mapper Performance](https://github.com/LIF-Initiative/lif-core/issues/13)
