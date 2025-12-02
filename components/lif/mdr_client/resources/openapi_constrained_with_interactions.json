@@ -22,13 +22,40 @@
 					"CourseLearningExperience": {
 						"type": "array",
 						"required": [
+							"identifier",
 							"informationSourceId",
-							"informationSourceOrganization"
+							"informationSourceOrganization",
+							"name"
 						],
 						"use_recommendations": "",
 						"x-mutable": false,
 						"x-queryable": false,
 						"properties": {
+							"identifier": {
+								"Id": 556,
+								"Name": "identifier",
+								"UniqueName": "Person.CourseLearningExperience.identifier",
+								"Description": null,
+								"UseConsiderations": null,
+								"DataModelId": 1,
+								"DataType": "string",
+								"ValueSetId": null,
+								"Required": "Yes",
+								"Array": "No",
+								"SourceModel": null,
+								"Notes": null,
+								"CreationDate": null,
+								"ActivationDate": null,
+								"DeprecationDate": null,
+								"Contributor": null,
+								"ContributorOrganization": "LIF",
+								"Extension": false,
+								"ExtensionNotes": null,
+								"Example": null,
+								"Common": null,
+								"x-mutable": false,
+								"x-queryable": false
+							},
 							"startDate": {
 								"Id": 561,
 								"Name": "startDate",
@@ -154,12 +181,38 @@
 								"x-mutable": false,
 								"x-queryable": false
 							},
+							"name": {
+								"Id": 1921,
+								"Name": "name",
+								"UniqueName": "CourseLearningExperience.name",
+								"Description": null,
+								"UseConsiderations": null,
+								"DataModelId": 1,
+								"DataType": "string",
+								"ValueSetId": null,
+								"Required": "Yes",
+								"Array": "No",
+								"SourceModel": null,
+								"Notes": null,
+								"CreationDate": null,
+								"ActivationDate": "2025-12-01T17:17:00+00:00",
+								"DeprecationDate": null,
+								"Contributor": "MDRUser",
+								"ContributorOrganization": "LIF",
+								"Extension": false,
+								"ExtensionNotes": null,
+								"Example": null,
+								"Common": null,
+								"x-mutable": false,
+								"x-queryable": false
+							},
 							"assertedByRefOrganization": {
 								"type": "object",
 								"required": [
 									"name",
 									"informationSourceId",
-									"informationSourceOrganization"
+									"informationSourceOrganization",
+									"identifier"
 								],
 								"use_recommendations": "",
 								"x-mutable": false,
@@ -237,6 +290,31 @@
 										"ExtensionNotes": null,
 										"Example": null,
 										"Common": true,
+										"x-mutable": false,
+										"x-queryable": false
+									},
+									"identifier": {
+										"Id": 1931,
+										"Name": "identifier",
+										"UniqueName": "Organization.identifier",
+										"Description": null,
+										"UseConsiderations": null,
+										"DataModelId": 1,
+										"DataType": "string",
+										"ValueSetId": null,
+										"Required": "Yes",
+										"Array": "No",
+										"SourceModel": null,
+										"Notes": null,
+										"CreationDate": null,
+										"ActivationDate": "2025-12-01T22:18:00+00:00",
+										"DeprecationDate": null,
+										"Contributor": "MDRUser",
+										"ContributorOrganization": "LIF",
+										"Extension": false,
+										"ExtensionNotes": null,
+										"Example": null,
+										"Common": null,
 										"x-mutable": false,
 										"x-queryable": false
 									}
@@ -361,7 +439,8 @@
 								"required": [
 									"identifier",
 									"informationSourceId",
-									"informationSourceOrganization"
+									"informationSourceOrganization",
+									"name"
 								],
 								"use_recommendations": "",
 								"x-mutable": false,
@@ -441,6 +520,31 @@
 										"Common": true,
 										"x-mutable": false,
 										"x-queryable": false
+									},
+									"name": {
+										"Id": 1919,
+										"Name": "name",
+										"UniqueName": "CredentialAward.name",
+										"Description": null,
+										"UseConsiderations": null,
+										"DataModelId": 1,
+										"DataType": "string",
+										"ValueSetId": null,
+										"Required": "Yes",
+										"Array": "No",
+										"SourceModel": null,
+										"Notes": null,
+										"CreationDate": null,
+										"ActivationDate": "2025-12-01T17:12:00+00:00",
+										"DeprecationDate": null,
+										"Contributor": "MDRUser",
+										"ContributorOrganization": "LIF",
+										"Extension": false,
+										"ExtensionNotes": null,
+										"Example": null,
+										"Common": null,
+										"x-mutable": false,
+										"x-queryable": false
 									}
 								}
 							},
@@ -459,13 +563,40 @@
 							"RefCourseLearningExperience": {
 								"type": "object",
 								"required": [
+									"identifier",
 									"informationSourceId",
-									"informationSourceOrganization"
+									"informationSourceOrganization",
+									"name"
 								],
 								"use_recommendations": "",
 								"x-mutable": false,
 								"x-queryable": false,
 								"properties": {
+									"identifier": {
+										"Id": 556,
+										"Name": "identifier",
+										"UniqueName": "Person.CourseLearningExperience.identifier",
+										"Description": null,
+										"UseConsiderations": null,
+										"DataModelId": 1,
+										"DataType": "string",
+										"ValueSetId": null,
+										"Required": "Yes",
+										"Array": "No",
+										"SourceModel": null,
+										"Notes": null,
+										"CreationDate": null,
+										"ActivationDate": null,
+										"DeprecationDate": null,
+										"Contributor": null,
+										"ContributorOrganization": "LIF",
+										"Extension": false,
+										"ExtensionNotes": null,
+										"Example": null,
+										"Common": null,
+										"x-mutable": false,
+										"x-queryable": false
+									},
 									"informationSourceId": {
 										"Id": 1898,
 										"Name": "informationSourceId",
@@ -515,12 +646,38 @@
 										"Common": true,
 										"x-mutable": false,
 										"x-queryable": false
+									},
+									"name": {
+										"Id": 1921,
+										"Name": "name",
+										"UniqueName": "CourseLearningExperience.name",
+										"Description": null,
+										"UseConsiderations": null,
+										"DataModelId": 1,
+										"DataType": "string",
+										"ValueSetId": null,
+										"Required": "Yes",
+										"Array": "No",
+										"SourceModel": null,
+										"Notes": null,
+										"CreationDate": null,
+										"ActivationDate": "2025-12-01T17:17:00+00:00",
+										"DeprecationDate": null,
+										"Contributor": "MDRUser",
+										"ContributorOrganization": "LIF",
+										"Extension": false,
+										"ExtensionNotes": null,
+										"Example": null,
+										"Common": null,
+										"x-mutable": false,
+										"x-queryable": false
 									}
 								}
 							},
 							"RefEmploymentLearningExperience": {
 								"type": "object",
 								"required": [
+									"identifier",
 									"name",
 									"informationSourceId",
 									"informationSourceOrganization"
@@ -529,6 +686,31 @@
 								"x-mutable": false,
 								"x-queryable": false,
 								"properties": {
+									"identifier": {
+										"Id": 1132,
+										"Name": "identifier",
+										"UniqueName": "Person.EmploymentLearningExperience.identifier",
+										"Description": "Unique identifier for this resource.",
+										"UseConsiderations": null,
+										"DataModelId": 1,
+										"DataType": "string",
+										"ValueSetId": null,
+										"Required": "Yes",
+										"Array": "No",
+										"SourceModel": null,
+										"Notes": "unique identifier for an employment class",
+										"CreationDate": null,
+										"ActivationDate": null,
+										"DeprecationDate": null,
+										"Contributor": null,
+										"ContributorOrganization": "LIF",
+										"Extension": false,
+										"ExtensionNotes": null,
+										"Example": null,
+										"Common": null,
+										"x-mutable": false,
+										"x-queryable": false
+									},
 									"name": {
 										"Id": 1133,
 										"Name": "name",
@@ -611,7 +793,8 @@
 								"required": [
 									"name",
 									"informationSourceId",
-									"informationSourceOrganization"
+									"informationSourceOrganization",
+									"identifier"
 								],
 								"use_recommendations": "",
 								"x-mutable": false,
@@ -691,12 +874,38 @@
 										"Common": true,
 										"x-mutable": false,
 										"x-queryable": false
+									},
+									"identifier": {
+										"Id": 1931,
+										"Name": "identifier",
+										"UniqueName": "Organization.identifier",
+										"Description": null,
+										"UseConsiderations": null,
+										"DataModelId": 1,
+										"DataType": "string",
+										"ValueSetId": null,
+										"Required": "Yes",
+										"Array": "No",
+										"SourceModel": null,
+										"Notes": null,
+										"CreationDate": null,
+										"ActivationDate": "2025-12-01T22:18:00+00:00",
+										"DeprecationDate": null,
+										"Contributor": "MDRUser",
+										"ContributorOrganization": "LIF",
+										"Extension": false,
+										"ExtensionNotes": null,
+										"Example": null,
+										"Common": null,
+										"x-mutable": false,
+										"x-queryable": false
 									}
 								}
 							},
 							"RefProficiency": {
 								"type": "object",
 								"required": [
+									"identifier",
 									"name",
 									"informationSourceId",
 									"informationSourceOrganization"
@@ -705,6 +914,31 @@
 								"x-mutable": false,
 								"x-queryable": false,
 								"properties": {
+									"identifier": {
+										"Id": 296,
+										"Name": "identifier",
+										"UniqueName": "Person.Proficiency.identifier",
+										"Description": null,
+										"UseConsiderations": "No change",
+										"DataModelId": 1,
+										"DataType": "string",
+										"ValueSetId": null,
+										"Required": "Yes",
+										"Array": "No",
+										"SourceModel": null,
+										"Notes": null,
+										"CreationDate": null,
+										"ActivationDate": "2025-11-26T22:51:00+00:00",
+										"DeprecationDate": null,
+										"Contributor": null,
+										"ContributorOrganization": "LIF",
+										"Extension": false,
+										"ExtensionNotes": null,
+										"Example": null,
+										"Common": null,
+										"x-mutable": false,
+										"x-queryable": false
+									},
 									"name": {
 										"Id": 298,
 										"Name": "name",
@@ -789,7 +1023,8 @@
 						"required": [
 							"identifier",
 							"informationSourceId",
-							"informationSourceOrganization"
+							"informationSourceOrganization",
+							"name"
 						],
 						"use_recommendations": "",
 						"x-mutable": false,
@@ -1320,12 +1555,38 @@
 								"x-mutable": false,
 								"x-queryable": false
 							},
+							"name": {
+								"Id": 1919,
+								"Name": "name",
+								"UniqueName": "CredentialAward.name",
+								"Description": null,
+								"UseConsiderations": null,
+								"DataModelId": 1,
+								"DataType": "string",
+								"ValueSetId": null,
+								"Required": "Yes",
+								"Array": "No",
+								"SourceModel": null,
+								"Notes": null,
+								"CreationDate": null,
+								"ActivationDate": "2025-12-01T17:12:00+00:00",
+								"DeprecationDate": null,
+								"Contributor": "MDRUser",
+								"ContributorOrganization": "LIF",
+								"Extension": false,
+								"ExtensionNotes": null,
+								"Example": null,
+								"Common": null,
+								"x-mutable": false,
+								"x-queryable": false
+							},
 							"Identity": {
 								"type": "array",
 								"required": [
 									"identityHash",
 									"informationSourceId",
-									"informationSourceOrganization"
+									"informationSourceOrganization",
+									"identifier"
 								],
 								"use_recommendations": "",
 								"x-mutable": false,
@@ -1505,6 +1766,31 @@
 										"Common": true,
 										"x-mutable": false,
 										"x-queryable": false
+									},
+									"identifier": {
+										"Id": 1935,
+										"Name": "identifier",
+										"UniqueName": "Identity.identifier",
+										"Description": null,
+										"UseConsiderations": null,
+										"DataModelId": 1,
+										"DataType": "string",
+										"ValueSetId": null,
+										"Required": "Yes",
+										"Array": "No",
+										"SourceModel": null,
+										"Notes": null,
+										"CreationDate": null,
+										"ActivationDate": "2025-12-01T22:22:00+00:00",
+										"DeprecationDate": null,
+										"Contributor": "MDRUser",
+										"ContributorOrganization": "LIF",
+										"Extension": false,
+										"ExtensionNotes": null,
+										"Example": null,
+										"Common": null,
+										"x-mutable": false,
+										"x-queryable": false
 									}
 								}
 							},
@@ -1627,7 +1913,8 @@
 								"required": [
 									"name",
 									"informationSourceId",
-									"informationSourceOrganization"
+									"informationSourceOrganization",
+									"identifier"
 								],
 								"use_recommendations": "",
 								"x-mutable": false,
@@ -1707,6 +1994,31 @@
 										"Common": true,
 										"x-mutable": false,
 										"x-queryable": false
+									},
+									"identifier": {
+										"Id": 1931,
+										"Name": "identifier",
+										"UniqueName": "Organization.identifier",
+										"Description": null,
+										"UseConsiderations": null,
+										"DataModelId": 1,
+										"DataType": "string",
+										"ValueSetId": null,
+										"Required": "Yes",
+										"Array": "No",
+										"SourceModel": null,
+										"Notes": null,
+										"CreationDate": null,
+										"ActivationDate": "2025-12-01T22:18:00+00:00",
+										"DeprecationDate": null,
+										"Contributor": "MDRUser",
+										"ContributorOrganization": "LIF",
+										"Extension": false,
+										"ExtensionNotes": null,
+										"Example": null,
+										"Common": null,
+										"x-mutable": false,
+										"x-queryable": false
 									}
 								}
 							}
@@ -1715,6 +2027,7 @@
 					"EmploymentLearningExperience": {
 						"type": "array",
 						"required": [
+							"identifier",
 							"name",
 							"informationSourceId",
 							"informationSourceOrganization"
@@ -1723,6 +2036,31 @@
 						"x-mutable": false,
 						"x-queryable": false,
 						"properties": {
+							"identifier": {
+								"Id": 1132,
+								"Name": "identifier",
+								"UniqueName": "Person.EmploymentLearningExperience.identifier",
+								"Description": "Unique identifier for this resource.",
+								"UseConsiderations": null,
+								"DataModelId": 1,
+								"DataType": "string",
+								"ValueSetId": null,
+								"Required": "Yes",
+								"Array": "No",
+								"SourceModel": null,
+								"Notes": "unique identifier for an employment class",
+								"CreationDate": null,
+								"ActivationDate": null,
+								"DeprecationDate": null,
+								"Contributor": null,
+								"ContributorOrganization": "LIF",
+								"Extension": false,
+								"ExtensionNotes": null,
+								"Example": null,
+								"Common": null,
+								"x-mutable": false,
+								"x-queryable": false
+							},
 							"name": {
 								"Id": 1133,
 								"Name": "name",
@@ -1876,13 +2214,40 @@
 							"RefPosition": {
 								"type": "object",
 								"required": [
+									"name",
 									"informationSourceId",
-									"informationSourceOrganization"
+									"informationSourceOrganization",
+									"identifier"
 								],
 								"use_recommendations": "",
 								"x-mutable": false,
 								"x-queryable": false,
 								"properties": {
+									"name": {
+										"Id": 1102,
+										"Name": "name",
+										"UniqueName": "Position.name",
+										"Description": "The descriptive name of a person's position.",
+										"UseConsiderations": null,
+										"DataModelId": 1,
+										"DataType": "string",
+										"ValueSetId": null,
+										"Required": "Yes",
+										"Array": "No",
+										"SourceModel": "CEDS",
+										"Notes": "this can be position specific or \"current\" on the top level class?",
+										"CreationDate": null,
+										"ActivationDate": null,
+										"DeprecationDate": null,
+										"Contributor": null,
+										"ContributorOrganization": "LIF",
+										"Extension": false,
+										"ExtensionNotes": null,
+										"Example": null,
+										"Common": null,
+										"x-mutable": false,
+										"x-queryable": false
+									},
 									"informationSourceId": {
 										"Id": 1898,
 										"Name": "informationSourceId",
@@ -1932,6 +2297,31 @@
 										"Common": true,
 										"x-mutable": false,
 										"x-queryable": false
+									},
+									"identifier": {
+										"Id": 1939,
+										"Name": "identifier",
+										"UniqueName": "Position.identifier",
+										"Description": null,
+										"UseConsiderations": null,
+										"DataModelId": 1,
+										"DataType": "string",
+										"ValueSetId": null,
+										"Required": "Yes",
+										"Array": "No",
+										"SourceModel": null,
+										"Notes": null,
+										"CreationDate": null,
+										"ActivationDate": "2025-12-01T22:25:00+00:00",
+										"DeprecationDate": null,
+										"Contributor": "MDRUser",
+										"ContributorOrganization": "LIF",
+										"Extension": false,
+										"ExtensionNotes": null,
+										"Example": null,
+										"Common": null,
+										"x-mutable": false,
+										"x-queryable": false
 									}
 								}
 							},
@@ -1952,7 +2342,8 @@
 								"required": [
 									"name",
 									"informationSourceId",
-									"informationSourceOrganization"
+									"informationSourceOrganization",
+									"identifier"
 								],
 								"use_recommendations": "",
 								"x-mutable": false,
@@ -2032,12 +2423,38 @@
 										"Common": true,
 										"x-mutable": false,
 										"x-queryable": false
+									},
+									"identifier": {
+										"Id": 1931,
+										"Name": "identifier",
+										"UniqueName": "Organization.identifier",
+										"Description": null,
+										"UseConsiderations": null,
+										"DataModelId": 1,
+										"DataType": "string",
+										"ValueSetId": null,
+										"Required": "Yes",
+										"Array": "No",
+										"SourceModel": null,
+										"Notes": null,
+										"CreationDate": null,
+										"ActivationDate": "2025-12-01T22:18:00+00:00",
+										"DeprecationDate": null,
+										"Contributor": "MDRUser",
+										"ContributorOrganization": "LIF",
+										"Extension": false,
+										"ExtensionNotes": null,
+										"Example": null,
+										"Common": null,
+										"x-mutable": false,
+										"x-queryable": false
 									}
 								}
 							},
 							"RefProficiency": {
 								"type": "object",
 								"required": [
+									"identifier",
 									"name",
 									"informationSourceId",
 									"informationSourceOrganization"
@@ -2046,6 +2463,31 @@
 								"x-mutable": false,
 								"x-queryable": false,
 								"properties": {
+									"identifier": {
+										"Id": 296,
+										"Name": "identifier",
+										"UniqueName": "Person.Proficiency.identifier",
+										"Description": null,
+										"UseConsiderations": "No change",
+										"DataModelId": 1,
+										"DataType": "string",
+										"ValueSetId": null,
+										"Required": "Yes",
+										"Array": "No",
+										"SourceModel": null,
+										"Notes": null,
+										"CreationDate": null,
+										"ActivationDate": "2025-11-26T22:51:00+00:00",
+										"DeprecationDate": null,
+										"Contributor": null,
+										"ContributorOrganization": "LIF",
+										"Extension": false,
+										"ExtensionNotes": null,
+										"Example": null,
+										"Common": null,
+										"x-mutable": false,
+										"x-queryable": false
+									},
 									"name": {
 										"Id": 298,
 										"Name": "name",
@@ -2126,13 +2568,40 @@
 							"RefCourseLearningExperience": {
 								"type": "object",
 								"required": [
+									"identifier",
 									"informationSourceId",
-									"informationSourceOrganization"
+									"informationSourceOrganization",
+									"name"
 								],
 								"use_recommendations": "",
 								"x-mutable": false,
 								"x-queryable": false,
 								"properties": {
+									"identifier": {
+										"Id": 556,
+										"Name": "identifier",
+										"UniqueName": "Person.CourseLearningExperience.identifier",
+										"Description": null,
+										"UseConsiderations": null,
+										"DataModelId": 1,
+										"DataType": "string",
+										"ValueSetId": null,
+										"Required": "Yes",
+										"Array": "No",
+										"SourceModel": null,
+										"Notes": null,
+										"CreationDate": null,
+										"ActivationDate": null,
+										"DeprecationDate": null,
+										"Contributor": null,
+										"ContributorOrganization": "LIF",
+										"Extension": false,
+										"ExtensionNotes": null,
+										"Example": null,
+										"Common": null,
+										"x-mutable": false,
+										"x-queryable": false
+									},
 									"informationSourceId": {
 										"Id": 1898,
 										"Name": "informationSourceId",
@@ -2182,6 +2651,31 @@
 										"Common": true,
 										"x-mutable": false,
 										"x-queryable": false
+									},
+									"name": {
+										"Id": 1921,
+										"Name": "name",
+										"UniqueName": "CourseLearningExperience.name",
+										"Description": null,
+										"UseConsiderations": null,
+										"DataModelId": 1,
+										"DataType": "string",
+										"ValueSetId": null,
+										"Required": "Yes",
+										"Array": "No",
+										"SourceModel": null,
+										"Notes": null,
+										"CreationDate": null,
+										"ActivationDate": "2025-12-01T17:17:00+00:00",
+										"DeprecationDate": null,
+										"Contributor": "MDRUser",
+										"ContributorOrganization": "LIF",
+										"Extension": false,
+										"ExtensionNotes": null,
+										"Example": null,
+										"Common": null,
+										"x-mutable": false,
+										"x-queryable": false
 									}
 								}
 							},
@@ -2190,7 +2684,8 @@
 								"required": [
 									"name",
 									"informationSourceId",
-									"informationSourceOrganization"
+									"informationSourceOrganization",
+									"identifier"
 								],
 								"use_recommendations": "",
 								"x-mutable": false,
@@ -2270,6 +2765,31 @@
 										"Common": true,
 										"x-mutable": false,
 										"x-queryable": false
+									},
+									"identifier": {
+										"Id": 1931,
+										"Name": "identifier",
+										"UniqueName": "Organization.identifier",
+										"Description": null,
+										"UseConsiderations": null,
+										"DataModelId": 1,
+										"DataType": "string",
+										"ValueSetId": null,
+										"Required": "Yes",
+										"Array": "No",
+										"SourceModel": null,
+										"Notes": null,
+										"CreationDate": null,
+										"ActivationDate": "2025-12-01T22:18:00+00:00",
+										"DeprecationDate": null,
+										"Contributor": "MDRUser",
+										"ContributorOrganization": "LIF",
+										"Extension": false,
+										"ExtensionNotes": null,
+										"Example": null,
+										"Common": null,
+										"x-mutable": false,
+										"x-queryable": false
 									}
 								}
 							},
@@ -2278,7 +2798,8 @@
 								"required": [
 									"identifier",
 									"informationSourceId",
-									"informationSourceOrganization"
+									"informationSourceOrganization",
+									"name"
 								],
 								"use_recommendations": "",
 								"x-mutable": false,
@@ -2358,6 +2879,31 @@
 										"Common": true,
 										"x-mutable": false,
 										"x-queryable": false
+									},
+									"name": {
+										"Id": 1919,
+										"Name": "name",
+										"UniqueName": "CredentialAward.name",
+										"Description": null,
+										"UseConsiderations": null,
+										"DataModelId": 1,
+										"DataType": "string",
+										"ValueSetId": null,
+										"Required": "Yes",
+										"Array": "No",
+										"SourceModel": null,
+										"Notes": null,
+										"CreationDate": null,
+										"ActivationDate": "2025-12-01T17:12:00+00:00",
+										"DeprecationDate": null,
+										"Contributor": "MDRUser",
+										"ContributorOrganization": "LIF",
+										"Extension": false,
+										"ExtensionNotes": null,
+										"Example": null,
+										"Common": null,
+										"x-mutable": false,
+										"x-queryable": false
 									}
 								}
 							},
@@ -2366,7 +2912,8 @@
 								"required": [
 									"name",
 									"informationSourceId",
-									"informationSourceOrganization"
+									"informationSourceOrganization",
+									"identifier"
 								],
 								"use_recommendations": "",
 								"x-mutable": false,
@@ -2446,12 +2993,38 @@
 										"Common": true,
 										"x-mutable": false,
 										"x-queryable": false
+									},
+									"identifier": {
+										"Id": 1931,
+										"Name": "identifier",
+										"UniqueName": "Organization.identifier",
+										"Description": null,
+										"UseConsiderations": null,
+										"DataModelId": 1,
+										"DataType": "string",
+										"ValueSetId": null,
+										"Required": "Yes",
+										"Array": "No",
+										"SourceModel": null,
+										"Notes": null,
+										"CreationDate": null,
+										"ActivationDate": "2025-12-01T22:18:00+00:00",
+										"DeprecationDate": null,
+										"Contributor": "MDRUser",
+										"ContributorOrganization": "LIF",
+										"Extension": false,
+										"ExtensionNotes": null,
+										"Example": null,
+										"Common": null,
+										"x-mutable": false,
+										"x-queryable": false
 									}
 								}
 							},
 							"RefEmploymentLearningExperience": {
 								"type": "object",
 								"required": [
+									"identifier",
 									"name",
 									"informationSourceId",
 									"informationSourceOrganization"
@@ -2460,6 +3033,31 @@
 								"x-mutable": false,
 								"x-queryable": false,
 								"properties": {
+									"identifier": {
+										"Id": 1132,
+										"Name": "identifier",
+										"UniqueName": "Person.EmploymentLearningExperience.identifier",
+										"Description": "Unique identifier for this resource.",
+										"UseConsiderations": null,
+										"DataModelId": 1,
+										"DataType": "string",
+										"ValueSetId": null,
+										"Required": "Yes",
+										"Array": "No",
+										"SourceModel": null,
+										"Notes": "unique identifier for an employment class",
+										"CreationDate": null,
+										"ActivationDate": null,
+										"DeprecationDate": null,
+										"Contributor": null,
+										"ContributorOrganization": "LIF",
+										"Extension": false,
+										"ExtensionNotes": null,
+										"Example": null,
+										"Common": null,
+										"x-mutable": false,
+										"x-queryable": false
+									},
 									"name": {
 										"Id": 1133,
 										"Name": "name",
@@ -2545,7 +3143,8 @@
 							"firstName",
 							"lastName",
 							"informationSourceId",
-							"informationSourceOrganization"
+							"informationSourceOrganization",
+							"identifier"
 						],
 						"use_recommendations": "In the treatment of a person name by the Learner Information Framework (LIF) and associated technologies, may users of LIF always center the human story of a person's name, how important it is to them, it\u2019s cultural connectedness to people and land, how people traverse multiple ways of \u201cnaming\u201d and the impact of \u201cnaming\u201d on our stories, experiences and the opportunities it may connect (or disconnect) us to/from.   Using and treating data on people's names can raise several equity issues due to the diversity of naming conventions across cultures and ethnicities. Some of these equity issues include:\n1. Many of the data standards from which LIF draws its normative data model, and as to user of LIF, these systems are designed with Western naming conventions in mind, which can marginalize individuals with non-Western names. This bias can lead to inaccuracies in data analysis and decision-making processes. For example, we made recommendations for the separation of \u201cname\u201d and \u201cname type\u201d as well as inclusion of multiple characters, unlimited character length, etc). \n2. The variety of ways the standards treat \u201cperson name\u201d shows limited interoperability between system-standards, which ultimately may lead to multiple records with different ways names are recorded, managed, and/or used. This Inaccurate or incomplete data due to mishandling of names can lead to biased analyses and decision-making, ultimately reinforcing existing disparities in society.\n3. Many of the standards, and the normative model, collapse \u201cname\u201d and \u201cname type\u201d into each other. Given the sensitivities and human implications for name changes, as well as the type of name (e.g., preferred, legal, given/gifted etc), we lean\u2019t into AACRAO report on student identity for recommendations on how learners/students prefer to record and include their names.\n4. Most of the standards systems encourage the standardization of names, which can overlook variations in spelling, pronunciation, and order of names across different cultures. This can result in the erasure of cultural identities and misrepresentation of individuals.\n5. Most of the standards did not include an option for people from indigenous communities to record their Nation Tribe, or their name type as belong to their nation tribe. We leaned into research from the BIA.gov and recommend adding this to the normative model to improve inclusivity and cultural responsiveness to the naming conventions of our first nations peoples.  \n6. Collecting full names without proper consent or understanding of cultural sensitivities can infringe on individuals' privacy rights, especially in contexts where certain names may carry social or political implications. For example, having strict guardrails on when/how \u201clegal name\u201d vs. \u201cpreferred name\u201d is used and who has access to the \n\nFor LIF purposes, our recommendation is that IF used in normative model, only names which have been consented to including/use by LIF, be included, with flexibility for their design and formatting to allow for cultural differences. \n\n\u201cTitle\u201d \u201cSuffix\u201d and \u201cprefix\u201d components of a person\u2019s name are used to provide additional information about a person's name. Using and treating data on people's titles can raise several equity issues.\n1. One argument for the inclusion of titles in normative data models is they may provide contextual information about an individual's identity and social status, and when used correctly, may ensure that individuals are addressed and identified appropriately, respects their social and professional distinctions.\n2. Traditional titles and honorifics often assume binary gender categories and may not adequately reflect the diversity of gender or social identities, may not be universally understood or used in all cultures or communities; and standardized forms may not accommodate all cultural or social variations in naming practices. For example, \"Mr.\" for men and \"Mrs.\" for married women. These assumptions about gender roles or marital status based on titles may not align with individuals' cultural norms or preferences. This binary classification can exclude and do harm to individuals who do not identify within these categories, such as non-binary or gender non-conforming individuals.\n3. Name suffixes, such as \"Jr.\" or \"III,\" can sometimes reveal familial relationships or generational information. Collecting this data without consent or proper safeguards may infringe on individuals' privacy rights and expose them to risks like identity theft or targeted advertising.\n4. Name suffixes may intersect with other aspects of an individual's identity, such as race, ethnicity, or gender. Failing to consider these intersections can perpetuate systemic inequalities and hinder efforts to promote equity and social justice.\n5. Different cultures may have specific titles or honorifics that hold significance and should be respected in data collection processes. Failing to accommodate these cultural variations can lead to erasure and marginalization of certain communities.\n6. Further, some individuals may not use titles, prefixes, or suffixes at all in their names, or they may have unconventional naming customs that are not recognized by standardized systems.\n6. Inaccurate or incomplete data on titles and prefixes can lead to biased analyses and decision-making, especially in contexts such as healthcare or academic research where precise demographic information is crucial. \n7. Failing to accommodate these variations of the use of \u201ctitles, suffix, and/or prefix\u201d can marginalize certain groups and perpetuate cultural biases. \n\nFor LIF purposes, our recommendation is that if used in normative model, only titles, prefix and affix which have been consented to including/use, and which pertain to qualifications, credentials, work, learning, cultural significance and/or honorifics be included, with flexibility for their design and formatting to allow for cultural differences. Titles, prefix and suffix which pertain to social, generational, marital or gender status should not be included to not perpetuate inequalities and expose learner to harm.",
 						"x-mutable": false,
@@ -2675,12 +3274,38 @@
 								"Common": true,
 								"x-mutable": false,
 								"x-queryable": false
+							},
+							"identifier": {
+								"Id": 1937,
+								"Name": "identifier",
+								"UniqueName": "Name.identifier",
+								"Description": null,
+								"UseConsiderations": null,
+								"DataModelId": 1,
+								"DataType": "string",
+								"ValueSetId": null,
+								"Required": "Yes",
+								"Array": "No",
+								"SourceModel": null,
+								"Notes": null,
+								"CreationDate": null,
+								"ActivationDate": "2025-12-01T22:23:00+00:00",
+								"DeprecationDate": null,
+								"Contributor": "MDRUser",
+								"ContributorOrganization": "LIF",
+								"Extension": false,
+								"ExtensionNotes": null,
+								"Example": null,
+								"Common": null,
+								"x-mutable": false,
+								"x-queryable": false
 							}
 						}
 					},
 					"Proficiency": {
 						"type": "array",
 						"required": [
+							"identifier",
 							"name",
 							"informationSourceId",
 							"informationSourceOrganization"
@@ -2689,6 +3314,31 @@
 						"x-mutable": false,
 						"x-queryable": false,
 						"properties": {
+							"identifier": {
+								"Id": 296,
+								"Name": "identifier",
+								"UniqueName": "Person.Proficiency.identifier",
+								"Description": null,
+								"UseConsiderations": "No change",
+								"DataModelId": 1,
+								"DataType": "string",
+								"ValueSetId": null,
+								"Required": "Yes",
+								"Array": "No",
+								"SourceModel": null,
+								"Notes": null,
+								"CreationDate": null,
+								"ActivationDate": "2025-11-26T22:51:00+00:00",
+								"DeprecationDate": null,
+								"Contributor": null,
+								"ContributorOrganization": "LIF",
+								"Extension": false,
+								"ExtensionNotes": null,
+								"Example": null,
+								"Common": null,
+								"x-mutable": false,
+								"x-queryable": false
+							},
 							"name": {
 								"Id": 298,
 								"Name": "name",
@@ -2819,7 +3469,8 @@
 								"required": [
 									"identifier",
 									"informationSourceId",
-									"informationSourceOrganization"
+									"informationSourceOrganization",
+									"name"
 								],
 								"use_recommendations": "",
 								"x-mutable": false,
@@ -2899,6 +3550,31 @@
 										"Common": true,
 										"x-mutable": false,
 										"x-queryable": false
+									},
+									"name": {
+										"Id": 1919,
+										"Name": "name",
+										"UniqueName": "CredentialAward.name",
+										"Description": null,
+										"UseConsiderations": null,
+										"DataModelId": 1,
+										"DataType": "string",
+										"ValueSetId": null,
+										"Required": "Yes",
+										"Array": "No",
+										"SourceModel": null,
+										"Notes": null,
+										"CreationDate": null,
+										"ActivationDate": "2025-12-01T17:12:00+00:00",
+										"DeprecationDate": null,
+										"Contributor": "MDRUser",
+										"ContributorOrganization": "LIF",
+										"Extension": false,
+										"ExtensionNotes": null,
+										"Example": null,
+										"Common": null,
+										"x-mutable": false,
+										"x-queryable": false
 									}
 								}
 							}
@@ -2908,7 +3584,8 @@
 						"type": "array",
 						"required": [
 							"informationSourceId",
-							"informationSourceOrganization"
+							"informationSourceOrganization",
+							"identifier"
 						],
 						"use_recommendations": "Using or treating someone's contact information can have several equity implications, particularly concerning privacy, consent, and potential misuse.",
 						"x-mutable": false,
@@ -3064,6 +3741,31 @@
 								"x-mutable": false,
 								"x-queryable": false
 							},
+							"identifier": {
+								"Id": 1905,
+								"Name": "identifier",
+								"UniqueName": "Organization.Contact.identifier",
+								"Description": null,
+								"UseConsiderations": null,
+								"DataModelId": 1,
+								"DataType": "string",
+								"ValueSetId": null,
+								"Required": "Yes",
+								"Array": "No",
+								"SourceModel": null,
+								"Notes": null,
+								"CreationDate": null,
+								"ActivationDate": "2025-11-26T18:22:00+00:00",
+								"DeprecationDate": null,
+								"Contributor": "MDRUser",
+								"ContributorOrganization": "LIF",
+								"Extension": false,
+								"ExtensionNotes": null,
+								"Example": null,
+								"Common": null,
+								"x-mutable": false,
+								"x-queryable": false
+							},
 							"Address": {
 								"type": "array",
 								"required": [
@@ -3073,7 +3775,8 @@
 									"addressPostalCode",
 									"countryCode",
 									"informationSourceId",
-									"informationSourceOrganization"
+									"informationSourceOrganization",
+									"identifier"
 								],
 								"use_recommendations": "Using and treating data on someone's physical address, be it personal, home, work etc., can have significant equity implications, particularly concerning privacy, security, and socioeconomic disparities and especially for people from marginalized communities. \n\nLIF implementors need to be responsible in the ways we design and use data models to serve in the use and transformation of people\u2019s address data, requiring a holistic approach that acknowledges the historical injustices in the use of address data. \n\nIt is important we center the discussion of address in the history of how address data and information in the USA on \u201cwhere people live\u201d \u201creside\u201d \u201care from\u201d and \u201ctheir address status\u201d (e.g., nonresident, resident, people experiencing homeless) has been for centuries and still is used against people, especially indigenous communities (i.e., displacement, forced relocation), people from black and immigrant communities (e.g., redlining, economic disparities), homeless, and refugee communities. The treatment and use of this data has resulted in limiting people's access to safety and security, as well as learning, work and financial opportunities continuing systemic marginalization based on address and location data and information. \n\nConsiderations around \u201caddress\u201d for indigenous and first nations peoples:\n1. Throughout history, Indigenous and first nations peoples in the USA have faced forced relocation from their ancestral lands, often to reservations or urban areas. Using or treating data on their addresses can serve as a reminder of this history of displacement and the ongoing impacts on Indigenous communities' access to resources and services.\n2. Indigenous communities have voiced concerns about the collection and use of their address data by external entities without their consent or meaningful participation. Address data collection efforts must respect Indigenous principles of data sovereignty, self-determination, and privacy, and involve community engagement.\n3. Address data collected from Indigenous communities may be vulnerable to misuse or discriminatory practices, such as racial profiling by law enforcement or targeting by predatory vendors and service providers. Ensuring the ethical and responsible use of address data is essential to prevent further harm and uphold principles of equity and justice.\n\nConsiderations around \u201caddress\u201d for people experiencing homelessness:\n - Historically, people experiencing homelessness have been stigmatized and marginalized, facing discrimination in housing, employment, and access to services. Collecting data on their addresses can perpetuate this stigma and potentially expose them to further discrimination or harassment.\n- Homeless individuals may have legitimate concerns about the privacy and safety of their personal information, including their addresses. Collecting data on their addresses without adequate safeguards or assurances of confidentiality can further erode their trust in institutions and discourage them from seeking assistance or support services.\n- Someone who is experiencing homelessness should have the opportunity to demonstrate their skills in a manner that is accessible, without having to provide an address or other identifying information, and be able to benefit from LIF in order to help to improve their life circumstances.\n\nConsiderations around \u201caddress\u201d for people from black and immigrant communities:\n- Historically, Black communities have been subject to discriminatory housing practices, including redlining, which systematically denied access to mortgage loans and homeownership opportunities based on race. Collecting data on addresses within these communities may reflect the legacy of segregation and economic disenfranchisement, perpetuating disparities in wealth, housing quality, and access to resources.\n- Immigrant communities, particularly those from marginalized backgrounds, have faced discriminatory policies and practices that restrict their access to housing, employment, education, and healthcare. Collecting data on addresses within immigrant communities may expose individuals and families to heightened surveillance, immigration enforcement, and xenophobic attacks, contributing to feelings of insecurity and fear.\n- Black and immigrant communities are disproportionately targeted for surveillance, policing, and criminalization. Collecting data on addresses within these communities may facilitate racial profiling, discriminatory policing practices, and surveillance technologies, leading to harassment, violence, and incarceration.\n\nGeneral considerations and recommendations:\n- Considering the foundational premise of LIF is intended to serve people from marginalized and underrepresented communities, it is important to recognize that sharing a street address can be sensitive for some people, dignity, respect and compassion should be priority. \n- That address is optional, and not required for a learner to be able to benefit from LIF.  \n- That the format for address adopts a generic international address format, i.e, not US centric to allow for multiple address formats.\n -That people can consent to the use and treatment of address in a manner that is best suited to them, and choosing to not include an address should not preclude a learner from being able to benefit from LIF. \n- If used for research purposes, an explanation about how address will be used, in an accessible manner, and informed manner.",
 								"x-mutable": false,
@@ -3567,6 +4270,31 @@
 										"Common": true,
 										"x-mutable": false,
 										"x-queryable": false
+									},
+									"identifier": {
+										"Id": 1924,
+										"Name": "identifier",
+										"UniqueName": "Address.identifier",
+										"Description": null,
+										"UseConsiderations": null,
+										"DataModelId": 1,
+										"DataType": "string",
+										"ValueSetId": null,
+										"Required": "Yes",
+										"Array": "No",
+										"SourceModel": null,
+										"Notes": null,
+										"CreationDate": null,
+										"ActivationDate": "2025-12-01T22:14:00+00:00",
+										"DeprecationDate": null,
+										"Contributor": "MDRUser",
+										"ContributorOrganization": "LIF",
+										"Extension": false,
+										"ExtensionNotes": null,
+										"Example": null,
+										"Common": null,
+										"x-mutable": false,
+										"x-queryable": false
 									}
 								}
 							},
@@ -3575,7 +4303,8 @@
 								"required": [
 									"emailAddress",
 									"informationSourceId",
-									"informationSourceOrganization"
+									"informationSourceOrganization",
+									"identifier"
 								],
 								"use_recommendations": "",
 								"x-mutable": false,
@@ -3780,6 +4509,31 @@
 										"Common": true,
 										"x-mutable": false,
 										"x-queryable": false
+									},
+									"identifier": {
+										"Id": 1925,
+										"Name": "identifier",
+										"UniqueName": "Email.identifier",
+										"Description": null,
+										"UseConsiderations": null,
+										"DataModelId": 1,
+										"DataType": "string",
+										"ValueSetId": null,
+										"Required": "Yes",
+										"Array": "No",
+										"SourceModel": null,
+										"Notes": null,
+										"CreationDate": null,
+										"ActivationDate": "2025-12-01T22:14:00+00:00",
+										"DeprecationDate": null,
+										"Contributor": "MDRUser",
+										"ContributorOrganization": "LIF",
+										"Extension": false,
+										"ExtensionNotes": null,
+										"Example": null,
+										"Common": null,
+										"x-mutable": false,
+										"x-queryable": false
 									}
 								}
 							},
@@ -3788,7 +4542,8 @@
 								"required": [
 									"telephoneNumber",
 									"informationSourceId",
-									"informationSourceOrganization"
+									"informationSourceOrganization",
+									"identifier"
 								],
 								"use_recommendations": "",
 								"x-mutable": false,
@@ -4068,6 +4823,31 @@
 										"Common": true,
 										"x-mutable": false,
 										"x-queryable": false
+									},
+									"identifier": {
+										"Id": 1926,
+										"Name": "identifier",
+										"UniqueName": "Telephone.identifier",
+										"Description": null,
+										"UseConsiderations": null,
+										"DataModelId": 1,
+										"DataType": "string",
+										"ValueSetId": null,
+										"Required": "Yes",
+										"Array": "No",
+										"SourceModel": null,
+										"Notes": null,
+										"CreationDate": null,
+										"ActivationDate": "2025-12-01T22:15:00+00:00",
+										"DeprecationDate": null,
+										"Contributor": "MDRUser",
+										"ContributorOrganization": "LIF",
+										"Extension": false,
+										"ExtensionNotes": null,
+										"Example": null,
+										"Common": null,
+										"x-mutable": false,
+										"x-queryable": false
 									}
 								}
 							}
@@ -4239,7 +5019,8 @@
 								"required": [
 									"name",
 									"informationSourceId",
-									"informationSourceOrganization"
+									"informationSourceOrganization",
+									"identifier"
 								],
 								"use_recommendations": "",
 								"x-mutable": false,
@@ -4319,6 +5100,31 @@
 										"Common": true,
 										"x-mutable": false,
 										"x-queryable": false
+									},
+									"identifier": {
+										"Id": 1931,
+										"Name": "identifier",
+										"UniqueName": "Organization.identifier",
+										"Description": null,
+										"UseConsiderations": null,
+										"DataModelId": 1,
+										"DataType": "string",
+										"ValueSetId": null,
+										"Required": "Yes",
+										"Array": "No",
+										"SourceModel": null,
+										"Notes": null,
+										"CreationDate": null,
+										"ActivationDate": "2025-12-01T22:18:00+00:00",
+										"DeprecationDate": null,
+										"Contributor": "MDRUser",
+										"ContributorOrganization": "LIF",
+										"Extension": false,
+										"ExtensionNotes": null,
+										"Example": null,
+										"Common": null,
+										"x-mutable": false,
+										"x-queryable": false
 									}
 								}
 							}
@@ -4328,7 +5134,8 @@
 						"type": "array",
 						"required": [
 							"organizationNames",
-							"organizationTypes"
+							"organizationTypes",
+							"identifier"
 						],
 						"use_recommendations": "",
 						"x-mutable": false,
@@ -4384,12 +5191,38 @@
 								"x-mutable": false,
 								"x-queryable": false
 							},
+							"identifier": {
+								"Id": 1945,
+								"Name": "identifier",
+								"UniqueName": "EmploymentPreferences.identifier",
+								"Description": null,
+								"UseConsiderations": null,
+								"DataModelId": 17,
+								"DataType": "string",
+								"ValueSetId": null,
+								"Required": "Yes",
+								"Array": "No",
+								"SourceModel": null,
+								"Notes": null,
+								"CreationDate": null,
+								"ActivationDate": "2025-12-02T15:21:00+00:00",
+								"DeprecationDate": null,
+								"Contributor": "MDRUser",
+								"ContributorOrganization": "StateU",
+								"Extension": true,
+								"ExtensionNotes": null,
+								"Example": null,
+								"Common": null,
+								"x-mutable": false,
+								"x-queryable": false
+							},
 							"offeredByRefOrganization": {
 								"type": "object",
 								"required": [
 									"name",
 									"informationSourceId",
-									"informationSourceOrganization"
+									"informationSourceOrganization",
+									"identifier"
 								],
 								"use_recommendations": "",
 								"x-mutable": false,
@@ -4469,6 +5302,31 @@
 										"Common": true,
 										"x-mutable": false,
 										"x-queryable": false
+									},
+									"identifier": {
+										"Id": 1931,
+										"Name": "identifier",
+										"UniqueName": "Organization.identifier",
+										"Description": null,
+										"UseConsiderations": null,
+										"DataModelId": 1,
+										"DataType": "string",
+										"ValueSetId": null,
+										"Required": "Yes",
+										"Array": "No",
+										"SourceModel": null,
+										"Notes": null,
+										"CreationDate": null,
+										"ActivationDate": "2025-12-01T22:18:00+00:00",
+										"DeprecationDate": null,
+										"Contributor": "MDRUser",
+										"ContributorOrganization": "LIF",
+										"Extension": false,
+										"ExtensionNotes": null,
+										"Example": null,
+										"Common": null,
+										"x-mutable": false,
+										"x-queryable": false
 									}
 								}
 							}
@@ -4477,7 +5335,7 @@
 					"Narrative": {
 						"type": "array",
 						"required": [
-
+							"identifier"
 						],
 						"use_recommendations": "",
 						"x-mutable": false,
@@ -4508,16 +5366,65 @@
 								"x-mutable": false,
 								"x-queryable": false
 							},
+							"identifier": {
+								"Id": 1943,
+								"Name": "identifier",
+								"UniqueName": "Narrative.identifier",
+								"Description": null,
+								"UseConsiderations": null,
+								"DataModelId": 17,
+								"DataType": "string",
+								"ValueSetId": null,
+								"Required": "Yes",
+								"Array": "No",
+								"SourceModel": null,
+								"Notes": null,
+								"CreationDate": null,
+								"ActivationDate": "2025-12-02T15:19:00+00:00",
+								"DeprecationDate": null,
+								"Contributor": "MDRUser",
+								"ContributorOrganization": "StateU",
+								"Extension": true,
+								"ExtensionNotes": null,
+								"Example": null,
+								"Common": null,
+								"x-mutable": false,
+								"x-queryable": false
+							},
 							"Texts": {
 								"type": "array",
 								"required": [
-
+									"identifier"
 								],
 								"use_recommendations": "",
 								"x-mutable": false,
 								"x-queryable": false,
 								"properties": {
-
+									"identifier": {
+										"Id": 1944,
+										"Name": "identifier",
+										"UniqueName": "Texts.identifier",
+										"Description": null,
+										"UseConsiderations": null,
+										"DataModelId": 17,
+										"DataType": "string",
+										"ValueSetId": null,
+										"Required": "Yes",
+										"Array": "No",
+										"SourceModel": null,
+										"Notes": null,
+										"CreationDate": null,
+										"ActivationDate": "2025-12-02T15:20:00+00:00",
+										"DeprecationDate": null,
+										"Contributor": "MDRUser",
+										"ContributorOrganization": "StateU",
+										"Extension": true,
+										"ExtensionNotes": null,
+										"Example": null,
+										"Common": null,
+										"x-mutable": false,
+										"x-queryable": false
+									}
 								}
 							}
 						}
@@ -4527,7 +5434,8 @@
 						"required": [
 							"positionOfferingTypeCodes",
 							"positionScheduleTypeCodes",
-							"positionTitles"
+							"positionTitles",
+							"identifier"
 						],
 						"use_recommendations": "",
 						"x-mutable": false,
@@ -4608,10 +5516,35 @@
 								"x-mutable": false,
 								"x-queryable": false
 							},
+							"identifier": {
+								"Id": 1946,
+								"Name": "identifier",
+								"UniqueName": "PositionPreferences.identifier",
+								"Description": null,
+								"UseConsiderations": null,
+								"DataModelId": 17,
+								"DataType": "string",
+								"ValueSetId": null,
+								"Required": "Yes",
+								"Array": "No",
+								"SourceModel": null,
+								"Notes": null,
+								"CreationDate": null,
+								"ActivationDate": "2025-12-02T15:30:00+00:00",
+								"DeprecationDate": null,
+								"Contributor": "MDRUser",
+								"ContributorOrganization": "StateU",
+								"Extension": true,
+								"ExtensionNotes": null,
+								"Example": null,
+								"Common": null,
+								"x-mutable": false,
+								"x-queryable": false
+							},
 							"Relocation": {
 								"type": "array",
 								"required": [
-
+									"identifier"
 								],
 								"use_recommendations": "",
 								"x-mutable": false,
@@ -4666,13 +5599,38 @@
 										"Common": null,
 										"x-mutable": false,
 										"x-queryable": false
+									},
+									"identifier": {
+										"Id": 1947,
+										"Name": "identifier",
+										"UniqueName": "Relocation.identifier",
+										"Description": null,
+										"UseConsiderations": null,
+										"DataModelId": 17,
+										"DataType": "string",
+										"ValueSetId": null,
+										"Required": "Yes",
+										"Array": "No",
+										"SourceModel": null,
+										"Notes": null,
+										"CreationDate": null,
+										"ActivationDate": "2025-12-02T15:34:00+00:00",
+										"DeprecationDate": null,
+										"Contributor": "MDRUser",
+										"ContributorOrganization": "StateU",
+										"Extension": true,
+										"ExtensionNotes": null,
+										"Example": null,
+										"Common": null,
+										"x-mutable": false,
+										"x-queryable": false
 									}
 								}
 							},
 							"RemoteWork": {
 								"type": "array",
 								"required": [
-
+									"identifier"
 								],
 								"use_recommendations": "",
 								"x-mutable": false,
@@ -4702,13 +5660,38 @@
 										"Common": null,
 										"x-mutable": false,
 										"x-queryable": false
+									},
+									"identifier": {
+										"Id": 1948,
+										"Name": "identifier",
+										"UniqueName": "RemoteWork.identifier",
+										"Description": null,
+										"UseConsiderations": null,
+										"DataModelId": 17,
+										"DataType": "string",
+										"ValueSetId": null,
+										"Required": "Yes",
+										"Array": "No",
+										"SourceModel": null,
+										"Notes": null,
+										"CreationDate": null,
+										"ActivationDate": "2025-12-02T15:35:00+00:00",
+										"DeprecationDate": null,
+										"Contributor": "MDRUser",
+										"ContributorOrganization": "StateU",
+										"Extension": true,
+										"ExtensionNotes": null,
+										"Example": null,
+										"Common": null,
+										"x-mutable": false,
+										"x-queryable": false
 									}
 								}
 							},
 							"Travel": {
 								"type": "array",
 								"required": [
-
+									"identifier"
 								],
 								"use_recommendations": "",
 								"x-mutable": false,
@@ -4763,19 +5746,68 @@
 										"Common": null,
 										"x-mutable": false,
 										"x-queryable": false
+									},
+									"identifier": {
+										"Id": 1949,
+										"Name": "identifier",
+										"UniqueName": "Travel.identifier",
+										"Description": null,
+										"UseConsiderations": null,
+										"DataModelId": 17,
+										"DataType": "string",
+										"ValueSetId": null,
+										"Required": "Yes",
+										"Array": "No",
+										"SourceModel": null,
+										"Notes": null,
+										"CreationDate": null,
+										"ActivationDate": "2025-12-02T15:35:00+00:00",
+										"DeprecationDate": null,
+										"Contributor": "MDRUser",
+										"ContributorOrganization": "StateU",
+										"Extension": true,
+										"ExtensionNotes": null,
+										"Example": null,
+										"Common": null,
+										"x-mutable": false,
+										"x-queryable": false
 									}
 								}
 							},
 							"offeredByRefRemunerationPackage": {
 								"type": "object",
 								"required": [
-
+									"identifier"
 								],
 								"use_recommendations": "",
 								"x-mutable": false,
 								"x-queryable": false,
 								"properties": {
-
+									"identifier": {
+										"Id": 1950,
+										"Name": "identifier",
+										"UniqueName": "RemunerationPackage.identifier",
+										"Description": null,
+										"UseConsiderations": null,
+										"DataModelId": 17,
+										"DataType": "string",
+										"ValueSetId": null,
+										"Required": "Yes",
+										"Array": "No",
+										"SourceModel": null,
+										"Notes": null,
+										"CreationDate": null,
+										"ActivationDate": "2025-12-02T15:37:00+00:00",
+										"DeprecationDate": null,
+										"Contributor": "MDRUser",
+										"ContributorOrganization": "StateU",
+										"Extension": true,
+										"ExtensionNotes": null,
+										"Example": null,
+										"Common": null,
+										"x-mutable": false,
+										"x-queryable": false
+									}
 								}
 							}
 						}
@@ -4783,7 +5815,7 @@
 					"Interactions": {
 						"type": "array",
 						"required": [
-
+							"identifier"
 						],
 						"use_recommendations": "",
 						"x-mutable": true,
@@ -5062,6 +6094,31 @@
 								"Example": null,
 								"Common": null,
 								"x-mutable": true,
+								"x-queryable": false
+							},
+							"identifier": {
+								"Id": 1951,
+								"Name": "identifier",
+								"UniqueName": "Interactions.identifier",
+								"Description": null,
+								"UseConsiderations": null,
+								"DataModelId": 17,
+								"DataType": "string",
+								"ValueSetId": null,
+								"Required": "Yes",
+								"Array": "No",
+								"SourceModel": null,
+								"Notes": null,
+								"CreationDate": null,
+								"ActivationDate": "2025-12-02T15:38:00+00:00",
+								"DeprecationDate": null,
+								"Contributor": "MDRUser",
+								"ContributorOrganization": "StateU",
+								"Extension": true,
+								"ExtensionNotes": null,
+								"Example": null,
+								"Common": null,
+								"x-mutable": false,
 								"x-queryable": false
 							}
 						}
@@ -5409,7 +6466,8 @@
 						"type": "array",
 						"required": [
 							"informationSourceId",
-							"informationSourceOrganization"
+							"informationSourceOrganization",
+							"identifier"
 						],
 						"use_recommendations": "",
 						"x-mutable": false,
@@ -5487,6 +6545,31 @@
 								"ExtensionNotes": null,
 								"Example": null,
 								"Common": true,
+								"x-mutable": false,
+								"x-queryable": false
+							},
+							"identifier": {
+								"Id": 1904,
+								"Name": "identifier",
+								"UniqueName": "Credential.Requirements.identifier",
+								"Description": null,
+								"UseConsiderations": null,
+								"DataModelId": 1,
+								"DataType": "string",
+								"ValueSetId": null,
+								"Required": "Yes",
+								"Array": "No",
+								"SourceModel": null,
+								"Notes": null,
+								"CreationDate": null,
+								"ActivationDate": "2025-11-26T18:21:00+00:00",
+								"DeprecationDate": null,
+								"Contributor": "MDRUser",
+								"ContributorOrganization": "LIF",
+								"Extension": false,
+								"ExtensionNotes": null,
+								"Example": null,
+								"Common": null,
 								"x-mutable": false,
 								"x-queryable": false
 							},
@@ -5848,7 +6931,8 @@
 						"required": [
 							"code",
 							"informationSourceId",
-							"informationSourceOrganization"
+							"informationSourceOrganization",
+							"identifier"
 						],
 						"use_recommendations": "",
 						"x-mutable": false,
@@ -6078,6 +7162,31 @@
 								"Common": true,
 								"x-mutable": false,
 								"x-queryable": false
+							},
+							"identifier": {
+								"Id": 1928,
+								"Name": "identifier",
+								"UniqueName": "CredentialAlignments.identifier",
+								"Description": null,
+								"UseConsiderations": null,
+								"DataModelId": 1,
+								"DataType": "string",
+								"ValueSetId": null,
+								"Required": "Yes",
+								"Array": "No",
+								"SourceModel": null,
+								"Notes": null,
+								"CreationDate": null,
+								"ActivationDate": "2025-12-01T22:17:00+00:00",
+								"DeprecationDate": null,
+								"Contributor": "MDRUser",
+								"ContributorOrganization": "LIF",
+								"Extension": false,
+								"ExtensionNotes": null,
+								"Example": null,
+								"Common": null,
+								"x-mutable": false,
+								"x-queryable": false
 							}
 						}
 					},
@@ -6085,7 +7194,8 @@
 						"type": "array",
 						"required": [
 							"informationSourceId",
-							"informationSourceOrganization"
+							"informationSourceOrganization",
+							"identifier"
 						],
 						"use_recommendations": "",
 						"x-mutable": false,
@@ -6163,6 +7273,31 @@
 								"ExtensionNotes": null,
 								"Example": null,
 								"Common": true,
+								"x-mutable": false,
+								"x-queryable": false
+							},
+							"identifier": {
+								"Id": 1918,
+								"Name": "identifier",
+								"UniqueName": "Accreditation.identifier",
+								"Description": null,
+								"UseConsiderations": null,
+								"DataModelId": 1,
+								"DataType": "string",
+								"ValueSetId": null,
+								"Required": "Yes",
+								"Array": "No",
+								"SourceModel": null,
+								"Notes": null,
+								"CreationDate": null,
+								"ActivationDate": "2025-12-01T17:05:00+00:00",
+								"DeprecationDate": null,
+								"Contributor": "MDRUser",
+								"ContributorOrganization": "LIF",
+								"Extension": false,
+								"ExtensionNotes": null,
+								"Example": null,
+								"Common": null,
 								"x-mutable": false,
 								"x-queryable": false
 							}
@@ -6287,7 +7422,8 @@
 						"required": [
 							"name",
 							"informationSourceId",
-							"informationSourceOrganization"
+							"informationSourceOrganization",
+							"identifier"
 						],
 						"use_recommendations": "",
 						"x-mutable": false,
@@ -6367,6 +7503,31 @@
 								"Common": true,
 								"x-mutable": false,
 								"x-queryable": false
+							},
+							"identifier": {
+								"Id": 1931,
+								"Name": "identifier",
+								"UniqueName": "Organization.identifier",
+								"Description": null,
+								"UseConsiderations": null,
+								"DataModelId": 1,
+								"DataType": "string",
+								"ValueSetId": null,
+								"Required": "Yes",
+								"Array": "No",
+								"SourceModel": null,
+								"Notes": null,
+								"CreationDate": null,
+								"ActivationDate": "2025-12-01T22:18:00+00:00",
+								"DeprecationDate": null,
+								"Contributor": "MDRUser",
+								"ContributorOrganization": "LIF",
+								"Extension": false,
+								"ExtensionNotes": null,
+								"Example": null,
+								"Common": null,
+								"x-mutable": false,
+								"x-queryable": false
 							}
 						}
 					}
@@ -6377,7 +7538,8 @@
 				"required": [
 					"name",
 					"informationSourceId",
-					"informationSourceOrganization"
+					"informationSourceOrganization",
+					"identifier"
 				],
 				"use_recommendations": "",
 				"x-mutable": false,
@@ -6608,6 +7770,31 @@
 						"x-mutable": false,
 						"x-queryable": false
 					},
+					"identifier": {
+						"Id": 1931,
+						"Name": "identifier",
+						"UniqueName": "Organization.identifier",
+						"Description": null,
+						"UseConsiderations": null,
+						"DataModelId": 1,
+						"DataType": "string",
+						"ValueSetId": null,
+						"Required": "Yes",
+						"Array": "No",
+						"SourceModel": null,
+						"Notes": null,
+						"CreationDate": null,
+						"ActivationDate": "2025-12-01T22:18:00+00:00",
+						"DeprecationDate": null,
+						"Contributor": "MDRUser",
+						"ContributorOrganization": "LIF",
+						"Extension": false,
+						"ExtensionNotes": null,
+						"Example": null,
+						"Common": null,
+						"x-mutable": false,
+						"x-queryable": false
+					},
 					"OrganizationCode": {
 						"type": "array",
 						"required": [
@@ -6751,7 +7938,8 @@
 						"type": "array",
 						"required": [
 							"informationSourceId",
-							"informationSourceOrganization"
+							"informationSourceOrganization",
+							"identifier"
 						],
 						"use_recommendations": "",
 						"x-mutable": false,
@@ -6831,6 +8019,31 @@
 								"Common": true,
 								"x-mutable": false,
 								"x-queryable": false
+							},
+							"identifier": {
+								"Id": 1906,
+								"Name": "identifier",
+								"UniqueName": "Organization.OperationalStatus.identifier",
+								"Description": null,
+								"UseConsiderations": null,
+								"DataModelId": 1,
+								"DataType": "string",
+								"ValueSetId": null,
+								"Required": "Yes",
+								"Array": "No",
+								"SourceModel": null,
+								"Notes": null,
+								"CreationDate": null,
+								"ActivationDate": "2025-11-26T18:23:00+00:00",
+								"DeprecationDate": null,
+								"Contributor": "MDRUser",
+								"ContributorOrganization": "LIF",
+								"Extension": false,
+								"ExtensionNotes": null,
+								"Example": null,
+								"Common": null,
+								"x-mutable": false,
+								"x-queryable": false
 							}
 						}
 					},
@@ -6838,7 +8051,8 @@
 						"type": "array",
 						"required": [
 							"informationSourceId",
-							"informationSourceOrganization"
+							"informationSourceOrganization",
+							"identifier"
 						],
 						"use_recommendations": "Using or treating someone's contact information can have several equity implications, particularly concerning privacy, consent, and potential misuse.",
 						"x-mutable": false,
@@ -6994,6 +8208,31 @@
 								"x-mutable": false,
 								"x-queryable": false
 							},
+							"identifier": {
+								"Id": 1905,
+								"Name": "identifier",
+								"UniqueName": "Organization.Contact.identifier",
+								"Description": null,
+								"UseConsiderations": null,
+								"DataModelId": 1,
+								"DataType": "string",
+								"ValueSetId": null,
+								"Required": "Yes",
+								"Array": "No",
+								"SourceModel": null,
+								"Notes": null,
+								"CreationDate": null,
+								"ActivationDate": "2025-11-26T18:22:00+00:00",
+								"DeprecationDate": null,
+								"Contributor": "MDRUser",
+								"ContributorOrganization": "LIF",
+								"Extension": false,
+								"ExtensionNotes": null,
+								"Example": null,
+								"Common": null,
+								"x-mutable": false,
+								"x-queryable": false
+							},
 							"Address": {
 								"type": "array",
 								"required": [
@@ -7003,7 +8242,8 @@
 									"addressPostalCode",
 									"countryCode",
 									"informationSourceId",
-									"informationSourceOrganization"
+									"informationSourceOrganization",
+									"identifier"
 								],
 								"use_recommendations": "Using and treating data on someone's physical address, be it personal, home, work etc., can have significant equity implications, particularly concerning privacy, security, and socioeconomic disparities and especially for people from marginalized communities. \n\nLIF implementors need to be responsible in the ways we design and use data models to serve in the use and transformation of people\u2019s address data, requiring a holistic approach that acknowledges the historical injustices in the use of address data. \n\nIt is important we center the discussion of address in the history of how address data and information in the USA on \u201cwhere people live\u201d \u201creside\u201d \u201care from\u201d and \u201ctheir address status\u201d (e.g., nonresident, resident, people experiencing homeless) has been for centuries and still is used against people, especially indigenous communities (i.e., displacement, forced relocation), people from black and immigrant communities (e.g., redlining, economic disparities), homeless, and refugee communities. The treatment and use of this data has resulted in limiting people's access to safety and security, as well as learning, work and financial opportunities continuing systemic marginalization based on address and location data and information. \n\nConsiderations around \u201caddress\u201d for indigenous and first nations peoples:\n1. Throughout history, Indigenous and first nations peoples in the USA have faced forced relocation from their ancestral lands, often to reservations or urban areas. Using or treating data on their addresses can serve as a reminder of this history of displacement and the ongoing impacts on Indigenous communities' access to resources and services.\n2. Indigenous communities have voiced concerns about the collection and use of their address data by external entities without their consent or meaningful participation. Address data collection efforts must respect Indigenous principles of data sovereignty, self-determination, and privacy, and involve community engagement.\n3. Address data collected from Indigenous communities may be vulnerable to misuse or discriminatory practices, such as racial profiling by law enforcement or targeting by predatory vendors and service providers. Ensuring the ethical and responsible use of address data is essential to prevent further harm and uphold principles of equity and justice.\n\nConsiderations around \u201caddress\u201d for people experiencing homelessness:\n - Historically, people experiencing homelessness have been stigmatized and marginalized, facing discrimination in housing, employment, and access to services. Collecting data on their addresses can perpetuate this stigma and potentially expose them to further discrimination or harassment.\n- Homeless individuals may have legitimate concerns about the privacy and safety of their personal information, including their addresses. Collecting data on their addresses without adequate safeguards or assurances of confidentiality can further erode their trust in institutions and discourage them from seeking assistance or support services.\n- Someone who is experiencing homelessness should have the opportunity to demonstrate their skills in a manner that is accessible, without having to provide an address or other identifying information, and be able to benefit from LIF in order to help to improve their life circumstances.\n\nConsiderations around \u201caddress\u201d for people from black and immigrant communities:\n- Historically, Black communities have been subject to discriminatory housing practices, including redlining, which systematically denied access to mortgage loans and homeownership opportunities based on race. Collecting data on addresses within these communities may reflect the legacy of segregation and economic disenfranchisement, perpetuating disparities in wealth, housing quality, and access to resources.\n- Immigrant communities, particularly those from marginalized backgrounds, have faced discriminatory policies and practices that restrict their access to housing, employment, education, and healthcare. Collecting data on addresses within immigrant communities may expose individuals and families to heightened surveillance, immigration enforcement, and xenophobic attacks, contributing to feelings of insecurity and fear.\n- Black and immigrant communities are disproportionately targeted for surveillance, policing, and criminalization. Collecting data on addresses within these communities may facilitate racial profiling, discriminatory policing practices, and surveillance technologies, leading to harassment, violence, and incarceration.\n\nGeneral considerations and recommendations:\n- Considering the foundational premise of LIF is intended to serve people from marginalized and underrepresented communities, it is important to recognize that sharing a street address can be sensitive for some people, dignity, respect and compassion should be priority. \n- That address is optional, and not required for a learner to be able to benefit from LIF.  \n- That the format for address adopts a generic international address format, i.e, not US centric to allow for multiple address formats.\n -That people can consent to the use and treatment of address in a manner that is best suited to them, and choosing to not include an address should not preclude a learner from being able to benefit from LIF. \n- If used for research purposes, an explanation about how address will be used, in an accessible manner, and informed manner.",
 								"x-mutable": false,
@@ -7497,6 +8737,31 @@
 										"Common": true,
 										"x-mutable": false,
 										"x-queryable": false
+									},
+									"identifier": {
+										"Id": 1924,
+										"Name": "identifier",
+										"UniqueName": "Address.identifier",
+										"Description": null,
+										"UseConsiderations": null,
+										"DataModelId": 1,
+										"DataType": "string",
+										"ValueSetId": null,
+										"Required": "Yes",
+										"Array": "No",
+										"SourceModel": null,
+										"Notes": null,
+										"CreationDate": null,
+										"ActivationDate": "2025-12-01T22:14:00+00:00",
+										"DeprecationDate": null,
+										"Contributor": "MDRUser",
+										"ContributorOrganization": "LIF",
+										"Extension": false,
+										"ExtensionNotes": null,
+										"Example": null,
+										"Common": null,
+										"x-mutable": false,
+										"x-queryable": false
 									}
 								}
 							},
@@ -7505,7 +8770,8 @@
 								"required": [
 									"emailAddress",
 									"informationSourceId",
-									"informationSourceOrganization"
+									"informationSourceOrganization",
+									"identifier"
 								],
 								"use_recommendations": "",
 								"x-mutable": false,
@@ -7710,6 +8976,31 @@
 										"Common": true,
 										"x-mutable": false,
 										"x-queryable": false
+									},
+									"identifier": {
+										"Id": 1925,
+										"Name": "identifier",
+										"UniqueName": "Email.identifier",
+										"Description": null,
+										"UseConsiderations": null,
+										"DataModelId": 1,
+										"DataType": "string",
+										"ValueSetId": null,
+										"Required": "Yes",
+										"Array": "No",
+										"SourceModel": null,
+										"Notes": null,
+										"CreationDate": null,
+										"ActivationDate": "2025-12-01T22:14:00+00:00",
+										"DeprecationDate": null,
+										"Contributor": "MDRUser",
+										"ContributorOrganization": "LIF",
+										"Extension": false,
+										"ExtensionNotes": null,
+										"Example": null,
+										"Common": null,
+										"x-mutable": false,
+										"x-queryable": false
 									}
 								}
 							},
@@ -7718,7 +9009,8 @@
 								"required": [
 									"telephoneNumber",
 									"informationSourceId",
-									"informationSourceOrganization"
+									"informationSourceOrganization",
+									"identifier"
 								],
 								"use_recommendations": "",
 								"x-mutable": false,
@@ -7998,6 +9290,31 @@
 										"Common": true,
 										"x-mutable": false,
 										"x-queryable": false
+									},
+									"identifier": {
+										"Id": 1926,
+										"Name": "identifier",
+										"UniqueName": "Telephone.identifier",
+										"Description": null,
+										"UseConsiderations": null,
+										"DataModelId": 1,
+										"DataType": "string",
+										"ValueSetId": null,
+										"Required": "Yes",
+										"Array": "No",
+										"SourceModel": null,
+										"Notes": null,
+										"CreationDate": null,
+										"ActivationDate": "2025-12-01T22:15:00+00:00",
+										"DeprecationDate": null,
+										"Contributor": "MDRUser",
+										"ContributorOrganization": "LIF",
+										"Extension": false,
+										"ExtensionNotes": null,
+										"Example": null,
+										"Common": null,
+										"x-mutable": false,
+										"x-queryable": false
 									}
 								}
 							}
@@ -8169,7 +9486,8 @@
 								"required": [
 									"name",
 									"informationSourceId",
-									"informationSourceOrganization"
+									"informationSourceOrganization",
+									"identifier"
 								],
 								"use_recommendations": "",
 								"x-mutable": false,
@@ -8249,6 +9567,31 @@
 										"Common": true,
 										"x-mutable": false,
 										"x-queryable": false
+									},
+									"identifier": {
+										"Id": 1931,
+										"Name": "identifier",
+										"UniqueName": "Organization.identifier",
+										"Description": null,
+										"UseConsiderations": null,
+										"DataModelId": 1,
+										"DataType": "string",
+										"ValueSetId": null,
+										"Required": "Yes",
+										"Array": "No",
+										"SourceModel": null,
+										"Notes": null,
+										"CreationDate": null,
+										"ActivationDate": "2025-12-01T22:18:00+00:00",
+										"DeprecationDate": null,
+										"Contributor": "MDRUser",
+										"ContributorOrganization": "LIF",
+										"Extension": false,
+										"ExtensionNotes": null,
+										"Example": null,
+										"Common": null,
+										"x-mutable": false,
+										"x-queryable": false
 									}
 								}
 							}
@@ -8258,7 +9601,8 @@
 						"type": "array",
 						"required": [
 							"informationSourceId",
-							"informationSourceOrganization"
+							"informationSourceOrganization",
+							"identifier"
 						],
 						"use_recommendations": "",
 						"x-mutable": false,
@@ -8336,6 +9680,31 @@
 								"ExtensionNotes": null,
 								"Example": null,
 								"Common": true,
+								"x-mutable": false,
+								"x-queryable": false
+							},
+							"identifier": {
+								"Id": 1918,
+								"Name": "identifier",
+								"UniqueName": "Accreditation.identifier",
+								"Description": null,
+								"UseConsiderations": null,
+								"DataModelId": 1,
+								"DataType": "string",
+								"ValueSetId": null,
+								"Required": "Yes",
+								"Array": "No",
+								"SourceModel": null,
+								"Notes": null,
+								"CreationDate": null,
+								"ActivationDate": "2025-12-01T17:05:00+00:00",
+								"DeprecationDate": null,
+								"Contributor": "MDRUser",
+								"ContributorOrganization": "LIF",
+								"Extension": false,
+								"ExtensionNotes": null,
+								"Example": null,
+								"Common": null,
 								"x-mutable": false,
 								"x-queryable": false
 							}
@@ -8721,7 +10090,8 @@
 								"required": [
 									"name",
 									"informationSourceId",
-									"informationSourceOrganization"
+									"informationSourceOrganization",
+									"identifier"
 								],
 								"use_recommendations": "",
 								"x-mutable": false,
@@ -8801,6 +10171,31 @@
 										"Common": true,
 										"x-mutable": false,
 										"x-queryable": false
+									},
+									"identifier": {
+										"Id": 1931,
+										"Name": "identifier",
+										"UniqueName": "Organization.identifier",
+										"Description": null,
+										"UseConsiderations": null,
+										"DataModelId": 1,
+										"DataType": "string",
+										"ValueSetId": null,
+										"Required": "Yes",
+										"Array": "No",
+										"SourceModel": null,
+										"Notes": null,
+										"CreationDate": null,
+										"ActivationDate": "2025-12-01T22:18:00+00:00",
+										"DeprecationDate": null,
+										"Contributor": "MDRUser",
+										"ContributorOrganization": "LIF",
+										"Extension": false,
+										"ExtensionNotes": null,
+										"Example": null,
+										"Common": null,
+										"x-mutable": false,
+										"x-queryable": false
 									}
 								}
 							}
@@ -8811,7 +10206,8 @@
 						"required": [
 							"name",
 							"informationSourceId",
-							"informationSourceOrganization"
+							"informationSourceOrganization",
+							"identifier"
 						],
 						"use_recommendations": "",
 						"x-mutable": false,
@@ -8889,6 +10285,31 @@
 								"ExtensionNotes": null,
 								"Example": null,
 								"Common": true,
+								"x-mutable": false,
+								"x-queryable": false
+							},
+							"identifier": {
+								"Id": 1931,
+								"Name": "identifier",
+								"UniqueName": "Organization.identifier",
+								"Description": null,
+								"UseConsiderations": null,
+								"DataModelId": 1,
+								"DataType": "string",
+								"ValueSetId": null,
+								"Required": "Yes",
+								"Array": "No",
+								"SourceModel": null,
+								"Notes": null,
+								"CreationDate": null,
+								"ActivationDate": "2025-12-01T22:18:00+00:00",
+								"DeprecationDate": null,
+								"Contributor": "MDRUser",
+								"ContributorOrganization": "LIF",
+								"Extension": false,
+								"ExtensionNotes": null,
+								"Example": null,
+								"Common": null,
 								"x-mutable": false,
 								"x-queryable": false
 							}
@@ -8899,7 +10320,8 @@
 						"required": [
 							"name",
 							"informationSourceId",
-							"informationSourceOrganization"
+							"informationSourceOrganization",
+							"identifier"
 						],
 						"use_recommendations": "",
 						"x-mutable": false,
@@ -8979,6 +10401,31 @@
 								"Common": true,
 								"x-mutable": false,
 								"x-queryable": false
+							},
+							"identifier": {
+								"Id": 1931,
+								"Name": "identifier",
+								"UniqueName": "Organization.identifier",
+								"Description": null,
+								"UseConsiderations": null,
+								"DataModelId": 1,
+								"DataType": "string",
+								"ValueSetId": null,
+								"Required": "Yes",
+								"Array": "No",
+								"SourceModel": null,
+								"Notes": null,
+								"CreationDate": null,
+								"ActivationDate": "2025-12-01T22:18:00+00:00",
+								"DeprecationDate": null,
+								"Contributor": "MDRUser",
+								"ContributorOrganization": "LIF",
+								"Extension": false,
+								"ExtensionNotes": null,
+								"Example": null,
+								"Common": null,
+								"x-mutable": false,
+								"x-queryable": false
 							}
 						}
 					}
@@ -8987,7 +10434,7 @@
 			"RemunerationPackage": {
 				"type": "array",
 				"required": [
-
+					"identifier"
 				],
 				"use_recommendations": "",
 				"x-mutable": false,
@@ -9018,19 +10465,69 @@
 						"x-mutable": false,
 						"x-queryable": false
 					},
+					"identifier": {
+						"Id": 1950,
+						"Name": "identifier",
+						"UniqueName": "RemunerationPackage.identifier",
+						"Description": null,
+						"UseConsiderations": null,
+						"DataModelId": 17,
+						"DataType": "string",
+						"ValueSetId": null,
+						"Required": "Yes",
+						"Array": "No",
+						"SourceModel": null,
+						"Notes": null,
+						"CreationDate": null,
+						"ActivationDate": "2025-12-02T15:37:00+00:00",
+						"DeprecationDate": null,
+						"Contributor": "MDRUser",
+						"ContributorOrganization": "StateU",
+						"Extension": true,
+						"ExtensionNotes": null,
+						"Example": null,
+						"Common": null,
+						"x-mutable": false,
+						"x-queryable": false
+					},
 					"Ranges": {
 						"type": "array",
 						"required": [
-
+							"identifier"
 						],
 						"use_recommendations": "",
 						"x-mutable": false,
 						"x-queryable": false,
 						"properties": {
+							"identifier": {
+								"Id": 1952,
+								"Name": "identifier",
+								"UniqueName": "Ranges.indentifier",
+								"Description": null,
+								"UseConsiderations": null,
+								"DataModelId": 17,
+								"DataType": "string",
+								"ValueSetId": null,
+								"Required": "Yes",
+								"Array": "No",
+								"SourceModel": null,
+								"Notes": null,
+								"CreationDate": null,
+								"ActivationDate": "2025-12-02T15:43:00+00:00",
+								"DeprecationDate": null,
+								"Contributor": "MDRUser",
+								"ContributorOrganization": "StateU",
+								"Extension": true,
+								"ExtensionNotes": null,
+								"Example": null,
+								"Common": null,
+								"x-mutable": false,
+								"x-queryable": false
+							},
 							"MinimumAmount": {
 								"type": "array",
 								"required": [
-
+									"identifier"
 								],
 								"use_recommendations": "",
 								"x-mutable": false,
@@ -9085,6 +10582,31 @@
 										"Common": null,
 										"x-mutable": false,
 										"x-queryable": false
+									},
+									"identifier": {
+										"Id": 1953,
+										"Name": "identifier",
+										"UniqueName": "MinimumAmount.identifier",
+										"Description": null,
+										"UseConsiderations": null,
+										"DataModelId": 17,
+										"DataType": "string",
+										"ValueSetId": null,
+										"Required": "Yes",
+										"Array": "No",
+										"SourceModel": null,
+										"Notes": null,
+										"CreationDate": null,
+										"ActivationDate": "2025-12-02T15:59:00+00:00",
+										"DeprecationDate": null,
+										"Contributor": "MDRUser",
+										"ContributorOrganization": "StateU",
+										"Extension": true,
+										"ExtensionNotes": null,
+										"Example": null,
+										"Common": null,
+										"x-mutable": false,
+										"x-queryable": false
 									}
 								}
 							}
@@ -9095,6 +10617,8 @@
 			"Assessment": {
 				"type": "array",
 				"required": [
+					"identifier",
+					"name",
 					"informationSourceId",
 					"informationSourceOrganization"
 				],
@@ -9102,6 +10626,56 @@
 				"x-mutable": false,
 				"x-queryable": false,
 				"properties": {
+					"identifier": {
+						"Id": 2,
+						"Name": "identifier",
+						"UniqueName": "Assessment.identifier",
+						"Description": "A unique number or alphanumeric code assigned to an assessment by a school, school system, a state, or other agency or entity. This may be the publisher identifier.",
+						"UseConsiderations": "Missing data should not be penalized in useage. Assuming that all organizations will want to comply with this system will introduce a high level of bias into outcomes",
+						"DataModelId": 1,
+						"DataType": "string",
+						"ValueSetId": null,
+						"Required": "Yes",
+						"Array": "Yes",
+						"SourceModel": null,
+						"Notes": null,
+						"CreationDate": null,
+						"ActivationDate": "2025-12-02T03:13:00+00:00",
+						"DeprecationDate": null,
+						"Contributor": null,
+						"ContributorOrganization": "LIF",
+						"Extension": false,
+						"ExtensionNotes": null,
+						"Example": null,
+						"Common": null,
+						"x-mutable": false,
+						"x-queryable": false
+					},
+					"name": {
+						"Id": 4,
+						"Name": "name",
+						"UniqueName": "Assessment.name",
+						"Description": "The title name or name of the assessment",
+						"UseConsiderations": "No change",
+						"DataModelId": 1,
+						"DataType": "string",
+						"ValueSetId": null,
+						"Required": "Yes",
+						"Array": "No",
+						"SourceModel": null,
+						"Notes": null,
+						"CreationDate": null,
+						"ActivationDate": null,
+						"DeprecationDate": null,
+						"Contributor": null,
+						"ContributorOrganization": "LIF",
+						"Extension": false,
+						"ExtensionNotes": null,
+						"Example": null,
+						"Common": null,
+						"x-mutable": false,
+						"x-queryable": false
+					},
 					"informationSourceId": {
 						"Id": 1898,
 						"Name": "informationSourceId",
@@ -9182,7 +10756,8 @@
 						"required": [
 							"name",
 							"informationSourceId",
-							"informationSourceOrganization"
+							"informationSourceOrganization",
+							"identifier"
 						],
 						"use_recommendations": "",
 						"x-mutable": false,
@@ -9260,6 +10835,31 @@
 								"ExtensionNotes": null,
 								"Example": null,
 								"Common": true,
+								"x-mutable": false,
+								"x-queryable": false
+							},
+							"identifier": {
+								"Id": 1931,
+								"Name": "identifier",
+								"UniqueName": "Organization.identifier",
+								"Description": null,
+								"UseConsiderations": null,
+								"DataModelId": 1,
+								"DataType": "string",
+								"ValueSetId": null,
+								"Required": "Yes",
+								"Array": "No",
+								"SourceModel": null,
+								"Notes": null,
+								"CreationDate": null,
+								"ActivationDate": "2025-12-01T22:18:00+00:00",
+								"DeprecationDate": null,
+								"Contributor": "MDRUser",
+								"ContributorOrganization": "LIF",
+								"Extension": false,
+								"ExtensionNotes": null,
+								"Example": null,
+								"Common": null,
 								"x-mutable": false,
 								"x-queryable": false
 							}
@@ -9270,7 +10870,8 @@
 						"required": [
 							"name",
 							"informationSourceId",
-							"informationSourceOrganization"
+							"informationSourceOrganization",
+							"identifier"
 						],
 						"use_recommendations": "",
 						"x-mutable": false,
@@ -9350,6 +10951,31 @@
 								"Common": true,
 								"x-mutable": false,
 								"x-queryable": false
+							},
+							"identifier": {
+								"Id": 1931,
+								"Name": "identifier",
+								"UniqueName": "Organization.identifier",
+								"Description": null,
+								"UseConsiderations": null,
+								"DataModelId": 1,
+								"DataType": "string",
+								"ValueSetId": null,
+								"Required": "Yes",
+								"Array": "No",
+								"SourceModel": null,
+								"Notes": null,
+								"CreationDate": null,
+								"ActivationDate": "2025-12-01T22:18:00+00:00",
+								"DeprecationDate": null,
+								"Contributor": "MDRUser",
+								"ContributorOrganization": "LIF",
+								"Extension": false,
+								"ExtensionNotes": null,
+								"Example": null,
+								"Common": null,
+								"x-mutable": false,
+								"x-queryable": false
 							}
 						}
 					}
@@ -9358,13 +10984,40 @@
 			"Position": {
 				"type": "array",
 				"required": [
+					"name",
 					"informationSourceId",
-					"informationSourceOrganization"
+					"informationSourceOrganization",
+					"identifier"
 				],
 				"use_recommendations": "",
 				"x-mutable": false,
 				"x-queryable": false,
 				"properties": {
+					"name": {
+						"Id": 1102,
+						"Name": "name",
+						"UniqueName": "Position.name",
+						"Description": "The descriptive name of a person's position.",
+						"UseConsiderations": null,
+						"DataModelId": 1,
+						"DataType": "string",
+						"ValueSetId": null,
+						"Required": "Yes",
+						"Array": "No",
+						"SourceModel": "CEDS",
+						"Notes": "this can be position specific or \"current\" on the top level class?",
+						"CreationDate": null,
+						"ActivationDate": null,
+						"DeprecationDate": null,
+						"Contributor": null,
+						"ContributorOrganization": "LIF",
+						"Extension": false,
+						"ExtensionNotes": null,
+						"Example": null,
+						"Common": null,
+						"x-mutable": false,
+						"x-queryable": false
+					},
 					"description": {
 						"Id": 1138,
 						"Name": "description",
@@ -9465,12 +11118,38 @@
 						"x-mutable": false,
 						"x-queryable": false
 					},
+					"identifier": {
+						"Id": 1939,
+						"Name": "identifier",
+						"UniqueName": "Position.identifier",
+						"Description": null,
+						"UseConsiderations": null,
+						"DataModelId": 1,
+						"DataType": "string",
+						"ValueSetId": null,
+						"Required": "Yes",
+						"Array": "No",
+						"SourceModel": null,
+						"Notes": null,
+						"CreationDate": null,
+						"ActivationDate": "2025-12-01T22:25:00+00:00",
+						"DeprecationDate": null,
+						"Contributor": "MDRUser",
+						"ContributorOrganization": "LIF",
+						"Extension": false,
+						"ExtensionNotes": null,
+						"Example": null,
+						"Common": null,
+						"x-mutable": false,
+						"x-queryable": false
+					},
 					"offeredByRefOrganization": {
 						"type": "object",
 						"required": [
 							"name",
 							"informationSourceId",
-							"informationSourceOrganization"
+							"informationSourceOrganization",
+							"identifier"
 						],
 						"use_recommendations": "",
 						"x-mutable": false,
@@ -9548,6 +11227,31 @@
 								"ExtensionNotes": null,
 								"Example": null,
 								"Common": true,
+								"x-mutable": false,
+								"x-queryable": false
+							},
+							"identifier": {
+								"Id": 1931,
+								"Name": "identifier",
+								"UniqueName": "Organization.identifier",
+								"Description": null,
+								"UseConsiderations": null,
+								"DataModelId": 1,
+								"DataType": "string",
+								"ValueSetId": null,
+								"Required": "Yes",
+								"Array": "No",
+								"SourceModel": null,
+								"Notes": null,
+								"CreationDate": null,
+								"ActivationDate": "2025-12-01T22:18:00+00:00",
+								"DeprecationDate": null,
+								"Contributor": "MDRUser",
+								"ContributorOrganization": "LIF",
+								"Extension": false,
+								"ExtensionNotes": null,
+								"Example": null,
+								"Common": null,
 								"x-mutable": false,
 								"x-queryable": false
 							}
@@ -9722,7 +11426,8 @@
 						"required": [
 							"name",
 							"informationSourceId",
-							"informationSourceOrganization"
+							"informationSourceOrganization",
+							"identifier"
 						],
 						"use_recommendations": "",
 						"x-mutable": false,
@@ -9802,107 +11507,46 @@
 								"Common": true,
 								"x-mutable": false,
 								"x-queryable": false
+							},
+							"identifier": {
+								"Id": 1931,
+								"Name": "identifier",
+								"UniqueName": "Organization.identifier",
+								"Description": null,
+								"UseConsiderations": null,
+								"DataModelId": 1,
+								"DataType": "string",
+								"ValueSetId": null,
+								"Required": "Yes",
+								"Array": "No",
+								"SourceModel": null,
+								"Notes": null,
+								"CreationDate": null,
+								"ActivationDate": "2025-12-01T22:18:00+00:00",
+								"DeprecationDate": null,
+								"Contributor": "MDRUser",
+								"ContributorOrganization": "LIF",
+								"Extension": false,
+								"ExtensionNotes": null,
+								"Example": null,
+								"Common": null,
+								"x-mutable": false,
+								"x-queryable": false
 							}
 						}
 					}
 				}
 			},
-			"Accreditation": {
-				"type": "array",
-				"required": [
-
-				],
-				"use_recommendations": "",
-				"x-mutable": false,
-				"x-queryable": false,
-				"properties": {
-
-				}
-			},
 			"Identifier": {
 				"type": "array",
 				"required": [
-					"identifier"
+
 				],
 				"use_recommendations": "",
 				"x-mutable": false,
 				"x-queryable": false,
 				"properties": {
-					"identifier": {
-						"Id": 1290,
-						"Name": "identifier",
-						"UniqueName": "Common.Identifier.identifier",
-						"Description": "A number and/or alphanumeric code used to uniquely identify the entity. Use \"missing at will\" ,\"ad-hoc\"and \"not applicable\" for missng data to avoid skewed outcomes.",
-						"UseConsiderations": "Only use if consent has been verified.",
-						"DataModelId": 1,
-						"DataType": "string",
-						"ValueSetId": null,
-						"Required": "Yes",
-						"Array": "No",
-						"SourceModel": "CEDS-Edited",
-						"Notes": null,
-						"CreationDate": null,
-						"ActivationDate": "2025-11-26T22:14:00+00:00",
-						"DeprecationDate": null,
-						"Contributor": null,
-						"ContributorOrganization": "LIF",
-						"Extension": false,
-						"ExtensionNotes": null,
-						"Example": null,
-						"Common": null,
-						"x-mutable": false,
-						"x-queryable": true
-					},
-					"identifierType": {
-						"Id": 1291,
-						"Name": "identifierType",
-						"UniqueName": "Common.Identifier.identifierType",
-						"Description": "The types of sources of identifiers used to uniquely identify the entity",
-						"UseConsiderations": "Only use if consent has been verified.",
-						"DataModelId": 1,
-						"DataType": "string",
-						"ValueSetId": null,
-						"Required": "No",
-						"Array": "No",
-						"SourceModel": "CEDS",
-						"Notes": null,
-						"CreationDate": null,
-						"ActivationDate": "2025-11-26T22:14:00+00:00",
-						"DeprecationDate": null,
-						"Contributor": null,
-						"ContributorOrganization": "LIF",
-						"Extension": false,
-						"ExtensionNotes": null,
-						"Example": null,
-						"Common": null,
-						"x-mutable": false,
-						"x-queryable": true
-					},
-					"identifierVerification": {
-						"Id": 1292,
-						"Name": "identifierVerification",
-						"UniqueName": "Common.Identifier.identifierVerification",
-						"Description": "The evidence by which a persons name, address, date of birth, etc. is confirmed.",
-						"UseConsiderations": "Only use if consent has been verified.",
-						"DataModelId": 1,
-						"DataType": "string",
-						"ValueSetId": null,
-						"Required": "No",
-						"Array": "Yes",
-						"SourceModel": "CEDS",
-						"Notes": "(ChrisM - 1/8/24) Does this element need a value set?",
-						"CreationDate": null,
-						"ActivationDate": null,
-						"DeprecationDate": null,
-						"Contributor": null,
-						"ContributorOrganization": "LIF",
-						"Extension": false,
-						"ExtensionNotes": null,
-						"Example": null,
-						"Common": null,
-						"x-mutable": false,
-						"x-queryable": false
-					}
+
 				}
 			}
 		}

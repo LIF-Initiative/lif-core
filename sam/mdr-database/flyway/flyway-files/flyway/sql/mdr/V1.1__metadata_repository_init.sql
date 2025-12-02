@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
--- \restrict Qz5smfmwp5XOyNIXgn37V688dnEpOfOropKVXrxaoqcfbc9FxzY7jonEhRCvdiX
+-- \restrict M0ICOe5C8XZAngGj27H5S1q9MOdTCdyxnd1jJBJC8gjPruEqie6XPbCrDVZjvYh
 
 -- Dumped from database version 17.6 (Debian 17.6-1.pgdg13+1)
 -- Dumped by pg_dump version 17.6 (Homebrew)
@@ -2737,11 +2737,22 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1929	identifier	Criteria.identifier	\N	\N	1	string	\N	Yes	No	\N	\N	\N	2025-12-01 22:17:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N
 1930	identifier	OrganizationCode.identifier	\N	\N	1	string	\N	Yes	No	\N	\N	\N	2025-12-01 22:18:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N
 1931	identifier	Organization.identifier	\N	\N	1	string	\N	Yes	No	\N	\N	\N	2025-12-01 22:18:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N
+1945	identifier	EmploymentPreferences.identifier	\N	\N	17	string	\N	Yes	No	\N	\N	\N	2025-12-02 15:21:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N
+1946	identifier	PositionPreferences.identifier	\N	\N	17	string	\N	Yes	No	\N	\N	\N	2025-12-02 15:30:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N
+1949	identifier	Travel.identifier	\N	\N	17	string	\N	Yes	No	\N	\N	\N	2025-12-02 15:35:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N
+1952	identifier	Ranges.indentifier	\N	\N	17	string	\N	Yes	No	\N	\N	\N	2025-12-02 15:43:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N
 1624	name	Program.name	The name of the program of instruction, training, services or benefits available through federal, state, or local agencies.	No change	1	string	\N	Yes	Yes	CEDS	\N	\N	2025-11-26 22:20:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
 792	identifier	Credential.identifier	An identifier for the Credential.	No change	1	string	\N	Yes	No	CEDS	Should be able to have more than one ID, must be coupled with idType	\N	2025-12-01 22:13:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
 1922	name	MilitaryLearningExperience.name	\N	\N	1	string	\N	Yes	No	\N	\N	\N	2025-12-01 17:17:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N
 1923	name	ProgramLearningExperience.name	\N	\N	1	string	\N	Yes	No	\N	\N	\N	2025-12-01 17:18:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N
+1943	identifier	Narrative.identifier	\N	\N	17	string	\N	Yes	No	\N	\N	\N	2025-12-02 15:19:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N
+1947	identifier	Relocation.identifier	\N	\N	17	string	\N	Yes	No	\N	\N	\N	2025-12-02 15:34:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N
+1951	identifier	Interactions.identifier	\N	\N	17	string	\N	Yes	No	\N	\N	\N	2025-12-02 15:38:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N
 1198	informationSourceSystem	Organization.informationSourceSystem	For identification and record-keeping purposes	Ensure your models and systems can ingest the ad-hoc IDs from organizations that reside outside the systems embedded in the current mapping schema. Suggested normative data set Current Vocab plus an additional category for ad-hoc additions.	1	string	\N	No	No	CEDS	\N	\N	2025-11-26 22:48:00+00	\N	\N	LIF	f	\N	t	\N	\N	\N
+1944	identifier	Texts.identifier	\N	\N	17	string	\N	Yes	No	\N	\N	\N	2025-12-02 15:20:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N
+1948	identifier	RemoteWork.identifier	\N	\N	17	string	\N	Yes	No	\N	\N	\N	2025-12-02 15:35:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N
+1950	identifier	RemunerationPackage.identifier	\N	\N	17	string	\N	Yes	No	\N	\N	\N	2025-12-02 15:37:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N
+1953	identifier	MinimumAmount.identifier	\N	\N	17	string	\N	Yes	No	\N	\N	\N	2025-12-02 15:59:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N
 \.
 
 
@@ -3085,6 +3096,7 @@ COPY public."Entities" ("Id", "Name", "UniqueName", "Description", "UseConsidera
 74	LegalCode	Common.LegalCode	\N	\N	No	Yes	\N	1	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N
 75	AuditHistory	Person.Consent.AuditHistory	Mechanism for recording and tracking consent-related activities and changes.	\N	No	Yes	LIF	1	CM3/21: Unclear how this is actually represented?	\N	\N	\N	\N	LIF	f	\N	f	\N	\N
 77	Course	Course	\N	\N	No	Yes	\N	1	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N
+369	Accreditation	Accreditation	\N	\N	\N	Yes	\N	17	\N	\N	2025-10-03 17:28:00+00	\N	MDRUser	StateU	t	\N	t	\N	\N
 131	Criteria	Credential.Requirements.Criteria	The required criteria, or what is needed to earn the credential.	\N	No	Yes	OB2	1	in programs	\N	\N	\N	\N	LIF	f	\N	f	\N	\N
 133	CredentialAlignments	Credential.CredentialAlignments	Any and all alignments to or from the Credential.	\N	No	Yes	CLR v2 / Open Badges v3	1	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N
 135	Identity	Person.CredentialAward.Identity	\N	\N	No	Yes	\N	1	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N
@@ -3159,7 +3171,6 @@ COPY public."Entities" ("Id", "Name", "UniqueName", "Description", "UseConsidera
 344	TestPartnerEntity	TestPartnerEntity	Test of creating a partner LIF extension Entity	Test considerations	No	Yes	\N	18	Test notes	2025-08-17 16:19:22.543+00	2025-08-17 16:19:22.543+00	\N	Mary Gwozdz	StateU	t	\N	f	\N	\N
 343	TestOrgChildEntity	TestOrgChildEntity	Test of creating an org Child LIF extension Entity	Test considerations	No	Yes	\N	17	Test notes	2025-08-17 16:19:22.543+00	2025-08-17 16:19:22.543+00	\N	Mary Gwozdz	StateU	t	\N	t	\N	\N
 348	TestOrgChildEntity	TestOrgChildEntity	Test of creating an org Child LIF extension Entity	Test considerations	No	Yes	\N	17	Test notes	2025-08-17 16:19:22.543+00	2025-08-17 16:19:22.543+00	\N	Mary Gwozdz	StateU	t	\N	t	\N	\N
-369	Accreditation	Accreditation	\N	\N	\N	Yes	\N	17	\N	\N	2025-10-03 17:28:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N
 364	MinimumAmount	RemunerationPackage.Ranges.MinimumAmount	\N	\N	No	Yes	\N	17	\N	\N	2025-10-02 20:50:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N
 360	Narrative	Person.Narrative	\N	\N	No	Yes	\N	17	\N	\N	2025-10-02 19:21:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N
 363	Ranges	RemunerationPackage.Ranges	\N	\N	No	Yes	\N	17	\N	\N	2025-10-02 20:46:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N
@@ -5438,7 +5449,6 @@ COPY public."EntityAttributeAssociation" ("Id", "EntityId", "AttributeId", "Note
 1770	134	1810	\N	\N	\N	\N	\N	StateU	t	17
 1788	337	1825	\N	\N	\N	\N	\N	StateU	t	17
 1786	337	1826	\N	\N	\N	\N	\N	StateU	t	17
-1839	371	1290	\N	2025-10-06 16:32:00+00	2025-10-06 16:32:00+00	\N	\N	StateU	f	17
 1769	238	1809	\N	\N	\N	\N	\N	StateU	t	17
 1817	239	1320	\N	\N	\N	\N	\N	StateU	f	17
 1818	239	1321	\N	\N	\N	\N	\N	StateU	f	17
@@ -5447,7 +5457,6 @@ COPY public."EntityAttributeAssociation" ("Id", "EntityId", "AttributeId", "Note
 1821	364	1860	\N	2025-10-02 20:51:00+00	2025-10-02 20:51:00+00	\N	MDRUser	StateU	f	17
 1822	364	1861	\N	2025-10-02 20:51:00+00	2025-10-02 20:51:00+00	\N	MDRUser	StateU	f	17
 1823	360	1862	\N	2025-10-02 20:54:00+00	2025-10-02 20:54:00+00	\N	MDRUser	StateU	f	17
-1840	371	1291	\N	2025-10-06 16:33:00+00	2025-10-06 16:33:00+00	\N	\N	StateU	f	17
 1825	361	1864	\N	2025-10-02 20:57:00+00	2025-10-02 20:57:00+00	\N	MDRUser	StateU	f	17
 1826	361	1865	\N	2025-10-02 23:23:00+00	2025-10-02 23:23:00+00	\N	MDRUser	StateU	f	17
 1827	361	1866	\N	2025-10-02 23:24:00+00	2025-10-02 23:24:00+00	\N	MDRUser	StateU	f	17
@@ -5469,7 +5478,6 @@ COPY public."EntityAttributeAssociation" ("Id", "EntityId", "AttributeId", "Note
 1772	134	1812	\N	\N	\N	\N	\N	StateU	t	17
 1776	134	1816	\N	\N	\N	\N	\N	StateU	t	17
 1824	361	1863	\N	2025-10-02 20:56:00+00	2025-10-02 20:56:00+00	\N	MDRUser	StateU	t	17
-1841	371	1292	\N	2025-10-06 16:33:00+00	2025-10-06 16:33:00+00	\N	\N	StateU	f	17
 1844	132	1878	\N	2025-10-06 17:09:00+00	2025-10-06 17:09:00+00	\N	MDRUser	StateU	f	17
 1846	132	1745	\N	\N	\N	\N		StateU	f	17
 1847	132	1880	\N	\N	\N	\N		StateU	f	17
@@ -5482,6 +5490,8 @@ COPY public."EntityAttributeAssociation" ("Id", "EntityId", "AttributeId", "Note
 1857	374	1886	\N	\N	\N	\N	\N	StateU	f	17
 1858	374	1887	\N	\N	\N	\N	\N	StateU	f	17
 1859	374	1888	\N	\N	\N	\N	\N	StateU	f	17
+1839	371	1290	\N	2025-10-06 16:32:00+00	2025-10-06 16:32:00+00	\N	\N	StateU	t	17
+1841	371	1292	\N	2025-10-06 16:33:00+00	2025-10-06 16:33:00+00	\N	\N	StateU	t	17
 1860	374	1889	\N	\N	\N	\N	\N	StateU	f	17
 1861	374	1890	\N	\N	\N	\N	\N	StateU	f	17
 1862	374	1891	\N	\N	\N	\N	\N	StateU	f	17
@@ -5535,6 +5545,18 @@ COPY public."EntityAttributeAssociation" ("Id", "EntityId", "AttributeId", "Note
 2181	188	1941	\N	2025-12-01 22:26:00+00	2025-12-01 22:26:00+00	\N	MDRUser	LIF	f	\N
 2182	191	1942	\N	2025-12-01 22:26:00+00	2025-12-01 22:26:00+00	\N	MDRUser	LIF	f	\N
 1173	212	1198	\N	\N	\N	\N	\N	LIF	t	\N
+2183	360	1943	\N	2025-12-02 15:20:00+00	2025-12-02 15:20:00+00	\N	MDRUser	StateU	f	17
+2184	365	1944	\N	2025-12-02 15:20:00+00	2025-12-02 15:20:00+00	\N	MDRUser	StateU	f	17
+2185	359	1945	\N	2025-12-02 15:28:00+00	2025-12-02 15:28:00+00	\N	MDRUser	StateU	f	17
+2186	361	1946	\N	2025-12-02 15:30:00+00	2025-12-02 15:30:00+00	\N	MDRUser	StateU	f	17
+2187	366	1947	\N	2025-12-02 15:34:00+00	2025-12-02 15:34:00+00	\N	MDRUser	StateU	f	17
+2188	367	1948	\N	2025-12-02 15:35:00+00	2025-12-02 15:35:00+00	\N	MDRUser	StateU	f	17
+2189	368	1949	\N	2025-12-02 15:36:00+00	2025-12-02 15:36:00+00	\N	MDRUser	StateU	f	17
+2190	362	1950	\N	2025-12-02 15:38:00+00	2025-12-02 15:38:00+00	\N	MDRUser	StateU	f	17
+2191	374	1951	\N	2025-12-02 15:39:00+00	2025-12-02 15:39:00+00	\N	MDRUser	StateU	f	17
+2192	363	1952	\N	2025-12-02 15:44:00+00	2025-12-02 15:44:00+00	\N	MDRUser	StateU	f	17
+2193	364	1953	\N	2025-12-02 15:59:00+00	2025-12-02 15:59:00+00	\N	MDRUser	StateU	f	17
+1840	371	1291	\N	2025-10-06 16:33:00+00	2025-10-06 16:33:00+00	\N	\N	StateU	t	17
 \.
 
 
@@ -5823,7 +5845,6 @@ COPY public."ExtInclusionsFromBaseDM" ("Id", "ExtDataModelId", "ElementType", "I
 283	17	Attribute	1874	\N	2025-10-02 23:36:00+00	2025-10-02 23:36:00+00	\N	MDRUser	StateU	f	Public	f	f
 285	17	Attribute	1876	\N	2025-10-02 23:37:00+00	2025-10-02 23:37:00+00	\N	MDRUser	StateU	f	Private	f	f
 291	17	Entity	371	\N	\N	\N	\N		StateU	f	Public	f	f
-287	17	Entity	369	\N	2025-10-03 17:28:00+00	2025-10-03 17:28:00+00	\N	MDRUser	StateU	f	Public	f	f
 316	17	Entity	212	\N	2025-10-07 02:38:00+00	2025-10-07 02:38:00+00	\N	MDRUser	StateU	f	Public	f	f
 192	17	Entity	215	\N	2025-10-02 18:04:00+00	2025-10-02 18:04:00+00	\N	UX	StateU	t	Public	f	f
 289	17	Attribute	829	\N	2025-10-03 17:35:00+00	2025-10-03 17:35:00+00	\N	MDRUser	StateU	f	Public	f	f
@@ -5870,6 +5891,7 @@ COPY public."ExtInclusionsFromBaseDM" ("Id", "ExtDataModelId", "ElementType", "I
 334	17	Attribute	1891	\N	\N	\N	\N		StateU	f	Private	f	t
 335	17	Attribute	1892	\N	\N	\N	\N		StateU	f	Private	f	t
 325	17	Entity	374	\N	\N	2025-11-14 02:21:00+00	\N	\N	StateU	f	Private	f	t
+287	17	Entity	369	\N	2025-10-03 17:28:00+00	2025-10-03 17:28:00+00	\N	MDRUser	StateU	t	Public	f	f
 336	17	Attribute	1893	\N	\N	\N	\N		StateU	f	Private	f	t
 337	17	Attribute	1899	\N	2025-11-18 16:43:00+00	2025-11-18 16:43:00+00	\N	MDRUser	StateU	f	Public	f	f
 338	17	Attribute	1900	\N	2025-11-18 16:43:00+00	2025-11-18 16:43:00+00	\N	MDRUser	StateU	f	Public	f	f
@@ -5883,6 +5905,37 @@ COPY public."ExtInclusionsFromBaseDM" ("Id", "ExtDataModelId", "ElementType", "I
 345	17	Attribute	1627	\N	2025-12-01 22:35:00+00	2025-12-01 22:35:00+00	\N	MDRUser	StateU	f	Public	f	f
 346	17	Attribute	1624	\N	2025-12-01 22:35:00+00	2025-12-01 22:35:00+00	\N	MDRUser	StateU	f	Public	f	f
 214	17	Attribute	1198	\N	2025-10-02 18:09:00+00	2025-10-02 18:09:00+00	\N	UX	StateU	t	Public	f	f
+347	17	Attribute	556	\N	2025-12-02 15:14:00+00	2025-12-02 15:14:00+00	\N	MDRUser	StateU	f	Public	f	f
+348	17	Attribute	1931	\N	2025-12-02 15:14:00+00	2025-12-02 15:14:00+00	\N	MDRUser	StateU	f	Public	f	f
+349	17	Attribute	1132	\N	2025-12-02 15:14:00+00	2025-12-02 15:14:00+00	\N	MDRUser	StateU	f	Public	f	f
+350	17	Attribute	296	\N	2025-12-02 15:15:00+00	2025-12-02 15:15:00+00	\N	MDRUser	StateU	f	Public	f	f
+351	17	Attribute	1939	\N	2025-12-02 15:15:00+00	2025-12-02 15:15:00+00	\N	MDRUser	StateU	f	Public	f	f
+352	17	Attribute	1937	\N	2025-12-02 15:15:00+00	2025-12-02 15:15:00+00	\N	MDRUser	StateU	f	Public	f	f
+353	17	Attribute	1905	\N	2025-12-02 15:15:00+00	2025-12-02 15:15:00+00	\N	MDRUser	StateU	f	Public	f	f
+354	17	Attribute	1924	\N	2025-12-02 15:15:00+00	2025-12-02 15:15:00+00	\N	MDRUser	StateU	f	Public	f	f
+355	17	Attribute	1925	\N	2025-12-02 15:16:00+00	2025-12-02 15:16:00+00	\N	MDRUser	StateU	f	Public	f	f
+356	17	Attribute	1926	\N	2025-12-02 15:16:00+00	2025-12-02 15:16:00+00	\N	MDRUser	StateU	f	Public	f	f
+357	17	Attribute	1935	\N	2025-12-02 15:18:00+00	2025-12-02 15:18:00+00	\N	MDRUser	StateU	f	Public	f	f
+358	17	Attribute	1943	\N	2025-12-02 15:20:00+00	2025-12-02 15:20:00+00	\N	MDRUser	StateU	f	Public	f	f
+359	17	Attribute	1944	\N	2025-12-02 15:20:00+00	2025-12-02 15:20:00+00	\N	MDRUser	StateU	f	Public	f	f
+360	17	Attribute	1945	\N	2025-12-02 15:28:00+00	2025-12-02 15:28:00+00	\N	MDRUser	StateU	f	Public	f	f
+361	17	Attribute	1946	\N	2025-12-02 15:30:00+00	2025-12-02 15:30:00+00	\N	MDRUser	StateU	f	Public	f	f
+362	17	Attribute	1947	\N	2025-12-02 15:34:00+00	2025-12-02 15:34:00+00	\N	MDRUser	StateU	f	Public	f	f
+363	17	Attribute	1948	\N	2025-12-02 15:35:00+00	2025-12-02 15:35:00+00	\N	MDRUser	StateU	f	Public	f	f
+364	17	Attribute	1949	\N	2025-12-02 15:36:00+00	2025-12-02 15:36:00+00	\N	MDRUser	StateU	f	Private	f	f
+365	17	Attribute	1950	\N	2025-12-02 15:38:00+00	2025-12-02 15:38:00+00	\N	MDRUser	StateU	f	Public	f	f
+366	17	Attribute	1951	\N	2025-12-02 15:39:00+00	2025-12-02 15:39:00+00	\N	MDRUser	StateU	f	Private	f	f
+367	17	Attribute	1904	\N	2025-12-02 15:42:00+00	2025-12-02 15:42:00+00	\N	MDRUser	StateU	f	Public	f	f
+368	17	Attribute	1928	\N	2025-12-02 15:42:00+00	2025-12-02 15:42:00+00	\N	MDRUser	StateU	f	Public	f	f
+369	17	Attribute	1918	\N	2025-12-02 15:43:00+00	2025-12-02 15:43:00+00	\N	MDRUser	StateU	f	Public	f	f
+370	17	Attribute	1906	\N	2025-12-02 15:43:00+00	2025-12-02 15:43:00+00	\N	MDRUser	StateU	f	Public	f	f
+371	17	Attribute	1952	\N	2025-12-02 15:44:00+00	2025-12-02 15:44:00+00	\N	MDRUser	StateU	f	Public	f	f
+372	17	Attribute	1953	\N	2025-12-02 15:59:00+00	2025-12-02 15:59:00+00	\N	MDRUser	StateU	f	Private	f	f
+373	17	Attribute	2	\N	2025-12-02 16:00:00+00	2025-12-02 16:00:00+00	\N	MDRUser	StateU	f	Public	f	f
+374	17	Attribute	1921	\N	2025-12-02 16:00:00+00	2025-12-02 16:00:00+00	\N	MDRUser	StateU	f	Public	f	f
+375	17	Attribute	1919	\N	2025-12-02 16:00:00+00	2025-12-02 16:00:00+00	\N	MDRUser	StateU	f	Public	f	f
+376	17	Attribute	1102	\N	2025-12-02 16:00:00+00	2025-12-02 16:00:00+00	\N	MDRUser	StateU	f	Public	f	f
+377	17	Attribute	4	\N	2025-12-02 16:00:00+00	2025-12-02 16:00:00+00	\N	MDRUser	StateU	f	Public	f	f
 \.
 
 
@@ -18132,7 +18185,7 @@ COPY public."ValueSets" ("Id", "Name", "Description", "UseConsiderations", "Data
 -- Name: Attributes_Id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."Attributes_Id_seq"', 1942, true);
+SELECT pg_catalog.setval('public."Attributes_Id_seq"', 1953, true);
 
 
 --
@@ -18174,14 +18227,14 @@ SELECT pg_catalog.setval('public."EntityAssociation_Id_seq"', 185, true);
 -- Name: EntityAttributeAssociation_Id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."EntityAttributeAssociation_Id_seq"', 2182, true);
+SELECT pg_catalog.setval('public."EntityAttributeAssociation_Id_seq"', 2193, true);
 
 
 --
 -- Name: ExtInclusionsFromBaseDM_Id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."ExtInclusionsFromBaseDM_Id_seq"', 346, true);
+SELECT pg_catalog.setval('public."ExtInclusionsFromBaseDM_Id_seq"', 377, true);
 
 
 --
@@ -18644,5 +18697,5 @@ ALTER TABLE ONLY public."TransformationAttributes"
 -- PostgreSQL database dump complete
 --
 
--- \unrestrict Qz5smfmwp5XOyNIXgn37V688dnEpOfOropKVXrxaoqcfbc9FxzY7jonEhRCvdiX
+-- \unrestrict M0ICOe5C8XZAngGj27H5S1q9MOdTCdyxnd1jJBJC8gjPruEqie6XPbCrDVZjvYh
 
