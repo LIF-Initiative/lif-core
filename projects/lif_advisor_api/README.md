@@ -1,3 +1,8 @@
+# Advisor AI
+
+The **Advisor API** facilitates a conversational experience by authenticating users, managing session states,
+and interacting with a language model agent to provide personalized chat interactions.
+
 # Example usage
 
 ## Build the project
