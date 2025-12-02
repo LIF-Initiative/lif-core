@@ -11536,18 +11536,6 @@
 						}
 					}
 				}
-			},
-			"Identifier": {
-				"type": "array",
-				"required": [
-
-				],
-				"use_recommendations": "",
-				"x-mutable": false,
-				"x-queryable": false,
-				"properties": {
-
-				}
 			}
 		}
 	}

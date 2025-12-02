@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
--- \restrict M0ICOe5C8XZAngGj27H5S1q9MOdTCdyxnd1jJBJC8gjPruEqie6XPbCrDVZjvYh
+-- \restrict HW7E7Zg9n6oBvbEeM4udH9s6iAPc3Jq9DkSqWAqethotOIn15m6W92s3jxWZUWh
 
 -- Dumped from database version 17.6 (Debian 17.6-1.pgdg13+1)
 -- Dumped by pg_dump version 17.6 (Homebrew)
@@ -3184,8 +3184,8 @@ COPY public."Entities" ("Id", "Name", "UniqueName", "Description", "UseConsidera
 373	image	Credential.image	IRI or document representing an image of the credential. This must be a PNG or SVG image.	\N	No	Yes	Open Badges v2	17	\N	\N	\N	\N	\N	StateU	t	\N	t	\N	\N
 337	StateUExtensionEntity	StateUExtensionEntity	An entity added for the purpose of being an example of a StateU extension.	\N	No	Yes	LIF-Addition	17	\N	\N	\N	\N	\N	StateU	t	\N	f	\N	\N
 338	StateUChildExtEntity	StateUChildExtEntity	An entity added as an example of an entity that is a child of the other example entity.	\N	No	Yes	LIF-Addition	17	\N	\N	\N	\N	\N	StateU	t	\N	f	\N	\N
-371	Identifier	StateU.Common.Identifier	\N	\N	No	Yes	\N	17	\N	\N	2025-10-06 16:08:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N
 78	Grade	Course.Grade	\N	\N	No	Yes	\N	1	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N
+371	Identifier	StateU.Common.Identifier	\N	\N	No	Yes	\N	17	\N	\N	2025-10-06 16:08:00+00	\N	MDRUser	StateU	t	\N	t	\N	\N
 \.
 
 
@@ -18697,5 +18697,5 @@ ALTER TABLE ONLY public."TransformationAttributes"
 -- PostgreSQL database dump complete
 --
 
--- \unrestrict M0ICOe5C8XZAngGj27H5S1q9MOdTCdyxnd1jJBJC8gjPruEqie6XPbCrDVZjvYh
+-- \unrestrict HW7E7Zg9n6oBvbEeM4udH9s6iAPc3Jq9DkSqWAqethotOIn15m6W92s3jxWZUWh
 
