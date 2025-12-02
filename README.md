@@ -1,5 +1,16 @@
-# lif-main
-Collection of LIF components
+# lif-core
+The LIF Core project is a modular collection of components designed to facilitate the aggregation of learner
+information from a variety of systems and sources into a single data record. The record is based off of a
+flexible data model schema that can be extended and constrained for localized use. Mapping from a variety of
+source formats into the LIF data model is managed by a web app with a graphical UI, including in this repo.
+
+## Try the LIF Demo
+
+To experience the LIF comonents firsthand, you can run the LIF demo application using Docker. Navigate to the [`deployments/advisor-demo-docker/`](deployments/advisor-demo-docker/) directory for instructions on setting up and running the demo. This will give you an interactive demonstration of the LIF Advisor's capabilities and features, allowing you to explore the system's functionality in a controlled, local environment.
+
+## Community Support
+
+We will be activating the Discussions feature in GitHub to support community discussions and topics.
 
 ## Toolchain
 * python
