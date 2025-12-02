@@ -1,0 +1,31 @@
+information_sources:
+  - information_source_id: "org2"
+    information_source_organization: "Org2"
+    adapter_id: "lif-to-lif"
+    ttl_hours: 24
+    lif_fragment_paths:
+      - "person.name"
+      - "person.contact"
+      - "person.identifier"
+      - "person.employmentLearningExperience"
+      - "person.positionPreferences"
+  - information_source_id: "org3"
+    information_source_organization: "Org3"
+    adapter_id: "lif-to-lif"
+    ttl_hours: 24
+    lif_fragment_paths:
+      - "person.name"
+      - "person.contact"
+      - "person.identifier"
+      - "person.credentialAward"
+      - "person.courseLearningExperience"
+      - "person.proficiency"
+  - information_source_id: "org1-example-data-source"
+    information_source_organization: "Org1"
+    adapter_id: "example-data-source-rest-api-to-lif"
+    ttl_hours: 24
+    lif_fragment_paths:
+      - "person.employmentPreferences"
+    translation:
+      source_schema_id: "26"
+      target_schema_id: "17"
