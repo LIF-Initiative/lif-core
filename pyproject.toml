@@ -39,15 +39,21 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "asyncpg~=0.30",
     "dagster-cloud~=1.11",
     "dagster-dg-cli~=1.11",
     "dagster-webserver~=1.11",
+    "greenlet>=3.2.3",
+    "mysql-connector-python~=8.3",
+    "passlib[bcrypt]~=1.7",
     "polylith-cli~=1.30",
     "pre-commit~=4.2",
+    "psycopg2-binary~=2.9",
     "pytest~=8.4",
     "pytest-asyncio~=1.1",
     "ruff~=0.11",
     "strawberry-graphql[debug-server]~=0.275",
+    "testcontainers[postgres]>=4.13.3",
     "ty~=0.0",
 ]
 
@@ -116,4 +122,3 @@ ignore = [
   "TD002",
   "TD003"
 ]
-
