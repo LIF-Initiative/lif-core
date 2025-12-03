@@ -9,7 +9,8 @@ Environment:
   - Name: SEMANTIC_SEARCH_SERVICE__GRAPHQL_TIMEOUT__READ
     Value: 300
   - Name: LIF_MDR_API_URL
-    Value: "https://mdr-api.lif.unicon.net"
+    Value: 
+      Fn::Sub: "https://mdr-api.${PublicHostedZoneName}"
   - Name: OPENAPI_DATA_MODEL_ID
     Value: "17"
   - Name: OPENAPI_JSON_FILENAME

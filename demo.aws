@@ -6,49 +6,98 @@ SSO_ACCOUNT_NAME=AWS-Gates-CLIR
 SAM_CONFIG_ENV=demo
 
 declare -g -A STACKS
-#We're using images from the dev ECR repos
-#note: create /demo/S3Bucket=na in parameter store
-#      we don't need the bucket, just the param
-#STACKS['demo-lif-repositories']='repositories'
+STACKS['demo-lif-repositories']='repositories'
 STACKS['demo-lif-networking']='networking'
 STACKS['demo-lif-common']='service-common'
-STACKS['demo-lif-mongodb']='service'
-STACKS['demo-lif-query-cache']='service'
-STACKS['demo-lif-query-planner']='service'
-STACKS['demo-lif-graphql']='service'
+
+# Org1 services (existing)
+STACKS['demo-lif-translator-org1']='service'
+STACKS['demo-lif-identity-mapper-mariadb-org1']='service'
+STACKS['demo-lif-identity-mapper-org1']='service'
+STACKS['demo-lif-mongodb-org1']='service'
+STACKS['demo-lif-query-cache-org1']='service'
+STACKS['demo-lif-query-planner-org1']='service'
+STACKS['demo-lif-graphql-org1']='service'
 STACKS['demo-lif-semantic-search']='service'
 STACKS['demo-lif-advisor-api']='service'
 STACKS['demo-lif-advisor-app']='service'
-STACKS['demo-lif-mongodb-seed']='scheduled-task'
+STACKS['demo-lif-orchestrator-api']='service'
 STACKS['demo-lif-example-data-source-rest-api']='service'
 
+# Org2 services (new)
+STACKS['demo-lif-identity-mapper-mariadb-org2']='service'
+STACKS['demo-lif-identity-mapper-org2']='service'
+STACKS['demo-lif-mongodb-org2']='service'
+STACKS['demo-lif-query-cache-org2']='service'
+STACKS['demo-lif-query-planner-org2']='service'
+STACKS['demo-lif-graphql-org2']='service'
+
+# Org3 services (new)
+STACKS['demo-lif-identity-mapper-mariadb-org3']='service'
+STACKS['demo-lif-identity-mapper-org3']='service'
+STACKS['demo-lif-mongodb-org3']='service'
+STACKS['demo-lif-query-cache-org3']='service'
+STACKS['demo-lif-query-planner-org3']='service'
+STACKS['demo-lif-graphql-org3']='service'
+
+STACKS['demo-lif-dagster-cloud-agent']='service'
 STACKS['demo-lif-mdr-frontend']='s3-hosted'
 STACKS['demo-lif-mdr-api']='service'
 
+# Dagster OSE
+STACKS['demo-lif-dagster-code-location']='service'
+STACKS['demo-lif-dagster-webserver']='service'
+STACKS['demo-lif-dagster-daemon']='service'
+
 declare -g -a STACK_ORDER
 STACK_ORDER=(
-#  demo-lif-repositories 
+  demo-lif-repositories 
   demo-lif-networking 
   demo-lif-common
-  demo-lif-mongodb
-  demo-lif-query-cache
-  demo-lif-query-planner
-  demo-lif-graphql
+  
+  # Org1 infrastructure
+  demo-lif-translator-org1
+  demo-lif-identity-mapper-mariadb-org1
+  demo-lif-identity-mapper-org1
+  demo-lif-mongodb-org1
+  demo-lif-query-cache-org1
+  demo-lif-query-planner-org1
+  demo-lif-graphql-org1
   demo-lif-semantic-search
   demo-lif-advisor-api
   demo-lif-advisor-app
-  demo-lif-mongodb-seed
   demo-lif-example-data-source-rest-api
+  
+  # Org2 infrastructure
+  demo-lif-identity-mapper-mariadb-org2
+  demo-lif-identity-mapper-org2
+  demo-lif-mongodb-org2
+  demo-lif-query-cache-org2
+  demo-lif-query-planner-org2
+  demo-lif-graphql-org2
+  
+  # Org3 infrastructure
+  demo-lif-identity-mapper-mariadb-org3
+  demo-lif-identity-mapper-org3
+  demo-lif-mongodb-org3
+  demo-lif-query-cache-org3
+  demo-lif-query-planner-org3
+  demo-lif-graphql-org3
+ 
+  demo-lif-dagster-cloud-agent
+  demo-lif-orchestrator-api
   demo-lif-mdr-frontend
   demo-lif-mdr-api
-)
 
+  # Dagster OSE
+  demo-lif-dagster-code-location
+  demo-lif-dagster-webserver
+  demo-lif-dagster-daemon
+  
+)
 
 declare -g -a SAM_STACKS
 SAM_STACKS=(
   mdr-database
+  dagster-database
 )
-
-declare -g -A DOCKER_IMAGES
-DOCKER_IMAGES['demo-mdr-flyway']='flyway'
-

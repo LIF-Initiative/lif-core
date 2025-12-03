@@ -46,7 +46,7 @@ dev:
 demo:
   global:
     parameters:
-      stack_name: demo-lif-sam-resources
+      stack_name: demo-lif-mdr-db-resources
       region: us-east-1
 
   build:
@@ -68,8 +68,8 @@ demo:
       resolve_s3: true
       resolve_image_repos: true
       disable_rollback: false
-      s3_prefix: demo-lif-sam-resources
-      tags: env=demo name=demo-lif-sam-resources
+      s3_prefix: demo-lif-mdr-db-resources
+      tags: env=demo name=demo-lif-mdr-db-resources
       parameter_overrides: "pEnv=demo pMdrDbInstanceClass=db.t4g.medium"
 
   sync:

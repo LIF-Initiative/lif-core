@@ -1,4 +1,3 @@
-
 [
   {
     "ParameterKey": "EnvironmentName",
@@ -10,7 +9,7 @@
   },
   {
     "ParameterKey": "ScheduleExpression",
-    "ParameterValue": "cron(0 13 * * ? *)"
+    "ParameterValue": "cron(0 13 aws-deploy.sh bases cloudformation commitlint.config.mjs components cspell.json demo.aws deployments dev.aws development docs e2e exec.sh frontends LICENSE LIF_Release_1_(R1)_Executive_Summary.md mkdocs.yml orchestrators projects pyproject.toml README.md sam scripts test test.sh uv.lock workspace.toml aws-deploy.sh bases cloudformation commitlint.config.mjs components cspell.json demo.aws deployments dev.aws development docs e2e exec.sh frontends LICENSE LIF_Release_1_(R1)_Executive_Summary.md mkdocs.yml orchestrators projects pyproject.toml README.md sam scripts test test.sh uv.lock workspace.toml ? *)"
   },
   {
     "ParameterKey": "ImageUrl",

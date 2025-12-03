@@ -1,0 +1,2 @@
+declare -g -A DOCKER_IMAGES
+DOCKER_IMAGES['demo-mdr-flyway']='flyway'

@@ -1,6 +1,7 @@
 Environment:
   - Name: LIF_MDR_API_URL
-    Value: "https://mdr-api.lif.unicon.net"
+    Value:
+      Fn::Sub: "https://mdr-api.${PublicHostedZoneName}"
   - Name: OPENAPI_DATA_MODEL_ID
     Value: "17"
   - Name: OPENAPI_JSON_FILENAME

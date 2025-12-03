@@ -4,16 +4,24 @@
     "ParameterValue": "notapplicable"
   },
   {
+    "ParameterKey": "EnableCognitoAuth",
+    "ParameterValue": "false"
+  },
+  {
     "ParameterKey": "DomainNames",
-    "ParameterValue": "advisor.demo.lif.unicon.net"
+    "ParameterValue": "mdr-api.demo.lif.unicon.net"
   },
   {
     "ParameterKey": "EnvironmentName",
     "ParameterValue": "demo"
   },
   {
+    "ParameterKey": "OrganizationName",
+    "ParameterValue": "org1"
+  },
+  {
     "ParameterKey": "ServiceName",
-    "ParameterValue": "advisor-app"
+    "ParameterValue": "mdr-api"
   },
   {
     "ParameterKey": "S3AppBucket",
@@ -25,7 +33,7 @@
   },
   {
     "ParameterKey": "Priority",
-    "ParameterValue": "1"
+    "ParameterValue": "4"
   },
   {
     "ParameterKey": "EcsLaunchType",
@@ -33,7 +41,7 @@
   },
   {
     "ParameterKey": "HealthCheckUrl",
-    "ParameterValue": "/"
+    "ParameterValue": "/health-check"
   },
   {
     "ParameterKey": "UseLbForService",
@@ -49,11 +57,11 @@
   },
   {
     "ParameterKey": "ImageUrl",
-    "ParameterValue": "381492161417.dkr.ecr.us-east-1.amazonaws.com/lif/dev/lif_advisor_app:2025-10-31-20-44-54-5334514"
+    "ParameterValue": "381492161417.dkr.ecr.us-east-1.amazonaws.com/lif/dev/lif_mdr_api:2025-11-17-23-52-53-df7347e"
   },
   {
     "ParameterKey": "TaskDefIncludesFile",
-    "ParameterValue": "s3://clir-cf-templates/demo-lif/lif-advisor-app-taskdef-includes.yml"
+    "ParameterValue": "s3://clir-cf-templates/demo-lif/lif-mdr-api-taskdef-includes.yml"
   },
   {
     "ParameterKey": "TaskRoleIncludesFile",
@@ -61,7 +69,7 @@
   },
   {
     "ParameterKey": "ContainerPort",
-    "ParameterValue": "80"
+    "ParameterValue": "8012"
   },
   {
     "ParameterKey": "ContainerMemory",

@@ -105,6 +105,7 @@ Parameters:
     Description: The environment tag is used to designate the Environment Stage of the associated AWS resource.
     AllowedValues:
       - dev
+      - demo
       - test
       - qa
       - pre-prod

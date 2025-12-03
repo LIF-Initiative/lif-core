@@ -23,7 +23,7 @@ Resources:
   WebsiteBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Sub '${ServiceName}-${AWS::AccountId}-${AWS::Region}'
+      BucketName: !Sub '${EnvironmentName}-${ServiceName}-${AWS::AccountId}-${AWS::Region}'
       PublicAccessBlockConfiguration:
         BlockPublicAcls: true
         BlockPublicPolicy: true
@@ -34,7 +34,7 @@ Resources:
     Type: AWS::CloudFront::OriginAccessControl
     Properties:
       OriginAccessControlConfig:
-        Name: !Sub '${ServiceName}-oac'
+        Name: !Sub '${EnvironmentName}-${ServiceName}-oac'
         OriginAccessControlOriginType: s3
         SigningBehavior: always
         SigningProtocol: sigv4

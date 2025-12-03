@@ -1,0 +1,18 @@
+[
+  {
+    "ParameterKey": "EnvironmentName",
+    "ParameterValue": "demo"
+  },
+  {
+    "ParameterKey": "HostedZoneName",
+    "ParameterValue": "demo.lif.unicon.net"
+  },
+  {
+    "ParameterKey": "HostedZoneId",
+    "ParameterValue": "Z01404232VS3BQYEC5TV1"
+  },
+  {
+    "ParameterKey": "ServiceName",
+    "ParameterValue": "mdr"
+  }
+]

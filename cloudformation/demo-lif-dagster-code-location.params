@@ -5,7 +5,7 @@
   },
   {
     "ParameterKey": "DomainNames",
-    "ParameterValue": "advisor.demo.lif.unicon.net"
+    "ParameterValue": "notapplicable"
   },
   {
     "ParameterKey": "EnvironmentName",
@@ -13,7 +13,7 @@
   },
   {
     "ParameterKey": "ServiceName",
-    "ParameterValue": "advisor-app"
+    "ParameterValue": "dagster-code-location"
   },
   {
     "ParameterKey": "S3AppBucket",
@@ -37,7 +37,7 @@
   },
   {
     "ParameterKey": "UseLbForService",
-    "ParameterValue": "true"
+    "ParameterValue": "false"
   },
   {
     "ParameterKey": "InstanceType",
@@ -49,19 +49,19 @@
   },
   {
     "ParameterKey": "ImageUrl",
-    "ParameterValue": "381492161417.dkr.ecr.us-east-1.amazonaws.com/lif/dev/lif_advisor_app:2025-10-31-20-44-54-5334514"
+    "ParameterValue": "381492161417.dkr.ecr.us-east-1.amazonaws.com/lif/dev/dagster_code_location:2025-11-21-23-32-25-e63e5c5"
   },
   {
     "ParameterKey": "TaskDefIncludesFile",
-    "ParameterValue": "s3://clir-cf-templates/demo-lif/lif-advisor-app-taskdef-includes.yml"
+    "ParameterValue": "s3://clir-cf-templates/demo-lif/dagster-ose-taskdef-includes.yml"
   },
   {
     "ParameterKey": "TaskRoleIncludesFile",
-    "ParameterValue": "s3://clir-cf-templates/demo-lif/service-taskrole-includes.yml"
+    "ParameterValue": "s3://clir-cf-templates/demo-lif/dagster-ose-taskrole-includes.yml"
   },
   {
     "ParameterKey": "ContainerPort",
-    "ParameterValue": "80"
+    "ParameterValue": "4000"
   },
   {
     "ParameterKey": "ContainerMemory",

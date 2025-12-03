@@ -112,7 +112,7 @@ checkDependencies() {
 
 buildDockerImages() {
   ACCOUNT=$(aws sts get-caller-identity --query Account --output text)
-  . dockerImages
+  . ${SAM_CONFIG_ENV}.dockerImages
   for image in "${!DOCKER_IMAGES[@]}"; do 
     cd ${DOCKER_IMAGES[$image]}
     REPOSITORY=$image

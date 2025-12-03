@@ -5,15 +5,19 @@
   },
   {
     "ParameterKey": "DomainNames",
-    "ParameterValue": "advisor.demo.lif.unicon.net"
+    "ParameterValue": "notapplicable"
   },
   {
     "ParameterKey": "EnvironmentName",
     "ParameterValue": "demo"
   },
   {
+    "ParameterKey": "OrganizationName",
+    "ParameterValue": "org3"
+  },
+  {
     "ParameterKey": "ServiceName",
-    "ParameterValue": "advisor-app"
+    "ParameterValue": "query-planner-org3"
   },
   {
     "ParameterKey": "S3AppBucket",
@@ -37,7 +41,7 @@
   },
   {
     "ParameterKey": "UseLbForService",
-    "ParameterValue": "true"
+    "ParameterValue": "false"
   },
   {
     "ParameterKey": "InstanceType",
@@ -49,11 +53,11 @@
   },
   {
     "ParameterKey": "ImageUrl",
-    "ParameterValue": "381492161417.dkr.ecr.us-east-1.amazonaws.com/lif/dev/lif_advisor_app:2025-10-31-20-44-54-5334514"
+    "ParameterValue": "381492161417.dkr.ecr.us-east-1.amazonaws.com/lif/dev/lif_query_planner_api:2025-11-21-23-32-31-e63e5c5"
   },
   {
     "ParameterKey": "TaskDefIncludesFile",
-    "ParameterValue": "s3://clir-cf-templates/demo-lif/lif-advisor-app-taskdef-includes.yml"
+    "ParameterValue": "s3://clir-cf-templates/demo-lif/lif-query-planner-taskdef-includes.yml"
   },
   {
     "ParameterKey": "TaskRoleIncludesFile",
@@ -61,7 +65,7 @@
   },
   {
     "ParameterKey": "ContainerPort",
-    "ParameterValue": "80"
+    "ParameterValue": "8002"
   },
   {
     "ParameterKey": "ContainerMemory",
