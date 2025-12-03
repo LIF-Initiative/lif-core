@@ -12,7 +12,7 @@
     "ParameterValue": "repo:LIF-Initiative/lif-core:*"
   },
   {
-    "ParameterKey": "CreateProvider",
-    "ParameterValue": "false"
+    "ParameterKey": "ExistingProviderArn",
+    "ParameterValue": "arn:aws:iam::381492161417:oidc-provider/token.actions.githubusercontent.com"
   }
 ]

@@ -2,7 +2,7 @@ name: Deploy Demo LIF Metadata Repository Frontend to Amazon S3
 
 env:
   AWS_REGION: us-east-1
-  GHA_ROLE: "arn:aws:iam::381492161417:role/lif-github-actions-dev"
+  GHA_ROLE: "arn:aws:iam::381492161417:role/lif-github-actions-demo"
   AWS_ACCOUNT_ID: 381492161417
   DOMAIN: demo.lif.unicon.net
   ENV_NAME: demo
