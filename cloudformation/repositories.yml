@@ -8,11 +8,6 @@ Parameters:
     Description: The environment name (the SSM prefix path name)
     MaxLength: 10
 
-  AccessKeySerial:
-    Description: Increment this integer in order to rotate access-key credentials
-    Type: Number
-    Default: 1
-
   S3Bucket:
     Description: Creates a bucket that will hold application configs and files
     Type: String
@@ -20,6 +15,17 @@ Parameters:
   GitHubRepos:
     Description: A list of GitHub repositories that have access to GitHub Actions Role in AWS
     Type: CommaDelimitedList
+
+  ExistingProviderArn:
+    Description: Only one OIDC provider (for GitHub) may be created per account. If one already exists, provide the ARN.
+    Type: String
+    Default: 'none'
+
+Conditions:
+
+  CreateProvider: !Equals
+    - !Ref ExistingProviderArn
+    - 'none'
 
 Resources:
 
@@ -90,16 +96,24 @@ Resources:
     Type: AWS::ECR::Repository
     Properties:
       RepositoryName: !Sub lif/${EnvironmentName}/dagster_cloud_agent
+      ImageScanningConfiguration:
+        ScanOnPush: true
 
   DagsterCodeLocationRepo:
     Type: AWS::ECR::Repository
+    DeletionPolicy: Retain
     Properties:
       RepositoryName: !Sub lif/${EnvironmentName}/dagster_code_location
+      ImageScanningConfiguration:
+        ScanOnPush: true
 
   DagsterRepo:
     Type: AWS::ECR::Repository
+    DeletionPolicy: Retain
     Properties:
       RepositoryName: !Sub lif/${EnvironmentName}/dagster
+      ImageScanningConfiguration:
+        ScanOnPush: true
 
   OrchestratorRepo:
     Type: AWS::ECR::Repository
@@ -152,6 +166,7 @@ Resources:
 
   GitHubOIDCProvider:
     Type: AWS::IAM::OIDCProvider
+    Condition: CreateProvider
     Properties:
       Url: https://token.actions.githubusercontent.com
       ClientIdList:
@@ -178,6 +193,12 @@ Resources:
           Resource: !Sub 'arn:aws:ecr:${AWS::Region}:${AWS::AccountId}:repository/lif/${EnvironmentName}/*'
         - Effect: Allow
           Action:
+            - ecr:GetDownloadUrlForLayer
+            - ecr:BatchCheckLayerAvailability
+            - ecr:BatchGetImage
+          Resource: !Sub 'arn:aws:ecr:${AWS::Region}:${AWS::AccountId}:repository/lif/*'
+        - Effect: Allow
+          Action:
             - 's3:Get*'
             - 's3:List*'
             - 's3:PutObject*'
@@ -188,8 +209,8 @@ Resources:
           Resource:
             - !Sub 'arn:aws:s3:::${S3Bucket}'
             - !Sub 'arn:aws:s3:::${S3Bucket}/*'
-            - !Sub 'arn:aws:s3:::mdr-${AWS::AccountId}-${AWS::Region}'
-            - !Sub 'arn:aws:s3:::mdr-${AWS::AccountId}-${AWS::Region}/*'
+            - !Sub 'arn:aws:s3:::${EnvironmentName}-mdr-${AWS::AccountId}-${AWS::Region}'
+            - !Sub 'arn:aws:s3:::${EnvironmentName}-mdr-${AWS::AccountId}-${AWS::Region}/*'
         - Effect: Allow
           Action:
             - 'ssm:GetParameter'
@@ -216,7 +237,7 @@ Resources:
         Statement:
           - Effect: Allow
             Principal:
-              Federated: !Ref GitHubOIDCProvider
+              Federated: !If [CreateProvider, !Ref GitHubOIDCProvider, !Ref ExistingProviderArn]
             Action: sts:AssumeRoleWithWebIdentity
             Condition:
               StringEquals:
@@ -229,3 +250,7 @@ Resources:
         - Key: Name
           Value: !Sub lif-github-actions-${EnvironmentName}
 
+Outputs:
+
+  GitHubOIDCProvider:
+    Value: !If [CreateProvider, !Ref GitHubOIDCProvider, !Ref ExistingProviderArn]

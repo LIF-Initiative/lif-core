@@ -12,7 +12,7 @@
     "ParameterValue": "repo:LIF-Initiative/lif-core:*"
   },
   {
-    "ParameterKey": "CreateProvider",
-    "ParameterValue": "true"
+    "ParameterKey": "ExistingProviderArn",
+    "ParameterValue": "none"
   }
 ]

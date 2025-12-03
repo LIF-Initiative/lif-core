@@ -49,6 +49,7 @@
 ## Notes
 ### GitHubRepos Parameter
 Set GitHubRepos to your GitHub organization and repository pattern (e.g., `myorg/myrepo` or `myorg/*` for all repos) in the <name>-lif-repositories.params file. This value configures the OIDC trust policy for GitHub Actions integration with AWS. If this value is incorrect, your GitHub Actions workflows will fail to run.
+**_NOTE:_** If you run multiple LIF environment stacks in a single account, you can create only one OIDC provider per account.  Thus you should set the ExistingProviderArn to the ARN of the existing provider.
 
 ### Target Group Targeting (Public Services Only)
 The service.yml template supports three methods for routing traffic to target groups:

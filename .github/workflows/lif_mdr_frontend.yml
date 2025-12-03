@@ -10,7 +10,7 @@ env:
 on:
   workflow_dispatch:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "feat/lif-658" ]
     paths:
       - .github/workflows/lif_mdr_frontend.yml
       - frontends/mdr-frontend/**
@@ -53,7 +53,7 @@ jobs:
       shell: bash
       working-directory: ${{ env.WORKING_DIR }}
       run: |
-        aws s3 sync --delete dist s3://mdr-${{ env.AWS_ACCOUNT_ID }}-${{ env.AWS_REGION }}
+        aws s3 sync --delete dist s3://${{ env.ENV_NAME }}-mdr-${{ env.AWS_ACCOUNT_ID }}-${{ env.AWS_REGION }}
         id=$(aws ssm get-parameter --name "/${{ env.ENV_NAME }}/mdr/DistributionId" --query "Parameter.Value" --output text)
         aws cloudfront create-invalidation --distribution-id $id --paths "/"
 
