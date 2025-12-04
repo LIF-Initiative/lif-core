@@ -2,7 +2,7 @@
 The LIF Core project is a modular collection of components designed to facilitate the aggregation of learner
 information from a variety of systems and sources into a single data record. The record is based off of a
 flexible data model schema that can be extended and constrained for localized use. Mapping from a variety of
-source formats into the LIF data model is managed by a web app with a graphical UI, including in this repo.
+source formats into the LIF data model is managed by a web app (known as MDR) with a graphical UI, included in this repo.
 
 ## Try the LIF Demo
 
