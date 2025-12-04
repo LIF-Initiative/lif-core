@@ -1,3 +1,7 @@
+# Overview
+
+The **Query Planner** is the central component of LIF. It processes and serves *LIF queries* from the **LIF API**.  It provides a uniform and unified query interface for the **LIF API** by hiding the complexity that arises from interacting with different internal and external data source systems to fetch required data to fulfill the *LIF query* with a *LIF record* that complies with the **LIF Data Model**.
+
 # Example usage
 
 ## Build the project

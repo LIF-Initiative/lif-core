@@ -56,40 +56,16 @@ Version 1.0.0
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Example Usage](#example-usage)
 
-[Detailed Design](#detailed-design)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Implementation Model](#implementation-model)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Tools and Technologies](#tools-and-technologies)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Implementation Requirements](#implementation-requirements)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Data Storage](#data-storage)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[State](#state)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Concurrency](#concurrency-1)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Sync/Async](#syncasync)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[External Services](#external-services)
-
-[Deployment Design](#deployment-design)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Deployment Environment](#deployment-environment)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Deployment Model](#deployment-model)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Deployment Requirements](#deployment-requirements)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Dependencies](#dependencies-1)
+[Possible Future Roadmap Items](#possible-future-roadmap-items)
 
 
 # Introduction
 
 ## Overview
 
-The **Query Planner** is the central component of LIF. It processes and serves *LIF queries* from the **LIF API**. A *LIF query* supports both read and write requests. A *LIF read query* requests specific information about one or more learners, and it is fulfilled by one or more corresponding *LIF records*. A *LIF write query* includes specific learner information to be saved into a target source data system.
+The **Query Planner** is the central component of LIF. It processes and serves *LIF queries* from the **LIF API**. A *LIF query* supports both read and write requests. 
+* A *LIF read query* requests specific information about one or more learners, and it is fulfilled by one or more corresponding *LIF records*. 
+* (Possible Future Roadmap Item) A *LIF write query* includes specific learner information to be saved into a target source data system.
 
 There are many ways a *LIF query* could be fulfilled, as LIF components serve different discrete functions that support the user receiving a holistic, context-rich record from one or multiple data sources and/or caches.
 
@@ -111,46 +87,49 @@ A *LIF record* is a single holistic dataset that contains all available informat
 
 #### LIF fragment
 
-A *LIF fragment* is a partial learner information dataset containing data for a given part of a holistic *LIF record* corresponding to a specific branch of the *LIF record*. A *LIF fragment* contains a fragment path and the corresponding LIF data structure. The fragment path is the semantic path of the associated data structure relative to the root of the *LIF record*. This fragment path can be represented as a JSON Path expression such as ```$.person.attendance```.
+A *LIF fragment* is a partial learner information dataset containing data for a given part of a holistic *LIF record* corresponding to a specific branch of the *LIF record*. A *LIF fragment* contains a fragment path and the corresponding LIF data structure. The fragment path is the semantic path of the associated data structure relative to the root of the *LIF record*. This fragment path can be represented as a ~~JSON Path expression such as ```$.person.attendance```~~ hierarchical dot path expression such as `person.credentialAward`.
 
 A sample *LIF fragment* may look like the following:
 
 ```
 {
-	"$.person.attendance": {
-		// LIF data part
-	}
+	"fragment_path": "person.credentialAward",
+	"fragment": [
+		// fragment json
+	]
 }
 ```
 
 #### LIF Query
 
-A *LIF query* may reference one or more learners and can be fulfilled by one or more *LIF records*. A *LIF query* is represented as a JSON path expression that includes all valid query expressions.
+A *LIF query* may reference one or more learners and can be fulfilled by one or more *LIF records*. A *LIF query* is represented as ~~a JSON path expression that includes all~~ valid query expressions.
 
-The *LIF query* supports both an identity query and a parametric query. The identity query allows for LIF to find learner information based on a learner ID. The parametric query allows for LIF to find learner information based on specific attributes.
+The *LIF query* supports both an identity query and a parametric query. 
+* The identity query allows for LIF to find learner information based on a learner ID. 
+* (Possible Future Roadmap Item) The parametric query allows for LIF to find learner information based on specific attributes.
 
 In addition, the *LIF query* also supports retrieving query results by a Correlation ID for previously-submitted, long-running identity and parametric queries that were served asynchronously.
 
 #### LIF query result
 
-A *LIF query result* is a collection of *LIF fragments* with additional metadata information, such as source and timestamp. *LIF query results* are generated by **Data Pipelines** and/or **Adapters** that fetch data from different source systems.
+A *LIF query result* is a collection of ~~*LIF fragments* with additional~~ *LIF records* that include metadata information, such as source and timestamp. *LIF query results* are generated by **Data Pipelines** and/or **Adapters** that fetch data from different source systems.
 
 A sample *LIF query result* may be represented with following JSON:
 
 ```
 [
 	{
-		"source": "source_1",
-		"timestamp": "",
-		"fragments": [
-			//collection of LIF fragments
-		]
-	},
-	{
-		"source": "source_2",
-		"timestamp": "",
-		"fragments": [
-			//collection of LIF fragments
+		"person": [
+			{
+				"identifier": [
+					{
+						"informationSourceId": "Org1",
+						"identifier": "1234567",
+						"identifierType": "SCHOOL_ASSIGNED_NUMBER"
+					}
+				],
+				...
+			}
 		]
 	}
 ]
@@ -170,9 +149,9 @@ The **Query Planner** will follow the steps below in accordance with its role in
 
 3.  The **Query Planner** then compares the collection of *LIF records* returned against the *LIF query* and identifies if there is additional data required.
 
-4.  If additional data is required, the **Query Planner** then queries the **Identity Mapper** and **MDR** to get necessary information about source data systems that may be storing the relevant learner information. While the **Identity Mapper** provides information about the source organizations required to get the data for the specific learner(s) in question, the **MDR** provides source data models and mappings for appropriately fetching the data from the source data systems.
+4.  If additional data is required, the **Query Planner** then queries the ~~**Identity Mapper** and **MDR**~~ information sources configuration to get necessary information about source data systems that may be storing the relevant learner information. ~~While the **Identity Mapper** provides information about the source organizations required to get the data for the specific learner(s) in question, the **MDR** provides source data models and mappings for appropriately fetching the data from the source data systems.~~
 
-5.  The **Query Planner** then invokes the **Orchestrator** to spin up required data pipelines to fetch the additional data required based on findings from the **Identity Mapper** and **MDR**. The **Orchestrator** returns *LIF query* *result.*
+5.  The **Query Planner** then invokes the **Orchestrator** to spin up required data pipelines to fetch the additional data required based on findings from the ~~**Identity Mapper** and **MDR**~~ information sources configuration. The **Orchestrator** returns *LIF query* *result.*
 
 6.  The **Query Planner** uses the *LIF query result* to update the existing list of *LIF records,* making them "complete" by having answered the *LIF query*. It is important to note that even if no data is returned from the data pipelines, the absence of information still "completes" this instance of composing a *LIF record.*
 
@@ -180,7 +159,7 @@ The **Query Planner** will follow the steps below in accordance with its role in
 
 The **Query Planner** can serve a read query either asynchronously or synchronously, depending on whether it can be served entirely from **LIF Cache** or if it needs to fetch data from source data systems.
 
-The **Query Planner** will follow the steps below in accordance with its role in LIF to serve a *LIF write query.* Responses from other components are included in-line as relevant.
+(Possible Future Roadmap Item) The **Query Planner** will follow the steps below in accordance with its role in LIF to serve a *LIF write query.* Responses from other components are included in-line as relevant.
 
 1.  To initiate the process of saving data, the **Query Planner** receives a *LIF query* with specified learner data from **LIF API**.
 
@@ -197,7 +176,7 @@ The **LIF Query Planner** is at the center of LIF, interacting with almost all o
 
 ## Design Assumptions
 
-1.  The **Query Planner** is a serverless and stateless component.
+1.  ~~The **Query Planner** is a serverless and stateless component.~~
 
 2.  The **Query Planner** will have the necessary configuration for enabling it to invoke other components and coordinate the invocations to serve the *LIF query*.
 
@@ -245,7 +224,7 @@ The **Query Planner** is a serverless component that includes one delegate objec
 
 3.  **Identities Lookup Agent** - The **Identities Lookup Agent** communicates with the **Identity Mapper** to find a list of identities for a given learner identifier in a *LIF query*.
 
-4.  **Source Metadata Loader** - The **Source Metadata Loader** manages communication with the **MDR** to retrieve appropriate metadata for a given source data system. These metadata include the source data model, source-to-target mapping, and the target data model for the current LIF implementation.
+4.  ~~**Source Metadata Loader** - The **Source Metadata Loader** manages communication with the **MDR** to retrieve appropriate metadata for a given source data system. These metadata include the source data model, source-to-target mapping, and the target data model for the current LIF implementation.~~
 
 5.  **Data Pipeline Executor** - This subcomponent calls the **Orchestrator** to spin up data pipelines and adapters with a query plan and then collects the result of those data pipelines once they are completed.
 
@@ -258,10 +237,10 @@ The **Query Planner** then queries the **LIF Cache** with a correlation ID, uses
 The **Query Planner** supports the following read and write query scenarios:
 
 1.  Query with one or more learners by their IDs <br /><br />
-The **Query Planner** supports identity queries that can be used to find information about one or more learners by their IDs. These IDs must be available from the **Identity Mapper** for the **Query Planner** to be able to be able to process them. The user can query for one or more learners and request the entire available *LIF record* or just specific information. Depending on the number of source data pipelines required and the volume of information required to serve the query, the **Query Planner** may heuristically determine to serve the request either synchronously or asynchronously.
+The **Query Planner** supports identity queries that can be used to find information about one or more learners by their IDs. These IDs must be available from the **Identity Mapper** for the **Query Planner** to be able to process them. The user can query for one or more learners and request the entire available *LIF record* or just specific information. Depending on the number of source data pipelines required and the volume of information required to serve the query, the **Query Planner** may heuristically determine to serve the request either synchronously or asynchronously.
 
-2.  Query with one or more learner attributes <br /><br />
-The **Query Planner** supports parametric queries where clients can request to find learners based on their specific attributes. These queries are always served in asynchronously. The **Query Planner** queries the **LIF Cache** to find all learners that match the query criteria. It then builds a query DAG with a list of learner IDs to exclude while querying the respective source data systems. It triggers all the required data pipelines to fetch additional learner data. Finally, it merges the existing learner data with the new learner data before returning the result.
+2.  (Possible Future Roadmap Item) Query with one or more learner attributes<br /><br />
+The **Query Planner** supports parametric queries where clients can request to find learners based on their specific attributes. These queries are always served asynchronously. The **Query Planner** queries the **LIF Cache** to find all learners that match the query criteria. It then builds a query DAG with a list of learner IDs to exclude while querying the respective source data systems. It triggers all the required data pipelines to fetch additional learner data. Finally, it merges the existing learner data with the new learner data before returning the result.
 
 3.  Query with one or more correlation ID <br /><br />
 For all queries served asynchronously, the **Query Planner** provides correlation IDs as it invokes different helper components to retrieve the data required from the **LIF Cache** and via **Orchestrator** data pipelines and/or **Adapters**.
@@ -270,7 +249,7 @@ For all queries served asynchronously, the **Query Planner** provides correlatio
 
 The **Query Planner** supports the following write query scenarios:
 
-1.  Save specific learner data by learner ID
+1.  (Possible Future Roadmap Item) Save specific learner data by learner ID
 <br /><br />The **Query Planner** supports saving specific learner data to underlying data storage. The **Identity Mapper** and **MDR** should have information about the data source system and necessary **Adapter** for writing this data appropriately to the user's LIF system. The **Query Planner** retrieves this information for building the appropriate pipeline DAG.
 <br /><br />Based on the source metadata, the **Query Planner** spins up the **Orchestrator** data pipelines with the DAG to write the data to a target data source system. It receives the *LIF query result* representing the data saved from the **Orchestrator** once the pipelines complete successfully. The **Query Planner** then saves this query result to **LIF Cache** for future retrieval.
 
@@ -285,8 +264,8 @@ The **Query Planner** supports the following query and save scenarios:
 
 *Image 3: Diagram of the high-level workflow for a query by one or more learner IDs*
 
-1.  Query by one or more learner attributes
-<br /><br />The user specifies one or more attributes for learners and initiates the asynchronous workflow. The **Query Planner** then searches the **LIF Cache** to find requested learner data matching to the specific learner attributes. If the request can be satisfied by the cache it synchronously returns the result. Otherwise, the **Query Planner** serves this type of request asynchronously by returning a correlation ID by which the user can retrieve the result later.
+1.  (Possible Future Roadmap Item) Query by one or more learner attributes
+<br /><br />The user specifies one or more attributes for learners and initiates the asynchronous workflow. The **Query Planner** then searches the **LIF Cache** to find requested learner data matching the specific learner attributes. If the request can be satisfied by the cache it synchronously returns the result. Otherwise, the **Query Planner** serves this type of request asynchronously by returning a correlation ID by which the user can retrieve the result later.
 <br /><br />It then invokes the **Orchestrator** data pipelines to fetch any additional learner data from different source data systems that match the given attributes. In the second pass, it searches the **LIF Cache** and any required data pipelines.
 <br /><br />Once all the data required to serve the query is available in the **Query Planner**, it uses the **Composer** to build a collection of *LIF records* from the collection of *LIF fragments* from the **LIF Cache** and **Orchestrator**. It then stores the collection of *LIF records* in the internal **Processed Response Cache** by mapping that with the correlation ID. It also pushes the *LIF fragments* received from the **Orchestrator** to the **LIF Cache** for updating respective learner data in the cache.
 
@@ -312,45 +291,28 @@ The **Query Planner** supports the following query and save scenarios:
 
 The **Query Planner** requires configuration to connect and interact with all helper components. It may also include mapping of internal data source systems with corresponding adapters.
 
-A sample component configuration is as given below:
-
+Configuration for information data sources is as follows (YAML):
 ```
-{
-	"identity_mapper": {
-		"api_endpoint": "",
-		"api_key": ""
-	},
-	"mdr": {
-		"api_endpoint": "",
-		"api_key": ""
-	},
-	"orchestrator": {
-		"invocation_api_endpoint": "",
-		"output_api_endpoint": "",
-		"api_key": ""
-	},
-	"query_cache": {
-		"read_api_endpoint": "",
-		"write_api_endpoint": "",
-		"api_key": ""
-	},
-	"internal_cache": {
-		"api_endpoint": ""
-	},
-}
-```
-Configuration for internal data source adapters is as follows:
-```
-[{
-	"adapter_id": "",
-	"datamodel_id": "",
-	"datamodel_path": "",
-	"mode": "read_only|write_only|read_and_write",
-	"adapter": {
-		"package": "",
-		"main_module": ""
-	}
-}]
+information_sources:
+  - information_source_id: "org2"
+    information_source_organization: "Org2"
+    adapter_id: "lif-to-lif"
+    ttl_hours: 24
+    lif_fragment_paths:
+      - "person.name"
+      - "person.contact"
+      - "person.identifier"
+      - "person.employmentLearningExperience"
+      - "person.positionPreferences"
+  - information_source_id: "org1-example-data-source"
+    information_source_organization: "Org1"
+    adapter_id: "example-data-source-rest-api-to-lif"
+    ttl_hours: 24
+    lif_fragment_paths:
+      - "person.employmentPreferences"
+    translation:
+      source_schema_id: "26"
+      target_schema_id: "17"
 ```
 
 These configurations are provided to the **Query Planner** by the underlying infra settings, and the component is spun up with the appropriate configuration as specified.
@@ -380,59 +342,14 @@ This exception occurs if the **LIF Cache** is not able to connect to its underly
 ## Example Usage
 
 ```
-query_planner = QueryPlanner(config)
-records = query_planner.query(lif_query)
+query_planner = LIFQueryPlannerService(config):w
+
+records = await query_planner.run_query(lif_query)
 return records
 ```
 
-# Detailed Design
+# Possible Future Roadmap Items
 
-This component implements a delegate pattern with helper or service client components of the various services it needs to process and serve a *LIF query*. This component is designed to be implemented as a serverless component that can be scaled on demand.
+[Issue #26 Query Planner: Add Write Support](https://github.com/LIF-Initiative/lif-core/issues/26)
 
-## Implementation Model
-
-The **Query Planner** can be implemented as a serverless function.
-
-## Tools and Technologies
-
-The component is implemented using Python.
-
-## Implementation Requirements
-
-### Data Storage
-
-This component uses internal cache storage to maintain results for async query temporarily as configured.
-
-### State
-
-This component is stateless and does not maintain any information about any run.
-
-### Concurrency
-
-Being a stateless component, it should be able to scale on demand to address multiple concurrent requests. However, the concurrency limit will depend on the capability of other helper components.
-
-### Sync/Async
-
-This component operates in both sync and async modes depending on the workload it determines to be required for serving a query request.
-
-### External Services
-
-This component does not call any external services but uses a number of internal components as specified in the high-level design.
-
-# Deployment Design
-
-## Deployment Environment
-
-The component can be deployed in cloud using serverless infrastructure such as AWS Step Function or Azure Function. In the on-prem deployment environment, the component can be deployed as dependency along with other helper components such as the **LIF Cache**, **Identity Mapper**, **MDR**, and **Orchestrator**.
-
-## Deployment Model
-
-TBD
-
-## Deployment Requirements
-
-TBD
-
-## Dependencies
-
-TBD 
+[Issue #27 Query Planner: Add Support for Parametric Queries](https://github.com/LIF-Initiative/lif-core/issues/27)
