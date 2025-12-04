@@ -11,6 +11,7 @@ To experience the LIF components firsthand, you can run the LIF demo application
 ## Community Support
 
 We will be activating the Discussions feature in GitHub to support community discussions and topics.
+Community engagement is highly encouraged, especially for code changes and data model discussions.
 
 ## Toolchain
 * python
