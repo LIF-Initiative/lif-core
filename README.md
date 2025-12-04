@@ -6,7 +6,7 @@ source formats into the LIF data model is managed by a web app (known as MDR) wi
 
 ## Try the LIF Demo
 
-To experience the LIF comonents firsthand, you can run the LIF demo application using Docker. Navigate to the [`deployments/advisor-demo-docker/`](deployments/advisor-demo-docker/) directory for instructions on setting up and running the demo. This will give you an interactive demonstration of the LIF Advisor's capabilities and features, allowing you to explore the system's functionality in a controlled, local environment.
+To experience the LIF components firsthand, you can run the LIF demo application using Docker. Navigate to the [`deployments/advisor-demo-docker/`](deployments/advisor-demo-docker/) directory for instructions on setting up and running the demo. This will give you an interactive demonstration of the LIF Advisor, LIF GraphQL, and MDR, allowing you to explore the system's capabilities and features in a controlled, local environment.
 
 ## Community Support
 
