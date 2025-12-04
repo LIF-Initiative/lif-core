@@ -2,10 +2,10 @@
 -- PostgreSQL database dump
 --
 
-\restrict A3GRzz27qPpOflr6KmzQL3NO8Y30qAwPrkbAo6oqeoW1YGCITkENghQ0eQrkANy
+\restrict iWjJL0tEQAjEtfX5U5Sc0fPBwlegow1uCpsjftbRpvhA8vMvAllFXLjCzw6zTpM
 
--- Dumped from database version 17.2 (Debian 17.2-1.pgdg120+1)
--- Dumped by pg_dump version 17.7 (Ubuntu 17.7-3.pgdg24.04+1)
+-- Dumped from database version 17.6 (Debian 17.6-1.pgdg13+1)
+-- Dumped by pg_dump version 17.6 (Homebrew)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -1373,18 +1373,16 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 225	rights	CompetencyFramework.rights	The information about rights held in and over the resource.	In general, please pay attention to the power balance between what validation is needed to allow a learner to make a claim compared to what validation is needed to allow a competency framework to make a claim.	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 226	sequence	CompetencyFramework.sequence	A set of one or more alphanumeric characters and/or symbols denoting the positioning of the statement being described in a sequential listing of statements.	No change	1	string	\N	No	Yes	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 244	keywords	CompetencyFramework.Competency.keywords	\N	Great care should be taken to understand that claims of competency topicality are not value neutral frameworks and an assessment should be taken as to what values are being prioritized in each competency description before adoption	1	string	\N	No	Yes	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-54	type	Person.AssessmentLearningExperience.type	\N	No change	1	string	\N	Yes	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 55	identifier	Person.AssessmentLearningExperience.identifier	\N	No change	1	string	\N	Yes	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-212	creator	CompetencyFramework.creator	The person or organization chiefly responsible for the intellectual content of the competency framework.	The claim of creation should be assessed and validated prior to use. The origins of competency frameworks are often more complex than captured and this introduces critical bias and inaccuracy into outcomes.	1	string	\N	Yes	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-236	name	CompetencyFramework.Competency.name	\N	The name of the competency should not be used a proxy for what is actually measured in the elements. Care should be taken to avoid biased assumptions about what a competency actually measures from its name.	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 237	abbreviatedStatement	CompetencyFramework.Competency.abbreviatedStatement	\N	Great care should be taken to understand that claims of competency and competency frameworks are not value neutral frameworks and an assessment should be taken as to what values are being prioritized in each competency description before adoption	1	string	\N	No	No	CASE	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 238	rightsHolder	CompetencyFramework.Competency.rightsHolder	\N	The claim of rights should be assessed and validated prior to use. The origins of competency frameworks are often more complex than captured and this introduces critical bias and inaccuracy into outcomes.	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
+54	type	Person.AssessmentLearningExperience.type	\N	No change	1	string	\N	No	No	\N	\N	\N	2025-11-26 22:24:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+236	name	CompetencyFramework.Competency.name	\N	The name of the competency should not be used a proxy for what is actually measured in the elements. Care should be taken to avoid biased assumptions about what a competency actually measures from its name.	1	string	\N	Yes	No	CEDS	\N	\N	2025-11-26 23:08:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
 286	alignmentType	CompetencyFramework.Competency.CompetencyAlignments.alignmentType	\N	\N	1	string	\N	No	No	\N	List of possible alignment types.	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 246	hasProgressionLevel	CompetencyFramework.Competency.hasProgressionLevel	\N	No change	1	string	\N	No	No	CTDL	A progression level is a member of a progression model. Likely a URI would be used, that points to the source progression level.	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 248	license	CompetencyFramework.Competency.license	\N	The claim of rights should be assessed and validated prior to use. The origins of competency frameworks are often more complex than captured and this introduces critical bias and inaccuracy into outcomes.	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 256	altCodedNotation	CompetencyFramework.Competency.altCodedNotation	\N	No change	1	string	\N	No	No	CTDL	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 258	environmentalHazard	CompetencyFramework.Competency.environmentalHazard	\N	This is highly subjective rating. An element needs to be added to indicate the source of this rating. Should be used with caution.	1	string	\N	No	Yes	CTDL	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-260	identifier	CompetencyFramework.Competency.ProficiencyDefinition.identifier	Identifier for the Competency	No change	1	string	\N	No	No	\N	This might should be 0..* if there are more than one proficiency definition for the competency.	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 250	testibilityType	CompetencyFramework.Competency.testibilityType	\N	Opinion about whether a competency can or cannot be tested is highly subjective. Prior to implementing this element check the maker of this claim and who this claim prioritizes.	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 56	informationSourceId	Person.AssessmentLearningExperience.informationSourceId	\N	No change	1	string	\N	Yes	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N
 30	performanceLowerLevel	Assessment.AssessmentPerformanceLevel.performanceLowerLevel	Lowest possible score for the performance level.	No change	1	number	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
@@ -1395,7 +1393,6 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 267	valueMax	CompetencyFramework.Competency.ProficiencyDefinition.valueMax	The maximum possible value that may be asserted	No change	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 268	valueMin	CompetencyFramework.Competency.ProficiencyDefinition.valueMin	The minimum possible value that may be asserted in a linked result.	No change	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 953	expirationDate	StudentCredentialRecord.expirationDate	\N	\N	5	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-271	competencyId	CompetencyFramework.Competency.ProficiencyDefinition.ProficiencyLevel.competencyId	The identifier of the competency for which the levels are being defined.	No change	1	string	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 273	value	CompetencyFramework.Competency.ProficiencyDefinition.ProficiencyLevel.value	The proficiency value if it is a number or letter grade.	No change	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 278	competencyAssociationConnectionCitation	CompetencyFramework.Association.competencyAssociationConnectionCitation	\N	No change	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 291	alignsToType	CompetencyFramework.Competency.CompetencyAlignments.alignsToType	\N	\N	1	string	\N	No	No	\N	Subtype of the AlignmentType  \nRequired if AlignmentType contains subtypes	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
@@ -1408,16 +1405,14 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 490	languages	Person.Consent.languages	Languages in which consent information and notices are presented to users (e.g. Braille, Spanish, French, etc.).	Ensure that consent is obtained in the user's primary language or a language that they are proficient in.	1	string	\N	No	Yes	LIF	CM 3.21: Changed to an array	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 495	regulatoryCompliance	Person.Consent.regulatoryCompliance	Compliance with relevant data protection regulations (e.g., GDPR, CCPA).	\N	1	string	\N	No	Yes	LIF	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 496	additionalNotes	Person.Consent.additionalNotes	Any additional information or notes relevant to the consent flow mapping.	\N	1	string	\N	No	No	LIF	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-485	code	Common.LegalCode.code	The code for the law or justification for processing the data or withdrawing consent (e.g., consent, legitimate interest).	\N	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1840	MDRTest2	MDRTest2	This is a test of creating a new Source attribute	consideration	25	enum	343	No	No	\N	\N	2025-08-19 13:42:40.259+00	2025-08-19 13:42:40.259+00	\N	Mary Gwozdz	Unicon	f	\N	f	\N	\N	\N
 1218	ctidStatus	Common.Accreditation.ctidStatus	A ctid status, which provide details about whether it is missing at will or not applicable.	\N	1	string	36	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N
-281	competencyAssociationOriginName	CompetencyFramework.Association.competencyAssociationOriginName	\N	No change	1	string	\N	Yes	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 292	accessibility	CompetencyFramework.Competency.accessibility	\N	\N	1	entity	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N
 474	identifier	Person.Consent.identifier	Unique identifier for this instance of description of consent	\N	1	string	\N	Yes	No	LIF	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 974	proof	European Digital Credential.proof	The proof of the european digital credential.	\N	7	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 975	terms of use	European Digital Credential.terms of use	The terms of use of european digital credential.	\N	7	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-481	typesOfData	Person.Consent.typesOfData	Categories or types of data that will be collected, processed, or shared. These types of data may include information related to competencies, employment skills and achievements, educational achievements, and other metadata.	Reach out to legal counsel and extend the LIF Model as necessary.	1	string	\N	Yes	Yes	LIF	PW: This may not be needed, as this entity will be directly associated with the portion(s) of the information model instance to which it applies\nCM: 3/21:	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-482	lifEntities	Person.Consent.lifEntities	List of entities for which this consent pertains.	\N	1	string	45	Yes	Yes	LIF	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
+271	competencyId	CompetencyFramework.Competency.ProficiencyDefinition.ProficiencyLevel.competencyId	The identifier of the competency for which the levels are being defined.	No change	1	string	\N	Yes	Yes	\N	\N	\N	2025-11-26 23:19:00+00	\N	\N	LIF	f	\N	t	\N	\N	\N
+485	code	Common.LegalCode.code	The code for the law or justification for processing the data or withdrawing consent (e.g., consent, legitimate interest).	\N	1	string	\N	Yes	No	\N	\N	\N	2025-11-26 23:23:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
 493	auditLog	Person.Consent.AuditHistory.auditLog	Narrative description of what took place during the consent audit, including the consent-related activities and changes.	\N	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 509	learningStandard	Course.learningStandard	Learning standard(s) to be taught by the course.	\N	1	string	\N	No	Yes	Ed-Fi	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 512	courseSubjectAbbreviation	Course.courseSubjectAbbreviation	The alphabetic abbreviation of the academic department or discipline offering the course. It is one part of the total course identifier number.	No change	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
@@ -1465,7 +1460,6 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 901	humanCode	AchievementCredential.humanCode	Achievement is also extensible	\N	3	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 902	expirationDate	AchievementCredential.expirationDate	If the credential has some notion of expiry, this indicates a timestamp when a credential should no longer be considered valid. After this time, the credential should be considered expired.	\N	3	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 491	expiration	Person.Consent.expiration	Period for which consent is valid before it needs to be renewed or refreshed.	\N	1	string	\N	No	No	LIF	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-557	personId	Person.CourseLearningExperience.personId	\N	\N	1	string	\N	Yes	No	\N	N/A if part of a Person graph	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 903	awardedDate (or issuanceDate)	AchievementCredential.awardedDate (or issuanceDate)	Timestamp of when the credential was awarded. issuanceDate is used to determine the most recent version of a Credential in conjunction with issuer and id. Consequently, the only way to update a Credental is to update the issuanceDate, losing the date when the Credential was originally awarded. awardedDate is meant to keep this original date.	\N	3	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 904	identifier	AchievementSubject.identifier	Other identifiers for the recipient of the achievement. Either id or at least one identifier MUST be supplied.	\N	3	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 905	result	AchievementSubject.result	The set of results being asserted.	\N	3	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
@@ -1681,11 +1675,9 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 826	name	Credential.CredentialAlignments.name	Name of the alignment.	No change	1	string	\N	No	No	CLR v2 / Open Badges v3	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 827	description	Credential.CredentialAlignments.description	Description of the alignment target.	No change	1	string	\N	No	No	CLR v2 / Open Badges v3	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 828	framework	Credential.CredentialAlignments.framework	Name of the framework being aligned.	No change	1	string	\N	No	No	CLR v2 / Open Badges v3	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-829	code	Credential.CredentialAlignments.code	If applicable, a locally unique string identifier that identifies the alignment target within its framework and/or targetUrl.	No change	1	string	\N	No	No	CLR v2 / Open Badges v3	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-855	type	Person.CredentialAward.Evidence.type	?	No change	1	string	\N	No	No	CLR v2 / Open Badges v3	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
+796	name	Credential.name	Name of the credential.	No change	1	string	\N	Yes	No	CEDS	\N	\N	2025-12-01 22:11:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
 166	lowerPercentage	Shortened Grading.lowerPercentage	The percentage of students of the same course who got a lower grade.	\N	7	\N	\N	Yes	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 795	abbreviation	Credential.abbreviation	Abbreviated name of the credential.	No change	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-796	name	Credential.name	Name of the credential.	No change	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 797	description	Credential.description	Description of the credential.	No change	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 793	uri	Credential.uri	A URI, a string of characters used to identify the Credential.	No change	1	string	\N	No	No	Open Badges v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1354	birthIndicator	Person.Birth.birthIndicator	An indication that the person is a twin, triplet, etc.	\N	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
@@ -1693,9 +1685,7 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 234	code	CompetencyFramework.Competency.code	A human-referenceable code designated by the publisher to identify the item in the hierarchy of competency definitions. Use "missing at will" and "not applicable" for missng data to avoid skewed outcomes.	Missing data should not be penalized in useage. Assuming that all organizations will want to comply with this system will introduce a high level of bias into outcomes	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 488	mechanism	Person.Consent.mechanism	Method or mechanism used to obtain and manage consent, including accessibility technologies used (e.g., checkboxes, cookie banners, email confirmation, written or digital signature).	\N	1	string	\N	No	No	LIF	CM: 3/21: Does this need a codelist?	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 475	type	Person.Consent.type	Type of consent - active, passive, implied, etc.	\N	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-235	statement	CompetencyFramework.Competency.statement	\N	Great care should be taken to understand that claims of competency and competency frameworks are not value neutral frameworks and an assessment should be taken as to what values are being prioritized in each competency description before adoption	1	string	\N	Yes	No	CEDS	Sometimes the competency only has a statement and no name, or vice versa.  One should be required and one should be optional.  Just don't know which.	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1742	type	OpenBadgeCredential.type	\N	\N	16	string	\N	\N	Yes	\N	Same type of information as @context	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N
-279	competencyAssociationDestinationName	CompetencyFramework.Association.competencyAssociationDestinationName	\N	No change	1	string	\N	Yes	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 838	result	Person.CredentialAward.result	The set of results being asserted.	No change	1	string	\N	No	Yes	CLR v2 / Open Badges v3	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 839	creditsEarned	Person.CredentialAward.creditsEarned	The number of credits earned, generally in semester or quarter credit hours. This field correlates with the Achievement creditsAvailable field.	Ensure that missing data is not used as a negative.	1	string	\N	No	No	CLR v2 / Open Badges v3	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 844	salt	Person.CredentialAward.Identity.salt	If the identityHash is hashed, this should contain the string used to salt the hash. If this value is not provided, it should be assumed that the hash was not salted.	No change	1	string	\N	No	No	CLR v2 / Open Badges v3	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
@@ -1704,23 +1694,22 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 862	payload	Person.CredentialAward.payload	Entire payload of the credential and credential award.	No change	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1856	accreditedBy	Credential.Accreditation.accreditedBy	\N	\N	1	string	\N	\N	\N	\N	\N	\N	2025-09-30 00:36:00+00	\N	UX	LIF	f	\N	t	\N	\N	\N
 863	signedPayload	Person.CredentialAward.signedPayload	Signed version of the entire payload of the credential and credential award.	No change	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-848	evidenceAccreditation	Person.CredentialAward.Evidence.evidenceAccreditation	?	No change	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
+235	statement	CompetencyFramework.Competency.statement	\N	Great care should be taken to understand that claims of competency and competency frameworks are not value neutral frameworks and an assessment should be taken as to what values are being prioritized in each competency description before adoption	1	string	\N	No	No	CEDS	Sometimes the competency only has a statement and no name, or vice versa.  One should be required and one should be optional.  Just don't know which.	\N	2025-11-26 22:11:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
 849	name	Person.CredentialAward.Evidence.name	A descriptive title of the evidence.	No change	1	string	\N	No	No	CLR v2 / Open Badges v3	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 850	description	Person.CredentialAward.Evidence.description	A longer description of the evidence.	No change	1	string	\N	No	No	CLR v2 / Open Badges v3	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 851	genre	Person.CredentialAward.Evidence.genre	A string that describes the type of evidence. For example, Poetry, Prose, Film.	No change	1	string	\N	No	No	CLR v2 / Open Badges v3	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 852	audience	Person.CredentialAward.Evidence.audience	A description of the intended audience for a piece of evidence.	No change	1	string	\N	No	No	CLR v2 / Open Badges v3	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-276	competencyAssociationUri	CompetencyFramework.Association.competencyAssociationUri	\N	No change	1	string	\N	Yes	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 853	evidenceStatement	Person.CredentialAward.Evidence.evidenceStatement	A narrative that describes the evidence and process of achievement that led to an assertion.	No change	1	string	\N	No	No	CLR v2 / Open Badges v3	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 856	narrative	Person.CredentialAward.Evidence.narrative	A narrative that describes the evidence and process that led to an assertion of the credential.	No change	1	string	\N	Yes	No	CLR v2 / Open Badges v3	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1077	industryCodeValue	Position.IndustryCode.industryCodeValue	The industry code as defined in NAICS (https://www.census.gov/naics/), SIC, (https://www.dnb.com/resources/sic-naics-industry-codes.html) or ISIC (https://unstats.un.org/unsd/publication/seriesm/seriesm_4rev4e.pdf)	If NAICS is used instead of ISIC be aware that people with international employment experience are likely to be misclassified	1	string	\N	Yes	Yes	CEDS	Could be a list, specific to the job, not the organization. Should handle non-NAICS industries	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 576	department	Person.CourseLearningExperience.department	The department at the institution to which the person attended.	\N	1	string	\N	No	No	HR Open Standards	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 51	contentStandardStatus	Assessment.contentStandardStatus	A contentStandard status, which provide details about whether it is missing at will or not applicable.	\N	1	string	350	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 845	proof	Person.CredentialAward.proof	\N	No change	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-1203	organizationType	Organization.organizationType	The type of educational organization or entity.	Ensure your models and systems can ingest the ad-hoc organization types from organizations that reside outside the systems embedded in the current mapping schema	1	string	\N	Yes	Yes	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1667	informationSourceId	Person.ProgramLearningExperience.informationSourceId	\N	\N	1	string	\N	Yes	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N
 233	informationSourceId	CompetencyFramework.Competency.informationSourceId	\N	\N	1	string	\N	Yes	No	LIF-Addition	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N
 1103	EmploymentTypeStatus	Person.EmploymentLearningExperience.EmploymentTypeStatus	\N	\N	1	entity	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N
-1097	jobCodeValue	Position.JobCode.jobCodeValue	This property can consist of multipe types of job codes including the following: CEDs Job codes. These codes map to IPEDs (https://ceds.ed.gov/element/000731). IPEDs Job Codes  (https://surveys.nces.ed.gov/ipeds/public/hrsoc-browse) . The International Standard Classification of Occupations (https://ilostat.ilo.org/methods/concepts-and-definitions/classification-occupation/) (ISCO) .  Occupation profiles for the U.S. Burea of Labor Statistics. (https://www.bls.gov/oes/current/oes_stru.htm). These fields can be crosswalked to CIP codes (https://nces.ed.gov/ipeds/cipcode/post3.aspx?y=56).   If there is no jobcode Not Applicable or "missing at will" can be selected.	ISCO categories will provide information that will capture a lot of contextual discrimination and should be used with care. consider controlling for this. If anyone needs more than IPEDS SOC code and wants to use ISCO then add  2 new property "positionIdentifier" and "positionIdentifierType". The Type is coming from ISCO and other one should be the actual value.	1	string	\N	No	Yes	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
+279	competencyAssociationDestinationName	CompetencyFramework.Association.competencyAssociationDestinationName	\N	No change	1	string	\N	No	No	CEDS	\N	\N	2025-11-26 22:11:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+276	competencyAssociationUri	CompetencyFramework.Association.competencyAssociationUri	\N	No change	1	string	\N	No	No	CEDS	\N	\N	2025-11-26 22:12:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
 1162	comments	Person.MilitaryLearningExperience.comments	Additional comments about the military service history. Use "missing at will" and "not applicable" for missing data to avoid skewed outcomes.	\N	1	string	\N	No	Yes	HR Open	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1308	addressLine2	Common.Contact.Address.addressLine2	The apartment, room, or suite number of an address.	Only use if consent has been verified.	1	string	\N	No	No	CEDS	MP: either decide to have a single address that includes unit, bldg number, contact, etc. or have an addressLine2 (etc.) to have a generic placeholder	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1163	jobCategories	EmployerHistoryType.jobCategories	\N	\N	2	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
@@ -1756,7 +1745,6 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1193	occupationalCategory	Occupation.occupationalCategory	\N	\N	11	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1100	contractLengthStatus	Position.contractLengthStatus	A status filed, which provide details about whether it is missing at will or not applicable.	\N	1	string	358	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1082	primaryPayMethod	Position.primaryPayMethod	An indication of the primary pay method of the position. For example, salary, hourly, commission only, contract, stipend, piecework, tips, or other.	\N	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-1078	industryCodeType	Position.IndustryCode.industryCodeType	The type of the Industry Code - NAICS, SIC, or ISIC.	\N	1	string	\N	Yes	No	\N	Could be a list, specific to the job, not the organization. Should handle non-NAICS industries	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1093	incomeSourceCategory	Person.EmploymentLearningExperience.IncomeSources.incomeSourceCategory	The name of the category of any income source.	The assignment of eligibility of a person into income source categories should not be used as a proxy for eligiblity for these nor as a proxy for any other social or economic category.	1	string	\N	No	No	CEDS	Or have a vocabulary for income sources.	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1194	naics	Person or Organization.naics	\N	\N	11	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1195	roleName	Role.roleName	\N	\N	11	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
@@ -1765,15 +1753,14 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1242	EducationOrganizationIdentificationSystem	EducationOrganizationIdentificationCode.EducationOrganizationIdentificationSystem	The school system, state, or agency assigning the identification code.	\N	6	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 167	higherPercentage	Shortened Grading.higherPercentage	The percentage of students of the same course who got a higher grade.	\N	7	\N	\N	Yes	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1285	lastName	Person.Name.lastName	The last name of a person or individual	Only use if consent has been verified.	1	string	\N	Yes	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-1290	identifier	Common.Identifier.identifier	A number and/or alphanumeric code used to uniquely identify the entity. Use "missing at will" ,"ad-hoc"and "not applicable" for missng data to avoid skewed outcomes.	Only use if consent has been verified.	1	string	\N	Yes	No	CEDS-Edited	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1875	organizationNames	Person.EmploymentPreferences.organizationNames	The names of the preferred employment organizations.	\N	17	string	\N	Yes	Yes	\N	\N	\N	2025-10-02 23:36:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N
+1078	industryCodeType	Position.IndustryCode.industryCodeType	The type of the Industry Code - NAICS, SIC, or ISIC.	\N	1	string	\N	No	No	\N	Could be a list, specific to the job, not the organization. Should handle non-NAICS industries	\N	2025-11-26 22:43:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
 1125	experienceType	Person.EmploymentLearningExperience.experienceType	Experience type considers self-employment, scholarships, volunteering, mentorships or internships. Includes any entity, not just employer or organisation. This is a category to sort all experiences include employment, military and any other working experiences, such as volunteering, mentorships, transition programs and more.	A person will need to be able to provide access to specific unique experiences rather than to turn on/off all experiences of the same type. The classification of an experience into a type is a subjective decision which will capture a lot of social and class location information. For example, a wealthy student may get their experience classified as an internship while a poor student may have their identical experience classified as volunteer.	1	string	\N	No	Yes	No Source	Experience type is an inclusive word to include employment details, military and any other "working" experiences, such as volunteering, mentorships, transition programs and the like.	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1129	aspirations	Person.EmploymentLearningExperience.aspirations	Allows a person to record the details of their personal learning or career aspirations	This can be a useful data element to set up measures of success that prioritize the wants and needs of the learner/earner instead of prioritizing a cultural norm. Ensure that we're clear that we're documenting learning aspirations and or career aspirations	1	string	\N	No	No	No Source	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1130	sourceExperience	Person.EmploymentLearningExperience.sourceExperience	A link to the sourced experience. It may point to a GitHub project, images, google docs and other sharable files.  If not applicable please indicate.	This should be optional as not all types of experiences leave collateral that can be shared. Resources to create such documentation will be directly linked to wealth and class. Making this mandatory will replicate class and wealth disparity.	1	string	\N	No	No	No Source	Helps to verify and solidify the experiences obtained via a source	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 820	tags	Credential.tags	Tags, keywords or short key phrases describing aspects of a credential considered useful for its discovery.	No change	1	string	\N	No	Yes	CLR v2 / Open Badges v3	n/a	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 821	fieldOfStudy	Credential.fieldOfStudy	Category, subject, area of study, discipline, or general branch of knowledge. Examples include Business, Education, Psychology, and Technology.	No change	1	string	\N	No	No	CLR v2 / Open Badges v3	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1132	identifier	Person.EmploymentLearningExperience.identifier	Unique identifier for this resource.	\N	1	string	\N	Yes	No	\N	unique identifier for an employment class	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-1133	name	Person.EmploymentLearningExperience.name	The descriptive name of a person's position.	\N	1	string	\N	Yes	No	CEDS	this can be position specific or "current" on the top level class?	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1134	description	Person.EmploymentLearningExperience.description	Statement, characterization or account of the entity.	\N	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 40	creditValue	Assessment.creditValue	A credit-related value. [=>QuantitativeValue]	No change	1	number	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1105	employmentTypeStatusDescription	Person.EmploymentLearningExperience.EmploymentTypeStatus.employmentTypeStatusDescription	The description of the employment type status category.	\N	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N
@@ -1793,6 +1780,7 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1226	name	EntityType.name	Free text description for that entity.	\N	2	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1227	tradeName	EmploymentEstablishmentType.tradeName	Trade name of the establishment or doing-business as (DBA).	\N	2	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1228	description	OrganizationType.description	A description or quick summary of the organization.	\N	2	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
+1899	informationSourceOrganization	Common.informationSourceOrganization		\N	1	string	\N	Yes	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	t
 1229	industryIdentifiers	OrganizationType.industryIdentifiers	The types of industry to which the organization belongs. The Industry identifiers could be referenced to a standard taxonomy (such as NAICS) or a custom taxonomy.	\N	2	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1230	responsibilityCode	OrganizationReferenceType.responsibilityCode	The level or the responsibility at which the organization operates.	\N	2	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1231	image	Profile.image	IRI of an image representing the individual or organization. May be a DATA URI or the URL where the image may be found.	\N	12	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
@@ -1830,6 +1818,7 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1270	AccreditedBy, ApprovedBy, recognizedBy, regulatedBy	CredentialOrganization\nQACredentialOrganization.AccreditedBy, ApprovedBy, recognizedBy, regulatedBy	Quality assurance relationships where an external org accredits/approves, etc the target organization	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1271	naics	CredentialOrganization\nQACredentialOrganization.naics	North American Industry Classification System (NAICS) code of an organization or business person.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1272	LifeCycleStatusType	CredentialOrganization\nQACredentialOrganization.LifeCycleStatusType	Type of state of the resource in terms of its stage in a life cycle; select from an enumeration of such types.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
+1900	informationSourceSystem	Common.informationSourceSystem		\N	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	t
 1273	AccreditedBy	CredentialOrganization\nQACredentialOrganization.AccreditedBy	Quality assurance relationships where an external org accredits/approves, etc the target organization	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1274	accreditedBy	CredentialOrganization\nQACredentialOrganization.accreditedBy	Quality assurance organization that provides official authorization to, or approval of, a credential, organization, assessment, or learning opportunity.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1275	accredits	QACredentialOrganization.accredits	Credential, assessment, organization, or learning opportunity for which this organization provides official authorization or approval based on prescribed standards or criteria.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
@@ -1847,16 +1836,15 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1660	targetLearningResource	Program.targetLearningResource	Learning object or resource that is used as part of an learning activity.	No change	1	string	\N	No	Yes	CTDL	URI To an learning resource in the credential registry	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1744	description	OpenBadgeCredential.description	\N	\N	16	string	\N	\N	No	\N	\N	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N
 1745	id	image.id	\N	\N	16	string	\N	\N	No	\N	\N	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N
-1217	ctid	Common.Accreditation.ctid	Globally unique Credential Transparency Identifier (CTID) by which the creator, owner or provider of a resource recognizes it in transactions with the external environment (e.g., in verifiable claims involving the resource).	Missing data should not be penalized in useage. Assuming that all organizations will want to comply with this system will introduce a high level of bias into outcomes. A mapping option for not applicable and missing at will need to be added to this	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1219	ctdlOrganizationType	Common.Accreditation.ctdlOrganizationType	The type of credentialing organization or entity as defined by the Credential Transparency Description Language.	Missing data should not be penalized in useage. Assuming that all organizations will want to comply with this system will introduce a high level of bias into outcomes. A value needs to be added for missing at will and a value needs to be added for not applicable to avoid too much missing data resulting in skewed outcomes	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1223	accreditedIn	Common.Accreditation.accreditedIn	Region or political jurisdiction such as a state, province or locale in which the credential, learning opportunity or assessment is accredited. Use "missing at will" and "not applicable" for missng data to avoid skewed outcomes.	Missing data should not be penalized in useage. Assuming that all organizations will want to comply with this system will introduce a high level of bias into outcomes. A value needs to be added for missing at will and a value needs to be added for not applicable to avoid too much missing data resulting in skewed outcomes	1	string	\N	No	No	CTDL	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1855	accreditationExpirationDate	Credential.Accreditation.accreditationExpirationDate	\N	\N	1	string	\N	\N	\N	\N	\N	\N	2025-09-30 00:33:00+00	\N	UX	LIF	f	\N	t	\N	\N	\N
-1207	organizationCodeType	Organization.OrganizationCode.organizationCodeType	A code type, which provide details about whether it is NAICS, SIC or ISIC.	\N	1	string	\N	Yes	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1286	tribalNationName	Person.Demographics.tribalNationName	The name of an individual gifted by and/or connected to the land and people of their Tribal Nation, and recognised by the Bureau of Indian Affairs (BIA).	Only use if consent has been verified.	1	string	284	No	No	CEDS	3/6: CM brought up from Demographics section (row 130)	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 823	extensions	Credential.extensions	Any and all extension formats being used for this Credential	No change	1	string	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1155	currentRank	Person.MilitaryLearningExperience.currentRank	The rank which the person held currently.	\N	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N
 259	proficiencyDefinition	CompetencyFramework.Competency.proficiencyDefinition	The definition of the how the competency is assessed for proficiency.	\N	1	entity	\N	No	No	\N	This might should be 0..* if there are more than one proficiency definition for the competency.	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N
 1127	dateOfAssertion	Person.EmploymentLearningExperience.dateOfAssertion	Provides the date of the assertion experiences	\N	1	string	\N	No	Yes	No Source	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
+1897	deletedStatus	Common.deletedStatus		\N	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	t
 825	url	Credential.CredentialAlignments.url	URL linking to the official description of the alignment target, for example an individual standard within a learning framework.	No change	1	string	\N	No	No	CLR v2 / Open Badges v3	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1299	titleAffixCode	Person.Name.titleAffixCode	The title affix attached to a person's name (such as Esq., K.B.E.).	Only use if consent has been verified.  Only include values for learning, work, professional, religious, cultural ceremonial related titles, and ensure values are neutral of marital status, age or gender. \nInclude: “optional text input” to capture the variety of values that could fall under titles.	1	string	\N	No	Yes	HR Open	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1300	nameSuffix	Person.Name.nameSuffix	A designation attached to the end of a person's name to indicate generation in a family (e.g, Jr., Sr., II, III).	\N	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
@@ -1871,10 +1859,8 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1315	proofOfResidency	Person.Residency.proofOfResidency	An accepted form of proof of residency in the district/county/other locality.	\N	1	string	\N	No	Yes	CEDS	MP: This would be specific to a person address where having a generic address class is more open.	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1325	localType	Person.Residency.localType	A general geographic indicator that categorizes U.S. territory (e.g., City, Suburban).	\N	1	string	\N	No	No	Ed-Fi	MP: maybe localType to be more meaningful.	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1831	TestNewPartnerAttribute	TestNewPartnerAttribute	This is a test of creating a new partner attribute	consideration	18	string	\N	No	No	\N	\N	2025-08-19 13:42:40.259+00	2025-08-19 13:42:40.259+00	\N	Mary Gwozdz	Org2	t	\N	t	\N	\N	\N
-1350	cityOfBirth	Person.Birth.cityOfBirth	The name of the city in which a person was born.	\N	1	string	\N	Yes	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1309	addressCity	Common.Contact.Address.addressCity	The name of the city in which an address is located.	\N	17	string	\N	Yes	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1648	dateEffective	Program.dateEffective	Effective date of this resource's content.	No change	1	string	\N	No	No	CTDL	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-1351	stateOfBirth	Person.Birth.stateOfBirth	The abbreviation for the name of the state (within the United States) or extra-state jurisdiction in which a person was born.	\N	1	string	\N	Yes	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1746	type	image.type	\N	\N	16	string	\N	\N	No	\N	\N	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N
 1091	compensationTotalSalaryStatus	Position.compensationTotalSalaryStatus	A status filed, which provide details about whether it is missing at will or not applicable.	\N	1	string	356	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1080	employmentSchedule	Position.employmentSchedule	An indication of whether the position provides full time, part time, flex time, shared time, or other schedule of employment.	\N	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
@@ -1883,14 +1869,14 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1306	addressType	Common.Contact.Address.addressType	The type of address listed for an individual or organization. For example: Physical Address, Mailing Address, Home Address, etc.)	Only use if consent has been verified.	1	string	\N	No	Yes	CEDS	Merged addressTypeLearner & Staff together as addressType.	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1338	informationSourceId	Common.Contact.Email.informationSourceId	The indentifier for the Information Source record associated with this entity	\N	17	string	\N	Yes	No	LIF-Addition	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N
 1411	family	PersonNameType.family	The family name (or surname) of a person.	\N	2	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-1352	birthCode	Person.Birth.birthCode	The unique two digit International Organization for Standardization (ISO) code for the country in which a person is born.	\N	1	string	\N	Yes	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1353	birthVerification	Person.Birth.birthVerification	The evidence by which a child's date of birth is confirmed.	\N	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1364	pronouns	Person.SexAndGender.pronouns	The persons pronouns	\N	1	string	\N	\N	\N	LIF-ADDITION	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-1362	sex	Person.SexAndGender.sex	The concept describing the biological traits that distinguish the males and females of a species.	\N	1	string	288	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1363	gender	Person.SexAndGender.gender	The persons gender	\N	1	string	289	No	No	HROPEN	2/5: Person transformation sub-team added gender to stop conflating with sex., and grouped 'sex and gender' under a common parent'SexAndGender'	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1377	familyIncomeCalculation	Person.Demographics.familyIncomeCalculation	The calculation method used by a program to determine total family income.	\N	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1378	highestLevelEducation	Person.Demographics.highestLevelEducation	The extent of formal instruction a person has received (e.g., the highest grade in school completed or its equivalent or the highest degree received).	Only use of consent is verified.	1	string	290	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1114	identifier	Position.Membership.identifier	Unique identifier of this resource.	\N	1	string	\N	Yes	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
+1350	cityOfBirth	Person.Birth.cityOfBirth	The name of the city in which a person was born.	\N	1	string	\N	No	No	CEDS	\N	\N	2025-11-26 22:41:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+1362	sex	Person.SexAndGender.sex	The concept describing the biological traits that distinguish the males and females of a species.	\N	1	string	288	Yes	No	CEDS	\N	\N	2025-11-26 23:26:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
 1398	relationshipRestrictions	Person.RelationshipContacts.relationshipRestrictions	Restrictions for student and/or teacher contact with the individual (e.g., the student may not be picked up by the individual)	\N	1	string	\N	No	Yes	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1384	homelessPrimaryResidence	Person.Demographics.homelessPrimaryResidence	The primary nighttime residence of the students at the time the students are identified as homeless.	For use cases in which this field is used for research, it is not recommended to be used for research purposes given the variable nature of this field. Given the volatility, the use of this field for research purposes may lead to inaccurate findings if used in statistical or other analysis.	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1387	qualifyingMoveCountry	Person.Demographics.qualifyingMoveCountry	The abbreviation code for a country (other than the US) area in which the child resided prior to the qualifying move.	\N	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
@@ -1913,7 +1899,6 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1389	informationSourceId	Person.Demographics.informationSourceId	The indentifier for the Information Source record associated with this entity	\N	1	string	\N	Yes	No	LIF-Addition	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N
 1622	normalTimeCompletion	Program.normalTimeCompletion	The amount of time necessary for a person to complete all requirements for a degree or certificate according to the institution's catalog. This is typically 4 years (8 semesters or trimesters, or 12 quarters, excluding summer terms) for a bachelor's degree in a standard term-based institution; 2 years (4 semesters or trimesters, or 6 quarters, excluding summer terms) for an associate's degree in a standard term-based institution; and the various scheduled times for certificate programs.	No change	1	string	\N	No	No	CEDS	Not sure if this should be part of Credit or Unit?	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1626	subjectWebpage	Program.subjectWebpage	The webpage that describes this entity.	Ensure any use incorporates a "not applicable" field as many legitimate programs will not have this and you don't want to accidentaly discard them due to missing data codes.	1	string	\N	No	No	CTDL	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-1627	programIdentifier	Program.programIdentifier	A unique number or alphanumeric code assigned to a program by a school, school system, a state, or other agency or entity.	No change	1	string	\N	Yes	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1628	programIdentifierSystem	Program.programIdentifierSystem	System of the supporting program.	\N	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1128	experienceTypeValidated	Person.EmploymentLearningExperience.experienceTypeValidated	Validating the experience via a professional body to help provide a credential through an assessor. This can be self-validation.	Access to a credentialing body or organization to provide validation will be a status-based indicator. It will replicate the current distribution of privelege and should be used with great caution. Should include self-validation.	1	string	\N	No	Yes	No Source	The experiences can be further validated through an organisation. This attribute could play a key relationship with competency or credentialling.	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1412	address	EmailType.address	Actual email address.	\N	2	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
@@ -2011,6 +1996,7 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1516	Name	Student.Name	The set of elements that comprise an individual's legal name.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1510	TribalAffiliation	StudentEducationOrganizationAssociation.TribalAffiliation	An American Indian tribe with which the student is affiliated as last reported to the education organization.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1512	ElectronicMailType	ElectronicMail.ElectronicMailType	The type of email listed for an individual or organization. For example: Home/Personal, Work, etc.)	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
+1898	informationSourceId	Common.informationSourceId		\N	1	string	\N	Yes	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	t
 1514	StudentIdentificationSystem	StudentIdentificationCode.StudentIdentificationSystem	This descriptor defines the originating record system and code that is used for record-keeping purposes of the student.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1515	PersonalInformationVerification	IdentificationDocument.PersonalInformationVerification	The category of the document relative to its purpose.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1520	AddressType	Address.AddressType	The type of address listed for an individual or organization. For example: Physical Address, Mailing Address, Home Address, etc.)	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
@@ -2160,10 +2146,10 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1647	creditValue	Program.creditValue	A credit-related value. [=>ValueProfile]	Ensure any use incorporates a "not applicable" field as many legitimate programs will not have this and you don't want to accidentaly discard them due to missing data codes.	1	string	\N	No	Yes	CTDL	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1651	inLanguage	Program.inLanguage	The primary language or languages of the entity, even if it makes use of other languages; e.g., a course offered in English to teach Spanish would have an inLanguage of English, while a credential in Quebec could have an inLanguage of both French and English.	No change	1	string	\N	No	Yes	CTDL	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 18	assessmentLanguage	Assessment.assessmentLanguage	The language in which the assessment form is designed to be delivered	No change	1	string	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-1151	serviceNumber	Person.MilitaryLearningExperience.serviceNumber	The military service number or identifier of the person as defined by the country, branch, and/or division. Use "missing at will" and "not applicable" for missng data to avoid skewed outcomes.	\N	1	string	\N	No	Yes	HR Open	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1153	startingRank	Person.MilitaryLearningExperience.startingRank	The rank which the person held in the military service at the beginning of the service period.	\N	1	string	\N	No	No	HR Open	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1154	endingRank	Person.MilitaryLearningExperience.endingRank	The rank which the person held at the end of the military service period.	\N	1	string	\N	No	No	HR Open	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1655	ownedBy	Program.ownedBy	Organization or person with an enforceable claim or legal title to the resource.	No change	1	string	\N	No	Yes	CTDL	URI to an organization record in the credential registry	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
+1917	identifier	ProficiencyLevel.identifier	\N	\N	1	string	\N	Yes	No	\N	\N	\N	2025-12-01 16:44:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N
 1656	recognizedBy	Program.recognizedBy	Agent that acknowledges the validity of the program.	Ensure any use incorporates a "not applicable" field as many legitimate programs will not have this and you don't want to accidentaly discard them due to missing data codes.	1	string	\N	No	Yes	CTDL	URI to an organization record in the credential registry	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1657	regulatedBy	Program.regulatedBy	Quality assurance organization that enforces the legal requirements of the program.	Ensure any use incorporates a "not applicable" field as many legitimate programs will not have this and you don't want to accidentaly discard them due to missing data codes.	1	string	\N	No	Yes	CTDL	URI to an organization record in the credential registry	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1659	estimatedCost	Program.estimatedCost	Estimated cost of a program. [=>CostProfile]	Use with care. Even carefully standardized data will be likely to contain large inconsistencies and unstandard cacluations	1	string	\N	No	Yes	CTDL	Cost profile includes: name, descripiton, URL, direct cost types and price	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
@@ -2178,41 +2164,34 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1202	description	Organization.description	A description or quick summary of the organization.	No Change	1	string	\N	No	No	HR Open	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1662	targetAssessment	Program.targetAssessment	Assessment that provides direct, indirect, formative or summative evaluation or estimation of the nature, ability, or quality for an entity.	Ensure any use incorporates a "not applicable" field as many legitimate programs will not have this and you don't want to accidentaly discard them due to missing data codes.	1	string	\N	No	Yes	CTDL	URI To an assessment in the credential registry	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1665	identifier	Person.ProgramLearningExperience.identifier	\N	\N	1	string	\N	Yes	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-232	uri	CompetencyFramework.Competency.uri	A network-resolvable Uniform Resource Locator (URL) pointing to the authoritative reference for the competency definition.	It is very likely that competing claims of formal authority will exist. Do not assume that all data here is final.	1	string	\N	Yes	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 841	hashed	Person.CredentialAward.Identity.hashed	Whether or not the identityHash value is hashed.	No change	1	boolean	\N	No	No	CLR v2 / Open Badges v3	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-230	id	CompetencyFramework.id	An identifier for the Competency Framework	No change	1	string	\N	Yes	No	CASE	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 12	subject	Assessment.subject	The description of the content or subject area (e.g., arts, mathematics, reading, or a foreign language) being evaluated. These can also be any broader subject out side education like coding test in jon interview. Here is an example of CEDS set https://ceds.ed.gov/element/000021	The decription of the content or subject of assessment should not be used a proxy for what is actually measured in the assessment. Care should be taken to avoid biased assumptions about what a framework actually measures from its claim. Assessments can be used to perpetuate cultural bias under the guise of professional assessment.	1	string	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 34	alternateName	Assessment.alternateName	Alias for the entity including acronyms, alpha-numeric notations, and other forms of name abbreviations in common use such as PhD, MA, and BA.	No change	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 38	audienceLevelType	Assessment.audienceLevelType	Type of level indicating a point in a progression through an educational or training context, for which the assessment is intended; select from an existing enumeration of such types. Use "missing at will" and "not applicable" for missng data to avoid skewed outcomes.	Missing data should not be penalized in useage. Assuming that all organizations will want to comply with this system will introduce a high level of bias into outcomes	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 61	scoreType	Person.AssessmentLearningExperience.scoreType	Indicates the purpose for which this assessment score instance was recorded.	The interpretation and use of this data element will depend on whose perspective is being captured in the element. The reason will be perceived differently by the learner, the assessor, and the organization.	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1199	imageUrl	Organization.imageUrl	The Uniform Resource Locator (URL) for the unique address of an image representing the Organization.	No Change	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1222	accredits	Common.Accreditation.accredits	Credential, assessment, organization, or learning opportunity for which this organization provides official authorization or approval based on prescribed standards or criteria. Use "missing at will" and "not applicable" for missng data to avoid skewed outcomes.	Missing data should not be penalized in useage. Assuming that all organizations will want to comply with this system will introduce a high level of bias into outcomes. A value needs to be added for missing at will and a value needs to be added for not applicable to avoid too much missing data resulting in skewed outcomes	1	string	\N	No	No	CTDL	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-209	name	CompetencyFramework.name	The name of the competency framework.	The name of the competency framework should not be used a proxy for what is actually measured in the elements. Care should be taken to avoid biased assumptions about what a framework actually measures from its name. When using this field, there are other entitites that include relevant data elemants that allow for inclusion of other elements related to competency.	1	string	\N	Yes	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
+1918	identifier	Accreditation.identifier	\N	\N	1	string	\N	Yes	No	\N	\N	\N	2025-12-01 17:05:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N
 1894	id	person.id	\N	\N	26	string	\N	Yes	No	\N	\N	\N	2025-10-08 22:12:00+00	\N	MDRUser	\N	f	\N	f	\N	\N	\N
 1294	middleName	Person.Name.middleName	A middle or additional given name of a person, further defined using nameType.	\N	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-808	uri	Credential.Requirements.Criteria.uri	The URI of a webpage that describes in a human-readable format the criteria for the credential.	No change	1	string	\N	No	No	Open Badges v2	in programs	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 533	CourseCompetency	Course.CourseCompetency	\N	\N	1	entity	\N	\N	\N	CTDL	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N
 1085	hoursWorkedPerWeek	Position.hoursWorkedPerWeek	The average number of hours anticipated by the employer to be worked in this postion per week.	Depending on the unit of measurement here (average vs typical week vs last week) this will add bias towards earners in specific types of employment	1	number	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 224	license	CompetencyFramework.license	A legal document giving official permission to do something with the competency framework. Use "missing at will" and "not applicable" for missng data to avoid skewed outcomes.	Missing data should not be penalized in useage. Assuming that all organizations will want to comply with this system will introduce a high level of bias into outcomes	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-290	alignsToText	CompetencyFramework.Competency.CompetencyAlignments.alignsToText	\N	\N	1	string	\N	Yes	No	\N	Required if no alignsToUri	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 299	description	Person.Proficiency.description	\N	This description will be highly subjective and should be used in connection with information about who crafted the description. Note - the information about the origination of the description is available elsewhere in the model.	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 476	typeDescription	Person.Consent.typeDescription	Some descriptions for the type of consent can be found here: https://www.hhs.gov/ohrp/regulations-and-policy/guidance/faq/informed-consent/index.html	\N	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-477	status	Person.Consent.status	Indicates whether consent has been given, withdrawn, or is pending.	Use in tandem with aditional elements described in description change.	1	string	\N	Yes	No	LIF	Other categories for consent are included in non-required fields. This includes time/date, purpose for which the consent is obtained, categories for types of data that will be collected, entities with whom the data will be shared, the method used to obtain, language of consent, channels, compliance, and other. Reference should be made to these other non-required fields and these fields should be used when possible.	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-1616	instructionalProgramCode	Program.instructionalProgramCode	A six-digit code in the form xx.xxxx that identifies instructional program specialties within educational institutions.	No change	1	string	\N	Yes	Yes	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 480	purpose	Person.Consent.purpose	Description of the purpose for which consent is being obtained. This can be the organization's ethical motivation for obtaiing consent and/or a project-specific reason for obtaining consent and/or a description of the detailed use of data that consent is covering and/or any other.	Consent is obtained for a number of reasons, including the primary goal of the LIF model, which is to benefit learners. There are other purposes for consent, which should be indicated here, particularly in instances where the primary reason for consent is not to benefit the learner. These may include for product development purposes, where data is being used to test out product tools or other applications, it is strongly suggested that this field be used to indicate that consent has been obtained for research purposes - if that is the reason for using learner data in the LIF model, in these instances, it is also advised that the researcher be associated with an IRB to ensure appropriate participant protection practices.	1	string	\N	No	No	LIF	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 64	completionStatus	Person.AssessmentLearningExperience.completionStatus	The completion and scoring status for an instance of a person taking an assessment.	Great care should be made to ensure that missing data should not be penalized in useage. Assuming that all organizations will want to comply with this system will introduce a high level of bias into outcomes	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-1291	identifierType	Common.Identifier.identifierType	The types of sources of identifiers used to uniquely identify the entity	Only use if consent has been verified.	1	string	\N	Yes	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-498	courseID	Course.courseID	The actual code that identifies the organization of subject matter and related learning experiences provided for the instruction of persons. Usage notes: any identified MAY be a Universally Unique Identified (UUID) / Globally Unique Identified (GUID), i.e 128-bit unique identiers generate according to the algorithms and encoding standards of RFC 4122.  https://ceds.ed.gov/element/000055	No change	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 501	name	Course.name	The descriptive name given to a course of study offered in a school or other institution or organization. In departmentalized classes at the elementary, secondary, and postsecondary levels (and for staff development activities), this refers to the name by which a course is identified (e.g., American History, English III). For elementary and other non-departmentalized classes, it refers to any portion of the instruction for which a grade or report is assigned (e.g., reading, composition, spelling, and language arts).	No change	1	string	\N	Yes	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1750	type	OpenBadgeCredential.credentialSubject.type	\N	\N	16	string	\N	\N	Yes	\N	\N	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N
 546	offeredBy	Course.offeredBy	Agent that offers the resource.	Ensure any use incorporates a "not applicable" field as many legitimate courses will not have this and you don't want to accidentaly discard them due to missing data codes.	1	string	\N	No	Yes	CTDL	URI to an organization record in the credential registry	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 575	institution	Person.CourseLearningExperience.institution	The institution to which the person attended.	\N	1	string	\N	No	No	HR Open Standards	Should already have this context based on source of the data?	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 577	currentlyAttendingIndicator	Person.CourseLearningExperience.currentlyAttendingIndicator	Indicator that the person is still attending.	\N	1	string	\N	No	No	HR Open Standards	Couldn't this be derived? It could have been collected while attending and not recollected after the status may have changed?	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-817	imageId	Credential.Image.imageId	The URI or Data URI of the image	No change	1	string	\N	No	No	Open Badges v2	IRI or document representing an image of the achievement. This must be a PNG or SVG image	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
+1616	instructionalProgramCode	Program.instructionalProgramCode	A six-digit code in the form xx.xxxx that identifies instructional program specialties within educational institutions.	No change	1	string	\N	No	Yes	CEDS	\N	\N	2025-11-26 22:19:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+477	status	Person.Consent.status	Indicates whether consent has been given, withdrawn, or is pending.	Use in tandem with aditional elements described in description change.	1	string	\N	No	No	LIF	Other categories for consent are included in non-required fields. This includes time/date, purpose for which the consent is obtained, categories for types of data that will be collected, entities with whom the data will be shared, the method used to obtain, language of consent, channels, compliance, and other. Reference should be made to these other non-required fields and these fields should be used when possible.	\N	2025-11-26 22:41:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+498	identifier	Course.identifier		No change	1	string	\N	Yes	No	CEDS	\N	\N	2025-11-26 22:51:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+808	uri	Credential.Requirements.Criteria.uri	The URI of a webpage that describes in a human-readable format the criteria for the credential.	No change	1	string	\N	Yes	No	Open Badges v2	in programs	\N	2025-11-26 23:21:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+817	identifier	Credential.Image.identifier	Unique indentifier of the image	No change	1	string	\N	Yes	No	Open Badges v2	IRI or document representing an image of the achievement. This must be a PNG or SVG image	\N	2025-11-26 23:20:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
 1322	congressionalDistrict	Person.Residency.congressionalDistrict	The congressional district in which an address is located.	\N	1	string	\N	No	Yes	Ed-Fi	MP: how to derive, or make more generic. Districts can change, and wouldn't want require mass updates.	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-833	id	Person.CredentialAward.id	An identifier for the  issued credential award.	Ensure that missing data is not used as a negative. This needs to be updated to include self assertion and missing at will and an issuer (other than self) who is not included in main value map	1	string	\N	Yes	No	CLR v2 / Open Badges v3	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-208	uri	CompetencyFramework.uri	An unambiguous reference to the competency framework using a network-resolvable URI.	No change	1	string	\N	Yes	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-842	identityHash	Person.CredentialAward.Identity.identityHash	A String consisting of an algorithm identifier, a $ separator, and a hash across an identifier and an optionally appended salt string. The only supported algorithms are MD5 [RFC1321] and SHA-256 [FIPS-180-4], identified by the strings 'md5' and 'sha256' respectively. Identifiers and salts MUST be encoded in UTF-8 prior to hashing, and the resulting hash MUST be expressed in hexadecimal using uppercase (A-F, 0-9) or lowercase character (a-f, 0-9) sets. For example: 'sha256$b5809d8a92f8858436d7e6b87c12ebc0ae1eac4baecc2c0b913aee2c922ef399' represents the result of calculating a SHA-256 hash on the string 'a@example.comKosher'. in which the email identifier 'a@example.com' is salted with 'Kosher'	No change	1	string	\N	No	No	CLR v2 / Open Badges v3	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1895	preferred_org_types	person.employment.preferences.preferred_org_types	\N	\N	26	string	\N	No	Yes	\N	\N	\N	2025-10-08 22:14:00+00	\N	MDRUser	\N	f	\N	f	\N	\N	\N
 1075	occupationalCategory	Position.occupationalCategory	A category describing the job, preferably using a term from a taxonomy such as BLS O*NET-SOC, ISCO-08 or similar, with the property repeated for each applicable value. Ideally the taxonomy should be identified, and both the textual label and formal code for the category should be provided.	\N	1	string	\N	No	Yes	Schema.org	Could be a list, could have other occupation systems	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 824	credentialAlignments	Credential.credentialAlignments	Any and all alignments to or from the Credential.	\N	1	entity	\N	No	Yes	CLR v2 / Open Badges v3	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N
@@ -2228,28 +2207,25 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1758	name	OpenBadgeCredential.credentialSubject.source.name	\N	\N	16	string	\N	\N	No	\N	\N	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N
 1759	term	OpenBadgeCredential.credentialSubject.term	\N	\N	16	string	\N	\N	No	\N	\N	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N
 1762	identityType	OpenBadgeCredential.credentialSubject.identifier.identityType	\N	\N	16	string	\N	\N	No	\N	\N	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N
-2	identifier	Assessment.identifier	A unique number or alphanumeric code assigned to an assessment by a school, school system, a state, or other agency or entity. This may be the publisher identifier.	Missing data should not be penalized in useage. Assuming that all organizations will want to comply with this system will introduce a high level of bias into outcomes	1	string	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1094	incomeSourceDescription	Person.EmploymentLearningExperience.IncomeSources.incomeSourceDescription	A description of the income source category. For example, for salaryforTeachingAssignmentOnly the description might be "Indicator to determine whether the teacher's base salary includes pay for teaching assignments alone." For titleITargetedAssistanceStaff the description might be "An indication that a staff member is targeted assistance (TAS) program staff funded by Title I, Part A, Section 1115 of ESEA as amended." For migrantEducationProgramPersonnel the description might be "An indication that a staff member's salary is paid by the Title I, Part C Migrant Education Program (MEP) of ESEA as amended". For staffCompensationHealthBenefits the description might be "Contributions made by the school district, municipal, state, federal and other government agencies for the teacher's or early learning provider's health insurance, prorated to the specific school or local provider agency indicated on the record, not including contributions made by the teacher or early learning provider.". For staffCompensationRetirementBenefits the description might be "Contributions made by the school district, municipal, state, federal and other government agencies for the teacher's or early learning provider’s health insurance, prorated to the specific school or local provider agency indicated on the record, not including contributions made by the teacher or early learning provider.". For staffCompensationOtherBenefits the description might be "All other benefits paid by the school district, municipal, state, federal, and other government agencies for the teacher or early learning provider, prorated to the specific school or local provider agency indicated on the record, not including retirement and health insurance benefits or contributions made by the teacher or early learning provider.".	The assignment of eligibility of a person into income source categories should not be used as a proxy for eligiblity for these nor as a proxy for any other social or economic category.	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-1113	name	Position.Membership.name	The name of the association of which the person is a member.	\N	1	string	\N	No	No	CEDS	Membership name will be: Association.OrganizationId -> Organization.Id -> Name	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
+281	competencyAssociationOriginName	CompetencyFramework.Association.competencyAssociationOriginName	\N	No change	1	string	\N	No	No	CEDS	\N	\N	2025-11-26 22:12:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+833	identifier	Person.CredentialAward.identifier	An identifier for the  issued credential award.	Ensure that missing data is not used as a negative. This needs to be updated to include self assertion and missing at will and an issuer (other than self) who is not included in main value map	1	string	\N	Yes	No	CLR v2 / Open Badges v3	\N	\N	2025-12-01 22:04:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+1113	name	Position.Membership.name	The name of the association of which the person is a member.	\N	1	string	\N	Yes	No	CEDS	Membership name will be: Association.OrganizationId -> Organization.Id -> Name	\N	2025-12-01 22:13:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+2	identifier	Assessment.identifier	A unique number or alphanumeric code assigned to an assessment by a school, school system, a state, or other agency or entity. This may be the publisher identifier.	Missing data should not be penalized in useage. Assuming that all organizations will want to comply with this system will introduce a high level of bias into outcomes	1	string	\N	Yes	Yes	\N	\N	\N	2025-12-02 03:13:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
 1126	experienceTypeAssertion	Person.EmploymentLearningExperience.experienceTypeAssertion	Asserting the experience via a professional, colleague or someone experienced. Similar to a letter of reference. It is self-asserted if a person decides to share an experience not validated or already asserted by others. This can be self-assertion.	Access to a person or organization to provide assertion will be a status-based indicator. It will replicate the current distribution of privelege and should be used with great caution. Should include self-assertion	1	string	\N	No	Yes	No Source	Self Assertion, Letter of Reference or Credentialised	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 805	requirements	Credential.requirements	The requirements to achieve the credential.	\N	1	entity	\N	No	No	New	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N
-1669	endDate	Person.ProgramLearningExperience.endDate	\N	\N	1	string	\N	Yes	No	\N	The year, month and day on which the program ended.	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-1670	exitDate	Person.ProgramLearningExperience.exitDate	\N	\N	1	string	\N	Yes	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 33	dateIssued	Assessment.dateIssued	The date when the assessment was formally approved/issued.	No change	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-1666	personId	Person.ProgramLearningExperience.personId	\N	\N	1	string	\N	Yes	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1150	countryCode	Person.MilitaryLearningExperience.countryCode	The country for whom this military service was performed. The unique two character International Organization for Standardization (ISO) code for the country. https://www.iso.org/obp/ui/#search	\N	1	string	\N	No	No	HR Open	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1152	division	Person.MilitaryLearningExperience.division	The military division as defined in the military branch and country. It could be a portion of an army or fleet, consisting of a definite number of troops or vessels, under one commanding officer; also applied to a definite portion of a squadron or battalion. Use "missing at will" and "not applicable" for missng data to avoid skewed outcomes.	\N	1	string	\N	No	Yes	HR Open	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1324	doNotPublishIndicator	Person.Residency.doNotPublishIndicator	An indication that the address should not be published.	\N	1	boolean	\N	No	No	Ed-Fi	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 562	endDate	Person.CourseLearningExperience.endDate	The date on which the enrollment status ended related to a student enrolled in an instance of a course.	\N	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 815	image	Credential.image	IRI or document representing an image of the credential. This must be a PNG or SVG image.	\N	1	entity	\N	No	No	Open Badges v2	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N
 1095	incomeSourceAmount	Person.EmploymentLearningExperience.IncomeSources.incomeSourceAmount	Contribution or dollar amount for the income source.	\N	1	number	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N
-280	competencyAssociationDestinationUri	CompetencyFramework.Association.competencyAssociationDestinationUri	\N	No change	1	string	\N	Yes	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1221	accreditedBy	Common.Accreditation.accreditedBy	Quality assurance organization that provides official authorization to, or approval of, a credential, organization, assessment, or learning opportunity. This can be any international value. Use "missing at will" and "not applicable" for missng data to avoid skewed outcomes.	Missing data should not be penalized in useage. Assuming that all organizations will want to comply with this system will introduce a high level of bias into outcomes. A value needs to be added for missing at will and a value needs to be added for not applicable to avoid too much missing data resulting in skewed outcomes	1	string	\N	No	No	CTDL	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 295	Proficiency	Person.Proficiency	\N	\N	1	entity	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N
 1621	distanceEducationProgram	Program.distanceEducationProgram	An individual's enrollment in a program for which all the required coursework for program completion is able to be completed via distance education courses. Distance education is education that uses one or more technologies to deliver instruction to individuals who are separated from the instructor and to support regular and substantive interaction between the individuals and the instructor synchronously or asynchronously.	No change	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1360	informationSourceId	Person.Birth.informationSourceId	The indentifier for the Information Source record associated with this entity	\N	1	string	\N	Yes	No	LIF-Addition	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N
 1284	firstName	Person.Name.firstName	The first name of a person or individual, further defined by nameType	Only use if consent has been verified.	1	string	\N	Yes	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-296	id	Person.Proficiency.id	\N	No change	1	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1323	countyFIPSCode	Person.Residency.countyFIPSCode	The Federal Information Processing Standards (FIPS) numeric code for the county issued by the National Institute of Standards and Technology (NIST). Counties are considered to be the "first-order subdivisions" of each State and statistically equivalent entity, regardless of their local designations (county, parish, borough, etc.) Counties in different States will have the same code. A unique county number is created when combined with the 2-digit FIPS State Code.	\N	1	string	\N	No	No	Ed-Fi	MP: if based on the county, maybe have it derived, rather than stored. As well making generic.	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1853	issuedByOrganization	Credential.IssuedByOrganization	\N	\N	1	string	\N	\N	\N	\N	\N	\N	2025-09-16 20:24:00+00	\N	UX	LIF	f	\N	t	\N	\N	\N
 1357	birthInternationalProvince	Person.Birth.birthInternationalProvince	For students born outside of the U.S., the Province or jurisdiction in which an individual is born.	\N	1	string	\N	No	No	Ed-Fi	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
@@ -2257,9 +2233,12 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1386	qualifyingMoveCity	Person.Demographics.qualifyingMoveCity	The name of the city in which the child resided prior to the qualifying move.	Only use if consent has been verified.	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1852	Test2UpdatedAttribute11	Test2UpdatedAttribute11	This is a test of creating updated attribute	consideration	25	string	\N	No	No	\N	\N	2025-08-19 13:42:40.259+00	2025-08-19 13:42:40.259+00	\N	Mary Gwozdz	Unicon	f	\N	f	\N	12345	\N
 1358	dateEnteredUS	Person.Birth.dateEnteredUS	For students born outside of the U.S., the date the student entered the U.S.	\N	1	string	\N	No	No	Ed-Fi	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-1624	name	Program.name	The name of the program of instruction, training, services or benefits available through federal, state, or local agencies.	No change	1	string	\N	Yes	Yes	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1646	creditUnitTypeDescription	Program.creditUnitTypeDescription	Detailed description of credit unit type.	Ensure any use incorporates a "not applicable" field as many legitimate programs will not have this and you don't want to accidentaly discard them due to missing data codes.	1	string	\N	No	No	CTDL	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1825	org2CustomExtensionAttr	Org2ExtensionEntity.org2CustomExtensionAttr	An attribute added to the Org2ExtensionEntity as an example.	\N	18	string	\N	No	No	LIF-Addition	\N	\N	\N	\N	\N	Org2	t	\N	f	\N	\N	\N
+1669	endDate	Person.ProgramLearningExperience.endDate	\N	\N	1	string	\N	No	No	\N	The year, month and day on which the program ended.	\N	2025-11-26 22:28:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+1670	exitDate	Person.ProgramLearningExperience.exitDate	\N	\N	1	string	\N	No	No	\N	\N	\N	2025-11-26 22:29:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+1666	personId	Person.ProgramLearningExperience.personId	\N	\N	1	string	\N	No	No	\N	\N	\N	2025-11-26 22:43:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+296	identifier	Person.Proficiency.identifier	\N	No change	1	string	\N	Yes	No	\N	\N	\N	2025-11-26 22:51:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
 21	subjectWebpage	Assessment.subjectWebpage	Webpage that describes this entity.	No change	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 23	moreInformation	Assessment.moreInformation	An additional free text note about the learning assessment specification.	No change	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 24	otherDocuments	Assessment.otherDocuments	A public web document containing additional documentation about the learning assessment specification.	No change	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
@@ -2299,7 +2278,6 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 20	generalizationOf	Assessment.generalizationOf	A learning assessment specification (e.g., a standard) of which this specification is a generalisation.	No change	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 42	dateEffective	Assessment.dateEffective	Effective date of this resource's content.	No change	1	string	\N	No	No	\N	About administration	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 43	expirationDate	Assessment.expirationDate	Date beyond which the resource is no longer offered or available.	No change	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-287	uri	CompetencyFramework.Competency.CompetencyAlignments.uri	\N	\N	1	string	\N	Yes	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 13	purpose	Assessment.purpose	The reason for which an assessment is designed or delivered	The interpretation and use of this data element will depend on whose perspective is being captured in the element. The reason will be perceived differently by the learner, the assessor, and the organization.	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 16	assessmentTypeAdministered	Assessment.assessmentTypeAdministered	The type of assessment administered	Current value set is very limited and subjective. Remapping needs to be done to provide both a set of values that provides consistent, specific types suitable for multiple sectors. Do not use in current format.	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 17	scoreMetricType	Assessment.scoreMetricType	The specific method used to report the performance and achievement of the assessment. This is the metric that is being used to derive the scores.	Missing data should not be penalized in useage. Assuming that all organizations will want to comply with this system will introduce a high level of bias into outcomes	1	string	\N	No	No	\N	Useful but aligned to CEDS definitions? 1EdTech has some useful additions	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
@@ -2328,6 +2306,7 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1523	City	Address.City	The name of the city in which an address is located.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1525	PostalCode	Address.PostalCode	The five or nine digit zip code or overseas postal code portion of an address.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1526	NameOfCounty	Address.NameOfCounty	The name of the county, parish, borough, or comparable unit (within a state) in 'which an address is located.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
+1919	name	CredentialAward.name	\N	\N	1	string	\N	Yes	No	\N	\N	\N	2025-12-01 17:12:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N
 1527	Latitude	Address.Latitude	The geographic latitude of the physical address.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1528	Longitude	Address.Longitude	The geographic longitude of the physical address.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1529	CongressionalDistrict	Address.CongressionalDistrict	The congressional district in which an address is located.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
@@ -2344,7 +2323,6 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 239	typeUrl	CompetencyFramework.Competency.typeUrl	\N	No change	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 249	alternativeNode	CompetencyFramework.Competency.alternativeNode	\N	No change	1	string	\N	No	Yes	CEDS	Not sure if this is 1 or many alternative node(s)	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 270	uri	CompetencyFramework.Competency.ProficiencyDefinition.ProficiencyLevel.uri	URI which identifies the unique proficiency level.	No change	1	string	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-247	currentVersionIndicator	CompetencyFramework.Competency.currentVersionIndicator	\N	No change	1	boolean	\N	Yes	No	CEDS	Not sure this works since we are not seeing the whole picture.  We'd likely have to go by date for 'current'.	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 251	textComplexityMaximumValue	CompetencyFramework.Competency.textComplexityMaximumValue	\N	No change	1	number	\N	No	No	CEDS	If min exists, so should max.	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 252	textComplexityMinimumValue	CompetencyFramework.Competency.textComplexityMinimumValue	\N	No change	1	number	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 216	publicationDate	CompetencyFramework.publicationDate	The date on which this content was first published.	The claimed or assumed date of publication will vary depending on who you ask. This element should be used with care.	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
@@ -2353,12 +2331,9 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 57	startDate	Person.AssessmentLearningExperience.startDate	Date and time the assessment actually began.	No change	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 58	endDate	Person.AssessmentLearningExperience.endDate	Date and time the assessment actually ended.	No change	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 227	lastChangeDateTime	CompetencyFramework.lastChangeDateTime	\N	No change	1	string	\N	No	No	CASE	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-298	name	Person.Proficiency.name	\N	No change	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 241	ageRangeMin	CompetencyFramework.Competency.ageRangeMin	\N	Typical minimum and maximum age should be considered to be an opinion of the dataset creator and used with the assumption of great added bias.	1	number	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 242	ageRangeMax	CompetencyFramework.Competency.ageRangeMax	\N	Typical minimum and maximum age should be considered to be an opinion of the dataset creator and used with the assumption of great added bias.	1	number	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 27	assessmentPerformanceLevel	Assessment.assessmentPerformanceLevel	\N	\N	1	entity	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N
-283	competencyAssociationWeight	CompetencyFramework.Association.competencyAssociationWeight	\N	\N	1	number	\N	Yes	Yes	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-282	competencyAssociationOriginUri	CompetencyFramework.Association.competencyAssociationOriginUri	\N	No change	1	string	\N	Yes	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 138	AssessedGradeLevel	Assessment.AssessedGradeLevel	The grade level(s) for which an assessment is designed. The semantics of null is assumed to mean that the assessment is not associated with any grade level.	\N	6	string	\N	\N	\N	\N	Reference to GradeLevelDescriptor	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 140	Language	Assessment.Language	An indication of the languages in which the assessment is designed.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 144	AdministrationEnvironment	StudentAssement.AdministrationEnvironment	The environment in which the test was administered.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
@@ -2366,6 +2341,9 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 667	AssessmentReportingMethod	AssessmentScore.AssessmentReportingMethod	This descriptor defines the method that the instructor of the class uses to report the performance and achievement of all students. It may be a qualitative method such as individualized teacher comments or a quantitative method such as a letter or a numerical grade.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 668	EducationalEnvironment	Section.EducationalEnvironment	The setting in which a child receives education and related services.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 669	InteractivityStyle	Learning Resource.InteractivityStyle	The predominate mode of learning supported by the learning resource. Acceptable values are active, expositive, or mixed.	\N	6	string	\N	\N	\N	\N	TBD - Ed-Fi EdOrg?	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
+282	competencyAssociationOriginUri	CompetencyFramework.Association.competencyAssociationOriginUri	\N	No change	1	string	\N	No	No	CEDS	\N	\N	2025-11-26 22:12:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+283	competencyAssociationWeight	CompetencyFramework.Association.competencyAssociationWeight	\N	\N	1	number	\N	No	Yes	CEDS	\N	\N	2025-11-26 22:12:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+298	name	Person.Proficiency.name	\N	No change	1	string	\N	Yes	No	\N	\N	\N	2025-11-26 23:29:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
 670	CourseRepeatCode	CourseTranscript.CourseRepeatCode	Indicates that an academic course has been repeated by a student and how that repeat is to be computed in the student's academic grade average	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1551	CitizenshipStatus	Citizenship.CitizenshipStatus	An indicator of whether or not the person is a U.S. citizen.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1552	HomelessPrimaryNighttimeResidence	StudentHomelessProgramAssociation.HomelessPrimaryNighttimeResidence	The primary nighttime residence of the student at the time the student is identified as homeless.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
@@ -2375,12 +2353,10 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 275	Association	CompetencyFramework.Association	\N	\N	1	entity	\N	Yes	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N
 269	ProficiencyLevel	CompetencyFramework.Competency.ProficiencyDefinition.ProficiencyLevel	\N	\N	1	entity	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N
 297	proficiencyScaleType	Person.Proficiency.proficiencyScaleType	\N	No change	1	string	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-555	type	Person.CourseLearningExperience.type	\N	\N	1	string	\N	Yes	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 811	minimumDuration	Credential.Requirements.minimumDuration	Minimum duration of time allowed in order to earn the credential.	No change	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 812	maximumDuration	Credential.Requirements.maximumDuration	Maximum duration of time allowed in order to earn the credential.	No change	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1558	Language	Language.Language	This descriptor defines the language(s) that are spoken or written. It is strongly recommended that entries use only ISO 639-2 language codes: for CodeValue, use the 3 character code; for ShortDescription and Description use the full language name.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1559	LanguageUse	Language.LanguageUse	The category denoting how a language is used.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-28	identifier	Assessment.AssessmentPerformanceLevel.identifier	A unique number or alphanumeric code assigned to an assessment performance level.	No change	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 145	identifier	Learning Assessment Specification.identifier	An identifier of the learning assessment specification.	\N	7	\N	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 153	methodOfAssessmentSupervisionAndIDVerification	Learning Assessment.methodOfAssessmentSupervisionAndIDVerification	Method of assessment supervision and ID verification. It should be provided using the EDC Controlled List of Methods Of Supervision And Verification.	\N	7	\N	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 170	grade status	Learning Assessment.grade status	The status of the grade, which can be i) pass, ii) fail or iii) other. It should be provided using a controlled vocabulary.	\N	7	\N	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
@@ -2393,6 +2369,8 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1832	testNewLIFAttribute	testNewLIFAttribute	This is a test of creating a new LIF attribute	consideration	1	string	\N	No	No	\N	\N	2025-08-19 13:42:40.259+00	2025-08-19 13:42:40.259+00	\N	Mary Gwozdz	LIF	f	\N	f	\N	\N	\N
 219	validStartDateStatus	CompetencyFramework.validStartDateStatus	A valid start date status, which provide details about whether it is missing at will or not applicable.	\N	1	string	353	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 508	courseStandardAlignment	Course.courseStandardAlignment	An indication whether a course is aligned with the established standards of a curriculum framework.	Use only in tandem with an element designed to be more specific about what curriculum framework is being references.	1	boolean	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
+555	type	Person.CourseLearningExperience.type	\N	\N	1	string	\N	No	No	\N	\N	\N	2025-11-26 22:25:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+28	identifier	Assessment.AssessmentPerformanceLevel.identifier	A unique number or alphanumeric code assigned to an assessment performance level.	No change	1	string	\N	Yes	No	\N	\N	\N	2025-11-26 23:07:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
 511	courseLevelCharacteristic	Course.courseLevelCharacteristic	An indication of the general nature and difficulty of instruction provided throughout a course.	Do not use without two elements to provide specifics on the standards used and who makes the determination. This element is likely to absorb a large amount of bias due to asymetrical power and organizational politics	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 505	courseSectionTimeRequiredFor	Course.courseSectionTimeRequiredFor	The actual or estimated number of clock minutes required for course completion. This number is especially important for career and technical education course and may represent (in minutes) the clock hour requirement of the course, the number of minutes (or clock hours) of class time per week, times the number of equivalent weeks the class typically meets.	No change	1	number	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 566	experienceNumericalGrade	Person.CourseLearningExperience.experienceNumericalGrade	The numerical value assigned to a letter grade to provide a basis of quantitative determination of an average.	\N	1	number	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
@@ -2400,21 +2378,16 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 574	courseSectionNumber	Person.CourseLearningExperience.courseSectionNumber	The number assigned to differentiate among distinct occurrences of courses that have the same course abbreviation and number but are considered to be different courses.	\N	1	number	\N	No	No	CEDS	Seems not relevent	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 572	courseTotal	Person.CourseLearningExperience.courseTotal	The total number of courses listed on a transcript. Used as a check digit for integrity purposes.	\N	1	number	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 504	courseEndDate	Course.courseEndDate	The year, month and day an instance of a course ends. This is the end date for the specific instance that was attended by the learner. If no official start data, please note "Not Applicable".	Use this element with care as many legitimate courses don't have official start dates particularly in online learning.	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-1664	type	Person.ProgramLearningExperience.type	\N	\N	1	string	\N	Yes	No	\N	Type=Program	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 560	courseAddDate	Person.CourseLearningExperience.courseAddDate	The date an individual was added to an academic course at a school.	\N	1	string	\N	No	No	CEDS	Seems confusing to use this, as there is no courseEndDate. So is course section more appropriate	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 561	startDate	Person.CourseLearningExperience.startDate	The date on which the enrollment status began related to a student enrolled in an instance of a course.	\N	1	string	\N	No	No	CEDS	If present, this would take presidence over courseAddDate (unless using both)?	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 301	resultDateTime	Person.Proficiency.resultDateTime	\N	Missing data should not be penalized in useage. Assuming that all organizations will want to comply with this system will introduce a high level of bias into outcomes	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1106	employmentTypeStatusValue	Person.EmploymentLearningExperience.EmploymentTypeStatus.employmentTypeStatusValue	A boolean indication of whether or not the learner has the employment type status.	\N	1	boolean	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N
 1084	fullTimeEquivalentRatio	Position.fullTimeEquivalentRatio	The number of total hours worked divided by the maximum number of compensable hours in a full-time schedule as defined by law, or determined by civil or organizational policies.	The denominator of this element needs to be carefully considered to avoid creating calculations that further bias outcomes away from many diverse types of earners.	1	number	\N	No	No	HR Open	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-1123	payRate	Position.Wage.payRate	\N	\N	1	number	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 813	minimumAge	Credential.Requirements.minimumAge	Minimum age, in years, in order to earn the credential.	No change	1	number	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1086	contractDaysOfServicePerYear	Position.contractDaysOfServicePerYear	The number of days per year that a person is expected to work as outlined specifically in their employment agreement, if appopriate in their form of employment.	This metric will be inaccurate for a large number of earners who do not have employment in a specific type of class of employment	1	number	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1099	contractLength	Position.contractLength	The contracted period for the person.	This metric will be inaccurate for a large number of earners who do not have employment in a specific type of class of employment	1	number	\N	No	No	CEDS	the vocab seems teacher specific, versus just contract length	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 835	expirationDate	Person.CredentialAward.expirationDate	The expiration date of the credential, after which the credential will no longer be valid for the awardee.	No change	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-836	awardIssueDate	Person.CredentialAward.awardIssueDate	Date the credential was asserted/awarded.	No change	1	string	\N	Yes	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-1356	deathDate	Person.Death.deathDate	If the person is deceased, the legal date that the person died.	\N	1	string	\N	No	No	HR Open	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 810	estimatedDuration	Credential.Requirements.estimatedDuration	Estimated duration or time to earn the credential.	No change	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-837	credentialAwardee	Person.CredentialAward.credentialAwardee	The person (subject) about which claims are made and who owns and has been awarded the credential.	No change	1	string	\N	Yes	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1135	hireDate	Person.EmploymentLearningExperience.hireDate	The year, month and day on which a person was hired for a position, or consecutive positions within the same organization and job classification.	\N	1	string	\N	No	No	CEDS	NOTE: given a person can have multiple employment records for an org, then wouldn't make sense to have hireDate on each record. CEDS suggested the position can have a hire date as well. \nFor a position hireDate doesn't make sense\nAlso, how important is hireDate versus startDate?	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1096	JobCode	Position.JobCode	\N	\N	1	entity	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N
 1112	Membership	Position.Membership	\N	\N	1	entity	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N
@@ -2423,10 +2396,15 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1098	jobCodeType	Position.JobCode.jobCodeType	\N	\N	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1359	visa	Person.Birth.visa	An indicator of a non-US citizen's Visa type.	\N	1	string	\N	No	No	Ed-Fi	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1896	deletedDate	Common.deletedDate	The date when the object with deleted.	\N	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	t
-1899	informationSourceOrganization	Common.informationSourceOrganization	The date when the object with deleted.	\N	1	string	\N	Yes	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	t
-1900	informationSourceSystem	Common.informationSourceSystem	The date when the object with deleted.	\N	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	t
+836	awardIssueDate	Person.CredentialAward.awardIssueDate	Date the credential was asserted/awarded.	No change	1	string	\N	No	No	\N	\N	\N	2025-11-26 22:26:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+1664	type	Person.ProgramLearningExperience.type	\N	\N	1	string	\N	No	No	\N	Type=Program	\N	2025-11-26 22:40:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+1123	payRate	Position.Wage.payRate	\N	\N	1	number	\N	Yes	No	\N	\N	\N	2025-11-26 23:25:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+1356	deathDate	Person.Death.deathDate	If the person is deceased, the legal date that the person died.	\N	1	string	\N	Yes	No	HR Open	\N	\N	2025-11-26 23:26:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+1920	name	AssessmentLearningExperience.name	\N	\N	1	string	\N	Yes	No	\N	\N	\N	2025-12-01 17:16:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N
+1921	name	CourseLearningExperience.name	\N	\N	1	string	\N	Yes	No	\N	\N	\N	2025-12-01 17:17:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N
+1932	identifier	Birth.identifier	\N	\N	1	string	\N	Yes	No	\N	\N	\N	2025-12-01 22:20:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N
+1137	endDate	Person.EmploymentLearningExperience.endDate	Date some event or activity ends.	\N	1	string	\N	No	No	CEDS	\N	\N	2025-11-26 22:28:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
 1136	startDate	Person.EmploymentLearningExperience.startDate	Date the validity or usefulness of the information in this resource begins.	\N	1	string	\N	No	No	CEDS	could have an overall start and end date related to the org. And separate ones for wage history.	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-1137	endDate	Person.EmploymentLearningExperience.endDate	Date some event or activity ends.	\N	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1147	experienceStartDate	Person.MilitaryLearningExperience.experienceStartDate	\N	\N	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1148	experienceEndDate	Person.MilitaryLearningExperience.experienceEndDate	\N	\N	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1283	birthDate	Person.Birth.birthDate	The year, month, and day on which a person or individual identifies as their date of birth.	Use to verifiy if age as 18 year or older to comply with FERPA. Only use if consent has been verified.	1	string	\N	Yes	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
@@ -2457,7 +2435,6 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1401	expiraryDates	Person.RelationshipContacts.expiraryDates	The expiry date for which the relationship does not apply.	None	1	string	\N	No	No	LIF-Addition	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1400	effectiveDates	Person.RelationshipContacts.effectiveDates	The effective date for which the relationship is valid.	None	1	string	\N	No	No	LIF-Addition	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1224	informationSourceId	Common.Accreditation.informationSourceId	\N	\N	1	string	\N	Yes	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N
-792	id	Credential.id	An identifier for the Credential.	No change	1	string	\N	Yes	No	CEDS	Should be able to have more than one ID, must be coupled with idType	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 791	idSystem	Credential.idSystem	\N	No change	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 857	selfAsserted	Person.CredentialAward.selfAsserted	If True, the credential has been Self Asserted	No change	1	boolean	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1629	programDuration	Program.programDuration	The normal length in credit/contact hours of a person's program as published in the institution's catalogue, website, or other official documents.	\N	1	number	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
@@ -2466,7 +2443,6 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1620	creditsRequired	Program.creditsRequired	The total number of credits required for a person to graduate from the school of enrollment or complete a program.	No change	1	number	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 814	industryCode	Credential.industryCode	Numeric, and usually a NAICS code for industry for an employer (North American Industry Classification System).	No change	1	number	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1650	expirationDate	Program.expirationDate	Date beyond which the resource is no longer offered or available.	No change	1	string	\N	No	No	CTDL	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-1668	startDate	Person.ProgramLearningExperience.startDate	\N	\N	1	string	\N	Yes	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1645	ctid	Program.ctid	Globally unique Credential Transparency Identifier (CTID) by which the creator, owner or provider of a resource recognizes it in transactions with the external environment (e.g., in verifiable claims involving the resource).	Ensure any use incorporates a "not applicable" field as many legitimate programs will not have this and you don't want to accidentaly discard them due to missing data codes.	1	string	\N	No	No	CTDL	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1343	orderOfPriority	Common.Contact.Telephone.orderOfPriority	The order of priority assigned to telephone numbers to define which number to attempt first, second, etc.	Only used if consent is verified. Only use if priority list i generated by the individual or person	1	boolean	\N	No	No	Ed-Fi	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 547	ownedBy	Course.ownedBy	Organization or person with an enforceable claim or legal title to the resource.	Ensure any use incorporates a "not applicable" field as many legitimate courses will not have this and you don't want to accidentaly discard them due to missing data codes.	1	string	\N	No	Yes	CTDL	URI to an organization record in the credential registry	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
@@ -2491,7 +2467,8 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 854	evidenceId	Person.CredentialAward.Evidence.evidenceId	The URL of a webpage presenting evidence of achievement or the evidence encoded as a Data URI. The schema of the webpage is undefined.	No change	1	string	\N	No	No	CLR v2 / Open Badges v3	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 578	goodStandingIndicator	Person.CourseLearningExperience.goodStandingIndicator	Indicator that the person is currently in good standing according to the rules of the educational institution.	\N	1	boolean	\N	No	No	HR Open Standards	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 859	revoked	Person.CredentialAward.revoked	Indicates if the assertion of the credential has been revoked, thus invalidating the award.	No change	1	boolean	\N	No	No	Open Badges v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-1115	membershipStatus	Position.Membership.membershipStatus	An indication of whether the person is an active member of an association.	The selection of what associations are included as possibilities will severely bias this element	1	boolean	\N	Yes	No	CEDS	This could now be derived using associationType of union.	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
+1668	startDate	Person.ProgramLearningExperience.startDate	\N	\N	1	string	\N	No	No	\N	\N	\N	2025-11-26 22:39:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+1933	identifier	AuditHistory.identifier	\N	\N	1	string	\N	Yes	No	\N	\N	\N	2025-12-01 22:20:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N
 1107	employedWhileEnrolled	Person.EmploymentLearningExperience.employedWhileEnrolled	An individual who is a paid employee or works in his or her own business, profession, or farm, as reported through the State Unemployment Insurance Wage Report, FEDES, or WRIS, and at the same time is enrolled in secondary, postsecondary, or adult education or workforce programs.	If you have a verification method for determining whether or not the learner was employed during enrollment, then the LIF model may be extended with additional fields to indcate how this was determined (self reported or otherwise).	1	boolean	\N	No	No	CEDS	could be derived from emp history and course (tbd) history	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1109	employedPriorToEnrollment	Person.EmploymentLearningExperience.employedPriorToEnrollment	An individual who is a paid employee or works in his or her own business, profession, or farm, as reported through the State Unemployment Insurance Wage Report, FEDES, or WRIS, before enrolling in secondary, postsecondary, or adult education or workforce programs. Additional information on this field is available (https://ceds.ed.gov/element/001342), and states that usage for this involves  Individual-level data obtained by matching records with wage records, FEDES, or WRIS. The State Education Agency defines the time period for this collection around an exit period and a corresponding period for employment and earnings data to be obtained. The option set includes "Yes" for employment found via one of the resources listed in the source element. These sources won't tell you anything further about employment or unemployment, only that a record was "not found" or "not matched" thus “unknown."	If you have a verification method for determining whether or not the learner was employed prior to enrollment, then the LIF model may be extended with additional fields to indcate how this was determined (self reported or otherwise).	1	boolean	\N	No	No	CEDS	enrollment data	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1836	TestNewSourceAttributeForValueSet	TestNewSourceAttributeForValueSet	This is a test of creating a new Source attribute	consideration	25	enum	337	No	No	\N	\N	2025-08-19 13:42:40.259+00	2025-08-19 13:42:40.259+00	\N	Mary Gwozdz	Unicon	f	\N	f	\N	\N	\N
@@ -2506,15 +2483,18 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 847	Evidence	Person.CredentialAward.Evidence	\N	\N	1	entity	\N	No	Yes	CLR v2 / Open Badges v3	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N
 1355	Death	Person.Death	\N	\N	1	entity	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N
 1213	Accreditation	Common.Accreditation	\N	\N	1	entity	\N	No	Yes	CEDS	2024-10-04: Abhishek: We have same entity in Credential so we are moving this entity to common and  creating inter-entity link.	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N
-277	competencyAssociationType	CompetencyFramework.Association.competencyAssociationType	\N	No change	1	string	\N	Yes	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1375	economicDisadvantage	Person.Demographics.economicDisadvantage	An indication that the student met the State criteria for classification as having an economic disadvantage.	\N	1	boolean	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
+247	currentVersionIndicator	CompetencyFramework.Competency.currentVersionIndicator	\N	No change	1	boolean	\N	No	No	CEDS	Not sure this works since we are not seeing the whole picture.  We'd likely have to go by date for 'current'.	\N	2025-11-26 22:10:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+232	uri	CompetencyFramework.Competency.uri	A network-resolvable Uniform Resource Locator (URL) pointing to the authoritative reference for the competency definition.	It is very likely that competing claims of formal authority will exist. Do not assume that all data here is final.	1	string	\N	No	No	CEDS	\N	\N	2025-11-26 22:11:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+280	competencyAssociationDestinationUri	CompetencyFramework.Association.competencyAssociationDestinationUri	\N	No change	1	string	\N	No	No	CEDS	\N	\N	2025-11-26 22:12:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+277	competencyAssociationType	CompetencyFramework.Association.competencyAssociationType	\N	No change	1	string	\N	No	No	CEDS	\N	\N	2025-11-26 22:12:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+290	alignsToText	CompetencyFramework.Competency.CompetencyAlignments.alignsToText	\N	\N	1	string	\N	No	No	\N	Required if no alignsToUri	\N	2025-11-26 22:13:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
 1108	employedAfterExit	Person.EmploymentLearningExperience.employedAfterExit	An individual who is a paid employee or works in his or her own business, profession, or farm, as reported through the State Unemployment Insurance Wage Report, FEDES, or WRIS, after exiting secondary, postsecondary, or adult education or workforce programs.  Additional usage notes for this field from CEDs: Individual-level data obtained by matching records with wage records, FEDES, or WRIS. The State Education Agency defines the time period for this collection around an exit period and a corresponding period for employment and earnings data to be obtained. The option set includes "Yes" for employment found via one of the resources listed in the source element. These sources will provide information about most of the types of jobs that students or former students will become employed in but not all. For that reason when a record is "not found" or "not matched" their employment status is "unknown" for the targeted time base. (https://ceds.ed.gov/element/000988)	If you have a verification method for determining whether or not the learner was employed after exit, then the LIF model may be extended with additional fields to indcate how this was determined (self reported or otherwise).	1	boolean	\N	No	No	CEDS	outcome data?	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 284	competencyAlignments	CompetencyFramework.Competency.competencyAlignments	\N	\N	1	entity	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N
 1214	accreditationStatus	Common.Accreditation.accreditationStatus	An indication of the accreditation status of a higher education institution. This can be any international value. Some potential example for this property could be : Regionally, Programmatic accreditation, Nationally accredited, Faith, Career related, Not accredited, Unknown.	Until the data team updates the normative value set, this element should be used with great caution. It contains a high degree of bias towards generating results and outcomes that will reflect priviledge and marginalization baked into current US accreditation schemes. Recommendation for normative value set from WAC - Current normative set does not provide enough information for the data user or the engineering team to be able to map data or use the LIF results	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N
 1090	compensationTotalSalary	Position.compensationTotalSalary	Total annualized salary of staff at the specific organization indicated on the record.	\N	1	number	\N	No	No	CEDS	TODO - store on Experience or Position?\nIf there are multiple positions in a year, then  having Position would not work?	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 220	validEndDate	CompetencyFramework.validEndDate	The year, month and day the competency framework was deprecated/replaced by the jurisdiction in which it was intended to apply.	Missing data should not be penalized in useage. Assuming that all organizations will want to comply with this system will introduce a high level of bias into outcomes	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 503	courseBeginDate	Course.courseBeginDate	The year, month and day an instance of a course officially began. This is the start date for the specific instance that was attended by the learner. If no official start data, please note "Not Applicable".	Use this element with care as many legitimate courses don't have official start dates particularly in online learning.	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-1120	startDate	Position.Wage.startDate	Date the validity or usefulness of the information in this resource begins.	\N	1	string	\N	Yes	No	CTDL	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 563	exitDate	Person.CourseLearningExperience.exitDate	The circumstances under which the person exited from membership in the learning experience.	\N	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 570	courseSectionExitWithdrawalDate	Person.CourseLearningExperience.courseSectionExitWithdrawalDate	The year, month and day of the first day after the date of a person's last enrollment in a course section.	\N	1	string	\N	No	No	CEDS	seems like an internal property and unnecessay with courseDropDate	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 799	effectiveDate	Credential.effectiveDate	The effective date of the credential, if not immediately effective.	No change	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
@@ -2529,7 +2509,9 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 218	validStartDate	CompetencyFramework.validStartDate	The year, month and day the competency framework was adopted by the jurisdiction in which it was intended to apply.	Missing data should not be penalized in useage. Assuming that all organizations will want to comply with this system will introduce a high level of bias into outcomes	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 478	dateTimeConsentGiven	Person.Consent.dateTimeConsentGiven	Date and time when consent was first given.	\N	1	string	\N	No	No	LIF	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 479	dateTimeConsentUpdated	Person.Consent.dateTimeConsentUpdated	Date and time when consent was updated.	\N	1	string	\N	No	No	LIF	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-494	auditDate	Person.Consent.AuditHistory.auditDate	Timestamp of when the audit took place.	\N	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
+494	auditDate	Person.Consent.AuditHistory.auditDate	Timestamp of when the audit took place.	\N	1	string	\N	Yes	No	\N	\N	\N	2025-11-26 23:23:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+1934	identifier	Evidence.identifier	\N	\N	1	string	\N	Yes	No	\N	\N	\N	2025-12-01 22:21:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N
+1935	identifier	Identity.identifier	\N	\N	1	string	\N	Yes	No	\N	\N	\N	2025-12-01 22:22:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N
 1295	startDate	Person.Name.startDate	The start date that this name record is effective for the person	\N	1	string	\N	No	No	LIF-Addition	2/20: CM added as part of truing up to model	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1296	endDate	Person.Name.endDate	The end date that this name record is effective for the person	\N	1	string	\N	No	No	LIF-Addition	2/20: CM added as part of truing up to model	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1297	lastModificationDate	Person.Name.lastModificationDate	The date when the person (information) was last modified	\N	1	string	\N	No	No	ELM	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
@@ -2540,7 +2522,6 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1104	employmentTypeStatusCategory	Person.EmploymentLearningExperience.EmploymentTypeStatus.employmentTypeStatusCategory	The category of the employment type status to indicate whether the learner has a certain type of employment. For example, facultyStatus, instructionalStaffStatus, medicalSchoolStaffStatus, graduateAssistantStatus, other.	\N	1	string	160	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N
 1307	addressStreet	Common.Contact.Address.addressStreet	The street number and street name or post office box number of an address.	Only use if consent has been verified.	17	string	\N	Yes	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1811	activityEndDate	Person.CredentialAward.activityEndDate	\N	\N	17	string	\N	No	No	Open Badges v3	\N	2025-08-03 19:39:51.760627+00	2025-08-03 19:39:51.760627+00	\N	\N	StateU	t	\N	f	\N	\N	\N
-1342	primaryNumber	Common.Contact.Telephone.primaryNumber	An indication that the telephone number should be used as the principal number for a person or organization.	Only use if consent has been verified.	17	boolean	\N	Yes	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1340	telephoneNumber	Common.Contact.Telephone.telephoneNumber	The telephone number including the area code, and extension, if applicable.	Only use if consent has been verified.	17	string	\N	Yes	Yes	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1658	specialization	Program.specialization	Words or brief phrases describing the topicality of the entity; select subject terms from an existing enumeration of such terms.	No change	17	string	\N	No	No	CTDL	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1333	informationSourceId	Common.Contact.informationSourceId	\N	\N	17	string	\N	Yes	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N
@@ -2572,7 +2553,6 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 223	language	CompetencyFramework.language	The default language of the text used for the content in the competency framework.	No change	1	string	351	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 243	language	CompetencyFramework.Competency.language	\N	There should only be one language for a competency and for a framework, but the same framework could be copied and defined in a different language, but that copy  would have unique Ids. Do not overlook this when using this element.	1	string	351	No	No	CEDS	There should only be one language for a competency and for a framework, but the same framework could be copied and defined in a different language, but that copy  would have unique Ids.	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1623	normalTimeCompletionUnits	Program.normalTimeCompletionUnits	The unit of measurement for length of time for completion.	No change	1	string	363	No	No	CEDS	Not sure if this should be part of Credit or Unit?	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-215	publicationStatus	CompetencyFramework.publicationStatus	The publication status of the competency framework is "Published".	No change	1	string	360	Yes	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 221	validEndDateStatus	CompetencyFramework.validEndDateStatus	A valid end date status, which provide details about whether it is missing at will or not applicable.	\N	1	string	352	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 535	assessmentMethodType	Course.assessmentMethodType	Type of method used to conduct an assessment; select from an existing enumeration of such types. Use "missing at will" and "not applicable" for missng data to avoid skewed outcomes.	Ensure any use incorporates a "not applicable" field as many legitimate courses will not have this and you don't want to accidentaly discard them due to missing data codes.	1	string	\N	No	Yes	CTDL	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 37	methodType	Assessment.methodType	Type of method used to conduct an assessment; select from an existing enumeration of such types.	Missing data should not be penalized in useage. Assuming that all organizations will want to comply with this system will introduce a high level of bias into outcomes	1	string	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
@@ -2582,21 +2562,18 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 240	level	CompetencyFramework.Competency.level	\N	If CEDS rather than ISCED value maps are used this will introduce inaccuracy and bias for international people. You can add a property called "educationLevelSystem" (the default is CEDS) and if it is different from CEDS use the code values from https://isced.uis.unesco.org/data-mapping/	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 843	identityType	Person.CredentialAward.Identity.identityType	The identity type.	No change	1	string	\N	No	No	CLR v2 / Open Badges v3	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 858	awardStatus	Person.CredentialAward.awardStatus	The status of the awarded credential or achievement.	No change	1	string	\N	No	No	CLR v2 / Open Badges v3	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-1897	deletedStatus	Common.deletedStatus	The date when the object with deleted.	\N	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	t
+287	uri	CompetencyFramework.Competency.CompetencyAlignments.uri	\N	\N	1	string	\N	No	No	\N	\N	\N	2025-11-26 22:13:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
 510	courseCodeSystem	Course.courseCodeSystem	A system that is used to identify the organization of subject matter and related learning experiences provided for the instruction of persons.	No change	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 524	courseCreditBasisType	Course.courseCreditBasisType	The type of enrollment associated with the credit hours for the course.	No change	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 802	achievementType	Credential.achievementType	Type of the Credential	These mapping values are not mutually exclusive and the selection on an achievement type will reflect context and social location. Care is recommended when using this element to categorize or classify credentials. Extreme bias will be replicated in using this data element	1	string	\N	No	Yes	CLR v1	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 830	alignmentType	Credential.CredentialAlignments.alignmentType	Type of alignment, RSD, CredentialEngine, CASE, ASN, etc.	No change	1	string	\N	No	No	CLR v2 / Open Badges v3	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 803	format	Credential.format	Digital Format of the Credential	Missing data should not be penalized in useage. Assuming that all organizations will want to comply with this system will introduce a high level of bias into outcomes. A value needs to be added for missing at will and a value needs to be added for not applicable to avoid too much missing data resulting in skewed outcomes	1	string	\N	No	Yes	new	Open Badge version or \nother digital credential formats	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1083	otherPayMethods	Position.otherPayMethods	An indication of the other payment methods of the position besides the primary payment method. For example, commission, stipend, piecework, bonus, tips, profit sharing, equity/stock options, or other.	\N	1	string	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-1116	membershipType	Position.Membership.membershipType	Type of association for which an invidividual is a member.	The selection of what associations are included as possibilities will severely bias this element	1	string	\N	Yes	No	\N	New concept scheme of Association Type	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-1198	identificationSystem	Organization.identificationSystem	A coding scheme that is used for identification and record-keeping purposes by schools, social services, or other agencies to refer to an organization.	Ensure your models and systems can ingest the ad-hoc IDs from organizations that reside outside the systems embedded in the current mapping schema. Suggested normative data set Current Vocab plus an additional category for ad-hoc additions.	1	string	\N	Yes	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1210	operationalStatus	Organization.OperationalStatus.operationalStatus	The current status of the organization's operations, exclusive of scheduled breaks, holidays, or other temporary interruptions.	Ensure your models and systems can ingest the ad-hoc organization types from organizations that reside outside the systems embedded in the current mapping schema	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1367	americanIndianOrAlaskan	Person.Culture.americanIndianOrAlaskan	A person having origins in any of the original peoples of North and South America (including Central America), and who maintains cultural identification through tribal affiliation or community attachment.	\N	1	string	\N	No	No	CEDS	CM: 2/4: Do we need a normative codelist for race/culture (instead of a fixed set of federal values)?	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1381	homeless	Person.Demographics.homeless	Children and youth who lack a fixed, regular, and adequate nighttime residence. Homeless children and youth include: 1) children and youth who are sharing the housing of other persons due to loss of housing, economic hardship, or a similar reason; are living in motels, hotels, trailer parks, or camping grounds due to the lack of alternative adequate accommodations; are living in emergency or transitional shelters; are abandoned in hospitals; or are awaiting foster care placement; 2) children and youth who have a primary nighttime residence that is a public or private place not designed for or originally used as a regular sleeping accommodation for human beings; or 3) children and youths who are living in cars, parks, public spaces, abandoned buildings, substandard housing, bus or train stations, or similar settings. 4) migratory children who qualify as homeless because the children are living in circumstances described in the above. (See Section 103 of the McKinney Act for a more detailed description of this data element).	In use cases where this field may be desired for research purposes, it is not recommended that this field be used, considering the likelihood for missing data, and inconsistencies. It would appear that the likelihood for inaccurate analysis is higher than for research that may benefit a learner.	1	boolean	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1631	programSponsorType	Program.programSponsorType	A type of organization providing funds for a particular educational or service program or activity or for an individual's participation in the program or activity.	No change	1	string	\N	No	Yes	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1638	assessmentMethodType	Program.assessmentMethodType	Type of method used to conduct an assessment; select from an existing enumeration of such types.	Ensure any use incorporates a "not applicable" field as many legitimate programs will not have this and you don't want to accidentaly discard them due to missing data codes.	1	string	\N	No	Yes	CTDL	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
-1898	informationSourceId	Common.informationSourceId	The date when the object with deleted.	\N	1	string	\N	Yes	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	t
 1348	informationSourceId	Common.Contact.Telephone.informationSourceId	The indentifier for the Information Source record associated with this entity	\N	17	string	\N	Yes	No	LIF-Addition	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N
 1783	addressRegion	address.addressRegion	\N	\N	16	string	\N	\N	No	\N	Deduplication with Organization entity should be considered	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N
 1784	addressLocality	address.addressLocality	\N	\N	16	string	\N	\N	No	\N	Deduplication with Organization entity should be considered	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N
@@ -2617,10 +2594,13 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1808	type	OpenBadgeCredential.refreshService.type	\N	\N	16	string	\N	\N	No	\N	\N	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N
 1880	type	Image.type	\N	\N	17	string	\N	\N	No	\N	\N	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N
 1794	creditsAvailable	achievement.creditsAvailable	\N	\N	16	number	\N	\N	No	\N	\N	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N
+1936	identifier	Death.identifier	\N	\N	1	string	\N	Yes	No	\N	\N	\N	2025-12-01 22:22:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N
+1937	identifier	Name.identifier	\N	\N	1	string	\N	Yes	No	\N	\N	\N	2025-12-01 22:23:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N
+1938	identifier	SexAndGender.identifier	\N	\N	1	number	\N	Yes	No	\N	\N	\N	2025-12-01 22:24:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N
+1939	identifier	Position.identifier	\N	\N	1	string	\N	Yes	No	\N	\N	\N	2025-12-01 22:25:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N
 1770	targetFramework	achievement.alignment.targetFramework	\N	\N	16	string	\N	\N	No	\N	\N	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N
 1772	targetUrl	achievement.alignment.targetUrl	\N	\N	16	string	\N	\N	No	\N	\N	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N
 1753	creditsEarned	OpenBadgeCredential.credentialSubject.creditsEarned	\N	\N	16	number	\N	\N	No	\N	\N	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N
-1289	emailAddressType	Common.Contact.Email.emailAddressType	The type of electronic mail (e-mail) address listed for an individual or person.	Only use if consent has been verified.	17	string	\N	Yes	Yes	CEDS	\N	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N
 1774	achievementType	achievement.achievementType	\N	\N	16	string	\N	\N	No	\N	\N	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N
 1740	@context	OpenBadgeCredential.@context	\N	\N	16	string	\N	\N	Yes	\N	\N	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N
 1768	targetDescription	achievement.alignment.targetDescription	\N	\N	16	string	\N	\N	No	\N	\N	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N
@@ -2667,6 +2647,9 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1869	willingToTravelIndicator	willingToTravelIndicator	\N	\N	17	boolean	\N	No	No	\N	\N	\N	2025-10-02 23:27:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N
 1320	dateEffective	Common.Contact.Address.dateEffective	The effective date for which the address is valid. For physical addresses, the periods in which the person lived at that address.	\N	17	string	\N	No	No	\N	CM 3/11: Brought over from Person	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N
 1813	sourceId	Organization.sourceId	\N	\N	17	string	\N	No	No	Open Badges v3	\N	2025-08-03 19:39:51.760627+00	2025-08-03 19:39:51.760627+00	\N	\N	StateU	t	\N	t	\N	\N	\N
+1940	identifier	IndustryCode.identifier	\N	\N	1	string	\N	Yes	No	\N	\N	\N	2025-12-01 22:25:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N
+1941	identifier	JobCode.identifier	\N	\N	1	string	\N	Yes	No	\N	\N	\N	2025-12-01 22:26:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N
+1942	identifier	Wage.identifier	\N	\N	1	string	\N	Yes	No	\N	\N	\N	2025-12-01 22:26:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N
 1321	dateExpired	Common.Contact.Address.dateExpired	The expired date for which the address is valid. For physical addresses, the periods in which the person lived at that address.	\N	17	string	\N	No	No	\N	CM 3/11: Brought over from Person\n2024-08-09: Mary and Abhishek: We have created Contact entity at the root level in the Person workbook and added the inter-entity link between Organization and Contact, also the Contact in Person already has Address as sub-entity, so this field is marked as Ignore = Yes.	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N
 1878	id	Person.CredentialAward.Image.id	\N	\N	17	string	\N	\N	\N	\N	\N	\N	2025-10-06 17:09:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N
 1862	name	Narrative.name	\N	\N	17	string	\N	No	No	\N	\N	\N	2025-10-02 20:54:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N
@@ -2701,6 +2684,76 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1826	stateUPrivateTestAttr	StateUExtensionEntity.stateUPrivateTestAttr	An attribute added to the StateUExtensionEntity for the purpose of being an example of an attribute marked private.	\N	17	string	\N	No	No	LIF-Addition	\N	\N	\N	\N	\N	StateU	t	\N	f	\N	\N	\N
 532	teaches	Course.teaches	Competency that the course is intended to teach.	No change	1	string	\N	No	Yes	CEDS	Starting with a simple list of strings. Note that CTDL may be part of the StateU demo.	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
 1876	organizationTypes	Person.employmentPreferences.organizationTypes	The preferred organization types.	\N	17	string	\N	Yes	Yes	\N	\N	\N	2025-10-02 23:37:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N
+212	creator	CompetencyFramework.creator	The person or organization chiefly responsible for the intellectual content of the competency framework.	The claim of creation should be assessed and validated prior to use. The origins of competency frameworks are often more complex than captured and this introduces critical bias and inaccuracy into outcomes.	1	string	\N	No	No	CEDS	\N	\N	2025-11-26 22:15:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+215	publicationStatus	CompetencyFramework.publicationStatus	The publication status of the competency framework is "Published".	No change	1	string	360	No	No	CEDS	\N	\N	2025-11-26 22:16:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+1203	organizationType	Organization.organizationType	The type of educational organization or entity.	Ensure your models and systems can ingest the ad-hoc organization types from organizations that reside outside the systems embedded in the current mapping schema	1	string	\N	No	Yes	CEDS	\N	\N	2025-11-26 22:09:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+837	credentialAwardee	Person.CredentialAward.credentialAwardee	The person (subject) about which claims are made and who owns and has been awarded the credential.	No change	1	string	\N	No	No	\N	\N	\N	2025-11-26 22:26:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+482	lifEntities	Person.Consent.lifEntities	List of entities for which this consent pertains.	\N	1	string	45	No	Yes	LIF	\N	\N	2025-11-26 22:41:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+481	typesOfData	Person.Consent.typesOfData	Categories or types of data that will be collected, processed, or shared. These types of data may include information related to competencies, employment skills and achievements, educational achievements, and other metadata.	Reach out to legal counsel and extend the LIF Model as necessary.	1	string	\N	No	Yes	LIF	PW: This may not be needed, as this entity will be directly associated with the portion(s) of the information model instance to which it applies\nCM: 3/21:	\N	2025-11-26 22:41:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+1115	membershipStatus	Position.Membership.membershipStatus	An indication of whether the person is an active member of an association.	The selection of what associations are included as possibilities will severely bias this element	1	boolean	\N	No	No	CEDS	This could now be derived using associationType of union.	\N	2025-11-26 22:43:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+1120	startDate	Position.Wage.startDate	Date the validity or usefulness of the information in this resource begins.	\N	1	string	\N	No	No	CTDL	\N	\N	2025-11-26 22:44:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+1627	identifier	Program.identifier	A unique number or alphanumeric code assigned to a program by a school, school system, a state, or other agency or entity.	No change	1	string	\N	Yes	No	CEDS	\N	\N	2025-11-26 22:49:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+1902	identifier	CompetencyFramework.Competency.Accessibility.identifier	\N	\N	1	string	\N	Yes	No	\N	\N	\N	2025-11-26 18:17:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N
+1903	identifier	CompetencyFramework.Competency.identifier	\N	\N	1	string	\N	Yes	No	\N	\N	\N	2025-11-26 18:18:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N
+829	code	Credential.CredentialAlignments.code	If applicable, a locally unique string identifier that identifies the alignment target within its framework and/or targetUrl.	No change	1	string	\N	Yes	No	CLR v2 / Open Badges v3	\N	\N	2025-11-26 23:19:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+1904	identifier	Credential.Requirements.identifier	\N	\N	1	string	\N	Yes	No	\N	\N	\N	2025-11-26 18:21:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N
+1905	identifier	Organization.Contact.identifier	\N	\N	1	string	\N	Yes	No	\N	\N	\N	2025-11-26 18:22:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N
+1097	jobCodeValue	Position.JobCode.jobCodeValue	This property can consist of multipe types of job codes including the following: CEDs Job codes. These codes map to IPEDs (https://ceds.ed.gov/element/000731). IPEDs Job Codes  (https://surveys.nces.ed.gov/ipeds/public/hrsoc-browse) . The International Standard Classification of Occupations (https://ilostat.ilo.org/methods/concepts-and-definitions/classification-occupation/) (ISCO) .  Occupation profiles for the U.S. Burea of Labor Statistics. (https://www.bls.gov/oes/current/oes_stru.htm). These fields can be crosswalked to CIP codes (https://nces.ed.gov/ipeds/cipcode/post3.aspx?y=56).   If there is no jobcode Not Applicable or "missing at will" can be selected.	ISCO categories will provide information that will capture a lot of contextual discrimination and should be used with care. consider controlling for this. If anyone needs more than IPEDS SOC code and wants to use ISCO then add  2 new property "positionIdentifier" and "positionIdentifierType". The Type is coming from ISCO and other one should be the actual value.	1	string	\N	Yes	Yes	CEDS	\N	\N	2025-11-26 23:25:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+1909	identifier	Person.EmploymentLearningExperience.IncomeSources.identifier	\N	\N	1	string	\N	Yes	No	\N	\N	\N	2025-11-26 18:27:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N
+1911	name	Person.Language.name	\N	\N	1	string	\N	Yes	No	\N	\N	\N	2025-11-26 18:28:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N
+1151	serviceNumber	Person.MilitaryLearningExperience.serviceNumber	The military service number or identifier of the person as defined by the country, branch, and/or division. Use "missing at will" and "not applicable" for missng data to avoid skewed outcomes.	\N	1	string	\N	Yes	Yes	HR Open	\N	\N	2025-11-26 23:29:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+1913	identifier	Person.RelationshipContacts.identifier	\N	\N	1	string	\N	Yes	No	\N	\N	\N	2025-11-26 18:30:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N
+855	type	Person.CredentialAward.Evidence.type		No change	1	string	\N	No	No	CLR v2 / Open Badges v3	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
+1291	identifierType	Common.Identifier.identifierType	The types of sources of identifiers used to uniquely identify the entity	Only use if consent has been verified.	1	string	\N	No	No	CEDS	\N	\N	2025-11-26 22:14:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+208	uri	CompetencyFramework.uri	An unambiguous reference to the competency framework using a network-resolvable URI.	No change	1	string	\N	No	No	CEDS	\N	\N	2025-11-26 22:16:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+1207	organizationCodeType	Organization.OrganizationCode.organizationCodeType	A code type, which provide details about whether it is NAICS, SIC or ISIC.	\N	1	string	\N	No	No	\N	\N	\N	2025-11-26 22:23:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+1352	birthCode	Person.Birth.birthCode	The unique two digit International Organization for Standardization (ISO) code for the country in which a person is born.	\N	1	string	\N	No	No	CEDS	\N	\N	2025-11-26 22:40:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+1351	stateOfBirth	Person.Birth.stateOfBirth	The abbreviation for the name of the state (within the United States) or extra-state jurisdiction in which a person was born.	\N	1	string	\N	No	No	CEDS	\N	\N	2025-11-26 22:41:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+1116	membershipType	Position.Membership.membershipType	Type of association for which an invidividual is a member.	The selection of what associations are included as possibilities will severely bias this element	1	string	\N	No	No	\N	New concept scheme of Association Type	\N	2025-11-26 22:44:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+1901	identifier	CompetencyFramework.Association.identifier	\N	\N	1	string	\N	Yes	No	\N	\N	\N	2025-11-26 18:11:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N
+260	identifier	CompetencyFramework.Competency.ProficiencyDefinition.identifier	Identifier for the Competency	No change	1	string	\N	Yes	No	\N	This might should be 0..* if there are more than one proficiency definition for the competency.	\N	2025-11-26 23:19:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+1906	identifier	Organization.OperationalStatus.identifier	\N	\N	1	string	\N	Yes	No	\N	\N	\N	2025-11-26 18:23:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N
+842	identityHash	Person.CredentialAward.Identity.identityHash	A String consisting of an algorithm identifier, a $ separator, and a hash across an identifier and an optionally appended salt string. The only supported algorithms are MD5 [RFC1321] and SHA-256 [FIPS-180-4], identified by the strings 'md5' and 'sha256' respectively. Identifiers and salts MUST be encoded in UTF-8 prior to hashing, and the resulting hash MUST be expressed in hexadecimal using uppercase (A-F, 0-9) or lowercase character (a-f, 0-9) sets. For example: 'sha256$b5809d8a92f8858436d7e6b87c12ebc0ae1eac4baecc2c0b913aee2c922ef399' represents the result of calculating a SHA-256 hash on the string 'a@example.comKosher'. in which the email identifier 'a@example.com' is salted with 'Kosher'	No change	1	string	\N	Yes	No	CLR v2 / Open Badges v3	\N	\N	2025-11-26 23:25:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+1907	identifier	Person.Culture.identifier	\N	\N	1	string	\N	Yes	No	\N	\N	\N	2025-11-26 18:26:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N
+1908	identifier	Person.Demographics.identifier	\N	\N	1	string	\N	Yes	No	\N	\N	\N	2025-11-26 18:27:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N
+1910	identifier	Person.Lanugage.identifier	\N	\N	1	string	\N	Yes	No	\N	\N	\N	2025-11-26 18:28:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N
+1912	identifier	Person.MilitaryLearningExperience.identifier	\N	\N	1	string	\N	Yes	No	\N	\N	\N	2025-11-26 18:29:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N
+1914	identifier	Person.Residency.identifier	\N	\N	1	string	\N	Yes	No	\N	\N	\N	2025-11-26 18:30:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N
+557	personId	Person.CourseLearningExperience.personId	\N	\N	1	string	\N	No	No	\N	N/A if part of a Person graph	\N	2025-11-26 22:42:00+00	\N	\N	LIF	f	\N	t	\N	\N	\N
+1217	ctid	Common.Accreditation.ctid	Globally unique Credential Transparency Identifier (CTID) by which the creator, owner or provider of a resource recognizes it in transactions with the external environment (e.g., in verifiable claims involving the resource).	Missing data should not be penalized in useage. Assuming that all organizations will want to comply with this system will introduce a high level of bias into outcomes. A mapping option for not applicable and missing at will need to be added to this	1	string	\N	No	No	CEDS	\N	\N	2025-11-26 23:19:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+209	name	CompetencyFramework.name	The name of the competency framework.	The name of the competency framework should not be used a proxy for what is actually measured in the elements. Care should be taken to avoid biased assumptions about what a framework actually measures from its name. When using this field, there are other entitites that include relevant data elemants that allow for inclusion of other elements related to competency.	1	string	\N	Yes	No	CEDS	\N	\N	2025-11-26 22:15:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+1133	name	Person.EmploymentLearningExperience.name	The descriptive name of a person's position.	\N	1	string	\N	Yes	No	CEDS	this can be position specific or "current" on the top level class?	\N	2025-11-26 22:27:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+1915	countryCode	Contact.Address.countryCode		\N	1	string	\N	No	No		\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
+1289	emailAddressType	Common.Contact.Email.emailAddressType	The type of electronic mail (e-mail) address listed for an individual or person.	Only use if consent has been verified.	1	string	\N	No	Yes	CEDS	\N	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N
+1342	primaryNumber	Common.Contact.Telephone.primaryNumber	An indication that the telephone number should be used as the principal number for a person or organization.	Only use if consent has been verified.	1	boolean	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
+848	evidenceAccreditation	Person.CredentialAward.Evidence.evidenceAccreditation		No change	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N
+1290	identifier	Common.Identifier.identifier	A number and/or alphanumeric code used to uniquely identify the entity. Use "missing at will" ,"ad-hoc"and "not applicable" for missng data to avoid skewed outcomes.	Only use if consent has been verified.	1	string	\N	Yes	No	CEDS-Edited	\N	\N	2025-11-26 22:14:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+230	identifier	CompetencyFramework.identifier	An identifier for the Competency Framework	No change	1	string	\N	Yes	No	CASE	\N	\N	2025-12-01 22:14:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+1924	identifier	Address.identifier	\N	\N	1	string	\N	Yes	No	\N	\N	\N	2025-12-01 22:14:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N
+1925	identifier	Email.identifier	\N	\N	1	string	\N	Yes	No	\N	\N	\N	2025-12-01 22:14:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N
+1926	identifier	Telephone.identifier	\N	\N	1	string	\N	Yes	No	\N	\N	\N	2025-12-01 22:15:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N
+1927	identifier	LegalCode.identifier	\N	\N	1	string	\N	Yes	No	\N	\N	\N	2025-12-01 22:15:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N
+1928	identifier	CredentialAlignments.identifier	\N	\N	1	string	\N	Yes	No	\N	\N	\N	2025-12-01 22:17:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N
+1929	identifier	Criteria.identifier	\N	\N	1	string	\N	Yes	No	\N	\N	\N	2025-12-01 22:17:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N
+1930	identifier	OrganizationCode.identifier	\N	\N	1	string	\N	Yes	No	\N	\N	\N	2025-12-01 22:18:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N
+1931	identifier	Organization.identifier	\N	\N	1	string	\N	Yes	No	\N	\N	\N	2025-12-01 22:18:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N
+1945	identifier	EmploymentPreferences.identifier	\N	\N	17	string	\N	Yes	No	\N	\N	\N	2025-12-02 15:21:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N
+1946	identifier	PositionPreferences.identifier	\N	\N	17	string	\N	Yes	No	\N	\N	\N	2025-12-02 15:30:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N
+1949	identifier	Travel.identifier	\N	\N	17	string	\N	Yes	No	\N	\N	\N	2025-12-02 15:35:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N
+1952	identifier	Ranges.indentifier	\N	\N	17	string	\N	Yes	No	\N	\N	\N	2025-12-02 15:43:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N
+1624	name	Program.name	The name of the program of instruction, training, services or benefits available through federal, state, or local agencies.	No change	1	string	\N	Yes	Yes	CEDS	\N	\N	2025-11-26 22:20:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+792	identifier	Credential.identifier	An identifier for the Credential.	No change	1	string	\N	Yes	No	CEDS	Should be able to have more than one ID, must be coupled with idType	\N	2025-12-01 22:13:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N
+1922	name	MilitaryLearningExperience.name	\N	\N	1	string	\N	Yes	No	\N	\N	\N	2025-12-01 17:17:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N
+1923	name	ProgramLearningExperience.name	\N	\N	1	string	\N	Yes	No	\N	\N	\N	2025-12-01 17:18:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N
+1943	identifier	Narrative.identifier	\N	\N	17	string	\N	Yes	No	\N	\N	\N	2025-12-02 15:19:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N
+1947	identifier	Relocation.identifier	\N	\N	17	string	\N	Yes	No	\N	\N	\N	2025-12-02 15:34:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N
+1951	identifier	Interactions.identifier	\N	\N	17	string	\N	Yes	No	\N	\N	\N	2025-12-02 15:38:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N
+1954	identifier	Criteria.identifier	\N	\N	17	string	\N	Yes	No	\N	\N	\N	2025-12-02 19:15:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N
+1198	informationSourceSystem	Organization.informationSourceSystem	For identification and record-keeping purposes	Ensure your models and systems can ingest the ad-hoc IDs from organizations that reside outside the systems embedded in the current mapping schema. Suggested normative data set Current Vocab plus an additional category for ad-hoc additions.	1	string	\N	No	No	CEDS	\N	\N	2025-11-26 22:48:00+00	\N	\N	LIF	f	\N	t	\N	\N	\N
+1944	identifier	Texts.identifier	\N	\N	17	string	\N	Yes	No	\N	\N	\N	2025-12-02 15:20:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N
+1948	identifier	RemoteWork.identifier	\N	\N	17	string	\N	Yes	No	\N	\N	\N	2025-12-02 15:35:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N
+1950	identifier	RemunerationPackage.identifier	\N	\N	17	string	\N	Yes	No	\N	\N	\N	2025-12-02 15:37:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N
+1953	identifier	MinimumAmount.identifier	\N	\N	17	string	\N	Yes	No	\N	\N	\N	2025-12-02 15:59:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N
 \.
 
 
@@ -3044,7 +3097,7 @@ COPY public."Entities" ("Id", "Name", "UniqueName", "Description", "UseConsidera
 74	LegalCode	Common.LegalCode	\N	\N	No	Yes	\N	1	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N
 75	AuditHistory	Person.Consent.AuditHistory	Mechanism for recording and tracking consent-related activities and changes.	\N	No	Yes	LIF	1	CM3/21: Unclear how this is actually represented?	\N	\N	\N	\N	LIF	f	\N	f	\N	\N
 77	Course	Course	\N	\N	No	Yes	\N	1	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N
-78	Grade	Course.Grade	\N	\N	No	Yes	\N	1	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N
+369	Accreditation	Accreditation	\N	\N	\N	Yes	\N	17	\N	\N	2025-10-03 17:28:00+00	\N	MDRUser	StateU	t	\N	t	\N	\N
 131	Criteria	Credential.Requirements.Criteria	The required criteria, or what is needed to earn the credential.	\N	No	Yes	OB2	1	in programs	\N	\N	\N	\N	LIF	f	\N	f	\N	\N
 133	CredentialAlignments	Credential.CredentialAlignments	Any and all alignments to or from the Credential.	\N	No	Yes	CLR v2 / Open Badges v3	1	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N
 135	Identity	Person.CredentialAward.Identity	\N	\N	No	Yes	\N	1	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N
@@ -3119,7 +3172,6 @@ COPY public."Entities" ("Id", "Name", "UniqueName", "Description", "UseConsidera
 344	TestPartnerEntity	TestPartnerEntity	Test of creating a partner LIF extension Entity	Test considerations	No	Yes	\N	18	Test notes	2025-08-17 16:19:22.543+00	2025-08-17 16:19:22.543+00	\N	Mary Gwozdz	StateU	t	\N	f	\N	\N
 343	TestOrgChildEntity	TestOrgChildEntity	Test of creating an org Child LIF extension Entity	Test considerations	No	Yes	\N	17	Test notes	2025-08-17 16:19:22.543+00	2025-08-17 16:19:22.543+00	\N	Mary Gwozdz	StateU	t	\N	t	\N	\N
 348	TestOrgChildEntity	TestOrgChildEntity	Test of creating an org Child LIF extension Entity	Test considerations	No	Yes	\N	17	Test notes	2025-08-17 16:19:22.543+00	2025-08-17 16:19:22.543+00	\N	Mary Gwozdz	StateU	t	\N	t	\N	\N
-369	Accreditation	Accreditation	\N	\N	\N	Yes	\N	17	\N	\N	2025-10-03 17:28:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N
 364	MinimumAmount	RemunerationPackage.Ranges.MinimumAmount	\N	\N	No	Yes	\N	17	\N	\N	2025-10-02 20:50:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N
 360	Narrative	Person.Narrative	\N	\N	No	Yes	\N	17	\N	\N	2025-10-02 19:21:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N
 363	Ranges	RemunerationPackage.Ranges	\N	\N	No	Yes	\N	17	\N	\N	2025-10-02 20:46:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N
@@ -3133,7 +3185,8 @@ COPY public."Entities" ("Id", "Name", "UniqueName", "Description", "UseConsidera
 373	image	Credential.image	IRI or document representing an image of the credential. This must be a PNG or SVG image.	\N	No	Yes	Open Badges v2	17	\N	\N	\N	\N	\N	StateU	t	\N	t	\N	\N
 337	StateUExtensionEntity	StateUExtensionEntity	An entity added for the purpose of being an example of a StateU extension.	\N	No	Yes	LIF-Addition	17	\N	\N	\N	\N	\N	StateU	t	\N	f	\N	\N
 338	StateUChildExtEntity	StateUChildExtEntity	An entity added as an example of an entity that is a child of the other example entity.	\N	No	Yes	LIF-Addition	17	\N	\N	\N	\N	\N	StateU	t	\N	f	\N	\N
-371	Identifier	StateU.Common.Identifier	\N	\N	No	Yes	\N	17	\N	\N	2025-10-06 16:08:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N
+78	Grade	Course.Grade	\N	\N	No	Yes	\N	1	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N
+371	Identifier	StateU.Common.Identifier	\N	\N	No	Yes	\N	17	\N	\N	2025-10-06 16:08:00+00	\N	MDRUser	StateU	t	\N	t	\N	\N
 \.
 
 
@@ -3176,7 +3229,6 @@ COPY public."EntityAssociation" ("Id", "ParentEntityId", "ChildEntityId", "Relat
 34	76	215	\N	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N
 36	76	238	\N	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N
 39	76	241	\N	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N
-14	77	78	\N	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N
 88	80	212	assertedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N
 17	129	130	\N	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N
 19	129	132	\N	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N
@@ -3239,6 +3291,7 @@ COPY public."EntityAssociation" ("Id", "ParentEntityId", "ChildEntityId", "Relat
 155	340	341	\N	Reference	Test updated notes for association	2025-08-17 16:50:35.49+00	2025-08-17 16:50:35.49+00	2025-08-17 16:50:35.491+00	Mary Gwozdz	Unicon	f	f	\N	\N
 147	4	336	\N	\N	\N	\N	\N	\N	\N	Org2	f	t	\N	18
 153	344	345	\N	Embedded	Test notes for association	2025-08-17 16:50:35.49+00	2025-08-17 16:50:35.49+00	\N	Mary Gwozdz	Org2	t	t	\N	18
+14	77	78	\N	\N	\N	\N	\N	\N	\N	LIF	t	f	\N	\N
 157	344	345	\N	Embedded	Test notes for association	2025-08-17 16:50:35.49+00	2025-08-17 16:50:35.49+00	\N	Mary Gwozdz	Org2	t	t	\N	18
 154	346	347	\N	Embedded	Test notes for association	2025-08-17 16:50:35.49+00	2025-08-17 16:50:35.49+00	2025-08-17 16:50:35.491+00	Mary Gwozdz	Unicon	t	f	\N	\N
 161	41	238	\N	Embedded	\N	\N	\N	\N	\N	LIF	f	f	\N	\N
@@ -3546,7 +3599,6 @@ COPY public."EntityAttributeAssociation" ("Id", "EntityId", "AttributeId", "Note
 1797	344	1835	\N	2025-08-19 13:58:08.81+00	2025-08-19 13:58:08.81+00	\N	Mary Gwozdz	Org2	f	18
 1796	340	1834	\N	2025-08-19 13:58:08.81+00	2025-08-19 13:58:08.81+00	\N	Mary Gwozdz	Unicon	f	25
 269	43	270	\N	\N	\N	\N	\N	LIF	f	\N
-270	43	271	\N	\N	\N	\N	\N	LIF	f	\N
 271	43	272	\N	\N	\N	\N	\N	LIF	f	\N
 272	43	273	\N	\N	\N	\N	\N	LIF	f	\N
 273	43	274	\N	\N	\N	\N	\N	LIF	f	\N
@@ -3744,10 +3796,9 @@ COPY public."EntityAttributeAssociation" ("Id", "EntityId", "AttributeId", "Note
 502	77	503	\N	\N	\N	\N	\N	LIF	f	\N
 503	77	504	\N	\N	\N	\N	\N	LIF	f	\N
 504	77	505	\N	\N	\N	\N	\N	LIF	f	\N
-499	78	500	\N	\N	\N	\N	\N	LIF	f	\N
+270	43	271	\N	\N	\N	\N	\N	LIF	t	\N
 554	80	555	\N	\N	\N	\N	\N	LIF	f	\N
 555	80	556	\N	\N	\N	\N	\N	LIF	f	\N
-556	80	557	\N	\N	\N	\N	\N	LIF	f	\N
 558	80	559	\N	\N	\N	\N	\N	LIF	f	\N
 559	80	560	\N	\N	\N	\N	\N	LIF	f	\N
 560	80	561	\N	\N	\N	\N	\N	LIF	f	\N
@@ -3774,7 +3825,6 @@ COPY public."EntityAttributeAssociation" ("Id", "EntityId", "AttributeId", "Note
 1135	193	1160	\N	\N	\N	\N	\N	LIF	f	\N
 1136	193	1161	\N	\N	\N	\N	\N	LIF	f	\N
 1137	193	1162	\N	\N	\N	\N	\N	LIF	f	\N
-1173	212	1198	\N	\N	\N	\N	\N	LIF	f	\N
 1174	212	1199	\N	\N	\N	\N	\N	LIF	f	\N
 1175	212	1200	\N	\N	\N	\N	\N	LIF	f	\N
 1176	212	1201	\N	\N	\N	\N	\N	LIF	f	\N
@@ -3798,6 +3848,7 @@ COPY public."EntityAttributeAssociation" ("Id", "EntityId", "AttributeId", "Note
 593	84	594	\N	\N	\N	\N	\N	LIF	f	\N
 594	84	595	\N	\N	\N	\N	\N	LIF	f	\N
 595	85	596	\N	\N	\N	\N	\N	LIF	f	\N
+556	80	557	\N	\N	\N	\N	\N	LIF	t	\N
 596	86	597	\N	\N	\N	\N	\N	LIF	f	\N
 597	5	598	\N	\N	\N	\N	\N	LIF	f	\N
 598	83	599	\N	\N	\N	\N	\N	LIF	f	\N
@@ -5093,8 +5144,7 @@ COPY public."EntityAttributeAssociation" ("Id", "EntityId", "AttributeId", "Note
 1916	192	1897	\N	\N	\N	\N	\N	LIF	f	\N
 1917	136	1896	\N	\N	\N	\N	\N	LIF	f	\N
 1918	136	1897	\N	\N	\N	\N	\N	LIF	f	\N
-1919	78	1896	\N	\N	\N	\N	\N	LIF	f	\N
-1920	78	1897	\N	\N	\N	\N	\N	LIF	f	\N
+2157	43	1917	\N	\N	\N	\N		LIF	f	\N
 1921	238	1896	\N	\N	\N	\N	\N	LIF	f	\N
 1922	238	1897	\N	\N	\N	\N	\N	LIF	f	\N
 1923	135	1896	\N	\N	\N	\N	\N	LIF	f	\N
@@ -5109,6 +5159,7 @@ COPY public."EntityAttributeAssociation" ("Id", "EntityId", "AttributeId", "Note
 1932	188	1897	\N	\N	\N	\N	\N	LIF	f	\N
 1933	250	1896	\N	\N	\N	\N	\N	LIF	f	\N
 1934	250	1897	\N	\N	\N	\N	\N	LIF	f	\N
+1920	78	1897	\N	\N	\N	\N	\N	LIF	t	\N
 1935	74	1896	\N	\N	\N	\N	\N	LIF	f	\N
 1936	74	1897	\N	\N	\N	\N	\N	LIF	f	\N
 1937	190	1896	\N	\N	\N	\N	\N	LIF	f	\N
@@ -5225,10 +5276,9 @@ COPY public."EntityAttributeAssociation" ("Id", "EntityId", "AttributeId", "Note
 2050	136	1898	\N	\N	\N	\N	\N	LIF	f	\N
 2051	136	1899	\N	\N	\N	\N	\N	LIF	f	\N
 2052	136	1900	\N	\N	\N	\N	\N	LIF	f	\N
-2053	78	1898	\N	\N	\N	\N	\N	LIF	f	\N
-2054	78	1899	\N	\N	\N	\N	\N	LIF	f	\N
-2055	78	1900	\N	\N	\N	\N	\N	LIF	f	\N
 2056	238	1898	\N	\N	\N	\N	\N	LIF	f	\N
+2053	78	1898	\N	\N	\N	\N	\N	LIF	t	\N
+2055	78	1900	\N	\N	\N	\N	\N	LIF	t	\N
 2057	238	1899	\N	\N	\N	\N	\N	LIF	f	\N
 2058	238	1900	\N	\N	\N	\N	\N	LIF	f	\N
 2059	135	1898	\N	\N	\N	\N	\N	LIF	f	\N
@@ -5400,7 +5450,6 @@ COPY public."EntityAttributeAssociation" ("Id", "EntityId", "AttributeId", "Note
 1770	134	1810	\N	\N	\N	\N	\N	StateU	t	17
 1788	337	1825	\N	\N	\N	\N	\N	StateU	t	17
 1786	337	1826	\N	\N	\N	\N	\N	StateU	t	17
-1839	371	1290	\N	2025-10-06 16:32:00+00	2025-10-06 16:32:00+00	\N	\N	StateU	f	17
 1769	238	1809	\N	\N	\N	\N	\N	StateU	t	17
 1817	239	1320	\N	\N	\N	\N	\N	StateU	f	17
 1818	239	1321	\N	\N	\N	\N	\N	StateU	f	17
@@ -5409,7 +5458,6 @@ COPY public."EntityAttributeAssociation" ("Id", "EntityId", "AttributeId", "Note
 1821	364	1860	\N	2025-10-02 20:51:00+00	2025-10-02 20:51:00+00	\N	MDRUser	StateU	f	17
 1822	364	1861	\N	2025-10-02 20:51:00+00	2025-10-02 20:51:00+00	\N	MDRUser	StateU	f	17
 1823	360	1862	\N	2025-10-02 20:54:00+00	2025-10-02 20:54:00+00	\N	MDRUser	StateU	f	17
-1840	371	1291	\N	2025-10-06 16:33:00+00	2025-10-06 16:33:00+00	\N	\N	StateU	f	17
 1825	361	1864	\N	2025-10-02 20:57:00+00	2025-10-02 20:57:00+00	\N	MDRUser	StateU	f	17
 1826	361	1865	\N	2025-10-02 23:23:00+00	2025-10-02 23:23:00+00	\N	MDRUser	StateU	f	17
 1827	361	1866	\N	2025-10-02 23:24:00+00	2025-10-02 23:24:00+00	\N	MDRUser	StateU	f	17
@@ -5431,7 +5479,6 @@ COPY public."EntityAttributeAssociation" ("Id", "EntityId", "AttributeId", "Note
 1772	134	1812	\N	\N	\N	\N	\N	StateU	t	17
 1776	134	1816	\N	\N	\N	\N	\N	StateU	t	17
 1824	361	1863	\N	2025-10-02 20:56:00+00	2025-10-02 20:56:00+00	\N	MDRUser	StateU	t	17
-1841	371	1292	\N	2025-10-06 16:33:00+00	2025-10-06 16:33:00+00	\N	\N	StateU	f	17
 1844	132	1878	\N	2025-10-06 17:09:00+00	2025-10-06 17:09:00+00	\N	MDRUser	StateU	f	17
 1846	132	1745	\N	\N	\N	\N		StateU	f	17
 1847	132	1880	\N	\N	\N	\N		StateU	f	17
@@ -5444,6 +5491,8 @@ COPY public."EntityAttributeAssociation" ("Id", "EntityId", "AttributeId", "Note
 1857	374	1886	\N	\N	\N	\N	\N	StateU	f	17
 1858	374	1887	\N	\N	\N	\N	\N	StateU	f	17
 1859	374	1888	\N	\N	\N	\N	\N	StateU	f	17
+1839	371	1290	\N	2025-10-06 16:32:00+00	2025-10-06 16:32:00+00	\N	\N	StateU	t	17
+1841	371	1292	\N	2025-10-06 16:33:00+00	2025-10-06 16:33:00+00	\N	\N	StateU	t	17
 1860	374	1889	\N	\N	\N	\N	\N	StateU	f	17
 1861	374	1890	\N	\N	\N	\N	\N	StateU	f	17
 1862	374	1891	\N	\N	\N	\N	\N	StateU	f	17
@@ -5454,6 +5503,92 @@ COPY public."EntityAttributeAssociation" ("Id", "EntityId", "AttributeId", "Note
 1853	373	818	\N	2025-10-06 16:32:00+00	2025-10-06 16:32:00+00	\N	\N	StateU	t	17
 1842	132	817	\N	2025-10-06 16:49:00+00	2025-10-06 16:49:00+00	\N	\N	StateU	t	17
 1843	132	816	\N	2025-10-06 16:49:00+00	2025-10-06 16:49:00+00	\N	\N	StateU	t	17
+2142	44	1901	\N	2025-11-26 18:11:00+00	2025-11-26 18:11:00+00	\N	MDRUser	LIF	f	\N
+2143	46	1902	\N	2025-11-26 18:17:00+00	2025-11-26 18:17:00+00	\N	MDRUser	LIF	f	\N
+2144	41	1903	\N	2025-11-26 18:18:00+00	2025-11-26 18:18:00+00	\N	MDRUser	LIF	f	\N
+2145	130	1904	\N	2025-11-26 18:21:00+00	2025-11-26 18:21:00+00	\N	MDRUser	LIF	f	\N
+2146	241	1905	\N	2025-11-26 18:22:00+00	2025-11-26 18:22:00+00	\N	MDRUser	LIF	f	\N
+2147	214	1906	\N	2025-11-26 18:23:00+00	2025-11-26 18:23:00+00	\N	MDRUser	LIF	f	\N
+2148	247	1907	\N	2025-11-26 18:26:00+00	2025-11-26 18:26:00+00	\N	MDRUser	LIF	f	\N
+2149	248	1908	\N	2025-11-26 18:27:00+00	2025-11-26 18:27:00+00	\N	MDRUser	LIF	f	\N
+2150	187	1909	\N	2025-11-26 18:27:00+00	2025-11-26 18:27:00+00	\N	MDRUser	LIF	f	\N
+2151	250	1910	\N	2025-11-26 18:28:00+00	2025-11-26 18:28:00+00	\N	MDRUser	LIF	f	\N
+2152	250	1911	\N	2025-11-26 18:28:00+00	2025-11-26 18:28:00+00	\N	MDRUser	LIF	f	\N
+2153	193	1912	\N	2025-11-26 18:29:00+00	2025-11-26 18:29:00+00	\N	MDRUser	LIF	f	\N
+2154	249	1913	\N	2025-11-26 18:30:00+00	2025-11-26 18:30:00+00	\N	MDRUser	LIF	f	\N
+2155	240	1914	\N	2025-11-26 18:30:00+00	2025-11-26 18:30:00+00	\N	MDRUser	LIF	f	\N
+499	77	500	\N	\N	\N	\N	\N	LIF	f	\N
+2054	78	1899	\N	\N	\N	\N	\N	LIF	t	\N
+1919	78	1896	\N	\N	\N	\N	\N	LIF	t	\N
+2158	215	1918	\N	2025-12-01 17:06:00+00	2025-12-01 17:06:00+00	\N	MDRUser	LIF	f	\N
+2159	134	1919	\N	2025-12-01 17:12:00+00	2025-12-01 17:12:00+00	\N	MDRUser	LIF	f	\N
+2160	3	1920	\N	2025-12-01 17:16:00+00	2025-12-01 17:16:00+00	\N	MDRUser	LIF	f	\N
+2161	80	1921	\N	2025-12-01 17:17:00+00	2025-12-01 17:17:00+00	\N	MDRUser	LIF	f	\N
+2162	193	1922	\N	2025-12-01 17:18:00+00	2025-12-01 17:18:00+00	\N	MDRUser	LIF	f	\N
+2163	305	1923	\N	2025-12-01 17:18:00+00	2025-12-01 17:18:00+00	\N	MDRUser	LIF	f	\N
+2164	239	1924	\N	2025-12-01 22:14:00+00	2025-12-01 22:14:00+00	\N	MDRUser	LIF	f	\N
+2165	242	1925	\N	2025-12-01 22:14:00+00	2025-12-01 22:14:00+00	\N	MDRUser	LIF	f	\N
+2166	243	1926	\N	2025-12-01 22:15:00+00	2025-12-01 22:15:00+00	\N	MDRUser	LIF	f	\N
+2167	74	1927	\N	2025-12-01 22:15:00+00	2025-12-01 22:15:00+00	\N	MDRUser	LIF	f	\N
+2168	133	1928	\N	2025-12-01 22:17:00+00	2025-12-01 22:17:00+00	\N	MDRUser	LIF	f	\N
+2169	131	1929	\N	2025-12-01 22:17:00+00	2025-12-01 22:17:00+00	\N	MDRUser	LIF	f	\N
+2170	213	1930	\N	2025-12-01 22:18:00+00	2025-12-01 22:18:00+00	\N	MDRUser	LIF	f	\N
+2171	212	1931	\N	2025-12-01 22:19:00+00	2025-12-01 22:19:00+00	\N	MDRUser	LIF	f	\N
+2172	244	1932	\N	2025-12-01 22:20:00+00	2025-12-01 22:20:00+00	\N	MDRUser	LIF	f	\N
+2173	75	1933	\N	2025-12-01 22:21:00+00	2025-12-01 22:21:00+00	\N	MDRUser	LIF	f	\N
+2174	136	1934	\N	2025-12-01 22:21:00+00	2025-12-01 22:21:00+00	\N	MDRUser	LIF	f	\N
+2175	135	1935	\N	2025-12-01 22:22:00+00	2025-12-01 22:22:00+00	\N	MDRUser	LIF	f	\N
+2176	245	1936	\N	2025-12-01 22:22:00+00	2025-12-01 22:22:00+00	\N	MDRUser	LIF	f	\N
+2177	237	1937	\N	2025-12-01 22:23:00+00	2025-12-01 22:23:00+00	\N	MDRUser	LIF	f	\N
+2178	246	1938	\N	2025-12-01 22:25:00+00	2025-12-01 22:25:00+00	\N	MDRUser	LIF	f	\N
+2179	185	1939	\N	2025-12-01 22:25:00+00	2025-12-01 22:25:00+00	\N	MDRUser	LIF	f	\N
+2180	186	1940	\N	2025-12-01 22:26:00+00	2025-12-01 22:26:00+00	\N	MDRUser	LIF	f	\N
+2181	188	1941	\N	2025-12-01 22:26:00+00	2025-12-01 22:26:00+00	\N	MDRUser	LIF	f	\N
+2182	191	1942	\N	2025-12-01 22:26:00+00	2025-12-01 22:26:00+00	\N	MDRUser	LIF	f	\N
+1173	212	1198	\N	\N	\N	\N	\N	LIF	t	\N
+2183	360	1943	\N	2025-12-02 15:20:00+00	2025-12-02 15:20:00+00	\N	MDRUser	StateU	f	17
+2184	365	1944	\N	2025-12-02 15:20:00+00	2025-12-02 15:20:00+00	\N	MDRUser	StateU	f	17
+2185	359	1945	\N	2025-12-02 15:28:00+00	2025-12-02 15:28:00+00	\N	MDRUser	StateU	f	17
+2186	361	1946	\N	2025-12-02 15:30:00+00	2025-12-02 15:30:00+00	\N	MDRUser	StateU	f	17
+2187	366	1947	\N	2025-12-02 15:34:00+00	2025-12-02 15:34:00+00	\N	MDRUser	StateU	f	17
+2188	367	1948	\N	2025-12-02 15:35:00+00	2025-12-02 15:35:00+00	\N	MDRUser	StateU	f	17
+2189	368	1949	\N	2025-12-02 15:36:00+00	2025-12-02 15:36:00+00	\N	MDRUser	StateU	f	17
+2190	362	1950	\N	2025-12-02 15:38:00+00	2025-12-02 15:38:00+00	\N	MDRUser	StateU	f	17
+2191	374	1951	\N	2025-12-02 15:39:00+00	2025-12-02 15:39:00+00	\N	MDRUser	StateU	f	17
+2192	363	1952	\N	2025-12-02 15:44:00+00	2025-12-02 15:44:00+00	\N	MDRUser	StateU	f	17
+2193	364	1953	\N	2025-12-02 15:59:00+00	2025-12-02 15:59:00+00	\N	MDRUser	StateU	f	17
+1840	371	1291	\N	2025-10-06 16:33:00+00	2025-10-06 16:33:00+00	\N	\N	StateU	t	17
+2194	360	1898	\N	2025-12-02 17:19:00+00	2025-12-02 17:19:00+00	\N	\N	StateU	f	17
+2195	360	1899	\N	2025-12-02 19:06:00+00	2025-12-02 19:06:00+00	\N	\N	StateU	f	17
+2196	360	1900	\N	2025-12-02 19:07:00+00	2025-12-02 19:07:00+00	\N	\N	StateU	f	17
+2197	365	1898	\N	2025-12-02 19:07:00+00	2025-12-02 19:07:00+00	\N	\N	StateU	f	17
+2198	365	1899	\N	2025-12-02 19:07:00+00	2025-12-02 19:07:00+00	\N	\N	StateU	f	17
+2199	365	1900	\N	2025-12-02 19:08:00+00	2025-12-02 19:08:00+00	\N	\N	StateU	f	17
+2200	361	1898	\N	2025-12-02 19:08:00+00	2025-12-02 19:08:00+00	\N	\N	StateU	f	17
+2201	361	1899	\N	2025-12-02 19:08:00+00	2025-12-02 19:08:00+00	\N	\N	StateU	f	17
+2202	361	1900	\N	2025-12-02 19:08:00+00	2025-12-02 19:08:00+00	\N	\N	StateU	f	17
+2203	366	1898	\N	2025-12-02 19:08:00+00	2025-12-02 19:08:00+00	\N	\N	StateU	f	17
+2204	366	1899	\N	2025-12-02 19:09:00+00	2025-12-02 19:09:00+00	\N	\N	StateU	f	17
+2205	366	1900	\N	2025-12-02 19:09:00+00	2025-12-02 19:09:00+00	\N	\N	StateU	f	17
+2206	367	1898	\N	2025-12-02 19:09:00+00	2025-12-02 19:09:00+00	\N	\N	StateU	f	17
+2207	367	1899	\N	2025-12-02 19:09:00+00	2025-12-02 19:09:00+00	\N	\N	StateU	f	17
+2208	367	1900	\N	2025-12-02 19:09:00+00	2025-12-02 19:09:00+00	\N	\N	StateU	f	17
+2209	368	1898	\N	2025-12-02 19:10:00+00	2025-12-02 19:10:00+00	\N	\N	StateU	f	17
+2210	368	1899	\N	2025-12-02 19:10:00+00	2025-12-02 19:10:00+00	\N	\N	StateU	f	17
+2211	368	1900	\N	2025-12-02 19:10:00+00	2025-12-02 19:10:00+00	\N	\N	StateU	f	17
+2212	362	1898	\N	2025-12-02 19:11:00+00	2025-12-02 19:11:00+00	\N	\N	StateU	f	17
+2213	362	1899	\N	2025-12-02 19:11:00+00	2025-12-02 19:11:00+00	\N	\N	StateU	f	17
+2214	362	1900	\N	2025-12-02 19:11:00+00	2025-12-02 19:11:00+00	\N	\N	StateU	f	17
+2215	374	1898	\N	2025-12-02 19:12:00+00	2025-12-02 19:12:00+00	\N	\N	StateU	f	17
+2216	374	1899	\N	2025-12-02 19:12:00+00	2025-12-02 19:12:00+00	\N	\N	StateU	f	17
+2217	374	1900	\N	2025-12-02 19:12:00+00	2025-12-02 19:12:00+00	\N	\N	StateU	f	17
+2220	363	1900	\N	2025-12-02 19:13:00+00	2025-12-02 19:13:00+00	\N	\N	StateU	f	17
+2222	364	1899	\N	2025-12-02 19:14:00+00	2025-12-02 19:14:00+00	\N	\N	StateU	f	17
+2218	363	1898	\N	2025-12-02 19:13:00+00	2025-12-02 19:13:00+00	\N	\N	StateU	f	17
+2223	364	1900	\N	2025-12-02 19:14:00+00	2025-12-02 19:14:00+00	\N	\N	StateU	f	17
+2219	363	1899	\N	2025-12-02 19:13:00+00	2025-12-02 19:13:00+00	\N	\N	StateU	f	17
+2221	364	1898	\N	2025-12-02 19:14:00+00	2025-12-02 19:14:00+00	\N	\N	StateU	f	17
+2224	131	1954	\N	2025-12-02 19:15:00+00	2025-12-02 19:15:00+00	\N	MDRUser	StateU	f	17
 \.
 
 
@@ -5672,7 +5807,6 @@ COPY public."ExtInclusionsFromBaseDM" ("Id", "ExtDataModelId", "ElementType", "I
 206	17	Attribute	1346	\N	2025-10-02 18:07:00+00	2025-10-02 18:07:00+00	\N	UX	StateU	f	Public	f	f
 213	17	Attribute	1341	\N	2025-10-02 18:08:00+00	2025-10-02 18:08:00+00	\N	UX	StateU	f	Public	f	f
 212	17	Attribute	1345	\N	2025-10-02 18:08:00+00	2025-10-02 18:08:00+00	\N	UX	StateU	f	Public	f	f
-214	17	Attribute	1198	\N	2025-10-02 18:09:00+00	2025-10-02 18:09:00+00	\N	UX	StateU	f	Public	f	f
 221	17	Attribute	1201	\N	2025-10-02 18:09:00+00	2025-10-02 18:09:00+00	\N	UX	StateU	f	Public	f	f
 220	17	Attribute	1204	\N	2025-10-02 18:09:00+00	2025-10-02 18:09:00+00	\N	UX	StateU	f	Public	f	f
 219	17	Attribute	1203	\N	2025-10-02 18:09:00+00	2025-10-02 18:09:00+00	\N	UX	StateU	f	Public	f	f
@@ -5743,13 +5877,11 @@ COPY public."ExtInclusionsFromBaseDM" ("Id", "ExtDataModelId", "ElementType", "I
 283	17	Attribute	1874	\N	2025-10-02 23:36:00+00	2025-10-02 23:36:00+00	\N	MDRUser	StateU	f	Public	f	f
 285	17	Attribute	1876	\N	2025-10-02 23:37:00+00	2025-10-02 23:37:00+00	\N	MDRUser	StateU	f	Private	f	f
 291	17	Entity	371	\N	\N	\N	\N		StateU	f	Public	f	f
-287	17	Entity	369	\N	2025-10-03 17:28:00+00	2025-10-03 17:28:00+00	\N	MDRUser	StateU	f	Public	f	f
 316	17	Entity	212	\N	2025-10-07 02:38:00+00	2025-10-07 02:38:00+00	\N	MDRUser	StateU	f	Public	f	f
 192	17	Entity	215	\N	2025-10-02 18:04:00+00	2025-10-02 18:04:00+00	\N	UX	StateU	t	Public	f	f
 289	17	Attribute	829	\N	2025-10-03 17:35:00+00	2025-10-03 17:35:00+00	\N	MDRUser	StateU	f	Public	f	f
 269	17	Attribute	1863	\N	2025-10-02 20:56:00+00	2025-10-02 20:56:00+00	\N	MDRUser	StateU	t	Private	f	f
 304	17	Entity	214	\N	2025-10-06 17:07:00+00	2025-10-06 17:07:00+00	\N	MDRUser	StateU	f	Private	f	f
-305	17	Entity	213	\N	2025-10-06 17:07:00+00	2025-10-06 17:07:00+00	\N	MDRUser	StateU	f	Private	f	f
 298	17	Entity	213	\N	2025-10-06 16:35:00+00	2025-10-06 16:35:00+00	\N	MDRUser	StateU	t	Public	f	f
 297	17	Entity	214	\N	2025-10-06 16:35:00+00	2025-10-06 16:35:00+00	\N	MDRUser	StateU	t	Public	f	f
 294	17	Attribute	1292	\N	2025-10-06 16:33:00+00	2025-10-06 16:33:00+00	\N	\N	StateU	t	Private	f	f
@@ -5791,7 +5923,52 @@ COPY public."ExtInclusionsFromBaseDM" ("Id", "ExtDataModelId", "ElementType", "I
 334	17	Attribute	1891	\N	\N	\N	\N		StateU	f	Private	f	t
 335	17	Attribute	1892	\N	\N	\N	\N		StateU	f	Private	f	t
 325	17	Entity	374	\N	\N	2025-11-14 02:21:00+00	\N	\N	StateU	f	Private	f	t
+287	17	Entity	369	\N	2025-10-03 17:28:00+00	2025-10-03 17:28:00+00	\N	MDRUser	StateU	t	Public	f	f
 336	17	Attribute	1893	\N	\N	\N	\N		StateU	f	Private	f	t
+337	17	Attribute	1899	\N	2025-11-18 16:43:00+00	2025-11-18 16:43:00+00	\N	MDRUser	StateU	f	Public	f	f
+338	17	Attribute	1900	\N	2025-11-18 16:43:00+00	2025-11-18 16:43:00+00	\N	MDRUser	StateU	f	Public	f	f
+339	17	Attribute	800	\N	2025-11-18 16:44:00+00	2025-11-18 16:44:00+00	\N	MDRUser	StateU	f	Public	f	f
+340	17	Entity	1	\N	2025-11-18 21:37:00+00	2025-11-18 21:37:00+00	\N	MDRUser	StateU	f	Public	f	f
+305	17	Entity	213	\N	2025-10-06 17:07:00+00	2025-10-06 17:07:00+00	\N	MDRUser	StateU	f	Public	f	f
+341	17	Attribute	1930	\N	2025-12-01 22:33:00+00	2025-12-01 22:33:00+00	\N	MDRUser	StateU	f	Public	f	f
+342	17	Attribute	1206	\N	2025-12-01 22:33:00+00	2025-12-01 22:33:00+00	\N	MDRUser	StateU	f	Public	f	f
+343	17	Attribute	498	\N	2025-12-01 22:34:00+00	2025-12-01 22:34:00+00	\N	MDRUser	StateU	f	Public	f	f
+344	17	Attribute	501	\N	2025-12-01 22:34:00+00	2025-12-01 22:34:00+00	\N	MDRUser	StateU	f	Public	f	f
+345	17	Attribute	1627	\N	2025-12-01 22:35:00+00	2025-12-01 22:35:00+00	\N	MDRUser	StateU	f	Public	f	f
+346	17	Attribute	1624	\N	2025-12-01 22:35:00+00	2025-12-01 22:35:00+00	\N	MDRUser	StateU	f	Public	f	f
+214	17	Attribute	1198	\N	2025-10-02 18:09:00+00	2025-10-02 18:09:00+00	\N	UX	StateU	t	Public	f	f
+347	17	Attribute	556	\N	2025-12-02 15:14:00+00	2025-12-02 15:14:00+00	\N	MDRUser	StateU	f	Public	f	f
+348	17	Attribute	1931	\N	2025-12-02 15:14:00+00	2025-12-02 15:14:00+00	\N	MDRUser	StateU	f	Public	f	f
+349	17	Attribute	1132	\N	2025-12-02 15:14:00+00	2025-12-02 15:14:00+00	\N	MDRUser	StateU	f	Public	f	f
+350	17	Attribute	296	\N	2025-12-02 15:15:00+00	2025-12-02 15:15:00+00	\N	MDRUser	StateU	f	Public	f	f
+351	17	Attribute	1939	\N	2025-12-02 15:15:00+00	2025-12-02 15:15:00+00	\N	MDRUser	StateU	f	Public	f	f
+352	17	Attribute	1937	\N	2025-12-02 15:15:00+00	2025-12-02 15:15:00+00	\N	MDRUser	StateU	f	Public	f	f
+353	17	Attribute	1905	\N	2025-12-02 15:15:00+00	2025-12-02 15:15:00+00	\N	MDRUser	StateU	f	Public	f	f
+354	17	Attribute	1924	\N	2025-12-02 15:15:00+00	2025-12-02 15:15:00+00	\N	MDRUser	StateU	f	Public	f	f
+355	17	Attribute	1925	\N	2025-12-02 15:16:00+00	2025-12-02 15:16:00+00	\N	MDRUser	StateU	f	Public	f	f
+356	17	Attribute	1926	\N	2025-12-02 15:16:00+00	2025-12-02 15:16:00+00	\N	MDRUser	StateU	f	Public	f	f
+357	17	Attribute	1935	\N	2025-12-02 15:18:00+00	2025-12-02 15:18:00+00	\N	MDRUser	StateU	f	Public	f	f
+358	17	Attribute	1943	\N	2025-12-02 15:20:00+00	2025-12-02 15:20:00+00	\N	MDRUser	StateU	f	Public	f	f
+359	17	Attribute	1944	\N	2025-12-02 15:20:00+00	2025-12-02 15:20:00+00	\N	MDRUser	StateU	f	Public	f	f
+360	17	Attribute	1945	\N	2025-12-02 15:28:00+00	2025-12-02 15:28:00+00	\N	MDRUser	StateU	f	Public	f	f
+361	17	Attribute	1946	\N	2025-12-02 15:30:00+00	2025-12-02 15:30:00+00	\N	MDRUser	StateU	f	Public	f	f
+362	17	Attribute	1947	\N	2025-12-02 15:34:00+00	2025-12-02 15:34:00+00	\N	MDRUser	StateU	f	Public	f	f
+363	17	Attribute	1948	\N	2025-12-02 15:35:00+00	2025-12-02 15:35:00+00	\N	MDRUser	StateU	f	Public	f	f
+365	17	Attribute	1950	\N	2025-12-02 15:38:00+00	2025-12-02 15:38:00+00	\N	MDRUser	StateU	f	Public	f	f
+367	17	Attribute	1904	\N	2025-12-02 15:42:00+00	2025-12-02 15:42:00+00	\N	MDRUser	StateU	f	Public	f	f
+368	17	Attribute	1928	\N	2025-12-02 15:42:00+00	2025-12-02 15:42:00+00	\N	MDRUser	StateU	f	Public	f	f
+369	17	Attribute	1918	\N	2025-12-02 15:43:00+00	2025-12-02 15:43:00+00	\N	MDRUser	StateU	f	Public	f	f
+370	17	Attribute	1906	\N	2025-12-02 15:43:00+00	2025-12-02 15:43:00+00	\N	MDRUser	StateU	f	Public	f	f
+371	17	Attribute	1952	\N	2025-12-02 15:44:00+00	2025-12-02 15:44:00+00	\N	MDRUser	StateU	f	Public	f	f
+373	17	Attribute	2	\N	2025-12-02 16:00:00+00	2025-12-02 16:00:00+00	\N	MDRUser	StateU	f	Public	f	f
+374	17	Attribute	1921	\N	2025-12-02 16:00:00+00	2025-12-02 16:00:00+00	\N	MDRUser	StateU	f	Public	f	f
+375	17	Attribute	1919	\N	2025-12-02 16:00:00+00	2025-12-02 16:00:00+00	\N	MDRUser	StateU	f	Public	f	f
+376	17	Attribute	1102	\N	2025-12-02 16:00:00+00	2025-12-02 16:00:00+00	\N	MDRUser	StateU	f	Public	f	f
+377	17	Attribute	4	\N	2025-12-02 16:00:00+00	2025-12-02 16:00:00+00	\N	MDRUser	StateU	f	Public	f	f
+364	17	Attribute	1949	\N	2025-12-02 15:36:00+00	2025-12-02 15:36:00+00	\N	MDRUser	StateU	f	Public	f	f
+366	17	Attribute	1951	\N	2025-12-02 15:39:00+00	2025-12-02 15:39:00+00	\N	MDRUser	StateU	f	Public	f	f
+372	17	Attribute	1953	\N	2025-12-02 15:59:00+00	2025-12-02 15:59:00+00	\N	MDRUser	StateU	f	Public	f	f
+378	17	Attribute	1954	\N	2025-12-02 19:15:00+00	2025-12-02 19:15:00+00	\N	MDRUser	StateU	f	Public	f	f
 \.
 
 
@@ -8398,8 +8575,6 @@ COPY public."TransformationAttributes" ("Id", "AttributeId", "TransformationId",
 2719	833	1361	Target	\N	\N	\N	\N	\N	\N	f	f	\N	134	Person.CredentialAward
 2720	1777	1362	Source	\N	\N	\N	\N	\N	\N	f	f	\N	325	achievement.creator
 2721	1200	1362	Target	\N	\N	\N	\N	\N	\N	f	f	\N	212	Person.CredentialAward.issuerOrganization
-2722	1422	1363	Source	\N	\N	\N	\N	\N	\N	f	f	\N	255	AddressType
-2723	1307	1363	Target	\N	\N	\N	\N	\N	\N	f	f	\N	239	Person.Contact.Address
 2713	1815	1358	Target	\N	2025-08-26 16:59:03.522+00	2025-08-26 16:59:03.522+00	\N	Mary Gwozdz	Unicon	t	f	\N	212	Person.CredentialAward.issuerOrganization
 2715	1815	1359	Target	\N	2025-08-26 16:59:03.522+00	2025-08-26 16:59:03.522+00	\N	Mary Gwozdz	Unicon	t	f	\N	212	Person.CredentialAward.issuerOrganization
 2711	1815	1357	Target	\N	2025-08-26 16:59:03.522+00	2025-08-26 16:59:03.522+00	\N	Mary Gwozdz	Unicon	t	f	\N	212	Person.CredentialAward.issuerOrganization
@@ -8527,6 +8702,23 @@ COPY public."TransformationAttributes" ("Id", "AttributeId", "TransformationId",
 2727	1876	1365	Target	\N	\N	\N	\N	\N	\N	f	f	\N	359	Person.EmploymentPreferences
 2724	1895	1364	Source	\N	\N	\N	\N	\N	\N	t	f	\N	377	person.employment.preferences
 2725	1876	1364	Target	\N	\N	\N	\N	\N	\N	t	f	\N	359	Person.employmentPreferences
+2722	1422	1363	Source	\N	\N	\N	\N	\N	\N	t	f	\N	255	AddressType
+2723	1307	1363	Target	\N	\N	\N	\N	\N	\N	t	f	\N	239	Person.Contact.Address
+2732	1426	1368	Source	\N	\N	\N	\N	\N	\N	t	f	\N	255	AddressType
+2733	1313	1368	Target	\N	\N	\N	\N	\N	\N	t	f	\N	239	Person.Contact.Address
+2730	1425	1367	Source	\N	\N	\N	\N	\N	\N	t	f	\N	255	AddressType
+2731	1311	1367	Target	\N	\N	\N	\N	\N	\N	t	f	\N	239	Person.Contact.Address
+2728	1423	1366	Source	\N	\N	\N	\N	\N	\N	t	f	\N	255	AddressType
+2729	1309	1366	Target	\N	\N	\N	\N	\N	\N	t	f	\N	239	Person.Contact.Address
+2734	1422	1369	Source	\N	\N	\N	\N	\N	\N	f	f	\N	255	AddressType
+2735	1307	1369	Target	\N	\N	\N	\N	\N	\N	f	f	\N	239	Person.Contact.Address
+2736	1423	1370	Source	\N	\N	\N	\N	\N	\N	f	f	\N	255	AddressType
+2737	1309	1370	Target	\N	\N	\N	\N	\N	\N	f	f	\N	239	Person.Contact.Address
+2740	1424	1372	Source	\N	\N	\N	\N	\N	\N	f	f	\N	255	AddressType
+2741	1308	1372	Target	\N	\N	\N	\N	\N	\N	f	f	\N	239	Person.Contact.Address
+2742	1426	1370	Source	\N	\N	\N	\N	\N	\N	f	f	\N	255	AddressType
+2738	1425	1371	Source	\N	\N	\N	\N	\N	\N	t	f	\N	255	AddressType
+2739	1311	1371	Target	\N	\N	\N	\N	\N	\N	t	f	\N	239	Person.Contact.Address
 \.
 
 
@@ -9862,7 +10054,6 @@ COPY public."Transformations" ("Id", "TransformationGroupId", "Name", "Descripti
 1360	23	Person.CredentialAward.term	\N	\N	\N	{ "Person": Alignment. { "CredentialAward": [{ "term": targetDescription }] } }	JSONata	\N	\N	\N	\N	\N	\N	\N	\N	f	f	\N
 1361	16	Person.CredentialAward.id	\N	\N	\N	{ "Person": OpenBadgeCredential. { "CredentialAward": [{ "id": id }] } }	JSONata	\N	\N	\N	\N	\N	\N	\N	\N	f	f	\N
 1362	16	Person.CredentialAward.issuerOrganization.name	\N	\N	\N	{ "Person": achievement. { "CredentialAward": [{ "issuerOrganization": [{ "name": creator.name }] }] } }	JSONata	\N	\N	\N	\N	\N	\N	\N	\N	f	f	\N
-1363	25	Person.Contact.Address.addressStreet	\N	\N	\N	{ "Person": AddressType. { "Contact": [{ "Address": [{ "addressStreet": line }] }] } }	JSONata	\N	\N	\N	\N	\N	\N	\N	\N	f	f	\N
 1342	18	TestOrgEntity.TestNewOrgAttribute	\N	\N	\N	TestOrgEntity.TestNewOrgAttribute = TestNewSourceEntity.TestNewSourceAttribute + Update	JSONata	\N	\N	\N	2025-08-26 16:59:03.522+00	2025-08-26 16:59:03.522+00	\N	Mary Gwozdz	Unicon	t	f	\N
 1341	18	TestOrgEntity.TestNewOrgAttribute	\N	\N	\N	TestOrgEntity.TestNewOrgAttribute = TestNewSourceEntity.TestNewSourceAttribute	JSONata	\N	\N	\N	2025-08-26 16:59:03.522+00	2025-08-26 16:59:03.522+00	\N	Mary Gwozdz	Unicon	t	f	\N
 1343	18	TestOrgEntity.TestNewOrgAttribute	\N	\N	\N	TestOrgEntity.TestNewOrgAttribute = TestNewSourceEntity.TestNewSourceAttribute + Update	JSONata	\N	\N	\N	2025-08-26 16:59:03.522+00	2025-08-26 16:59:03.522+00	\N	Mary Gwozdz	Unicon	t	f	\N
@@ -9900,6 +10091,14 @@ COPY public."Transformations" ("Id", "TransformationGroupId", "Name", "Descripti
 1328	16	creator.official	\N	\N	\N	Organization.credentialOfficial = OpenBadgeCredential.credentialSubject.achievement.creator.official	LIF_Pseudo_Code	\N	\N	\N	\N	\N	\N	\N	StateU	t	f	\N
 1364	26	Person.employmentPreferences.organizationTypes	\N	\N	\N	person.employmentPreferences[].organizationTypes = person.employment.preferences.preferred_org_types	JSONata	\N	\N	\N	\N	\N	\N	\N	\N	t	f	\N
 1365	26	Person.EmploymentPreferences.organizationTypes	\N	\N	\N	{ "person": [{ "employmentPreferences": [{ "organizationTypes": person.employment.preferences.preferred_org_types }] }] }	JSONata	\N	\N	\N	\N	\N	\N	\N	\N	f	f	\N
+1363	25	Person.Contact.Address.addressStreet	\N	\N	\N	{ "Person": AddressType. { "Contact": [{ "Address": [{ "addressStreet": line }] }] } }	JSONata	\N	\N	\N	\N	\N	\N	\N	\N	t	f	\N
+1368	25	Person.Contact.Address.countryCode	\N	\N	\N	{ "Person": AddressType. { "Contact": [{ "Address": [{ "countryCode": countryCode }] }] } }	JSONata	\N	\N	\N	\N	\N	\N	\N	\N	t	f	\N
+1367	25	Person.Contact.Address.addressPostalCode	\N	\N	\N	{ "Person": AddressType. { "Contact": [{ "Address": [{ "addressPostalCode": postalCode }] }] } }	JSONata	\N	\N	\N	\N	\N	\N	\N	\N	t	f	\N
+1366	25	Person.Contact.Address.addressCity	\N	\N	\N	{ "Person": AddressType. { "Contact": [{ "Address": [{ "addressCity": city }] }] } }	JSONata	\N	\N	\N	\N	\N	\N	\N	\N	t	f	\N
+1369	25	Person.Contact.Address.addressStreet	\N	\N	\N	{ "Person": AddressType. { "Contact": [{ "Address": [{ "addressStreet": line }] }] } }	JSONata	\N	\N	\N	\N	\N	\N	\N	\N	f	f	\N
+1370	25	Person.Contact.Address.addressCity	\N	\N	\N	{ "Person": AddressType. { "Contact": [{ "Address": [{ "addressCity": city }] }] } }	JSONata	\N	\N	\N	\N	\N	\N	\N	\N	f	f	\N
+1372	25	Person.Contact.Address.addressLine2	\N	\N	\N	{ "Person": AddressType. { "Contact": [{ "Address": [{ "addressLine2": countrySubDivisions }] }] } }	JSONata	\N	\N	\N	\N	\N	\N	\N	\N	f	f	\N
+1371	25	Person.Contact.Address.addressPostalCode	\N	\N	\N	{ "Person": AddressType. { "Contact": [{ "Address": [{ "addressPostalCode": postalCode }] }] } }	JSONata	\N	\N	\N	\N	\N	\N	\N	\N	t	f	\N
 \.
 
 
@@ -18019,7 +18218,7 @@ COPY public."ValueSets" ("Id", "Name", "Description", "UseConsiderations", "Data
 -- Name: Attributes_Id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."Attributes_Id_seq"', 1900, true);
+SELECT pg_catalog.setval('public."Attributes_Id_seq"', 1954, true);
 
 
 --
@@ -18061,14 +18260,14 @@ SELECT pg_catalog.setval('public."EntityAssociation_Id_seq"', 185, true);
 -- Name: EntityAttributeAssociation_Id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."EntityAttributeAssociation_Id_seq"', 2141, true);
+SELECT pg_catalog.setval('public."EntityAttributeAssociation_Id_seq"', 2224, true);
 
 
 --
 -- Name: ExtInclusionsFromBaseDM_Id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."ExtInclusionsFromBaseDM_Id_seq"', 336, true);
+SELECT pg_catalog.setval('public."ExtInclusionsFromBaseDM_Id_seq"', 378, true);
 
 
 --
@@ -18531,5 +18730,5 @@ ALTER TABLE ONLY public."TransformationAttributes"
 -- PostgreSQL database dump complete
 --
 
-\unrestrict A3GRzz27qPpOflr6KmzQL3NO8Y30qAwPrkbAo6oqeoW1YGCITkENghQ0eQrkANy
+\unrestrict iWjJL0tEQAjEtfX5U5Sc0fPBwlegow1uCpsjftbRpvhA8vMvAllFXLjCzw6zTpM
 

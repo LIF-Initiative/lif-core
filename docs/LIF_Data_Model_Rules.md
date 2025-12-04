@@ -87,8 +87,9 @@ There are two types of required fields:
 **Reasoning:** A minimum amount of data is required to create a new LIF record. Since all LIF records are oriented around a person, the Person object is required. Similarly, when adding other objects to the record, a minimum amount of data must be captured to make the object valid. In the example above, when adding a new address, an `effectiveDate` is required to convey when the address became effective.
 
 ### Data Source Organization
-Every LIF Entity must include fields that help identify the source system of the data. These fields are `informationSourceId`, `informationSourceOrganization`, and optionally, `informationSourceSystem`.
+Every LIF Entity must include fields that help identify the source system of the data. These fields are `identifier`, `informationSourceId`, `informationSourceOrganization`, and optionally, `informationSourceSystem`.
 
+- The `identifier` field is to provide a unique identifier for that data. This field, along with `informationSourceId` and `informationSourceOrganization`, allows each block of data to be uniquely identified.
 - The `informationSourceId` field is an identifier used by the LIF software components to distinguish the source system of the data.  
 - The `informationSourceOrganization` field should specify the name of the organization that owns the source system.  
 - If an organization provides data from multiple source systems, the `informationSourceSystem` field can be used to specify which system the data originates from (e.g., “Canvas LMS”, “Ellucian SIS”).
