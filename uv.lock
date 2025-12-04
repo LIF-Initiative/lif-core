@@ -1466,7 +1466,7 @@ dev = [
     { name = "dagster-cloud", specifier = "~=1.11" },
     { name = "dagster-dg-cli", specifier = "~=1.11" },
     { name = "dagster-webserver", specifier = "~=1.11" },
-    { name = "greenlet", specifier = ">=3.2.3" },
+    { name = "greenlet", specifier = "~=3.2" },
     { name = "mysql-connector-python", specifier = "~=8.3" },
     { name = "passlib", extras = ["bcrypt"], specifier = "~=1.7" },
     { name = "polylith-cli" },
@@ -1477,7 +1477,7 @@ dev = [
     { name = "pytest-asyncio", specifier = "~=1.1" },
     { name = "ruff", specifier = "~=0.11" },
     { name = "strawberry-graphql", extras = ["debug-server"], specifier = "~=0.275" },
-    { name = "testcontainers", extras = ["postgres"], specifier = ">=4.13.3" },
+    { name = "testcontainers", extras = ["postgres"], specifier = "~=4.13" },
     { name = "ty", specifier = "~=0.0" },
 ]
 
