@@ -1,3 +1,7 @@
+# Overview
+
+The **Query Cache** component provides caching support for previous LIF queries in order to save time and cost needed to run the **Orchestrator** to fetch data for a query that can be satisfied by the cache.
+
 # Example usage
 
 ## Build the project
