@@ -110,8 +110,8 @@ async def test_create_source_schema_datamodel_without_upload_success(async_clien
         json={
             "DataModelVersion": "1.0",
             "State": "Draft",
-            "CreationDate": "2025-12-02T21:01",
-            "ActivationDate": "2025-12-02T21:01",
+            "CreationDate": "2025-12-02T21:01:00Z",
+            "ActivationDate": "2025-12-02T21:01:00Z",
             "Name": "Test Source Schema Data Model",
             "Type": "SourceSchema",
             "BaseDataModelId": None,
@@ -121,7 +121,7 @@ async def test_create_source_schema_datamodel_without_upload_success(async_clien
             "Tags": "test1",
             "Contributor": "JSmith",
             "ContributorOrganization": "Acme",
-            "DeprecationDate": "2040-12-12T01:02",
+            "DeprecationDate": "2040-12-12T01:02:00Z",
         },
     )
     assert response.status_code == 201, str(response.content) + str(response.text) + str(response.headers)
@@ -134,14 +134,14 @@ async def test_create_source_schema_datamodel_without_upload_success(async_clien
     # Confirm creation response
 
     assert response.json() == {
-        "ActivationDate": "2025-12-03T03:01:00Z",
+        "ActivationDate": "2025-12-02T21:01:00Z",
         "BaseDataModelId": None,
         "Contributor": "JSmith",
         "ContributorOrganization": "Acme",
-        "CreationDate": "2025-12-03T03:01:00Z",
+        "CreationDate": "2025-12-02T21:01:00Z",
         "DataModelVersion": "1.0",
         "Deleted": False,
-        "DeprecationDate": "2040-12-12T07:02:00Z",
+        "DeprecationDate": "2040-12-12T01:02:00Z",
         "Description": "Test Source Schema Data Model description",
         "Id": datamodel_id,
         "Name": "Test Source Schema Data Model",
@@ -185,7 +185,7 @@ async def test_create_source_schema_datamodel_with_upload_success(async_client):
         data={
             "data_model_version": "1.0",
             "state": "Draft",
-            "activation_date": "2025-12-02T21:01",
+            "activation_date": "2025-12-02T21:01:00Z",
             "data_model_name": "Test Source Schema Data Model with Upload",
             "data_model_type": "SourceSchema",
         },
@@ -200,7 +200,7 @@ async def test_create_source_schema_datamodel_with_upload_success(async_client):
     assert isinstance(data_model_id, int)
 
     assert create_response.json() == {
-        "ActivationDate": "2025-12-03T03:01:00Z",
+        "ActivationDate": "2025-12-02T21:01:00Z",
         "BaseDataModelId": None,
         "Contributor": None,
         "ContributorOrganization": None,
