@@ -92,7 +92,7 @@ Every LIF Entity must include fields that help identify the source system of the
 - The `identifier` field is to provide a unique identifier for that data. This field, along with `informationSourceId` and `informationSourceOrganization`, allows each block of data to be uniquely identified.
 - The `informationSourceId` field is an identifier used by the LIF software components to distinguish the source system of the data.  
 - The `informationSourceOrganization` field should specify the name of the organization that owns the source system.  
-- If an organization provides data from multiple source systems, the `informationSourceSystem` field can be used to specify which system the data originates from (e.g., “Canvas LMS”, “Ellucian SIS”).
+- If an organization provides data from multiple source systems, the `informationSourceSystem` field can be used to specify which system the data originates from (e.g., “Canvas LMS”, “Ellucian SIS”). These fields include a description within the data model to help better understand how to use each field.
 
 **Reasoning:** When a LIF record is transferred to downstream systems, it is important to know that certain data originated from different source systems via the `informationSourceId`. Additionally, these downstream systems may have use cases that require a human-readable name for the data source, including the organization name and source system name.
 
