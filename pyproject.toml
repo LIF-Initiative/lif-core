@@ -102,6 +102,14 @@ dev-dependencies = ["polylith-cli"]
 "components/lif/identity_mapper_storage" = "lif/identity_mapper_storage"
 "components/lif/identity_mapper_storage_sql" = "lif/identity_mapper_storage_sql"
 "components/lif/data_source_adapters" = "lif/data_source_adapters"
+"bases/lif/example_data_source_rest_api" = "lif/example_data_source_rest_api"
+"bases/lif/mdr_restapi" = "lif/mdr_restapi"
+"bases/lif/translator_restapi" = "lif/translator_restapi"
+"components/lif/mdr_auth" = "lif/mdr_auth"
+"components/lif/example_data_source_service" = "lif/example_data_source_service"
+"components/lif/translator" = "lif/translator"
+"components/lif/mdr_utils" = "lif/mdr_utils"
+"components/lif/mdr_dto" = "lif/mdr_dto"
 
 [tool.ruff]
 line-length = 120
