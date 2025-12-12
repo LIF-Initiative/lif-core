@@ -1,6 +1,7 @@
 from uuid import uuid4
 
-from sqlalchemy import Column, String, UniqueConstraint
+from sqlalchemy import String, UniqueConstraint
+from sqlalchemy.orm import Mapped, mapped_column
 from lif.identity_mapper_storage_sql.db import Base
 from lif.datatypes import IdentityMapping
 
@@ -10,12 +11,12 @@ class IdentityMappingModel(Base):
 
     __tablename__ = "identity_mappings"
 
-    mapping_id: Column[String] = Column(String(36), primary_key=True, index=True, default=lambda: str(uuid4()))
-    lif_organization_id: Column[String] = Column(String(255), index=True, nullable=False)
-    lif_organization_person_id: Column[String] = Column(String(255), index=True, nullable=False)
-    target_system_id: Column[String] = Column(String(255), index=True, nullable=False)
-    target_system_person_id_type: Column[String] = Column(String(100), index=True, nullable=False)
-    target_system_person_id: Column[String] = Column(String(255), index=True, nullable=False)
+    mapping_id: Mapped[str] = mapped_column(String(36), primary_key=True, index=True, default=lambda: str(uuid4()))
+    lif_organization_id: Mapped[str] = mapped_column(String(255), index=True, nullable=False)
+    lif_organization_person_id: Mapped[str] = mapped_column(String(255), index=True, nullable=False)
+    target_system_id: Mapped[str] = mapped_column(String(255), index=True, nullable=False)
+    target_system_person_id_type: Mapped[str] = mapped_column(String(100), index=True, nullable=False)
+    target_system_person_id: Mapped[str] = mapped_column(String(255), index=True, nullable=False)
     __table_args__ = (
         UniqueConstraint(
             "lif_organization_id",

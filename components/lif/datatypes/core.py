@@ -78,12 +78,6 @@ class LIFQueryFilter(RootModel[LIFQueryPersonFilter]):
 
     root: LIFQueryPersonFilter
 
-    def __iter__(self):
-        return iter(self.root)
-
-    def __getitem__(self, item):
-        return self.root[item]
-
 
 class LIFQuery(BaseModel):
     """
@@ -112,10 +106,12 @@ class LIFQueryStatusResponse(BaseModel):
     Attributes:
         query_id (str): Query ID for the query.
         status (str): Status of the query (e.g., 'PENDING').
+        error_message (str | None): Error message if the query failed.
     """
 
     query_id: str = Field(..., description="Query ID for the query")
     status: str = Field(..., description="Status of the query (e.g., 'PENDING', 'COMPLETED)")
+    error_message: str | None = Field(None, description="Error message if the query failed")
 
 
 class LIFUpdatePersonPayload(BaseModel):

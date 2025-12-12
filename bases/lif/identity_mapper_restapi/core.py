@@ -2,7 +2,7 @@ from contextlib import asynccontextmanager
 from typing import List
 from uuid import uuid4
 
-from fastapi import FastAPI, Request, Response, status
+from fastapi import FastAPI, Request, status
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import sessionmaker, Session
 
@@ -49,8 +49,10 @@ logger.info("Identity Mapper REST API service initialized successfully")
     status_code=status.HTTP_200_OK,
     response_model=List[IdentityMapping],
 )
-async def do_save_mappings(org_id: str, person_id: str, mappings: List[IdentityMapping]) -> Response:
+async def do_save_mappings(org_id: str, person_id: str, mappings: List[IdentityMapping]) -> List[IdentityMapping]:
     logger.info(f"CALL RECEIVED TO (POST) /organizations/{org_id}/persons/{person_id}/mappings API")
+    if service is None:
+        raise RuntimeError("Service is not initialized")
     mappings_created: List[IdentityMapping] = await service.save_mappings(org_id, person_id, mappings)
     logger.info(f"Mappings saved successfully for person {person_id} in organization {org_id}")
     return mappings_created
@@ -63,6 +65,8 @@ async def do_save_mappings(org_id: str, person_id: str, mappings: List[IdentityM
 )
 async def do_get_mappings(org_id: str, person_id: str) -> List[IdentityMapping]:
     logger.info(f"CALL RECEIVED TO (GET) /organizations/{org_id}/persons/{person_id}/mappings API")
+    if service is None:
+        raise RuntimeError("Service is not initialized")
     mappings = await service.get_mappings(org_id, person_id)
     logger.info(f"Mappings retrieved successfully for person {person_id} in organization {org_id}")
     return mappings
@@ -71,6 +75,8 @@ async def do_get_mappings(org_id: str, person_id: str) -> List[IdentityMapping]:
 @app.delete("/organizations/{org_id}/persons/{person_id}/mappings/{mapping_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def do_delete_mapping(org_id: str, person_id: str, mapping_id: str):
     logger.info(f"CALL RECEIVED TO (DELETE) /organizations/{org_id}/persons/{person_id}/mappings/{mapping_id} API")
+    if service is None:
+        raise RuntimeError("Service is not initialized")
     await service.delete_mapping(org_id, person_id, mapping_id)
     logger.info(f"Mapping {mapping_id} deleted successfully for person {person_id} in organization {org_id}")
 

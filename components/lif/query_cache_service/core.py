@@ -275,7 +275,7 @@ async def add(lif_record: LIFRecord) -> LIFRecord:
         result = await collection.insert_one(lif_record.model_dump())
         if result.inserted_id:
             added_record = await collection.find_one({"_id": result.inserted_id})
-            return LIFRecord(**added_record)
+            return LIFRecord(**added_record)  # type: ignore
         raise ResourceNotFoundException("Failed to add record, no inserted ID returned.")
     except Exception as e:
         logger.exception("Add Exception: %s", e)

@@ -23,3 +23,12 @@ repos:
     hooks:
       - id: cspell
         exclude: cspell.json
+  - repo: local
+    hooks:
+      - id: ty-check
+        name: ty-check
+        entry: uv run ty check --error-on-warning
+        language: system
+        types: [python]
+        pass_filenames: false
+        always_run: true

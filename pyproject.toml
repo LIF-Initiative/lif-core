@@ -54,7 +54,7 @@ dev = [
     "ruff~=0.11",
     "strawberry-graphql[debug-server]~=0.275",
     "testcontainers[postgres]~=4.13",
-    "ty~=0.0",
+    "ty~=0.0.1-alpha.33",
 ]
 
 [build-system]
@@ -108,8 +108,8 @@ line-length = 120
 required-version = "~=0.11.13"
 
 [tool.ruff.format]
-# use '\n' line endings for all files (*nix/mac default)
 docstring-code-format = true
+# use '\n' line endings for all files (*nix/mac default)
 line-ending = "lf"
 skip-magic-trailing-comma = true
 
@@ -122,3 +122,22 @@ ignore = [
   "TD002",
   "TD003"
 ]
+
+[tool.ty.src]
+exclude = [
+  "scripts/",
+  "test/",
+  "bases/lif/advisor_restapi/",
+  "bases/lif/api_graphql/",
+  "bases/lif/mdr_restapi/",
+  "bases/lif/semantic_search_mcp_server",
+  "components/lif/langchain_agent/",
+  "components/lif/mdr_dto/",
+  "components/lif/mdr_services/",
+  "components/lif/mdr_utils/",
+  "components/lif/openapi_to_graphql/",
+  "components/lif/orchestrator_clients/",
+  "components/lif/semantic_search_service/",
+  "development/"
+]
+

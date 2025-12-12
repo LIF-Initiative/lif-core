@@ -111,7 +111,7 @@ class LIFQueryPlannerService:
 
                 orchestrator_job_request: OrchestratorJobRequest = OrchestratorJobRequest(
                     lif_query_plan=lif_query_plan,
-                    async_=True,  # Run the orchestration asynchronously
+                    async_=True,  # ty: ignore[unknown-argument]
                 )
 
                 try:
