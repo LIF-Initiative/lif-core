@@ -37,6 +37,7 @@
         "datatypes",
         "dateutil",
         "dbname",
+        "delenv",
         "diaz",
         "dmypy",
         "dockerfiles",

@@ -23,3 +23,11 @@ repos:
     hooks:
       - id: cspell
         exclude: cspell.json
+  - repo: local
+    hooks:
+      - id: pytest
+        name: Run Pytest
+        entry: uv run pytest test
+        language: system
+        types: [python]
+        pass_filenames: false
