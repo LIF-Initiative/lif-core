@@ -1,20 +1,24 @@
-# Contributing to `LIF-MAIN`
+# Contributing to `LIF-CORE`
 
-Thanks for your interest in contributing! We welcome pull requests, ideas, and feedback to help improve this project.
+Thanks for your interest in contributing! We welcome pull requests, ideas, and
+feedback to help improve this project.
 
-This guide outlines how to get set up, our coding standards, and how to propose changes.
+This guide outlines how to get set up, our coding standards, and how to propose
+changes.
 
 ---
 
 ## Getting Started
 
 1. **Fork** the repository and clone your fork:
+
    ```bash
    git clone https://github.com/your-username/lif-main.git
    cd lif-main
    ```
 
 2. **Install dependencies and create virtual environment**:
+
    ```bash
    uv sync
    ```
@@ -24,17 +28,22 @@ This guide outlines how to get set up, our coding standards, and how to propose 
 ## How to Contribute
 
 - **Report bugs** or **suggest features** by opening an issue.
-- **Fix bugs**, **add features**, or **improve documentation** via pull requests (PRs).
+- **Fix bugs**, **add features**, or **improve documentation**
+  via pull requests (PRs).
 - Contributions should generally **start with an open issue or a well-defined task**.
 
 ---
 
 ## Pull Request Guidelines
 
-We aim to keep our codebase clean, reviewable, and maintainable. Please follow these guidelines:
+We aim to keep our codebase clean, reviewable, and maintainable.
+Please follow these guidelines:
 
-- **Small and focused**: PRs should address **one issue or task**. Avoid combining multiple unrelated changes (e.g., don’t fix bugs and add new features in the same PR).
-- **Descriptive**: Provide a clear summary of what the PR does and why, referencing the related issue number (e.g., `Closes #42`).
+- **Small and focused**: PRs should address **one issue or task**.
+  Avoid combining multiple unrelated changes
+  (e.g., don’t fix bugs and add new features in the same PR).
+- **Descriptive**: Provide a clear summary of what the PR does and why,
+  referencing the related issue number (e.g., `Closes #42`).
 - **Review protocol**:
   - PR authors **should not approve their own pull requests**, except for:
     - Trivial changes (e.g., typo fixes)
@@ -53,7 +62,7 @@ We aim to keep our codebase clean, reviewable, and maintainable. Please follow t
 We enforce consistent code style using:
 
 - [`ruff`](https://github.com/astral-sh/ruff) – code formatter / fast linter
-- [`ty`] (https://github.com/astral-sh/ty) - static type checker
+- [`ty`](https://github.com/astral-sh/ty) - static type checker
 - [`pre-commit`](https://pre-commit.com/) – automates checks
 
 ### Before You Commit
@@ -121,4 +130,5 @@ Use clear, descriptive commit messages. Conventional commit style is encouraged:
 
 We appreciate your contributions and interest in the project!
 
-If you're not sure where to start, check out [open issues](https://github.com/your-org/your-project/issues), especially those labeled `good first issue` or `help wanted`.
+If you're not sure where to start, check out [open issues](https://github.com/your-org/your-project/issues),
+especially those labeled `good first issue` or `help wanted`.
