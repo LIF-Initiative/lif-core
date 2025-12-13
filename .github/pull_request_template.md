@@ -3,7 +3,7 @@ Thank you for your pull request. Please review the requirements below.
 
 Bug fixes and new features should be reported on the issue tracker: https://github.com/lif-initiative/lif-core/issues
 
-Contributing guide: https://github.com/lif-initiative/lif-core/blob/main/docs/contributing.md
+Contributing guide: https://github.com/lif-initiative/lif-core/blob/main/docs/CONTRIBUTING.md
 Code of Conduct: https://github.com/lif-initiative/lif-core/blob/main/CODE_OF_CONDUCT.md
 -->
 
