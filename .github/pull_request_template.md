@@ -12,6 +12,7 @@ Code of Conduct: https://github.com/lif-initiative/lif-core/blob/main/CODE_OF_CO
 
 - [ ] commit message follows commit guidelines (see commitlint.config.mjs)
 - [ ] tests are included (unit and/or integration tests)
+- [ ] all tests are successful
 - [ ] documentation is changed or added (in /docs directory)
 - [ ] code passes linting checks (`uv run ruff check`)
 - [ ] code passes formatting checks (`uv run ruff format`)
