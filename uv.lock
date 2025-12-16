@@ -1479,7 +1479,7 @@ dev = [
     { name = "ruff", specifier = "~=0.11" },
     { name = "strawberry-graphql", extras = ["debug-server"], specifier = "~=0.275" },
     { name = "testcontainers", extras = ["postgres"], specifier = "~=4.13" },
-    { name = "ty", specifier = "~=0.0.1a33" },
+    { name = "ty", specifier = "~=0.0" },
 ]
 
 [[package]]

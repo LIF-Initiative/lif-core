@@ -54,7 +54,7 @@ dev = [
     "ruff~=0.11",
     "strawberry-graphql[debug-server]~=0.275",
     "testcontainers[postgres]~=4.13",
-    "ty~=0.0.1-alpha.33",
+    "ty~=0.0",
 ]
 
 [build-system]
