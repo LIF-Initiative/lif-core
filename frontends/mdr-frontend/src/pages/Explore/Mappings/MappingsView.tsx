@@ -450,8 +450,16 @@ const MappingsView: React.FC = () => {
     );
 
     const fetchTransformations = useCallback(async () => {
+        if (!allModels?.length) return; // wait for models to load
         const seq = ++loadSeqRef.current;
         if (!groupId || groupId < 0) {
+            // If no groupdId but selected source has transformation, go to first matching group
+            if (allGroups?.length) {
+                const trans = allGroups.find((g) => g.SourceDataModelId === selectedSourceId && g.TargetDataModelId === selectedTargetId);
+                const transId = trans?.TransformationGroupId || 0;
+                if (transId) { navigate(`/explore/data-mappings/${transId}`); return; }
+            }
+
             // No group selected: clear group and transformations, but ensure models are loaded based on source selection and default target (1)
             if (seq !== loadSeqRef.current) return;
             setGroup(null);
@@ -648,6 +656,7 @@ const MappingsView: React.FC = () => {
     // When we have group + all groups, ensure we know versions for same source/target pairs
     useEffect(() => {
         const ensurePairVersions = async () => {
+            // console.log('Ensuring pair versions for group', group, allGroups);
             if (!group || !allGroups) return;
             const normalize = (id?: number) => (id && id > 0 ? id : 1);
             const pair = allGroups.filter(
