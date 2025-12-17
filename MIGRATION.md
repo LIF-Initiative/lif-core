@@ -87,5 +87,7 @@ If you encounter issues during migration:
 
 1. Check the [CHANGELOG.md](CHANGELOG.md) for additional context
 2. Review relevant documentation in the [/docs](docs/) directory
-3. Search existing [GitHub Issues](https://github.com/lif-initiative/lif-core/issues)
-4. Open a new issue with the `migration` label if needed
+3. Search existing [GitHub Discussions](https://github.com/lif-initiative/lif-core/discussions)
+4. Open a new discussion with the `migration` label if applicable
+5. Search existing [GitHub Issues](https://github.com/lif-initiative/lif-core/issues)
+6. Open a new issue with the `migration` label if needed

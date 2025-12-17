@@ -50,11 +50,11 @@ have real entries.
 
 ### Deprecated
 
-- `/v1/learner` endpoint will be removed in version 2.0.0 (use `/v2/learner` instead)
+- `/v1.1/learner` endpoint will be removed in version 2.0.0 (use `/v2/learner` instead)
 
 ### Removed
 
-- **BREAKING:** Removed deprecated `/v1/learner` endpoint (deprecated in 1.0.0)
+- **BREAKING:** Removed deprecated `/v1.0/learner` endpoint (deprecated in 1.0.0)
 - Legacy authentication middleware
 
 ### Fixed
@@ -92,9 +92,11 @@ have real entries.
 
 - **Added** - New features
 - **Changed** - Changes to existing functionality
+- **Chore** - Maintenance changes outside of functionality and bug fixes
 - **Deprecated** - Features that will be removed in future versions
-- **Removed** - Features that have been removed
+- **Documentation** - Documentation-focused updates
 - **Fixed** - Bug fixes
+- **Removed** - Features that have been removed
 - **Security** - Vulnerability fixes and security improvements
 
 ### Breaking Changes

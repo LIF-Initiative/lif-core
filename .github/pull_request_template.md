@@ -19,7 +19,8 @@ Code of Conduct: https://github.com/lif-initiative/lif-core/blob/main/CODE_OF_CO
 - [ ] code passes type checking (`uv run ty check`)
 - [ ] pre-commit hooks have been run successfully
 - [ ] database schema changes: migration files created and CHANGELOG.md updated
-- [ ] API changes: base (Python code) documentation and project README updated
+- [ ] API changes: base (Python code) documentation in `docs/`
+      and project README updated
 - [ ] configuration changes: relevant folder README updated
 - [ ] breaking changes: added to MIGRATION.md with upgrade instructions
       and CHANGELOG.md entry
@@ -48,18 +49,17 @@ Include:
 ##### Related Issues
 <!-- Link to related issues using #issue_number -->
 
-Closes #
+Closes # [[add Github issue number]]
 
 ##### Testing
 <!-- Describe the testing you've done -->
 
 - [ ] Manual testing performed
 - [ ] Automated tests added/updated
-- [ ] Tested with sample data
 - [ ] Integration testing completed
 
-##### Component(s) Affected
-<!-- Check all components affected by this change -->
+##### Project Area(s) Affected
+<!-- Check all project areas affected by this change -->
 
 - [ ] bases/
 - [ ] components/
@@ -70,6 +70,7 @@ Closes #
 - [ ] Database schema
 - [ ] API endpoints
 - [ ] Documentation
+- [ ] Testing
 
 ##### Additional Notes
 <!-- Any additional information that reviewers should know -->

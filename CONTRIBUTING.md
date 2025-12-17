@@ -126,6 +126,17 @@ Use clear, descriptive commit messages. Conventional commit style is encouraged:
 
 ---
 
+## Additional Considerations
+
+When contributing, please ensure:
+
+- Breaking changes are documented in both CHANGELOG.md and MIGRATION.md
+- Database schema changes include migration files and changelog entries
+- API changes update both the base Python documentation and project READMEs
+- Configuration changes update relevant folder READMEs
+
+---
+
 ## Thanks
 
 We appreciate your contributions and interest in the project!
