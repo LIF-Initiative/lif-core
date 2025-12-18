@@ -90,7 +90,6 @@ The `example-data-source-rest-api-to-lif` adapter is the reference implementatio
         ```
         { "person": [{ "contact": [{ "address": [{ "addressCity": user.details.address.state }] }] }] }
         ```
-    - Due to a **MDR** UX bug, sometimes the mappings don't always appear ( https://github.com/LIF-Initiative/lif-core/issues/44 ). See the workarounds in the issue ticket if this occurs.
 
 7. If target fields in the mappings need to be added into the _Org LIF_ model, first review the `Data Models` > _Base LIF_ data model to see if the field already exists and just needs to be marked as included in _Org LIF_ model (You can review this by accessing `StateU LIF` > `Base LIF Inclusions` > find the field and tick the `Inc` checkbox). If the field does not exist in the _Base LIF_ model, then in the _Org LIF_ model, use the three vertical dots button to create the needed entities and attributes. Please do not modify the _Base LIF_ model.
     - If creating new entities or attributes:
@@ -153,7 +152,7 @@ There is a known issue when a translation yields an empty LIF fragment, Dagster'
 If your LIF Fragment is empty, but it shouldn't be, check that the JSONata expressions are lower-cased as noted previously in this guide.
 
 ### Clear the Cache
-The **LIF Cache** service uses mongoDB to store LIF Query results so the Orchestration process does not always need to be executed. There is a TTL on the cache (default of 24 hours), and at times, it's desireable for updates to occur sooner then the TTL. 
+The **LIF Cache** service uses mongoDB to store LIF Query results so the Orchestration process does not always need to be executed. There is a TTL on the cache (default of 24 hours), and at times, it's desirable for updates to occur sooner then the TTL. 
 
 To clear the cache, stop the services, delete the docker container `mongodb-org1`, and restart docker compose.
 
