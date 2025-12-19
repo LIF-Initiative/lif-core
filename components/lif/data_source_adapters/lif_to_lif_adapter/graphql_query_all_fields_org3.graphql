@@ -21,20 +21,20 @@ query GetPersonByIdentifier($identifier: String!, $identifierType: String!) {
       awardStatus
       instanceOfRefCredential {
         informationSourceId
-        id
+        identifier
       }
-      id
-      awardIssueDate
-      credentialAwardee
+      identifier
+      #awardIssueDate
+      #credentialAwardee
     }
     courseLearningExperience {
       informationSourceId
-      assertedByRefOrganization {
-        informationSourceId
-        name
-        identificationSystem
-        organizationType
-      }
+      #assertedByRefOrganization {
+      #  informationSourceId
+      #  name
+      #  identificationSystem
+      #  organizationType
+      #}
       refCourse {
         informationSourceId
         #identifier {
@@ -44,17 +44,17 @@ query GetPersonByIdentifier($identifier: String!, $identifierType: String!) {
         #  informationSourceId
         #}
       }
-      offeredByRefOrganization {
-        identificationSystem
-        name
-        organizationType
-        informationSourceId
-      }
+      #offeredByRefOrganization {
+      #  identificationSystem
+      #  name
+      #  organizationType
+      #  informationSourceId
+      #}
       refCredentialAward {
         informationSourceId
-        id
-        awardIssueDate
-        credentialAwardee
+        identifier
+        #awardIssueDate
+        #credentialAwardee
       }
     }
     proficiency {
@@ -62,9 +62,9 @@ query GetPersonByIdentifier($identifier: String!, $identifierType: String!) {
       name
       description
       refCredentialAward {
-        id
-        awardIssueDate
-        credentialAwardee
+        identifier
+        #awardIssueDate
+        #credentialAwardee
         informationSourceId
       }
     }

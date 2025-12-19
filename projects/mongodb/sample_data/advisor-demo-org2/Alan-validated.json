@@ -63,6 +63,7 @@
           },
           "refCredentialAward": {
             "identifier": "org2-cred-employment-certificate-001",
+            "name": "Employment Certificate",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Org2",
@@ -104,6 +105,7 @@
           },
           "refCredentialAward": {
             "identifier": "org2-cred-employment-certificate-001",
+            "name": "Employment Certificate",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Org2",
@@ -215,8 +217,9 @@
       "credentialAward": [
         {
           "identifier": "org2-cred-employment-certificate-001",
+          "name": "Employment Certificate",
           "awardIssueDate": "2024-12-15T10:00:00Z",
-          "credentialAwardee": "Alan  Tsatrian",
+          "credentialAwardee": "Alan Tsatrian",
           "informationSourceId": "Org2",
           "informationSourceOrganization": "Org2"
         }

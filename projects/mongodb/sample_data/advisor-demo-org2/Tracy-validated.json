@@ -80,6 +80,7 @@
           },
           "refCredentialAward": {
             "identifier": "cred-employment-certificate-001",
+            "name": "Employment Certificate",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Tracy Thatcher",
             "informationSourceId": "Org2",
@@ -121,6 +122,7 @@
           },
           "refCredentialAward": {
             "identifier": "cred-employment-certificate-001",
+            "name": "Employment Certificate",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Tracy Thatcher",
             "informationSourceId": "Org2",
@@ -162,6 +164,7 @@
           },
           "refCredentialAward": {
             "identifier": "cred-employment-certificate-001",
+            "name": "Employment Certificate",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Tracy Thatcher",
             "informationSourceId": "Org2",
@@ -203,6 +206,7 @@
           },
           "refCredentialAward": {
             "identifier": "cred-employment-certificate-001",
+            "name": "Employment Certificate",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Tracy Thatcher",
             "informationSourceId": "Org2",
@@ -280,6 +284,7 @@
       "credentialAward": [
         {
           "identifier": "cred-employment-certificate-001",
+          "name": "Employment Certificate",
           "awardIssueDate": "2024-12-15T10:00:00Z",
           "credentialAwardee": "Tracy Thatcher",
           "informationSourceId": "Org2"
