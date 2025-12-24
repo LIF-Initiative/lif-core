@@ -40,7 +40,6 @@ STACKS['demo-lif-query-cache-org3']='service'
 STACKS['demo-lif-query-planner-org3']='service'
 STACKS['demo-lif-graphql-org3']='service'
 
-STACKS['demo-lif-dagster-cloud-agent']='service'
 STACKS['demo-lif-mdr-frontend']='s3-hosted'
 STACKS['demo-lif-mdr-api']='service'
 
@@ -84,7 +83,6 @@ STACK_ORDER=(
   demo-lif-query-planner-org3
   demo-lif-graphql-org3
  
-  demo-lif-dagster-cloud-agent
   demo-lif-orchestrator-api
   demo-lif-mdr-frontend
   demo-lif-mdr-api

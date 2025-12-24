@@ -43,7 +43,6 @@ STACKS['dev-lif-query-planner-org3']='service'
 STACKS['dev-lif-graphql-org3']='service'
 STACKS['dev-lif-mongodb-seed-org3']='scheduled-task'
 
-STACKS['dev-lif-dagster-cloud-agent']='service'
 STACKS['dev-lif-mdr-frontend']='s3-hosted'
 STACKS['dev-lif-mdr-api']='service'
 
@@ -90,7 +89,6 @@ STACK_ORDER=(
   dev-lif-graphql-org3
   dev-lif-mongodb-seed-org3
  
-  dev-lif-dagster-cloud-agent
   dev-lif-orchestrator-api
   dev-lif-mdr-frontend
   dev-lif-mdr-api
