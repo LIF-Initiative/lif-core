@@ -330,10 +330,10 @@ This exception occurs when uniqueness constraints are about to be violated durin
 TBD
 
 # Possible Future Roadmap Items
-- [LIF-631 Fetch OpenAPI schema from MDR instead of file](https://linear.app/lif/issue/LIF-631/fetch-openapi-schema-from-mdr-instead-of-file)
-- [LIF-358 Add support to pull latest LIF data model from Github repo](https://linear.app/lif/issue/LIF-358/add-support-to-pull-latest-lif-data-model-from-github-repo)
-- [LIF-352 Add support to MDR for updating schema via upload](https://linear.app/lif/issue/LIF-352/add-support-to-mdr-for-updating-schema-via-upload)
-- [LIF-357 Add button to update data model by uploading an OpenAPI schema](https://linear.app/lif/issue/LIF-357/add-button-to-update-data-model-by-uploading-an-openapi-schema)
-- [LIF-341 Ensure GET API is available in the MDR to provide translation instructions to translator in the appropriate format](https://linear.app/lif/issue/LIF-341/ensure-get-api-is-available-in-the-mdr-to-provide-translation)
-- [LIF-369 Update MDR API to support GET Transformations by source and target attributes](https://linear.app/lif/issue/LIF-369/update-mdr-api-to-support-get-transformations-by-source-and-target)
-- [LIF-364 Exclude entities and attributes from GET endpoints when DeprecationDate <= now](https://linear.app/lif/issue/LIF-364/exclude-entities-and-attributes-from-get-endpoints-when)
+- [#717: Fetch OpenAPI schema from MDR instead of file](https://github.com/LIF-Initiative/lif-core/issues/717)
+- [#437: Add support to pull latest LIF data model from Github repo](https://github.com/LIF-Initiative/lif-core/issues/437)
+- [#17:  Add support to MDR for updating schema via upload](https://github.com/LIF-Initiative/lif-core/issues/17)
+- [#18:  Add button to update data model by uploading an OpenAPI schema](https://github.com/LIF-Initiative/lif-core/issues/18)
+- [#401: Ensure GET API is available in the MDR to provide translation instructions to translator in the appropriate format](https://github.com/LIF-Initiative/lif-core/issues/401)
+- [#449: Update MDR API to support GET Transformations by source and target attributes](https://github.com/LIF-Initiative/lif-core/issues/449)
+- [#444: Exclude entities and attributes from GET endpoints when DeprecationDate <= now](https://github.com/LIF-Initiative/lif-core/issues/444)
