@@ -341,8 +341,8 @@ translated_data = response.json()
 ```
 
 # Possible Future Roadmap Items
-- [LIF-633 SPIKE - Investigate approach to enum translation](https://linear.app/lif/issue/LIF-633/spike-investigate-approach-to-enum-translation)
--[LIF-634 SPIKE - Investigate Custom Code Translations](https://linear.app/lif/issue/LIF-634/spike-investigate-custom-code-translations)
--[LIF-635 SPIKE - Investigate alternative translation patterns](https://linear.app/lif/issue/LIF-635/spike-investigate-alternative-translation-patterns)
-- [LIF-636 Investigate and Improve Translator Performance](https://linear.app/lif/issue/LIF-636/investigate-and-improve-translator-performance)
-- [LIF-637 SPIKE - Investigate bidirectional translations](https://linear.app/lif/issue/LIF-637/spike-investigate-bidirectional-translations)
+- [#719: SPIKE - Investigate approach to enum translation](https://github.com/LIF-Initiative/lif-core/issues/719)
+- [#720: SPIKE - Investigate Custom Code Translations](https://github.com/LIF-Initiative/lif-core/issues/720)
+- [#721: SPIKE - Investigate alternative translation patterns](https://github.com/LIF-Initiative/lif-core/issues/721)
+- [#722: Investigate and Improve Translator Performance](https://github.com/LIF-Initiative/lif-core/issues/722)
+- [#723: SPIKE - Investigate bidirectional translations](https://github.com/LIF-Initiative/lif-core/issues/723)
