@@ -57,7 +57,9 @@
           "awardStatus": "InProgress",
           "instanceOfRefCredential": {
             "informationSourceId": "Org3",
-            "identifier": "a050aa17-45f1-413f-a63b-c3a627ffa686"
+            "informationSourceOrganization": "Org3",
+            "identifier": "a050aa17-45f1-413f-a63b-c3a627ffa686",
+            "name": "Credential 001"
           },
           "identifier": "641d3d79-cf40-47e3-9396-7f4d067ceccd",
           "awardIssueDate": "2023-10-25",
@@ -67,7 +69,9 @@
           "awardStatus": "Completed",
           "instanceOfRefCredential": {
             "informationSourceId": "Org3",
-            "identifier": ""
+            "informationSourceOrganization": "Org3",
+            "identifier": "",
+            "name": "Credential 002"
           },
           "identifier": "cred-proficiency-certificate-001",
           "awardIssueDate": "2024-12-15T10:00:00Z",
@@ -78,7 +82,9 @@
           "awardStatus": "Completed",
           "instanceOfRefCredential": {
             "informationSourceId": "Org3",
-            "identifier": ""
+            "informationSourceOrganization": "Org3",
+            "identifier": "",
+            "name": "Credential 003"
           },
           "informationSourceId": "Org3",
           "identifier": "5367f3bd-e285-4880-be4f-75f270c99de9",
@@ -89,7 +95,9 @@
           "awardStatus": "Completed",
           "instanceOfRefCredential": {
             "informationSourceId": "Org3",
-            "identifier": ""
+            "informationSourceOrganization": "Org3",
+            "identifier": "",
+            "name": "Credential 004"
           },
           "informationSourceId": "Org3",
           "identifier": "21448b4f-163d-4806-b0f4-28ffd06a078a",
@@ -100,7 +108,9 @@
           "awardStatus": "Completed",
           "instanceOfRefCredential": {
             "informationSourceId": "Org3",
-            "identifier": ""
+            "informationSourceOrganization": "Org3",
+            "identifier": "",
+            "name": "Credential 005"
           },
           "informationSourceId": "Org3",
           "identifier": "8f6e6d12-2693-4543-85ac-f57174f5863f",
@@ -119,7 +129,10 @@
           },
           "refCourse": {
             "informationSourceId": "Org3",
-            "identifier": [
+            "informationSourceOrganization": "Org3",
+            "identifier": "CS651",
+            "name": "Computer Science 651",
+            "Identifier": [
               {
                 "identifier": "CS651",
                 "identifierType": "Course Code",
@@ -142,6 +155,7 @@
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Org3",
             "identifier": "5367f3bd-e285-4880-be4f-75f270c99de9",
+            "name": "Credential 501",
             "awardIssueDate": "2024-11-14T02:37:11Z",
             "credentialAwardee": "Matt Hanson"
           }
@@ -156,7 +170,10 @@
           },
           "refCourse": {
             "informationSourceId": "Org3",
-            "identifier": [
+            "informationSourceOrganization": "Org3",
+            "identifier": "CS651",
+            "name": "Computer Science 651",
+            "Identifier": [
               {
                 "identifier": "CS651",
                 "identifierType": "Course Code",
@@ -179,6 +196,7 @@
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Org3",
             "identifier": "21448b4f-163d-4806-b0f4-28ffd06a078a",
+            "name": "Credential 502",
             "awardIssueDate": "2021-08-05",
             "credentialAwardee": "Matt Hanson"
           }
@@ -193,7 +211,10 @@
           },
           "refCourse": {
             "informationSourceId": "Org3",
-            "identifier": [
+            "informationSourceOrganization": "Org3",
+            "identifier": "CS651",
+            "name": "Computer Science 651",
+            "Identifier": [
               {
                 "identifier": "CS651",
                 "identifierType": "Course Code",
@@ -216,6 +237,7 @@
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Org3",
             "identifier": "8f6e6d12-2693-4543-85ac-f57174f5863f",
+            "name": "Credential 503",
             "awardIssueDate": "2021-10-12T17:39:31Z",
             "credentialAwardee": "Matt Hanson"
           }

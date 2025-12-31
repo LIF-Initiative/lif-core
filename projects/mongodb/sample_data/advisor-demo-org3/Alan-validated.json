@@ -56,7 +56,8 @@
           "instanceOfRefCredential": {
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Org3",
-            "identifier": "84d6de55-974c-47e5-92bf-889addac75ae"
+            "identifier": "84d6de55-974c-47e5-92bf-889addac75ae",
+            "name": "Credential 001"
           },
           "identifier": "org3-cred-award-001",
           "awardIssueDate": "2021-12-03T15:43:17Z",
@@ -66,7 +67,9 @@
           "awardStatus": "Completed",
           "instanceOfRefCredential": {
             "informationSourceId": "Org3",
-            "identifier": ""
+            "informationSourceOrganization": "Org3",
+            "identifier": "",
+            "name": "Credential 002"
           },
           "identifier": "org3-cred-proficiency-certificate-001",
           "awardIssueDate": "2024-12-15T10:00:00Z",
@@ -79,7 +82,8 @@
           "instanceOfRefCredential": {
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Org3",
-            "identifier": ""
+            "identifier": "",
+            "name": "Credential 003"
           },
           "informationSourceId": "Org3",
           "informationSourceOrganization": "Org3",
@@ -92,7 +96,8 @@
           "instanceOfRefCredential": {
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Org3",
-            "identifier": ""
+            "identifier": "",
+            "name": "Credential 004"
           },
           "informationSourceId": "Org3",
           "informationSourceOrganization": "Org3",
@@ -105,7 +110,8 @@
           "instanceOfRefCredential": {
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Org3",
-            "identifier": ""
+            "identifier": "",
+            "name": "Credential 005"
           },
           "informationSourceId": "Org3",
           "informationSourceOrganization": "Org3",
@@ -118,7 +124,8 @@
           "instanceOfRefCredential": {
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Org3",
-            "identifier": ""
+            "identifier": "",
+            "name": "Credential 006"
           },
           "informationSourceId": "Org3",
           "informationSourceOrganization": "Org3",
@@ -131,7 +138,8 @@
           "instanceOfRefCredential": {
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Org3",
-            "identifier": ""
+            "identifier": "",
+            "name": "Credential 007"
           },
           "informationSourceId": "Org3",
           "informationSourceOrganization": "Org3",
@@ -144,7 +152,8 @@
           "instanceOfRefCredential": {
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Org3",
-            "identifier": ""
+            "identifier": "",
+            "name": "Credential 008"
           },
           "informationSourceId": "Org3",
           "informationSourceOrganization": "Org3",
@@ -164,7 +173,10 @@
           },
           "refCourse": {
             "informationSourceId": "Org3",
-            "identifier": [
+            "informationSourceOrganization": "Org3",
+            "identifier": "CS651",
+            "name": "Computer Science 651",
+            "Identifier": [
               {
                 "identifier": "CS651",
                 "identifierType": "Course Code",
@@ -187,6 +199,7 @@
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Org3",
             "identifier": "31b9edc0-93cb-42a0-8668-bf6e4bc00796",
+            "name": "Credential 101",
             "awardIssueDate": "2023-03-10T17:10:37Z",
             "credentialAwardee": "Alan  Tsatrian"
           }
@@ -201,7 +214,10 @@
           },
           "refCourse": {
             "informationSourceId": "Org3",
-            "identifier": [
+            "informationSourceOrganization": "Org3",
+            "identifier": "CS651",
+            "name": "Computer Science 651",
+            "Identifier": [
               {
                 "identifier": "CS651",
                 "identifierType": "Course Code",
@@ -224,6 +240,7 @@
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Org3",
             "identifier": "931b66f4-a70e-4bb7-84df-3d200ed1976a",
+            "name": "Credential 102",
             "awardIssueDate": "2024-04-09",
             "credentialAwardee": "Alan  Tsatrian"
           }
@@ -238,7 +255,10 @@
           },
           "refCourse": {
             "informationSourceId": "Org3",
-            "identifier": [
+            "informationSourceOrganization": "Org3",
+            "identifier": "CS651",
+            "name": "Computer Science 651",
+            "Identifier": [
               {
                 "identifier": "CS651",
                 "identifierType": "Course Code",
@@ -261,6 +281,7 @@
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Org3",
             "identifier": "ad1adb0a-22c5-4643-bd70-1fbe7ef615a6",
+            "name": "Credential 103",
             "awardIssueDate": "2024-08-31T09:51:03Z",
             "credentialAwardee": "Alan  Tsatrian"
           }
@@ -275,7 +296,10 @@
           },
           "refCourse": {
             "informationSourceId": "Org3",
-            "identifier": [
+            "informationSourceOrganization": "Org3",
+            "identifier": "CS651",
+            "name": "Computer Science 651",
+            "Identifier": [
               {
                 "identifier": "CS651",
                 "identifierType": "Course Code",
@@ -298,6 +322,7 @@
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Org3",
             "identifier": "388bde0e-9e53-44e8-9887-cd9508b34d1e",
+            "name": "Credential 104",
             "awardIssueDate": "2020-09-07",
             "credentialAwardee": "Alan  Tsatrian"
           }
@@ -312,7 +337,10 @@
           },
           "refCourse": {
             "informationSourceId": "Org3",
-            "identifier": [
+            "informationSourceOrganization": "Org3",
+            "identifier": "CS651",
+            "name": "Computer Science 651",
+            "Identifier": [
               {
                 "identifier": "CS651",
                 "identifierType": "Course Code",
@@ -335,6 +363,7 @@
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Org3",
             "identifier": "11403294-d6ba-42e0-bbdd-5864080c7d3e",
+            "name": "Credential 105",
             "awardIssueDate": "2024-12-14T23:57:48Z",
             "credentialAwardee": "Alan  Tsatrian"
           }
@@ -349,7 +378,10 @@
           },
           "refCourse": {
             "informationSourceId": "Org3",
-            "identifier": [
+            "informationSourceOrganization": "Org3",
+            "identifier": "CS651",
+            "name": "Computer Science 651",
+            "Identifier": [
               {
                 "identifier": "CS651",
                 "identifierType": "Course Code",
@@ -372,6 +404,7 @@
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Org3",
             "identifier": "a02134d5-b3bd-423d-9856-a1702ad18183",
+            "name": "Credential 106",
             "awardIssueDate": "2024-12-18T10:24:11Z",
             "credentialAwardee": "Alan  Tsatrian"
           }

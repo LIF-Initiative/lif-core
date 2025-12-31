@@ -14,10 +14,11 @@
           "name": "Research Skills",
           "description": "Research is a skill that involves gathering and analyzing information to answer questions or solve problems. It involves identifying reliable sources of information, evaluating the credibility of those sources, and synthesizing the information to draw meaningful conclusions. Research skills are essential in many fields, including academia, business, and journalism. Effective research requires critical thinking, attention to detail, and the ability to discern biases and limitations in information sources.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -25,10 +26,11 @@
           "name": "Adaptability",
           "description": "Adaptability is a common skill that involves the ability to change and adjust to new situations, tasks, and environments. It is the capacity to be flexible and open-minded in response to changes in work routines, expectations, and demands. Adaptability is valued in the workplace because it allows individuals to quickly and efficiently adapt to new circumstances, problems, and challenges. This skill can be developed and improved over time, and it can be a valuable asset for personal and professional growth.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -36,10 +38,11 @@
           "name": "Data Analysis",
           "description": "Data analysis involves using various techniques and methods to process, transform, and summarize data in order to extract meaningful insights and information that can inform decision-making. It involves the application of statistical and computational tools to large datasets, and requires a specialized set of skills and knowledge, including expertise in programming languages, data visualization, and machine learning. Effective data analysis can help businesses, governments, and other organizations better understand their operations, customers, and markets, and make informed decisions based on the insights gained from their data.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -47,10 +50,11 @@
           "name": "Chemistry",
           "description": "Chemistry is a specialized skill that involves the study of matter, its properties, and the changes that it undergoes. It is a branch of science that explores the composition, structure, and properties of elements and compounds, as well as the reactions that take place between them. Chemists use this knowledge to develop new compounds, analyze substances, and design processes that can be used for industrial applications. It is an important field that has applications in many industries, including pharmaceuticals, materials science, and energy production.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -58,10 +62,11 @@
           "name": "Teaching",
           "description": "Teaching is a common skill that involves the transfer of knowledge, skills, and values from one person to another. It involves designing and delivering effective learning experiences that engage students and promote understanding. Effective teaching requires the ability to communicate clearly, listen actively, adapt to different learning styles, and provide constructive feedback. It is an important skill that is required across a wide range of professions and industries.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -69,10 +74,11 @@
           "name": "Elementary Mathematics",
           "description": "Elementary Mathematics is a fundamental skill that involves learning basic concepts and operations related to numbers, such as addition, subtraction, multiplication, and division, as well as mathematical concepts such as geometry, fractions, decimals, and measurement. It lays the foundation for more complex mathematical concepts that students will encounter later in their academic and professional careers. Mastery of elementary mathematics is critical for success in many fields, such as science, engineering, economics, and finance.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -80,10 +86,11 @@
           "name": "Biology",
           "description": "Biology is a specialized skill focused on the study of living organisms, including their structure, function, growth, evolution, distribution, and taxonomy. It involves a deep understanding of the natural world and the processes that drive life. This scientific discipline is critical to many fields, including medicine, agriculture, genetics, and ecology, and it is continually advancing our knowledge of the world around us. Those who study biology must possess a combination of critical thinking, analytical skills, and creativity to excel in their work.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -91,10 +98,11 @@
           "name": "Biological Systems",
           "description": "Biological systems is the study of living organisms and their interactions with each other and their environment. It involves the study of the structure, function, behavior, and evolution of organisms, as well as the processes that enable them to survive and reproduce. It is a specialized skill that requires an understanding of biology, ecology, and related fields, as well as the ability to analyze complex data and conduct experiments to better understand biological systems. Those with a background in biological systems can pursue careers in fields such as ecology, molecular biology, genetics, and biomedical research.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -102,10 +110,11 @@
           "name": "Educational Technologies",
           "description": "Educational technologies refer to the specialized skills and knowledge required to use technology in education. It involves the understanding of various digital tools, learning theories, and instructional design principles to optimize learning outcomes. The use of technology in education can enhance teaching and learning experiences, improving engagement and accessibility for learners. Educational technologies are constantly evolving, and professionals working in this field must stay up-to-date with new advancements and best practices.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -113,10 +122,11 @@
           "name": "Community Health",
           "description": "Community health refers to the study, maintenance, and improvement of the health status of a defined community. It is a specialized skill that involves promoting healthy behaviors and lifestyles, preventing and controlling diseases and injuries, and addressing the social and economic determinants of health. Community health practitioners work in a variety of settings, including clinics, hospitals, public health departments, and non-profit organizations, and collaborate with a wide range of stakeholders to achieve their goals. Effective community health practice requires a deep understanding of the unique challenges and needs of the community being served, as well as strong communication, problem-solving, and leadership skills.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -124,10 +134,11 @@
           "name": "Debating",
           "description": "Debating is a specialized skill that involves presenting arguments and counterarguments on a particular topic or issue. It requires critical thinking, effective communication, and the ability to think on one's feet. Debaters must be knowledgeable on their topic, be able to construct persuasive arguments, and engage in respectful and professional discourse with their opponents. With practice, anyone can develop their debating skills and become a more effective communicator and advocate for their ideas.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -135,10 +146,11 @@
           "name": "Computer Literacy",
           "description": "Computer literacy refers to the ability to use computers and related technology effectively for a wide range of purposes. It is a common skill in today's society, where most work and communication is done using technology. Individuals who are computer literate are able to perform various tasks such as computer programming, software applications, data management, and Internet browsing. This skill is highly valued in the job market, especially in fields such as computer science, technology, and business.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -146,10 +158,11 @@
           "name": "Conflict Resolution",
           "description": "Conflict Resolution is a specialized skill that involves finding solutions to disputes and disagreements between individuals or groups. It involves active listening, empathy, and effective communication to understand the needs and concerns of each party involved in the conflict. A successful conflict resolution requires a neutral and objective approach to finding a mutually beneficial solution that satisfies all parties involved.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -157,10 +170,11 @@
           "name": "Course Evaluations",
           "description": "Course evaluations involve assessing the effectiveness of a course by gathering feedback from students. Evaluators must have a specialized set of skills, including an ability to design effective evaluation instruments, analyze data, and provide constructive feedback to instructors. Effective course evaluations can help educators improve their teaching methods and ensure that students receive the best possible education.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -168,10 +182,11 @@
           "name": "Critical Thinking",
           "description": "Critical thinking is a skill that allows individuals to analyze and evaluate information to make sound judgements and decisions. It involves the ability to question assumptions, identify biases, and examine evidence to reach logical conclusions. It is a common skill that is essential in various areas of life, including education, career, and personal relationships.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -179,10 +194,11 @@
           "name": "Data Presentation",
           "description": "Data presentation is the process of organizing, visualizing, and communicating data in a way that is clear, accurate, and meaningful. It is a specialized skill that involves the use of various tools and techniques such as charts, graphs, infographics, and storytelling to present data in a way that can be easily understood and interpreted by the target audience. Effective data presentation is essential for decision-making, problem-solving, and communication in various fields including business, academia, and research.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -190,30 +206,33 @@
           "name": "Digital Storytelling",
           "description": "Digital Storytelling is a specialized skill that involves using digital tools to create a compelling narrative or story. It requires a combination of technical skills and creativity to bring together images, audio, and video in a way that engages the audience and communicates a message effectively. Digital storytelling is a powerful way to share experiences, educate others, and create meaningful connections between people, and is commonly used in marketing, education, advocacy, and other fields.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
           "informationSourceId": "Org1",
           "name": "Ethical Codes",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
           "informationSourceId": "Org1",
           "name": "General Administrative Support",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -221,10 +240,11 @@
           "name": "Health Education",
           "description": "Health education is a specialized skill that involves providing individuals or communities with the knowledge and skills necessary to make informed decisions about their health. Health educators must have an understanding of various health topics, as well as effective communication and teaching strategies. They may work in various settings, such as schools, hospitals, community centers, and government agencies, to promote healthy behaviors and prevent illness.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -232,10 +252,11 @@
           "name": "Interpersonal Communications",
           "description": "Interpersonal communication is the process of exchanging information, feelings, and meaning through verbal and nonverbal interactions. It is an essential skill that involves the ability to listen actively, speak clearly, and empathize with others. Effective interpersonal communication promotes strong relationships, enhances understanding, and fosters mutual respect between individuals. It is a common skill that is used in personal, social, and professional contexts.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -243,10 +264,11 @@
           "name": "Problem Solving",
           "description": "Problem solving is the process of identifying, analyzing and resolving problems that can arise in any situation. It is a common skill that is required in many different industries and situations, and involves identifying the root cause of a problem, generating possible solutions, evaluating those solutions and implementing the best one. Successful problem solving involves critical thinking, creativity and communication skills. Learning how to effectively solve problems can help individuals and organizations to more efficiently achieve their goals and objectives.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -254,20 +276,22 @@
           "name": "Planning of Lessons",
           "description": "Lesson planning is the process of developing a detailed outline of what will be covered in a lesson or series of lessons, including learning objectives, instructional materials, teaching strategies, assessment methods, and student objectives. It is a specialized skill that requires knowledge of the subject matter, understanding of the learners' needs and abilities, and expertise in teaching strategies and assessment tools. Effective lesson planning helps ensure that students receive a high-quality education and reach their learning goals.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
           "informationSourceId": "Org1",
           "name": "Knowledge of Mathematics",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -275,10 +299,11 @@
           "name": "Mathematics Education",
           "description": "Mathematics education is a specialized skill that involves teaching and learning strategies to help students understand and apply mathematical concepts. Teachers who specialize in mathematics education must have a deep understanding of mathematical concepts, curriculum standards, and best practices for teaching, assessment, and evaluation. They must also be able to adapt their teaching style to meet the diverse learning needs of their students and use technology to enhance their instruction. Effective mathematics education can help students develop critical thinking skills, problem-solving abilities, and mathematical proficiency that will serve them well throughout their academic and professional careers.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -286,10 +311,11 @@
           "name": "Nursing",
           "description": "Nursing is a specialized skill that involves the care and treatment of patients who are ill, injured, or recovering from surgery. It encompasses a broad range of tasks that vary depending on the patient's needs, from administering medication to providing emotional support. Nurses are highly trained professionals who work closely with physicians and other healthcare providers to ensure that patients receive the best possible care. They are essential members of the healthcare team and play a critical role in the overall health and well-being of patients.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -297,10 +323,11 @@
           "name": "Professional Communication",
           "description": "Professional communication is the effective and appropriate exchange of information and ideas within a professional setting. It encompasses verbal, written, and nonverbal communication skills aimed at achieving specific goals, such as building relationships, addressing conflicts, or achieving business objectives. Effective professional communication involves clear, concise messaging, active listening, empathetic response building, and the appropriate levels of confidence, respect, and assertiveness. It is a critical skill for success in most career paths.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -308,10 +335,11 @@
           "name": "Elearning",
           "description": "Text Kernel Skill",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -319,10 +347,11 @@
           "name": "Assisting Teachers",
           "description": "Assisting Teachers is the skill of providing support and aid to educators in educational settings. This skill involves helping teachers with tasks such as classroom management, lesson preparation, student engagement, and administrative duties. Assisting teachers contributes to effective teaching and a positive learning environment, allowing educators to focus on delivering quality education and fostering students' growth and development.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -330,10 +359,11 @@
           "name": "Risk Analysis",
           "description": "Risk Analysis involves identifying, assessing, and evaluating potential risks, threats, and hazards that could impact an organization, project, or individual. It is a specialized skill that requires expertise in risk management, data analysis, and decision-making. Risk analysts use a range of tools and techniques to identify and assess risks, such as risk registers, risk matrices, and scenario planning. The goal of risk analysis is to minimize or mitigate the likelihood and impact of potential risks, and to develop strategies to respond to them if they occur.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -341,10 +371,11 @@
           "name": "Scientific Reasoning",
           "description": "Scientific reasoning is a specific skill that requires a certain set of abilities and practices to critically analyze and solve problems using scientific methods. It involves logical thinking, experimentation, observation, data analysis, and communication of findings. Developing and refining scientific reasoning skills is essential for success in scientific fields and applications.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -352,10 +383,11 @@
           "name": "Strategic Thinking",
           "description": "Strategic thinking is the ability to analyze complex problems, synthesize information, and develop creative and practical solutions. It involves considering multiple perspectives, anticipating potential outcomes, and making informed decisions that align with long-term goals. This skill is important in many fields, including business, government, and non-profit organizations. Effective strategic thinkers are able to adapt to changing circumstances and take calculated risks to achieve success.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -363,10 +395,11 @@
           "name": "Student Engagement",
           "description": "Student engagement is the ability to captivate and involve the students in the learning process. It involves a specialized set of skills and strategies that educators use to create a positive learning environment, foster student enthusiasm, and promote a sense of belonging among students. Student engagement is crucial for a successful and effective classroom experience, and it requires ongoing effort and attention from educators.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -374,10 +407,11 @@
           "name": "Systems Thinking",
           "description": "Systems thinking is a way of making sense of the complexity of the world by looking at it in terms of wholes and relationships rather than by splitting it down into its parts. It has been used as a way of exploring and developing effective action in complex contexts. Systems thinking draws on and contributes to systems theory and the system sciences.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -385,20 +419,22 @@
           "name": "Teacher Education",
           "description": "Teacher Education is a specific field that involves specialized training and education focused on preparing individuals to become effective and successful educators. It involves studying and understanding a variety of teaching techniques, learning theories, classroom management strategies, and educational tools that can be used to help students learn and excel in their academic pursuits. This field is essential for anyone who wants to become a teacher or advance their career in education.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
           "informationSourceId": "Org1",
           "name": "Passionate",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -406,10 +442,11 @@
           "name": "Administrative Operations",
           "description": "Text Kernel Skill",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -417,10 +454,11 @@
           "name": "Private Tutoring",
           "description": "Text Kernel Skill",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -428,10 +466,11 @@
           "name": "Classroom Management",
           "description": "Classroom management is a specialized skill that refers to the strategies and techniques used by teachers to create a safe and productive learning environment for their students. It involves establishing clear rules and expectations, creating engaging lessons that keep students on task, and managing behavior in a positive way. Effective classroom management promotes student engagement, improves academic performance, and fosters a sense of community and respect among students. It requires a combination of effective communication skills, empathy, and a strong understanding of student development and behavior.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -439,10 +478,11 @@
           "name": "Preventive Health Screening",
           "description": "Text Kernel Skill",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -450,30 +490,33 @@
           "name": "Thought Leadership",
           "description": "Thought Leadership is the ability to lead, inspire and influence others by providing innovative and insightful ideas and perspectives in a particular field or industry. It requires a combination of expertise, strategic thinking, and effective communication skills to establish oneself as a thought leader in a specific niche. Thought leaders often publish articles, speak at conferences, engage with their audience on social media, and demonstrate their expertise in other ways to establish credibility and influence.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
           "informationSourceId": "Org1",
           "name": "Written Communication",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
           "informationSourceId": "Org1",
           "name": "Teaching Others",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -481,10 +524,11 @@
           "name": "Online Communication",
           "description": "Online communication requires a specialized set of skills such as clear and concise writing, active listening, the ability to interpret nonverbal cues, and effective use of technology. It also involves understanding cultural differences and adapting communication style accordingly. Developing these skills can lead to more successful and efficient communication in virtual settings.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -492,10 +536,11 @@
           "name": "Communications",
           "description": "Communication is a vital skill that involves exchanging information through speaking, writing or non-verbal means. It is crucial for building relationships, conveying ideas, clarifying misunderstandings, and achieving goals. Effective communication requires active listening, clear and concise expression, empathy, and persuasion skills. It is applicable in all aspects of life, including personal relationships, social interactions, and professional settings.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -503,20 +548,22 @@
           "name": "Cultural Sensitivity",
           "description": "Cultural sensitivity, also sometimes referred to as cross-cultural sensitivity or simply cultural awareness, is the knowledge, awareness, and acceptance of other cultures and others' cultural identities. It is related to cultural competence, and sometimes regarded as the precursor to the achievement of cultural competence, but is a more widely used term than cultural competence. On the individual level, cultural sensitivity enables travelers and workers to successfully navigate a different culture with which they are interacting.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
           "informationSourceId": "Org1",
           "name": "Cross-Cultural Fluency",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -524,20 +571,22 @@
           "name": "Influencing Skills",
           "description": "Influencing skills refer to the ability to persuade or convince others to support an idea, decision or action. This involves understanding the perspectives and needs of others, communicating effectively, building trust and rapport, and using various techniques such as negotiation and persuasion to achieve the desired outcome. Influencing skills are commonly required in various personal and professional settings, such as leadership, sales, marketing, and teamwork.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
           "informationSourceId": "Org1",
           "name": "Goal Oriented",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -545,10 +594,11 @@
           "name": "Research",
           "description": "Research is a skill that involves gathering and analyzing information to answer questions or solve problems. It involves identifying reliable sources of information, evaluating the credibility of those sources, and synthesizing the information to draw meaningful conclusions. Research skills are essential in many fields, including academia, business, and journalism. Effective research requires critical thinking, attention to detail, and the ability to discern biases and limitations in information sources.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -556,30 +606,33 @@
           "name": "Detail Oriented",
           "description": "Detail Oriented is a skill that involves a strong focus on precision and thoroughness when performing tasks or handling information. This skill is used to spot errors, maintain accuracy, and ensure quality in work. Detail-oriented individuals excel in tasks such as proofreading documents, conducting thorough research, performing quality control checks, and meticulously reviewing data to prevent mistakes and produce high-quality results.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
           "informationSourceId": "Org1",
           "name": "Mathematics",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
           "informationSourceId": "Org1",
           "name": "Academic Tenacity",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -587,10 +640,11 @@
           "name": "Relationship Building",
           "description": "Relationship building is the practice of building strong connections and trust with others, which is a common skill among successful individuals in all industries. It involves open communication, active listening, empathy, and understanding the needs and goals of others. Building relationships can help to establish a solid network, increase opportunities, foster collaboration, and improve overall well-being.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -598,10 +652,11 @@
           "name": "Teamwork",
           "description": "Teamwork is the ability to work effectively and harmoniously with others towards a common goal. It involves being cooperative, communicative, and collaborative, as well as being able to contribute to and participate in group decision-making processes. Teamwork is a valued skill in many workplaces and is essential for successful project completion and overall business success.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -609,10 +664,11 @@
           "name": "Lesson Planning",
           "description": "Lesson planning is the process of developing a detailed outline of what will be covered in a lesson or series of lessons, including learning objectives, instructional materials, teaching strategies, assessment methods, and student objectives. It is a specialized skill that requires knowledge of the subject matter, understanding of the learners' needs and abilities, and expertise in teaching strategies and assessment tools. Effective lesson planning helps ensure that students receive a high-quality education and reach their learning goals.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -620,10 +676,11 @@
           "name": "Persuasive Communication",
           "description": "Persuasive communication refers to the ability to convince others to take a certain course of action or persuade them to believe in a particular idea or viewpoint. This skill is commonly used in various settings such as politics, advertising, sales, and public speaking. Effective persuasive communication involves understanding the audience, identifying their needs and values, presenting compelling arguments, using persuasive techniques such as storytelling and emotional appeals, and addressing potential objections. It is a valuable skill to have in personal and professional life as it can lead to successful negotiations, increased influence, and improved relationships.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -631,10 +688,11 @@
           "name": "Professionalism",
           "description": "Professionalism is a skill that is essential in any career or job role. It involves demonstrating a high level of quality, competence, and integrity in one's work and interactions with others. Professionalism includes things like punctuality, good communication, a positive attitude, and respect for others. It is important for building trust, credibility, and a strong reputation in the workplace.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -642,10 +700,11 @@
           "name": "Advocacy",
           "description": "Advocacy is a common skill in which an individual or group takes action on behalf of themselves or others to create change, raise awareness, or promote a cause. Effective advocacy requires the ability to clearly articulate one's position, build coalitions, influence decision-makers, and engage in strategic communication. It can be applied in various settings, from personal relationships to professional contexts, and is crucial for promoting social justice, human rights, and equality.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -653,10 +712,11 @@
           "name": "Academic Advising",
           "description": "Academic advising is a specialized skill that involves guiding students through their educational journeys, helping them make informed decisions about courses, majors, and career paths. An academic advisor must possess strong communication, problem-solving, and interpersonal skills, as well as a deep knowledge of the educational programs, policies, and requirements of the institution. Effective academic advising can contribute significantly to student achievement and success.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -664,10 +724,11 @@
           "name": "Analytical Techniques",
           "description": "Analytical techniques involve the use of specialized skills and methods to analyze data and information. These techniques enable individuals to identify patterns, trends, and relationships in data, as well as to draw insights and make informed decisions. Such skills require a deep understanding of statistics, data modeling, and visualization techniques, as well as the ability to apply critical thinking and logic to complex problems. Effective use of analytical techniques can help businesses and organizations to improve their operations, identify new opportunities, and make informed decisions based on data-driven insights.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -675,10 +736,11 @@
           "name": "Cardiopulmonary Resuscitation (CPR)",
           "description": "CPR is a specialized skill that involves performing chest compressions and rescue breaths to help restore blood circulation and breathing in a person who is experiencing cardiac arrest. It requires proper training and certification to perform effectively and should only be done by trained professionals or individuals who have been properly trained in CPR.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -686,10 +748,11 @@
           "name": "First Aid",
           "description": "First Aid is the immediate care given to an injured or sick person before professional medical help arrives. It involves assessing the situation and providing basic medical treatment to stabilize the person's condition and prevent further harm. Basic first aid includes steps such as CPR, controlling bleeding, treating burns, and immobilizing fractures. The goal is to preserve life, prevent deterioration, and promote recovery until medical professionals can take over.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -697,10 +760,11 @@
           "name": "Applied Ethics",
           "description": "Applied ethics is a specialized skill that involves the application of ethical principles to real-world scenarios and situations. It involves understanding and analyzing ethical dilemmas and decision-making processes in areas such as healthcare, business, law, and public policy, in order to make reasoned and justifiable ethical choices. This skill involves knowledge of various ethical theories, principles, and frameworks, as well as critical thinking and communication abilities. An applied ethicist must be able to consider the diverse perspectives and values of different stakeholders, and to navigate complex ethical issues in a professional and unbiased manner.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -708,20 +772,22 @@
           "name": "Civic Engagement",
           "description": "Civic engagement is a specialized skill that involves actively participating in community or social issues to promote positive change. It requires individuals to have strong communication, leadership, and collaboration skills to effectively work with others and reach common goals. By engaging in civic activities, individuals can become more informed about community and political issues and make a meaningful impact on society.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
           "informationSourceId": "Org1",
           "name": "Communication and Interaction",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -729,10 +795,11 @@
           "name": "Digital Literacy",
           "description": "Digital literacy is a key skill in today's technology-driven world. It refers to the ability to find, evaluate, use, and communicate information using digital technology. Digital literacy includes skills such as using computers, smartphones, and other devices, navigating websites and apps, using social media, and understanding online security and privacy. It is essential for personal and professional success and is a common skill needed in the workforce.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -740,20 +807,22 @@
           "name": "Empirical Analysis",
           "description": "Empirical analysis is the process of gathering and analyzing data to draw inferences or conclusions. It requires specialized skills, including knowledge of statistical methods, research design, and data collection techniques. Empirical analysis is used in various fields, including economics, psychology, sociology, and political science. The goal of empirical analysis is to produce reliable and valid findings that can inform policy decisions or advance academic knowledge.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
           "informationSourceId": "Org1",
           "name": "Formal Analysis",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -761,20 +830,22 @@
           "name": "Instruction Delivery",
           "description": "Instruction delivery is a specialized skill that involves effectively communicating information and knowledge to others in a clear and concise manner. This skill involves a deep understanding of the subject matter, the target audience, and the best methods to convey the information. Effective instruction delivery can improve learning outcomes and increase engagement among students, employees, or other individuals receiving instruction.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
           "informationSourceId": "Org1",
           "name": "Novel And Adaptive Thinking",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -782,10 +853,11 @@
           "name": "Sensemaking",
           "description": "Sensemaking is a cognitive process in which people attempt to make sense of complex, ambiguous, or uncertain situations by creating their own mental models of the situation. It is a specialized skill that involves identifying patterns, generating hypotheses, collecting and analyzing data, and creating meaning from that data. Sensemaking is particularly important in fields such as law enforcement, intelligence gathering, and business strategy, where decision-makers need to understand complex information and make decisions based on that information.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -793,10 +865,11 @@
           "name": "Behavioral Science",
           "description": "Behavioral science is a specialized skill that involves the study of human behavior, cognition, and emotions. It draws on disciplines such as psychology, sociology, anthropology, and economics to understand the complex interactions between individuals and their environment. Behavioral scientists apply their expertise to a variety of fields, including healthcare, education, business, and government, to influence behavior change, improve decision-making, and optimize outcomes. To become a successful behavioral scientist, one must possess strong analytical skills, critical thinking, excellent communication skills, and a deep understanding of human behavior.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -804,20 +877,22 @@
           "name": "Instructing",
           "description": "Instructing is a specialized skill that requires a combination of knowledge, communication, and interpersonal skills. The ability to convey information clearly and effectively, adapt to the needs of different learners, and provide constructive feedback are all essential to successful teaching. Instructors also need to be knowledgeable about their subject matter, proficient in the use of teaching techniques and technology, and aware of the latest trends and developments in their field. Effective instruction requires continuous learning, self-reflection, and a commitment to ongoing professional development.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
           "informationSourceId": "Org1",
           "name": "Technology Ethics",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -825,10 +900,11 @@
           "name": "Physical Science",
           "description": "Physical Science is a field of science that deals with the study of matter and energy, including their interactions and transformations. It includes disciplines such as physics, chemistry, and astronomy. Physical scientists use specialized instruments and methods to observe and measure physical phenomena, and use mathematical models to explain and predict behavior. They study everything from the behavior of subatomic particles to the dynamics of the universe as a whole, and their work has practical applications in fields such as engineering, medicine, and technology development.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -836,20 +912,22 @@
           "name": "Needs Assessment",
           "description": "Needs assessment is the process of identifying gaps or discrepancies between desired outcomes and current realities. It involves gathering information to determine the most effective way to meet the needs of a particular group or organization. This skill is important because it enables individuals and organizations to make informed decisions about how to allocate resources and prioritize activities to achieve their goals. Some common tools and techniques used in needs assessment include surveys, focus groups, interviews, and observation.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
           "informationSourceId": "Org1",
           "name": "Technological Literacy",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -857,10 +935,11 @@
           "name": "Writing",
           "description": "Writing is a skill that involves putting thoughts and ideas into words through the use of language. It is an essential communication tool used to convey messages, express thoughts and emotions, and share information. Writing can be done in various forms, such as essays, reports, stories, and letters. It is a skill that can be developed through practice, patience, and dedication. Effective writing requires clarity, coherence, and proper grammar and punctuation, among other things.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -868,10 +947,11 @@
           "name": "Learning Strategies",
           "description": "Learning strategies are techniques and approaches that individuals use to enhance their learning and retention of new information. It involves prioritizing and organizing materials, actively engaging with the content, monitoring progress, and reflecting on what is learned. It is a specialized skill that can be developed and refined over time. Effective use of learning strategies can lead to improved academic performance and lifelong learning.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -879,10 +959,11 @@
           "name": "Organizational Strategy",
           "description": "Organizational strategy is the process of defining an organization's overall purpose and direction, and aligning resources and actions to achieve that purpose. It involves identifying an organization's strengths, weaknesses, opportunities, and threats, and developing a plan to capitalize on strengths and overcome weaknesses. Organizational strategy requires specialized skills such as critical thinking, problem-solving, communication, and leadership. It is a key component of successful business management and ensures long-term viability and success for an organization.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         }
       ],
@@ -934,7 +1015,7 @@
           "uri": "https://api.badgr.io/public/assertions/_ALUdGrKRdWfBES1XgIr4g",
           "image": [
             {
-              "id": "https://api.badgr.io/public/assertions/_ALUdGrKRdWfBES1XgIr4g/image",
+              "identifier": "https://api.badgr.io/public/assertions/_ALUdGrKRdWfBES1XgIr4g/image",
               "informationSourceId": "Org1"
             }
           ],
@@ -951,27 +1032,33 @@
           "verificationType": "HostedBadge",
           "instanceOfRefCredential": {
             "informationSourceId": "Org1",
-            "id": "3d740646-6368-4c88-ba15-3230897dd5da"
+            "informationSourceOrganization": "Org1",
+            "identifier": "3d740646-6368-4c88-ba15-3230897dd5da",
+            "name": "Credential 300"
           },
-          "id": "3cf36bee-9533-43dc-85bf-5f82fe531828",
+          "identifier": "3cf36bee-9533-43dc-85bf-5f82fe531828",
           "credentialAwardee": "Sarah Marin"
         },
         {
           "informationSourceId": "Org1",
+          "informationSourceOrganization": "Org1",
           "instanceOfRefCredential": {
             "informationSourceId": "Org1",
-            "id": "https://api.badgr.io/public/badges/jTvfWDxrQPmJ7o0aR1FL1w"
+            "informationSourceOrganization": "Org1",
+            "identifier": "https://api.badgr.io/public/badges/jTvfWDxrQPmJ7o0aR1FL1w",
+            "name": "Badge 333"
           },
-          "id": "9b25bb2c-22f2-4d44-b207-fae56b715375",
+          "identifier": "9b25bb2c-22f2-4d44-b207-fae56b715375",
           "awardIssueDate": "2022-10-12T15:26:56Z",
           "credentialAwardee": "Sarah Marin"
         },
         {
           "informationSourceId": "Org1",
+          "informationSourceOrganization": "Org1",
           "uri": "https://api.badgr.io/public/assertions/mu9eco_mSb-RKnpLhhpbvA",
           "image": [
             {
-              "id": "https://api.badgr.io/public/assertions/mu9eco_mSb-RKnpLhhpbvA/image",
+              "identifier": "https://api.badgr.io/public/assertions/mu9eco_mSb-RKnpLhhpbvA/image",
               "informationSourceId": "Org1"
             }
           ],
@@ -988,108 +1075,127 @@
           "verificationType": "HostedBadge",
           "instanceOfRefCredential": {
             "informationSourceId": "Org1",
-            "id": "82dee133-5947-4258-8af5-38c3e65a5af3"
+            "informationSourceOrganization": "Org1",
+            "identifier": "82dee133-5947-4258-8af5-38c3e65a5af3",
+            "name": "Credential 301"
           },
-          "id": "2a7290cd-8450-4108-8dc5-dc6a3c15288a",
+          "identifier": "2a7290cd-8450-4108-8dc5-dc6a3c15288a",
           "credentialAwardee": "Sarah Marin"
         },
         {
           "instanceOfRefCredential": {
             "informationSourceId": "Org1",
-            "id": "https://api.badgr.io/public/badges/6KseIB0VTcaLHE0lx6V72w"
+            "informationSourceOrganization": "Org1",
+            "identifier": "https://api.badgr.io/public/badges/6KseIB0VTcaLHE0lx6V72w",
+            "name": "Badge 344"
           },
-          "id": "5e47c804-8d90-4ac8-bf1e-ed204f1d4983",
+          "identifier": "5e47c804-8d90-4ac8-bf1e-ed204f1d4983",
           "awardIssueDate": "2022-05-30T01:38:45Z",
           "credentialAwardee": "Sarah Marin",
           "informationSourceId": "Org1"
         },
         {
-          "id": "cred-proficiency-certificate-001",
+          "identifier": "cred-proficiency-certificate-001",
           "awardIssueDate": "2024-12-15T10:00:00Z",
           "credentialAwardee": "Sarah Marin",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "Org1"
         },
         {
           "informationSourceId": "Org1",
-          "id": "91015e0d-4efe-4b38-a39e-95bccafffcdf",
+          "informationSourceOrganization": "Org1",
+          "identifier": "91015e0d-4efe-4b38-a39e-95bccafffcdf",
           "awardIssueDate": "2022-09-02T20:56:58Z",
           "credentialAwardee": "Sarah Marin"
         },
         {
           "informationSourceId": "Org1",
-          "id": "ea486070-f6df-4c47-9404-14637789acc8",
+          "informationSourceOrganization": "Org1",
+          "identifier": "ea486070-f6df-4c47-9404-14637789acc8",
           "awardIssueDate": "2024-11-09",
           "credentialAwardee": "Sarah Marin"
         },
         {
           "informationSourceId": "Org1",
-          "id": "2a63bd3b-1133-46a8-949a-bffdd1762122",
+          "informationSourceOrganization": "Org1",
+          "identifier": "2a63bd3b-1133-46a8-949a-bffdd1762122",
           "awardIssueDate": "2021-05-31",
           "credentialAwardee": "Sarah Marin"
         },
         {
           "informationSourceId": "Org1",
-          "id": "090d2aaf-aee6-4817-a568-40ed629025ec",
+          "informationSourceOrganization": "Org1",
+          "identifier": "090d2aaf-aee6-4817-a568-40ed629025ec",
           "awardIssueDate": "2023-03-01T22:14:42Z",
           "credentialAwardee": "Sarah Marin"
         },
         {
           "informationSourceId": "Org1",
-          "id": "54845c97-5e9c-45ba-b4b3-b3c20fec890c",
+          "informationSourceOrganization": "Org1",
+          "identifier": "54845c97-5e9c-45ba-b4b3-b3c20fec890c",
           "awardIssueDate": "2024-02-22T13:35:48Z",
           "credentialAwardee": "Sarah Marin"
         },
         {
           "informationSourceId": "Org1",
-          "id": "66bee4f9-b1ef-49f3-a63c-182ce2cacee2",
+          "informationSourceOrganization": "Org1",
+          "identifier": "66bee4f9-b1ef-49f3-a63c-182ce2cacee2",
           "awardIssueDate": "2023-08-05T16:02:12Z",
           "credentialAwardee": "Sarah Marin"
         },
         {
           "informationSourceId": "Org1",
-          "id": "bdc242b7-fece-470e-bc0e-c074552f129b",
+          "informationSourceOrganization": "Org1",
+          "identifier": "bdc242b7-fece-470e-bc0e-c074552f129b",
           "awardIssueDate": "2020-01-12T12:30:33Z",
           "credentialAwardee": "Sarah Marin"
         },
         {
           "informationSourceId": "Org1",
-          "id": "0a51bd6c-5091-4dd0-9cf2-77485d919efc",
+          "informationSourceOrganization": "Org1",
+          "identifier": "0a51bd6c-5091-4dd0-9cf2-77485d919efc",
           "awardIssueDate": "2023-08-26T09:56:14Z",
           "credentialAwardee": "Sarah Marin"
         },
         {
           "informationSourceId": "Org1",
-          "id": "c92152b5-e39e-4c83-a804-de5a63a48659",
+          "informationSourceOrganization": "Org1",
+          "identifier": "c92152b5-e39e-4c83-a804-de5a63a48659",
           "awardIssueDate": "2020-07-27T10:14:13Z",
           "credentialAwardee": "Sarah Marin"
         },
         {
           "informationSourceId": "Org1",
-          "id": "7aca9639-4924-45df-9ad3-fc9360997d56",
+          "informationSourceOrganization": "Org1",
+          "identifier": "7aca9639-4924-45df-9ad3-fc9360997d56",
           "awardIssueDate": "2024-08-25",
           "credentialAwardee": "Sarah Marin"
         },
         {
           "informationSourceId": "Org1",
-          "id": "746c68fd-3656-433a-8040-4e1d598d7d53",
+          "informationSourceOrganization": "Org1",
+          "identifier": "746c68fd-3656-433a-8040-4e1d598d7d53",
           "awardIssueDate": "2023-05-25T12:42:26Z",
           "credentialAwardee": "Sarah Marin"
         },
         {
           "informationSourceId": "Org1",
-          "id": "0327a5c1-168d-4ce5-81d5-46d7e307427d",
+          "informationSourceOrganization": "Org1",
+          "identifier": "0327a5c1-168d-4ce5-81d5-46d7e307427d",
           "awardIssueDate": "2022-08-08",
           "credentialAwardee": "Sarah Marin"
         },
         {
           "informationSourceId": "Org1",
-          "id": "83f7a63a-8d18-4a8c-832d-15c78da59045",
+          "informationSourceOrganization": "Org1",
+          "identifier": "83f7a63a-8d18-4a8c-832d-15c78da59045",
           "awardIssueDate": "2021-06-22T12:28:58Z",
           "credentialAwardee": "Sarah Marin"
         },
         {
           "informationSourceId": "Org1",
-          "id": "e734989d-e254-4167-b126-8e89e7449405",
+          "informationSourceOrganization": "Org1",
+          "identifier": "e734989d-e254-4167-b126-8e89e7449405",
           "awardIssueDate": "2022-04-22T16:17:24Z",
           "credentialAwardee": "Sarah Marin"
         }
@@ -1158,7 +1264,10 @@
           ],
           "refCourse": {
             "informationSourceId": "Org1",
-            "identifier": [
+            "informationSourceOrganization": "Org1",
+            "identifier": "CS651",
+            "name": "Computer Science 651",
+            "Identifier": [
               {
                 "identifier": "CS651",
                 "identifierType": "Course Code",
@@ -1179,7 +1288,8 @@
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
-            "id": "91015e0d-4efe-4b38-a39e-95bccafffcdf",
+            "informationSourceOrganization": "Org1",
+            "identifier": "91015e0d-4efe-4b38-a39e-95bccafffcdf",
             "awardIssueDate": "2022-09-02T20:56:58Z",
             "credentialAwardee": "Sarah Marin"
           }
@@ -1247,7 +1357,10 @@
           ],
           "refCourse": {
             "informationSourceId": "Org1",
-            "identifier": [
+            "informationSourceOrganization": "Org1",
+            "identifier": "CS651",
+            "name": "Computer Science 651",
+            "Identifier": [
               {
                 "identifier": "CS651",
                 "identifierType": "Course Code",
@@ -1268,7 +1381,8 @@
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
-            "id": "ea486070-f6df-4c47-9404-14637789acc8",
+            "informationSourceOrganization": "Org1",
+            "identifier": "ea486070-f6df-4c47-9404-14637789acc8",
             "awardIssueDate": "2024-11-09",
             "credentialAwardee": "Sarah Marin"
           }
@@ -1278,6 +1392,7 @@
           "assertedByRefOrganization": [
             {
               "informationSourceId": "Org1",
+              "informationSourceOrganization": "Org1",
               "name": "State University",
               "description": "State University (StateU) is an accredited online university offering online bachelor's and master's degree programs. The programs are competency-based, student-focused, online, nonprofit university.",
               "contact": [
@@ -1336,7 +1451,10 @@
           ],
           "refCourse": {
             "informationSourceId": "Org1",
-            "identifier": [
+            "informationSourceOrganization": "Org1",
+            "identifier": "CS651",
+            "name": "Computer Science 651",
+            "Identifier": [
               {
                 "identifier": "CS651",
                 "identifierType": "Course Code",
@@ -1357,7 +1475,8 @@
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
-            "id": "2a63bd3b-1133-46a8-949a-bffdd1762122",
+            "informationSourceOrganization": "Org1",
+            "identifier": "2a63bd3b-1133-46a8-949a-bffdd1762122",
             "awardIssueDate": "2021-05-31",
             "credentialAwardee": "Sarah Marin"
           }
@@ -1425,7 +1544,10 @@
           ],
           "refCourse": {
             "informationSourceId": "Org1",
-            "identifier": [
+            "informationSourceOrganization": "Org1",
+            "identifier": "CS651",
+            "name": "Computer Science 651",
+            "Identifier": [
               {
                 "identifier": "CS651",
                 "identifierType": "Course Code",
@@ -1446,7 +1568,8 @@
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
-            "id": "090d2aaf-aee6-4817-a568-40ed629025ec",
+            "informationSourceOrganization": "Org1",
+            "identifier": "090d2aaf-aee6-4817-a568-40ed629025ec",
             "awardIssueDate": "2023-03-01T22:14:42Z",
             "credentialAwardee": "Sarah Marin"
           }
@@ -1514,7 +1637,10 @@
           ],
           "refCourse": {
             "informationSourceId": "Org1",
-            "identifier": [
+            "informationSourceOrganization": "Org1",
+            "identifier": "CS651",
+            "name": "Computer Science 651",
+            "Identifier": [
               {
                 "identifier": "CS651",
                 "identifierType": "Course Code",
@@ -1535,7 +1661,8 @@
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
-            "id": "54845c97-5e9c-45ba-b4b3-b3c20fec890c",
+            "informationSourceOrganization": "Org1",
+            "identifier": "54845c97-5e9c-45ba-b4b3-b3c20fec890c",
             "awardIssueDate": "2024-02-22T13:35:48Z",
             "credentialAwardee": "Sarah Marin"
           }
@@ -1603,7 +1730,10 @@
           ],
           "refCourse": {
             "informationSourceId": "Org1",
-            "identifier": [
+            "informationSourceOrganization": "Org1",
+            "identifier": "CS651",
+            "name": "Computer Science 651",
+            "Identifier": [
               {
                 "identifier": "CS651",
                 "identifierType": "Course Code",
@@ -1624,7 +1754,8 @@
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
-            "id": "66bee4f9-b1ef-49f3-a63c-182ce2cacee2",
+            "informationSourceOrganization": "Org1",
+            "identifier": "66bee4f9-b1ef-49f3-a63c-182ce2cacee2",
             "awardIssueDate": "2023-08-05T16:02:12Z",
             "credentialAwardee": "Sarah Marin"
           }
@@ -1692,7 +1823,10 @@
           ],
           "refCourse": {
             "informationSourceId": "Org1",
-            "identifier": [
+            "informationSourceOrganization": "Org1",
+            "identifier": "CS651",
+            "name": "Computer Science 651",
+            "Identifier": [
               {
                 "identifier": "CS651",
                 "identifierType": "Course Code",
@@ -1713,7 +1847,8 @@
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
-            "id": "bdc242b7-fece-470e-bc0e-c074552f129b",
+            "informationSourceOrganization": "Org1",
+            "identifier": "bdc242b7-fece-470e-bc0e-c074552f129b",
             "awardIssueDate": "2020-01-12T12:30:33Z",
             "credentialAwardee": "Sarah Marin"
           }
@@ -1730,7 +1865,8 @@
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
-            "id": "0a51bd6c-5091-4dd0-9cf2-77485d919efc",
+            "informationSourceOrganization": "Org1",
+            "identifier": "0a51bd6c-5091-4dd0-9cf2-77485d919efc",
             "awardIssueDate": "2023-08-26T09:56:14Z",
             "credentialAwardee": "Sarah Marin"
           }
@@ -1747,7 +1883,8 @@
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
-            "id": "c92152b5-e39e-4c83-a804-de5a63a48659",
+            "informationSourceOrganization": "Org1",
+            "identifier": "c92152b5-e39e-4c83-a804-de5a63a48659",
             "awardIssueDate": "2020-07-27T10:14:13Z",
             "credentialAwardee": "Sarah Marin"
           }
@@ -1764,7 +1901,8 @@
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
-            "id": "7aca9639-4924-45df-9ad3-fc9360997d56",
+            "informationSourceOrganization": "Org1",
+            "identifier": "7aca9639-4924-45df-9ad3-fc9360997d56",
             "awardIssueDate": "2024-08-25",
             "credentialAwardee": "Sarah Marin"
           }
@@ -1781,7 +1919,8 @@
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
-            "id": "746c68fd-3656-433a-8040-4e1d598d7d53",
+            "informationSourceOrganization": "Org1",
+            "identifier": "746c68fd-3656-433a-8040-4e1d598d7d53",
             "awardIssueDate": "2023-05-25T12:42:26Z",
             "credentialAwardee": "Sarah Marin"
           }
@@ -1798,7 +1937,8 @@
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
-            "id": "0327a5c1-168d-4ce5-81d5-46d7e307427d",
+            "informationSourceOrganization": "Org1",
+            "identifier": "0327a5c1-168d-4ce5-81d5-46d7e307427d",
             "awardIssueDate": "2022-08-08",
             "credentialAwardee": "Sarah Marin"
           }
@@ -1815,7 +1955,8 @@
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
-            "id": "83f7a63a-8d18-4a8c-832d-15c78da59045",
+            "informationSourceOrganization": "Org1",
+            "identifier": "83f7a63a-8d18-4a8c-832d-15c78da59045",
             "awardIssueDate": "2021-06-22T12:28:58Z",
             "credentialAwardee": "Sarah Marin"
           }
@@ -1832,7 +1973,8 @@
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
-            "id": "e734989d-e254-4167-b126-8e89e7449405",
+            "informationSourceOrganization": "Org1",
+            "identifier": "e734989d-e254-4167-b126-8e89e7449405",
             "awardIssueDate": "2022-04-22T16:17:24Z",
             "credentialAwardee": "Sarah Marin"
           }
@@ -1931,7 +2073,7 @@
       "format": [
         "https://w3id.org/openbadges/v2"
       ],
-      "id": "3d740646-6368-4c88-ba15-3230897dd5da",
+      "identifier": "3d740646-6368-4c88-ba15-3230897dd5da",
       "accreditation": [
         {
           "informationSourceId": "Org1",
@@ -1944,11 +2086,11 @@
     },
     {
       "informationSourceId": "Org1",
-      "id": "https://api.badgr.io/public/badges/jTvfWDxrQPmJ7o0aR1FL1w",
+      "identifier": "https://api.badgr.io/public/badges/jTvfWDxrQPmJ7o0aR1FL1w",
       "name": "StateU Certificate: Transformative Technology for Inclusive P-12 Classrooms",
       "image": [
         {
-          "id": "https://api.badgr.io/public/badges/jTvfWDxrQPmJ7o0aR1FL1w/image",
+          "identifier": "https://api.badgr.io/public/badges/jTvfWDxrQPmJ7o0aR1FL1w/image",
           "informationSourceId": "Org1"
         }
       ],
@@ -2292,7 +2434,7 @@
       "format": [
         "https://w3id.org/openbadges/v2"
       ],
-      "id": "82dee133-5947-4258-8af5-38c3e65a5af3",
+      "identifier": "82dee133-5947-4258-8af5-38c3e65a5af3",
       "accreditation": [
         {
           "informationSourceId": "Org1",
@@ -2305,11 +2447,11 @@
     },
     {
       "informationSourceId": "Org1",
-      "id": "https://api.badgr.io/public/badges/6KseIB0VTcaLHE0lx6V72w",
+      "identifier": "https://api.badgr.io/public/badges/6KseIB0VTcaLHE0lx6V72w",
       "name": "StateU Certificate: Innovative Technology for Inclusive P-12 Classrooms",
       "image": [
         {
-          "id": "https://api.badgr.io/public/badges/6KseIB0VTcaLHE0lx6V72w/image",
+          "identifier": "https://api.badgr.io/public/badges/6KseIB0VTcaLHE0lx6V72w/image",
           "informationSourceId": "Org1"
         }
       ],
@@ -2618,19 +2760,19 @@
     },
     {
       "informationSourceId": "Org1",
-      "id": "3d740646-6368-4c88-ba15-3230897dd5da"
+      "identifier": "3d740646-6368-4c88-ba15-3230897dd5da"
     },
     {
       "informationSourceId": "Org1",
-      "id": "https://api.badgr.io/public/badges/jTvfWDxrQPmJ7o0aR1FL1w"
+      "identifier": "https://api.badgr.io/public/badges/jTvfWDxrQPmJ7o0aR1FL1w"
     },
     {
       "informationSourceId": "Org1",
-      "id": "82dee133-5947-4258-8af5-38c3e65a5af3"
+      "identifier": "82dee133-5947-4258-8af5-38c3e65a5af3"
     },
     {
       "informationSourceId": "Org1",
-      "id": "https://api.badgr.io/public/badges/6KseIB0VTcaLHE0lx6V72w"
+      "identifier": "https://api.badgr.io/public/badges/6KseIB0VTcaLHE0lx6V72w"
     }
   ],
   "informationSourceId": "Org1"

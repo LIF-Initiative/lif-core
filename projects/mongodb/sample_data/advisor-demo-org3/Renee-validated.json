@@ -53,6 +53,7 @@
       "courseLearningExperience": [
         {
           "informationSourceId": "Org3",
+          "informationSourceOrganization": "Org3",
           "assertedByRefOrganization": {
             "informationSourceId": "Org3",
             "name": "Summit Valley University",
@@ -61,7 +62,10 @@
           },
           "refCourse": {
             "informationSourceId": "Org3",
-            "identifier": [
+            "informationSourceOrganization": "Org3",
+            "identifier": "CS651",
+            "name": "Computer Science 651",
+            "Identifier": [
               {
                 "identifier": "CS651",
                 "identifierType": "Course Code",
@@ -84,6 +88,7 @@
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Org3",
             "identifier": "34024cb4-4a2d-4ed6-ba42-50c65cd688b4",
+            "name": "Credential 401",
             "awardIssueDate": "2021-11-15T20:13:56Z",
             "credentialAwardee": "Renee Green"
           }
@@ -96,7 +101,9 @@
           "awardStatus": "InProgress",
           "instanceOfRefCredential": {
             "informationSourceId": "Org3",
-            "identifier": "dbd3c22f-1fd2-4829-b39d-be88d2052ca1"
+            "informationSourceOrganization": "Org3",
+            "identifier": "dbd3c22f-1fd2-4829-b39d-be88d2052ca1",
+            "name": "Credential 400"
           },
           "identifier": "230826f6-7b40-4c79-9589-fb290deea1a3",
           "awardIssueDate": "2022-07-31T13:14:17Z",
@@ -106,20 +113,26 @@
           "awardStatus": "Completed",
           "instanceOfRefCredential": {
             "informationSourceId": "Org3",
-            "identifier": ""
+            "informationSourceOrganization": "Org3",
+            "identifier": "",
+            "name": "Credential 401"
           },
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Org3",
           "identifier": "cred-proficiency-certificate-001",
           "awardIssueDate": "2024-12-15T10:00:00Z",
-          "credentialAwardee": "Renee Green",
-          "informationSourceId": "Org3"
+          "credentialAwardee": "Renee Green"
         },
         {
           "awardStatus": "Completed",
           "instanceOfRefCredential": {
             "informationSourceId": "Org3",
-            "identifier": ""
+            "informationSourceOrganization": "Org3",
+            "identifier": "",
+            "name": "Credential 402"
           },
           "informationSourceId": "Org3",
+          "informationSourceOrganization": "Org3",
           "identifier": "34024cb4-4a2d-4ed6-ba42-50c65cd688b4",
           "awardIssueDate": "2021-11-15T20:13:56Z",
           "credentialAwardee": "Renee Green"

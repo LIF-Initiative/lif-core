@@ -59,7 +59,10 @@
           },
           "refCourse": {
             "informationSourceId": "Org3",
-            "identifier": [
+            "informationSourceOrganization": "Org3",
+            "identifier": "CS651",
+            "name": "Computer Science 651",
+            "Identifier": [
               {
                 "identifier": "CS651",
                 "identifierType": "Course Code",
@@ -82,6 +85,7 @@
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Org3",
             "identifier": "32acbc32-9cc5-468b-ab31-aaa01a90aa3e",
+            "name": "Credential 201",
             "awardIssueDate": "2020-07-13",
             "credentialAwardee": "Jenna Diaz"
           }
@@ -96,7 +100,10 @@
           },
           "refCourse": {
             "informationSourceId": "Org3",
-            "identifier": [
+            "informationSourceOrganization": "Org3",
+            "identifier": "CS651",
+            "name": "Computer Science 651",
+            "Identifier": [
               {
                 "identifier": "CS651",
                 "identifierType": "Course Code",
@@ -119,6 +126,7 @@
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Org3",
             "identifier": "68aabc07-81aa-47b7-9c3d-0378d15784d1",
+            "name": "Credential 202",
             "awardIssueDate": "2021-02-25T08:49:53Z",
             "credentialAwardee": "Jenna Diaz"
           }
@@ -133,7 +141,10 @@
           },
           "refCourse": {
             "informationSourceId": "Org3",
-            "identifier": [
+            "informationSourceOrganization": "Org3",
+            "identifier": "CS651",
+            "name": "Computer Science 651",
+            "Identifier": [
               {
                 "identifier": "CS651",
                 "identifierType": "Course Code",
@@ -156,6 +167,7 @@
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Org3",
             "identifier": "be88469a-5e0e-4b09-9975-c921bbb4533a",
+            "name": "Credential 203",
             "awardIssueDate": "2023-04-27",
             "credentialAwardee": "Jenna Diaz"
           }
@@ -170,7 +182,10 @@
           },
           "refCourse": {
             "informationSourceId": "Org3",
-            "identifier": [
+            "informationSourceOrganization": "Org3",
+            "identifier": "CS651",
+            "name": "Computer Science 651",
+            "Identifier": [
               {
                 "identifier": "CS651",
                 "identifierType": "Course Code",
@@ -193,6 +208,7 @@
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Org3",
             "identifier": "5c824455-52ca-4491-9dca-0379028dd03a",
+            "name": "Credential 204",
             "awardIssueDate": "2022-10-07T15:11:21Z",
             "credentialAwardee": "Jenna Diaz"
           }
@@ -207,7 +223,10 @@
           },
           "refCourse": {
             "informationSourceId": "Org3",
-            "identifier": [
+            "informationSourceOrganization": "Org3",
+            "identifier": "CS651",
+            "name": "Computer Science 651",
+            "Identifier": [
               {
                 "identifier": "CS651",
                 "identifierType": "Course Code",
@@ -230,6 +249,7 @@
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Org3",
             "identifier": "d53c9325-fcb7-4ac7-9b33-0d372c44c58d",
+            "name": "Credential 205",
             "awardIssueDate": "2021-07-29",
             "credentialAwardee": "Jenna Diaz"
           }
@@ -242,7 +262,9 @@
           "awardStatus": "Completed",
           "instanceOfRefCredential": {
             "informationSourceId": "Org3",
-            "identifier": "84d6de55-974c-47e5-92bf-889addac75ae"
+            "informationSourceOrganization": "Org3",
+            "identifier": "84d6de55-974c-47e5-92bf-889addac75ae",
+            "name": "Credential 001"
           },
           "identifier": "fb8e3666-654d-4544-b353-1285242f9a4a",
           "awardIssueDate": "2023-08-22",
@@ -252,7 +274,9 @@
           "awardStatus": "Completed",
           "instanceOfRefCredential": {
             "informationSourceId": "Org3",
-            "identifier": ""
+            "informationSourceOrganization": "Org3",
+            "identifier": "",
+            "name": "Credential 002"
           },
           "identifier": "cred-proficiency-certificate-001",
           "awardIssueDate": "2024-12-15T10:00:00Z",
@@ -264,7 +288,9 @@
           "awardStatus": "Completed",
           "instanceOfRefCredential": {
             "informationSourceId": "Org3",
-            "identifier": ""
+            "informationSourceOrganization": "Org3",
+            "identifier": "",
+            "name": "Credential 002"
           },
           "informationSourceId": "Org3",
           "informationSourceOrganization": "Org3",
@@ -276,7 +302,9 @@
           "awardStatus": "Completed",
           "instanceOfRefCredential": {
             "informationSourceId": "Org3",
-            "identifier": ""
+            "informationSourceOrganization": "Org3",
+            "identifier": "",
+            "name": "Credential 003"
           },
           "informationSourceId": "Org3",
           "informationSourceOrganization": "Org3",
@@ -288,7 +316,9 @@
           "awardStatus": "Completed",
           "instanceOfRefCredential": {
             "informationSourceId": "Org3",
-            "identifier": ""
+            "informationSourceOrganization": "Org3",
+            "identifier": "",
+            "name": "Credential 004"
           },
           "informationSourceId": "Org3",
           "informationSourceOrganization": "Org3",
@@ -300,7 +330,9 @@
           "awardStatus": "Completed",
           "instanceOfRefCredential": {
             "informationSourceId": "Org3",
-            "identifier": ""
+            "informationSourceOrganization": "Org3",
+            "identifier": "",
+            "name": "Credential 005"
           },
           "informationSourceId": "Org3",
           "informationSourceOrganization": "Org3",
@@ -312,7 +344,9 @@
           "awardStatus": "Completed",
           "instanceOfRefCredential": {
             "informationSourceId": "Org3",
-            "identifier": ""
+            "informationSourceOrganization": "Org3",
+            "identifier": "",
+            "name": "Credential 005"
           },
           "informationSourceId": "Org3",
           "informationSourceOrganization": "Org3",

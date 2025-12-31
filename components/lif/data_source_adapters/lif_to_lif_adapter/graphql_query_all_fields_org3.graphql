@@ -21,7 +21,9 @@ query GetPersonByIdentifier($identifier: String!, $identifierType: String!) {
       awardStatus
       instanceOfRefCredential {
         informationSourceId
+        informationSourceOrganization
         identifier
+        name
       }
       identifier
       #awardIssueDate
@@ -37,12 +39,9 @@ query GetPersonByIdentifier($identifier: String!, $identifierType: String!) {
       #}
       refCourse {
         informationSourceId
-        #identifier {
-        #  identifier
-        #  identifierType
-        #  identifierVerification
-        #  informationSourceId
-        #}
+        informationSourceOrganization
+        identifier
+        name
       }
       #offeredByRefOrganization {
       #  identificationSystem
@@ -52,7 +51,9 @@ query GetPersonByIdentifier($identifier: String!, $identifierType: String!) {
       #}
       refCredentialAward {
         informationSourceId
+        informationSourceOrganization
         identifier
+        name
         #awardIssueDate
         #credentialAwardee
       }
@@ -66,6 +67,7 @@ query GetPersonByIdentifier($identifier: String!, $identifierType: String!) {
         #awardIssueDate
         #credentialAwardee
         informationSourceId
+        informationSourceOrganization
       }
     }
   }
