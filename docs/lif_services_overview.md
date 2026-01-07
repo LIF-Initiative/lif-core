@@ -246,7 +246,7 @@ Provides a facade to external orchestration products (Dagster, Apache Airflow), 
 
 **Example Query Flow:**
 
-1. A user queries the **GraphQL API** for a learner's complete record
+1. A user queries **GraphQL API** for a learner's complete record
 2. **GraphQL API** forwards the query to **Query Planner API**
 3. **Query Planner API** checks the **Query Cache API** for existing data
 4. If data is missing or stale, **Query Planner API** consults **Identity Mapper API** for all known identities
