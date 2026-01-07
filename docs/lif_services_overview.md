@@ -13,7 +13,7 @@ Each service addresses a specific responsibility in the learner data ecosystem. 
 
 These services handle the fundamental data operations: querying, transformation, identity resolution, and metadata management.
 
-### 🔍 LIF GraphQL API
+### 🔍 LIF GraphQL API (LIF API)
 
 **WHEN YOU NEED TO...**  
 Provide a standardized query interface for accessing learner data across multiple source systems using a flexible, modern API.
