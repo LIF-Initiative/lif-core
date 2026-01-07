@@ -3,7 +3,7 @@
 
 ## Understanding LIF as Building Blocks
 
-LIF (Learner Information Framework) provides infrastructure components for building custom learner data workflows—not a one-size-fits-all product. Think of these microservices as building blocks that can be composed to create tailored solutions for aggregating, transforming, and accessing learner information across multiple systems and institutions.
+LIF (Learner Information Framework) provides infrastructure components for building custom learner data workflows - not a one-size-fits-all product. Think of these micro-services as building blocks that can be composed to create tailored solutions for aggregating, transforming, and accessing learner information across multiple systems and institutions.
 
 Each service addresses a specific responsibility in the learner data ecosystem. Organizations typically use a subset of these services based on their specific integration and analytics needs.
 
