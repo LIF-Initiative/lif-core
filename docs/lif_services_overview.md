@@ -133,7 +133,7 @@ Provides AI-powered advisory capabilities over learner data, enabling natural la
 - Personalized learning path recommendations based on prior learning
 - Intervention suggestion engines for at-risk students
 
-**WORKS WITH:** GraphQL API, Query Cache API, Advisor UI  
+**WORKS WITH:** GraphQL API, Semantic Search MCP Server, Advisor UI  
 **TYPICAL USERS:** Student affairs, advising offices, EdTech product teams
 
 ---
