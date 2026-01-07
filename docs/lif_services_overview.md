@@ -173,7 +173,7 @@ Provides semantic search capabilities over learner data that can be accessed by 
 - Building context-aware AI applications that understand learner records
 - Creating custom AI tools that need semantic access to educational data
 
-**WORKS WITH:** GraphQL API  
+**WORKS WITH:** GraphQL API, MDR API
 **TYPICAL USERS:** AI/ML developers, application developers integrating AI capabilities
 
 ---
