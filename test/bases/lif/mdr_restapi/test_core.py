@@ -257,3 +257,112 @@ async def test_create_source_schema_datamodel_with_upload_success(async_client):
             ],
         )
         assert not diff, f"Retrieved schema does not match original: {diff}"
+
+
+### TODO: Test without the upload
+
+
+@pytest.mark.asyncio
+async def test_update_source_schema_datamodel_with_upload_success(async_client):
+    # Create data model with OpenAPI schema upload
+
+    schema_path = Path(__file__).parent / "data_model_example_datasource_full_openapi_schema.json"
+    create_response = await async_client.post(
+        "/datamodels/open_api_schema/upload",
+        headers=HEADER_MDR_API_KEY_GRAPHQL,
+        files={"file": ("filename.json", open(schema_path, "rb"), "application/json")},
+        data={
+            "data_model_version": "1.0",
+            "state": "Draft",
+            "activation_date": "2025-12-02T21:01:00Z",
+            "data_model_name": "Test Update Source Schema Data Model with Upload",
+            "data_model_type": "SourceSchema",
+        },
+    )
+
+    # Confirm creation response
+
+    assert create_response.status_code == 201, str(create_response.text) + str(create_response.headers)
+    # Location header is not populated for this endpoint, so extract ID from response body
+    data_model_id = create_response.json()["Id"]
+    assert data_model_id is not None
+    assert isinstance(data_model_id, int)
+
+    # Update data model with OpenAPI schema upload
+
+    # TODO: test the update without upload as well
+    # TODO: modify some metadata fields in addition to upload
+    # schema_path = Path(__file__).parent / "data_model_example_datasource_full_openapi_schema_updated.json"
+    # update_response = await async_client.put(
+    #     "/datamodels/open_api_schema/upload",
+    #     headers=HEADER_MDR_API_KEY_GRAPHQL,
+    #     files={"file": ("filename.json", open(schema_path, "rb"), "application/json")},
+    #     data={
+    #         "data_model_version": "1.0",
+    #         "state": "Draft",
+    #         "activation_date": "2025-12-02T21:01:00Z",
+    #         "data_model_name": "Test Update Source Schema Data Model with Upload",
+    #         "data_model_type": "SourceSchema",
+    #     },
+    # )
+
+    # assert create_response.json() == {
+    #     "ActivationDate": "2025-12-02T21:01:00Z",
+    #     "BaseDataModelId": None,
+    #     "Contributor": None,
+    #     "ContributorOrganization": None,
+    #     "CreationDate": None,
+    #     "DataModelVersion": "1.0",
+    #     "Deleted": False,
+    #     "DeprecationDate": None,
+    #     "Description": None,
+    #     "Id": data_model_id,
+    #     "Name": "Test Update Source Schema Data Model with Upload",
+    #     "Notes": None,
+    #     "State": "Draft",
+    #     "Tags": None,
+    #     "Type": "SourceSchema",
+    #     "UseConsiderations": None,
+    # }
+
+    # # Download full OpenAPI schema with metadata to verify upload
+
+    # retrieve_response = await async_client.get(
+    #     f"/datamodels/open_api_schema/{data_model_id}?download=true&include_entity_md=true&include_attr_md=true&full_export=true",
+    #     headers=HEADER_MDR_API_KEY_GRAPHQL,
+    # )
+    # assert retrieve_response.status_code == 200, str(retrieve_response.text)
+
+    # retrieved_schema = retrieve_response.json()
+    # with open(schema_path, "r") as f:
+    #     original_schema = json.load(f)
+    #     original_schema["info"]["title"] = (
+    #         "Machine-Readable Schema for Test Update Source Schema Data Model with Upload"
+    #     )
+
+    #     diff = DeepDiff(
+    #         original_schema,
+    #         retrieved_schema,
+    #         ignore_order=True,
+    #         exclude_paths=[
+    #             "root['components']['schemas']['person']['Id']",
+    #             "root['components']['schemas']['person']['DataModelId']",
+    #             "root['components']['schemas']['person']['properties']['id']['Id']",
+    #             "root['components']['schemas']['person']['properties']['id']['DataModelId']",
+    #             "root['components']['schemas']['person']['properties']['id']['EntityAttributeAssociationId']",
+    #             "root['components']['schemas']['person']['properties']['id']['EntityId']",
+    #             "root['components']['schemas']['person']['properties']['employment']['DataModelId']",
+    #             "root['components']['schemas']['person']['properties']['employment']['Id']",
+    #             "root['components']['schemas']['person']['properties']['employment']['EntityAssociationId']",
+    #             "root['components']['schemas']['person']['properties']['employment']['EntityAssociationParentEntityId']",
+    #             "root['components']['schemas']['person']['properties']['employment']['properties']['preferences']['DataModelId']",
+    #             "root['components']['schemas']['person']['properties']['employment']['properties']['preferences']['Id']",
+    #             "root['components']['schemas']['person']['properties']['employment']['properties']['preferences']['EntityAssociationId']",
+    #             "root['components']['schemas']['person']['properties']['employment']['properties']['preferences']['EntityAssociationParentEntityId']",
+    #             "root['components']['schemas']['person']['properties']['employment']['properties']['preferences']['properties']['preferred_org_types']['Id']",
+    #             "root['components']['schemas']['person']['properties']['employment']['properties']['preferences']['properties']['preferred_org_types']['DataModelId']",
+    #             "root['components']['schemas']['person']['properties']['employment']['properties']['preferences']['properties']['preferred_org_types']['EntityAttributeAssociationId']",
+    #             "root['components']['schemas']['person']['properties']['employment']['properties']['preferences']['properties']['preferred_org_types']['EntityId']",
+    #         ],
+    #     )
+    #     assert not diff, f"Retrieved schema does not match original: {diff}"

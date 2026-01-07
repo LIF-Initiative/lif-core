@@ -1,23 +1,24 @@
 import { Box, Dialog } from "@radix-ui/themes";
-import React, { useEffect, useState, useCallback, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { DataModelCreateFields, DataModelEditFields } from "./CreateFields";
-import { SimpleTree, transformData } from "./SimpleTree";
+import { errorToString } from "../../utils/errorUtils";
 import { CrudDialog } from "../Dialog/Dialog";
 import ModelTree from "../ModelExplorer/ModelExplorer";
-import { errorToString } from "../../utils/errorUtils";
+import { DataModelCreateFields, DataModelEditFields } from "./CreateFields";
+import { SimpleTree, transformData } from "./SimpleTree";
 
 const FileDEBUG = false;
-const debugLog = (...args: any[]) => { if(FileDEBUG) console.log(...args); };
+const debugLog = (...args: any[]) => { if (FileDEBUG) console.log(...args); };
 const reportError = (...args: any[]) => { console.error(...args); };
 
 
 import {
-  listModels,
   // getModelDetails,
   createDataModel,
-  updateDataModel,
   createDataModelFromUpload,
+  listModels,
+  updateDataModel,
+  updateDataModelFromUpload,
 } from "../../services/modelService";
 
 interface ExplorePageLayoutProps {
@@ -103,8 +104,11 @@ const DataModelSelector: React.FC<ExplorePageLayoutProps> = ({
     debugLog("handleEditModel:", id, params);
     try {
       delete params.Type; // Type is not editable
-      delete params.File; // Update via file not supported yet
-      await updateDataModel(id, params);
+      if (params.File) {
+        await updateDataModelFromUpload(id, params);
+      } else {
+        await updateDataModel(id, params);
+      }
       await fetchModels();
     } catch (error) {
       reportError("Error updating model:", errorToString(error));
@@ -113,17 +117,17 @@ const DataModelSelector: React.FC<ExplorePageLayoutProps> = ({
   };
 
   const handleOnModelEdit = async (id: number, params: any) => {
-      const newEditDialog = {
-        isEditMode: true,
-        title: "Data Model",
-        itemToEdit: params,
-        fields: DataModelEditFields(params.Type),
-        onEdit: handleEditModel,
-      };
-      debugLog("handleOnModelEdit:", id, newEditDialog);
-      setCrudDialog(newEditDialog);
-      setIsCreateDialogOpen(true);
+    const newEditDialog = {
+      isEditMode: true,
+      title: "Data Model",
+      itemToEdit: params,
+      fields: DataModelEditFields(params.Type),
+      onEdit: handleEditModel,
     };
+    debugLog("handleOnModelEdit:", id, newEditDialog);
+    setCrudDialog(newEditDialog);
+    setIsCreateDialogOpen(true);
+  };
 
 
   // const handleDeleteModel = async (id: number) => {
@@ -155,7 +159,7 @@ const DataModelSelector: React.FC<ExplorePageLayoutProps> = ({
     }
   }, [models, dataModeltype, navigate, routPath]);
 
-  
+
   /** CRUD Dialog functionality */
   const [crudDialog, setCrudDialog] = useState<any>({
     title: '',
@@ -168,7 +172,7 @@ const DataModelSelector: React.FC<ExplorePageLayoutProps> = ({
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const handleDialogOpenChange = (open: boolean) => {
     setIsCreateDialogOpen(open);
-    if (!open) { 
+    if (!open) {
       setCrudDialog({
         title: '',
         fields: [],
@@ -176,7 +180,7 @@ const DataModelSelector: React.FC<ExplorePageLayoutProps> = ({
         isEditMode: false,
         itemToEdit: null,
         onEdit: undefined
-      }); 
+      });
     }
   };
   const handleOnAddNew = async () => {
@@ -199,10 +203,11 @@ const DataModelSelector: React.FC<ExplorePageLayoutProps> = ({
 
   return (
     <Box style={{ height: "100%", width: "100%", }}>
-      <Box style={{ height: "100%", width: "100%",
-          display: "grid", gap: "1em",
-          gridTemplateColumns: "repeat(3, minmax(400px, 1fr))",
-        }}
+      <Box style={{
+        height: "100%", width: "100%",
+        display: "grid", gap: "1em",
+        gridTemplateColumns: "repeat(3, minmax(400px, 1fr))",
+      }}
       >
         <Box className="col-layout column-list">
           <Dialog.Root>

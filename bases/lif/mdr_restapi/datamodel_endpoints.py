@@ -107,6 +107,64 @@ async def update_datamodel(datamodel_id: int, data: UpdateDataModelDTO, session:
     return datamodel
 
 
+@router.put("/{datamodel_id}/use_schema_upload", response_model=DataModelDTO)
+async def update_datamodel_with_upload(
+    datamodel_id: int,
+    file: UploadFile = File(
+        ..., description="OpenAPI schema JSON file previously downloaded via the GET open_api_schema endpoint"
+    ),
+    session: AsyncSession = Depends(get_session),
+    data_model_name: Optional[str] = Form(None, description="Name of the data model being updated"),
+    data_model_version: Optional[str] = Form(None, description="Version of the data model being updated"),
+    data_model_description: Optional[str] = Form(None, description="Description of the data model being updated"),
+    use_considerations: Optional[str] = Form(None),
+    notes: Optional[str] = Form(None),
+    activation_date: Optional[datetime] = Form(None, description="Activation date for the data model (ISO 8601)"),
+    deprecation_date: Optional[datetime] = Form(None, description="Deprecation date for the data model (ISO 8601)"),
+    contributor: Optional[str] = Form(None, description="Name of the contributor"),
+    contributor_organization: Optional[str] = Form(None, description="Name of the contributor organization"),
+    state: Optional[str] = Form("Draft", description="Initial state of the data model"),
+    tags: Optional[str] = Form(None, description="Comma-separated list of tags to associate with the data model"),
+):
+    metadata = UpdateDataModelDTO(
+        Name=data_model_name,
+        DataModelVersion=data_model_version,
+        Description=data_model_description,
+        UseConsiderations=use_considerations,
+        Notes=notes,
+        ActivationDate=activation_date,
+        DeprecationDate=deprecation_date,
+        Contributor=contributor,
+        ContributorOrganization=contributor_organization,
+        State=state,
+        Tags=tags,
+    )
+
+    """Upload an OpenAPI schema JSON exported from the system along with metadata to update a new data model."""
+    if file.content_type not in ("application/json", "text/json", None):
+        raise HTTPException(
+            status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE, detail="File must be JSON (application/json)"
+        )
+    try:
+        # Consider pulling out into a component function.
+        raw_bytes = await file.read()
+        if not raw_bytes:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Uploaded file is empty")
+        try:
+            schema_dict = json.loads(raw_bytes.decode("utf-8"))
+        except json.JSONDecodeError as e:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Invalid JSON: {e}") from e
+
+        datamodel = await datamodel_service.update_datamodel(session, datamodel_id, metadata, schema_dict)
+
+        return datamodel
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.exception("Unexpected error while uploading OpenAPI schema")
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+
+
 @router.delete("/{datamodel_id}", response_model=dict)
 async def delete_datamodel(datamodel_id: int, session: AsyncSession = Depends(get_session)):
     return await datamodel_service.soft_delete_data_model(session, datamodel_id)

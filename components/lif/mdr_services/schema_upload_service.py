@@ -1,14 +1,6 @@
 from datetime import datetime, timezone
-from typing import Optional, Dict
+from typing import Dict, Optional
 
-from lif.mdr_utils.logger_config import get_logger
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlmodel import select
-
-from lif.mdr_services.entity_service import get_unique_entity
-from lif.mdr_services.entity_attribute_association_service import check_existing_association
-from lif.mdr_services.entity_association_service import get_entity_association_by_parent_child_relationship
-from lif.mdr_services.inclusions_service import check_inclusion_exists
 from lif.datatypes.mdr_sql_model import (
     Attribute,
     DataModel,
@@ -20,6 +12,13 @@ from lif.datatypes.mdr_sql_model import (
     ValueSetValue,
 )
 from lif.mdr_dto.datamodel_dto import DataModelDTO
+from lif.mdr_services.entity_association_service import get_entity_association_by_parent_child_relationship
+from lif.mdr_services.entity_attribute_association_service import check_existing_association
+from lif.mdr_services.entity_service import get_unique_entity
+from lif.mdr_services.inclusions_service import check_inclusion_exists
+from lif.mdr_utils.logger_config import get_logger
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlmodel import select
 
 logger = get_logger(__name__)
 
@@ -600,3 +599,46 @@ async def create_data_model_from_openapi_schema(
     await session.commit()
     await session.refresh(new_data_model)
     return DataModelDTO.from_orm(new_data_model)
+
+
+async def update_data_model_from_openapi_schema(
+    session: AsyncSession, data_model: DataModel, openapi_schema: Dict
+) -> None:
+    # Process the OpenAPI schema to extract entities and attributes
+    components = openapi_schema.get("components", {})
+    schemas = components.get("schemas", {})
+    logger.info(f"Updating data model {data_model.Id} with schemas: {list(schemas.keys())} ")
+
+    for schema_name, schema in schemas.items():
+        # Entities first (anything that lacks a top-level 'ValueSetId'); attributes afterward.
+        if "$ref" in schema:
+            continue  # Skip $ref schemas for now. We need to make sure all entities are created to reference to first.
+        if "ValueSetId" not in schema:  # It's an entity
+            logger.info(f"Updating entity and children for schema: {schema_name}")
+            # await update_entity_and_children_if_needed(
+            #     session,
+            #     schema_name,
+            #     schema,
+            #     data_model.Id,
+            #     data_model.Contributor,
+            #     data_model.ContributorOrganization,
+            #     data_model.Type,
+            # )
+        else:  # It's an attribute (has top-level 'ValueSetId')
+            logger.info(f"Updating attribute for schema: {schema_name}")
+            # await create_attribute_if_needed(
+            #     session,
+            #     schema_name,
+            #     schema,
+            #     data_model.Id,
+            #     data_model.Type,
+            #     data_model.Contributor,
+            #     data_model.ContributorOrganization,
+            # )
+
+    ## After everything has been updated, process references
+    for schema_name, schema in schemas.items():
+        logger.info(f"Updating reference associations for schema: {schema_name}")
+        # await update_reference_associations_for_children(
+        #     session, schema, data_model.Id, openapi_schema, data_model.Type
+        # )

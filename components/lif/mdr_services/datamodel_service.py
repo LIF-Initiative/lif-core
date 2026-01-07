@@ -1,4 +1,5 @@
-from typing import List, Optional
+from typing import Any, List, Optional
+
 from fastapi import HTTPException
 from lif.datatypes.mdr_sql_model import (
     AccessType,
@@ -27,14 +28,14 @@ from lif.mdr_services.entity_service import (
     soft_delete_entity,
 )
 from lif.mdr_services.inclusions_service import soft_delete_data_model_ext_inclusions
+from lif.mdr_services.schema_upload_service import update_data_model_from_openapi_schema
 from lif.mdr_services.transformation_service import get_transformations_by_data_model_id
 from lif.mdr_services.value_set_values_service import get_list_of_values_for_value_set, soft_delete_value_set_value
 from lif.mdr_services.valueset_service import get_value_sets_by_data_model_id_and_attributes, soft_delete_value_set
 from lif.mdr_utils.logger_config import get_logger
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlmodel import select, func
 from sqlalchemy import or_
-
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlmodel import func, select
 
 logger = get_logger(__name__)
 
@@ -212,30 +213,39 @@ async def create_datamodel(session: AsyncSession, data: CreateDataModelDTO):
     return DataModelDTO.from_orm(datamodel)
 
 
-async def update_datamodel(session: AsyncSession, id: int, data: UpdateDataModelDTO):
+async def update_datamodel(session: AsyncSession, id: int, metadata: UpdateDataModelDTO, data: Optional[Any] = None):
     datamodel = await session.get(DataModel, id)
     if not datamodel:
-        raise HTTPException(status_code=404, detail="DataModel not found")
+        raise HTTPException(status_code=404, detail="Data Model not found")
     if datamodel.Deleted:
         raise HTTPException(status_code=404, detail=f"Data Model with ID {id} is deleted")
-    # if datamodel values for Name, Version, Type, ContributorOrganization, and Deleted are different than they are in data and the values in data already exist, then throw exception
+    # if Name, Version, or ContributorOrganization are different between the persistent
+    # data model and requested changes, throw an exception
     if (
-        datamodel.Name != data.Name
-        or datamodel.DataModelVersion != data.DataModelVersion
-        or datamodel.Type != data.Type
-        or datamodel.ContributorOrganization != data.ContributorOrganization
+        datamodel.Name != metadata.Name
+        or datamodel.DataModelVersion != metadata.DataModelVersion
+        or datamodel.ContributorOrganization != metadata.ContributorOrganization
     ) and await check_unique_data_model_exists(
-        session, data.Name, data.DataModelVersion, data.Type, data.ContributorOrganization
+        session, metadata.Name, metadata.DataModelVersion, metadata.Type, metadata.ContributorOrganization
     ) != None:
         raise HTTPException(
             status_code=400,
-            detail=f"DataModel with name '{data.Name}', version '{data.DataModelVersion}', type '{data.Type}', and contributor organization '{data.ContributorOrganization}' already exists",
+            detail=f"DataModel with name '{metadata.Name}', version '{metadata.DataModelVersion}', and contributor organization '{metadata.ContributorOrganization}' already exists",
         )
 
-    for key, value in data.dict(exclude_unset=True).items():
+    # Update the metadata of the data model
+
+    for key, value in metadata.dict(exclude_unset=True).items():
         setattr(datamodel, key, value)
 
     session.add(datamodel)
+    await session.flush()
+
+    logger.info(f"Updating Data Model ID {datamodel.Id}. New schema data: {str(data)}")
+    # Update the schema if provided
+    if data:
+        await update_data_model_from_openapi_schema(session, datamodel, data)
+
     await session.commit()
     await session.refresh(datamodel)
     return DataModelDTO.from_orm(datamodel)

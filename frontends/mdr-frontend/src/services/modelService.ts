@@ -1,15 +1,15 @@
-import api from "./api";
 import { faker } from '@faker-js/faker';
 import {
   ApiResponse,
-  DataModel,
   CountResponse,
+  DataModel,
   DataModelWithDetailsDTO,
-  EntityWithAttributesDTO,
-  EntityTreeNode,
   DataModelWithDetailsWithTree,
+  EntityTreeNode,
+  EntityWithAttributesDTO,
   StateType,
 } from "../types";
+import api from "./api";
 
 const apiBaseUrl = import.meta.env.VITE_API_URL;
 
@@ -791,6 +791,56 @@ export const updateDataModel = async (id: number, params: Partial<CreateDataMode
     return response.data;
   } catch (error) {
     console.error("Error updating data model:", error);
+    throw error;
+  }
+};
+
+
+export const updateDataModelFromUpload = async (id: number, params: CreateDataModelParams) => {
+  try {
+    const { File, ...rest } = params;
+    if (!File) {
+      throw new Error("File is required when uploading a data model schema.");
+    }
+
+    const formData = new FormData();
+    formData.append("file", File);
+
+    const restRecord = rest as Record<string, unknown>;
+    const appendIfPresent = (formKey: string, value: unknown) => {
+      if (value !== undefined && value !== null && value !== "") {
+        formData.append(formKey, String(value));
+      }
+    };
+
+    appendIfPresent(
+      "use_considerations",
+      restRecord.UseConsiderations ?? restRecord["Use Considerations"]
+    );
+    appendIfPresent("notes", restRecord.Notes);
+    appendIfPresent("activation_date", restRecord.ActivationDate);
+    appendIfPresent("deprecation_date", restRecord.DeprecationDate);
+    appendIfPresent("contributor", restRecord.Contributor);
+    appendIfPresent(
+      "contributor_organization",
+      restRecord.ContributorOrganization
+    );
+    appendIfPresent("data_model_name", restRecord.Name);
+    appendIfPresent("data_model_version", restRecord.DataModelVersion);
+    appendIfPresent("data_model_description", restRecord.Description);
+    appendIfPresent("state", restRecord.State);
+    appendIfPresent("tags", restRecord.Tags);
+
+    const response = await api.put(
+      `${apiBaseUrl}/datamodels/${id}/use_schema_upload`,
+      formData,
+      {
+        headers: { "Content-Type": "multipart/form-data" },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error updating data model from upload:", error);
     throw error;
   }
 };
