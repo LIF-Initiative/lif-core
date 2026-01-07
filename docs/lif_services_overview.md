@@ -36,7 +36,7 @@ Exposes learner data through a GraphQL interface, routing queries to the Query P
 ### 🔄 LIF Translator API
 
 **WHEN YOU NEED TO...**  
-Transform data from your institution's systems (SIS, LMS, HR systems) into a standardized learner data format for integration and analysis.
+Transform data from your institution's systems (SIS, LMS, HR systems, etc) into a standardized learner data format for integration and analysis.
 
 **THIS SERVICE...**  
 Converts data from various source formats into the LIF data model using configurable mappings, running within orchestrated data workflows.
