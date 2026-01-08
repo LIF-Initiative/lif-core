@@ -268,15 +268,15 @@ Provides a facade to external orchestration products (Dagster, Apache Airflow), 
 
 ## Composing Solutions
 
-Not every organization needs all services. Here are common deployment patterns:
+Not every organization needs all services. Here are some possible deployment patterns:
 
 **Simple Integration Pattern:**  
-GraphQL API + Query Planner + Query Cache + Translator + MDR (API & UI)
+GraphQL API + Query Planner + Query Cache + Orchestrator API + Translator + MDR (API & UI)
 
 - For organizations that want to standardize and query their learner data
 
 **Advanced Analytics Pattern:**  
-Add: Identity Mapper + Orchestrator API
+Add: Identity Mapper
 
 - For multi-institutional scenarios requiring identity resolution and complex workflows
 
