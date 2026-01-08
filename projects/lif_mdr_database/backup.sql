@@ -18503,6 +18503,13 @@ CREATE UNIQUE INDEX ux_transformationsgroup_model_id_version_active ON public."T
 
 
 --
+-- Name: ux_valuesets_name_datamodelid_active; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX ux_valuesets_name_datamodelid_active ON public."ValueSets" USING btree ("Name", "DataModelId") WHERE ("Deleted" IS NOT TRUE);
+
+
+--
 -- Name: ValueSetValueMapping FK_ValueSetValueMapping_SourceValueSet; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
