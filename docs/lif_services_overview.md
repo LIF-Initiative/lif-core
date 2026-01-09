@@ -11,7 +11,7 @@ Each service addresses a specific responsibility in the learner data ecosystem. 
 ```mermaid
 graph TB
     subgraph External["External Systems & Users"]
-        Users[🌐 Applications / 👤 Developers]
+        Users[🌐 Applications/<br>👤 Developers]
         Students[🎓 Students/Learners]
         Sources[🏢 Source Systems<br/>SIS, LMS, HR]
         Orchestrators[⚙️ Dagster/Airflow]
