@@ -15,7 +15,9 @@ graph TB
         Students[🎓 Students/Learners]
         Sources[🏢 Source Systems<br/>SIS, LMS, HR]
         Orchestrators[⚙️ Dagster/Airflow]
+        AIModels[🤖 AI Models]
         AITools[🤖 AI Tools<br/>Claude, Cursor]
+        Adapters[🔌 Adapters]
     end
     
     subgraph Core["Core Data Services"]
@@ -48,7 +50,9 @@ graph TB
     AdvisorUI --> Advisor
     Advisor --> GQL
     Advisor --> MCP
+    Advisor --> AIModels
     MCP --> GQL
+    MCP --> MDR
     MDRUI --> MDR
     
     Planner --> Cache
@@ -57,7 +61,8 @@ graph TB
     
     Orch --> Orchestrators
     Orchestrators --> Trans
-    Orchestrators --> Sources
+    Orchestrators --> Adapters
+    Adapters --> Sources
     Trans --> MDR
     Trans --> Orch
     
