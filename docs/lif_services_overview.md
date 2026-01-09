@@ -64,7 +64,6 @@ graph TB
     Orchestrators --> Adapters
     Adapters --> Sources
     Trans --> MDR
-    Trans --> Orch
     
     classDef coreStyle fill:#4A90E2,stroke:#2E5C8A,color:#fff
     classDef intelStyle fill:#7ED321,stroke:#5FA319,color:#fff
