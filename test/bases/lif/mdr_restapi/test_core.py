@@ -174,6 +174,66 @@ async def test_create_source_schema_datamodel_without_upload_success(async_clien
 
 
 @pytest.mark.asyncio
+async def test_create_source_schema_datamodel_with_duplicate_valuesets(async_client):
+    """
+    Create data model with OpenAPI schema upload that contains duplicate valuesets.
+
+    Should fail the creation call.
+    """
+
+    schema_path = Path(__file__).parent / "data_model_test_duplicate_valuesets.json"
+    create_response = await async_client.post(
+        "/datamodels/open_api_schema/upload",
+        headers=HEADER_MDR_API_KEY_GRAPHQL,
+        files={"file": ("filename.json", open(schema_path, "rb"), "application/json")},
+        data={
+            "data_model_version": "1.0",
+            "state": "Draft",
+            "activation_date": "2025-12-02T21:01:00Z",
+            "data_model_name": "Test Source Schema Data Model with Duplicate ValueSets",
+            "data_model_type": "SourceSchema",
+        },
+    )
+
+    # Confirm creation response
+
+    assert create_response.status_code == 500, str(create_response.text) + str(create_response.headers)
+    assert "IntegrityError" in create_response.json()["detail"], str(create_response.text) + str(
+        create_response.headers
+    )
+
+
+@pytest.mark.asyncio
+async def test_create_source_schema_datamodel_with_duplicate_valuesetvalues(async_client):
+    """
+    Create data model with OpenAPI schema upload that contains duplicate valueset values.
+
+    Should fail the creation call.
+    """
+
+    schema_path = Path(__file__).parent / "data_model_test_duplicate_valuesetvalues.json"
+    create_response = await async_client.post(
+        "/datamodels/open_api_schema/upload",
+        headers=HEADER_MDR_API_KEY_GRAPHQL,
+        files={"file": ("filename.json", open(schema_path, "rb"), "application/json")},
+        data={
+            "data_model_version": "1.0",
+            "state": "Draft",
+            "activation_date": "2025-12-02T21:01:00Z",
+            "data_model_name": "Test Source Schema Data Model with Duplicate ValueSetValues",
+            "data_model_type": "SourceSchema",
+        },
+    )
+
+    # Confirm creation response
+
+    assert create_response.status_code == 500, str(create_response.text) + str(create_response.headers)
+    assert "IntegrityError" in create_response.json()["detail"], str(create_response.text) + str(
+        create_response.headers
+    )
+
+
+@pytest.mark.asyncio
 async def test_create_source_schema_datamodel_with_upload_success(async_client):
     # Create data model with OpenAPI schema upload
 

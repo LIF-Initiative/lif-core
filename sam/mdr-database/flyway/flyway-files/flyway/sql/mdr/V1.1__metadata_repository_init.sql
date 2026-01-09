@@ -14700,7 +14700,7 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 2938	279	Work is the type of electronic mail (e-mail) address listed for a person or organization.	\N	Work	Work	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 2939	279	Organizational (school) address is the type of electronic mail (e-mail) address listed for a person or organization.	\N	Organizational	Organizational (school) address	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 2940	279	Other is the type of electronic mail (e-mail) address listed for a person or organization.	\N	Other	Other	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
-2941	280	Fax number is the type of communication number listed for an organization.	\N	Fax	Fax number	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
+2941	280	Fax number is the type of communication number listed for an organization.	\N	Fax	Fax	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 2942	280	Main phone number is the type of communication number listed for an organization.	\N	Main	Main phone number	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 2943	280	Administrative phone number is the type of communication number listed for an organization.	\N	Administrative	Administrative phone number	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 2944	280	Health clinic phone number is the type of communication number listed for an organization.	\N	HealthClinic	Health clinic phone number	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
@@ -14738,7 +14738,7 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 426	33	\N	\N	bem	Bemba	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 1494	45	\N	\N	ProficiencyResult	ProficiencyResult	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 1495	45	\N	\N	SexAndGender	SexAndGender	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	1
-1496	45	\N	\N	Image	Image	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	1
+1496	45	\N	\N	Image	Image	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 1497	45	\N	\N	AssessmentLearningExperience	AssessmentLearningExperience	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 1498	45	\N	\N	Assessment	Assessment	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 3644	289	Female	\N	Female	Female	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	1
@@ -18500,6 +18500,20 @@ CREATE UNIQUE INDEX uq_entities_uniquename_datamodelid_active ON public."Entitie
 --
 
 CREATE UNIQUE INDEX ux_transformationsgroup_model_id_version_active ON public."TransformationsGroup" USING btree ("GroupVersion", "SourceDataModelId", "TargetDataModelId") WHERE ("Deleted" IS NOT TRUE);
+
+
+--
+-- Name: ux_valuesets_name_datamodelid_active; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX ux_valuesets_name_datamodelid_active ON public."ValueSets" USING btree ("Name", "DataModelId") WHERE ("Deleted" IS NOT TRUE);
+
+
+--
+-- Name: ux_valuesetvalues_valuename_valuesetid_active; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX ux_valuesetvalues_valuename_valuesetid_active ON public."ValueSetValues" USING btree ("ValueName", "ValueSetId") WHERE ("Deleted" IS NOT TRUE);
 
 
 --
