@@ -11,18 +11,18 @@ Each service addresses a specific responsibility in the learner data ecosystem. 
 ```mermaid
 graph TB
     subgraph External["External Systems & Users"]
-        Users[Applications/Developers]
-        Students[Students/Learners]
-        Sources[Source Systems<br/>SIS, LMS, HR]
-        Orchestrators[Dagster/Airflow]
-        AITools[AI Tools<br/>Claude, Cursor]
+        Users[🌐 Applications/👤 Developers]
+        Students[🎓 Students/Learners]
+        Sources[🏢 Source Systems<br/>SIS, LMS, HR]
+        Orchestrators[⚙️ Dagster/Airflow]
+        AITools[🤖 AI Tools<br/>Claude, Cursor]
     end
     
     subgraph Core["Core Data Services"]
         GQL[GraphQL API]
-        Trans[Translator API]
-        IDMap[Identity Mapper API]
-        MDR[MDR API]
+        Trans[Translator]
+        IDMap[Identity Mapper]
+        MDR[MDR Service]
         MDRUI[MDR UI]
     end
     
@@ -33,8 +33,8 @@ graph TB
     end
     
     subgraph Infra["Infrastructure Services"]
-        Cache[Query Cache API]
-        Planner[Query Planner API]
+        Cache[Query Cache]
+        Planner[Query Planner]
         Orch[Orchestrator API]
     end
     
@@ -44,8 +44,10 @@ graph TB
     AITools --> MCP
     
     GQL --> Planner
+    GQL --> MDR
     AdvisorUI --> Advisor
     Advisor --> GQL
+    Advisor --> MCP
     MCP --> GQL
     MDRUI --> MDR
     
@@ -57,6 +59,7 @@ graph TB
     Orchestrators --> Trans
     Orchestrators --> Sources
     Trans --> MDR
+    Trans --> Orch
     
     classDef coreStyle fill:#4A90E2,stroke:#2E5C8A,color:#fff
     classDef intelStyle fill:#7ED321,stroke:#5FA319,color:#fff
@@ -85,10 +88,10 @@ Exposes learner data through a GraphQL interface, routing queries to the Query P
 
 ```mermaid
 graph LR
-    Users[External Applications]
+    Users[🌐 External Applications]
     GQL[LIF GraphQL API]
-    QP[Query Planner API]
-    MDR[MDR API]
+    QP[Query Planner]
+    MDR[MDR Service]
     
     Users -->|queries| GQL
     GQL -->|route query| QP
@@ -116,7 +119,7 @@ graph LR
 
 ---
 
-### 🔄 LIF Translator API
+### 🔄 LIF Translator
 
 **WHEN YOU NEED TO...**  
 Transform data from your institution's systems (SIS, LMS, HR systems) into a standardized learner data format for integration and analysis.
