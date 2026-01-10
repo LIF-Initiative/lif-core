@@ -150,7 +150,7 @@ graph LR
 
     classDef coreStyle fill:#4A90E2,stroke:#2E5C8A,color:#fff
     classDef extStyle fill:#9B9B9B,stroke:#6B6B6B,color:#fff
-    classDef dagStyle fill:#E8F2FC,stroke:#4A90E2,stroke-dasharray: 5 5
+    classDef dagStyle fill:#2B2B2B,stroke:#6B6B6B,stroke-dasharray: 5 5,color:#E0E0E0
 
     class Adapter,Trans coreStyle
     class MDR coreStyle
