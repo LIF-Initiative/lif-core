@@ -100,13 +100,14 @@ graph LR
     MCP[Semantic Search]
     
     Users -->|queries| GQL
+    Advisor -->|queries| GQL
+    MCP -->|queries| GQL
+    GQL -->|get schema info| MDR
+    MDR -->|return schema info| GQL
     GQL -->|route query| QP
-    GQL -->|schema info| MDR
     QP -->|return data| GQL
     GQL -->|results| Users
-    Advisor -->|queries| GQL
     GQL -->|results| Advisor
-    MCP -->|queries| GQL
     GQL -->|results| MCP
     
     classDef coreStyle fill:#4A90E2,stroke:#2E5C8A,color:#fff
