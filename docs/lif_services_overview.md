@@ -105,12 +105,7 @@ graph LR
     Advisor -->|queries| GQL
     MCP -->|queries| GQL
     GQL -->|get schema info| MDR
-    MDR -->|return schema info| GQL
-    GQL -->|route query| QP
-    QP -->|return data| GQL
-    GQL -->|results| Users
-    GQL -->|results| Advisor
-    GQL -->|results| MCP
+    GQL -->|query for LIF records| QP
     
     classDef coreStyle fill:#4A90E2,stroke:#2E5C8A,color:#fff
     classDef intelStyle fill:#7ED321,stroke:#5FA319,color:#fff
