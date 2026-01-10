@@ -92,12 +92,14 @@ Exposes learner data through a GraphQL interface, routing queries to the Query P
 
 ```mermaid
 graph LR
-    Users[🌐 External Applications]
     GQL[LIF GraphQL API]
     QP[Query Planner]
     MDR[MDR Service]
-    Advisor[Advisor API]
-    MCP[Semantic Search]
+    subgraph Clients["Clients"]
+        Users[🌐 External Applications]
+        Advisor[Advisor API]
+        MCP[Semantic Search]
+    end
     
     Users -->|queries| GQL
     Advisor -->|queries| GQL
