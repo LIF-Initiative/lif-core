@@ -169,7 +169,7 @@ graph LR
 
 ---
 
-### 👤 LIF Identity Mapper API
+### 👤 LIF Identity Mapper
 
 **WHEN YOU NEED TO...**  
 Match and link learner identities across different systems and institutions where the same person may have multiple IDs, email addresses, or identifying information.
@@ -179,8 +179,8 @@ Resolves learner identities across systems and organizations, enabling accurate 
 
 ```mermaid
 graph LR
-    QP[Query Planner API]
-    IDMap[LIF Identity Mapper API]
+    QP[Query Planner]
+    IDMap[LIF Identity Mapper]
     
     QP -->|query for identities| IDMap
     IDMap -->|return all known IDs| QP
