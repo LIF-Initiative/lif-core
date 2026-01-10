@@ -96,18 +96,26 @@ graph LR
     GQL[LIF GraphQL API]
     QP[Query Planner]
     MDR[MDR Service]
+    Advisor[Advisor API]
+    MCP[Semantic Search]
     
     Users -->|queries| GQL
     GQL -->|route query| QP
     GQL -->|schema info| MDR
     QP -->|return data| GQL
     GQL -->|results| Users
+    Advisor -->|queries| GQL
+    GQL -->|results| Advisor
+    MCP -->|queries| GQL
+    GQL -->|results| MCP
     
     classDef coreStyle fill:#4A90E2,stroke:#2E5C8A,color:#fff
+    classDef intelStyle fill:#7ED321,stroke:#5FA319,color:#fff
     classDef infraStyle fill:#F5A623,stroke:#C17D11,color:#fff
     classDef extStyle fill:#9B9B9B,stroke:#6B6B6B,color:#fff
     
     class GQL,MDR coreStyle
+    class Advisor,MCP intelStyle
     class QP infraStyle
     class Users extStyle
 ```
@@ -118,7 +126,7 @@ graph LR
 - Developing custom analytics applications that need learner information
 - Integrating learner data into third-party applications
 
-**WORKS WITH:** Query Planner, MDR Service  
+**WORKS WITH:** Query Planner, MDR Service, Advisor API, Semantic Search MCP Server  
 **TYPICAL USERS:** Application developers, data engineers
 
 ---
@@ -164,7 +172,7 @@ graph LR
 - Converting HR employment records into learner experience data
 - Preparing data for cross-institutional credential exchanges
 
-**WORKS WITH:** MDR Service (for mappings), Orchestrator API (runs in workflows)  
+**WORKS WITH:** MDR Service (for mappings), Orchestrator API (runs in DAG workflows), Source Adapters  
 **TYPICAL USERS:** Data engineers, ETL developers
 
 ---
@@ -296,16 +304,22 @@ graph LR
     AdvisorUI[Advisor UI]
     Advisor[LIF Advisor API]
     GQL[GraphQL API]
+    MCP[Semantic Search]
+    AIModels[🤖 AI Models]
     
     AdvisorUI -->|send question| Advisor
+    Advisor -->|AI response| AdvisorUI
     Advisor -->|query data| GQL
     GQL -->|return data| Advisor
-    Advisor -->|AI response| AdvisorUI
+    Advisor -->|query data| MCP
+    MCP -->|return data| Advisor
+    AIModels --> Advisor
+    Advisor --> AIModels
     
     classDef intelStyle fill:#7ED321,stroke:#5FA319,color:#fff
     classDef coreStyle fill:#4A90E2,stroke:#2E5C8A,color:#fff
     
-    class Advisor,AdvisorUI intelStyle
+    class Advisor,AdvisorUI,MCP intelStyle
     class GQL coreStyle
 ```
 
@@ -316,7 +330,7 @@ graph LR
 - Personalized learning path recommendations based on prior learning
 - Intervention suggestion engines for at-risk students
 
-**WORKS WITH:** GraphQL API, Query Cache API, Advisor UI  
+**WORKS WITH:** GraphQL API, Semantic Search MCP Server, Advisor UI, AI Models  
 **TYPICAL USERS:** Student affairs, advising offices, EdTech product teams
 
 ---
@@ -371,18 +385,24 @@ graph LR
     AITools[AI Tools<br/>Claude, Cursor<br/>Custom Apps]
     MCP[LIF Semantic Search<br/>MCP Server]
     GQL[GraphQL API]
+    MDR[MDR Service]
+    Advisor[Advisor API]
     
     AITools -->|MCP queries| MCP
     MCP -->|GraphQL queries| GQL
     GQL -->|return data| MCP
     MCP -->|semantic results| AITools
+    MCP -->|fetch schemas| MDR
+    MDR -->|return schemas| MCP
+    Advisor -->|query data context| MCP
+    MCP -->|return data context| Advisor
     
     classDef intelStyle fill:#7ED321,stroke:#5FA319,color:#fff
     classDef coreStyle fill:#4A90E2,stroke:#2E5C8A,color:#fff
     classDef extStyle fill:#9B9B9B,stroke:#6B6B6B,color:#fff
     
-    class MCP intelStyle
-    class GQL coreStyle
+    class MCP,Advisor intelStyle
+    class GQL,MDR coreStyle
     class AITools extStyle
 ```
 
@@ -392,7 +412,7 @@ graph LR
 - Building context-aware AI applications that understand learner records
 - Creating custom AI tools that need semantic access to educational data
 
-**WORKS WITH:** GraphQL API  
+**WORKS WITH:** GraphQL API, MDR Service, Advisor API, AI Tools  
 **TYPICAL USERS:** AI/ML developers, application developers integrating AI capabilities
 
 ---
@@ -401,7 +421,7 @@ graph LR
 
 These services provide the performance, optimization, and workflow orchestration necessary for production deployments.
 
-### 💾 LIF Query Cache API
+### 💾 LIF Query Cache
 
 **WHEN YOU NEED TO...**  
 Improve query performance and reduce load on source systems by caching learner data fragments and creating unified learner records.
@@ -433,12 +453,12 @@ graph LR
 - Pre-aggregating learner records for real-time applications
 - Supporting offline or disconnected access to learner data
 
-**WORKS WITH:** Query Planner API (reads/writes cache)  
+**WORKS WITH:** Query Planner (reads/writes cache)  
 **TYPICAL USERS:** System administrators, platform engineers
 
 ---
 
-### 🧠 LIF Query Planner API
+### 🧠 LIF Query Planner
 
 **WHEN YOU NEED TO...**  
 Intelligently route queries, determine data freshness requirements, and orchestrate data collection from multiple upstream sources.
@@ -449,9 +469,9 @@ Acts as the query intelligence layer, checking cache availability, consulting th
 ```mermaid
 graph LR
     GQL[GraphQL API]
-    QP[LIF Query Planner API]
-    Cache[Query Cache API]
-    IDMap[Identity Mapper API]
+    QP[LIF Query Planner]
+    Cache[Query Cache]
+    IDMap[Identity Mapper]
     Orch[Orchestrator API]
     
     GQL -->|send query| QP
@@ -474,7 +494,7 @@ graph LR
 - Coordinating complex queries that require identity resolution
 - Managing data collection workflows for missing or stale data
 
-**WORKS WITH:** GraphQL API (receives queries), Query Cache API, Identity Mapper API, Orchestrator API  
+**WORKS WITH:** GraphQL API (receives queries), Query Cache, Identity Mapper, Orchestrator API  
 **TYPICAL USERS:** Platform engineers, DevOps teams
 
 ---
@@ -489,25 +509,35 @@ Provides a facade to external orchestration products (Dagster, Apache Airflow), 
 
 ```mermaid
 graph LR
-    QP[Query Planner API]
+    QP[Query Planner]
     Orch[LIF Orchestrator API]
-    OrchTools[Orchestration Tools<br/>Dagster, Airflow]
-    Trans[Translator API]
-    Sources[Source Systems<br/>SIS, LMS, HR]
-    
+    OrchTools[🌐 Orchestration Tools<br/>Dagster, Airflow]
+
+    subgraph DAG["📐 LIF Ingest DAG"]
+        Sources["🌐 Source Systems<br/>SIS, LMS, HR"]
+        Adapter["🔌  Source Adapter"]
+        Trans["Translator"]
+    end
+
+    Sources -->|extract records| Adapter
+    Adapter -->|pass source data| Trans
+    Trans -->|emit LIF fragments| OrchTools
     QP -->|trigger collection| Orch
     Orch -->|start DAG| OrchTools
-    OrchTools -->|run workflow| Trans
-    OrchTools -->|fetch from| Sources
+    OrchTools -->|run workflow| DAG
+    OrchTools -->|returns LIF fragments| Orch
+    Orch -->|returns LIF fragments| QP
     
     classDef infraStyle fill:#F5A623,stroke:#C17D11,color:#fff
     classDef coreStyle fill:#4A90E2,stroke:#2E5C8A,color:#fff
     classDef extStyle fill:#9B9B9B,stroke:#6B6B6B,color:#fff
+    classDef dagStyle fill:#2B2B2B,stroke:#6B6B6B,stroke-dasharray: 5 5,color:#E0E0E0
     
     class Orch infraStyle
-    class Trans coreStyle
+    class Trans,Adapter coreStyle
     class QP infraStyle
     class OrchTools,Sources extStyle
+    class DAG dagStyle
 ```
 
 **USE CASES:**
@@ -516,7 +546,7 @@ graph LR
 - Managing complex ETL pipelines that include translation steps
 - Coordinating data freshness across multiple source systems
 
-**WORKS WITH:** Query Planner API (triggers workflows), Translator API (may be included in workflows)  
+**WORKS WITH:** Query Planner API (triggers workflows), Translator (may be included in DAG workflows)  
 **TYPICAL USERS:** Data engineers, DevOps teams, workflow administrators
 
 ---
