@@ -188,8 +188,7 @@ graph LR
     QP[Query Planner]
     IDMap[Identity Mapper]
     
-    QP -->|query for identities| IDMap
-    IDMap -->|return all known IDs| QP
+    QP -->|query for learner identities| IDMap
     
     classDef coreStyle fill:#4A90E2,stroke:#2E5C8A,color:#fff
     classDef infraStyle fill:#F5A623,stroke:#C17D11,color:#fff
@@ -264,8 +263,6 @@ graph LR
     
     Users -->|configure mappings| MDRUI
     MDRUI -->|CRUD operations| MDR
-    MDR -->|return data| MDRUI
-    MDRUI -->|display| Users
     
     classDef coreStyle fill:#4A90E2,stroke:#2E5C8A,color:#fff
     classDef extStyle fill:#9B9B9B,stroke:#6B6B6B,color:#fff
@@ -307,12 +304,9 @@ graph LR
     
     AdvisorUI -->|send question| Advisor
     Advisor -->|AI response| AdvisorUI
-    Advisor -->|query data| GQL
-    GQL -->|return data| Advisor
-    Advisor -->|query data| MCP
-    MCP -->|return data| Advisor
-    AIModels --> Advisor
-    Advisor --> AIModels
+    Advisor -->|query for LIF records| GQL
+    Advisor -->|query for LIF data in context| MCP
+    Advisor -->|natural language quey| AIModels
     
     classDef intelStyle fill:#7ED321,stroke:#5FA319,color:#fff
     classDef coreStyle fill:#4A90E2,stroke:#2E5C8A,color:#fff
@@ -350,7 +344,7 @@ graph LR
     Students -->|ask questions| AdvisorUI
     AdvisorUI -->|send query| Advisor
     Advisor -->|AI response| AdvisorUI
-    AdvisorUI -->|display answer| Students
+    AdvisorUI -->|display answers| Students
     
     classDef intelStyle fill:#7ED321,stroke:#5FA319,color:#fff
     classDef extStyle fill:#9B9B9B,stroke:#6B6B6B,color:#fff
@@ -380,20 +374,21 @@ Provides semantic search capabilities over learner data that can be accessed by 
 
 ```mermaid
 graph LR
-    AITools[AI Tools<br/>Claude, Cursor<br/>Custom Apps]
     MCP[LIF Semantic Search<br/>MCP Server]
     GQL[GraphQL API]
     MDR[MDR Service]
-    Advisor[Advisor API]
+
+    subgraph Clients["Clients"]
+        AITools[🤖 AI Tools<br/>Claude, Cursor<br/>Custom Apps]
+        Advisor[Advisor API]
+    end
     
     AITools -->|MCP queries| MCP
-    MCP -->|GraphQL queries| GQL
-    GQL -->|return data| MCP
+    Advisor -->|MCP queries| MCP
+    MCP -->|query LIF records| GQL
+    MCP -->|fetch LIF schema| MDR
     MCP -->|semantic results| AITools
-    MCP -->|fetch schemas| MDR
-    MDR -->|return schemas| MCP
-    Advisor -->|query data context| MCP
-    MCP -->|return data context| Advisor
+    MCP -->|semantic results| Advisor
     
     classDef intelStyle fill:#7ED321,stroke:#5FA319,color:#fff
     classDef coreStyle fill:#4A90E2,stroke:#2E5C8A,color:#fff
@@ -429,20 +424,16 @@ Stores LIF data model fragments from various sources (with metadata) and creates
 
 ```mermaid
 graph LR
-    QP[Query Planner API]
-    Cache[LIF Query Cache API]
-    Trans[Translator API]
+    QP[Query Planner]
+    Cache[Query Cache]
     
     QP -->|check cache| Cache
-    Cache -->|return data| QP
     QP -->|write fragments| Cache
-    Trans -->|write fragments| Cache
     
     classDef infraStyle fill:#F5A623,stroke:#C17D11,color:#fff
     classDef coreStyle fill:#4A90E2,stroke:#2E5C8A,color:#fff
     
     class Cache,QP infraStyle
-    class Trans coreStyle
 ```
 
 **USE CASES:**
