@@ -557,8 +557,8 @@ graph TB
     QP -->|3. Check cache| Cache
     Cache -->|4. Return LIF record or miss| QP
     Cache -->|4'. Data missing/stale| MISS
-    QP -->|13. Return LIF data or collection ID| GQL
-    GQL -->|14. Send results| User
+    QP -->|5. Return LIF data or collection ID| GQL
+    GQL -->|6. Send results| User
     
     classDef coreStyle fill:#4A90E2,stroke:#2E5C8A,color:#fff
     classDef infraStyle fill:#F5A623,stroke:#C17D11,color:#fff
@@ -598,8 +598,8 @@ graph TB
     MCP -->|8. Return contextual LIF data| Advisor
     Advisor -->|9. Pass to AI Model| AIModel
     AIModel -->|10. Return natural language response| Advisor
-    Advisor -->|10. Natural language response| AdvisorUI
-    AdvisorUI -->|11. Display answer| Student
+    Advisor -->|11. Natural language response| AdvisorUI
+    AdvisorUI -->|12. Display answer| Student
     
     classDef coreStyle fill:#4A90E2,stroke:#2E5C8A,color:#fff
     classDef intelStyle fill:#7ED321,stroke:#5FA319,color:#fff
