@@ -619,14 +619,21 @@ graph TB
 
 ```mermaid
 graph TB
-    QP[Query Planner]
-    Cache[Query Cache]
-    MDR[MDR Service]
-    Orch[LIF Orchestrator API]
-    OrchTool[🌐 Orchestration Tools<br/>Dagster, Airflow]
+
+    subgraph Core[Core Data Services]
+        MDR[MDR Service]
+    end
+    subgraph Infra[Infrastructure Services]
+        QP[Query Planner]
+        Cache[Query Cache]
+        Orch[LIF Orchestrator API]
+    end
+    subgraph Ext[External Systems]
+        OrchTool[🌐 Orchestration Tools<br/>Dagster, Airflow]
+        Sources["🌐 Source Systems<br/>SIS, LMS, HR"]
+    end
 
     subgraph DAG["📐 LIF Ingest DAG"]
-        Sources["🌐 Source Systems<br/>SIS, LMS, HR"]
         Adapter["🔌  Source Adapter"]
         Trans["Translator"]
     end
