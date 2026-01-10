@@ -134,21 +134,28 @@ Converts data from various source formats into the LIF data model using configur
 ```mermaid
 graph LR
     Orch["🌐 Orchestration Tool<br/>Dagster / Airflow"]
-    Adapter["⚙️ Source Adapter"]
-    Sources["🌐 Source Systems<br/>SIS, LMS, HR"]
+
+    subgraph DAG["📐 LIF Ingest DAG"]
+        Sources["🌐 Source Systems<br/>SIS, LMS, HR"]
+        Adapter["⚙️ Source Adapter"]
+        Trans["⚙️ LIF Translator API"]
+    end
+
     MDR["⚙️ MDR API"]
-    Trans["⚙️ LIF Translator API"]
 
     Sources -->|extract records| Adapter
     Adapter -->|pass source data| Trans
-    Trans -->|get mappings| MDR
     Trans -->|emit LIF records| Orch
+    Trans -->|get mappings| MDR
 
     classDef coreStyle fill:#4A90E2,stroke:#2E5C8A,color:#fff
     classDef extStyle fill:#9B9B9B,stroke:#6B6B6B,color:#fff
+    classDef dagStyle fill:#E8F2FC,stroke:#4A90E2,stroke-dasharray: 5 5
 
-    class Trans,MDR,Adapter coreStyle
+    class Adapter,Trans coreStyle
+    class MDR coreStyle
     class Orch,Sources extStyle
+    class DAG dagStyle
 ```
 
 **USE CASES:**
