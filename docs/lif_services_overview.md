@@ -555,9 +555,9 @@ graph TB
     User -->|1. Request learner data| GQL
     GQL -->|2. Forward query| QP
     QP -->|3. Check cache| Cache
-    Cache -.->|4a. Data exists| QP
-    Cache -.->|4b. Data missing/stale| MISS
-    QP -->|13. Return data| GQL
+    Cache -.->|4. Return LIF record or "miss"| QP
+    Cache -.->|4'. Data missing/stale| MISS
+    QP -->|13. Return LIF data or collection ID| GQL
     GQL -->|14. Send results| User
     
     classDef coreStyle fill:#4A90E2,stroke:#2E5C8A,color:#fff
@@ -573,22 +573,25 @@ graph TB
 
 ```mermaid
 graph TB
-    Student[Student/Learner]
+    Student[🎓 Student/Learner]
     AdvisorUI[Advisor UI]
     Advisor[Advisor API]
+    MCP[Semantic Search MCP Server]
     GQL[GraphQL API]
-    QP[Query Planner API]
-    Cache[Query Cache API]
+    AIModels[🤖 AI Models]
+    QUERY[Standard Query Flow]
     
     Student -->|1. Ask question| AdvisorUI
     AdvisorUI -->|2. Send question| Advisor
-    Advisor -->|3. Query learner data| GQL
-    GQL -->|4. Forward query| QP
-    QP -->|5. Check cache| Cache
-    Cache -->|6. Return data| QP
-    QP -->|7. Return data| GQL
-    GQL -->|8. Return data| Advisor
-    Advisor -->|9. Process with AI| Advisor
+    Advisor -->|3. Query basic learner data| GQL
+    GQL -->QUERY
+    GQL -->|4. Return basic learner data| Advisor
+    Advisor -->|5. Request contextual LIF data| MCP
+    MCP -->|6. Query LIF student record| GQL
+    GQL -->|7. Return LIF student record| MCP
+    MCP -->|8. Return contextual LIF data| Advisor
+    Advisor -->|9. Pass to AI Model| AIModel
+    AIModel -->|10. Return natural language response| Advisor
     Advisor -->|10. Natural language response| AdvisorUI
     AdvisorUI -->|11. Display answer| Student
     
@@ -598,8 +601,7 @@ graph TB
     classDef extStyle fill:#9B9B9B,stroke:#6B6B6B,color:#fff
     
     class GQL coreStyle
-    class Advisor,AdvisorUI intelStyle
-    class QP,Cache infraStyle
+    class Advisor,AdvisorUI,MCP intelStyle
     class Student extStyle
 ```
 
