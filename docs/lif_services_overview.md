@@ -118,7 +118,7 @@ graph LR
 - Developing custom analytics applications that need learner information
 - Integrating learner data into third-party applications
 
-**WORKS WITH:** Query Planner API, MDR API  
+**WORKS WITH:** Query Planner, MDR Service  
 **TYPICAL USERS:** Application developers, data engineers
 
 ---
@@ -164,7 +164,7 @@ graph LR
 - Converting HR employment records into learner experience data
 - Preparing data for cross-institutional credential exchanges
 
-**WORKS WITH:** MDR API (for mappings), Orchestrator API (runs in workflows)  
+**WORKS WITH:** MDR Service (for mappings), Orchestrator API (runs in workflows)  
 **TYPICAL USERS:** Data engineers, ETL developers
 
 ---
@@ -198,12 +198,12 @@ graph LR
 - Merging records when students transfer between institutions
 - Building comprehensive learner profiles from fragmented data sources
 
-**WORKS WITH:** Query Planner API (provides identity mappings for queries)  
+**WORKS WITH:** Query Planner (provides identity mappings for queries)  
 **TYPICAL USERS:** Data stewards, integration architects
 
 ---
 
-### 📋 LIF MDR (Metadata Repository) API
+### 📋 LIF MDR (Metadata Repository) Service
 
 **WHEN YOU NEED TO...**  
 Define and manage how data from your source systems maps to the LIF data model, including schemas, field mappings, and transformation rules.
@@ -214,13 +214,15 @@ Provides the backend for managing schemas, mapping configurations, and data tran
 ```mermaid
 graph LR
     MDRUI[MDR UI]
-    MDR[LIF MDR API]
-    Trans[Translator API]
+    MDR[MDR Service]
+    Trans[Translator]
     GQL[GraphQL API]
-    
+    MCP[Semantic Search MCP Server]
+ 
     MDRUI -->|manage mappings| MDR
     Trans -->|get mappings| MDR
     GQL -->|get schemas| MDR
+    MCP -->|get schemas| MDR
     
     classDef coreStyle fill:#4A90E2,stroke:#2E5C8A,color:#fff
     
@@ -233,7 +235,7 @@ graph LR
 - Managing data quality rules and validation logic
 - Documenting data lineage and transformation logic
 
-**WORKS WITH:** MDR UI (frontend), Translator API, GraphQL API  
+**WORKS WITH:** MDR UI (frontend), Translator, GraphQL API, Semantic Search MCP Server 
 **TYPICAL USERS:** Data architects, data governance teams
 
 ---
