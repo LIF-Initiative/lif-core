@@ -219,7 +219,7 @@ graph LR
     GQL[GraphQL API]
     MCP[Semantic Search]
  
-    MDRUI -->|manage mappings| MDR
+    MDRUI -->|CRUD operations| MDR
     Trans -->|get mappings| MDR
     GQL -->|get schemas| MDR
     MCP -->|get schemas| MDR
@@ -237,7 +237,7 @@ graph LR
 - Managing data quality rules and validation logic
 - Documenting data lineage and transformation logic
 
-**WORKS WITH:** MDR UI (frontend), Translator, GraphQL API, Semantic Search
+**WORKS WITH:** MDR UI (frontend), Translator, GraphQL API, Semantic Search 
 **TYPICAL USERS:** Data architects, data governance teams
 
 ---
@@ -252,9 +252,9 @@ Offers a web-based interface for configuring data mappings and managing the meta
 
 ```mermaid
 graph LR
-    Users[Data Engineers<br/>Data Stewards]
+    Users[👤 Data Engineers<br/>Data Stewards]
     MDRUI[LIF MDR UI]
-    MDR[MDR API]
+    MDR[MDR Service]
     
     Users -->|configure mappings| MDRUI
     MDRUI -->|CRUD operations| MDR
