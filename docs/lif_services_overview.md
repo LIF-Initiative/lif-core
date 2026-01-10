@@ -573,13 +573,19 @@ graph TB
 
 ```mermaid
 graph TB
-    Student[🎓 Student/Learner]
-    AdvisorUI[Advisor UI]
-    Advisor[Advisor API]
-    MCP[Semantic Search MCP Server]
-    GQL[GraphQL API]
-    AIModel[🤖 AI Models]
-    QUERY[Standard Query Flow]
+    subgraph Intel["Intelligence Layer"]
+        AdvisorUI[Advisor UI]
+        Advisor[Advisor API]
+        MCP[Semantic Search MCP Server]
+    end
+    subgraph Core[Core Data Services]
+        GQL[GraphQL API]
+        QUERY[Standard Query Flow]
+    end
+    subgraph Ext[External Systems]
+        Student[🎓 Student/Learner]
+        AIModel[🤖 AI Models]
+    end
     
     Student -->|1. Ask question| AdvisorUI
     AdvisorUI -->|2. Send question| Advisor
