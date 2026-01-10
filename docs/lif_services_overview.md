@@ -546,29 +546,17 @@ graph LR
 
 ```mermaid
 graph TB
-    User[External Application]
+    User[🌐 External Application]
     GQL[GraphQL API]
-    QP[Query Planner API]
-    Cache[Query Cache API]
-    IDMap[Identity Mapper API]
-    Orch[Orchestrator API]
-    OrchTool[Dagster/Airflow]
-    Trans[Translator API]
-    Sources[Source Systems]
+    QP[Query Planner]
+    Cache[Query Cache]
+    MISS[Query Miss -- Start Data Collection Workflow]
     
     User -->|1. Request learner data| GQL
     GQL -->|2. Forward query| QP
     QP -->|3. Check cache| Cache
     Cache -.->|4a. Data exists| QP
-    Cache -.->|4b. Data missing/stale| QP
-    QP -->|5. Get all identities| IDMap
-    QP -->|6. Trigger workflow| Orch
-    Orch -->|7. Start DAG| OrchTool
-    OrchTool -->|8. Fetch data| Sources
-    OrchTool -->|9. Transform data| Trans
-    Trans -->|10. Write fragments| Cache
-    Cache -->|11. Merge & aggregate| Cache
-    QP -->|12. Retrieve data| Cache
+    Cache -.->|4b. Data missing/stale| MISS
     QP -->|13. Return data| GQL
     GQL -->|14. Send results| User
     
