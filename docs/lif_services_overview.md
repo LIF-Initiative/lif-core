@@ -217,7 +217,7 @@ graph LR
     MDR[MDR Service]
     Trans[Translator]
     GQL[GraphQL API]
-    MCP[Semantic Search MCP Server]
+    MCP[Semantic Search]
  
     MDRUI -->|manage mappings| MDR
     Trans -->|get mappings| MDR
