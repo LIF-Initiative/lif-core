@@ -235,7 +235,7 @@ graph LR
 - Managing data quality rules and validation logic
 - Documenting data lineage and transformation logic
 
-**WORKS WITH:** MDR UI (frontend), Translator, GraphQL API, Semantic Search MCP Server 
+**WORKS WITH:** MDR UI (frontend), Translator, GraphQL API, Semantic Search
 **TYPICAL USERS:** Data architects, data governance teams
 
 ---
