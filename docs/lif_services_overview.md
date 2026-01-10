@@ -137,11 +137,11 @@ graph LR
 
     subgraph DAG["📐 LIF Ingest DAG"]
         Sources["🌐 Source Systems<br/>SIS, LMS, HR"]
-        Adapter["⚙️ Source Adapter"]
-        Trans["⚙️ LIF Translator API"]
+        Adapter["Source Adapter"]
+        Trans["Translator"]
     end
 
-    MDR["⚙️ MDR API"]
+    MDR["MDR Service"]
 
     Sources -->|extract records| Adapter
     Adapter -->|pass source data| Trans
@@ -180,7 +180,7 @@ Resolves learner identities across systems and organizations, enabling accurate 
 ```mermaid
 graph LR
     QP[Query Planner]
-    IDMap[LIF Identity Mapper]
+    IDMap[Identity Mapper]
     
     QP -->|query for identities| IDMap
     IDMap -->|return all known IDs| QP
@@ -225,8 +225,10 @@ graph LR
     MCP -->|get schemas| MDR
     
     classDef coreStyle fill:#4A90E2,stroke:#2E5C8A,color:#fff
+    classDef intelStyle fill:#7ED321,stroke:#5FA319,color:#fff
     
-    class MDRUI,MDR,Trans,GQL,MCP coreStyle
+    class MDRUI,MDR,Trans coreStyle
+    class GQL,MCP intelStyle
 ```
 
 **USE CASES:**
