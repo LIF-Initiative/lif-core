@@ -237,7 +237,7 @@ graph LR
 - Managing data quality rules and validation logic
 - Documenting data lineage and transformation logic
 
-**WORKS WITH:** MDR UI (frontend), Translator, GraphQL API, Semantic Search 
+**WORKS WITH:** MDR UI (frontend), Translator, GraphQL API, Semantic Search  
 **TYPICAL USERS:** Data architects, data governance teams
 
 ---
@@ -252,7 +252,7 @@ Offers a web-based interface for configuring data mappings and managing the meta
 
 ```mermaid
 graph LR
-    Users[👤 Data Engineers<br/>Data Stewards]
+    Users[👤 Data Engineers<br/> 👤 Data Stewards]
     MDRUI[LIF MDR UI]
     MDR[MDR Service]
     
@@ -274,7 +274,7 @@ graph LR
 - Managing versioning of mapping configurations
 - Training non-technical staff on data integration processes
 
-**WORKS WITH:** MDR API  
+**WORKS WITH:** MDR Service  
 **TYPICAL USERS:** Data engineers, data stewards, business analysts
 
 ---
@@ -331,7 +331,7 @@ Offers a student-facing web interface for interacting with the AI-powered adviso
 
 ```mermaid
 graph LR
-    Students[Students<br/>Learners<br/>Alumni]
+    Students[👤 Students<br/> 👤 Learners<br/> 👤 Alumni]
     AdvisorUI[LIF Advisor UI]
     Advisor[Advisor API]
     
