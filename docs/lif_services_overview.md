@@ -555,7 +555,7 @@ graph TB
     User -->|1. Request learner data| GQL
     GQL -->|2. Forward query| QP
     QP -->|3. Check cache| Cache
-    Cache -->|4. Return LIF record or "miss"| QP
+    Cache -->|4. Return LIF record or miss| QP
     Cache -->|4'. Data missing/stale| MISS
     QP -->|13. Return LIF data or collection ID| GQL
     GQL -->|14. Send results| User
