@@ -306,7 +306,7 @@ graph LR
     Advisor -->|AI response| AdvisorUI
     Advisor -->|query for LIF records| GQL
     Advisor -->|query for LIF data in context| MCP
-    Advisor -->|natural language quey| AIModels
+    Advisor -->|natural language query| AIModels
     
     classDef intelStyle fill:#7ED321,stroke:#5FA319,color:#fff
     classDef coreStyle fill:#4A90E2,stroke:#2E5C8A,color:#fff
@@ -615,62 +615,47 @@ graph TB
     class Student extStyle
 ```
 
-### Data Collection & Translation Flow
+### Data Collection & Translation Flow (Cache Miss)
 
 ```mermaid
 graph TB
-    QP[Query Planner API]
-    Orch[Orchestrator API]
-    OrchTool[Dagster/Airflow]
-    Sources[Source Systems<br/>SIS, LMS, HR]
-    Trans[Translator API]
-    MDR[MDR API]
-    Cache[Query Cache API]
+    QP[Query Planner]
+    Cache[Query Cache]
+    MDR[MDR Service]
+    Orch[LIF Orchestrator API]
+    OrchTool[🌐 Orchestration Tools<br/>Dagster, Airflow]
+
+    subgraph DAG["📐 LIF Ingest DAG"]
+        Sources["🌐 Source Systems<br/>SIS, LMS, HR"]
+        Adapter["🔌  Source Adapter"]
+        Trans["Translator"]
+    end
     
-    QP -->|1. Trigger collection| Orch
-    Orch -->|2. Start DAG with<br/>learner identities| OrchTool
-    OrchTool -->|3. Fetch raw data| Sources
-    Sources -->|4. Return raw data| OrchTool
-    OrchTool -->|5. Invoke translator| Trans
-    Trans -->|6. Get mappings| MDR
-    MDR -->|7. Return mappings| Trans
-    Trans -->|8. Transform to LIF format| Trans
-    Trans -->|9. Write fragments<br/>with metadata| Cache
-    Cache -->|10. Merge into<br/>aggregate record| Cache
-    Cache -->|11. Notify complete| QP
+    QP -->|1. Query for LIF record| Cache
+    Cache -->|2. cache miss/expired| QP
+    QP -->|3. Trigger collection| Orch
+    Orch -->|4. Signal to start DAG| OrchTool
+    OrchTool -->|5. Start DAG with<br/>learner identities| DAG
+    Adapter -->|6. Extracts source records| Sources
+    Adapter -->|7. Passes source records| Trans
+    Trans -->|8. Get mappings| MDR
+    MDR -->|9. Return mappings| Trans
+    Trans -->|10. Transform to LIF format| Trans
+    Trans -->|11. Emits LIF fragments| OrchTool
+    OrchTool -->|12. Submits LIF fragments via callback| QP
+    QP -->|13. Submits fresh LIF fragments| Cache
+    Cache -->|14. Merge into<br/>aggregate record| Cache
     
     classDef coreStyle fill:#4A90E2,stroke:#2E5C8A,color:#fff
     classDef infraStyle fill:#F5A623,stroke:#C17D11,color:#fff
     classDef extStyle fill:#9B9B9B,stroke:#6B6B6B,color:#fff
+    classDef dagStyle fill:#2B2B2B,stroke:#6B6B6B,stroke-dasharray: 5 5,color:#E0E0E0
+
     
-    class Trans,MDR coreStyle
+    class Trans,MDR,Adapter coreStyle
     class QP,Orch,Cache infraStyle
     class OrchTool,Sources extStyle
-```
-
-### Identity Resolution Flow
-
-```mermaid
-graph TB
-    QP[Query Planner API]
-    IDMap[Identity Mapper API]
-    Orch[Orchestrator API]
-    Cache[Query Cache API]
-    
-    QP -->|1. Query for learner<br/>with ID: 12345| IDMap
-    IDMap -->|2. Return all known IDs:<br/>12345, 67890, abc@edu| QP
-    QP -->|3. Trigger collection<br/>for all IDs| Orch
-    Orch -->|4. Fetch data using<br/>all identities| Orch
-    Orch -->|5. Write fragments| Cache
-    Cache -->|6. Merge fragments from<br/>multiple identities| Cache
-    Cache -->|7. Create unified<br/>aggregate record| Cache
-    QP -->|8. Retrieve complete<br/>learner profile| Cache
-    
-    classDef coreStyle fill:#4A90E2,stroke:#2E5C8A,color:#fff
-    classDef infraStyle fill:#F5A623,stroke:#C17D11,color:#fff
-    
-    class IDMap coreStyle
-    class QP,Orch,Cache infraStyle
+    class DAG dagStyle
 ```
 
 ---
