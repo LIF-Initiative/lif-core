@@ -226,7 +226,7 @@ graph LR
     
     classDef coreStyle fill:#4A90E2,stroke:#2E5C8A,color:#fff
     
-    class MDRUI,MDR,Trans,GQL coreStyle
+    class MDRUI,MDR,Trans,GQL,MCP coreStyle
 ```
 
 **USE CASES:**
