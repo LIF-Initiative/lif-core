@@ -183,6 +183,8 @@ Match and link learner identities across different systems and institutions wher
 **THIS SERVICE...**  
 Resolves learner identities across systems and organizations, enabling accurate aggregation of records that belong to the same individual.
 
+**N.B.:** This service was not used in the demo. The implementation is incomplete.
+
 ```mermaid
 graph LR
     QP[Query Planner]
@@ -480,7 +482,7 @@ graph LR
 **USE CASES:**
 - Optimizing query execution across multiple data sources
 - Determining when cached data is sufficient vs. when fresh data is needed
-- Coordinating complex queries that require identity resolution
+- Coordinating complex queries that require identity resolution (future)
 - Managing data collection workflows for missing or stale data
 
 **WORKS WITH:** GraphQL API (receives queries), Query Cache, Identity Mapper, Orchestrator API  
@@ -663,7 +665,7 @@ graph TB
 
 ## Composing Solutions
 
-Not every organization needs all services. Here are common deployment patterns:
+Not every organization needs all services. Here are proposed deployment patterns:
 
 **Simple Integration Pattern:**  
 GraphQL API + Query Planner + Query Cache + Translator + MDR (API & UI)
