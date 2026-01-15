@@ -47,6 +47,7 @@
         "Dramatiq",
         "drivername",
         "dtos",
+        "durationatprofession",
         "endraw",
         "entitya",
         "entityb",
@@ -80,6 +81,7 @@
         "langmem",
         "lastname",
         "levelname",
+        "levelofskillability",
         "LIFAIAgent",
         "LIFCORE",
         "liffy",
@@ -122,6 +124,8 @@
         "scrapy",
         "sdist",
         "sessionmaker",
+        "skilllevel",
+        "skillsgainedfromcourses",
         "spyder",
         "spyderproject",
         "spyproject",
@@ -147,6 +151,7 @@
         "venv",
         "VITE",
         "webassets",
+        "workpreference",
         "xform"
     ],
     "ignorePaths": [
