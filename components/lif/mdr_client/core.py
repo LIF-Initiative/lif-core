@@ -1,8 +1,9 @@
 import json
-import httpx
 import os
 from importlib.resources import files
+from typing import AsyncGenerator
 
+import httpx
 from lif.exceptions.core import LIFException, ResourceNotFoundException
 from lif.logging import get_logger
 
@@ -15,6 +16,16 @@ def _get_mdr_api_url() -> str:
 
 def _get_mdr_api_auth_token() -> str:
     return os.getenv("LIF_MDR_API_AUTH_TOKEN", "no_auth_token_set")
+
+
+async def _get_mdr_client() -> AsyncGenerator[httpx.AsyncClient]:
+    """
+    Generator that yields an httpx AsyncClient.
+
+    Allows a test harness to override this method to connect to an in-memory MDR instance.
+    """
+    async with httpx.AsyncClient() as client:
+        yield client
 
 
 def _get_openapi_json_filename() -> str:
@@ -71,7 +82,7 @@ async def get_data_model_schema(
     mdr_api_url = _get_mdr_api_url()
     url: str = f"{mdr_api_url}/datamodels/open_api_schema/{data_model_id}?include_attr_md={str(include_attr_md).lower()}&include_entity_md={str(include_entity_md).lower()}"
     try:
-        async with httpx.AsyncClient() as client:
+        async for client in _get_mdr_client():
             response = await client.get(url, headers=_build_mdr_headers())
         response.raise_for_status()
         response_json = response.json()
@@ -94,7 +105,7 @@ async def get_data_model_transformation(source_data_model_id: str, target_data_m
     mdr_api_url = _get_mdr_api_url()
     url: str = f"{mdr_api_url}/transformation_groups/transformations_for_data_models/?source_data_model_id={source_data_model_id}&target_data_model_id={target_data_model_id}&size=1000"
     try:
-        async with httpx.AsyncClient() as client:
+        async for client in _get_mdr_client():
             response = await client.get(url, headers=_build_mdr_headers())
         response.raise_for_status()
         response_json = response.json()

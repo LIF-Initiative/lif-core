@@ -6,10 +6,36 @@ import pytest
 import testcontainers.postgres
 from deepdiff import DeepDiff
 from httpx import ASGITransport, AsyncClient
+from lif.translator_restapi import core as translator_core
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
+from test.utils.lif.mdr.api import create_data_model_by_upload, create_transformation, create_transformation_groups
+from test.utils.lif.translator.api import create_translation
+
 HEADER_MDR_API_KEY_GRAPHQL = {"X-API-Key": "changeme1"}
+
+
+def find_object_by_unique_name(schema_part: dict, unique_name: str) -> dict | None:
+    """
+    Recursively search for an object with the given UniqueName.
+
+    Returns:
+        The object dictionary if found, None otherwise
+    """
+
+    for _, value in schema_part.items():
+        if isinstance(value, dict) and value.get("UniqueName") == unique_name:
+            return value
+
+        # Recursively search
+        if isinstance(value, dict):
+            result = find_object_by_unique_name(value, unique_name)
+            if result:
+                return result
+
+    return None
+
 
 #
 # Setup to test the end-to-end API with a real postgreSQL database
@@ -60,8 +86,8 @@ async def test_db_session(postgres_container):
 
 
 @pytest.fixture(scope="function")
-async def async_client(test_db_session):
-    """Create async HTTP client for testing."""
+async def async_client_mdr(test_db_session):
+    """Create async HTTP client for testing MDR."""
 
     # Leave imports here to force database setup with
     # the test container environment variables
@@ -84,14 +110,42 @@ async def async_client(test_db_session):
     core.app.dependency_overrides.clear()
 
 
+@pytest.fixture(scope="function")
+async def async_client_translator(async_client_mdr):
+    """Create async HTTP client for testing the Translator."""
+    from lif.mdr_client import core as mdr_client_core
+
+    # Store original function for cleanup
+    original_get_mdr_client = mdr_client_core._get_mdr_client
+    original_get_mdr_api_url = mdr_client_core._get_mdr_api_url
+    original_get_mdr_api_auth_token = mdr_client_core._get_mdr_api_auth_token
+
+    # Override mdr_client's _get_mdr_client to use the test MDR app
+    async def override_get_mdr_client():
+        yield async_client_mdr
+
+    mdr_client_core._get_mdr_client = override_get_mdr_client
+    mdr_client_core._get_mdr_api_url = lambda: "http://test"
+    mdr_client_core._get_mdr_api_auth_token = lambda: "changeme1"
+
+    # Create the translator client
+    async with AsyncClient(transport=ASGITransport(app=translator_core.app), base_url="http://test") as client:
+        yield client
+
+    # Clean up - restore original function
+    mdr_client_core._get_mdr_client = original_get_mdr_client
+    mdr_client_core._get_mdr_api_url = original_get_mdr_api_url
+    mdr_client_core._get_mdr_api_auth_token = original_get_mdr_api_auth_token
+
+
 #
 # Test cases
 #
 
 
 @pytest.mark.asyncio
-async def test_test_auth_info_graphql_api_key(async_client):
-    response = await async_client.get("/test/auth-info", headers=HEADER_MDR_API_KEY_GRAPHQL)
+async def test_test_auth_info_graphql_api_key(async_client_mdr):
+    response = await async_client_mdr.get("/test/auth-info", headers=HEADER_MDR_API_KEY_GRAPHQL)
     assert response.status_code == 200, str(response.content)
     assert response.json() == {
         "auth_type": "API key",
@@ -101,10 +155,10 @@ async def test_test_auth_info_graphql_api_key(async_client):
 
 
 @pytest.mark.asyncio
-async def test_create_source_schema_datamodel_without_upload_success(async_client):
+async def test_create_source_schema_datamodel_without_upload_success(async_client_mdr):
     # Create data model without OpenAPI schema upload
 
-    response = await async_client.post(
+    response = await async_client_mdr.post(
         "/datamodels/",
         headers=HEADER_MDR_API_KEY_GRAPHQL,
         json={
@@ -154,7 +208,7 @@ async def test_create_source_schema_datamodel_without_upload_success(async_clien
 
     # Download full OpenAPI schema with metadata to verify creation
 
-    retrieve_response = await async_client.get(
+    retrieve_response = await async_client_mdr.get(
         f"/datamodels/open_api_schema/{datamodel_id}?download=true&include_entity_md=true&include_attr_md=true&full_export=true",
         headers=HEADER_MDR_API_KEY_GRAPHQL,
     )
@@ -174,7 +228,7 @@ async def test_create_source_schema_datamodel_without_upload_success(async_clien
 
 
 @pytest.mark.asyncio
-async def test_create_source_schema_datamodel_with_duplicate_valuesets(async_client):
+async def test_create_source_schema_datamodel_with_duplicate_valuesets(async_client_mdr):
     """
     Create data model with OpenAPI schema upload that contains duplicate valuesets.
 
@@ -182,7 +236,7 @@ async def test_create_source_schema_datamodel_with_duplicate_valuesets(async_cli
     """
 
     schema_path = Path(__file__).parent / "data_model_test_duplicate_valuesets.json"
-    create_response = await async_client.post(
+    create_response = await async_client_mdr.post(
         "/datamodels/open_api_schema/upload",
         headers=HEADER_MDR_API_KEY_GRAPHQL,
         files={"file": ("filename.json", open(schema_path, "rb"), "application/json")},
@@ -204,7 +258,7 @@ async def test_create_source_schema_datamodel_with_duplicate_valuesets(async_cli
 
 
 @pytest.mark.asyncio
-async def test_create_source_schema_datamodel_with_duplicate_valuesetvalues(async_client):
+async def test_create_source_schema_datamodel_with_duplicate_valuesetvalues(async_client_mdr):
     """
     Create data model with OpenAPI schema upload that contains duplicate valueset values.
 
@@ -212,7 +266,7 @@ async def test_create_source_schema_datamodel_with_duplicate_valuesetvalues(asyn
     """
 
     schema_path = Path(__file__).parent / "data_model_test_duplicate_valuesetvalues.json"
-    create_response = await async_client.post(
+    create_response = await async_client_mdr.post(
         "/datamodels/open_api_schema/upload",
         headers=HEADER_MDR_API_KEY_GRAPHQL,
         files={"file": ("filename.json", open(schema_path, "rb"), "application/json")},
@@ -234,11 +288,90 @@ async def test_create_source_schema_datamodel_with_duplicate_valuesetvalues(asyn
 
 
 @pytest.mark.asyncio
-async def test_create_source_schema_datamodel_with_upload_success(async_client):
+async def test_transforms_deep_literal_attribute(async_client_mdr, async_client_translator):
+    """
+    Transform a 'deep' literal attribute to another deep literal attribute.
+
+    Source and Target are source schemas.
+
+    """
+
+    # Create Source Data Model and extract IDs for the entity and attribute
+
+    (source_data_model_id, source_schema) = await create_data_model_by_upload(
+        async_client_mdr=async_client_mdr,
+        schema_path=Path(__file__).parent / "data_model_test_transforms_deep_literal_attribute_source.json",
+        data_model_name="test_transforms_deep_literal_attribute_source",
+        data_model_type="SourceSchema",
+    )
+    source_parent_entity_id = find_object_by_unique_name(source_schema, "person.courses")["Id"]
+    assert source_parent_entity_id is not None, "Could not find source parent entity ID for person.courses... " + str(
+        source_schema
+    )
+    source_attribute_id = find_object_by_unique_name(source_schema, "person.courses.grade")["Id"]
+    assert source_attribute_id is not None, "Could not find source attribute ID for person.courses.grade... " + str(
+        source_schema
+    )
+
+    # Create Target Data Model and extract IDs for the entity and attribute
+
+    (target_data_model_id, target_schema) = await create_data_model_by_upload(
+        async_client_mdr=async_client_mdr,
+        schema_path=Path(__file__).parent / "data_model_test_transforms_deep_literal_attribute_target.json",
+        data_model_name="test_transforms_deep_literal_attribute_target",
+        data_model_type="SourceSchema",
+    )
+    target_parent_entity_id = find_object_by_unique_name(target_schema, "user.skills")["Id"]
+    assert target_parent_entity_id is not None, "Could not find target parent entity ID for user.skills... " + str(
+        target_schema
+    )
+    target_attribute_id = find_object_by_unique_name(target_schema, "user.skills.genre")["Id"]
+    assert target_attribute_id is not None, "Could not find target attribute ID for user.skills.genre... " + str(
+        target_schema
+    )
+
+    # Create transform group between source and target
+
+    transformation_group_id = await create_transformation_groups(
+        async_client_mdr=async_client_mdr,
+        source_data_model_id=source_data_model_id,
+        target_data_model_id=target_data_model_id,
+        group_name=test_transforms_deep_literal_attribute.__name__,
+    )
+
+    # Create transform
+
+    _ = await create_transformation(
+        async_client_mdr=async_client_mdr,
+        transformation_group_id=transformation_group_id,
+        source_parent_entity_id=source_parent_entity_id,
+        source_attribute_id=source_attribute_id,
+        source_entity_path="Person.Courses",
+        target_parent_entity_id=target_parent_entity_id,
+        target_attribute_id=target_attribute_id,
+        target_entity_path="User.Skills",
+        mapping_expression='{ "User": { "Skills": { "Genre": Person.Courses.Grade } } }',
+        transformation_name="User.Skills.Genre",
+    )
+
+    # Use the transform via the Translator endpoint
+
+    translated_json = await create_translation(
+        async_client_translator=async_client_translator,
+        source_data_model_id=source_data_model_id,
+        target_data_model_id=target_data_model_id,
+        json_to_translate={"Person": {"Courses": {"Grade": "A", "Style": "Lecture"}}},
+        headers=HEADER_MDR_API_KEY_GRAPHQL,
+    )
+    assert translated_json == {"User": {"Skills": {"Genre": "A"}}}
+
+
+@pytest.mark.asyncio
+async def test_create_source_schema_datamodel_with_upload_success(async_client_mdr):
     # Create data model with OpenAPI schema upload
 
     schema_path = Path(__file__).parent / "data_model_example_datasource_full_openapi_schema.json"
-    create_response = await async_client.post(
+    create_response = await async_client_mdr.post(
         "/datamodels/open_api_schema/upload",
         headers=HEADER_MDR_API_KEY_GRAPHQL,
         files={"file": ("filename.json", open(schema_path, "rb"), "application/json")},
@@ -280,7 +413,7 @@ async def test_create_source_schema_datamodel_with_upload_success(async_client):
 
     # Download full OpenAPI schema with metadata to verify upload
 
-    retrieve_response = await async_client.get(
+    retrieve_response = await async_client_mdr.get(
         f"/datamodels/open_api_schema/{data_model_id}?download=true&include_entity_md=true&include_attr_md=true&full_export=true",
         headers=HEADER_MDR_API_KEY_GRAPHQL,
     )
