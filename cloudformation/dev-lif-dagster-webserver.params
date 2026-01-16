@@ -9,7 +9,7 @@
   },
   {
     "ParameterKey": "DomainNames",
-    "ParameterValue": "dagster.lif.unicon.net"
+    "ParameterValue": "dagster.dev.lif.unicon.net"
   },
   {
     "ParameterKey": "EnvironmentName",
