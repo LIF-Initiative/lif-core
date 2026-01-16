@@ -225,6 +225,17 @@ async def get_all_transformation_groups(
     return {"total": total_count, "data": transformations}
 
 
+@router.get("/{transformation_group_id}/export", response_model=Dict[str, Any])
+async def export_transformation_group(
+    request: Request, transformation_group_id: int, session: AsyncSession = Depends(get_session)
+):
+    transformations_export = await transformation_service.get_exportable_transformations_group(
+        session=session, group_id=transformation_group_id
+    )
+
+    return {"data": transformations_export}
+
+
 @router.get("/{transformation_group_id}", response_model=Dict[str, Any])
 async def get_all_transformations_for_a_group(
     request: Request,

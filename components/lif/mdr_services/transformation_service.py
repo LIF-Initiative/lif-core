@@ -1,4 +1,5 @@
 from typing import Dict, List
+
 from fastapi import HTTPException
 from lif.datatypes.mdr_sql_model import (
     DataModel,
@@ -17,8 +18,8 @@ from lif.mdr_dto.transformation_dto import (
     UpdateTransformationDTO,
 )
 from lif.mdr_dto.transformation_group_dto import (
-    TransformationGroupDTO,
     CreateTransformationGroupDTO,
+    TransformationGroupDTO,
     UpdateTransformationGroupDTO,
 )
 from lif.mdr_services.attribute_service import get_attribute_dto_by_id
@@ -26,15 +27,15 @@ from lif.mdr_services.entity_association_service import validate_entity_associat
 from lif.mdr_services.entity_service import is_entity_by_unique_name
 from lif.mdr_services.helper_service import (
     check_attribute_by_id,
+    check_datamodel_by_id,
     check_entity_attribute_association,
     check_entity_by_id,
-    check_datamodel_by_id,
 )
 from lif.mdr_utils.logger_config import get_logger
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlmodel import select, func
-from sqlalchemy.orm import aliased
 from sqlalchemy import and_
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import aliased
+from sqlmodel import func, select
 
 logger = get_logger(__name__)
 
@@ -954,6 +955,106 @@ async def get_paginated_transformations_for_a_group(
         transformations_dtos.append(transformation_dto)
     transformation_group_dto.Transformations = transformations_dtos
     return total_count, transformation_group_dto
+
+
+# async def get_exportable_transformations_group(session: AsyncSession, group_id: int):
+#     transformation_group = await get_transformation_group_by_id(session=session, id=group_id)
+#     transformation_group_dto = TransformationGroupDTO.from_orm(transformation_group)
+#     source_data_model = await check_datamodel_by_id(session=session, id=transformation_group_dto.SourceDataModelId)
+#     target_data_model = await check_datamodel_by_id(session=session, id=transformation_group_dto.TargetDataModelId)
+#     transformation_group_dto.SourceDataModelName = source_data_model.Name
+#     transformation_group_dto.TargetDataModelName = target_data_model.Name
+
+#     transformations_dtos: list[TransformationDTO] = []
+
+#     transformations_query = (
+#         select(Transformation)
+#         .where(Transformation.TransformationGroupId == group_id, Transformation.Deleted == False)
+#         .order_by(Transformation.Id)
+#     )
+
+#     result = await session.execute(transformations_query)
+#     transformations = result.scalars().all()
+
+#     for transformation in transformations:
+#         # Get related transformation attributes
+#         query = select(TransformationAttribute).where(
+#             TransformationAttribute.TransformationId == transformation.Id, TransformationAttribute.Deleted == False
+#         )
+#         result = await session.execute(query)
+#         transformation_attributes = result.scalars().all()
+
+#         # Initialize the source and target attributes
+#         source_attribute_dtos = []
+#         target_attribute_dto = None
+
+#         for transformation_attribute in transformation_attributes:
+#             # Fetch attribute and entity names using the service methods
+#             attribute_data = await get_attribute_dto_by_id(session, transformation_attribute.AttributeId)
+#             # entity = await get_entity_by_id(session, attribute.EntityId)
+#             query = select(EntityAttributeAssociation.EntityId).where(
+#                 EntityAttributeAssociation.AttributeId == transformation_attribute.AttributeId,
+#                 EntityAttributeAssociation.Deleted == False,
+#             )
+#             result = await session.execute(query)
+#             entity_id = result.scalars().first()
+#             reversed_attribute_path = []
+#             reversed_attribute_path.append(attribute_data.UniqueName)
+
+#             while entity_id:
+#                 entity = await get_entity_by_id(session, entity_id)
+#                 if entity:
+#                     break
+#                 else:
+#                     query = select(EntityAssociation.EntityId).where(
+#                         EntityAttributeAssociation.AttributeId == transformation_attribute.AttributeId,
+#                         EntityAttributeAssociation.Deleted == False,
+#                     )
+#                     result = await session.execute(query)
+#                     entity_id = result.scalars().first()
+
+#             # Create the TransformationAttributeDTO
+#             attribute_dto = TransformationAttributeDTO(
+#                 AttributeId=transformation_attribute.AttributeId,
+#                 AttributeName=attribute_data.Name,  # Populating the name using service
+#                 EntityId=entity_id,
+#                 # EntityName=entity.Name,  # Populating the entity name using service
+#                 AttributeType=transformation_attribute.AttributeType,
+#                 Notes=transformation_attribute.Notes,
+#                 CreationDate=transformation_attribute.CreationDate,
+#                 ActivationDate=transformation_attribute.ActivationDate,
+#                 DeprecationDate=transformation_attribute.DeprecationDate,
+#                 Contributor=transformation_attribute.Contributor,
+#                 ContributorOrganization=transformation_attribute.ContributorOrganization,
+#                 EntityIdPath=transformation_attribute.EntityIdPath,
+#             )
+
+#             # Assign based on the attribute type (Source or Target)
+#             if transformation_attribute.AttributeType == "Source":
+#                 source_attribute_dtos.append(attribute_dto)
+#             else:
+#                 target_attribute_dto = attribute_dto
+
+#         # Build the TransformationDTO
+#         transformation_dto = TransformationDTO(
+#             Id=transformation.Id,
+#             TransformationGroupId=group_id,
+#             Name=transformation.Name,
+#             ExpressionLanguage=transformation.ExpressionLanguage,
+#             Expression=transformation.Expression,
+#             Notes=transformation.Notes,
+#             Alignment=transformation.Alignment,
+#             CreationDate=transformation.CreationDate,
+#             ActivationDate=transformation.ActivationDate,
+#             DeprecationDate=transformation.DeprecationDate,
+#             Contributor=transformation.Contributor,
+#             ContributorOrganization=transformation.ContributorOrganization,
+#             SourceAttributes=source_attribute_dtos,  # Source attribute DTO
+#             TargetAttribute=target_attribute_dto,  # Target attribute DTO
+#         )
+#         transformations_dtos.append(transformation_dto)
+#     transformation_group_dto.Transformations = transformations_dtos
+#     return total_count, transformation_group_dto
 
 
 async def get_transformation_group_for_source_and_target(
