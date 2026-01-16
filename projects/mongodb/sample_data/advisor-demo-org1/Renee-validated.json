@@ -14,10 +14,11 @@
           "name": "Accounts Receivable",
           "description": "Accounts Receivable is a specialized skill that involves managing the company's outstanding payments from customers for goods or services provided. The main tasks involved in Accounts Receivable are invoicing customers, tracking payments, maintaining customer records, and following up on overdue invoices. Effective management of Accounts Receivable is essential for maintaining cash flow and ensuring the financial health of the company. It requires a strong attention to detail, excellent organizational skills, and effective communication abilities.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -25,10 +26,11 @@
           "name": "Adaptability",
           "description": "Adaptability is a common skill that involves the ability to change and adjust to new situations, tasks, and environments. It is the capacity to be flexible and open-minded in response to changes in work routines, expectations, and demands. Adaptability is valued in the workplace because it allows individuals to quickly and efficiently adapt to new circumstances, problems, and challenges. This skill can be developed and improved over time, and it can be a valuable asset for personal and professional growth.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -36,10 +38,11 @@
           "name": "Spreadsheets",
           "description": "Spreadsheets is a software application used for organizing, analyzing and manipulating data in a tabular format. It is commonly used for financial and numerical analysis, budgeting, project management, and other tasks that require the use of tables or charts. Common spreadsheet software includes Microsoft Excel, Google Sheets, and Apple Numbers. Proficiency in using spreadsheets is a valuable skill in many job roles, particularly those that involve data analysis, finance, or administration.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -47,10 +50,11 @@
           "name": "Customer Service",
           "description": "Customer service is a necessary and common skill in almost every field and industry. It involves effectively communicating with customers to understand their needs, answering their questions or concerns, and providing them with excellent support and service. A successful customer service representative must be patient, empathetic, and knowledgeable about their products or services. Strong customer service skills can lead to increased customer satisfaction, loyalty, and business success.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -58,10 +62,11 @@
           "name": "Conflict Resolution",
           "description": "Conflict Resolution is a specialized skill that involves finding solutions to disputes and disagreements between individuals or groups. It involves active listening, empathy, and effective communication to understand the needs and concerns of each party involved in the conflict. A successful conflict resolution requires a neutral and objective approach to finding a mutually beneficial solution that satisfies all parties involved.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -69,10 +74,11 @@
           "name": "Creativity",
           "description": "Creativity is a skill that is not limited to certain individuals or professions. Everyone has the ability to be creative in their own way, and it can be improved through practice and exploration. Being creative means generating unique and innovative solutions to problems or tasks, as well as expressing oneself in new and original ways. It is a vital skill in many fields and can enhance personal and professional growth.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -80,10 +86,11 @@
           "name": "Web Design",
           "description": "Web design involves creating and designing websites that are visually appealing, user-friendly, and optimized for performance. It requires a specialized skill set that includes knowledge of graphic design, coding languages, and user experience. A good web designer must be able to create a website that effectively conveys information, engages users, and drives conversions.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -91,10 +98,11 @@
           "name": "Logic Synthesis of Circuits",
           "description": "Logic synthesis is the process of translating a high-level design or behavior description of a digital circuit into a low-level implementation using a specific technology, such as field-programmable gate arrays (FPGAs) or application-specific integrated circuits (ASICs). It involves optimizing the circuit for specific design constraints and technology limitations, such as area, power, and timing. Logic synthesis is a specialized skill that requires expertise in digital design, computer architecture, and optimization techniques.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -102,10 +110,11 @@
           "name": "Digital Marketing",
           "description": "Digital marketing is a specialized skill that involves promoting a brand, product or service through various digital channels such as search engines, social media, email, and online advertising. It requires knowledge of consumer behavior, search engine algorithms, web analytics, and content marketing strategies. Effective digital marketing can help businesses reach a wider audience, increase brand awareness, drive traffic to their website, and generate leads or sales. It is a dynamic field that requires constant adaptation to changes in technology and consumer behavior.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -113,10 +122,11 @@
           "name": "Digital Storytelling",
           "description": "Digital Storytelling is a specialized skill that involves using digital tools to create a compelling narrative or story. It requires a combination of technical skills and creativity to bring together images, audio, and video in a way that engages the audience and communicates a message effectively. Digital storytelling is a powerful way to share experiences, educate others, and create meaningful connections between people, and is commonly used in marketing, education, advocacy, and other fields.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -124,10 +134,11 @@
           "name": "E-Commerce",
           "description": "E-commerce is the process of buying and selling goods and services online. It is a specialized skill that involves various aspects such as website design, digital marketing, inventory management, order fulfillment, and customer service. It requires a thorough understanding of the online marketplace, consumer behavior, and technology platforms. E-commerce professionals need to be skilled in various areas to succeed in this industry.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -135,10 +146,11 @@
           "name": "Electronic Billing",
           "description": "Electronic billing is a specialized skill that involves generating and transmitting electronic invoices and payments between businesses and their clients. It requires knowledge of electronic data interchange (EDI) standards, software systems, and financial accounting practices. The goal of electronic billing is to reduce costs, increase efficiency, and improve accuracy in the billing process. Skilled professionals in electronic billing are in high demand and play a critical role in the success of businesses that rely on digital invoicing and payments.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -146,20 +158,22 @@
           "name": "Front Office",
           "description": "Front Office is a specialized skill that involves the management and coordination of all activities that take place at the front desk or reception area of an organization. This includes handling guest inquiries, reservations, check-ins and check-outs, billing and payments, and providing general information about the organization. Front Office personnel must have excellent communication and organizational skills, be able to handle high-stress situations, and maintain a professional and welcoming demeanor at all times. In essence, front office is responsible for creating a positive first impression of the organization and ensuring that guests have a seamless and enjoyable experience.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
           "informationSourceId": "Org1",
           "name": "General Administrative Support",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -167,10 +181,11 @@
           "name": "Hospitality Service",
           "description": "Hospitality service is a specialized skill that involves providing excellent customer service, anticipating and meeting guests' needs, and creating a welcoming and comfortable atmosphere for them. It requires a combination of communication, interpersonal, and problem-solving skills, as well as knowledge of the industry and its trends. The goal of hospitality service is to ensure that guests feel valued and satisfied, and ultimately, to create a memorable experience that will encourage them to return in the future.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -178,20 +193,22 @@
           "name": "Interpersonal Communications",
           "description": "Interpersonal communication is the process of exchanging information, feelings, and meaning through verbal and nonverbal interactions. It is an essential skill that involves the ability to listen actively, speak clearly, and empathize with others. Effective interpersonal communication promotes strong relationships, enhances understanding, and fosters mutual respect between individuals. It is a common skill that is used in personal, social, and professional contexts.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
           "informationSourceId": "Org1",
           "name": "Interpersonal Skills",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -199,10 +216,11 @@
           "name": "Problem Solving",
           "description": "Problem solving is the process of identifying, analyzing and resolving problems that can arise in any situation. It is a common skill that is required in many different industries and situations, and involves identifying the root cause of a problem, generating possible solutions, evaluating those solutions and implementing the best one. Successful problem solving involves critical thinking, creativity and communication skills. Learning how to effectively solve problems can help individuals and organizations to more efficiently achieve their goals and objectives.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -210,10 +228,11 @@
           "name": "Personal Attributes Questionnaires",
           "description": "The Personal Attributes Questionnaire (PAQ) is a specialized skill used in the field of industrial-organizational psychology to assess an individual's personal characteristics and traits. The PAQ is a standardized test that measures individual differences in personality traits such as motivation, leadership, social skills, and work ethic. This tool is often used by employers in the hiring process to identify individuals who possess the qualities and characteristics necessary to excel in a particular position. Professionals who administer this assessment must have a thorough understanding of assessment procedures and standards to ensure accurate and reliable results.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -221,20 +240,22 @@
           "name": "Phone Support",
           "description": "Phone support is a specialized skill that involves providing assistance and solutions to customers over the phone. It requires effective communication, problem-solving abilities, and technical knowledge to resolve issues efficiently and satisfactorily. A phone support agent must be patient, empathetic, and able to handle challenging situations to ensure a positive customer experience. Successful phone support relies on understanding the customer's needs, diagnosing problems accurately, and providing clear guidance to resolve issues effectively.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
           "informationSourceId": "Org1",
           "name": "Passionate",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -242,10 +263,11 @@
           "name": "Telephone Call Reception Management",
           "description": "Text Kernel Skill",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -253,10 +275,11 @@
           "name": "Healthcare Electronic Billing",
           "description": "Text Kernel Skill",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -264,30 +287,33 @@
           "name": "Thought Leadership",
           "description": "Thought Leadership is the ability to lead, inspire and influence others by providing innovative and insightful ideas and perspectives in a particular field or industry. It requires a combination of expertise, strategic thinking, and effective communication skills to establish oneself as a thought leader in a specific niche. Thought leaders often publish articles, speak at conferences, engage with their audience on social media, and demonstrate their expertise in other ways to establish credibility and influence.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
           "informationSourceId": "Org1",
           "name": "Oral Communication",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
           "informationSourceId": "Org1",
           "name": "Written Communication",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -295,10 +321,11 @@
           "name": "Customer Support",
           "description": "Customer support is a specialized skill that involves providing assistance, guidance and solutions to customers who may have inquiries, problems or complaints. It requires strong communication skills, patience, empathy and problem-solving abilities. Customer support is crucial for ensuring customer satisfaction and loyalty, and it is a key aspect of many businesses' success.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -306,10 +333,11 @@
           "name": "Communications",
           "description": "Communication is a vital skill that involves exchanging information through speaking, writing or non-verbal means. It is crucial for building relationships, conveying ideas, clarifying misunderstandings, and achieving goals. Effective communication requires active listening, clear and concise expression, empathy, and persuasion skills. It is applicable in all aspects of life, including personal relationships, social interactions, and professional settings.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -317,20 +345,22 @@
           "name": "Influencing Skills",
           "description": "Influencing skills refer to the ability to persuade or convince others to support an idea, decision or action. This involves understanding the perspectives and needs of others, communicating effectively, building trust and rapport, and using various techniques such as negotiation and persuasion to achieve the desired outcome. Influencing skills are commonly required in various personal and professional settings, such as leadership, sales, marketing, and teamwork.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
           "informationSourceId": "Org1",
           "name": "Goal Oriented",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -338,10 +368,11 @@
           "name": "Teamwork",
           "description": "Teamwork is the ability to work effectively and harmoniously with others towards a common goal. It involves being cooperative, communicative, and collaborative, as well as being able to contribute to and participate in group decision-making processes. Teamwork is a valued skill in many workplaces and is essential for successful project completion and overall business success.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -349,10 +380,11 @@
           "name": "Persuasive Communication",
           "description": "Persuasive communication refers to the ability to convince others to take a certain course of action or persuade them to believe in a particular idea or viewpoint. This skill is commonly used in various settings such as politics, advertising, sales, and public speaking. Effective persuasive communication involves understanding the audience, identifying their needs and values, presenting compelling arguments, using persuasive techniques such as storytelling and emotional appeals, and addressing potential objections. It is a valuable skill to have in personal and professional life as it can lead to successful negotiations, increased influence, and improved relationships.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -360,10 +392,11 @@
           "name": "Analytical Techniques",
           "description": "Analytical techniques involve the use of specialized skills and methods to analyze data and information. These techniques enable individuals to identify patterns, trends, and relationships in data, as well as to draw insights and make informed decisions. Such skills require a deep understanding of statistics, data modeling, and visualization techniques, as well as the ability to apply critical thinking and logic to complex problems. Effective use of analytical techniques can help businesses and organizations to improve their operations, identify new opportunities, and make informed decisions based on data-driven insights.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -371,10 +404,11 @@
           "name": "Client Services",
           "description": "Client services is a specialized skill that involves providing high-quality customer service and support to clients or customers. This includes communication, problem-solving, customer satisfaction, relationship management, and ensuring that clients' needs are met. It involves understanding the client's goals, expectations, and preferences to develop a strategy that can lead to better outcomes and maintain long-term relationships. It is important to provide efficient and reliable assistance to clients to ensure their trust and loyalty.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -382,10 +416,11 @@
           "name": "Stress Management",
           "description": "Stress management is the ability to cope with stressors and challenges in a healthy manner. It involves a range of techniques and strategies, such as mindfulness, exercise, and time management, that help individuals reduce stress and maintain a sense of balance and wellbeing. Effective stress management can improve mental and physical health, enhance productivity and performance, and lead to overall greater satisfaction with life.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -393,20 +428,22 @@
           "name": "Bookkeeping",
           "description": "Bookkeeping is the process of recording and organizing financial transactions for a business or organization. It involves keeping accurate records of income and expenses, creating financial statements, and reconciling accounts. Bookkeeping requires specialized skills such as attention to detail, analytical skills, and proficiency in accounting software. It is essential for businesses to maintain an accurate record of their finances to make informed decisions, stay compliant with tax laws, and monitor business performance.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
           "informationSourceId": "Org1",
           "name": "Customer Billing",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -414,10 +451,11 @@
           "name": "Billing",
           "description": "Billing is the process of generating invoices or bills for goods or services provided by a business to its clients or customers. It involves gathering all the necessary information related to the transaction, calculating costs, and creating accurate invoices. Effective billing requires specialized knowledge of accounting principles, billing software, and legal and regulatory compliance. It is an important aspect of business operations as it ensures timely payment and helps maintain financial stability.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
@@ -425,20 +463,22 @@
           "name": "Learning Agility",
           "description": "Learning Agility is a skill that refers to an individual's ability to rapidly learn and adapt to new situations or tasks that they have no prior experience with. It is the ability to learn from experience, and apply those lessons to new or unfamiliar situations. Those who possess strong learning agility can quickly acclimate to new environments, learn new skills, and adapt to changing circumstances with ease. It is considered a crucial skill in today's fast-paced, ever-changing work environment and is highly valued by employers.",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         },
         {
           "informationSourceId": "Org1",
           "name": "Medical Coding",
           "refCredentialAward": {
-            "id": "cred-proficiency-certificate-001",
+            "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1"
           }
         }
       ],
@@ -489,7 +529,10 @@
           },
           "refCourse": {
             "informationSourceId": "Org1",
-            "identifier": [
+            "informationSourceOrganization": "Org1",
+            "identifier": "CS651",
+            "name": "Computer Science 651",
+            "Identifier": [
               {
                 "identifier": "CS651",
                 "identifierType": "Course Code",
@@ -511,7 +554,8 @@
           "informationSourceId": "Org1",
           "refCredentialAward": {
             "informationSourceId": "Org1",
-            "id": "f5d42e6a-d6bd-4a34-a910-dfd12adbb708",
+            "informationSourceOrganization": "Org1",
+            "identifier": "f5d42e6a-d6bd-4a34-a910-dfd12adbb708",
             "awardIssueDate": "2021-03-24",
             "credentialAwardee": "Renee Green"
           }
@@ -528,7 +572,8 @@
           "informationSourceId": "Org1",
           "refCredentialAward": {
             "informationSourceId": "Org1",
-            "id": "3cc9234a-4a0c-4171-846b-77d28d9aceb0",
+            "informationSourceOrganization": "Org1",
+            "identifier": "3cc9234a-4a0c-4171-846b-77d28d9aceb0",
             "awardIssueDate": "2022-02-15T19:22:24Z",
             "credentialAwardee": "Renee Green"
           }
@@ -545,7 +590,8 @@
           "informationSourceId": "Org1",
           "refCredentialAward": {
             "informationSourceId": "Org1",
-            "id": "c9efcc1d-e6af-492f-8a1b-04006feadce3",
+            "informationSourceOrganization": "Org1",
+            "identifier": "c9efcc1d-e6af-492f-8a1b-04006feadce3",
             "awardIssueDate": "2022-01-13",
             "credentialAwardee": "Renee Green"
           }
@@ -554,26 +600,30 @@
       "informationSourceId": "Org1",
       "credentialAward": [
         {
-          "id": "cred-proficiency-certificate-001",
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "Org1",
+          "identifier": "cred-proficiency-certificate-001",
           "awardIssueDate": "2024-12-15T10:00:00Z",
-          "credentialAwardee": "Renee Green",
-          "informationSourceId": "Org1"
+          "credentialAwardee": "Renee Green"
         },
         {
           "informationSourceId": "Org1",
-          "id": "f5d42e6a-d6bd-4a34-a910-dfd12adbb708",
+          "informationSourceOrganization": "Org1",
+          "identifier": "f5d42e6a-d6bd-4a34-a910-dfd12adbb708",
           "awardIssueDate": "2021-03-24",
           "credentialAwardee": "Renee Green"
         },
         {
           "informationSourceId": "Org1",
-          "id": "3cc9234a-4a0c-4171-846b-77d28d9aceb0",
+          "informationSourceOrganization": "Org1",
+          "identifier": "3cc9234a-4a0c-4171-846b-77d28d9aceb0",
           "awardIssueDate": "2022-02-15T19:22:24Z",
           "credentialAwardee": "Renee Green"
         },
         {
           "informationSourceId": "Org1",
-          "id": "c9efcc1d-e6af-492f-8a1b-04006feadce3",
+          "informationSourceOrganization": "Org1",
+          "identifier": "c9efcc1d-e6af-492f-8a1b-04006feadce3",
           "awardIssueDate": "2022-01-13",
           "credentialAwardee": "Renee Green"
         }
