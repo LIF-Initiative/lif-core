@@ -840,13 +840,9 @@ const MappingsView: React.FC = () => {
     const countGroupsForSource = useCallback(
         (sourceId: number) => {
             if (!allGroups) return 0;
-            const normalize = (id?: number) => (id && id > 0 ? id : 1);
-            const targetId = selectedTargetId ?? 17;
-            return allGroups.filter(
-                (g) =>
-                    g.SourceDataModelId === sourceId &&
-                    normalize(g.TargetDataModelId) === normalize(targetId)
-            ).length;
+            sourceId = sourceId ?? 0;
+            const targetId = selectedTargetId ?? 0;
+            return allGroups.filter((g) => g.SourceDataModelId === sourceId && g.TargetDataModelId === targetId).length;
         },
         [allGroups, selectedTargetId]
     );
@@ -855,13 +851,9 @@ const MappingsView: React.FC = () => {
     const countGroupsForTarget = useCallback(
         (targetId: number) => {
             if (!allGroups) return 0;
-            const normalize = (id?: number) => (id && id > 0 ? id : 17);
-            const sourceId = selectedSourceId ?? 1;
-            return allGroups.filter(
-                (g) =>
-                    g.SourceDataModelId === sourceId &&
-                    normalize(g.TargetDataModelId) === normalize(targetId)
-            ).length;
+            targetId = targetId ?? 0;
+            const sourceId = selectedSourceId ?? 0;
+            return allGroups.filter((g) => g.SourceDataModelId === sourceId && g.TargetDataModelId === targetId).length;
         },
         [allGroups, selectedSourceId]
     );
