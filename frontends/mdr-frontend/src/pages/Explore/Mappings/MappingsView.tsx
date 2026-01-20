@@ -737,7 +737,7 @@ const MappingsView: React.FC = () => {
     useEffect(() => {
         const loadModels = async () => {
             try {
-                const data = await listModels({ type: 'SourceSchema' });
+                const data = await listModels();
                 const list = Array.isArray(data)
                     ? (data as any[]).map((m) => ({ Id: m.Id, Name: m.Name }))
                     : [];
@@ -836,19 +836,26 @@ const MappingsView: React.FC = () => {
         [allGroups, versionByGroupId]
     );
 
-    // Count groups for a given source pointing to selected target (default normalize to 1 when absent)
+    // Count groups for a given source pointing to selected target
     const countGroupsForSource = useCallback(
         (sourceId: number) => {
             if (!allGroups) return 0;
-            const normalize = (id?: number) => (id && id > 0 ? id : 1);
-            const targetId = selectedTargetId ?? 1;
-            return allGroups.filter(
-                (g) =>
-                    g.SourceDataModelId === sourceId &&
-                    normalize(g.TargetDataModelId) === normalize(targetId)
-            ).length;
+            sourceId = sourceId ?? 0;
+            const targetId = selectedTargetId ?? 0;
+            return allGroups.filter((g) => g.SourceDataModelId === sourceId && g.TargetDataModelId === targetId).length;
         },
         [allGroups, selectedTargetId]
+    );
+
+    // Count groups for a given target pointing to selected source
+    const countGroupsForTarget = useCallback(
+        (targetId: number) => {
+            if (!allGroups) return 0;
+            targetId = targetId ?? 0;
+            const sourceId = selectedSourceId ?? 0;
+            return allGroups.filter((g) => g.SourceDataModelId === sourceId && g.TargetDataModelId === targetId).length;
+        },
+        [allGroups, selectedSourceId]
     );
 
     const onChangeSourceModel = useCallback(
@@ -2221,24 +2228,15 @@ const MappingsView: React.FC = () => {
                                         )}
                                     </RdxSelect.Trigger>
                                     <RdxSelect.Content>
-                                        {allModels.map((m) => {
-                                            const count = countGroupsForSource(
-                                                m.Id
-                                            );
+                                        {allModels.filter((m: any) => m.Id !== selectedTargetId)
+                                          .map((m) => {
+                                            const count = countGroupsForSource(m.Id);
                                             return (
-                                                <RdxSelect.Item
-                                                    key={m.Id}
-                                                    value={String(m.Id)}
-                                                >
+                                                <RdxSelect.Item key={m.Id} value={String(m.Id)}>
                                                     <div className="mappings-select-item-row">
                                                         <span>{m.Name}</span>
                                                         {count > 0 && (
-                                                            <Badge
-                                                                variant="soft"
-                                                                color="gray"
-                                                            >
-                                                                {count}
-                                                            </Badge>
+                                                            <Badge variant="soft" color="gray">{count}</Badge>
                                                         )}
                                                     </div>
                                                 </RdxSelect.Item>
@@ -2496,12 +2494,10 @@ const MappingsView: React.FC = () => {
                         query={targetQuery}
                         onQueryChange={setTargetQuery}
                         headerNameNode={(() => {
-                            const selected = orgLifModels.find(
-                                (m) => m.Id === selectedTargetId
-                            );
-                            if (!orgLifModels.length) return 'Target';
-                            if (orgLifModels.length === 1)
-                                return selected?.Name || orgLifModels[0].Name;
+                            const selected = allModels.find((m) => m.Id === selectedTargetId);
+                            const selectedCount = selected
+                                ? countGroupsForTarget(selected.Id)
+                                : 0;
                             return (
                                 <RdxSelect.Root
                                     value={
@@ -2513,25 +2509,33 @@ const MappingsView: React.FC = () => {
                                         onChangeTargetModel(Number(v))
                                     }
                                 >
-                                    <RdxSelect.Trigger
-                                        className="mappings-source-select"
-                                        title="Select target OrgLIF model"
-                                    >
-                                        <span>
-                                            {selected?.Name || 'Select target'}
-                                        </span>
+                                    <RdxSelect.Trigger className="mappings-target-select" title="Select target data model">
+                                        <span>{selected?.Name || 'Select target'}</span>
+                                        {selectedCount > 0 && (
+                                            <Badge
+                                                variant="soft"
+                                                color="gray"
+                                                className="mappings-source-trigger-count"
+                                            >
+                                                {selectedCount}
+                                            </Badge>
+                                        )}
                                     </RdxSelect.Trigger>
                                     <RdxSelect.Content>
-                                        {orgLifModels.map((m) => (
-                                            <RdxSelect.Item
-                                                key={m.Id}
-                                                value={String(m.Id)}
-                                            >
-                                                <div className="mappings-select-item-row">
-                                                    <span>{m.Name}</span>
-                                                </div>
-                                            </RdxSelect.Item>
-                                        ))}
+                                        {allModels.filter((m: any) => m.Id !== selectedSourceId)
+                                          .map((m) => {
+                                            const count = countGroupsForTarget(m.Id);
+                                            return (
+                                                <RdxSelect.Item key={m.Id} value={String(m.Id)}>
+                                                    <div className="mappings-select-item-row">
+                                                        <span>{m.Name}</span>
+                                                        {count > 0 && (
+                                                            <Badge variant="soft" color="gray">{count}</Badge>
+                                                        )}
+                                                    </div>
+                                                </RdxSelect.Item>
+                                            );
+                                        })}
                                     </RdxSelect.Content>
                                 </RdxSelect.Root>
                             );
