@@ -610,7 +610,9 @@
             "informationSourceId": "Org1",
             "name": "State University",
             "identificationSystem": "State University SIS",
-            "organizationType": []
+            "organizationType": [],
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refCourse": {
             "informationSourceId": "Org1",
@@ -634,7 +636,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "informationSourceId": "Org1",
           "refCredentialAward": {
@@ -654,7 +658,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "informationSourceId": "Org1",
           "refCredentialAward": {
@@ -674,7 +680,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "informationSourceId": "Org1",
           "refCredentialAward": {

@@ -56,7 +56,9 @@
           "name": "Sales Associate ",
           "refPosition": {
             "informationSourceId": "Org2",
-            "name": "Referenced Employment Experience"
+            "name": "Referenced Employment Experience",
+            "informationSourceOrganization": "Community College",
+            "identifier": "position-referenced-employment-experien-org2-001"
           },
           "startDate": "2021-05",
           "assertedByRefOrganization": {
@@ -65,7 +67,9 @@
             "organizationType": [
               "Company"
             ],
-            "informationSourceId": "Org2"
+            "informationSourceId": "Org2",
+            "informationSourceOrganization": "Community College",
+            "identifier": "organization-employing-organization-org2-001"
           },
           "offeredByRefOrganization": {
             "identificationSystem": "stateu-training-provider-id",
@@ -73,7 +77,9 @@
             "organizationType": [
               "Training Organization"
             ],
-            "informationSourceId": "Org2"
+            "informationSourceId": "Org2",
+            "informationSourceOrganization": "Community College",
+            "identifier": "organization-training-provider-org2-001"
           },
           "approvedByRefOrganization": {
             "identificationSystem": "stateu-approving-authority-id",
@@ -81,7 +87,9 @@
             "organizationType": [
               "Regulatory Body"
             ],
-            "informationSourceId": "Org2"
+            "informationSourceId": "Org2",
+            "informationSourceOrganization": "Community College",
+            "identifier": "organization-approving-authority-org2-001"
           },
           "refCredentialAward": {
             "identifier": "cred-employment-certificate-001",
@@ -100,7 +108,9 @@
           "endDate": "2016-09",
           "refPosition": {
             "informationSourceId": "Org2",
-            "name": "Referenced Employment Experience"
+            "name": "Referenced Employment Experience",
+            "informationSourceOrganization": "Community College",
+            "identifier": "position-referenced-employment-experien-org2-001"
           },
           "startDate": "2010-08",
           "assertedByRefOrganization": {
@@ -109,7 +119,9 @@
             "organizationType": [
               "Company"
             ],
-            "informationSourceId": "Org2"
+            "informationSourceId": "Org2",
+            "informationSourceOrganization": "Community College",
+            "identifier": "organization-employing-organization-org2-001"
           },
           "offeredByRefOrganization": {
             "identificationSystem": "stateu-training-provider-id",
@@ -117,7 +129,9 @@
             "organizationType": [
               "Training Organization"
             ],
-            "informationSourceId": "Org2"
+            "informationSourceId": "Org2",
+            "informationSourceOrganization": "Community College",
+            "identifier": "organization-training-provider-org2-001"
           },
           "approvedByRefOrganization": {
             "identificationSystem": "stateu-approving-authority-id",
@@ -125,7 +139,9 @@
             "organizationType": [
               "Regulatory Body"
             ],
-            "informationSourceId": "Org2"
+            "informationSourceId": "Org2",
+            "informationSourceOrganization": "Community College",
+            "identifier": "organization-approving-authority-org2-001"
           },
           "refCredentialAward": {
             "identifier": "cred-employment-certificate-001",
@@ -144,7 +160,9 @@
           "endDate": "2016-08",
           "refPosition": {
             "informationSourceId": "Org2",
-            "name": "Referenced Employment Experience"
+            "name": "Referenced Employment Experience",
+            "informationSourceOrganization": "Community College",
+            "identifier": "position-referenced-employment-experien-org2-001"
           },
           "startDate": "2006-05",
           "assertedByRefOrganization": {
@@ -153,7 +171,9 @@
             "organizationType": [
               "Company"
             ],
-            "informationSourceId": "Org2"
+            "informationSourceId": "Org2",
+            "informationSourceOrganization": "Community College",
+            "identifier": "organization-employing-organization-org2-001"
           },
           "offeredByRefOrganization": {
             "identificationSystem": "stateu-training-provider-id",
@@ -161,7 +181,9 @@
             "organizationType": [
               "Training Organization"
             ],
-            "informationSourceId": "Org2"
+            "informationSourceId": "Org2",
+            "informationSourceOrganization": "Community College",
+            "identifier": "organization-training-provider-org2-001"
           },
           "approvedByRefOrganization": {
             "identificationSystem": "stateu-approving-authority-id",
@@ -169,7 +191,9 @@
             "organizationType": [
               "Regulatory Body"
             ],
-            "informationSourceId": "Org2"
+            "informationSourceId": "Org2",
+            "informationSourceOrganization": "Community College",
+            "identifier": "organization-approving-authority-org2-001"
           },
           "refCredentialAward": {
             "identifier": "cred-employment-certificate-001",
@@ -188,7 +212,9 @@
           "endDate": "2006-03",
           "refPosition": {
             "informationSourceId": "Org2",
-            "name": "Referenced Employment Experience"
+            "name": "Referenced Employment Experience",
+            "informationSourceOrganization": "Community College",
+            "identifier": "position-referenced-employment-experien-org2-001"
           },
           "startDate": "2001-09",
           "assertedByRefOrganization": {
@@ -197,7 +223,9 @@
             "organizationType": [
               "Company"
             ],
-            "informationSourceId": "Org2"
+            "informationSourceId": "Org2",
+            "informationSourceOrganization": "Community College",
+            "identifier": "organization-employing-organization-org2-001"
           },
           "offeredByRefOrganization": {
             "identificationSystem": "stateu-training-provider-id",
@@ -205,7 +233,9 @@
             "organizationType": [
               "Training Organization"
             ],
-            "informationSourceId": "Org2"
+            "informationSourceId": "Org2",
+            "informationSourceOrganization": "Community College",
+            "identifier": "organization-training-provider-org2-001"
           },
           "approvedByRefOrganization": {
             "identificationSystem": "stateu-approving-authority-id",
@@ -213,7 +243,9 @@
             "organizationType": [
               "Regulatory Body"
             ],
-            "informationSourceId": "Org2"
+            "informationSourceId": "Org2",
+            "informationSourceOrganization": "Community College",
+            "identifier": "organization-approving-authority-org2-001"
           },
           "refCredentialAward": {
             "identifier": "cred-employment-certificate-001",

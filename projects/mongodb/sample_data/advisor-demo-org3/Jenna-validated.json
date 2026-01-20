@@ -61,7 +61,9 @@
             "informationSourceId": "Org3",
             "name": "Summit Valley University",
             "identificationSystem": "Summit Valley University SIS",
-            "organizationType": []
+            "organizationType": [],
+            "informationSourceOrganization": "Regional University",
+            "identifier": "organization-summit-valley-university-org3-001"
           },
           "refCourse": {
             "informationSourceId": "Org3",
@@ -85,7 +87,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org3"
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Regional University",
+            "identifier": "organization-state-university-org3-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org3",
@@ -104,7 +108,9 @@
             "informationSourceId": "Org3",
             "name": "Summit Valley University",
             "identificationSystem": "Summit Valley University SIS",
-            "organizationType": []
+            "organizationType": [],
+            "informationSourceOrganization": "Regional University",
+            "identifier": "organization-summit-valley-university-org3-001"
           },
           "refCourse": {
             "informationSourceId": "Org3",
@@ -128,7 +134,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org3"
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Regional University",
+            "identifier": "organization-state-university-org3-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org3",
@@ -147,7 +155,9 @@
             "informationSourceId": "Org3",
             "name": "Summit Valley University",
             "identificationSystem": "Summit Valley University SIS",
-            "organizationType": []
+            "organizationType": [],
+            "informationSourceOrganization": "Regional University",
+            "identifier": "organization-summit-valley-university-org3-001"
           },
           "refCourse": {
             "informationSourceId": "Org3",
@@ -171,7 +181,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org3"
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Regional University",
+            "identifier": "organization-state-university-org3-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org3",
@@ -190,7 +202,9 @@
             "informationSourceId": "Org3",
             "name": "Summit Valley University",
             "identificationSystem": "Summit Valley University SIS",
-            "organizationType": []
+            "organizationType": [],
+            "informationSourceOrganization": "Regional University",
+            "identifier": "organization-summit-valley-university-org3-001"
           },
           "refCourse": {
             "informationSourceId": "Org3",
@@ -214,7 +228,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org3"
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Regional University",
+            "identifier": "organization-state-university-org3-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org3",
@@ -233,7 +249,9 @@
             "informationSourceId": "Org3",
             "name": "Summit Valley University",
             "identificationSystem": "Summit Valley University SIS",
-            "organizationType": []
+            "organizationType": [],
+            "informationSourceOrganization": "Regional University",
+            "identifier": "organization-summit-valley-university-org3-001"
           },
           "refCourse": {
             "informationSourceId": "Org3",
@@ -257,7 +275,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org3"
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Regional University",
+            "identifier": "organization-state-university-org3-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org3",
@@ -870,7 +890,9 @@
                   "informationSourceId": "Org3"
                 }
               ],
-              "informationSourceId": "Org3"
+              "informationSourceId": "Org3",
+              "informationSourceOrganization": "Regional University",
+              "identifier": "contact-org3-001"
             }
           ],
           "imageUrl": "https://cdn.summitvalley.edu/assets/logo.svg",
@@ -878,21 +900,25 @@
             {
               "identifier": "999112233",
               "identifierType": "Federal employer identification number",
-              "informationSourceId": "Org3"
+              "informationSourceId": "Org3",
+              "informationSourceOrganization": "Regional University"
             },
             {
               "identifier": "123456789",
               "identifierType": "Dun and Bradstreet number",
-              "informationSourceId": "Org3"
+              "informationSourceId": "Org3",
+              "informationSourceOrganization": "Regional University"
             },
             {
               "identifier": "https://credentialfinder.org/organization/999/Summit_Valley_University",
               "identifierType": "credentialfinder.org",
-              "informationSourceId": "Org3"
+              "informationSourceId": "Org3",
+              "informationSourceOrganization": "Regional University"
             }
           ],
           "identificationSystem": "summit-valley-university-sis",
-          "organizationType": []
+          "organizationType": [],
+          "informationSourceOrganization": "Regional University"
         }
       ],
       "accreditation": [

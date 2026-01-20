@@ -2193,7 +2193,9 @@
             "informationSourceId": "Org1",
             "name": "State University",
             "identificationSystem": "State University SIS",
-            "organizationType": []
+            "organizationType": [],
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refRefCourse": [
             {
@@ -2217,7 +2219,9 @@
                 "organizationType": [
                   "Government Agency"
                 ],
-                "informationSourceId": "Org1"
+                "informationSourceId": "Org1",
+                "informationSourceOrganization": "State University",
+                "identifier": "organization-state-department-of-education-org1-001"
               },
               "identifier": [
                 {
@@ -2226,9 +2230,11 @@
                   "identifierVerification": [
                     "Academic Records"
                   ],
-                  "informationSourceId": "Org1"
+                  "informationSourceId": "Org1",
+                  "informationSourceOrganization": "State University"
                 }
-              ]
+              ],
+              "informationSourceOrganization": "State University"
             }
           ],
           "offeredByRefOrganization": {
@@ -2237,7 +2243,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refCredentialAward": {
             "identifier": "e5db3773-ff1b-4d11-b050-1aa7e8fd9366",
@@ -2256,7 +2264,9 @@
             "informationSourceId": "Org1",
             "name": "State University",
             "identificationSystem": "State University SIS",
-            "organizationType": []
+            "organizationType": [],
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refRefCourse": [
             {
@@ -2280,7 +2290,9 @@
                 "organizationType": [
                   "Government Agency"
                 ],
-                "informationSourceId": "Org1"
+                "informationSourceId": "Org1",
+                "informationSourceOrganization": "State University",
+                "identifier": "organization-state-department-of-education-org1-001"
               },
               "identifier": [
                 {
@@ -2289,9 +2301,11 @@
                   "identifierVerification": [
                     "Academic Records"
                   ],
-                  "informationSourceId": "Org1"
+                  "informationSourceId": "Org1",
+                  "informationSourceOrganization": "State University"
                 }
-              ]
+              ],
+              "informationSourceOrganization": "State University"
             }
           ],
           "offeredByRefOrganization": {
@@ -2300,7 +2314,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
@@ -2319,7 +2335,9 @@
             "informationSourceId": "Org1",
             "name": "State University",
             "identificationSystem": "State University SIS",
-            "organizationType": []
+            "organizationType": [],
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refRefCourse": [
             {
@@ -2343,7 +2361,9 @@
                 "organizationType": [
                   "Government Agency"
                 ],
-                "informationSourceId": "Org1"
+                "informationSourceId": "Org1",
+                "informationSourceOrganization": "State University",
+                "identifier": "organization-state-department-of-education-org1-001"
               },
               "identifier": [
                 {
@@ -2352,9 +2372,11 @@
                   "identifierVerification": [
                     "Academic Records"
                   ],
-                  "informationSourceId": "Org1"
+                  "informationSourceId": "Org1",
+                  "informationSourceOrganization": "State University"
                 }
-              ]
+              ],
+              "informationSourceOrganization": "State University"
             }
           ],
           "offeredByRefOrganization": {
@@ -2363,7 +2385,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
@@ -2382,7 +2406,9 @@
             "informationSourceId": "Org1",
             "name": "State University",
             "identificationSystem": "State University SIS",
-            "organizationType": []
+            "organizationType": [],
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refRefCourse": [
             {
@@ -2406,7 +2432,9 @@
                 "organizationType": [
                   "Government Agency"
                 ],
-                "informationSourceId": "Org1"
+                "informationSourceId": "Org1",
+                "informationSourceOrganization": "State University",
+                "identifier": "organization-state-department-of-education-org1-001"
               },
               "identifier": [
                 {
@@ -2415,9 +2443,11 @@
                   "identifierVerification": [
                     "Academic Records"
                   ],
-                  "informationSourceId": "Org1"
+                  "informationSourceId": "Org1",
+                  "informationSourceOrganization": "State University"
                 }
-              ]
+              ],
+              "informationSourceOrganization": "State University"
             }
           ],
           "offeredByRefOrganization": {
@@ -2426,7 +2456,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
@@ -2445,7 +2477,9 @@
             "informationSourceId": "Org1",
             "name": "State University",
             "identificationSystem": "State University SIS",
-            "organizationType": []
+            "organizationType": [],
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refRefCourse": [
             {
@@ -2469,7 +2503,9 @@
                 "organizationType": [
                   "Government Agency"
                 ],
-                "informationSourceId": "Org1"
+                "informationSourceId": "Org1",
+                "informationSourceOrganization": "State University",
+                "identifier": "organization-state-department-of-education-org1-001"
               },
               "identifier": [
                 {
@@ -2478,9 +2514,11 @@
                   "identifierVerification": [
                     "Academic Records"
                   ],
-                  "informationSourceId": "Org1"
+                  "informationSourceId": "Org1",
+                  "informationSourceOrganization": "State University"
                 }
-              ]
+              ],
+              "informationSourceOrganization": "State University"
             }
           ],
           "offeredByRefOrganization": {
@@ -2489,7 +2527,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
@@ -2508,7 +2548,9 @@
             "informationSourceId": "Org1",
             "name": "State University",
             "identificationSystem": "State University SIS",
-            "organizationType": []
+            "organizationType": [],
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refRefCourse": [
             {
@@ -2532,7 +2574,9 @@
                 "organizationType": [
                   "Government Agency"
                 ],
-                "informationSourceId": "Org1"
+                "informationSourceId": "Org1",
+                "informationSourceOrganization": "State University",
+                "identifier": "organization-state-department-of-education-org1-001"
               },
               "identifier": [
                 {
@@ -2541,9 +2585,11 @@
                   "identifierVerification": [
                     "Academic Records"
                   ],
-                  "informationSourceId": "Org1"
+                  "informationSourceId": "Org1",
+                  "informationSourceOrganization": "State University"
                 }
-              ]
+              ],
+              "informationSourceOrganization": "State University"
             }
           ],
           "offeredByRefOrganization": {
@@ -2552,7 +2598,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
@@ -2571,7 +2619,9 @@
             "informationSourceId": "Org1",
             "name": "State University",
             "identificationSystem": "State University SIS",
-            "organizationType": []
+            "organizationType": [],
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refRefCourse": [
             {
@@ -2595,7 +2645,9 @@
                 "organizationType": [
                   "Government Agency"
                 ],
-                "informationSourceId": "Org1"
+                "informationSourceId": "Org1",
+                "informationSourceOrganization": "State University",
+                "identifier": "organization-state-department-of-education-org1-001"
               },
               "identifier": [
                 {
@@ -2604,9 +2656,11 @@
                   "identifierVerification": [
                     "Academic Records"
                   ],
-                  "informationSourceId": "Org1"
+                  "informationSourceId": "Org1",
+                  "informationSourceOrganization": "State University"
                 }
-              ]
+              ],
+              "informationSourceOrganization": "State University"
             }
           ],
           "offeredByRefOrganization": {
@@ -2615,7 +2669,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
@@ -2634,7 +2690,9 @@
             "informationSourceId": "Org1",
             "name": "State University",
             "identificationSystem": "State University SIS",
-            "organizationType": []
+            "organizationType": [],
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refRefCourse": [
             {
@@ -2658,7 +2716,9 @@
                 "organizationType": [
                   "Government Agency"
                 ],
-                "informationSourceId": "Org1"
+                "informationSourceId": "Org1",
+                "informationSourceOrganization": "State University",
+                "identifier": "organization-state-department-of-education-org1-001"
               },
               "identifier": [
                 {
@@ -2667,9 +2727,11 @@
                   "identifierVerification": [
                     "Academic Records"
                   ],
-                  "informationSourceId": "Org1"
+                  "informationSourceId": "Org1",
+                  "informationSourceOrganization": "State University"
                 }
-              ]
+              ],
+              "informationSourceOrganization": "State University"
             }
           ],
           "offeredByRefOrganization": {
@@ -2678,7 +2740,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
@@ -2697,7 +2761,9 @@
             "informationSourceId": "Org1",
             "name": "State University",
             "identificationSystem": "State University SIS",
-            "organizationType": []
+            "organizationType": [],
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refRefCourse": [
             {
@@ -2721,7 +2787,9 @@
                 "organizationType": [
                   "Government Agency"
                 ],
-                "informationSourceId": "Org1"
+                "informationSourceId": "Org1",
+                "informationSourceOrganization": "State University",
+                "identifier": "organization-state-department-of-education-org1-001"
               },
               "identifier": [
                 {
@@ -2730,9 +2798,11 @@
                   "identifierVerification": [
                     "Academic Records"
                   ],
-                  "informationSourceId": "Org1"
+                  "informationSourceId": "Org1",
+                  "informationSourceOrganization": "State University"
                 }
-              ]
+              ],
+              "informationSourceOrganization": "State University"
             }
           ],
           "offeredByRefOrganization": {
@@ -2741,7 +2811,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
@@ -2760,7 +2832,9 @@
             "informationSourceId": "Org1",
             "name": "State University",
             "identificationSystem": "State University SIS",
-            "organizationType": []
+            "organizationType": [],
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refRefCourse": [
             {
@@ -2784,7 +2858,9 @@
                 "organizationType": [
                   "Government Agency"
                 ],
-                "informationSourceId": "Org1"
+                "informationSourceId": "Org1",
+                "informationSourceOrganization": "State University",
+                "identifier": "organization-state-department-of-education-org1-001"
               },
               "identifier": [
                 {
@@ -2793,9 +2869,11 @@
                   "identifierVerification": [
                     "Academic Records"
                   ],
-                  "informationSourceId": "Org1"
+                  "informationSourceId": "Org1",
+                  "informationSourceOrganization": "State University"
                 }
-              ]
+              ],
+              "informationSourceOrganization": "State University"
             }
           ],
           "offeredByRefOrganization": {
@@ -2804,7 +2882,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
@@ -2823,7 +2903,9 @@
             "informationSourceId": "Org1",
             "name": "State University",
             "identificationSystem": "State University SIS",
-            "organizationType": []
+            "organizationType": [],
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refRefCourse": [
             {
@@ -2847,7 +2929,9 @@
                 "organizationType": [
                   "Government Agency"
                 ],
-                "informationSourceId": "Org1"
+                "informationSourceId": "Org1",
+                "informationSourceOrganization": "State University",
+                "identifier": "organization-state-department-of-education-org1-001"
               },
               "identifier": [
                 {
@@ -2856,9 +2940,11 @@
                   "identifierVerification": [
                     "Academic Records"
                   ],
-                  "informationSourceId": "Org1"
+                  "informationSourceId": "Org1",
+                  "informationSourceOrganization": "State University"
                 }
-              ]
+              ],
+              "informationSourceOrganization": "State University"
             }
           ],
           "offeredByRefOrganization": {
@@ -2867,7 +2953,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
@@ -2886,7 +2974,9 @@
             "informationSourceId": "Org1",
             "name": "State University",
             "identificationSystem": "State University SIS",
-            "organizationType": []
+            "organizationType": [],
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refRefCourse": [
             {
@@ -2910,7 +3000,9 @@
                 "organizationType": [
                   "Government Agency"
                 ],
-                "informationSourceId": "Org1"
+                "informationSourceId": "Org1",
+                "informationSourceOrganization": "State University",
+                "identifier": "organization-state-department-of-education-org1-001"
               },
               "identifier": [
                 {
@@ -2919,9 +3011,11 @@
                   "identifierVerification": [
                     "Academic Records"
                   ],
-                  "informationSourceId": "Org1"
+                  "informationSourceId": "Org1",
+                  "informationSourceOrganization": "State University"
                 }
-              ]
+              ],
+              "informationSourceOrganization": "State University"
             }
           ],
           "offeredByRefOrganization": {
@@ -2930,7 +3024,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
@@ -2949,7 +3045,9 @@
             "informationSourceId": "Org1",
             "name": "State University",
             "identificationSystem": "State University SIS",
-            "organizationType": []
+            "organizationType": [],
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refRefCourse": [
             {
@@ -2973,7 +3071,9 @@
                 "organizationType": [
                   "Government Agency"
                 ],
-                "informationSourceId": "Org1"
+                "informationSourceId": "Org1",
+                "informationSourceOrganization": "State University",
+                "identifier": "organization-state-department-of-education-org1-001"
               },
               "identifier": [
                 {
@@ -2982,9 +3082,11 @@
                   "identifierVerification": [
                     "Academic Records"
                   ],
-                  "informationSourceId": "Org1"
+                  "informationSourceId": "Org1",
+                  "informationSourceOrganization": "State University"
                 }
-              ]
+              ],
+              "informationSourceOrganization": "State University"
             }
           ],
           "offeredByRefOrganization": {
@@ -2993,7 +3095,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
@@ -3012,7 +3116,9 @@
             "informationSourceId": "Org1",
             "name": "State University",
             "identificationSystem": "State University SIS",
-            "organizationType": []
+            "organizationType": [],
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refRefCourse": [
             {
@@ -3036,7 +3142,9 @@
                 "organizationType": [
                   "Government Agency"
                 ],
-                "informationSourceId": "Org1"
+                "informationSourceId": "Org1",
+                "informationSourceOrganization": "State University",
+                "identifier": "organization-state-department-of-education-org1-001"
               },
               "identifier": [
                 {
@@ -3045,9 +3153,11 @@
                   "identifierVerification": [
                     "Academic Records"
                   ],
-                  "informationSourceId": "Org1"
+                  "informationSourceId": "Org1",
+                  "informationSourceOrganization": "State University"
                 }
-              ]
+              ],
+              "informationSourceOrganization": "State University"
             }
           ],
           "offeredByRefOrganization": {
@@ -3056,7 +3166,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
@@ -3075,7 +3187,9 @@
             "informationSourceId": "Org1",
             "name": "State University",
             "identificationSystem": "State University SIS",
-            "organizationType": []
+            "organizationType": [],
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refRefCourse": [
             {
@@ -3099,7 +3213,9 @@
                 "organizationType": [
                   "Government Agency"
                 ],
-                "informationSourceId": "Org1"
+                "informationSourceId": "Org1",
+                "informationSourceOrganization": "State University",
+                "identifier": "organization-state-department-of-education-org1-001"
               },
               "identifier": [
                 {
@@ -3108,9 +3224,11 @@
                   "identifierVerification": [
                     "Academic Records"
                   ],
-                  "informationSourceId": "Org1"
+                  "informationSourceId": "Org1",
+                  "informationSourceOrganization": "State University"
                 }
-              ]
+              ],
+              "informationSourceOrganization": "State University"
             }
           ],
           "offeredByRefOrganization": {
@@ -3119,7 +3237,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
@@ -3138,7 +3258,9 @@
             "informationSourceId": "Org1",
             "name": "State University",
             "identificationSystem": "State University SIS",
-            "organizationType": []
+            "organizationType": [],
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refRefCourse": [
             {
@@ -3162,7 +3284,9 @@
                 "organizationType": [
                   "Government Agency"
                 ],
-                "informationSourceId": "Org1"
+                "informationSourceId": "Org1",
+                "informationSourceOrganization": "State University",
+                "identifier": "organization-state-department-of-education-org1-001"
               },
               "identifier": [
                 {
@@ -3171,9 +3295,11 @@
                   "identifierVerification": [
                     "Academic Records"
                   ],
-                  "informationSourceId": "Org1"
+                  "informationSourceId": "Org1",
+                  "informationSourceOrganization": "State University"
                 }
-              ]
+              ],
+              "informationSourceOrganization": "State University"
             }
           ],
           "offeredByRefOrganization": {
@@ -3182,7 +3308,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
@@ -3201,7 +3329,9 @@
             "informationSourceId": "Org1",
             "name": "State University",
             "identificationSystem": "State University SIS",
-            "organizationType": []
+            "organizationType": [],
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refRefCourse": [
             {
@@ -3225,7 +3355,9 @@
                 "organizationType": [
                   "Government Agency"
                 ],
-                "informationSourceId": "Org1"
+                "informationSourceId": "Org1",
+                "informationSourceOrganization": "State University",
+                "identifier": "organization-state-department-of-education-org1-001"
               },
               "identifier": [
                 {
@@ -3234,9 +3366,11 @@
                   "identifierVerification": [
                     "Academic Records"
                   ],
-                  "informationSourceId": "Org1"
+                  "informationSourceId": "Org1",
+                  "informationSourceOrganization": "State University"
                 }
-              ]
+              ],
+              "informationSourceOrganization": "State University"
             }
           ],
           "offeredByRefOrganization": {
@@ -3245,7 +3379,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
@@ -3264,7 +3400,9 @@
             "informationSourceId": "Org1",
             "name": "State University",
             "identificationSystem": "State University SIS",
-            "organizationType": []
+            "organizationType": [],
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refRefCourse": [
             {
@@ -3288,7 +3426,9 @@
                 "organizationType": [
                   "Government Agency"
                 ],
-                "informationSourceId": "Org1"
+                "informationSourceId": "Org1",
+                "informationSourceOrganization": "State University",
+                "identifier": "organization-state-department-of-education-org1-001"
               },
               "identifier": [
                 {
@@ -3297,9 +3437,11 @@
                   "identifierVerification": [
                     "Academic Records"
                   ],
-                  "informationSourceId": "Org1"
+                  "informationSourceId": "Org1",
+                  "informationSourceOrganization": "State University"
                 }
-              ]
+              ],
+              "informationSourceOrganization": "State University"
             }
           ],
           "offeredByRefOrganization": {
@@ -3308,7 +3450,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
@@ -3329,7 +3473,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
@@ -3350,7 +3496,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
@@ -3371,7 +3519,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
@@ -3392,7 +3542,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
@@ -3413,7 +3565,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
@@ -3434,7 +3588,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
@@ -3455,7 +3611,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
@@ -3476,7 +3634,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
@@ -3497,7 +3657,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
@@ -3518,7 +3680,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
@@ -3539,7 +3703,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
@@ -3560,7 +3726,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
@@ -3581,7 +3749,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
@@ -3602,7 +3772,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
@@ -3623,7 +3795,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
@@ -3644,7 +3818,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
@@ -3665,7 +3841,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
@@ -3686,7 +3864,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
@@ -3707,7 +3887,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
@@ -3866,7 +4048,9 @@
           "name": "Community Health Workers",
           "framework": "O*Net Online",
           "description": "Promote health within a community by assisting individuals to adopt healthy behaviors. Serve as an advocate for the health needs of individuals by assisting community residents in effectively communicating with healthcare providers or social service agencies. Act as liaison or advocate and implement programs that promote, maintain, and improve individual and overall community health. May deliver health-related preventive services such as blood pressure, glaucoma, and hearing screenings. May collect data to help identify community health needs.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-community-health-workers-org1-001"
         },
         {
           "url": "https://www.onetonline.org/link/summary/29-2072.00",
@@ -3874,7 +4058,9 @@
           "name": "Medical Records Specialists",
           "framework": "O*Net Online",
           "description": "Compile, process, and maintain medical records of hospital and clinic patients in a manner consistent with medical, administrative, ethical, legal, and regulatory requirements of the healthcare system. Classify medical and healthcare concepts, including diagnosis, procedures, medical services, and equipment, into the healthcare industry's numerical coding system. Includes medical coders.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-medical-records-specialists-org1-002"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/332da507-df3f-4382-8e2a-00eb24a19767",
@@ -3882,7 +4068,9 @@
           "name": "Active Performance Communication",
           "framework": "OSMT",
           "description": "Communicate in a manner that details performance and recommends actions.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-active-performance-communicati-org1-003"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/2a7ce0d8-1900-467d-9811-2186dddb4958",
@@ -3890,7 +4078,9 @@
           "name": "Apply Basic Chemistry Principles",
           "framework": "OSMT",
           "description": "Apply basic chemistry principles.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-apply-basic-chemistry-principl-org1-004"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/74f317f9-e715-465e-b3f2-e3bd4d28a77f",
@@ -3898,7 +4088,9 @@
           "name": "Apply Logical Reasoning",
           "framework": "OSMT",
           "description": "Apply a logical reasoning process to a situation or problem to arrive at an outcome.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-apply-logical-reasoning-org1-005"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/c7fd81ee-6c52-4c0f-860e-f90a5b690f00",
@@ -3906,7 +4098,9 @@
           "name": "Apply Principles of Force and Motion",
           "framework": "OSMT",
           "description": "Apply principles of forces and motion to an example.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-apply-principles-of-force-and--org1-006"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/9c7e2ea0-7bb1-4a81-9658-85fc6150beba",
@@ -3914,7 +4108,9 @@
           "name": "Apply Public Health Terminology",
           "framework": "OSMT",
           "description": "Apply public health terminology accurately.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-apply-public-health-terminolog-org1-007"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/2628fb3d-b872-4047-a476-328f71a8fb50",
@@ -3922,7 +4118,9 @@
           "name": "Apply Scientific Methods",
           "framework": "OSMT",
           "description": "Apply scientific methods to problem solving.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-apply-scientific-methods-org1-008"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/9466ad66-172b-4e0c-a675-ec09b3e959f5",
@@ -3930,7 +4128,9 @@
           "name": "Apply the Four Basic Operations",
           "framework": "OSMT",
           "description": "Apply the four basic operations to fractions, decimals, and percentages to evaluate quantitative expressions.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-apply-the-four-basic-operation-org1-009"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/82de6a25-5c8d-4ce1-8043-0ca672940e9d",
@@ -3938,7 +4138,9 @@
           "name": "Appropriate Tone of Voice Writing",
           "framework": "OSMT",
           "description": "Write text in the appropriate language and tone of voice for the intended audience.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-appropriate-tone-of-voice-writ-org1-010"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/219472eb-07a7-4c0d-8a44-7f3332771e65",
@@ -3946,7 +4148,9 @@
           "name": "Articulate Complex Ideas",
           "framework": "OSMT",
           "description": "Articulate complex ideas, opinions, and information, pointing out connections and relationships.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-articulate-complex-ideas-org1-011"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/15e72f48-efc1-4afa-8e72-9095f90d3728",
@@ -3954,7 +4158,9 @@
           "name": "Awareness of Other's Perception",
           "framework": "OSMT",
           "description": "Develop awareness of how one's language and behaviors may be perceived by members of a different cultural community.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-awareness-of-other-s-perceptio-org1-012"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/40e6318a-d5f7-43eb-8450-d5ece8bcce65",
@@ -3962,7 +4168,9 @@
           "name": "Balance a Chemical Equation",
           "framework": "OSMT",
           "description": "Balance a chemical equation.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-balance-a-chemical-equation-org1-013"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/1a03018a-63a9-43f7-9cb2-dbf68501f4d5",
@@ -3970,7 +4178,9 @@
           "name": "Communicate In Person or Electronically Professionally",
           "framework": "OSMT",
           "description": "Communicate in person or electronically in a professional manner.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-communicate-in-person-or-elect-org1-014"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/dae4c245-6643-4521-b56e-fbb147746d81",
@@ -3978,7 +4188,9 @@
           "name": "Communicate Strengths, Weaknesses, Opportunities, and Threats (SWOT)",
           "framework": "OSMT",
           "description": "Determine strengths, weaknesses, threats, and opportunities in written communications.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-communicate-strengths--weaknes-org1-015"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/a3f7c9bf-6102-4685-8019-e8519102ba41",
@@ -3986,7 +4198,9 @@
           "name": "Compare the States of Matter",
           "framework": "OSMT",
           "description": "Compare the states of matter.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-compare-the-states-of-matter-org1-016"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/a4138a63-e826-47ad-84b8-fa851bec2fcf",
@@ -3994,7 +4208,9 @@
           "name": "Compose Expository Text",
           "framework": "OSMT",
           "description": "Compose texts that use appropriate expository structure such as cause and effect, problem and solution, or sequence.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-compose-expository-text-org1-017"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/4e168d93-d650-484d-ae9e-12871b61415f",
@@ -4002,7 +4218,9 @@
           "name": "Connections within Complex Systems",
           "framework": "OSMT",
           "description": "Understand the connections within complex systems that contribute to cause and effect in decision making.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-connections-within-complex-sys-org1-018"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/1af8a35d-fd6f-4a05-9979-2b2b64b12dd2",
@@ -4010,7 +4228,9 @@
           "name": "Critical Thinking Skill Implementation",
           "framework": "OSMT",
           "description": "Implement skills that support the critical thinking process.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-critical-thinking-skill-implem-org1-019"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/c92f1420-0500-4293-b02c-72ac7b06ed03",
@@ -4018,7 +4238,9 @@
           "name": "Critique the Work of Others",
           "framework": "OSMT",
           "description": "Critique the work of others in ways that are constructive and rhetorically appropriate.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-critique-the-work-of-others-org1-020"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/8dab7b23-a7f8-4f84-9798-76ecb003735a",
@@ -4026,7 +4248,9 @@
           "name": "Demonstrate Understanding for Marginalized Individuals",
           "framework": "OSMT",
           "description": "Demonstrate understanding of marginalized individuals'  diverse experiences.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-demonstrate-understanding-for--org1-021"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/9df4bac5-e1d4-4da9-b1bf-3aaaaf72eacf",
@@ -4034,7 +4258,9 @@
           "name": "Describe Matter and Matter Cycling",
           "framework": "OSMT",
           "description": "Describe the properties of matter and the process of matter cycling.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-describe-matter-and-matter-cyc-org1-022"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/b4990629-2154-45ac-bdc4-c4b196aa0351",
@@ -4042,7 +4268,9 @@
           "name": "Describe Physical Phenomenon",
           "framework": "OSMT",
           "description": "Use understanding of energy to describe a physical phenomenon.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-describe-physical-phenomenon-org1-023"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/f9f8ca70-766e-4bcd-85d5-7374d3e77f88",
@@ -4050,7 +4278,9 @@
           "name": "Describe Public Health Impact Factors",
           "framework": "OSMT",
           "description": "Describe different factors that impact public health.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-describe-public-health-impact--org1-024"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/e6240341-93d2-49c7-8652-542b63baa29b",
@@ -4058,7 +4288,9 @@
           "name": "Describe Public Health Principles",
           "framework": "OSMT",
           "description": "Describe key principles of public health.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-describe-public-health-princip-org1-025"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/5802bf49-a7ea-4884-85cd-bf2068896237",
@@ -4066,7 +4298,9 @@
           "name": "Describe Public Health Services",
           "framework": "OSMT",
           "description": "Describe the core functions and essential services of public health.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-describe-public-health-service-org1-026"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/8f6f2771-7516-49d8-ae9e-8dea9ea847e5",
@@ -4074,7 +4308,9 @@
           "name": "Describe the Composition of Matter",
           "framework": "OSMT",
           "description": "Describe the composition of matter in terms of molecules and their interactions.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-describe-the-composition-of-ma-org1-027"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/0b0e11e2-3b79-421d-992f-b50a7607d05a",
@@ -4082,7 +4318,9 @@
           "name": "Describe the Organization of the Universe",
           "framework": "OSMT",
           "description": "Describe the organization of the universe from the subatomic to the universe level.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-describe-the-organization-of-t-org1-028"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/bd16059b-f981-42b6-a32e-747128d0ea74",
@@ -4090,7 +4328,9 @@
           "name": "Determine Math Equation Operations",
           "framework": "OSMT",
           "description": "Determine the arithmetic operations needed to calculate  basic math equations.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-determine-math-equation-operat-org1-029"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/a825a770-090c-48b9-80a0-477dab47d40b",
@@ -4098,7 +4338,9 @@
           "name": "Determine the Correct Coefficients",
           "framework": "OSMT",
           "description": "Determine the correct coefficients for a chemical equation.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-determine-the-correct-coeffici-org1-030"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/286c2895-73ac-4501-972d-1181772278ec",
@@ -4106,7 +4348,9 @@
           "name": "Develop Written Text Strategies",
           "framework": "OSMT",
           "description": "Develop flexible strategies for creating, revising, editing, and proofreading written texts.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-develop-written-text-strategie-org1-031"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/3eed25cd-91d8-403d-bf8d-fa10bcde0f0b",
@@ -4114,7 +4358,9 @@
           "name": "Differentiate Core Public Health Functions",
           "framework": "OSMT",
           "description": "Differentiate between the core functions of public health.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-differentiate-core-public-heal-org1-032"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/8aba341c-ecf1-4dfc-8a07-8211b26133a8",
@@ -4122,7 +4368,9 @@
           "name": "Evaluate Public Health Strategy Impact",
           "framework": "OSMT",
           "description": "Evaluate strategies for public health and minimizing the impact of disease.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-evaluate-public-health-strateg-org1-033"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/95605753-d272-44af-a66e-51f2c63c98d2",
@@ -4130,7 +4378,9 @@
           "name": "Evidence Evaluation for Problems",
           "framework": "OSMT",
           "description": "Evaluate research evidence for weaknesses, inconsistencies, biases, and other problems.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-evidence-evaluation-for-proble-org1-034"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/b8dd3a93-069a-4016-ab8f-6dd4fc03c85c",
@@ -4138,7 +4388,9 @@
           "name": "Explain Energy Flow",
           "framework": "OSMT",
           "description": "Explain the flow of energy in the universe.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-explain-energy-flow-org1-035"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/9e02d1b2-a5e6-4aa6-bff9-7cc031882a39",
@@ -4146,7 +4398,9 @@
           "name": "Explain How Scientific Knowledge Changes",
           "framework": "OSMT",
           "description": "Explain how scientific knowledge is created and how it changes over time.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-explain-how-scientific-knowled-org1-036"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/3a9ebbb6-19c7-464c-adba-1c0cbafbf33d",
@@ -4154,7 +4408,9 @@
           "name": "Explain Module Structure and Behavior",
           "framework": "OSMT",
           "description": "Explain how the structure of molecules affects their behavior.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-explain-module-structure-and-b-org1-037"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/39ddf0cb-1d93-426a-bb9c-05fc14111216",
@@ -4162,7 +4418,9 @@
           "name": "Explain System Connections and Properties",
           "framework": "OSMT",
           "description": "Explain connections and properties that exist between subsystems in a complex system.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-explain-system-connections-and-org1-038"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/4a170b4b-ba6d-4ea5-b1ea-c5070cd7bd22",
@@ -4170,7 +4428,9 @@
           "name": "Explain the Affect of Orbitals on the Formation of Chemical Bonds",
           "framework": "OSMT",
           "description": "Explain how electron orbitals dictate the formation of those chemical bonds.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-explain-the-affect-of-orbitals-org1-039"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/4449e3f9-7c62-48b1-95da-45c2d4703587",
@@ -4178,7 +4438,9 @@
           "name": "Explain the Composition of a Substance",
           "framework": "OSMT",
           "description": "Explain how the composition of a substance dictates its properties.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-explain-the-composition-of-a-s-org1-040"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/7501e3b9-b10d-40aa-8dde-0eb37d1618a1",
@@ -4186,7 +4448,9 @@
           "name": "Explain the Relationship Between Atom Structure and Substance Properties",
           "framework": "OSMT",
           "description": "Explain the relationship between the electronic structure of atoms and the properties of various substances.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-explain-the-relationship-betwe-org1-041"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/b3b0e9ae-a10a-4a44-9e41-052a06a603ac",
@@ -4194,7 +4458,9 @@
           "name": "Factors Affecting Psychological Well-being",
           "framework": "OSMT",
           "description": "Identify factors affecting psychological well-being.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-factors-affecting-psychologica-org1-042"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/196174ea-95ef-4ce9-81e6-1abd747ec531",
@@ -4202,7 +4468,9 @@
           "name": "Factual Evidence to Form Judgements",
           "framework": "OSMT",
           "description": "Identify factual evidence to establish a basis for forming a judgment.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-factual-evidence-to-form-judge-org1-043"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/31ce9ccd-d4e9-42de-83fe-d7119dc0ece3",
@@ -4210,7 +4478,9 @@
           "name": "Health Psychology Theories Explaining Behavior",
           "framework": "OSMT",
           "description": "Apply theories of health psychology to explain behavior.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-health-psychology-theories-exp-org1-044"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/95a36ec2-78ec-4b02-8540-76f56011d24b",
@@ -4218,7 +4488,9 @@
           "name": "Healthcare Access Barriers Identification",
           "framework": "OSMT",
           "description": "Identify how social, socioeconomic, and physical barriers impact health and healthcare access.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-healthcare-access-barriers-ide-org1-045"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/652dddf4-5fa3-441b-b0d2-625ef4b820d5",
@@ -4226,7 +4498,9 @@
           "name": "Idea Connections",
           "framework": "OSMT",
           "description": "Identify connections between ideas.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-idea-connections-org1-046"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/5cf6d793-f403-4912-8209-535d8cd49459",
@@ -4234,7 +4508,9 @@
           "name": "Identification of Strengths and Weaknesses of Solutions",
           "framework": "OSMT",
           "description": "Identify the strengths and weaknesses of alternative solutions, conclusions, or approaches to problems using logic and reasoning.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-identification-of-strengths-an-org1-047"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/9e1356f8-3960-46fd-b555-123e0771420a",
@@ -4242,7 +4518,9 @@
           "name": "Identify a Balanced and Unbalanced Chemical Equation",
           "framework": "OSMT",
           "description": "Identify when a chemical equation is balanced or unbalanced.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-identify-a-balanced-and-unbala-org1-048"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/9f80f1e4-ae86-40e5-95db-8bf8732a8d19",
@@ -4250,7 +4528,9 @@
           "name": "Identify Factors That Influence Complex Problems",
           "framework": "OSMT",
           "description": "Identify factors that influence difficult or complex problems or issues.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-identify-factors-that-influenc-org1-049"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/69633fb9-6138-49c6-aca6-2ea30bf49abd",
@@ -4258,7 +4538,9 @@
           "name": "Identify Health Information Promotion Strategies",
           "framework": "OSMT",
           "description": "Identify communication strategies to promote health information with the population.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-identify-health-information-pr-org1-050"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/699694f8-b501-4de3-976a-96ee8fa2c024",
@@ -4266,7 +4548,9 @@
           "name": "Identify Problematic Factors",
           "framework": "OSMT",
           "description": "Identify factors that influence a problem.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-identify-problematic-factors-org1-051"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/e4bf4bd2-ad37-415f-9cfd-6b1815dc06c5",
@@ -4274,7 +4558,9 @@
           "name": "Identify Public Health Structure",
           "framework": "OSMT",
           "description": "Identify the structure of a public health organization.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-identify-public-health-structu-org1-052"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/4a40e114-bf55-4bf1-a98a-af7f699160a3",
@@ -4282,7 +4568,9 @@
           "name": "Identify Types of Chemical Bonds",
           "framework": "OSMT",
           "description": "Identify the types of chemical bonds.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-identify-types-of-chemical-bon-org1-053"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/3227307b-b4b5-4842-9cfc-4f8bfea677ad",
@@ -4290,7 +4578,9 @@
           "name": "Inferential Analysis",
           "framework": "OSMT",
           "description": "Draw inferences based on the analysis and evaluation of information.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-inferential-analysis-org1-054"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/e4727027-9dba-4d5b-9bee-35d0f29af488",
@@ -4298,7 +4588,9 @@
           "name": "Influence of Culture on Perspectives",
           "framework": "OSMT",
           "description": "Explain the influence of culture on individual perspectives.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-influence-of-culture-on-perspe-org1-055"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/7f9d9dd6-2e42-4cdc-9712-355f2ed4785d",
@@ -4306,7 +4598,9 @@
           "name": "Interpret Graphical Displays",
           "framework": "OSMT",
           "description": "Interpret data from graphical displays and numerical measures.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-interpret-graphical-displays-org1-056"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/68d9f065-bf40-4799-871b-c51713e95918",
@@ -4314,7 +4608,9 @@
           "name": "Normal Physiological Function Identification",
           "framework": "OSMT",
           "description": "Identify normal physiological functions of living organisms and their parts.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-normal-physiological-function--org1-057"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/936cd437-afab-4f0c-a787-640199bd440c",
@@ -4322,7 +4618,9 @@
           "name": "Organize Writing",
           "framework": "OSMT",
           "description": "Organize writing in a logical and coherent manner.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-organize-writing-org1-058"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/74daf6c3-08a4-415b-9371-e2cc7d9afee5",
@@ -4330,7 +4628,9 @@
           "name": "Predict Effects of Human Actions on the Environment",
           "framework": "OSMT",
           "description": "Predict effects of human actions to the environment.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-predict-effects-of-human-actio-org1-059"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/0f479ce9-7fe9-400c-b07d-4245792d6264",
@@ -4338,7 +4638,9 @@
           "name": "Problem Definition Establishment",
           "framework": "OSMT",
           "description": "Establish a clear definition for a problem being solved.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-problem-definition-establishme-org1-060"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/0e25df73-c785-4b85-a330-87e11f2b54de",
@@ -4346,7 +4648,9 @@
           "name": "Procedure Adherence",
           "framework": "OSMT",
           "description": "Adhere to a detailed procedure.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-procedure-adherence-org1-061"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/a90282ad-07d1-43f1-8cff-17d6f6a01870",
@@ -4354,7 +4658,9 @@
           "name": "Process Division",
           "framework": "OSMT",
           "description": "Divide a process into detailed steps.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-process-division-org1-062"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/fee307e2-dc96-4af8-9b2a-876b432ab884",
@@ -4362,7 +4668,9 @@
           "name": "Promote Critical Thinking",
           "framework": "OSMT",
           "description": "Implement problem-solving skills that promote critical thinking.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-promote-critical-thinking-org1-063"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/e29351ca-2316-4d75-bbc3-729bbd9f2acc",
@@ -4370,7 +4678,9 @@
           "name": "Properties of Matter and Process of Matter Cycling",
           "framework": "OSMT",
           "description": "Understand properties of matter and process of matter cycling.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-properties-of-matter-and-proce-org1-064"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/e7cc9be9-6aeb-46cf-a840-39ac56fddbad",
@@ -4378,7 +4688,9 @@
           "name": "Provide Action Performance Needs Information",
           "framework": "OSMT",
           "description": "Provide detail-oriented information on how and why an action needs to be performed.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-provide-action-performance-nee-org1-065"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/c9bd6131-d47b-4d5d-85ca-27ba37a81bc7",
@@ -4386,7 +4698,9 @@
           "name": "Public Health Disease Prevention Strategy",
           "framework": "OSMT",
           "description": "Identify strategies for disease prevention.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-public-health-disease-preventi-org1-066"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/e31da140-2736-42b0-a3e6-82b9656abc2a",
@@ -4394,7 +4708,9 @@
           "name": "Public Health Service Identification",
           "framework": "OSMT",
           "description": "Identify essential public health services.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-public-health-service-identifi-org1-067"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/b1a1ab59-f34f-4b71-9f14-fa7345934805",
@@ -4402,7 +4718,9 @@
           "name": "Recognize Inequities",
           "framework": "OSMT",
           "description": "Recognize inequities and unjust practices.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-recognize-inequities-org1-068"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/b8f649f2-d1a3-4ede-a30b-98326b1ab1e5",
@@ -4410,7 +4728,9 @@
           "name": "Reflect On One's Experiences To Gain Insight",
           "framework": "OSMT",
           "description": "Reflect on one's experiences to gain insight into personal growth and development.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-reflect-on-one-s-experiences-t-org1-069"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/afe2f480-dcb8-4c56-89a5-912d387d6e85",
@@ -4418,7 +4738,9 @@
           "name": "Research Questions as Hypotheses",
           "framework": "OSMT",
           "description": "Articulate research questions as hypotheses that can be tested.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-research-questions-as-hypothes-org1-070"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/8c767c89-a998-4f5b-ad9b-31a26580d3a3",
@@ -4426,7 +4748,9 @@
           "name": "Role of Cause and Effect in Decision Making",
           "framework": "OSMT",
           "description": "Explain the role of cause and effect in human interactions and decision making.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-role-of-cause-and-effect-in-de-org1-071"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/e64e5741-85ce-406e-906a-a447f36b5629",
@@ -4434,7 +4758,9 @@
           "name": "Social Determinant Health Affects Explanation",
           "framework": "OSMT",
           "description": "Explain how programs, practices, and policies that impact social determinants of health (SDOH) affect the health of individuals, families, populations, and communities.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-social-determinant-health-affe-org1-072"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/65697efb-a1b7-4fc0-951b-66940840139c",
@@ -4442,7 +4768,9 @@
           "name": "Social Factors Analysis",
           "framework": "OSMT",
           "description": "Analyze the impact of the dynamics of social, socioeconomic, and physical factors across diverse environments on health and healthcare access.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-social-factors-analysis-org1-073"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/6d395187-b0dc-4f53-83aa-40da4cfe33b7",
@@ -4450,7 +4778,9 @@
           "name": "Solutions Evaluation",
           "framework": "OSMT",
           "description": "Evaluate solutions for a problem to determine the best solution.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-solutions-evaluation-org1-074"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/8e715d68-59dc-4776-8382-b89c7dbcb571",
@@ -4458,7 +4788,9 @@
           "name": "Specific, Measurable, Achievable, Relevant, Time-Bound (SMART) Goals Creation",
           "framework": "OSMT",
           "description": "Create personal specific, measurable, achievable, relevant, and time-bound (SMART) goals and a plan for measuring progress toward goal attainment.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-specific--measurable--achievab-org1-075"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/f78e4b2b-0cf4-49de-916c-74e4d7a0601f",
@@ -4466,7 +4798,9 @@
           "name": "Understand Skill Development",
           "framework": "OSMT",
           "description": "Demonstrate an understanding that one can develop and improve skills over time through thoughts, behaviors, and language.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-understand-skill-development-org1-076"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/c14f5cac-e81c-4f72-b686-6d8d0c64cd01",
@@ -4474,7 +4808,9 @@
           "name": "Use Professional Judgment",
           "framework": "OSMT",
           "description": "Use professional judgment consistent with ethical dimensions of professional contexts.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-use-professional-judgment-org1-077"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/5ba7bd1d-46cf-4dc3-bebe-2725adef9c33",
@@ -4482,7 +4818,9 @@
           "name": "Use Scientific Knowledge to Evaluate Claims",
           "framework": "OSMT",
           "description": "Use scientific knowledge to evaluate the validity of a claim.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-use-scientific-knowledge-to-ev-org1-078"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/d044153b-8dbb-4882-999b-339c36f83d12",
@@ -4490,7 +4828,9 @@
           "name": "Use the Periodic Table to Determine Number of Protons",
           "framework": "OSMT",
           "description": "Use the periodic table to determine the number of protons in an atom of each element.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-use-the-periodic-table-to-dete-org1-079"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/d81d7c04-366f-4f0c-b684-84b4a04182f9",
@@ -4498,7 +4838,9 @@
           "name": "Use the Periodic Table to Predict Element Properties",
           "framework": "OSMT",
           "description": "Use the periodic table to predict the properties of various elements.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-use-the-periodic-table-to-pred-org1-080"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/2abac011-d0d2-424c-ad8e-d490ac4ecafd",
@@ -4506,7 +4848,9 @@
           "name": "Utilize A Range Of Persuasive Techniques",
           "framework": "OSMT",
           "description": "Utilize a range of persuasive techniques to support arguments.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-utilize-a-range-of-persuasive--org1-081"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/54631051-d157-4e24-baa2-ebd3b7d83af0",
@@ -4514,7 +4858,9 @@
           "name": "Writing Clear and Concise",
           "framework": "OSMT",
           "description": "Write in an accurate, clear, concise, and well-organized manner.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-writing-clear-and-concise-org1-082"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/6b1ac919-ca78-42a3-a0e6-9f01fc8246ad",
@@ -4522,7 +4868,9 @@
           "name": "Written Communication Application",
           "framework": "OSMT",
           "description": "Apply written communication strategies.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-written-communication-applicat-org1-083"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/bc049cd2-2793-48ef-8540-7bba1c85a98d",
@@ -4530,7 +4878,9 @@
           "name": "Written Communication Proofreading",
           "framework": "OSMT",
           "description": "Proofread written communication.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-written-communication-proofrea-org1-084"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/2e5d39a3-e786-499b-8a9d-29520209f65c",
@@ -4538,7 +4888,9 @@
           "name": "Analyze Data from Research Findings",
           "framework": "OSMT",
           "description": "Analyze data from research findings.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-analyze-data-from-research-fin-org1-085"
         }
       ],
       "description": "***This micro-credential is for demonstration purposes only*** Recipients of the Health Science Foundations certificate from State University have built and demonstrated competence in communication, analytical skills, and problem solving.",
@@ -4588,7 +4940,9 @@
                   "informationSourceId": "Org1"
                 }
               ],
-              "informationSourceId": "Org1"
+              "informationSourceId": "Org1",
+              "informationSourceOrganization": "State University",
+              "identifier": "contact-org1-001"
             }
           ],
           "imageUrl": "https://assets.stateu.edu/99da0cfd314920b5cf8cb6c8727e7675",
@@ -4596,21 +4950,25 @@
             {
               "identifier": "833333326",
               "identifierType": "Federal employer identification number",
-              "informationSourceId": "Org1"
+              "informationSourceId": "Org1",
+              "informationSourceOrganization": "State University"
             },
             {
               "identifier": "23323331",
               "identifierType": "Dun and Bradstreet number",
-              "informationSourceId": "Org1"
+              "informationSourceId": "Org1",
+              "informationSourceOrganization": "State University"
             },
             {
               "identifier": "https://credentialfinder.org/organization/000/State_University",
               "identifierType": "credentialfinder.org",
-              "informationSourceId": "Org1"
+              "informationSourceId": "Org1",
+              "informationSourceOrganization": "State University"
             }
           ],
           "identificationSystem": "State University SIS",
-          "organizationType": []
+          "organizationType": [],
+          "informationSourceOrganization": "State University"
         }
       ],
       "accreditation": [
@@ -4713,7 +5071,9 @@
           "name": "Chief Executives",
           "framework": "O*Net Online",
           "description": "Determine and formulate policies and provide overall direction of companies or private and public sector organizations within guidelines set up by a board of directors or similar governing body. Plan, direct, or coordinate operational activities at the highest level of management with the help of subordinate executives and staff managers.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-chief-executives-org1-001"
         },
         {
           "url": "https://www.onetonline.org/link/summary/11-1021.00",
@@ -4721,7 +5081,9 @@
           "name": "General and Operations Managers",
           "framework": "O*Net Online",
           "description": "Plan, direct, or coordinate the operations of public or private sector organizations, overseeing multiple departments or locations. Duties and responsibilities include formulating policies, managing daily operations, and planning the use of materials and human resources, but are too diverse and general in nature to be classified in any one functional area of management or administration, such as personnel, purchasing, or administrative services. Usually manage through subordinate supervisors. Excludes First-Line Supervisors.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-general-and-operations-manager-org1-002"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/6cc1d93d-e687-483e-bbef-ae7f8396909f",
@@ -4729,7 +5091,9 @@
           "name": "Performance Assessment for Improvement",
           "framework": "OSMT",
           "description": "Assess performance to make improvements or take corrective action(s).",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-performance-assessment-for-imp-org1-003"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/478d49a5-28fd-4afe-9227-b9458b0191ee",
@@ -4737,7 +5101,9 @@
           "name": "Apply Contextual Reasoning",
           "framework": "OSMT",
           "description": "Apply contextual reasoning to understand problems.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-apply-contextual-reasoning-org1-004"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/59684bce-df8e-4bc3-8456-1551e8eb5710",
@@ -4745,7 +5111,9 @@
           "name": "Behavioral Impact Determination",
           "framework": "OSMT",
           "description": "Determine the impact of individuals' behavior on the inner workings of a system.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-behavioral-impact-determinatio-org1-005"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/7bc0f9e6-b77b-4e41-b7f0-54a99bf92206",
@@ -4753,7 +5121,9 @@
           "name": "Respect for Others Concept Implementation",
           "framework": "OSMT",
           "description": "Implement the concept of respect for others.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-respect-for-others-concept-imp-org1-006"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/89b006da-498f-46eb-8fa4-7c95edefe6dd",
@@ -4761,7 +5131,9 @@
           "name": "Personal Integrity Concept Implementation",
           "framework": "OSMT",
           "description": "Implement the concept of personal integrity.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-personal-integrity-concept-imp-org1-007"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/d8a03323-97a2-4409-8a77-2ffb9f83a4dc",
@@ -4769,7 +5141,9 @@
           "name": "Honesty Concept Implementation",
           "framework": "OSMT",
           "description": "Implement the concept of honesty.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-honesty-concept-implementation-org1-008"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/eaa290b0-592e-4ec7-b559-3b9ad22d72aa",
@@ -4777,7 +5151,9 @@
           "name": "Increase Care and Kindness in Culture",
           "framework": "OSMT",
           "description": "Develop strategies for increasing a culture of kindness and caring within the workplace.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-increase-care-and-kindness-in--org1-009"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/6ff5019e-9320-45d2-9da7-02c595f51f97",
@@ -4785,7 +5161,9 @@
           "name": "Create Trust and Rapport",
           "framework": "OSMT",
           "description": "Create trust and rapport with others.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-create-trust-and-rapport-org1-010"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/63255263-3588-407a-a014-41ba1e2dae71",
@@ -4793,7 +5171,9 @@
           "name": "Conflict Resolution Trust Building",
           "framework": "OSMT",
           "description": "Build trust with others in conflict resolution.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-conflict-resolution-trust-buil-org1-011"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/320a345c-71ad-4905-a398-663a293ad0c7",
@@ -4801,7 +5181,9 @@
           "name": "Cultural Contextualization in a Local System",
           "framework": "OSMT",
           "description": "Contextualize a person's culture within local systems.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-cultural-contextualization-in--org1-012"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/32bab9ed-ad7c-4504-b02f-40e81a460c80",
@@ -4809,7 +5191,9 @@
           "name": "Demonstrate Cultural Understanding",
           "framework": "OSMT",
           "description": "Demonstrate an understanding of different cultures and perspectives.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-demonstrate-cultural-understan-org1-013"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/fd98d434-07d7-4128-8c9e-d8da201d90bd",
@@ -4817,7 +5201,9 @@
           "name": "Describe Basic Concepts in Sociology",
           "framework": "OSMT",
           "description": "Describe basic concepts in sociology.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-describe-basic-concepts-in-soc-org1-014"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/63718301-a5cd-41a4-abce-2043f7bb45c4",
@@ -4825,7 +5211,9 @@
           "name": "Reason Behind a Challenge Identification",
           "framework": "OSMT",
           "description": "Identify the reasoning behind a challenge to solve it.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-reason-behind-a-challenge-iden-org1-015"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/83f5866d-b9ef-4d1a-9f50-76466a75aa6f",
@@ -4833,7 +5221,9 @@
           "name": "Diverse Perspectives Consideration",
           "framework": "OSMT",
           "description": "Consider multiple and diverse perspectives.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-diverse-perspectives-considera-org1-016"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/e7b742a0-cc50-481f-9d08-610159799551",
@@ -4841,7 +5231,9 @@
           "name": "Self-Awareness Demonstration",
           "framework": "OSMT",
           "description": "Demonstrate basic self-awareness skills.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-self-awareness-demonstration-org1-017"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/fe42141e-219e-48be-9cc9-eec76980c768",
@@ -4849,7 +5241,9 @@
           "name": "Demonstrate Empathy and Fairness",
           "framework": "OSMT",
           "description": "Demonstrate empathy and fairness in interpersonal relationships.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-demonstrate-empathy-and-fairne-org1-018"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/63508963-da4f-46c3-aae9-21561add5e35",
@@ -4857,7 +5251,9 @@
           "name": "Feelings Acknowledgement",
           "framework": "OSMT",
           "description": "Acknowledge other people's feelings and perspectives.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-feelings-acknowledgement-org1-019"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/1bd6349f-934b-4539-9791-4b09ac05478f",
@@ -4865,7 +5261,9 @@
           "name": "Maintain Supportive Relationships",
           "framework": "OSMT",
           "description": "Maintain supportive relationships while demonstrating empathy.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-maintain-supportive-relationsh-org1-020"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/40768bbb-ee7c-4f50-807e-1dfe7fe8a5a7",
@@ -4873,7 +5271,9 @@
           "name": "Distinguish Ethical Behavior",
           "framework": "OSMT",
           "description": "Distinguish between ethical and unethical behavior.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-distinguish-ethical-behavior-org1-021"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/a58c3d70-004d-48a3-8a1d-ef67735e56f8",
@@ -4881,7 +5281,9 @@
           "name": "Ethical Decision Making for Teams/Community",
           "framework": "OSMT",
           "description": "Demonstrate ethical decision-making in the context of a team or community.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-ethical-decision-making-for-te-org1-022"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/dc7a0a66-e282-40c5-99e9-4a0ca7426a2a",
@@ -4889,7 +5291,9 @@
           "name": "Decision Valuation",
           "framework": "OSMT",
           "description": "Assess the value of ethical decision making.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-decision-valuation-org1-023"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/927b1f32-ab58-413d-a9b6-ed67c0f590d5",
@@ -4897,7 +5301,9 @@
           "name": "Team and Project Management",
           "framework": "OSMT",
           "description": "Manage projects that conform with ethical principles, procedures, or processes.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-team-and-project-management-org1-024"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/c23ff5c7-c665-4130-a78b-fa7e9ec4dd7b",
@@ -4905,7 +5311,9 @@
           "name": "Bias Recognition in Solutions",
           "framework": "OSMT",
           "description": "Identify when bias is present in a solution.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-bias-recognition-in-solutions-org1-025"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/971572c1-aa0e-4a40-9283-72ca4d8a8ba8",
@@ -4913,7 +5321,9 @@
           "name": "Evidence Interpretation",
           "framework": "OSMT",
           "description": "Interpret evidence used to support a position.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-evidence-interpretation-org1-026"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/18839d43-7e10-48b0-8185-1f95e5668064",
@@ -4921,7 +5331,9 @@
           "name": "Develop Action Plans",
           "framework": "OSMT",
           "description": "Develop action plans designed to motivate and guide individuals towards a goal.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-develop-action-plans-org1-027"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/652dddf4-5fa3-441b-b0d2-625ef4b820d5",
@@ -4929,7 +5341,9 @@
           "name": "Idea Connections",
           "framework": "OSMT",
           "description": "Identify connections between ideas.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-idea-connections-org1-028"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/d8327033-ac70-441c-8a24-9e0cfd8c25c4",
@@ -4937,7 +5351,9 @@
           "name": "Influence Topic Position",
           "framework": "OSMT",
           "description": "Influence others to accept a new position on a topic.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-influence-topic-position-org1-029"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/f99e26a8-c491-4458-9e55-8dc0473b9e5b",
@@ -4945,7 +5361,9 @@
           "name": "Provide Counterargument",
           "framework": "OSMT",
           "description": "Provide a counterargument to a colleague's intellectual position on a topic.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-provide-counterargument-org1-030"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/3324572d-7daa-4e95-bef7-25377cd730f3",
@@ -4953,7 +5371,9 @@
           "name": "Decision Making Influence",
           "framework": "OSMT",
           "description": "Make an impact on others' decisions through authority and knowledge.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-decision-making-influence-org1-031"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/195c6b3b-ac55-499a-98d4-ba5b355598ec",
@@ -4961,7 +5381,9 @@
           "name": "Information Interpretation",
           "framework": "OSMT",
           "description": "Interpret information through independent and unconstrained analysis.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-information-interpretation-org1-032"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/dee91761-2161-4414-a662-18b089b09e9a",
@@ -4969,7 +5391,9 @@
           "name": "Expectations and Duties Agreement",
           "framework": "OSMT",
           "description": "Agree on a set of expectations and duties for the leader and for team members.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-expectations-and-duties-agreem-org1-033"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/156b475c-1011-41d4-b817-ae6c0e6d5ca9",
@@ -4977,7 +5401,9 @@
           "name": "Ethical Leadership Activities",
           "framework": "OSMT",
           "description": "Conduct all leadership activities consistently with company ethics and values.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-ethical-leadership-activities-org1-034"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/644e622a-1d54-4ac1-b830-5fd1751bc29e",
@@ -4985,7 +5411,9 @@
           "name": "Articulate Leadership Characteristics",
           "framework": "OSMT",
           "description": "Articulate the characteristics and components needed to be an effective leader.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-articulate-leadership-characte-org1-035"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/46692099-39d4-4fcd-9c2c-093fee8ca4dd",
@@ -4993,7 +5421,9 @@
           "name": "Organizational Culture Defining",
           "framework": "OSMT",
           "description": "Define an organizational culture by establishing a code of ethics, policies, and standards.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-organizational-culture-definin-org1-036"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/e3ffca48-0d17-44c7-baa2-a4c05e81893f",
@@ -5001,7 +5431,9 @@
           "name": "Organizational Change Correlation",
           "framework": "OSMT",
           "description": "Correlate organizational changes with the organizational culture and climate.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-organizational-change-correlat-org1-037"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/a346eba1-5aad-4d61-988f-14e199ff503b",
@@ -5009,7 +5441,9 @@
           "name": "Demonstrate Organizational Values",
           "framework": "OSMT",
           "description": "Demonstrate the values, standards, rules, principles, and strategies associated with an organization.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-demonstrate-organizational-val-org1-038"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/6c8aee77-06a2-4dd5-a36c-082796443161",
@@ -5017,7 +5451,9 @@
           "name": "Behavior Modification Recommendation",
           "framework": "OSMT",
           "description": "Recommend how to modify or change an employee's behavior toward more effective working habits.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-behavior-modification-recommen-org1-039"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/af61ac33-52d3-416e-ab8f-0d370da34527",
@@ -5025,7 +5461,9 @@
           "name": "Performance Appraisal Review",
           "framework": "OSMT",
           "description": "Review performance appraisals with employees.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-performance-appraisal-review-org1-040"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/3de8bcef-3a3d-44f0-b2cb-d82ba4cc1a09",
@@ -5033,7 +5471,9 @@
           "name": "Performance Indicators Implementation",
           "framework": "OSMT",
           "description": "Implement performance indicators to monitor success and failure.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-performance-indicators-impleme-org1-041"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/65ac5aa5-4690-4f53-b58b-951257d5e91f",
@@ -5041,7 +5481,9 @@
           "name": "Organizational Performance Evaluation Techniques Implementation Plan Development",
           "framework": "OSMT",
           "description": "Develop a plan for implementing performance evaluation techniques based on the needs of an organization.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-organizational-performance-eva-org1-042"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/4870e046-23bc-44f5-9fc4-b7de3490c82b",
@@ -5049,7 +5491,9 @@
           "name": "Power Structure Effect",
           "framework": "OSMT",
           "description": "Analyze the effect of power structures on diverse members of a population.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-power-structure-effect-org1-043"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/0618f183-58ac-4e4c-911f-e59b24ba8e6c",
@@ -5057,7 +5501,9 @@
           "name": "Pragmatic Approach",
           "framework": "OSMT",
           "description": "Apply a pragmatic approach to all problems.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-pragmatic-approach-org1-044"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/7e15ad53-e5f4-4fe3-9abc-e60a258df99a",
@@ -5065,7 +5511,9 @@
           "name": "Problem Nature and Extent Analysis",
           "framework": "OSMT",
           "description": "Analyze data for the nature and extent of a problem.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-problem-nature-and-extent-anal-org1-045"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/7ad77cc2-01a2-4888-8ede-d3110f50a2f3",
@@ -5073,7 +5521,9 @@
           "name": "Relationship Context Examination",
           "framework": "OSMT",
           "description": "Examine the context of relationships to understand a system.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-relationship-context-examinati-org1-046"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/0219bebf-b052-4f49-9a30-23f67057bb30",
@@ -5081,7 +5531,9 @@
           "name": "Workplace Relationships Development",
           "framework": "OSMT",
           "description": "Develop productive workplace relationships.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-workplace-relationships-develo-org1-047"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/216428d2-a28a-45ab-be6b-ee1f1330b69d",
@@ -5089,7 +5541,9 @@
           "name": "Team Relationship Maintenance",
           "framework": "OSMT",
           "description": "Maintain quality relationships with team members.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-team-relationship-maintenance-org1-048"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/22f22713-bfa6-478f-8c8c-b21153ebbb7f",
@@ -5097,7 +5551,9 @@
           "name": "Verbal Communication with Team",
           "framework": "OSMT",
           "description": "Communicate clearly with team members in verbal communication.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-verbal-communication-with-team-org1-049"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/faf44913-a365-4b6e-b766-698ce71b8e6e",
@@ -5105,7 +5561,9 @@
           "name": "Interpersonal Skills Application",
           "framework": "OSMT",
           "description": "Apply strategic interpersonal skills for productive workplace relationships.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-interpersonal-skills-applicati-org1-050"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/b008c2af-da2a-4530-a8c9-28a29ed1cccc",
@@ -5113,7 +5571,9 @@
           "name": "Cooperative Work Influence",
           "framework": "OSMT",
           "description": "Influence others to work cooperatively toward achieving organizational goals.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-cooperative-work-influence-org1-051"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/b06fa4a9-432f-4fd9-82cb-8cf90334540f",
@@ -5121,7 +5581,9 @@
           "name": "Define Success Criteria",
           "framework": "OSMT",
           "description": "Define success criteria for organizational objectives.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-define-success-criteria-org1-052"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/6c7504e1-04aa-4658-be6b-596a467a39b4",
@@ -5129,7 +5591,9 @@
           "name": "Organizational Culture Creation",
           "framework": "OSMT",
           "description": "Create an organizational culture in which team building and group-level work efforts are supported by encouraging and investing in cultivation of these efforts.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-organizational-culture-creatio-org1-053"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/1ae8664b-6f73-41ac-9b5e-f7a1c0f21898",
@@ -5137,7 +5601,9 @@
           "name": "Apply Group Leadership Principles",
           "framework": "OSMT",
           "description": "Apply appropriate leadership principles and styles for the work context to promote optimal individual and team performance",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-apply-group-leadership-princip-org1-054"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/2338878f-901a-4829-9286-98c106a91e3e",
@@ -5145,7 +5611,9 @@
           "name": "Apply Team Collaboration Principles",
           "framework": "OSMT",
           "description": "Apply principles of positive collaboration and motivation to a variety of team environments.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-apply-team-collaboration-princ-org1-055"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/b8e7d0b8-9034-4ff0-922d-2b2622826220",
@@ -5153,7 +5621,9 @@
           "name": "Group Leadership Principles Creation",
           "framework": "OSMT",
           "description": "Create group leadership principles or styles.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-group-leadership-principles-cr-org1-056"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/024a7d47-a39e-4ec0-a308-259af166aef0",
@@ -5161,7 +5631,9 @@
           "name": "Apply Teamwork Principles and Skills",
           "framework": "OSMT",
           "description": "Apply teamwork principles and skills in team settings.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-apply-teamwork-principles-and--org1-057"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/bbc40776-656c-4e9b-9bef-594ef5b231fc",
@@ -5169,7 +5641,9 @@
           "name": "Emotional Intelligence Demonstration",
           "framework": "OSMT",
           "description": "Demonstrate social and emotional intelligence skills, including self-awareness, self-management, social awareness, and relationship management.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-emotional-intelligence-demonst-org1-058"
         }
       ],
       "description": "***This micro-credential is for demonstration purposes only*** \nRecipients of the Leadership Certificate from State University have built and demonstrated competence in agency, applied ethics, business ethics, systems thinking, and team building.",
@@ -5219,7 +5693,9 @@
                   "informationSourceId": "Org1"
                 }
               ],
-              "informationSourceId": "Org1"
+              "informationSourceId": "Org1",
+              "informationSourceOrganization": "State University",
+              "identifier": "contact-org1-001"
             }
           ],
           "imageUrl": "https://assets.stateu.edu/99da0cfd314920b5cf8cb6c8727e7675",
@@ -5227,21 +5703,25 @@
             {
               "identifier": "833333326",
               "identifierType": "Federal employer identification number",
-              "informationSourceId": "Org1"
+              "informationSourceId": "Org1",
+              "informationSourceOrganization": "State University"
             },
             {
               "identifier": "23323331",
               "identifierType": "Dun and Bradstreet number",
-              "informationSourceId": "Org1"
+              "informationSourceId": "Org1",
+              "informationSourceOrganization": "State University"
             },
             {
               "identifier": "https://credentialfinder.org/organization/000/State_University",
               "identifierType": "credentialfinder.org",
-              "informationSourceId": "Org1"
+              "informationSourceId": "Org1",
+              "informationSourceOrganization": "State University"
             }
           ],
           "identificationSystem": "State University SIS",
-          "organizationType": []
+          "organizationType": [],
+          "informationSourceOrganization": "State University"
         }
       ],
       "accreditation": [

@@ -1409,7 +1409,9 @@
                       "informationSourceId": "Org1"
                     }
                   ],
-                  "informationSourceId": "Org1"
+                  "informationSourceId": "Org1",
+                  "informationSourceOrganization": "State University",
+                  "identifier": "contact-org1-001"
                 }
               ],
               "imageUrl": "https://assets.stateu.edu/99da0cfd314920b5cf8cb6c8727e7675",
@@ -1417,21 +1419,25 @@
                 {
                   "identifier": "833333326",
                   "identifierType": "Federal employer identification number",
-                  "informationSourceId": "Org1"
+                  "informationSourceId": "Org1",
+                  "informationSourceOrganization": "State University"
                 },
                 {
                   "identifier": "23323331",
                   "identifierType": "Dun and Bradstreet number",
-                  "informationSourceId": "Org1"
+                  "informationSourceId": "Org1",
+                  "informationSourceOrganization": "State University"
                 },
                 {
                   "identifier": "https://credentialfinder.org/organization/000/State_University",
                   "identifierType": "credentialfinder.org",
-                  "informationSourceId": "Org1"
+                  "informationSourceId": "Org1",
+                  "informationSourceOrganization": "State University"
                 }
               ],
               "identificationSystem": "State University SIS",
-              "organizationType": []
+              "organizationType": [],
+              "informationSourceOrganization": "State University"
             }
           ],
           "refCourse": {
@@ -1456,7 +1462,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
@@ -1504,7 +1512,9 @@
                       "informationSourceId": "Org1"
                     }
                   ],
-                  "informationSourceId": "Org1"
+                  "informationSourceId": "Org1",
+                  "informationSourceOrganization": "State University",
+                  "identifier": "contact-org1-001"
                 }
               ],
               "imageUrl": "https://assets.stateu.edu/99da0cfd314920b5cf8cb6c8727e7675",
@@ -1512,21 +1522,25 @@
                 {
                   "identifier": "833333326",
                   "identifierType": "Federal employer identification number",
-                  "informationSourceId": "Org1"
+                  "informationSourceId": "Org1",
+                  "informationSourceOrganization": "State University"
                 },
                 {
                   "identifier": "23323331",
                   "identifierType": "Dun and Bradstreet number",
-                  "informationSourceId": "Org1"
+                  "informationSourceId": "Org1",
+                  "informationSourceOrganization": "State University"
                 },
                 {
                   "identifier": "https://credentialfinder.org/organization/000/State_University",
                   "identifierType": "credentialfinder.org",
-                  "informationSourceId": "Org1"
+                  "informationSourceId": "Org1",
+                  "informationSourceOrganization": "State University"
                 }
               ],
               "identificationSystem": "State University SIS",
-              "organizationType": []
+              "organizationType": [],
+              "informationSourceOrganization": "State University"
             }
           ],
           "refCourse": {
@@ -1551,7 +1565,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
@@ -1600,7 +1616,9 @@
                       "informationSourceId": "Org1"
                     }
                   ],
-                  "informationSourceId": "Org1"
+                  "informationSourceId": "Org1",
+                  "informationSourceOrganization": "State University",
+                  "identifier": "contact-org1-001"
                 }
               ],
               "imageUrl": "https://assets.stateu.edu/99da0cfd314920b5cf8cb6c8727e7675",
@@ -1608,17 +1626,20 @@
                 {
                   "identifier": "833333326",
                   "identifierType": "Federal employer identification number",
-                  "informationSourceId": "Org1"
+                  "informationSourceId": "Org1",
+                  "informationSourceOrganization": "State University"
                 },
                 {
                   "identifier": "23323331",
                   "identifierType": "Dun and Bradstreet number",
-                  "informationSourceId": "Org1"
+                  "informationSourceId": "Org1",
+                  "informationSourceOrganization": "State University"
                 },
                 {
                   "identifier": "https://credentialfinder.org/organization/000/State_University",
                   "identifierType": "credentialfinder.org",
-                  "informationSourceId": "Org1"
+                  "informationSourceId": "Org1",
+                  "informationSourceOrganization": "State University"
                 }
               ],
               "identificationSystem": "State University SIS",
@@ -1647,7 +1668,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
@@ -1695,7 +1718,9 @@
                       "informationSourceId": "Org1"
                     }
                   ],
-                  "informationSourceId": "Org1"
+                  "informationSourceId": "Org1",
+                  "informationSourceOrganization": "State University",
+                  "identifier": "contact-org1-001"
                 }
               ],
               "imageUrl": "https://assets.stateu.edu/99da0cfd314920b5cf8cb6c8727e7675",
@@ -1703,21 +1728,25 @@
                 {
                   "identifier": "833333326",
                   "identifierType": "Federal employer identification number",
-                  "informationSourceId": "Org1"
+                  "informationSourceId": "Org1",
+                  "informationSourceOrganization": "State University"
                 },
                 {
                   "identifier": "23323331",
                   "identifierType": "Dun and Bradstreet number",
-                  "informationSourceId": "Org1"
+                  "informationSourceId": "Org1",
+                  "informationSourceOrganization": "State University"
                 },
                 {
                   "identifier": "https://credentialfinder.org/organization/000/State_University",
                   "identifierType": "credentialfinder.org",
-                  "informationSourceId": "Org1"
+                  "informationSourceId": "Org1",
+                  "informationSourceOrganization": "State University"
                 }
               ],
               "identificationSystem": "State University SIS",
-              "organizationType": []
+              "organizationType": [],
+              "informationSourceOrganization": "State University"
             }
           ],
           "refCourse": {
@@ -1742,7 +1771,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
@@ -1790,7 +1821,9 @@
                       "informationSourceId": "Org1"
                     }
                   ],
-                  "informationSourceId": "Org1"
+                  "informationSourceId": "Org1",
+                  "informationSourceOrganization": "State University",
+                  "identifier": "contact-org1-001"
                 }
               ],
               "imageUrl": "https://assets.stateu.edu/99da0cfd314920b5cf8cb6c8727e7675",
@@ -1798,21 +1831,25 @@
                 {
                   "identifier": "833333326",
                   "identifierType": "Federal employer identification number",
-                  "informationSourceId": "Org1"
+                  "informationSourceId": "Org1",
+                  "informationSourceOrganization": "State University"
                 },
                 {
                   "identifier": "23323331",
                   "identifierType": "Dun and Bradstreet number",
-                  "informationSourceId": "Org1"
+                  "informationSourceId": "Org1",
+                  "informationSourceOrganization": "State University"
                 },
                 {
                   "identifier": "https://credentialfinder.org/organization/000/State_University",
                   "identifierType": "credentialfinder.org",
-                  "informationSourceId": "Org1"
+                  "informationSourceId": "Org1",
+                  "informationSourceOrganization": "State University"
                 }
               ],
               "identificationSystem": "State University SIS",
-              "organizationType": []
+              "organizationType": [],
+              "informationSourceOrganization": "State University"
             }
           ],
           "refCourse": {
@@ -1837,7 +1874,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
@@ -1885,7 +1924,9 @@
                       "informationSourceId": "Org1"
                     }
                   ],
-                  "informationSourceId": "Org1"
+                  "informationSourceId": "Org1",
+                  "informationSourceOrganization": "State University",
+                  "identifier": "contact-org1-001"
                 }
               ],
               "imageUrl": "https://assets.stateu.edu/99da0cfd314920b5cf8cb6c8727e7675",
@@ -1893,21 +1934,25 @@
                 {
                   "identifier": "833333326",
                   "identifierType": "Federal employer identification number",
-                  "informationSourceId": "Org1"
+                  "informationSourceId": "Org1",
+                  "informationSourceOrganization": "State University"
                 },
                 {
                   "identifier": "23323331",
                   "identifierType": "Dun and Bradstreet number",
-                  "informationSourceId": "Org1"
+                  "informationSourceId": "Org1",
+                  "informationSourceOrganization": "State University"
                 },
                 {
                   "identifier": "https://credentialfinder.org/organization/000/State_University",
                   "identifierType": "credentialfinder.org",
-                  "informationSourceId": "Org1"
+                  "informationSourceId": "Org1",
+                  "informationSourceOrganization": "State University"
                 }
               ],
               "identificationSystem": "State University SIS",
-              "organizationType": []
+              "organizationType": [],
+              "informationSourceOrganization": "State University"
             }
           ],
           "refCourse": {
@@ -1932,7 +1977,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
@@ -1980,7 +2027,9 @@
                       "informationSourceId": "Org1"
                     }
                   ],
-                  "informationSourceId": "Org1"
+                  "informationSourceId": "Org1",
+                  "informationSourceOrganization": "State University",
+                  "identifier": "contact-org1-001"
                 }
               ],
               "imageUrl": "https://assets.stateu.edu/99da0cfd314920b5cf8cb6c8727e7675",
@@ -1988,21 +2037,25 @@
                 {
                   "identifier": "833333326",
                   "identifierType": "Federal employer identification number",
-                  "informationSourceId": "Org1"
+                  "informationSourceId": "Org1",
+                  "informationSourceOrganization": "State University"
                 },
                 {
                   "identifier": "23323331",
                   "identifierType": "Dun and Bradstreet number",
-                  "informationSourceId": "Org1"
+                  "informationSourceId": "Org1",
+                  "informationSourceOrganization": "State University"
                 },
                 {
                   "identifier": "https://credentialfinder.org/organization/000/State_University",
                   "identifierType": "credentialfinder.org",
-                  "informationSourceId": "Org1"
+                  "informationSourceId": "Org1",
+                  "informationSourceOrganization": "State University"
                 }
               ],
               "identificationSystem": "State University SIS",
-              "organizationType": []
+              "organizationType": [],
+              "informationSourceOrganization": "State University"
             }
           ],
           "refCourse": {
@@ -2027,7 +2080,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
@@ -2047,7 +2102,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
@@ -2067,7 +2124,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
@@ -2087,7 +2146,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
@@ -2107,7 +2168,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
@@ -2127,7 +2190,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
@@ -2147,7 +2212,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
@@ -2167,7 +2234,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Org1"
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-state-university-org1-001"
           },
           "refCredentialAward": {
             "informationSourceId": "Org1",
@@ -2249,7 +2318,9 @@
                   "informationSourceId": "Org1"
                 }
               ],
-              "informationSourceId": "Org1"
+              "informationSourceId": "Org1",
+              "informationSourceOrganization": "State University",
+              "identifier": "contact-org1-001"
             }
           ],
           "imageUrl": "https://assets.stateu.edu/99da0cfd314920b5cf8cb6c8727e7675",
@@ -2257,21 +2328,25 @@
             {
               "identifier": "833333326",
               "identifierType": "Federal employer identification number",
-              "informationSourceId": "Org1"
+              "informationSourceId": "Org1",
+              "informationSourceOrganization": "State University"
             },
             {
               "identifier": "23323331",
               "identifierType": "Dun and Bradstreet number",
-              "informationSourceId": "Org1"
+              "informationSourceId": "Org1",
+              "informationSourceOrganization": "State University"
             },
             {
               "identifier": "https://credentialfinder.org/organization/000/State_University",
               "identifierType": "credentialfinder.org",
-              "informationSourceId": "Org1"
+              "informationSourceId": "Org1",
+              "informationSourceOrganization": "State University"
             }
           ],
           "identificationSystem": "State University SIS",
-          "organizationType": []
+          "organizationType": [],
+          "informationSourceOrganization": "State University"
         }
       ],
       "format": [
@@ -2310,7 +2385,9 @@
           "name": "Elementary School Teachers, Except Special Education",
           "framework": "O*Net Online",
           "description": "Teach academic and social skills to students at the elementary school level.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-elementary-school-teachers--ex-org1-001"
         },
         {
           "url": "https://www.onetonline.org/link/summary/25-2012.00",
@@ -2318,7 +2395,9 @@
           "name": "Kindergarten Teachers, Except Special Education",
           "framework": "O*Net Online",
           "description": "Teach academic and social skills to kindergarten students.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-kindergarten-teachers--except--org1-002"
         },
         {
           "url": "https://www.onetonline.org/link/summary/25-2057.00",
@@ -2326,7 +2405,9 @@
           "name": "Special Education Teachers, Middle School",
           "framework": "O*Net Online",
           "description": "Teach academic, social, and life skills to middle school students with learning, emotional, or physical disabilities. Includes teachers who specialize and work with students who are blind or have visual impairments; students who are deaf or have hearing impairments; and students with intellectual disabilities",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-special-education-teachers--mi-org1-003"
         },
         {
           "url": "https://www.onetonline.org/link/summary/25-2058.00",
@@ -2334,7 +2415,9 @@
           "name": "Special Education Teachers, Secondary School",
           "framework": "O*Net Online",
           "description": "Teach academic, social, and life skills to secondary school students with learning, emotional, or physical disabilities. Includes teachers who specialize and work with students who are blind or have visual impairments; students who are deaf or have hearing impairments; and students with intellectual disabilities.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-special-education-teachers--se-org1-004"
         },
         {
           "url": "https://www.onetonline.org/link/summary/25-2059.00",
@@ -2342,7 +2425,9 @@
           "name": "Special Education Teachers, All Other",
           "framework": "O*Net Online",
           "description": "",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-special-education-teachers--al-org1-005"
         },
         {
           "url": "https://www.onetonline.org/link/summary/25-2031.00",
@@ -2350,7 +2435,9 @@
           "name": "Secondary School Teachers, Except Special and Career/Technical Education",
           "framework": "O*Net Online",
           "description": "Teach one or more subjects to students at the secondary school level.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-secondary-school-teachers--exc-org1-006"
         },
         {
           "url": "https://www.onetonline.org/link/summary/25-2022.00",
@@ -2358,7 +2445,9 @@
           "name": "Middle School Teachers, Except Special and Career/Technical Education",
           "framework": "O*Net Online",
           "description": "Teach one or more subjects to students at the middle, intermediate, or junior high school level.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-middle-school-teachers--except-org1-007"
         },
         {
           "url": "https://www.onetonline.org/link/summary/25-2055.00",
@@ -2366,7 +2455,9 @@
           "name": "Special Education Teachers, Kindergarten",
           "framework": "O*Net Online",
           "description": "Teach academic, social, and life skills to kindergarten students with learning, emotional, or physical disabilities. Includes teachers who specialize and work with students who are blind or have visual impairments; students who are deaf or have hearing impairments; and students with intellectual disabilities.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-special-education-teachers--ki-org1-008"
         },
         {
           "url": "https://www.onetonline.org/link/summary/25-2056.00",
@@ -2374,7 +2465,9 @@
           "name": "Special Education Teachers, Elementary School",
           "framework": "O*Net Online",
           "description": "Teach academic, social, and life skills to elementary school students with learning, emotional, or physical disabilities. Includes teachers who specialize and work with students who are blind or have visual impairments; students who are deaf or have hearing impairments; and students with intellectual disabilities.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-special-education-teachers--el-org1-009"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/0df106e2-2a97-4967-b968-1bc3672c4536",
@@ -2382,7 +2475,9 @@
           "name": "Analyze Ethical Implications of Technology",
           "framework": "OSMT",
           "description": "Analyze the ethical implications of new technologies.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-analyze-ethical-implications-o-org1-010"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/434e45ae-44d6-4335-9812-75413c8ad55c",
@@ -2390,7 +2485,9 @@
           "name": "Apply Ethical Concepts",
           "framework": "OSMT",
           "description": "Apply ethical concepts to complex situations.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-apply-ethical-concepts-org1-011"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/219472eb-07a7-4c0d-8a44-7f3332771e65",
@@ -2398,7 +2495,9 @@
           "name": "Articulate Complex Ideas",
           "framework": "OSMT",
           "description": "Articulate complex ideas, opinions, and information, pointing out connections and relationships.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-articulate-complex-ideas-org1-012"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/dad4d560-e760-49f6-af91-e5f588d63bc6",
@@ -2406,7 +2505,9 @@
           "name": "Behavior Societal Impact",
           "framework": "OSMT",
           "description": "Describe how different types of human behavior affect society.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-behavior-societal-impact-org1-013"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/fb137a0d-8042-4571-9cc6-fdd3fd035646",
@@ -2414,7 +2515,9 @@
           "name": "Classroom Technological Resources Implementation",
           "framework": "OSMT",
           "description": "Implement technological resources in the classroom that align with the school, district, and state policies.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-classroom-technological-resour-org1-014"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/9366bedd-e081-4ddf-9d36-8bf0f446c0fe",
@@ -2422,7 +2525,9 @@
           "name": "Convey Ideas in Writing",
           "framework": "OSMT",
           "description": "Convey ideas using written communication techniques.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-convey-ideas-in-writing-org1-015"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/ab9add2b-e0ca-4a13-bd30-8fee1d3d6c5d",
@@ -2430,7 +2535,9 @@
           "name": "Educational Technology Identification",
           "framework": "OSMT",
           "description": "Identify technologies that facilitate the delivery of educational instruction.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-educational-technology-identif-org1-016"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/5bd22ff5-cea4-4ab7-80b8-1881047b3278",
@@ -2438,7 +2545,9 @@
           "name": "Ethical Issue Communication",
           "framework": "OSMT",
           "description": "Communicate with others regarding ethical issues affecting patient care.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-ethical-issue-communication-org1-017"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/7c46b82c-c0b0-42ed-97e3-c4f72af730a6",
@@ -2446,7 +2555,9 @@
           "name": "Identify Potential Risks",
           "framework": "OSMT",
           "description": "Identify potential risks in a given situation.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-identify-potential-risks-org1-018"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/8deed530-e97e-40d4-b2c5-ea880f537e56",
@@ -2454,7 +2565,9 @@
           "name": "Information Analysis",
           "framework": "OSMT",
           "description": "Analyze relevant information to make sound, pragmatic decisions.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-information-analysis-org1-019"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/2b18f689-0b75-4922-84b3-d3f2d701722d",
@@ -2462,7 +2575,9 @@
           "name": "Integrating Technology in Lesson Plans",
           "framework": "OSMT",
           "description": "Integrate technology into lesson plans to support instruction and assessment for learners.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-integrating-technology-in-less-org1-020"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/87f4b160-a4ab-498b-8099-db7cfb0253b4",
@@ -2470,7 +2585,9 @@
           "name": "Promote Student Engagement",
           "framework": "OSMT",
           "description": "Promote student engagement through active learning.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-promote-student-engagement-org1-021"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/ea41b0ac-27bc-48f6-adff-55ef02e8c250",
@@ -2478,7 +2595,9 @@
           "name": "Technology Alignment Selection",
           "framework": "OSMT",
           "description": "Select technologies that align with learning goals.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-technology-alignment-selection-org1-022"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/66f06b9c-f039-46fe-bd3a-9959fb3e6bac",
@@ -2486,7 +2605,9 @@
           "name": "Technology Tool Lesson Development",
           "framework": "OSMT",
           "description": "Develop a lesson that engages students in a range of learning skills and technology tools in which the student will access, interpret, and apply knowledge.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-technology-tool-lesson-develop-org1-023"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/926755e8-6711-42bc-b048-428ce2bbe4c4",
@@ -2494,7 +2615,9 @@
           "name": "Tools for Learner-Content Interaction",
           "framework": "OSMT",
           "description": "Integrate technology tools that support learner interaction with content in online learning environments.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-tools-for-learner-content-inte-org1-024"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/fc24094d-4374-4813-b7d4-173da641cd76",
@@ -2502,7 +2625,9 @@
           "name": "Use Technology to Improve Productivity",
           "framework": "OSMT",
           "description": "Use technology to improve productivity and efficiency.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-use-technology-to-improve-prod-org1-025"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/b2f4a2ed-aebd-4014-85bd-48586050bea3",
@@ -2510,7 +2635,9 @@
           "name": "Analysis Insight Communication",
           "framework": "OSMT",
           "description": "Communicate insights based on analysis.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-analysis-insight-communication-org1-026"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/195c6b3b-ac55-499a-98d4-ba5b355598ec",
@@ -2518,7 +2645,9 @@
           "name": "Information Interpretation",
           "framework": "OSMT",
           "description": "Interpret information through independent and unconstrained analysis.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-information-interpretation-org1-027"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/1348d8d6-4ad3-43fe-921d-5436a4a2524e",
@@ -2526,7 +2655,9 @@
           "name": "Instructional Plan Adjustment",
           "framework": "OSMT",
           "description": "Adjust instructional plans in relation to short- and long-range goals.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-instructional-plan-adjustment-org1-028"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/559e4594-36dc-4678-a035-3b403e0df13e",
@@ -2534,7 +2665,9 @@
           "name": "Lesson Plan Adjustment",
           "framework": "OSMT",
           "description": "Adjust lesson plans based on needs in the learning environment.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-lesson-plan-adjustment-org1-029"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/23757411-e378-483e-acc9-82097397d9bd",
@@ -2542,7 +2675,9 @@
           "name": "Select Appropriate Technology for Need",
           "framework": "OSMT",
           "description": "Select appropriate technology applications to meet specific needs.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-select-appropriate-technology--org1-030"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/f7b6223c-cb0c-43c7-af23-22cdc3c7c888",
@@ -2550,7 +2685,9 @@
           "name": "Learner-to-Learner Interaction Support",
           "framework": "OSMT",
           "description": "Support learner-to-learner interaction in online learning environments through the use of strategies or tools.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-learner-to-learner-interaction-org1-031"
         }
       ],
       "description": "Recipients of the Transformative Technology for Inclusive P-12 Classrooms certificate from State University demonstrated competency in the use of technology to support online, blended, and in-person learning, enhance teacher productivity, and create digital learning experiences while applying and analyzing ethical theories and frameworks to address technology and privacy issues.",
@@ -2600,7 +2737,9 @@
                   "informationSourceId": "Org1"
                 }
               ],
-              "informationSourceId": "Org1"
+              "informationSourceId": "Org1",
+              "informationSourceOrganization": "State University",
+              "identifier": "contact-org1-001"
             }
           ],
           "imageUrl": "https://assets.stateu.edu/99da0cfd314920b5cf8cb6c8727e7675",
@@ -2608,21 +2747,25 @@
             {
               "identifier": "833333326",
               "identifierType": "Federal employer identification number",
-              "informationSourceId": "Org1"
+              "informationSourceId": "Org1",
+              "informationSourceOrganization": "State University"
             },
             {
               "identifier": "23323331",
               "identifierType": "Dun and Bradstreet number",
-              "informationSourceId": "Org1"
+              "informationSourceId": "Org1",
+              "informationSourceOrganization": "State University"
             },
             {
               "identifier": "https://credentialfinder.org/organization/000/State_University",
               "identifierType": "credentialfinder.org",
-              "informationSourceId": "Org1"
+              "informationSourceId": "Org1",
+              "informationSourceOrganization": "State University"
             }
           ],
           "identificationSystem": "State University SIS",
-          "organizationType": []
+          "organizationType": [],
+          "informationSourceOrganization": "State University"
         }
       ],
       "accreditation": [
@@ -2674,7 +2817,9 @@
           "name": "Kindergarten Teachers, Except Special Education",
           "framework": "O*Net Online",
           "description": "Teach academic and social skills to kindergarten students.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-kindergarten-teachers--except--org1-001"
         },
         {
           "url": "https://www.onetonline.org/link/summary/25-2021.00",
@@ -2682,7 +2827,9 @@
           "name": "Elementary School Teachers, Except Special Education",
           "framework": "O*Net Online",
           "description": "Teach academic and social skills to students at the elementary school level.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-elementary-school-teachers--ex-org1-002"
         },
         {
           "url": "https://www.onetonline.org/link/summary/25-2022.00",
@@ -2690,7 +2837,9 @@
           "name": "Middle School Teachers, Except Special and Career/Technical Education",
           "framework": "O*Net Online",
           "description": "Teach one or more subjects to students at the middle, intermediate, or junior high school level.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-middle-school-teachers--except-org1-003"
         },
         {
           "url": "https://www.onetonline.org/link/summary/25-2031.00",
@@ -2698,7 +2847,9 @@
           "name": "Secondary School Teachers, Except Special and Career/Technical Education",
           "framework": "O*Net Online",
           "description": "Teach one or more subjects to students at the secondary school level.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-secondary-school-teachers--exc-org1-004"
         },
         {
           "url": "https://www.onetonline.org/link/summary/25-2055.00",
@@ -2706,7 +2857,9 @@
           "name": "Special Education Teachers, Kindergarten",
           "framework": "O*Net Online",
           "description": "Teach academic, social, and life skills to kindergarten students with learning, emotional, or physical disabilities. Includes teachers who specialize and work with students who are blind or have visual impairments; students who are deaf or have hearing impairments; and students with intellectual disabilities.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-special-education-teachers--ki-org1-005"
         },
         {
           "url": "https://www.onetonline.org/link/summary/25-2057.00",
@@ -2714,7 +2867,9 @@
           "name": "Special Education Teachers, Middle School",
           "framework": "O*Net Online",
           "description": "Teach academic, social, and life skills to middle school students with learning, emotional, or physical disabilities. Includes teachers who specialize and work with students who are blind or have visual impairments; students who are deaf or have hearing impairments; and students with intellectual disabilities.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-special-education-teachers--mi-org1-006"
         },
         {
           "url": "https://www.onetonline.org/link/summary/25-2056.00",
@@ -2722,7 +2877,9 @@
           "name": "Special Education Teachers, Elementary School",
           "framework": "O*Net Online",
           "description": "Teach academic, social, and life skills to elementary school students with learning, emotional, or physical disabilities. Includes teachers who specialize and work with students who are blind or have visual impairments; students who are deaf or have hearing impairments; and students with intellectual disabilities.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-special-education-teachers--el-org1-007"
         },
         {
           "url": "https://www.onetonline.org/link/summary/25-2058.00",
@@ -2730,7 +2887,9 @@
           "name": "Special Education Teachers, Secondary School",
           "framework": "O*Net Online",
           "description": "Teach academic, social, and life skills to secondary school students with learning, emotional, or physical disabilities. Includes teachers who specialize and work with students who are blind or have visual impairments; students who are deaf or have hearing impairments; and students with intellectual disabilities.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-special-education-teachers--se-org1-008"
         },
         {
           "url": "https://www.onetonline.org/link/summary/25-2059.00",
@@ -2738,7 +2897,9 @@
           "name": "Special Education Teachers, All Other",
           "framework": "O*Net Online",
           "description": "",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-special-education-teachers--al-org1-009"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/0df106e2-2a97-4967-b968-1bc3672c4536",
@@ -2746,7 +2907,9 @@
           "name": "Analyze Ethical Implications of Technology",
           "framework": "OSMT",
           "description": "Analyze the ethical implications of new technologies.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-analyze-ethical-implications-o-org1-010"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/434e45ae-44d6-4335-9812-75413c8ad55c",
@@ -2754,7 +2917,9 @@
           "name": "Apply Ethical Concepts",
           "framework": "OSMT",
           "description": "Apply ethical concepts to complex situations.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-apply-ethical-concepts-org1-011"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/219472eb-07a7-4c0d-8a44-7f3332771e65",
@@ -2762,7 +2927,9 @@
           "name": "Articulate Complex Ideas",
           "framework": "OSMT",
           "description": "Articulate complex ideas, opinions, and information, pointing out connections and relationships.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-articulate-complex-ideas-org1-012"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/dad4d560-e760-49f6-af91-e5f588d63bc6",
@@ -2770,7 +2937,9 @@
           "name": "Behavior Societal Impact",
           "framework": "OSMT",
           "description": "Describe how different types of human behavior affect society.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-behavior-societal-impact-org1-013"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/fb137a0d-8042-4571-9cc6-fdd3fd035646",
@@ -2778,7 +2947,9 @@
           "name": "Classroom Technological Resources Implementation",
           "framework": "OSMT",
           "description": "Implement technological resources in the classroom that align with the school, district, and state policies.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-classroom-technological-resour-org1-014"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/9366bedd-e081-4ddf-9d36-8bf0f446c0fe",
@@ -2786,7 +2957,9 @@
           "name": "Convey Ideas in Writing",
           "framework": "OSMT",
           "description": "Convey ideas using written communication techniques.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-convey-ideas-in-writing-org1-015"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/5bd22ff5-cea4-4ab7-80b8-1881047b3278",
@@ -2794,7 +2967,9 @@
           "name": "Ethical Issue Communication",
           "framework": "OSMT",
           "description": "Communicate with others regarding ethical issues affecting patient care.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-ethical-issue-communication-org1-016"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/7c46b82c-c0b0-42ed-97e3-c4f72af730a6",
@@ -2802,7 +2977,9 @@
           "name": "Identify Potential Risks",
           "framework": "OSMT",
           "description": "Identify potential risks in a given situation.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-identify-potential-risks-org1-017"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/8deed530-e97e-40d4-b2c5-ea880f537e56",
@@ -2810,7 +2987,9 @@
           "name": "Information Analysis",
           "framework": "OSMT",
           "description": "Analyze relevant information to make sound, pragmatic decisions.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-information-analysis-org1-018"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/2b18f689-0b75-4922-84b3-d3f2d701722d",
@@ -2818,7 +2997,9 @@
           "name": "Integrating Technology in Lesson Plans",
           "framework": "OSMT",
           "description": "Integrate technology into lesson plans to support instruction and assessment for learners.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-integrating-technology-in-less-org1-019"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/87f4b160-a4ab-498b-8099-db7cfb0253b4",
@@ -2826,7 +3007,9 @@
           "name": "Promote Student Engagement",
           "framework": "OSMT",
           "description": "Promote student engagement through active learning.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-promote-student-engagement-org1-020"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/ea41b0ac-27bc-48f6-adff-55ef02e8c250",
@@ -2834,7 +3017,9 @@
           "name": "Technology Alignment Selection",
           "framework": "OSMT",
           "description": "Select technologies that align with learning goals.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-technology-alignment-selection-org1-021"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/66f06b9c-f039-46fe-bd3a-9959fb3e6bac",
@@ -2842,7 +3027,9 @@
           "name": "Technology Tool Lesson Development",
           "framework": "OSMT",
           "description": "Develop a lesson that engages students in a range of learning skills and technology tools in which the student will access, interpret, and apply knowledge.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-technology-tool-lesson-develop-org1-022"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/926755e8-6711-42bc-b048-428ce2bbe4c4",
@@ -2850,7 +3037,9 @@
           "name": "Tools for Learner-Content Interaction",
           "framework": "OSMT",
           "description": "Integrate technology tools that support learner interaction with content in online learning environments.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-tools-for-learner-content-inte-org1-023"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/fc24094d-4374-4813-b7d4-173da641cd76",
@@ -2858,7 +3047,9 @@
           "name": "Use Technology to Improve Productivity",
           "framework": "OSMT",
           "description": "Use technology to improve productivity and efficiency.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-use-technology-to-improve-prod-org1-024"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/2833ce2f-a3ea-49cf-a65c-5cce849a3c34",
@@ -2866,7 +3057,9 @@
           "name": "Educational Technology Application",
           "framework": "OSMT",
           "description": "Apply technologies in appropriate, safe, legal, ethical, and effective ways.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-educational-technology-applica-org1-025"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/23757411-e378-483e-acc9-82097397d9bd",
@@ -2874,7 +3067,9 @@
           "name": "Select Appropriate Technology for Need",
           "framework": "OSMT",
           "description": "Select appropriate technology applications to meet specific needs.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-select-appropriate-technology--org1-026"
         },
         {
           "url": "https://osmt.stateu.edu/api/skills/f7b6223c-cb0c-43c7-af23-22cdc3c7c888",
@@ -2882,7 +3077,9 @@
           "name": "Learner-to-Learner Interaction Support",
           "framework": "OSMT",
           "description": "Support learner-to-learner interaction in online learning environments through the use of strategies or tools.",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialalignments-learner-to-learner-interaction-org1-027"
         }
       ],
       "description": "Recipients of the Innovative Technology for Inclusive P-12 Classrooms certificate from State University demonstrated competency in the use of technology to support online and in-person learning, enhance teacher productivity, and create digital learning experiences while applying ethical frameworks to address technology and privacy issues.",
@@ -2932,7 +3129,9 @@
                   "informationSourceId": "Org1"
                 }
               ],
-              "informationSourceId": "Org1"
+              "informationSourceId": "Org1",
+              "informationSourceOrganization": "State University",
+              "identifier": "contact-org1-001"
             }
           ],
           "imageUrl": "https://assets.stateu.edu/99da0cfd314920b5cf8cb6c8727e7675",
@@ -2940,21 +3139,25 @@
             {
               "identifier": "833333326",
               "identifierType": "Federal employer identification number",
-              "informationSourceId": "Org1"
+              "informationSourceId": "Org1",
+              "informationSourceOrganization": "State University"
             },
             {
               "identifier": "23323331",
               "identifierType": "Dun and Bradstreet number",
-              "informationSourceId": "Org1"
+              "informationSourceId": "Org1",
+              "informationSourceOrganization": "State University"
             },
             {
               "identifier": "https://credentialfinder.org/organization/000/State_University",
               "identifierType": "credentialfinder.org",
-              "informationSourceId": "Org1"
+              "informationSourceId": "Org1",
+              "informationSourceOrganization": "State University"
             }
           ],
           "identificationSystem": "State University SIS",
-          "organizationType": []
+          "organizationType": [],
+          "informationSourceOrganization": "State University"
         }
       ],
       "accreditation": [

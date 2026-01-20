@@ -899,7 +899,9 @@
             "name": "State University",
             "identificationSystem": "State University SIS",
             "organizationType": [],
-            "informationSourceId": "Single-Org"
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "Demo University",
+            "identifier": "organization-state-university-single-org-001"
           },
           "refCourse": {
             "identifier": [
@@ -922,7 +924,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Single-Org"
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "Demo University",
+            "identifier": "organization-state-university-single-org-001"
           },
           "informationSourceId": "Single-Org",
           "refCredentialAward": {
@@ -941,7 +945,9 @@
             "name": "State University",
             "identificationSystem": "State University SIS",
             "organizationType": [],
-            "informationSourceId": "Single-Org"
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "Demo University",
+            "identifier": "organization-state-university-single-org-001"
           },
           "refCourse": {
             "identifier": [
@@ -964,7 +970,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Single-Org"
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "Demo University",
+            "identifier": "organization-state-university-single-org-001"
           },
           "informationSourceId": "Single-Org",
           "refCredentialAward": {
@@ -983,7 +991,9 @@
             "name": "State University",
             "identificationSystem": "State University SIS",
             "organizationType": [],
-            "informationSourceId": "Single-Org"
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "Demo University",
+            "identifier": "organization-state-university-single-org-001"
           },
           "refCourse": {
             "identifier": [
@@ -1006,7 +1016,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Single-Org"
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "Demo University",
+            "identifier": "organization-state-university-single-org-001"
           },
           "informationSourceId": "Single-Org",
           "refCredentialAward": {
@@ -1025,7 +1037,9 @@
             "name": "State University",
             "identificationSystem": "State University SIS",
             "organizationType": [],
-            "informationSourceId": "Single-Org"
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "Demo University",
+            "identifier": "organization-state-university-single-org-001"
           },
           "refCourse": {
             "identifier": [
@@ -1048,7 +1062,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Single-Org"
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "Demo University",
+            "identifier": "organization-state-university-single-org-001"
           },
           "informationSourceId": "Single-Org",
           "refCredentialAward": {
@@ -1067,7 +1083,9 @@
             "name": "State University",
             "identificationSystem": "State University SIS",
             "organizationType": [],
-            "informationSourceId": "Single-Org"
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "Demo University",
+            "identifier": "organization-state-university-single-org-001"
           },
           "refCourse": {
             "identifier": [
@@ -1090,7 +1108,9 @@
             "organizationType": [
               "University"
             ],
-            "informationSourceId": "Single-Org"
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "Demo University",
+            "identifier": "organization-state-university-single-org-001"
           },
           "informationSourceId": "Single-Org",
           "refCredentialAward": {
@@ -1232,7 +1252,9 @@
         {
           "name": "Certified Nursing Assistant CNA",
           "refPosition": {
-            "informationSourceId": "Single-Org"
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "Demo University",
+            "identifier": "position-single-org-001"
           },
           "startDate": "2018-03",
           "assertedByRefOrganization": {
@@ -1241,7 +1263,9 @@
             "organizationType": [
               "Company"
             ],
-            "informationSourceId": "Single-Org"
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "Demo University",
+            "identifier": "organization-employing-organization-single-org-001"
           },
           "offeredByRefOrganization": {
             "identificationSystem": "stateu-training-provider-id",
@@ -1249,7 +1273,9 @@
             "organizationType": [
               "Training Organization"
             ],
-            "informationSourceId": "Single-Org"
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "Demo University",
+            "identifier": "organization-training-provider-single-org-001"
           },
           "approvedByRefOrganization": [
             {
@@ -1258,7 +1284,9 @@
               "organizationType": [
                 "Regulatory Body"
               ],
-              "informationSourceId": "Single-Org"
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "Demo University",
+              "identifier": "organization-approving-authority-single-org-001"
             }
           ],
           "informationSourceId": "Single-Org",

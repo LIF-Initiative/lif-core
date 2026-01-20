@@ -65,12 +65,22 @@ KEY_TO_ENTITY = {
     "competencyFramework": "CompetencyFramework",
     "position": "Position",
     "program": "Program",
-    # Nested entities
+    # Nested reference entities
     "refCredentialAward": "CredentialAward",
     "refCompetency": "Competency",
     "refCourse": "Course",
+    "refRefCourse": "Course",  # typo in data
+    "refPosition": "Position",
+    "refRefPosition": "Position",  # typo in data
     "image": "Image",
-    "credentialAlignments": "CredentialAlignment",
+    "credentialAlignments": "CredentialAlignments",
+    # Organization references
+    "assertedByRefOrganization": "Organization",
+    "offeredByRefOrganization": "Organization",
+    "approvedByRefOrganization": "Organization",
+    "issuedByRefOrganization": "Organization",
+    "awardedByRefOrganization": "Organization",
+    "accreditedByRefOrganization": "Organization",
 }
 
 

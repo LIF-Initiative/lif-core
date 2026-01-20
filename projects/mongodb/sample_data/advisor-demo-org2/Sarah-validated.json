@@ -62,7 +62,9 @@
           "name": "Volunteer Nursing Assistant",
           "endDate": "2018-03",
           "refPosition": {
-            "informationSourceId": "Org2"
+            "informationSourceId": "Org2",
+            "informationSourceOrganization": "Community College",
+            "identifier": "position-org2-001"
           },
           "startDate": "2017-02",
           "assertedByRefOrganization": {
@@ -71,7 +73,9 @@
             "organizationType": [
               "Company"
             ],
-            "informationSourceId": "Org2"
+            "informationSourceId": "Org2",
+            "informationSourceOrganization": "Community College",
+            "identifier": "organization-employing-organization-org2-001"
           },
           "offeredByRefOrganization": {
             "identificationSystem": "stateu-training-provider-id",
@@ -79,7 +83,9 @@
             "organizationType": [
               "Training Organization"
             ],
-            "informationSourceId": "Org2"
+            "informationSourceId": "Org2",
+            "informationSourceOrganization": "Community College",
+            "identifier": "organization-training-provider-org2-001"
           },
           "approvedByRefOrganization": {
             "identificationSystem": "stateu-approving-authority-id",
@@ -87,7 +93,9 @@
             "organizationType": [
               "Regulatory Body"
             ],
-            "informationSourceId": "Org2"
+            "informationSourceId": "Org2",
+            "informationSourceOrganization": "Community College",
+            "identifier": "organization-approving-authority-org2-001"
           },
           "refCredentialAward": {
             "identifier": "cred-employment-certificate-001",
@@ -104,7 +112,9 @@
           "informationSourceId": "Org2",
           "name": "Teaching Aide",
           "refPosition": {
-            "informationSourceId": "Org2"
+            "informationSourceId": "Org2",
+            "informationSourceOrganization": "Community College",
+            "identifier": "position-org2-001"
           },
           "startDate": "2008-09",
           "endDate": "2017-01",
@@ -114,7 +124,9 @@
             "organizationType": [
               "Company"
             ],
-            "informationSourceId": "Org2"
+            "informationSourceId": "Org2",
+            "informationSourceOrganization": "Community College",
+            "identifier": "organization-employing-organization-org2-001"
           },
           "offeredByRefOrganization": {
             "identificationSystem": "stateu-training-provider-id",
@@ -122,7 +134,9 @@
             "organizationType": [
               "Training Organization"
             ],
-            "informationSourceId": "Org2"
+            "informationSourceId": "Org2",
+            "informationSourceOrganization": "Community College",
+            "identifier": "organization-training-provider-org2-001"
           },
           "approvedByRefOrganization": {
             "identificationSystem": "stateu-approving-authority-id",
@@ -130,7 +144,9 @@
             "organizationType": [
               "Regulatory Body"
             ],
-            "informationSourceId": "Org2"
+            "informationSourceId": "Org2",
+            "informationSourceOrganization": "Community College",
+            "identifier": "organization-approving-authority-org2-001"
           },
           "refCredentialAward": {
             "identifier": "cred-employment-certificate-001",
