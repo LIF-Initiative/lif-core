@@ -737,7 +737,7 @@ const MappingsView: React.FC = () => {
     useEffect(() => {
         const loadModels = async () => {
             try {
-                const data = await listModels(); // { type: 'SourceSchema' }
+                const data = await listModels();
                 const list = Array.isArray(data)
                     ? (data as any[]).map((m) => ({ Id: m.Id, Name: m.Name }))
                     : [];
@@ -836,12 +836,12 @@ const MappingsView: React.FC = () => {
         [allGroups, versionByGroupId]
     );
 
-    // Count groups for a given source pointing to selected target (default normalize to 1 when absent)
+    // Count groups for a given source pointing to selected target
     const countGroupsForSource = useCallback(
         (sourceId: number) => {
             if (!allGroups) return 0;
             const normalize = (id?: number) => (id && id > 0 ? id : 1);
-            const targetId = selectedTargetId ?? 1;
+            const targetId = selectedTargetId ?? 17;
             return allGroups.filter(
                 (g) =>
                     g.SourceDataModelId === sourceId &&
@@ -851,11 +851,11 @@ const MappingsView: React.FC = () => {
         [allGroups, selectedTargetId]
     );
 
-    // Count groups for a given target pointing to selected source (default normalize to 1 when absent)
+    // Count groups for a given target pointing to selected source
     const countGroupsForTarget = useCallback(
         (targetId: number) => {
             if (!allGroups) return 0;
-            const normalize = (id?: number) => (id && id > 0 ? id : 1);
+            const normalize = (id?: number) => (id && id > 0 ? id : 17);
             const sourceId = selectedSourceId ?? 1;
             return allGroups.filter(
                 (g) =>
