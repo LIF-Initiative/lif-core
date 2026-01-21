@@ -3,9 +3,6 @@ from typing import Any, Dict, List
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from passlib.context import CryptContext
-from pydantic import BaseModel
-
 from lif.mdr_auth.core import AuthMiddleware, create_access_token, create_refresh_token, decode_jwt
 from lif.mdr_restapi import (
     attribute_endpoints,
@@ -25,6 +22,8 @@ from lif.mdr_restapi import (
 )
 from lif.mdr_utils.config import get_settings
 from lif.mdr_utils.logger_config import get_logger
+from passlib.context import CryptContext
+from pydantic import BaseModel
 
 logger = get_logger(__name__)
 
@@ -61,6 +60,69 @@ users_db: List[Dict[str, Any]] = [
         "firstname": "Sarah",
         "lastname": "Marin",
         "identifier": "100003",
+        "identifier_type": "SCHOOL_ASSIGNED_NUMBER",
+        "identifier_type_enum": "SCHOOL_ASSIGNED_NUMBER",
+    },
+    {
+        "username": "Rgreen11Fdemo@stateu.edu",
+        "password": "$2b$12$pJyJLoYE2QcygmcdEfUhx.7OW1hbo79e3CbrHTyKy7ATJyUPRB4CK",  # "liffy4life!"
+        "firstname": "Renee",
+        "lastname": "Green",
+        "identifier": "100004",
+        "identifier_type": "SCHOOL_ASSIGNED_NUMBER",
+        "identifier_type_enum": "SCHOOL_ASSIGNED_NUMBER",
+    },
+    {
+        "username": "mhanson_lifdemo@stateu.edu",
+        "password": "$2b$12$pJyJLoYE2QcygmcdEfUhx.7OW1hbo79e3CbrHTyKy7ATJyUPRB4CK",  # "liffy4life!"
+        "firstname": "Matt",
+        "lastname": "Hanson",
+        "identifier": "100005",
+        "identifier_type": "SCHOOL_ASSIGNED_NUMBER",
+        "identifier_type_enum": "SCHOOL_ASSIGNED_NUMBER",
+    },
+    {
+        "username": "tthatcher_lifdemo@stateu.edu",
+        "password": "$2b$12$pJyJLoYE2QcygmcdEfUhx.7OW1hbo79e3CbrHTyKy7ATJyUPRB4CK",  # "liffy4life!"
+        "firstname": "Tracy",
+        "lastname": "Thatcher",
+        "identifier": "100006",
+        "identifier_type": "SCHOOL_ASSIGNED_NUMBER",
+        "identifier_type_enum": "SCHOOL_ASSIGNED_NUMBER",
+    },
+    {
+        "username": "nsmith_lifdemo@stateu.edu",
+        "password": "$2b$12$pJyJLoYE2QcygmcdEfUhx.7OW1hbo79e3CbrHTyKy7ATJyUPRB4CK",  # "liffy4life!"
+        "firstname": "Nancy",
+        "lastname": "Smith",
+        "identifier": "100007",
+        "identifier_type": "SCHOOL_ASSIGNED_NUMBER",
+        "identifier_type_enum": "SCHOOL_ASSIGNED_NUMBER",
+    },
+    {
+        "username": "bwang_lifdemo@stateu.edu",
+        "password": "$2b$12$pJyJLoYE2QcygmcdEfUhx.7OW1hbo79e3CbrHTyKy7ATJyUPRB4CK",  # "liffy4life!"
+        "firstname": "Ben",
+        "lastname": "Wang",
+        "identifier": "100008",
+        "identifier_type": "SCHOOL_ASSIGNED_NUMBER",
+        "identifier_type_enum": "SCHOOL_ASSIGNED_NUMBER",
+    },
+    {
+        "username": "gdavis_lifdemo@stateu.edu",
+        "password": "$2b$12$pJyJLoYE2QcygmcdEfUhx.7OW1hbo79e3CbrHTyKy7ATJyUPRB4CK",  # "liffy4life!"
+        "firstname": "George",
+        "lastname": "Davis",
+        "identifier": "100009",
+        "identifier_type": "SCHOOL_ASSIGNED_NUMBER",
+        "identifier_type_enum": "SCHOOL_ASSIGNED_NUMBER",
+    },
+    {
+        "username": "cwilliams_lifdemo@stateu.edu",
+        "password": "$2b$12$pJyJLoYE2QcygmcdEfUhx.7OW1hbo79e3CbrHTyKy7ATJyUPRB4CK",  # "liffy4life!"
+        "firstname": "Caleb",
+        "lastname": "Williams",
+        "identifier": "100010",
         "identifier_type": "SCHOOL_ASSIGNED_NUMBER",
         "identifier_type_enum": "SCHOOL_ASSIGNED_NUMBER",
     },
