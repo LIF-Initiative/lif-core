@@ -37,7 +37,7 @@ _Entities_ can be associated by **embedding** using the (`+ Existing Entity` > `
 
 Child _Attributes_ of these associated-by-embedding _Entities_ will display in the **associated** _Entity_ location(s) (including the schema export), and can be part of a Transformation mapping.
 
-The reference `Relationship` is a free form field, but **MDR** recognizes reserved words, such as TBD.
+The reference `Relationship` is a free form field, but **MDR** recognizes reserved words, detailed in the [LIF Data Model Rules](https://github.com/LIF-Initiative/lif-core/blob/main/docs/LIF_Data_Model_Rules.md).
 
 **Associated _Attributes_**
 
@@ -65,7 +65,9 @@ In order to maintain portable data:
 
 One of the primary benefits of using **MDR** is the ability to _map_ or _transform_ a block of JSON from one form into another. Any _Data Model_ in the LIF system can be used as the source or target for this transformation.
 
-Transformations can only be made between _Attributes_.
+Transformations can be a mix of _Entities_ and/or _Attributes_. Currently the UX / API for mapping visualization only supports _Attribute_-to-_Attribute_ transformations. A workaround for leveraging _Entities_ is to map an _Attribute_, and then access the JSONata expression of that mapping and adjust to target the _Entity_. While the UX won't visually update the mapping, the JSONata is what the **Translator** uses for the actual JSON transforms.
+
+Source and target _Entities_ or _Attributes_ can be mapped in a many-to-many fashion (such as multiple source _Attributes_ to the same target _Attribute_, or a single source _Attribute_ to multiple target _Attributes_). While users can do a myriad of mappings, a practical approach to complex transforms (such as multiple source _Attributes_ to a single target _Attribute_) can be accomplished by mapping one of the source _Attributes_, and then adjust the JSONata expression to reference the other source _Attributes_. 
 
 Each _Attribute_ will be persisted with an ID path (`entityIdPath`). This path is meant to be absolute in the system, and easily convertible to a portable format.
 
@@ -117,7 +119,7 @@ The origin _Value Set_ must be within the _Base LIF_.
 
 #### Org LIF
 
-A model specific to the LIF adopter, seeded and reliant on references from the _Base LIF_ model (known as inclusions), and enhancements added directly by the LIF adopter (known as extensions). 
+A model specific to the LIF adopter, seeded and reliant on references from other _Data Models_ (_Base LIF_ (known as `Inclusions`), _Partner LIF_, or _Source Schema_), and with enhancements added directly by the LIF adopter (known as extensions). 
 
 Requires the _Base LIF_ to be present.
 
@@ -129,25 +131,25 @@ Number of models supported per LIF system: 0 - 1
 
 Supported.
 
-The origin _Entity_ must be within the _Base LIF_ or _Org LIF_.
+The origin _Entity_ can be from any other _Data Model_. It is required when associating an entity into an Org LIF that the placement type is `Embedded` the first time. All subsequent times it can be by `Reference`.
 
 #### Associated _Entities_ - Embedded
 
 Supported.
 
-The origin _Entity_ must be within the _Base LIF_ or _Org LIF_.
+The origin _Entity_ must be from any other _Data Model_.
 
 #### Associated _Attributes_
 
 Supported.
 
-The origin Attribute must be within the _Base LIF_ or _Org LIF_.
+The origin Attribute must be from any other _Data Model_.
 
 #### Associated _Value Sets_
 
 Supported.
 
-The origin _Value Set_ must be within the _Base LIF_ or _Org LIF_.
+The origin _Value Set_ must be from any other _Data Model_.
 
 ### Source Schema
 
@@ -214,3 +216,4 @@ Some changes to the **MDR** will be needed to achieve alignment with this design
 ## References
 - https://github.com/LIF-Initiative/lif-core/issues/790
 - https://github.com/LIF-Initiative/lif-core/issues/792
+- MDR Technical Guide: https://docs.google.com/document/d/1MaCo8gGHTW00Ax9ARphus55SJGgUNjoz7QmbMX_B8iU/edit?tab=t.0#heading=h.dvmmzem12q7i
