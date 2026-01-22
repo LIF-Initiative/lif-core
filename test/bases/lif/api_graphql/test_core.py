@@ -16,13 +16,13 @@ async def test_fetch_dynamic_graphql_schema(mock_post):
     query: str = """
         query MyQuery {
             person(
-                filter: {identifier: {identifier: "100006", identifierType: "SCHOOL_ASSIGNED_NUMBER"}}
+                filter: {Identifier: {identifier: "100006", identifierType: "SCHOOL_ASSIGNED_NUMBER"}}
             ) {
-                identifier {
+                Identifier {
                     identifier
                     identifierType
                 }
-                employmentPreferences {
+                EmploymentPreferences {
                     organizationTypes
                 }
             }
@@ -34,13 +34,13 @@ async def test_fetch_dynamic_graphql_schema(mock_post):
             {
                 "person": [
                     {
-                        "identifier": [
+                        "Identifier": [
                             {
                                 "identifier": "100006",
-                                "identifierType": "SCHOOL_ASSIGNED_NUMBER" 
+                                "identifierType": "SCHOOL_ASSIGNED_NUMBER"
                             }
                         ],
-                        "employmentPreferences": [
+                        "EmploymentPreferences": [
                             {
                                 "organizationTypes": [
                                     "Non-Profit",
@@ -70,10 +70,10 @@ async def test_fetch_dynamic_graphql_schema(mock_post):
         assert execution_result.data is not None
         # print("Execution Result Data: ", execution_result.data)
         assert len(execution_result.data["person"]) == 1
-        assert len(execution_result.data["person"][0]["identifier"]) == 1
-        assert len(execution_result.data["person"][0]["employmentPreferences"]) == 1
-        assert execution_result.data["person"][0]["identifier"][0]["identifier"] == "100006"
-        assert execution_result.data["person"][0]["employmentPreferences"][0]["organizationTypes"] == [
+        assert len(execution_result.data["person"][0]["Identifier"]) == 1
+        assert len(execution_result.data["person"][0]["EmploymentPreferences"]) == 1
+        assert execution_result.data["person"][0]["Identifier"][0]["identifier"] == "100006"
+        assert execution_result.data["person"][0]["EmploymentPreferences"][0]["organizationTypes"] == [
             "Non-Profit",
             "Public Sector",
         ]
