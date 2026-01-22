@@ -24,6 +24,21 @@ PERSON_JSON_PATH_PREFIX: str = "$.person[0]."
 PERSON_DOT_LENGTH: int = len(PERSON_DOT)
 
 
+def _find_key_case_insensitive(d: dict, key: str) -> str | None:
+    """Find a key in a dict using case-insensitive matching.
+
+    Returns the actual key from the dict if found, None otherwise.
+    This handles the case where translator returns "Person" but we're looking for "person".
+    """
+    if key in d:
+        return key
+    key_lower = key.lower()
+    for k in d.keys():
+        if k.lower() == key_lower:
+            return k
+    return None
+
+
 # -------------------------------------------------------------------------
 # Helper function to adjust the LIF fragments for the initial orchestrator
 # simplification. Initially, fragments will contain a full person.  This
@@ -55,16 +70,18 @@ def adjust_lif_fragments_for_initial_orchestrator_simplification(
                 last_key = keys[-1]
                 current_field = fragment.fragment[0]
                 for key in keys:
+                    # Handle case-insensitive lookup for "person"/"Person" root key
+                    actual_key = _find_key_case_insensitive(current_field, key) if isinstance(current_field, dict) else key
                     if key == last_key:
-                        if key in current_field:
-                            current_field = current_field[key]
+                        if actual_key and actual_key in current_field:
+                            current_field = current_field[actual_key]
                             new_fragment = LIFFragment(
                                 fragment_path=path,
                                 fragment=current_field if isinstance(current_field, list) else [current_field],
                             )
                             results.append(new_fragment)
-                    elif isinstance(current_field, dict) and key in current_field:
-                        current_field = current_field[key]
+                    elif isinstance(current_field, dict) and actual_key and actual_key in current_field:
+                        current_field = current_field[actual_key]
                     elif isinstance(current_field, list) and len(current_field) == 0:
                         logger.info(f"list in lif record is empty for key: {key}")
                         break
