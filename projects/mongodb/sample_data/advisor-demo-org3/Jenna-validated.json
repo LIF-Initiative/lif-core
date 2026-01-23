@@ -1,5 +1,5 @@
 {
-  "person": [
+  "Person": [
     {
       "Name": [
         {
@@ -296,7 +296,7 @@
           "informationSourceId": "Org3",
           "informationSourceOrganization": "Org3",
           "awardStatus": "Completed",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Org3",
             "identifier": "84d6de55-974c-47e5-92bf-889addac75ae",
@@ -308,7 +308,7 @@
         },
         {
           "awardStatus": "Completed",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Org3",
             "identifier": "",
@@ -322,7 +322,7 @@
         },
         {
           "awardStatus": "Completed",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Org3",
             "identifier": "",
@@ -336,7 +336,7 @@
         },
         {
           "awardStatus": "Completed",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Org3",
             "identifier": "",
@@ -350,7 +350,7 @@
         },
         {
           "awardStatus": "Completed",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Org3",
             "identifier": "",
@@ -364,7 +364,7 @@
         },
         {
           "awardStatus": "Completed",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Org3",
             "identifier": "",
@@ -378,7 +378,7 @@
         },
         {
           "awardStatus": "Completed",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Org3",
             "identifier": "",
@@ -732,7 +732,7 @@
       "informationSourceId": "Org3"
     }
   ],
-  "course": [
+  "Course": [
     {
       "informationSourceId": "Org3",
       "Identifier": [
@@ -749,7 +749,7 @@
       "informationSourceOrganization": "Regional University"
     }
   ],
-  "organization": [
+  "Organization": [
     {
       "informationSourceId": "Org3",
       "name": "Summit Valley University",
@@ -842,7 +842,7 @@
       "identifier": "organization-state-university-org3-004"
     }
   ],
-  "credential": [
+  "Credential": [
     {
       "informationSourceId": "Org3",
       "identifier": "84d6de55-974c-47e5-92bf-889addac75ae",

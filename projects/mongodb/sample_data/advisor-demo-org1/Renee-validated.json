@@ -1,5 +1,5 @@
 {
-  "person": [
+  "Person": [
     {
       "Name": [
         {
@@ -729,7 +729,7 @@
       ]
     }
   ],
-  "course": [
+  "Course": [
     {
       "informationSourceId": "Org1",
       "Identifier": [
@@ -746,7 +746,7 @@
       "informationSourceOrganization": "State University"
     }
   ],
-  "organization": [
+  "Organization": [
     {
       "informationSourceId": "Org1",
       "name": "State University",

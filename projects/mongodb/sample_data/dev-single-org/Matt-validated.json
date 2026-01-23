@@ -1,5 +1,5 @@
 {
-  "person": [
+  "Person": [
     {
       "Name": [
         {
@@ -1832,7 +1832,7 @@
           ],
           "awardIssueDate": "2025-01-30T15:00:00Z",
           "verificationType": "HostedBadge",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "id": "https://api.badgr.io/public/badges/z7O2tvPBRuiA7hLpzDG0Bg",
             "informationSourceId": "Single-Org"
           },
@@ -1844,7 +1844,7 @@
         },
         {
           "awardStatus": "InProgress",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "id": "a050aa17-45f1-413f-a63b-c3a627ffa686",
             "informationSourceId": "Single-Org"
           },
@@ -1857,7 +1857,7 @@
         },
         {
           "awardStatus": "InProgress",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "id": "a050aa17-45f1-413f-a63b-c3a627ffa686",
             "informationSourceId": "Single-Org"
           },
@@ -1871,7 +1871,7 @@
         {
           "awardStatus": "Granted",
           "awardIssueDate": "05/2020",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "id": "a050aa17-45f1-413f-a63b-c3a627ffa686",
             "informationSourceId": "Single-Org"
           },
@@ -1883,7 +1883,7 @@
         },
         {
           "awardStatus": "Completed",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "id": "a050aa17-45f1-413f-a63b-c3a627ffa686",
             "informationSourceId": "Single-Org"
           },
@@ -1896,7 +1896,7 @@
         },
         {
           "awardStatus": "Completed",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "id": "a050aa17-45f1-413f-a63b-c3a627ffa686",
             "informationSourceId": "Single-Org"
           },
@@ -1909,7 +1909,7 @@
         },
         {
           "awardStatus": "Completed",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "id": "a050aa17-45f1-413f-a63b-c3a627ffa686",
             "informationSourceId": "Single-Org"
           },
@@ -2354,7 +2354,7 @@
       "informationSourceId": "Single-Org"
     }
   ],
-  "course": [
+  "Course": [
     {
       "Identifier": [
         {
@@ -2371,7 +2371,7 @@
       "informationSourceOrganization": "Demo University"
     }
   ],
-  "organization": [
+  "Organization": [
     {
       "name": "State University",
       "description": "State University (StateU) is an accredited online university offering online bachelor's and master's degree programs. The programs are competency-based, student-focused, online, nonprofit university.",
@@ -2512,7 +2512,7 @@
       "identifier": "organization-san-antonio-university-single-org-010"
     }
   ],
-  "credential": [
+  "Credential": [
     {
       "id": "https://api.badgr.io/public/badges/z7O2tvPBRuiA7hLpzDG0Bg",
       "name": "StateU Certificate: Network and Cyber Defense Foundations (DEMO)",

@@ -1,5 +1,5 @@
 {
-  "person": [
+  "Person": [
     {
       "Name": [
         {
@@ -993,7 +993,7 @@
       ]
     }
   ],
-  "course": [
+  "Course": [
     {
       "Identifier": [
         {
@@ -1010,7 +1010,7 @@
       "informationSourceOrganization": "Demo University"
     }
   ],
-  "organization": [
+  "Organization": [
     {
       "name": "State University",
       "description": "State University (StateU) is an accredited online university offering online bachelor's and master's degree programs. The programs are competency-based, student-focused, online, nonprofit university.",

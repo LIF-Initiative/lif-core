@@ -1,5 +1,5 @@
 {
-  "person": [
+  "Person": [
     {
       "Name": [
         {
@@ -1280,7 +1280,7 @@
           ],
           "awardIssueDate": "2025-01-31T15:00:00Z",
           "verificationType": "HostedBadge",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "id": "c6bd80f8-f5af-4d62-ae5d-896e4bf60295",
             "informationSourceId": "Single-Org"
           },
@@ -1291,7 +1291,7 @@
           "identifier": "credentialaward-903f07f0-f556-4051-9dd2-b3ed97-single-org-001"
         },
         {
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "id": "https://api.badgr.io/public/badges/jTvfWDxrQPmJ7o0aR1FL1w",
             "informationSourceId": "Single-Org"
           },
@@ -1323,7 +1323,7 @@
           ],
           "awardIssueDate": "2025-01-31T15:00:00Z",
           "verificationType": "HostedBadge",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "id": "94599d33-de74-42ea-bd51-fc66415d77c8",
             "informationSourceId": "Single-Org"
           },
@@ -1334,7 +1334,7 @@
           "identifier": "credentialaward-e0d76ed3-5a7c-4bb1-a712-2c7a41-single-org-003"
         },
         {
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "id": "https://api.badgr.io/public/badges/6KseIB0VTcaLHE0lx6V72w",
             "informationSourceId": "Single-Org"
           },
@@ -2065,7 +2065,7 @@
       "informationSourceId": "Single-Org"
     }
   ],
-  "course": [
+  "Course": [
     {
       "Identifier": [
         {
@@ -2082,7 +2082,7 @@
       "informationSourceOrganization": "Demo University"
     }
   ],
-  "organization": [
+  "Organization": [
     {
       "name": "State University",
       "description": "State University (StateU) is an accredited online university offering online bachelor's and master's degree programs. The programs are competency-based, student-focused, online, nonprofit university.",
@@ -2225,7 +2225,7 @@
       "identifier": "organization-state-university-single-org-010"
     }
   ],
-  "credential": [
+  "Credential": [
     {
       "IssuedByRefOrganization": {
         "name": "State University",

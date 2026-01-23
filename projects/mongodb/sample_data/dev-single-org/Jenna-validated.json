@@ -1,5 +1,5 @@
 {
-  "person": [
+  "Person": [
     {
       "Name": [
         {
@@ -1128,7 +1128,7 @@
       "CredentialAward": [
         {
           "awardStatus": "Completed",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "id": "249cdd22-6fb1-47c1-aea0-4cd77947e226",
             "informationSourceId": "Single-Org"
           },
@@ -1141,7 +1141,7 @@
         },
         {
           "awardStatus": "Completed",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "id": "249cdd22-6fb1-47c1-aea0-4cd77947e226",
             "informationSourceId": "Single-Org"
           },
@@ -1154,7 +1154,7 @@
         },
         {
           "awardStatus": "Completed",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "id": "249cdd22-6fb1-47c1-aea0-4cd77947e226",
             "informationSourceId": "Single-Org"
           },
@@ -1167,7 +1167,7 @@
         },
         {
           "awardStatus": "Completed",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "id": "249cdd22-6fb1-47c1-aea0-4cd77947e226",
             "informationSourceId": "Single-Org"
           },
@@ -1180,7 +1180,7 @@
         },
         {
           "awardStatus": "Completed",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "id": "249cdd22-6fb1-47c1-aea0-4cd77947e226",
             "informationSourceId": "Single-Org"
           },
@@ -1305,7 +1305,7 @@
       "informationSourceId": "Single-Org"
     }
   ],
-  "course": [
+  "Course": [
     {
       "Identifier": [
         {
@@ -1322,7 +1322,7 @@
       "informationSourceOrganization": "Demo University"
     }
   ],
-  "organization": [
+  "Organization": [
     {
       "name": "State University",
       "description": "State University (StateU) is an accredited online university offering online bachelor's and master's degree programs. The programs are competency-based, student-focused, online, nonprofit university.",
@@ -1441,7 +1441,7 @@
       "identifier": "organization-training-provider-single-org-007"
     }
   ],
-  "credential": [
+  "Credential": [
     {
       "id": "249cdd22-6fb1-47c1-aea0-4cd77947e226",
       "name": "C165 - Integrated Physical Sciences",

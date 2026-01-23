@@ -1,5 +1,5 @@
 {
-  "person": [
+  "Person": [
     {
       "Name": [
         {
@@ -61,7 +61,7 @@
           "informationSourceId": "Org3",
           "informationSourceOrganization": "Org3",
           "awardStatus": "InProgress",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Org3",
             "identifier": "a050aa17-45f1-413f-a63b-c3a627ffa686",
@@ -73,7 +73,7 @@
         },
         {
           "awardStatus": "Completed",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Org3",
             "identifier": "",
@@ -87,7 +87,7 @@
         },
         {
           "awardStatus": "Completed",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Org3",
             "identifier": "",
@@ -101,7 +101,7 @@
         },
         {
           "awardStatus": "Completed",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Org3",
             "identifier": "",
@@ -115,7 +115,7 @@
         },
         {
           "awardStatus": "Completed",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Org3",
             "identifier": "",
@@ -612,7 +612,7 @@
       "informationSourceId": "Org3"
     }
   ],
-  "course": [
+  "Course": [
     {
       "informationSourceId": "Org3",
       "Identifier": [
@@ -629,7 +629,7 @@
       "informationSourceOrganization": "Regional University"
     }
   ],
-  "organization": [
+  "Organization": [
     {
       "informationSourceId": "Org3",
       "name": "Summit Valley University",
@@ -730,7 +730,7 @@
       "identifier": "organization-summit-valley-university-org3-005"
     }
   ],
-  "credential": [
+  "Credential": [
     {
       "informationSourceId": "Org3",
       "identifier": "a050aa17-45f1-413f-a63b-c3a627ffa686",

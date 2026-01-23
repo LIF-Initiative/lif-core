@@ -1,5 +1,5 @@
 {
-  "person": [
+  "Person": [
     {
       "Name": [
         {
@@ -338,7 +338,7 @@
       ]
     }
   ],
-  "organization": [
+  "Organization": [
     {
       "identificationSystem": "stateu-employing-organization-id",
       "name": "Employing Organization",

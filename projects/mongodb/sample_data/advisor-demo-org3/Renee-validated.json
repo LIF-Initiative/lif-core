@@ -1,5 +1,5 @@
 {
-  "person": [
+  "Person": [
     {
       "Name": [
         {
@@ -110,7 +110,7 @@
           "informationSourceId": "Org3",
           "informationSourceOrganization": "Org3",
           "awardStatus": "InProgress",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Org3",
             "identifier": "dbd3c22f-1fd2-4829-b39d-be88d2052ca1",
@@ -122,7 +122,7 @@
         },
         {
           "awardStatus": "Completed",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Org3",
             "identifier": "",
@@ -136,7 +136,7 @@
         },
         {
           "awardStatus": "Completed",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Org3",
             "identifier": "",
@@ -238,7 +238,7 @@
       "informationSourceId": "Org3"
     }
   ],
-  "course": [
+  "Course": [
     {
       "informationSourceId": "Org3",
       "Identifier": [
@@ -255,7 +255,7 @@
       "informationSourceOrganization": "Regional University"
     }
   ],
-  "organization": [
+  "Organization": [
     {
       "informationSourceId": "Org3",
       "name": "Summit Valley University",
@@ -356,7 +356,7 @@
       "identifier": "organization-adobe-systems-incorporated-org3-005"
     }
   ],
-  "credential": [
+  "Credential": [
     {
       "informationSourceId": "Org3",
       "identifier": "dbd3c22f-1fd2-4829-b39d-be88d2052ca1",

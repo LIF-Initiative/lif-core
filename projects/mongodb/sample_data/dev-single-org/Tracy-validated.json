@@ -1,5 +1,5 @@
 {
-  "person": [
+  "Person": [
     {
       "Name": [
         {
@@ -1720,7 +1720,7 @@
           ],
           "awardIssueDate": "2025-01-22T15:00:00Z",
           "verificationType": "HostedBadge",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "id": "fbd563e7-35c3-4c0d-a9fc-857d49042e8c",
             "informationSourceId": "Single-Org"
           },
@@ -1731,7 +1731,7 @@
           "identifier": "credentialaward-fff2756c-d5ea-492a-baf4-bedbda-single-org-001"
         },
         {
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "id": "https://api.badgr.io/public/badges/RDNeDjydSZeht76dB3Bphg",
             "informationSourceId": "Single-Org"
           },
@@ -1763,7 +1763,7 @@
           ],
           "awardIssueDate": "2025-01-22T15:00:00Z",
           "verificationType": "HostedBadge",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "id": "a4c3cd3b-3d88-4f2a-8a89-d961c942c919",
             "informationSourceId": "Single-Org"
           },
@@ -1774,7 +1774,7 @@
           "identifier": "credentialaward-b07ab704-f4e6-4dff-8a0e-59a64c-single-org-003"
         },
         {
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "id": "https://api.badgr.io/public/badges/RDNeDjydSZeht76dB3Bphg",
             "informationSourceId": "Single-Org"
           },
@@ -1806,7 +1806,7 @@
           ],
           "awardIssueDate": "2025-01-22T15:00:00Z",
           "verificationType": "HostedBadge",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "id": "93ead2a1-c69f-4c25-8e33-e566dd586bce",
             "informationSourceId": "Single-Org"
           },
@@ -1817,7 +1817,7 @@
           "identifier": "credentialaward-575a592e-baba-4cbb-b65f-6d6ba1-single-org-005"
         },
         {
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "id": "https://api.badgr.io/public/badges/RDNeDjydSZeht76dB3Bphg",
             "informationSourceId": "Single-Org"
           },
@@ -1849,7 +1849,7 @@
           ],
           "awardIssueDate": "2025-01-22T15:00:00Z",
           "verificationType": "HostedBadge",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "id": "f9f91fbd-4c3f-4b8a-accd-4cf46ec36163",
             "informationSourceId": "Single-Org"
           },
@@ -1860,7 +1860,7 @@
           "identifier": "credentialaward-22e0d103-468a-4ac8-adc1-32872e-single-org-007"
         },
         {
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "id": "https://api.badgr.io/public/badges/RDNeDjydSZeht76dB3Bphg",
             "informationSourceId": "Single-Org"
           },
@@ -1892,7 +1892,7 @@
           ],
           "awardIssueDate": "2025-01-22T15:00:00Z",
           "verificationType": "HostedBadge",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "id": "6a2c6c85-033c-46de-ac47-7391cd96244e",
             "informationSourceId": "Single-Org"
           },
@@ -1903,7 +1903,7 @@
           "identifier": "credentialaward-dc228a26-3159-470b-b54f-8848e4-single-org-009"
         },
         {
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "id": "https://api.badgr.io/public/badges/SN-6qb4DSBuUbix5HcxYKA",
             "informationSourceId": "Single-Org"
           },
@@ -3706,7 +3706,7 @@
       "informationSourceId": "Single-Org"
     }
   ],
-  "course": [
+  "Course": [
     {
       "Identifier": [
         {
@@ -3723,7 +3723,7 @@
       "informationSourceOrganization": "Demo University"
     }
   ],
-  "organization": [
+  "Organization": [
     {
       "name": "State University",
       "description": "State University (StateU) is an accredited online university offering online bachelor's and master's degree programs. The programs are competency-based, student-focused, online, nonprofit university.",
@@ -3878,7 +3878,7 @@
       "identifier": "organization-state-university-single-org-012"
     }
   ],
-  "credential": [
+  "Credential": [
     {
       "format": [
         "https://w3id.org/openbadges/v2"

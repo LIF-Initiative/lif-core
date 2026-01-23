@@ -1,5 +1,5 @@
 {
-  "person": [
+  "Person": [
     {
       "Name": [
         {
@@ -1199,7 +1199,7 @@
           ],
           "awardIssueDate": "2025-01-31T15:00:00Z",
           "verificationType": "HostedBadge",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "informationSourceId": "Org1",
             "informationSourceOrganization": "Org1",
             "identifier": "3d740646-6368-4c88-ba15-3230897dd5da",
@@ -1212,7 +1212,7 @@
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "informationSourceId": "Org1",
             "informationSourceOrganization": "Org1",
             "identifier": "https://api.badgr.io/public/badges/jTvfWDxrQPmJ7o0aR1FL1w",
@@ -1244,7 +1244,7 @@
           ],
           "awardIssueDate": "2025-01-31T15:00:00Z",
           "verificationType": "HostedBadge",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "informationSourceId": "Org1",
             "informationSourceOrganization": "Org1",
             "identifier": "82dee133-5947-4258-8af5-38c3e65a5af3",
@@ -1254,7 +1254,7 @@
           "credentialAwardee": "Sarah Marin"
         },
         {
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "informationSourceId": "Org1",
             "informationSourceOrganization": "Org1",
             "identifier": "https://api.badgr.io/public/badges/6KseIB0VTcaLHE0lx6V72w",
@@ -2252,7 +2252,7 @@
       "informationSourceId": "Org1"
     }
   ],
-  "organization": [
+  "Organization": [
     {
       "identificationSystem": "stateu-state-university-id",
       "name": "State University",
@@ -2264,7 +2264,7 @@
       "identifier": "organization-state-university-org1-001"
     }
   ],
-  "course": [
+  "Course": [
     {
       "informationSourceId": "Org1",
       "Identifier": [
@@ -2281,7 +2281,7 @@
       "informationSourceOrganization": "State University"
     }
   ],
-  "credential": [
+  "Credential": [
     {
       "informationSourceId": "Org1",
       "IssuedByRefOrganization": [

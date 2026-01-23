@@ -1,5 +1,5 @@
 {
-  "person": [
+  "Person": [
     {
       "Name": [
         {
@@ -1107,7 +1107,7 @@
       "CredentialAward": [
         {
           "awardStatus": "InProgress",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "id": "84d6de55-974c-47e5-92bf-889addac75ae",
             "informationSourceId": "Single-Org"
           },
@@ -1120,7 +1120,7 @@
         },
         {
           "awardStatus": "Completed",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "id": "84d6de55-974c-47e5-92bf-889addac75ae",
             "informationSourceId": "Single-Org"
           },
@@ -1133,7 +1133,7 @@
         },
         {
           "awardStatus": "Completed",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "id": "84d6de55-974c-47e5-92bf-889addac75ae",
             "informationSourceId": "Single-Org"
           },
@@ -1146,7 +1146,7 @@
         },
         {
           "awardStatus": "Completed",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "id": "84d6de55-974c-47e5-92bf-889addac75ae",
             "informationSourceId": "Single-Org"
           },
@@ -1159,7 +1159,7 @@
         },
         {
           "awardStatus": "Completed",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "id": "84d6de55-974c-47e5-92bf-889addac75ae",
             "informationSourceId": "Single-Org"
           },
@@ -1172,7 +1172,7 @@
         },
         {
           "awardStatus": "Completed",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "id": "84d6de55-974c-47e5-92bf-889addac75ae",
             "informationSourceId": "Single-Org"
           },
@@ -1185,7 +1185,7 @@
         },
         {
           "awardStatus": "Completed",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "id": "84d6de55-974c-47e5-92bf-889addac75ae",
             "informationSourceId": "Single-Org"
           },
@@ -1747,7 +1747,7 @@
       "informationSourceId": "Single-Org"
     }
   ],
-  "course": [
+  "Course": [
     {
       "Identifier": [
         {
@@ -1764,7 +1764,7 @@
       "informationSourceOrganization": "Demo University"
     }
   ],
-  "organization": [
+  "Organization": [
     {
       "name": "State University",
       "description": "State University (StateU) is an accredited online university offering online bachelor's and master's degree programs. The programs are competency-based, student-focused, online, nonprofit university.",
@@ -1913,7 +1913,7 @@
       "identifier": "organization-utah-iso-consultants-single-org-011"
     }
   ],
-  "credential": [
+  "Credential": [
     {
       "id": "84d6de55-974c-47e5-92bf-889addac75ae",
       "name": "Master of Science (MS): Management and Leadership",

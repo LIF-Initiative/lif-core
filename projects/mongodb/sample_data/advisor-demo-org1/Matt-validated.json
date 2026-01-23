@@ -1,5 +1,5 @@
 {
-  "person": [
+  "Person": [
     {
       "Name": [
         {
@@ -1715,7 +1715,7 @@
           ],
           "awardIssueDate": "2025-01-30T15:00:00Z",
           "verificationType": "HostedBadge",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "informationSourceId": "Org1",
             "informationSourceOrganization": "Org1",
             "identifier": "https://api.badgr.io/public/badges/z7O2tvPBRuiA7hLpzDG0Bg",
@@ -1728,7 +1728,7 @@
         {
           "informationSourceId": "Org1",
           "awardStatus": "InProgress",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "informationSourceId": "Org1",
             "informationSourceOrganization": "Org1",
             "identifier": "a050aa17-45f1-413f-a63b-c3a627ffa686",
@@ -1742,7 +1742,7 @@
         {
           "informationSourceId": "Org1",
           "awardStatus": "InProgress",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "informationSourceId": "Org1",
             "informationSourceOrganization": "Org1",
             "identifier": "a050aa17-45f1-413f-a63b-c3a627ffa686",
@@ -1757,7 +1757,7 @@
           "informationSourceId": "Org1",
           "awardStatus": "Granted",
           "awardIssueDate": "05/2020",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "informationSourceId": "Org1",
             "informationSourceOrganization": "Org1",
             "identifier": "a050aa17-45f1-413f-a63b-c3a627ffa686",
@@ -1770,7 +1770,7 @@
         {
           "informationSourceId": "Org1",
           "awardStatus": "Completed",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "informationSourceId": "Org1",
             "informationSourceOrganization": "Org1",
             "identifier": "a050aa17-45f1-413f-a63b-c3a627ffa686",
@@ -1784,7 +1784,7 @@
         {
           "informationSourceId": "Org1",
           "awardStatus": "Completed",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "informationSourceId": "Org1",
             "informationSourceOrganization": "Org1",
             "identifier": "a050aa17-45f1-413f-a63b-c3a627ffa686",
@@ -1799,7 +1799,7 @@
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
           "awardStatus": "Completed",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "informationSourceId": "Org1",
             "informationSourceOrganization": "Org1",
             "identifier": "a050aa17-45f1-413f-a63b-c3a627ffa686",
@@ -1981,7 +1981,7 @@
       "informationSourceId": "Org1"
     }
   ],
-  "course": [
+  "Course": [
     {
       "informationSourceId": "Org1",
       "Identifier": [
@@ -1998,7 +1998,7 @@
       "informationSourceOrganization": "State University"
     }
   ],
-  "organization": [
+  "Organization": [
     {
       "informationSourceId": "Org1",
       "name": "State University",
@@ -2170,7 +2170,7 @@
       "identifier": "organization-san-antonio-university-org1-007"
     }
   ],
-  "credential": [
+  "Credential": [
     {
       "informationSourceId": "Org1",
       "id": "https://api.badgr.io/public/badges/z7O2tvPBRuiA7hLpzDG0Bg",

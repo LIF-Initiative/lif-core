@@ -1,5 +1,5 @@
 {
-  "person": [
+  "Person": [
     {
       "Name": [
         {
@@ -1721,7 +1721,7 @@
           ],
           "awardIssueDate": "2025-01-22T15:00:00Z",
           "verificationType": "HostedBadge",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "informationSourceId": "Org1",
             "informationSourceOrganization": "Org1",
             "identifier": "d3ad4fd0-1869-4129-93f9-07e67751a5ff",
@@ -1733,7 +1733,7 @@
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "informationSourceId": "Org1",
             "informationSourceOrganization": "Org1",
             "identifier": "https://api.badgr.io/public/badges/RDNeDjydSZeht76dB3Bphg",
@@ -1765,7 +1765,7 @@
           ],
           "awardIssueDate": "2025-01-22T15:00:00Z",
           "verificationType": "HostedBadge",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "informationSourceId": "Org1",
             "informationSourceOrganization": "Org1",
             "identifier": "a057548f-84b3-45c1-ace1-3f5edd4e4cb1",
@@ -1776,7 +1776,7 @@
         },
         {
           "informationSourceId": "Org1",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "informationSourceId": "Org1",
             "informationSourceOrganization": "Org1",
             "identifier": "https://api.badgr.io/public/badges/RDNeDjydSZeht76dB3Bphg",
@@ -1808,7 +1808,7 @@
           ],
           "awardIssueDate": "2025-01-22T15:00:00Z",
           "verificationType": "HostedBadge",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "informationSourceId": "Org1",
             "informationSourceOrganization": "Org1",
             "identifier": "8b6b88df-ff1f-4977-b733-cc00c7993f39",
@@ -1820,7 +1820,7 @@
         },
         {
           "informationSourceId": "Org1",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "informationSourceId": "Org1",
             "informationSourceOrganization": "Org1",
             "identifier": "https://api.badgr.io/public/badges/RDNeDjydSZeht76dB3Bphg",
@@ -1852,7 +1852,7 @@
           ],
           "awardIssueDate": "2025-01-22T15:00:00Z",
           "verificationType": "HostedBadge",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "informationSourceId": "Org1",
             "informationSourceOrganization": "Org1",
             "identifier": "b87e694d-ad90-4547-a3fe-f0c42c770fc8",
@@ -1864,7 +1864,7 @@
         },
         {
           "informationSourceId": "Org1",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "informationSourceId": "Org1",
             "informationSourceOrganization": "Org1",
             "identifier": "https://api.badgr.io/public/badges/RDNeDjydSZeht76dB3Bphg",
@@ -1896,7 +1896,7 @@
           ],
           "awardIssueDate": "2025-01-22T15:00:00Z",
           "verificationType": "HostedBadge",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "informationSourceId": "Org1",
             "informationSourceOrganization": "Org1",
             "identifier": "c3ee7191-293d-4cc0-ad57-75e72adf36f1",
@@ -1908,7 +1908,7 @@
         },
         {
           "informationSourceId": "Org1",
-          "InstanceOfRefCredential": {
+          "instanceOfRefCredential": {
             "informationSourceId": "Org1",
             "informationSourceOrganization": "Org1",
             "identifier": "https://api.badgr.io/public/badges/SN-6qb4DSBuUbix5HcxYKA",
@@ -3906,7 +3906,7 @@
       "informationSourceId": "Org1"
     }
   ],
-  "organization": [
+  "Organization": [
     {
       "informationSourceId": "Org1",
       "name": "State University",
@@ -4009,7 +4009,7 @@
       "identifier": "organization-state-department-of-education-org1-005"
     }
   ],
-  "credential": [
+  "Credential": [
     {
       "informationSourceId": "Org1",
       "format": [
