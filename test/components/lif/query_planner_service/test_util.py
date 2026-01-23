@@ -101,12 +101,39 @@ def test_get_lif_fragment_paths_from_query():
 
     fragment_paths = util.get_lif_fragment_paths_from_query(query)
     assert len(fragment_paths) == 5
+    # Paths are normalized to PascalCase 'Person.' prefix for consistency with schema
     assert fragment_paths == [
-        "person.name",
-        "person.employmentLearningExperience",
-        "person.positionPreferences",
-        "person.identifier",
-        "person.credentialAward",
+        "Person.name",
+        "Person.employmentLearningExperience",
+        "Person.positionPreferences",
+        "Person.identifier",
+        "Person.credentialAward",
+    ]
+
+
+def test_get_lif_fragment_paths_from_query_with_pascal_case_input():
+    """Test that PascalCase inputs are also handled correctly."""
+    person_identifier: LIFPersonIdentifier = LIFPersonIdentifier(
+        identifier="100001", identifierType="School-assigned number"
+    )
+    person_filter_identifier: LIFPersonIdentifiers = LIFPersonIdentifiers(Identifier=person_identifier)
+    person_filter = LIFQueryPersonFilter(person=person_filter_identifier)
+    query_filter = LIFQueryFilter(root=person_filter)
+    query = LIFQuery(
+        filter=query_filter,
+        selected_fields=[
+            "Person.Name",
+            "Person.CredentialAward",
+            "Person.CourseLearningExperience",
+        ],
+    )
+
+    fragment_paths = util.get_lif_fragment_paths_from_query(query)
+    assert len(fragment_paths) == 3
+    assert fragment_paths == [
+        "Person.Name",
+        "Person.CredentialAward",
+        "Person.CourseLearningExperience",
     ]
 
 

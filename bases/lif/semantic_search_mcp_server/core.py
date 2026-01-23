@@ -9,6 +9,7 @@ from sentence_transformers import SentenceTransformer
 from starlette.requests import Request
 from starlette.responses import PlainTextResponse
 
+from lif.lif_schema_config import LIFSchemaConfig, DEFAULT_ATTRIBUTE_KEYS
 from lif.logging import get_logger
 from lif.mdr_client import get_openapi_lif_data_model_from_file
 from lif.openapi_schema_parser import load_schema_leaves
@@ -23,14 +24,19 @@ from lif.semantic_search_service.core import (
 logger = get_logger(__name__)
 
 
-# --------- LOAD ENVIRONMENT VARIABLES ---------
+# --------- LOAD CONFIGURATION ---------
 
-ROOT_NODE = os.getenv("LIF_GRAPHQL_ROOT_NODE", "Person")
+# Load centralized configuration from environment
+CONFIG = LIFSchemaConfig.from_environment()
+
+# Extract values for convenience
+ROOT_NODES = CONFIG.all_root_types
+DEFAULT_ROOT_NODE = CONFIG.root_type_name
 LIF_GRAPHQL_API_URL = os.getenv("LIF_GRAPHQL_API_URL", "http://localhost:8002/graphql")
-TOP_K = int(os.getenv("TOP_K", 200))
-MODEL_NAME = "all-MiniLM-L6-v2"
+TOP_K = CONFIG.semantic_search_top_k
+MODEL_NAME = CONFIG.semantic_search_model_name
 
-ATTRIBUTE_KEYS = ["x-queryable", "x-mutable", "DataType", "Required", "Array", "enum"]  # Add more attributes as needed
+ATTRIBUTE_KEYS = DEFAULT_ATTRIBUTE_KEYS
 
 
 # --------- LOAD VECTOR STORE & EMBEDDINGS ---------
@@ -38,26 +44,52 @@ ATTRIBUTE_KEYS = ["x-queryable", "x-mutable", "DataType", "Required", "Array", "
 # get the OpenAPI specification for the LIF data model from the MDR
 openapi = get_openapi_lif_data_model_from_file()
 
-try:
-    LEAVES = load_schema_leaves(openapi, ROOT_NODE, attribute_keys=ATTRIBUTE_KEYS)
-except Exception as e:
-    logger.critical(f"Failed to load schema leaves: {e}")
+# Load schema leaves for all root nodes
+ALL_LEAVES: List = []
+LEAVES_BY_ROOT: dict = {}
+
+for root_node in ROOT_NODES:
+    try:
+        root_leaves = load_schema_leaves(openapi, root_node, attribute_keys=ATTRIBUTE_KEYS)
+        LEAVES_BY_ROOT[root_node] = root_leaves
+        ALL_LEAVES.extend(root_leaves)
+        logger.info(f"Loaded {len(root_leaves)} schema leaves for root '{root_node}'")
+    except Exception as e:
+        logger.warning(f"Failed to load schema leaves for root '{root_node}': {e}")
+
+if not ALL_LEAVES:
+    logger.critical("No schema leaves loaded from any root node")
     sys.exit(1)
 
-try:
-    FILTER = build_dynamic_filter_model(LEAVES)
-    Filter = FILTER[ROOT_NODE]
-    logger.info("Dynamic Filter Schema:\n" + json.dumps(Filter.model_json_schema(), indent=2))
-except Exception as e:
-    logger.critical(f"Failed to load build dynamic filter model: {e}")
-    sys.exit(1)
+logger.info(f"Total schema leaves loaded: {len(ALL_LEAVES)}")
 
-try:
-    MUTATION_MODELS = build_dynamic_mutation_model(LEAVES)
-    MutationModel = MUTATION_MODELS[ROOT_NODE]
-    logger.info("Dynamic Mutation Schema:\n" + json.dumps(MutationModel.model_json_schema(), indent=2))
-except Exception as e:
-    logger.critical(f"Failed to build dynamic mutation model: {e}")
+# Build filter and mutation models for each root
+FILTER_MODELS: dict = {}
+MUTATION_MODELS: dict = {}
+
+for root_node, root_leaves in LEAVES_BY_ROOT.items():
+    try:
+        filter_model = build_dynamic_filter_model(root_leaves)
+        if root_node in filter_model:
+            FILTER_MODELS[root_node] = filter_model[root_node]
+            logger.info(f"Dynamic Filter Schema for '{root_node}':\n" + json.dumps(filter_model[root_node].model_json_schema(), indent=2))
+    except Exception as e:
+        logger.warning(f"Failed to build dynamic filter model for '{root_node}': {e}")
+
+    try:
+        mutation_model = build_dynamic_mutation_model(root_leaves)
+        if root_node in mutation_model:
+            MUTATION_MODELS[root_node] = mutation_model[root_node]
+            logger.info(f"Dynamic Mutation Schema for '{root_node}':\n" + json.dumps(mutation_model[root_node].model_json_schema(), indent=2))
+    except Exception as e:
+        logger.warning(f"Failed to build dynamic mutation model for '{root_node}': {e}")
+
+# Use default root for backwards compatibility
+Filter = FILTER_MODELS.get(DEFAULT_ROOT_NODE)
+MutationModel = MUTATION_MODELS.get(DEFAULT_ROOT_NODE)
+
+if not Filter:
+    logger.critical(f"Failed to build filter model for default root '{DEFAULT_ROOT_NODE}'")
     sys.exit(1)
 
 try:
@@ -66,14 +98,17 @@ except Exception as e:
     logger.critical(f"Failed to load SentenceTransformer model: {e}")
     sys.exit(1)
 
-# ------ ALWAYS embed only the descriptions ------
-EMBEDDING_TEXTS = [leaf.description for leaf in LEAVES]
+# ------ ALWAYS embed only the descriptions for ALL leaves (all root entities) ------
+EMBEDDING_TEXTS = [leaf.description for leaf in ALL_LEAVES]
 
 try:
     EMBEDDINGS = build_embeddings(EMBEDDING_TEXTS, MODEL)
 except Exception as e:
     logger.critical(f"EMBEDDINGS failed: {e}")
     sys.exit(1)
+
+# Keep a reference to all leaves for search
+LEAVES = ALL_LEAVES
 
 
 mcp = FastMCP(name="LIF-Query-Server")
@@ -99,6 +134,7 @@ async def lif_query(
         leaves=LEAVES,
         top_k=TOP_K,
         graphql_url=LIF_GRAPHQL_API_URL,
+        config=CONFIG,
     )
 
 

@@ -25,6 +25,7 @@ packages = ["lif"]
 
 [tool.polylith.bricks]
 "../../bases/lif/semantic_search_mcp_server" = "lif/semantic_search_mcp_server"
+"../../components/lif/lif_schema_config" = "lif/lif_schema_config"
 "../../components/lif/logging" = "lif/logging"
 "../../components/lif/datatypes" = "lif/datatypes"
 "../../components/lif/exceptions" = "lif/exceptions"

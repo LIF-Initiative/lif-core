@@ -1814,28 +1814,52 @@
           "awardIssueDate": "2024-12-15T10:00:00Z",
           "credentialAwardee": "Matt Hanson",
           "informationSourceId": "Org1",
-          "informationSourceOrganization": "State University"
+          "informationSourceOrganization": "State University",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "cred-proficiency-certificate-001",
+            "name": "Credential Award 8"
+          }
         },
         {
           "informationSourceId": "Org1",
           "identifier": "b3a1f2c4-9a2b-5e4a-a48c-d4b2e5c9a2f1",
           "awardIssueDate": "2024-12-15T10:00:00Z",
           "credentialAwardee": "Matt Hanson",
-          "informationSourceOrganization": "State University"
+          "informationSourceOrganization": "State University",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "b3a1f2c4-9a2b-5e4a-a48c-d4b2e5c9a2f1",
+            "name": "Credential Award 9"
+          }
         },
         {
           "informationSourceId": "Org1",
           "identifier": "d4b2a5e3-94a3-5f2c-a38b-c2a4e5b6d8f9",
           "awardIssueDate": "2023-06-20",
           "credentialAwardee": "Matt Hanson",
-          "informationSourceOrganization": "State University"
+          "informationSourceOrganization": "State University",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "d4b2a5e3-94a3-5f2c-a38b-c2a4e5b6d8f9",
+            "name": "Credential Award 10"
+          }
         },
         {
           "informationSourceId": "Org1",
           "identifier": "c3a8b5e2-84b2-54da-b59c-f5c2a6d4e3b1",
           "awardIssueDate": "2020-12-15T10:00:00Z",
           "credentialAwardee": "Matt Hanson",
-          "informationSourceOrganization": "State University"
+          "informationSourceOrganization": "State University",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "c3a8b5e2-84b2-54da-b59c-f5c2a6d4e3b1",
+            "name": "Credential Award 11"
+          }
         }
       ],
       "CourseLearningExperience": [

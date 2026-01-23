@@ -25,6 +25,12 @@ import httpx
 import strawberry
 from dateutil import parser
 
+from lif.lif_schema_config import (
+    XSD_TO_PYTHON,
+    is_mutable as schema_is_mutable,
+    is_queryable as schema_is_queryable,
+    resolve_ref as schema_resolve_ref,
+)
 from lif.logging import get_logger
 from lif.string_utils import (
     convert_dates_to_strings,
@@ -44,16 +50,8 @@ LIF_QUERY_TIMEOUT_SECONDS = int(os.getenv("LIF_QUERY_TIMEOUT_SECONDS", "20"))
 
 # === Constants ===
 
-DATATYPE_MAP: Dict[str, Type[Any]] = {
-    "xsd:string": str,
-    "xsd:decimal": float,
-    "xsd:integer": int,
-    "xsd:boolean": bool,
-    "xsd:date": date,
-    "xsd:dateTime": datetime,
-    "xsd:datetime": datetime,
-    "xsd:anyURI": str,
-}
+# Use centralized type mappings from lif_schema_config
+DATATYPE_MAP = XSD_TO_PYTHON
 
 input_type_cache: Dict[str, Optional[Type[Any]]] = {}
 
@@ -64,6 +62,8 @@ input_type_cache: Dict[str, Optional[Type[Any]]] = {}
 def resolve_ref(ref: str, openapi: Dict[str, Any]) -> Dict[str, Any]:
     """Resolve a JSON reference in the OpenAPI document.
 
+    Delegates to centralized implementation in lif_schema_config.
+
     Args:
         ref (str): The JSON reference string.
         openapi (Dict[str, Any]): The OpenAPI document.
@@ -71,11 +71,7 @@ def resolve_ref(ref: str, openapi: Dict[str, Any]) -> Dict[str, Any]:
     Returns:
         Dict[str, Any]: The referenced object in the OpenAPI document.
     """
-    path = ref.lstrip("#/").split("/")
-    node: Any = openapi
-    for part in path:
-        node = node[part]
-    return node
+    return schema_resolve_ref(ref, openapi)
 
 
 # === Type/Enum Mapping and Queryable Propagation ===
@@ -210,25 +206,19 @@ def get_selected_field_paths(
 
 
 def is_queryable(field_def: dict) -> bool:
-    """Checks if this field or any nested field is x-queryable."""
-    if field_def.get("x-queryable", False):
-        return True
-    if field_def.get("type") == "object" and "properties" in field_def:
-        return any(is_queryable(sub_def) for sub_def in field_def["properties"].values())
-    if field_def.get("type") == "array" and "properties" in field_def:
-        return any(is_queryable(sub_def) for sub_def in field_def["properties"].values())
-    return False
+    """Checks if this field or any nested field is x-queryable.
+
+    Delegates to centralized implementation in lif_schema_config.
+    """
+    return schema_is_queryable(field_def)
 
 
 def is_mutable(field_def: dict) -> bool:
-    """Checks if this field or any nested field is x-mutable."""
-    if field_def.get("x-mutable", False):
-        return True
-    if field_def.get("type") == "object" and "properties" in field_def:
-        return any(is_mutable(sub_def) for sub_def in field_def["properties"].values())
-    if field_def.get("type") == "array" and "properties" in field_def:
-        return any(is_mutable(sub_def) for sub_def in field_def["properties"].values())
-    return False
+    """Checks if this field or any nested field is x-mutable.
+
+    Delegates to centralized implementation in lif_schema_config.
+    """
+    return schema_is_mutable(field_def)
 
 
 def convert_enums(obj):
@@ -762,9 +752,10 @@ def build_root_query_type(
             # Note: removed dict_keys_to_camel since input_asdict now returns correct schema names
 
             # Gather selection info from the GraphQL query
-            root_query_name = info.field_name
+            # Use PascalCase for the root name since MongoDB documents use PascalCase keys
+            root_query_name = info.field_name[0].upper() + info.field_name[1:]  # "person" -> "Person"
             fragments = get_fragments_from_info(info)
-            selected_fields = get_selected_field_paths(info.field_nodes, fragments, info.field_name)
+            selected_fields = get_selected_field_paths(info.field_nodes, fragments, root_query_name)
 
             # Structure the query for the backend API
             filter_wrapped = {root_query_name: filter_dict} if filter_dict else None
@@ -881,9 +872,9 @@ def build_root_mutation_type(
         # Note: removed dict_keys_to_camel since input_asdict now returns correct schema names
         input_dict = convert_dates_to_strings(input_dict)
 
-        # Wrap the dict under 'person'
-        filter_wrapped = {"person": filter_dict} if filter_dict else {}
-        input_wrapped = {"person": input_dict} if input_dict else {}
+        # Wrap the dict under 'Person' (PascalCase to match MongoDB document keys)
+        filter_wrapped = {"Person": filter_dict} if filter_dict else {}
+        input_wrapped = {"Person": input_dict} if input_dict else {}
 
         root_mutation_name = info.field_name
         payload = {root_mutation_name: {"filter": filter_wrapped, "input": input_wrapped}}

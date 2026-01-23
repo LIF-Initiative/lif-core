@@ -1924,266 +1924,494 @@
           "awardIssueDate": "2024-12-15T10:00:00Z",
           "credentialAwardee": "Tracy Thatcher",
           "informationSourceOrganization": "Org1",
-          "informationSourceId": "Org1"
+          "informationSourceId": "Org1",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "cred-proficiency-certificate-001",
+            "name": "Credential Award 11"
+          }
         },
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
           "identifier": "e5db3773-ff1b-4d11-b050-1aa7e8fd9366",
           "awardIssueDate": "2023-05-11",
-          "credentialAwardee": "Tracy Thatcher"
+          "credentialAwardee": "Tracy Thatcher",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "e5db3773-ff1b-4d11-b050-1aa7e8fd9366",
+            "name": "Credential Award 12"
+          }
         },
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
           "identifier": "0fbe0f45-3a44-40ef-bf08-1b2ccce8e45a",
           "awardIssueDate": "2024-11-30T07:51:18Z",
-          "credentialAwardee": "Tracy Thatcher"
+          "credentialAwardee": "Tracy Thatcher",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "0fbe0f45-3a44-40ef-bf08-1b2ccce8e45a",
+            "name": "Credential Award 13"
+          }
         },
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
           "identifier": "deb9139f-67fa-4f32-af86-7f04e012eba0",
           "awardIssueDate": "2022-12-03T12:46:24Z",
-          "credentialAwardee": "Tracy Thatcher"
+          "credentialAwardee": "Tracy Thatcher",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "deb9139f-67fa-4f32-af86-7f04e012eba0",
+            "name": "Credential Award 14"
+          }
         },
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
           "identifier": "ebccf2d8-8935-4125-993f-83fa3db94dd5",
           "awardIssueDate": "2023-10-24",
-          "credentialAwardee": "Tracy Thatcher"
+          "credentialAwardee": "Tracy Thatcher",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "ebccf2d8-8935-4125-993f-83fa3db94dd5",
+            "name": "Credential Award 15"
+          }
         },
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
           "identifier": "1d0ce2eb-bd04-44ee-8923-090a31be9f37",
           "awardIssueDate": "2023-01-21T04:37:24Z",
-          "credentialAwardee": "Tracy Thatcher"
+          "credentialAwardee": "Tracy Thatcher",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "1d0ce2eb-bd04-44ee-8923-090a31be9f37",
+            "name": "Credential Award 16"
+          }
         },
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
           "identifier": "6b724f29-d3ca-4d6f-bf1b-5185fbdec0bc",
           "awardIssueDate": "2020-12-11",
-          "credentialAwardee": "Tracy Thatcher"
+          "credentialAwardee": "Tracy Thatcher",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "6b724f29-d3ca-4d6f-bf1b-5185fbdec0bc",
+            "name": "Credential Award 17"
+          }
         },
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
           "identifier": "60a238c4-db35-4ec2-96bd-b3e591de8dcb",
           "awardIssueDate": "2023-08-14T22:51:17Z",
-          "credentialAwardee": "Tracy Thatcher"
+          "credentialAwardee": "Tracy Thatcher",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "60a238c4-db35-4ec2-96bd-b3e591de8dcb",
+            "name": "Credential Award 18"
+          }
         },
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
           "identifier": "f10e92fa-e641-4ec8-b2de-e0328ba8f0ab",
           "awardIssueDate": "2022-09-02",
-          "credentialAwardee": "Tracy Thatcher"
+          "credentialAwardee": "Tracy Thatcher",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "f10e92fa-e641-4ec8-b2de-e0328ba8f0ab",
+            "name": "Credential Award 19"
+          }
         },
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
           "identifier": "316aca97-ce09-433b-91b2-e92ea1602fe8",
           "awardIssueDate": "2020-01-10T19:58:39Z",
-          "credentialAwardee": "Tracy Thatcher"
+          "credentialAwardee": "Tracy Thatcher",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "316aca97-ce09-433b-91b2-e92ea1602fe8",
+            "name": "Credential Award 20"
+          }
         },
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
           "identifier": "4f81bb8a-be82-4743-a591-ad627f1f3e5c",
           "awardIssueDate": "2023-07-03T19:28:53Z",
-          "credentialAwardee": "Tracy Thatcher"
+          "credentialAwardee": "Tracy Thatcher",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "4f81bb8a-be82-4743-a591-ad627f1f3e5c",
+            "name": "Credential Award 21"
+          }
         },
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
           "identifier": "61980779-2666-4cec-9b02-195f30edbaaa",
           "awardIssueDate": "2021-03-02T06:11:27Z",
-          "credentialAwardee": "Tracy Thatcher"
+          "credentialAwardee": "Tracy Thatcher",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "61980779-2666-4cec-9b02-195f30edbaaa",
+            "name": "Credential Award 22"
+          }
         },
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
           "identifier": "3236748c-eac2-4980-82dd-d7f6d148385e",
           "awardIssueDate": "2020-09-09T09:50:20Z",
-          "credentialAwardee": "Tracy Thatcher"
+          "credentialAwardee": "Tracy Thatcher",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "3236748c-eac2-4980-82dd-d7f6d148385e",
+            "name": "Credential Award 23"
+          }
         },
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
           "identifier": "5c8b5dff-a489-4f64-ba1b-840924b83f3e",
           "awardIssueDate": "2023-09-27T20:57:47Z",
-          "credentialAwardee": "Tracy Thatcher"
+          "credentialAwardee": "Tracy Thatcher",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "5c8b5dff-a489-4f64-ba1b-840924b83f3e",
+            "name": "Credential Award 24"
+          }
         },
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
           "identifier": "213e7f89-b26b-4165-9077-484358ea896c",
           "awardIssueDate": "2020-08-17T00:03:23Z",
-          "credentialAwardee": "Tracy Thatcher"
+          "credentialAwardee": "Tracy Thatcher",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "213e7f89-b26b-4165-9077-484358ea896c",
+            "name": "Credential Award 25"
+          }
         },
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
           "identifier": "95f68f76-32b8-427f-9ea6-38b48c294861",
           "awardIssueDate": "2024-03-04",
-          "credentialAwardee": "Tracy Thatcher"
+          "credentialAwardee": "Tracy Thatcher",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "95f68f76-32b8-427f-9ea6-38b48c294861",
+            "name": "Credential Award 26"
+          }
         },
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
           "identifier": "ecf12f06-7c87-463e-902f-286c4fad9937",
           "awardIssueDate": "2022-05-18T02:03:54Z",
-          "credentialAwardee": "Tracy Thatcher"
+          "credentialAwardee": "Tracy Thatcher",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "ecf12f06-7c87-463e-902f-286c4fad9937",
+            "name": "Credential Award 27"
+          }
         },
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
           "identifier": "872b7348-4bce-4da5-ac7a-1f25404291d1",
           "awardIssueDate": "2024-07-09T00:06:24Z",
-          "credentialAwardee": "Tracy Thatcher"
+          "credentialAwardee": "Tracy Thatcher",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "872b7348-4bce-4da5-ac7a-1f25404291d1",
+            "name": "Credential Award 28"
+          }
         },
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
           "identifier": "5e1f057f-faf7-4194-b24a-7962dcea97fc",
           "awardIssueDate": "2021-11-23T11:58:30Z",
-          "credentialAwardee": "Tracy Thatcher"
+          "credentialAwardee": "Tracy Thatcher",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "5e1f057f-faf7-4194-b24a-7962dcea97fc",
+            "name": "Credential Award 29"
+          }
         },
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
           "identifier": "b2c56e6c-7741-44aa-94d7-387ee8f9b963",
           "awardIssueDate": "2020-05-22T15:00:18Z",
-          "credentialAwardee": "Tracy Thatcher"
+          "credentialAwardee": "Tracy Thatcher",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "b2c56e6c-7741-44aa-94d7-387ee8f9b963",
+            "name": "Credential Award 30"
+          }
         },
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
           "identifier": "4e24a2c4-9e3e-43ab-9847-9d1d7ed34316",
           "awardIssueDate": "2023-04-10T17:09:54Z",
-          "credentialAwardee": "Tracy Thatcher"
+          "credentialAwardee": "Tracy Thatcher",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "4e24a2c4-9e3e-43ab-9847-9d1d7ed34316",
+            "name": "Credential Award 31"
+          }
         },
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
           "identifier": "7b804f3d-9586-4dd7-b64b-52f7106c57e7",
           "awardIssueDate": "2021-10-02",
-          "credentialAwardee": "Tracy Thatcher"
+          "credentialAwardee": "Tracy Thatcher",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "7b804f3d-9586-4dd7-b64b-52f7106c57e7",
+            "name": "Credential Award 32"
+          }
         },
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
           "identifier": "b9e22a75-0b45-41ed-9e0b-0bdc3899aacb",
           "awardIssueDate": "2022-10-16T22:45:01Z",
-          "credentialAwardee": "Tracy Thatcher"
+          "credentialAwardee": "Tracy Thatcher",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "b9e22a75-0b45-41ed-9e0b-0bdc3899aacb",
+            "name": "Credential Award 33"
+          }
         },
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
           "identifier": "8de3b556-2d74-4986-a67d-9e3ea99a2d40",
           "awardIssueDate": "2023-07-05",
-          "credentialAwardee": "Tracy Thatcher"
+          "credentialAwardee": "Tracy Thatcher",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "8de3b556-2d74-4986-a67d-9e3ea99a2d40",
+            "name": "Credential Award 34"
+          }
         },
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
           "identifier": "bb55286f-0f3d-4a26-bd81-4aa886059af5",
           "awardIssueDate": "2022-09-29T05:01:50Z",
-          "credentialAwardee": "Tracy Thatcher"
+          "credentialAwardee": "Tracy Thatcher",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "bb55286f-0f3d-4a26-bd81-4aa886059af5",
+            "name": "Credential Award 35"
+          }
         },
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
           "identifier": "f770e8b7-ef51-4bb1-b28d-f9ad42239cf6",
           "awardIssueDate": "2022-12-12",
-          "credentialAwardee": "Tracy Thatcher"
+          "credentialAwardee": "Tracy Thatcher",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "f770e8b7-ef51-4bb1-b28d-f9ad42239cf6",
+            "name": "Credential Award 36"
+          }
         },
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
           "identifier": "5cef80cb-c495-41d9-9843-0363cbcc4bc8",
           "awardIssueDate": "2022-09-19T02:32:28Z",
-          "credentialAwardee": "Tracy Thatcher"
+          "credentialAwardee": "Tracy Thatcher",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "5cef80cb-c495-41d9-9843-0363cbcc4bc8",
+            "name": "Credential Award 37"
+          }
         },
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
           "identifier": "7b03bc89-2dd5-477e-81e4-f4da3828eda9",
           "awardIssueDate": "2021-10-18T20:30:04Z",
-          "credentialAwardee": "Tracy Thatcher"
+          "credentialAwardee": "Tracy Thatcher",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "7b03bc89-2dd5-477e-81e4-f4da3828eda9",
+            "name": "Credential Award 38"
+          }
         },
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
           "identifier": "595c313e-760a-42e9-a03a-0c48e348f69b",
           "awardIssueDate": "2022-08-12T12:41:23Z",
-          "credentialAwardee": "Tracy Thatcher"
+          "credentialAwardee": "Tracy Thatcher",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "595c313e-760a-42e9-a03a-0c48e348f69b",
+            "name": "Credential Award 39"
+          }
         },
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
           "identifier": "fba8c906-c52d-494d-83c0-75a7ffc739fe",
           "awardIssueDate": "2024-09-21T03:16:25Z",
-          "credentialAwardee": "Tracy Thatcher"
+          "credentialAwardee": "Tracy Thatcher",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "fba8c906-c52d-494d-83c0-75a7ffc739fe",
+            "name": "Credential Award 40"
+          }
         },
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
           "identifier": "d70332a5-3edb-411f-b34c-770719eea691",
           "awardIssueDate": "2024-06-12",
-          "credentialAwardee": "Tracy Thatcher"
+          "credentialAwardee": "Tracy Thatcher",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "d70332a5-3edb-411f-b34c-770719eea691",
+            "name": "Credential Award 41"
+          }
         },
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
           "identifier": "aadb4c3e-40c3-4f17-a642-e23932e54db0",
           "awardIssueDate": "2023-09-15",
-          "credentialAwardee": "Tracy Thatcher"
+          "credentialAwardee": "Tracy Thatcher",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "aadb4c3e-40c3-4f17-a642-e23932e54db0",
+            "name": "Credential Award 42"
+          }
         },
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
           "identifier": "f6480f8b-f550-4b7f-8343-482b3a9aff3e",
           "awardIssueDate": "2023-02-19T02:04:06Z",
-          "credentialAwardee": "Tracy Thatcher"
+          "credentialAwardee": "Tracy Thatcher",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "f6480f8b-f550-4b7f-8343-482b3a9aff3e",
+            "name": "Credential Award 43"
+          }
         },
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
           "identifier": "6d3d2320-47e3-4062-88d6-6e5d19fa0af1",
           "awardIssueDate": "2023-12-04T04:33:47Z",
-          "credentialAwardee": "Tracy Thatcher"
+          "credentialAwardee": "Tracy Thatcher",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "6d3d2320-47e3-4062-88d6-6e5d19fa0af1",
+            "name": "Credential Award 44"
+          }
         },
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
           "identifier": "8daf7a79-9b72-49dd-b11f-32af9b68a7bb",
           "awardIssueDate": "2024-08-12T19:16:13Z",
-          "credentialAwardee": "Tracy Thatcher"
+          "credentialAwardee": "Tracy Thatcher",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "8daf7a79-9b72-49dd-b11f-32af9b68a7bb",
+            "name": "Credential Award 45"
+          }
         },
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
           "identifier": "3bbbc33a-a6ec-4f35-8015-53321b602ac0",
           "awardIssueDate": "2024-11-26T04:17:42Z",
-          "credentialAwardee": "Tracy Thatcher"
+          "credentialAwardee": "Tracy Thatcher",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "3bbbc33a-a6ec-4f35-8015-53321b602ac0",
+            "name": "Credential Award 46"
+          }
         },
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
           "identifier": "b5a611ca-24bf-49a9-9926-d2906f10d558",
           "awardIssueDate": "2023-07-08",
-          "credentialAwardee": "Tracy Thatcher"
+          "credentialAwardee": "Tracy Thatcher",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "b5a611ca-24bf-49a9-9926-d2906f10d558",
+            "name": "Credential Award 47"
+          }
         },
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
           "identifier": "00a4a048-48a3-44be-89c7-380fd0110209",
           "awardIssueDate": "2023-10-17T00:04:24Z",
-          "credentialAwardee": "Tracy Thatcher"
+          "credentialAwardee": "Tracy Thatcher",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "00a4a048-48a3-44be-89c7-380fd0110209",
+            "name": "Credential Award 48"
+          }
         }
       ],
       "CourseLearningExperience": [
@@ -2256,7 +2484,23 @@
             "informationSourceOrganization": "Org1"
           },
           "informationSourceOrganization": "State University",
-          "identifier": "courselearningexperience-org1-001"
+          "identifier": "courselearningexperience-org1-001",
+          "RefCourse": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "COURSE001",
+            "name": "Course 1",
+            "Identifier": [
+              {
+                "identifier": "COURSE001",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org1"
+              }
+            ]
+          }
         },
         {
           "informationSourceId": "Org1",
@@ -2327,7 +2571,23 @@
             "credentialAwardee": "Tracy Thatcher"
           },
           "informationSourceOrganization": "State University",
-          "identifier": "courselearningexperience-org1-002"
+          "identifier": "courselearningexperience-org1-002",
+          "RefCourse": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "COURSE002",
+            "name": "Course 2",
+            "Identifier": [
+              {
+                "identifier": "COURSE002",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org1"
+              }
+            ]
+          }
         },
         {
           "informationSourceId": "Org1",
@@ -2398,7 +2658,23 @@
             "credentialAwardee": "Tracy Thatcher"
           },
           "informationSourceOrganization": "State University",
-          "identifier": "courselearningexperience-org1-003"
+          "identifier": "courselearningexperience-org1-003",
+          "RefCourse": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "COURSE003",
+            "name": "Course 3",
+            "Identifier": [
+              {
+                "identifier": "COURSE003",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org1"
+              }
+            ]
+          }
         },
         {
           "informationSourceId": "Org1",
@@ -2469,7 +2745,23 @@
             "credentialAwardee": "Tracy Thatcher"
           },
           "informationSourceOrganization": "State University",
-          "identifier": "courselearningexperience-org1-004"
+          "identifier": "courselearningexperience-org1-004",
+          "RefCourse": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "COURSE004",
+            "name": "Course 4",
+            "Identifier": [
+              {
+                "identifier": "COURSE004",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org1"
+              }
+            ]
+          }
         },
         {
           "informationSourceId": "Org1",
@@ -2540,7 +2832,23 @@
             "credentialAwardee": "Tracy Thatcher"
           },
           "informationSourceOrganization": "State University",
-          "identifier": "courselearningexperience-org1-005"
+          "identifier": "courselearningexperience-org1-005",
+          "RefCourse": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "COURSE005",
+            "name": "Course 5",
+            "Identifier": [
+              {
+                "identifier": "COURSE005",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org1"
+              }
+            ]
+          }
         },
         {
           "informationSourceId": "Org1",
@@ -2611,7 +2919,23 @@
             "credentialAwardee": "Tracy Thatcher"
           },
           "informationSourceOrganization": "State University",
-          "identifier": "courselearningexperience-org1-006"
+          "identifier": "courselearningexperience-org1-006",
+          "RefCourse": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "COURSE006",
+            "name": "Course 6",
+            "Identifier": [
+              {
+                "identifier": "COURSE006",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org1"
+              }
+            ]
+          }
         },
         {
           "informationSourceId": "Org1",
@@ -2682,7 +3006,23 @@
             "credentialAwardee": "Tracy Thatcher"
           },
           "informationSourceOrganization": "State University",
-          "identifier": "courselearningexperience-org1-007"
+          "identifier": "courselearningexperience-org1-007",
+          "RefCourse": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "COURSE007",
+            "name": "Course 7",
+            "Identifier": [
+              {
+                "identifier": "COURSE007",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org1"
+              }
+            ]
+          }
         },
         {
           "informationSourceId": "Org1",
@@ -2753,7 +3093,23 @@
             "credentialAwardee": "Tracy Thatcher"
           },
           "informationSourceOrganization": "State University",
-          "identifier": "courselearningexperience-org1-008"
+          "identifier": "courselearningexperience-org1-008",
+          "RefCourse": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "COURSE008",
+            "name": "Course 8",
+            "Identifier": [
+              {
+                "identifier": "COURSE008",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org1"
+              }
+            ]
+          }
         },
         {
           "informationSourceId": "Org1",
@@ -2824,7 +3180,23 @@
             "credentialAwardee": "Tracy Thatcher"
           },
           "informationSourceOrganization": "State University",
-          "identifier": "courselearningexperience-org1-009"
+          "identifier": "courselearningexperience-org1-009",
+          "RefCourse": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "COURSE009",
+            "name": "Course 9",
+            "Identifier": [
+              {
+                "identifier": "COURSE009",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org1"
+              }
+            ]
+          }
         },
         {
           "informationSourceId": "Org1",
@@ -2895,7 +3267,23 @@
             "credentialAwardee": "Tracy Thatcher"
           },
           "informationSourceOrganization": "State University",
-          "identifier": "courselearningexperience-org1-010"
+          "identifier": "courselearningexperience-org1-010",
+          "RefCourse": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "COURSE010",
+            "name": "Course 10",
+            "Identifier": [
+              {
+                "identifier": "COURSE010",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org1"
+              }
+            ]
+          }
         },
         {
           "informationSourceId": "Org1",
@@ -2966,7 +3354,23 @@
             "credentialAwardee": "Tracy Thatcher"
           },
           "informationSourceOrganization": "State University",
-          "identifier": "courselearningexperience-org1-011"
+          "identifier": "courselearningexperience-org1-011",
+          "RefCourse": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "COURSE011",
+            "name": "Course 11",
+            "Identifier": [
+              {
+                "identifier": "COURSE011",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org1"
+              }
+            ]
+          }
         },
         {
           "informationSourceId": "Org1",
@@ -3037,7 +3441,23 @@
             "credentialAwardee": "Tracy Thatcher"
           },
           "informationSourceOrganization": "State University",
-          "identifier": "courselearningexperience-org1-012"
+          "identifier": "courselearningexperience-org1-012",
+          "RefCourse": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "COURSE012",
+            "name": "Course 12",
+            "Identifier": [
+              {
+                "identifier": "COURSE012",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org1"
+              }
+            ]
+          }
         },
         {
           "informationSourceId": "Org1",
@@ -3108,7 +3528,23 @@
             "credentialAwardee": "Tracy Thatcher"
           },
           "informationSourceOrganization": "State University",
-          "identifier": "courselearningexperience-org1-013"
+          "identifier": "courselearningexperience-org1-013",
+          "RefCourse": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "COURSE013",
+            "name": "Course 13",
+            "Identifier": [
+              {
+                "identifier": "COURSE013",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org1"
+              }
+            ]
+          }
         },
         {
           "informationSourceId": "Org1",
@@ -3179,7 +3615,23 @@
             "credentialAwardee": "Tracy Thatcher"
           },
           "informationSourceOrganization": "State University",
-          "identifier": "courselearningexperience-org1-014"
+          "identifier": "courselearningexperience-org1-014",
+          "RefCourse": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "COURSE014",
+            "name": "Course 14",
+            "Identifier": [
+              {
+                "identifier": "COURSE014",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org1"
+              }
+            ]
+          }
         },
         {
           "informationSourceId": "Org1",
@@ -3250,7 +3702,23 @@
             "credentialAwardee": "Tracy Thatcher"
           },
           "informationSourceOrganization": "State University",
-          "identifier": "courselearningexperience-org1-015"
+          "identifier": "courselearningexperience-org1-015",
+          "RefCourse": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "COURSE015",
+            "name": "Course 15",
+            "Identifier": [
+              {
+                "identifier": "COURSE015",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org1"
+              }
+            ]
+          }
         },
         {
           "informationSourceId": "Org1",
@@ -3321,7 +3789,23 @@
             "credentialAwardee": "Tracy Thatcher"
           },
           "informationSourceOrganization": "State University",
-          "identifier": "courselearningexperience-org1-016"
+          "identifier": "courselearningexperience-org1-016",
+          "RefCourse": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "COURSE016",
+            "name": "Course 16",
+            "Identifier": [
+              {
+                "identifier": "COURSE016",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org1"
+              }
+            ]
+          }
         },
         {
           "informationSourceId": "Org1",
@@ -3392,7 +3876,23 @@
             "credentialAwardee": "Tracy Thatcher"
           },
           "informationSourceOrganization": "State University",
-          "identifier": "courselearningexperience-org1-017"
+          "identifier": "courselearningexperience-org1-017",
+          "RefCourse": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "COURSE017",
+            "name": "Course 17",
+            "Identifier": [
+              {
+                "identifier": "COURSE017",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org1"
+              }
+            ]
+          }
         },
         {
           "informationSourceId": "Org1",
@@ -3463,7 +3963,23 @@
             "credentialAwardee": "Tracy Thatcher"
           },
           "informationSourceOrganization": "State University",
-          "identifier": "courselearningexperience-org1-018"
+          "identifier": "courselearningexperience-org1-018",
+          "RefCourse": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "COURSE018",
+            "name": "Course 18",
+            "Identifier": [
+              {
+                "identifier": "COURSE018",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org1"
+              }
+            ]
+          }
         },
         {
           "informationSourceId": "Org1",
@@ -3486,7 +4002,23 @@
             "credentialAwardee": "Tracy Thatcher"
           },
           "informationSourceOrganization": "State University",
-          "identifier": "courselearningexperience-org1-019"
+          "identifier": "courselearningexperience-org1-019",
+          "RefCourse": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "COURSE019",
+            "name": "Course 19",
+            "Identifier": [
+              {
+                "identifier": "COURSE019",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org1"
+              }
+            ]
+          }
         },
         {
           "informationSourceId": "Org1",
@@ -3509,7 +4041,23 @@
             "credentialAwardee": "Tracy Thatcher"
           },
           "informationSourceOrganization": "State University",
-          "identifier": "courselearningexperience-org1-020"
+          "identifier": "courselearningexperience-org1-020",
+          "RefCourse": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "COURSE020",
+            "name": "Course 20",
+            "Identifier": [
+              {
+                "identifier": "COURSE020",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org1"
+              }
+            ]
+          }
         },
         {
           "informationSourceId": "Org1",
@@ -3532,7 +4080,23 @@
             "credentialAwardee": "Tracy Thatcher"
           },
           "informationSourceOrganization": "State University",
-          "identifier": "courselearningexperience-org1-021"
+          "identifier": "courselearningexperience-org1-021",
+          "RefCourse": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "COURSE021",
+            "name": "Course 21",
+            "Identifier": [
+              {
+                "identifier": "COURSE021",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org1"
+              }
+            ]
+          }
         },
         {
           "informationSourceId": "Org1",
@@ -3555,7 +4119,23 @@
             "credentialAwardee": "Tracy Thatcher"
           },
           "informationSourceOrganization": "State University",
-          "identifier": "courselearningexperience-org1-022"
+          "identifier": "courselearningexperience-org1-022",
+          "RefCourse": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "COURSE022",
+            "name": "Course 22",
+            "Identifier": [
+              {
+                "identifier": "COURSE022",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org1"
+              }
+            ]
+          }
         },
         {
           "informationSourceId": "Org1",
@@ -3578,7 +4158,23 @@
             "credentialAwardee": "Tracy Thatcher"
           },
           "informationSourceOrganization": "State University",
-          "identifier": "courselearningexperience-org1-023"
+          "identifier": "courselearningexperience-org1-023",
+          "RefCourse": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "COURSE023",
+            "name": "Course 23",
+            "Identifier": [
+              {
+                "identifier": "COURSE023",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org1"
+              }
+            ]
+          }
         },
         {
           "informationSourceId": "Org1",
@@ -3601,7 +4197,23 @@
             "credentialAwardee": "Tracy Thatcher"
           },
           "informationSourceOrganization": "State University",
-          "identifier": "courselearningexperience-org1-024"
+          "identifier": "courselearningexperience-org1-024",
+          "RefCourse": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "COURSE024",
+            "name": "Course 24",
+            "Identifier": [
+              {
+                "identifier": "COURSE024",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org1"
+              }
+            ]
+          }
         },
         {
           "informationSourceId": "Org1",
@@ -3624,7 +4236,23 @@
             "credentialAwardee": "Tracy Thatcher"
           },
           "informationSourceOrganization": "State University",
-          "identifier": "courselearningexperience-org1-025"
+          "identifier": "courselearningexperience-org1-025",
+          "RefCourse": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "COURSE025",
+            "name": "Course 25",
+            "Identifier": [
+              {
+                "identifier": "COURSE025",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org1"
+              }
+            ]
+          }
         },
         {
           "informationSourceId": "Org1",
@@ -3647,7 +4275,23 @@
             "credentialAwardee": "Tracy Thatcher"
           },
           "informationSourceOrganization": "State University",
-          "identifier": "courselearningexperience-org1-026"
+          "identifier": "courselearningexperience-org1-026",
+          "RefCourse": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "COURSE026",
+            "name": "Course 26",
+            "Identifier": [
+              {
+                "identifier": "COURSE026",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org1"
+              }
+            ]
+          }
         },
         {
           "informationSourceId": "Org1",
@@ -3670,7 +4314,23 @@
             "credentialAwardee": "Tracy Thatcher"
           },
           "informationSourceOrganization": "State University",
-          "identifier": "courselearningexperience-org1-027"
+          "identifier": "courselearningexperience-org1-027",
+          "RefCourse": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "COURSE027",
+            "name": "Course 27",
+            "Identifier": [
+              {
+                "identifier": "COURSE027",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org1"
+              }
+            ]
+          }
         },
         {
           "informationSourceId": "Org1",
@@ -3693,7 +4353,23 @@
             "credentialAwardee": "Tracy Thatcher"
           },
           "informationSourceOrganization": "State University",
-          "identifier": "courselearningexperience-org1-028"
+          "identifier": "courselearningexperience-org1-028",
+          "RefCourse": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "COURSE028",
+            "name": "Course 28",
+            "Identifier": [
+              {
+                "identifier": "COURSE028",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org1"
+              }
+            ]
+          }
         },
         {
           "informationSourceId": "Org1",
@@ -3716,7 +4392,23 @@
             "credentialAwardee": "Tracy Thatcher"
           },
           "informationSourceOrganization": "State University",
-          "identifier": "courselearningexperience-org1-029"
+          "identifier": "courselearningexperience-org1-029",
+          "RefCourse": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "COURSE029",
+            "name": "Course 29",
+            "Identifier": [
+              {
+                "identifier": "COURSE029",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org1"
+              }
+            ]
+          }
         },
         {
           "informationSourceId": "Org1",
@@ -3739,7 +4431,23 @@
             "credentialAwardee": "Tracy Thatcher"
           },
           "informationSourceOrganization": "State University",
-          "identifier": "courselearningexperience-org1-030"
+          "identifier": "courselearningexperience-org1-030",
+          "RefCourse": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "COURSE030",
+            "name": "Course 30",
+            "Identifier": [
+              {
+                "identifier": "COURSE030",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org1"
+              }
+            ]
+          }
         },
         {
           "informationSourceId": "Org1",
@@ -3762,7 +4470,23 @@
             "credentialAwardee": "Tracy Thatcher"
           },
           "informationSourceOrganization": "State University",
-          "identifier": "courselearningexperience-org1-031"
+          "identifier": "courselearningexperience-org1-031",
+          "RefCourse": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "COURSE031",
+            "name": "Course 31",
+            "Identifier": [
+              {
+                "identifier": "COURSE031",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org1"
+              }
+            ]
+          }
         },
         {
           "informationSourceId": "Org1",
@@ -3785,7 +4509,23 @@
             "credentialAwardee": "Tracy Thatcher"
           },
           "informationSourceOrganization": "State University",
-          "identifier": "courselearningexperience-org1-032"
+          "identifier": "courselearningexperience-org1-032",
+          "RefCourse": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "COURSE032",
+            "name": "Course 32",
+            "Identifier": [
+              {
+                "identifier": "COURSE032",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org1"
+              }
+            ]
+          }
         },
         {
           "informationSourceId": "Org1",
@@ -3808,7 +4548,23 @@
             "credentialAwardee": "Tracy Thatcher"
           },
           "informationSourceOrganization": "State University",
-          "identifier": "courselearningexperience-org1-033"
+          "identifier": "courselearningexperience-org1-033",
+          "RefCourse": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "COURSE033",
+            "name": "Course 33",
+            "Identifier": [
+              {
+                "identifier": "COURSE033",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org1"
+              }
+            ]
+          }
         },
         {
           "informationSourceId": "Org1",
@@ -3831,7 +4587,23 @@
             "credentialAwardee": "Tracy Thatcher"
           },
           "informationSourceOrganization": "State University",
-          "identifier": "courselearningexperience-org1-034"
+          "identifier": "courselearningexperience-org1-034",
+          "RefCourse": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "COURSE034",
+            "name": "Course 34",
+            "Identifier": [
+              {
+                "identifier": "COURSE034",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org1"
+              }
+            ]
+          }
         },
         {
           "informationSourceId": "Org1",
@@ -3854,7 +4626,23 @@
             "credentialAwardee": "Tracy Thatcher"
           },
           "informationSourceOrganization": "State University",
-          "identifier": "courselearningexperience-org1-035"
+          "identifier": "courselearningexperience-org1-035",
+          "RefCourse": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "COURSE035",
+            "name": "Course 35",
+            "Identifier": [
+              {
+                "identifier": "COURSE035",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org1"
+              }
+            ]
+          }
         },
         {
           "informationSourceId": "Org1",
@@ -3877,7 +4665,23 @@
             "credentialAwardee": "Tracy Thatcher"
           },
           "informationSourceOrganization": "State University",
-          "identifier": "courselearningexperience-org1-036"
+          "identifier": "courselearningexperience-org1-036",
+          "RefCourse": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "COURSE036",
+            "name": "Course 36",
+            "Identifier": [
+              {
+                "identifier": "COURSE036",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org1"
+              }
+            ]
+          }
         },
         {
           "informationSourceId": "Org1",
@@ -3900,7 +4704,23 @@
             "credentialAwardee": "Tracy Thatcher"
           },
           "informationSourceOrganization": "State University",
-          "identifier": "courselearningexperience-org1-037"
+          "identifier": "courselearningexperience-org1-037",
+          "RefCourse": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "COURSE037",
+            "name": "Course 37",
+            "Identifier": [
+              {
+                "identifier": "COURSE037",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org1"
+              }
+            ]
+          }
         }
       ],
       "informationSourceId": "Org1"

@@ -256,7 +256,7 @@ class LIFQueryPlannerService:
             )
 
             json_body = {
-                "lif_query_filter": lif_query_filter.model_dump(),
+                "lif_query_filter": lif_query_filter.model_dump(by_alias=True),
                 "lif_fragments": [fragment.model_dump() for fragment in lif_fragments],
             }
             async with httpx.AsyncClient() as client:
@@ -290,7 +290,7 @@ async def query_lif_cache(lif_cache_query_url: str, query: LIFQuery) -> List[LIF
     """
     try:
         async with httpx.AsyncClient() as client:
-            response = await client.post(lif_cache_query_url, json=query.model_dump())
+            response = await client.post(lif_cache_query_url, json=query.model_dump(by_alias=True))
         response.raise_for_status()
         response_json = response.json()
         lif_records = [LIFRecord(**record) for record in response_json]

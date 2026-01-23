@@ -21,28 +21,10 @@ query GetPersonByIdentifier($identifier: String!, $identifierType: String!) {
       name
       startDate
       endDate
-      #RefPosition {
-      #  name
-      #  informationSourceId
-      #}
-      #AssertedByRefOrganization {
-      #  identificationSystem
-      #  name
-      #  organizationType
-      #  informationSourceId
-      #}
-      #OfferedByRefOrganization {
-      #  identificationSystem
-      #  name
-      #  organizationType
-      #  informationSourceId
-      #}
-      #ApprovedByRefOrganization {
-      #  identificationSystem
-      #  name
-      #  organizationType
-      #  informationSourceId
-      #}
+      RefPosition {
+        name
+        informationSourceId
+      }
       RefCredentialAward {
         identifier
         #awardIssueDate

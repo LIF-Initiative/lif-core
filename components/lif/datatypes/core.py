@@ -1,7 +1,7 @@
 import warnings
 from typing import Any, Dict, List
 
-from pydantic import BaseModel, Field, RootModel, field_validator
+from pydantic import BaseModel, ConfigDict, Field, RootModel, field_validator
 
 
 # -------------------------------------------------------------------------
@@ -66,7 +66,10 @@ class LIFRecord(BaseModel):
         person (LIFPerson): Person.
     """
 
-    person: LIFPerson = Field(..., description="Person")
+    model_config = ConfigDict(populate_by_name=True)
+
+    # Use alias="Person" to accept PascalCase from MongoDB while keeping lowercase internally
+    person: LIFPerson = Field(..., alias="Person", description="Person")
 
 
 class LIFQueryPersonFilter(BaseModel):
@@ -76,7 +79,12 @@ class LIFQueryPersonFilter(BaseModel):
         person (LIFPersonFilterIdentifier): Person identifier for the query.
     """
 
-    person: LIFPersonIdentifiers = Field(..., description="Person identifier for the query")
+    model_config = ConfigDict(populate_by_name=True)
+
+    # Use alias="Person" to accept PascalCase from GraphQL API while keeping lowercase internally
+    person: LIFPersonIdentifiers = Field(
+        ..., alias="Person", description="Person identifier for the query"
+    )
 
 
 class LIFQueryFilter(RootModel[LIFQueryPersonFilter]):
@@ -180,8 +188,9 @@ class LIFFragment(BaseModel):
     def fragment_path_validation(cls, value):
         if not value:
             raise ValueError("No fragment_path provided.")
-        if not value.startswith("person."):
-            raise ValueError("Fragment path must start with 'person.'")
+        # Accept both lowercase 'person.' and PascalCase 'Person.' prefixes
+        if not value.startswith("person.") and not value.startswith("Person."):
+            raise ValueError("Fragment path must start with 'person.' or 'Person.'")
         return value
 
     @field_validator("fragment")

@@ -134,6 +134,8 @@ services:
       <<: *mongo-template-environment
       MONGO_HOST: ${MONGO_HOST_ORG1:-mongodb-org1}
       SEED_DATA_KEY: ${SEED_DATA_KEY:-advisor-demo-org1}
+    ports:
+      - "27017:27017"
     #volumes:
     #  - mongo_data_org1:/data/db
     networks:
@@ -146,6 +148,8 @@ services:
       <<: *mongo-template-environment
       MONGO_HOST: ${MONGO_HOST_ORG2:-mongodb-org2}
       SEED_DATA_KEY: ${SEED_DATA_KEY:-advisor-demo-org2}
+    ports:
+      - "27018:27017"
     #volumes:
     #  - mongo_data_org2:/data/db
     networks:
@@ -158,6 +162,8 @@ services:
       <<: *mongo-template-environment
       MONGO_HOST: ${MONGO_HOST_ORG3:-mongodb-org3}
       SEED_DATA_KEY: ${SEED_DATA_KEY:-advisor-demo-org3}
+    ports:
+      - "27019:27017"
     #volumes:
     #  - mongo_data_org3:/data/db
     networks:
@@ -168,6 +174,8 @@ services:
     container_name: lif-query-cache-org1
     environment:
       MONGODB_URI: mongodb-org1:27017
+    ports:
+      - "8001:8001"
     depends_on:
       - mongodb-org1
     networks:
@@ -178,6 +186,8 @@ services:
     container_name: lif-query-cache-org2
     environment:
       MONGODB_URI: mongodb-org2:27017
+    ports:
+      - "8101:8001"
     depends_on:
       - mongodb-org2
     networks:
@@ -188,6 +198,8 @@ services:
     container_name: lif-query-cache-org3
     environment:
       MONGODB_URI: mongodb-org3:27017
+    ports:
+      - "8201:8001"
     depends_on:
       - mongodb-org3
     networks:
@@ -201,6 +213,8 @@ services:
       LIF_ORCHESTRATOR_URL: ${LIF_ORCHESTRATOR_URL:-http://lif-orchestrator-api-org1:8005}
       LIF_QUERY_PLANNER_INFORMATION_SOURCES_CONFIG_PATH: ${LIF_QUERY_PLANNER_INFORMATION_SOURCES_CONFIG_PATH:-/opt/app/information_sources_config.yml}
       LIF_QUERY_TIMEOUT_SECONDS: ${LIF_QUERY_TIMEOUT_SECONDS:-120}
+    ports:
+      - "8002:8002"
     depends_on:
       - lif-query-cache-org1
     volumes:
@@ -215,6 +229,8 @@ services:
       LIF_QUERY_CACHE_URL: http://lif-query-cache-org2:8001
       LIF_QUERY_PLANNER_INFORMATION_SOURCES_CONFIG_PATH: ${LIF_QUERY_PLANNER_INFORMATION_SOURCES_CONFIG_PATH:-/opt/app/information_sources_config.yml}
       LIF_QUERY_TIMEOUT_SECONDS: ${LIF_QUERY_TIMEOUT_SECONDS:-120}
+    ports:
+      - "8102:8002"
     depends_on:
       - lif-query-cache-org2
     volumes:
@@ -229,6 +245,8 @@ services:
       LIF_QUERY_CACHE_URL: http://lif-query-cache-org3:8001
       LIF_QUERY_PLANNER_INFORMATION_SOURCES_CONFIG_PATH: ${LIF_QUERY_PLANNER_INFORMATION_SOURCES_CONFIG_PATH:-/opt/app/information_sources_config.yml}
       LIF_QUERY_TIMEOUT_SECONDS: ${LIF_QUERY_TIMEOUT_SECONDS:-120}
+    ports:
+      - "8202:8002"
     depends_on:
       - lif-query-cache-org3
     volumes:

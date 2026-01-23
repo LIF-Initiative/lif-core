@@ -1271,105 +1271,195 @@
           "awardIssueDate": "2024-12-15T10:00:00Z",
           "credentialAwardee": "Sarah Marin",
           "informationSourceId": "Org1",
-          "informationSourceOrganization": "Org1"
+          "informationSourceOrganization": "Org1",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "cred-proficiency-certificate-001",
+            "name": "Credential Award 5"
+          }
         },
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
           "identifier": "91015e0d-4efe-4b38-a39e-95bccafffcdf",
           "awardIssueDate": "2022-09-02T20:56:58Z",
-          "credentialAwardee": "Sarah Marin"
+          "credentialAwardee": "Sarah Marin",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "91015e0d-4efe-4b38-a39e-95bccafffcdf",
+            "name": "Credential Award 6"
+          }
         },
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
           "identifier": "ea486070-f6df-4c47-9404-14637789acc8",
           "awardIssueDate": "2024-11-09",
-          "credentialAwardee": "Sarah Marin"
+          "credentialAwardee": "Sarah Marin",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "ea486070-f6df-4c47-9404-14637789acc8",
+            "name": "Credential Award 7"
+          }
         },
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
           "identifier": "2a63bd3b-1133-46a8-949a-bffdd1762122",
           "awardIssueDate": "2021-05-31",
-          "credentialAwardee": "Sarah Marin"
+          "credentialAwardee": "Sarah Marin",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "2a63bd3b-1133-46a8-949a-bffdd1762122",
+            "name": "Credential Award 8"
+          }
         },
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
           "identifier": "090d2aaf-aee6-4817-a568-40ed629025ec",
           "awardIssueDate": "2023-03-01T22:14:42Z",
-          "credentialAwardee": "Sarah Marin"
+          "credentialAwardee": "Sarah Marin",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "090d2aaf-aee6-4817-a568-40ed629025ec",
+            "name": "Credential Award 9"
+          }
         },
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
           "identifier": "54845c97-5e9c-45ba-b4b3-b3c20fec890c",
           "awardIssueDate": "2024-02-22T13:35:48Z",
-          "credentialAwardee": "Sarah Marin"
+          "credentialAwardee": "Sarah Marin",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "54845c97-5e9c-45ba-b4b3-b3c20fec890c",
+            "name": "Credential Award 10"
+          }
         },
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
           "identifier": "66bee4f9-b1ef-49f3-a63c-182ce2cacee2",
           "awardIssueDate": "2023-08-05T16:02:12Z",
-          "credentialAwardee": "Sarah Marin"
+          "credentialAwardee": "Sarah Marin",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "66bee4f9-b1ef-49f3-a63c-182ce2cacee2",
+            "name": "Credential Award 11"
+          }
         },
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
           "identifier": "bdc242b7-fece-470e-bc0e-c074552f129b",
           "awardIssueDate": "2020-01-12T12:30:33Z",
-          "credentialAwardee": "Sarah Marin"
+          "credentialAwardee": "Sarah Marin",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "bdc242b7-fece-470e-bc0e-c074552f129b",
+            "name": "Credential Award 12"
+          }
         },
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
           "identifier": "0a51bd6c-5091-4dd0-9cf2-77485d919efc",
           "awardIssueDate": "2023-08-26T09:56:14Z",
-          "credentialAwardee": "Sarah Marin"
+          "credentialAwardee": "Sarah Marin",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "0a51bd6c-5091-4dd0-9cf2-77485d919efc",
+            "name": "Credential Award 13"
+          }
         },
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
           "identifier": "c92152b5-e39e-4c83-a804-de5a63a48659",
           "awardIssueDate": "2020-07-27T10:14:13Z",
-          "credentialAwardee": "Sarah Marin"
+          "credentialAwardee": "Sarah Marin",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "c92152b5-e39e-4c83-a804-de5a63a48659",
+            "name": "Credential Award 14"
+          }
         },
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
           "identifier": "7aca9639-4924-45df-9ad3-fc9360997d56",
           "awardIssueDate": "2024-08-25",
-          "credentialAwardee": "Sarah Marin"
+          "credentialAwardee": "Sarah Marin",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "7aca9639-4924-45df-9ad3-fc9360997d56",
+            "name": "Credential Award 15"
+          }
         },
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
           "identifier": "746c68fd-3656-433a-8040-4e1d598d7d53",
           "awardIssueDate": "2023-05-25T12:42:26Z",
-          "credentialAwardee": "Sarah Marin"
+          "credentialAwardee": "Sarah Marin",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "746c68fd-3656-433a-8040-4e1d598d7d53",
+            "name": "Credential Award 16"
+          }
         },
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
           "identifier": "0327a5c1-168d-4ce5-81d5-46d7e307427d",
           "awardIssueDate": "2022-08-08",
-          "credentialAwardee": "Sarah Marin"
+          "credentialAwardee": "Sarah Marin",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "0327a5c1-168d-4ce5-81d5-46d7e307427d",
+            "name": "Credential Award 17"
+          }
         },
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
           "identifier": "83f7a63a-8d18-4a8c-832d-15c78da59045",
           "awardIssueDate": "2021-06-22T12:28:58Z",
-          "credentialAwardee": "Sarah Marin"
+          "credentialAwardee": "Sarah Marin",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "83f7a63a-8d18-4a8c-832d-15c78da59045",
+            "name": "Credential Award 18"
+          }
         },
         {
           "informationSourceId": "Org1",
           "informationSourceOrganization": "Org1",
           "identifier": "e734989d-e254-4167-b126-8e89e7449405",
           "awardIssueDate": "2022-04-22T16:17:24Z",
-          "credentialAwardee": "Sarah Marin"
+          "credentialAwardee": "Sarah Marin",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "Org1",
+            "identifier": "e734989d-e254-4167-b126-8e89e7449405",
+            "name": "Credential Award 19"
+          }
         }
       ],
       "CourseLearningExperience": [
@@ -2114,7 +2204,23 @@
             "credentialAwardee": "Sarah Marin"
           },
           "informationSourceOrganization": "State University",
-          "identifier": "courselearningexperience-org1-008"
+          "identifier": "courselearningexperience-org1-008",
+          "RefCourse": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "COURSE008",
+            "name": "Course 8",
+            "Identifier": [
+              {
+                "identifier": "COURSE008",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org1"
+              }
+            ]
+          }
         },
         {
           "informationSourceId": "Org1",
@@ -2136,7 +2242,23 @@
             "credentialAwardee": "Sarah Marin"
           },
           "informationSourceOrganization": "State University",
-          "identifier": "courselearningexperience-org1-009"
+          "identifier": "courselearningexperience-org1-009",
+          "RefCourse": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "COURSE009",
+            "name": "Course 9",
+            "Identifier": [
+              {
+                "identifier": "COURSE009",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org1"
+              }
+            ]
+          }
         },
         {
           "informationSourceId": "Org1",
@@ -2158,7 +2280,23 @@
             "credentialAwardee": "Sarah Marin"
           },
           "informationSourceOrganization": "State University",
-          "identifier": "courselearningexperience-org1-010"
+          "identifier": "courselearningexperience-org1-010",
+          "RefCourse": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "COURSE010",
+            "name": "Course 10",
+            "Identifier": [
+              {
+                "identifier": "COURSE010",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org1"
+              }
+            ]
+          }
         },
         {
           "informationSourceId": "Org1",
@@ -2180,7 +2318,23 @@
             "credentialAwardee": "Sarah Marin"
           },
           "informationSourceOrganization": "State University",
-          "identifier": "courselearningexperience-org1-011"
+          "identifier": "courselearningexperience-org1-011",
+          "RefCourse": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "COURSE011",
+            "name": "Course 11",
+            "Identifier": [
+              {
+                "identifier": "COURSE011",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org1"
+              }
+            ]
+          }
         },
         {
           "informationSourceId": "Org1",
@@ -2202,7 +2356,23 @@
             "credentialAwardee": "Sarah Marin"
           },
           "informationSourceOrganization": "State University",
-          "identifier": "courselearningexperience-org1-012"
+          "identifier": "courselearningexperience-org1-012",
+          "RefCourse": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "COURSE012",
+            "name": "Course 12",
+            "Identifier": [
+              {
+                "identifier": "COURSE012",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org1"
+              }
+            ]
+          }
         },
         {
           "informationSourceId": "Org1",
@@ -2224,7 +2394,23 @@
             "credentialAwardee": "Sarah Marin"
           },
           "informationSourceOrganization": "State University",
-          "identifier": "courselearningexperience-org1-013"
+          "identifier": "courselearningexperience-org1-013",
+          "RefCourse": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "COURSE013",
+            "name": "Course 13",
+            "Identifier": [
+              {
+                "identifier": "COURSE013",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org1"
+              }
+            ]
+          }
         },
         {
           "informationSourceId": "Org1",
@@ -2246,7 +2432,23 @@
             "credentialAwardee": "Sarah Marin"
           },
           "informationSourceOrganization": "State University",
-          "identifier": "courselearningexperience-org1-014"
+          "identifier": "courselearningexperience-org1-014",
+          "RefCourse": {
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "COURSE014",
+            "name": "Course 14",
+            "Identifier": [
+              {
+                "identifier": "COURSE014",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org1"
+              }
+            ]
+          }
         }
       ],
       "informationSourceId": "Org1"

@@ -253,7 +253,7 @@ def test_run_post_orchestration_results(mock_post):
         "https://api.example.com/cache/save",
         json={
             "lif_query_filter": {
-                "person": {"Identifier": {"identifier": "12345", "identifierType": "School-assigned number"}}
+                "Person": {"Identifier": {"identifier": "12345", "identifierType": "School-assigned number"}}
             },
             "lif_fragments": [
                 {

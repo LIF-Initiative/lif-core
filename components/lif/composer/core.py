@@ -41,8 +41,16 @@ def compose_with_fragment_list(lif_record: LIFRecord, lif_fragments: List[LIFFra
 
 
 def adjust_fragment_path_for_root_person_list(fragment_path: str) -> str:
+    """Adjust fragment path to navigate into the person array.
+
+    Handles both lowercase 'person.' and PascalCase 'Person.' prefixes.
+    The internal LIF record structure uses lowercase 'person'.
+    """
     if fragment_path.startswith("person."):
         return "person.0" + fragment_path[6::]
+    elif fragment_path.startswith("Person."):
+        # Convert PascalCase to lowercase for internal navigation
+        return "person.0." + fragment_path[7:]
     else:
         return fragment_path
 

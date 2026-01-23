@@ -18,7 +18,6 @@ TODO: Add an introspection tool to help the LLM understand the relationships
 """
 
 from collections import defaultdict
-from datetime import date, datetime
 from enum import Enum
 import os
 from typing import Annotated, Any, Dict, List, Optional, Tuple, Type
@@ -30,6 +29,7 @@ from pydantic import BaseModel, Field
 from sentence_transformers import SentenceTransformer
 from string import Template
 
+from lif.lif_schema_config import LIFSchemaConfig, XSD_TO_PYTHON
 from lif.logging import get_logger
 from lif.openapi_schema_parser.core import SchemaLeaf
 from lif.string_utils import to_value_enum_name
@@ -38,17 +38,8 @@ logger = get_logger(__name__)
 
 SEMANTIC_SEARCH_SERVICE__GRAPHQL_TIMEOUT__READ = int(os.getenv("SEMANTIC_SEARCH_SERVICE__GRAPHQL_TIMEOUT__READ", 300))
 
-# Type Maps
-DATATYPE_MAP: Dict[str, Type[Any]] = {
-    "xsd:string": str,
-    "xsd:decimal": float,
-    "xsd:integer": int,
-    "xsd:boolean": bool,
-    "xsd:date": date,
-    "xsd:dateTime": datetime,
-    "xsd:datetime": datetime,
-    "xsd:anyURI": str,
-}
+# Use centralized type mappings from lif_schema_config
+DATATYPE_MAP = XSD_TO_PYTHON
 
 
 # GraphQL Templates
@@ -319,7 +310,58 @@ def to_graphql_field_list(obj: Any, indent=0) -> str:
     return ""
 
 
-# OLD - I added
+def filter_paths_for_graphql(
+    paths: List[str],
+    config: Optional[LIFSchemaConfig] = None,
+) -> List[str]:
+    """Filter and transform paths for GraphQL query generation.
+
+    The semantic search indexes multiple root entities (Person, Course, Organization, Credential)
+    to improve search relevance. However, the GraphQL person query only returns PersonItem type,
+    which has Person fields directly (not wrapped in a "Person" field).
+
+    This function:
+    1. Filters out paths from reference data roots (Course, Credential, Organization)
+       since they're not valid fields on PersonItem
+    2. Strips the primary root prefix (Person.) since PersonItem fields are accessed directly
+
+    Args:
+        paths: List of schema paths (e.g., ["Person.name", "Course.identifier"])
+        config: LIFSchemaConfig instance (uses defaults if not provided)
+
+    Returns:
+        List of paths valid for the GraphQL query
+    """
+    if config is None:
+        config = LIFSchemaConfig()
+
+    primary_root = config.root_type_name
+    reference_data_roots = config.reference_data_roots
+
+    filtered_paths = []
+    for path in paths:
+        if not path:
+            continue
+
+        # Get the root of this path
+        root = path.split(".")[0] if "." in path else path
+
+        # Skip reference data roots - they help with search but aren't queryable via person
+        if root in reference_data_roots:
+            logger.debug(f"Filtering out reference data path: {path}")
+            continue
+
+        # For Person paths, strip the "Person." prefix since PersonItem fields are direct
+        if root == primary_root and "." in path:
+            transformed_path = path[len(primary_root) + 1:]  # Strip "Person."
+            filtered_paths.append(transformed_path)
+        elif root != primary_root:
+            # Keep other paths as-is (shouldn't happen with current indexing)
+            filtered_paths.append(path)
+
+    return filtered_paths
+
+
 async def run_semantic_search(
     filter: BaseModel,
     query: str,
@@ -328,6 +370,7 @@ async def run_semantic_search(
     leaves: List[SchemaLeaf],
     top_k: int,
     graphql_url: str,
+    config: Optional[LIFSchemaConfig] = None,
 ):
     """Perform a semantic search and attribute-based lookup on LIF data fields.
 
@@ -339,6 +382,7 @@ async def run_semantic_search(
         leaves: List of schema leaves representing LIF data fields.
         top_k: Number of top results to return.
         graphql_url: Base URL of the GraphQL service to send the LIF query.
+        config: LIFSchemaConfig instance (uses defaults if not provided).
 
     Returns:
         List of search result dictionaries, or an error/result message.
@@ -366,7 +410,12 @@ async def run_semantic_search(
 
     results.sort(key=lambda r: (-r["score"], r["path"]))
     paths = [result.get("path") for result in results]
-    graphql_fields = paths_to_graphql_fields(paths)
+
+    # Filter paths for GraphQL query - remove reference data roots and strip Person prefix
+    graphql_paths = filter_paths_for_graphql(paths, config=config)
+    logger.info(f"Filtered {len(paths)} search paths to {len(graphql_paths)} GraphQL-compatible paths")
+
+    graphql_fields = paths_to_graphql_fields(graphql_paths)
 
     filter_literal = to_graphql_literal(filter.model_dump())
     query_template = Template(GRAPH_QL_QUERY_TEMPLATE)

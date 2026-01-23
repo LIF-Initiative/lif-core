@@ -17,6 +17,7 @@ from lif.query_planner_service.datatypes import LIFQueryPlannerInfoSourceConfig
 logger = get_logger(__name__)
 
 PERSON_DOT: str = "person."
+PERSON_DOT_PASCAL: str = "Person."
 PERSON_DOT_ALL: str = "person.all"
 PERSON_DOT_ZERO = "person.0"
 PERSON_JSON_PATH_PREFIX: str = "$.person[0]."
@@ -105,19 +106,27 @@ def get_lif_fragment_paths_from_query(query: LIFQuery) -> List[str]:
         query (LIFQuery): The LIF query to extract fragment paths from.
 
     Returns:
-        List[str]: List of LIF fragment paths.
+        List[str]: List of LIF fragment paths (using PascalCase 'Person.' prefix).
     """
     lif_fragment_paths = []
     for field in query.selected_fields:
-        if field.startswith(PERSON_DOT):
+        # Handle both lowercase 'person.' and PascalCase 'Person.' prefixes
+        if field.startswith(PERSON_DOT) or field.startswith(PERSON_DOT_PASCAL):
             index_of_second_dot: int = field.find(".", PERSON_DOT_LENGTH)
             if index_of_second_dot != -1:
                 path: str = field[0:index_of_second_dot]
+                # Normalize to PascalCase for consistency
+                if path.startswith(PERSON_DOT):
+                    path = PERSON_DOT_PASCAL + path[PERSON_DOT_LENGTH:]
                 if path not in lif_fragment_paths:
                     lif_fragment_paths.append(path)
             else:
-                if field not in lif_fragment_paths:
-                    lif_fragment_paths.append(field)
+                # Normalize to PascalCase for consistency
+                normalized_field = field
+                if field.startswith(PERSON_DOT):
+                    normalized_field = PERSON_DOT_PASCAL + field[PERSON_DOT_LENGTH:]
+                if normalized_field not in lif_fragment_paths:
+                    lif_fragment_paths.append(normalized_field)
     return lif_fragment_paths
 
 
@@ -141,10 +150,13 @@ def get_lif_fragment_paths_not_found_in_lif_record(lif_record: LIFRecord, lif_fr
 
     lif_record_dict = lif_record.model_dump()
     for path in lif_fragment_paths:
-        if not path.startswith(PERSON_DOT):
-            raise ValueError(f"Fragment path '{path}' must start with 'person.'")
+        # Handle both lowercase 'person.' and PascalCase 'Person.' prefixes
+        if not path.startswith(PERSON_DOT) and not path.startswith(PERSON_DOT_PASCAL):
+            raise ValueError(f"Fragment path '{path}' must start with 'person.' or 'Person.'")
 
-        json_path: str = PERSON_JSON_PATH_PREFIX + path[PERSON_DOT_LENGTH:]
+        # Extract the field name after the prefix
+        field_name = path[PERSON_DOT_LENGTH:] if path.startswith(PERSON_DOT) else path[PERSON_DOT_LENGTH:]
+        json_path: str = PERSON_JSON_PATH_PREFIX + field_name
         path_expr = parse(json_path)
         matches = path_expr.find(lif_record_dict)
         if not matches and path not in not_found_paths:

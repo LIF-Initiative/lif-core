@@ -24,6 +24,7 @@ packages = ["lif"]
 
 [tool.polylith.bricks]
 "../../bases/lif/api_graphql" = "lif/api_graphql"
+"../../components/lif/lif_schema_config" = "lif/lif_schema_config"
 "../../components/lif/mdr_client" = "lif/mdr_client"
 "../../components/lif/openapi_to_graphql" = "lif/openapi_to_graphql"
 "../../components/lif/string_utils" = "lif/string_utils"

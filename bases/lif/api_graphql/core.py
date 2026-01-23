@@ -11,6 +11,7 @@ from typing import AsyncGenerator
 from fastapi import FastAPI
 from strawberry.fastapi import GraphQLRouter
 
+from lif.lif_schema_config import LIFSchemaConfig
 from lif.logging import get_logger
 from lif.mdr_client import get_openapi_lif_data_model
 from lif.openapi_to_graphql.core import generate_graphql_schema
@@ -18,20 +19,20 @@ from lif.openapi_to_graphql.core import generate_graphql_schema
 logger = get_logger(__name__)
 
 
-LIF_QUERY_PLANNER_URL = os.getenv("LIF_QUERY_PLANNER_URL", "http://localhost:8002")
-LIF_GRAPHQL_ROOT_TYPE_NAME = os.getenv("LIF_GRAPHQL_ROOT_TYPE_NAME", "Person")
+# Load centralized configuration from environment
+CONFIG = LIFSchemaConfig.from_environment()
 
-logger.info(f"LIF_QUERY_PLANNER_URL: {LIF_QUERY_PLANNER_URL}")
-logger.info(f"LIF_GRAPHQL_ROOT_TYPE_NAME: {LIF_GRAPHQL_ROOT_TYPE_NAME}")
-logger.info(f"LIF_MDR_API_URL: {os.getenv('LIF_MDR_API_URL')}")
+logger.info(f"LIF_QUERY_PLANNER_URL: {CONFIG.query_planner_base_url}")
+logger.info(f"LIF_GRAPHQL_ROOT_TYPE_NAME: {CONFIG.root_type_name}")
+logger.info(f"LIF_MDR_API_URL: {CONFIG.mdr_api_url}")
 
 
 async def fetch_dynamic_graphql_schema(openapi: dict):
     return await generate_graphql_schema(
         openapi=openapi,
-        root_type_name=LIF_GRAPHQL_ROOT_TYPE_NAME,
-        query_planner_query_url=LIF_QUERY_PLANNER_URL.rstrip("/") + "/query",
-        query_planner_update_url=LIF_QUERY_PLANNER_URL.rstrip("/") + "/update",
+        root_type_name=CONFIG.root_type_name,
+        query_planner_query_url=CONFIG.query_planner_query_url,
+        query_planner_update_url=CONFIG.query_planner_update_url,
     )
 
 

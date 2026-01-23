@@ -31,24 +31,12 @@ query GetPersonByIdentifier($identifier: String!, $identifierType: String!) {
     }
     CourseLearningExperience {
       informationSourceId
-      #AssertedByRefOrganization {
-      #  informationSourceId
-      #  name
-      #  identificationSystem
-      #  organizationType
-      #}
       RefCourse {
         informationSourceId
         informationSourceOrganization
         identifier
         name
       }
-      #OfferedByRefOrganization {
-      #  identificationSystem
-      #  name
-      #  organizationType
-      #  informationSourceId
-      #}
       RefCredentialAward {
         informationSourceId
         informationSourceOrganization

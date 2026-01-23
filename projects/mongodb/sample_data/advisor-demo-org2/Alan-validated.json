@@ -39,6 +39,7 @@
           "name": "Compliance Manager ",
           "RefPosition": {
             "informationSourceId": "Org2",
+            "name": "Compliance Manager Position",
             "informationSourceOrganization": "Community College",
             "identifier": "position-org2-001"
           },
@@ -242,11 +243,120 @@
       "CredentialAward": [
         {
           "identifier": "org2-cred-employment-certificate-001",
-          "name": "Employment Certificate",
           "awardIssueDate": "2024-12-15T10:00:00Z",
           "credentialAwardee": "Alan Tsatrian",
           "informationSourceId": "Org2",
-          "informationSourceOrganization": "Org2"
+          "informationSourceOrganization": "Org2",
+          "instanceOfRefCredential": {
+            "informationSourceId": "Org2",
+            "informationSourceOrganization": "Org2",
+            "identifier": "org2-cred-employment-certificate-001",
+            "name": "Employment Certificate"
+          }
+        }
+      ],
+      "CourseLearningExperience": [
+        {
+          "informationSourceId": "Org2",
+          "informationSourceOrganization": "Community College",
+          "identifier": "courselearningexperience-alan -org2-001",
+          "startDate": "2020-01-15",
+          "endDate": "2020-05-15",
+          "AssertedByRefOrganization": {
+            "informationSourceId": "Org2",
+            "name": "Community College",
+            "identificationSystem": "Community College SIS",
+            "organizationType": [
+              "College"
+            ],
+            "informationSourceOrganization": "Community College",
+            "identifier": "organization-community-college-org2-001"
+          },
+          "RefCourse": {
+            "informationSourceId": "Org2",
+            "informationSourceOrganization": "Community College",
+            "identifier": "BUS101",
+            "name": "Introduction to Business",
+            "Identifier": [
+              {
+                "identifier": "BUS101",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org2"
+              }
+            ]
+          },
+          "OfferedByRefOrganization": {
+            "identificationSystem": "community-college-id",
+            "name": "Community College",
+            "organizationType": [
+              "College"
+            ],
+            "informationSourceId": "Org2",
+            "informationSourceOrganization": "Community College",
+            "identifier": "organization-community-college-org2-001"
+          },
+          "RefCredentialAward": {
+            "informationSourceId": "Org2",
+            "informationSourceOrganization": "Community College",
+            "identifier": "cred-course-completion-001",
+            "name": "Course Completion Certificate",
+            "awardIssueDate": "2020-05-20T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian"
+          }
+        },
+        {
+          "informationSourceId": "Org2",
+          "informationSourceOrganization": "Community College",
+          "identifier": "courselearningexperience-alan -org2-002",
+          "startDate": "2020-08-20",
+          "endDate": "2020-12-15",
+          "AssertedByRefOrganization": {
+            "informationSourceId": "Org2",
+            "name": "Community College",
+            "identificationSystem": "Community College SIS",
+            "organizationType": [
+              "College"
+            ],
+            "informationSourceOrganization": "Community College",
+            "identifier": "organization-community-college-org2-001"
+          },
+          "RefCourse": {
+            "informationSourceId": "Org2",
+            "informationSourceOrganization": "Community College",
+            "identifier": "COM201",
+            "name": "Business Communications",
+            "Identifier": [
+              {
+                "identifier": "COM201",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org2"
+              }
+            ]
+          },
+          "OfferedByRefOrganization": {
+            "identificationSystem": "community-college-id",
+            "name": "Community College",
+            "organizationType": [
+              "College"
+            ],
+            "informationSourceId": "Org2",
+            "informationSourceOrganization": "Community College",
+            "identifier": "organization-community-college-org2-001"
+          },
+          "RefCredentialAward": {
+            "informationSourceId": "Org2",
+            "informationSourceOrganization": "Community College",
+            "identifier": "cred-course-completion-002",
+            "name": "Course Completion Certificate",
+            "awardIssueDate": "2020-12-20T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian"
+          }
         }
       ]
     }
