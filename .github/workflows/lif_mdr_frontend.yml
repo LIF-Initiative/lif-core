@@ -46,7 +46,7 @@ jobs:
       working-directory: ${{ env.WORKING_DIR }}
       run: |
         npm ci
-        echo "VITE_API_URL=https://mdr-api.${{ env.DOMAIN }}" > .env
+        echo "VITE_API_URL=https://mdr-api.${{ env.ENV_NAME }}.${{ env.DOMAIN }}" > .env
         npm run build
 
     - name: Sync to S3

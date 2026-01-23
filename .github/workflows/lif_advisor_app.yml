@@ -31,7 +31,7 @@ jobs:
     env:
       WORKING_DIR: ./frontends/lif_advisor_app
       ECR_REPOSITORY: lif/dev/lif_advisor_app
-      VITE_LIF_ADVISOR_API_URL: 'https://advisor-api.lif.unicon.net'
+      VITE_LIF_ADVISOR_API_URL: 'https://advisor-api.dev.lif.unicon.net'
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
@@ -56,7 +56,7 @@ jobs:
         aws-region: ${{ env.AWS_REGION }}
         ecr-repository: ${{ env.ECR_REPOSITORY }}
         build-args: |
-          LIF_ADVISOR_API_URL=https://advisor-api.lif.unicon.net
+          LIF_ADVISOR_API_URL=https://advisor-api.dev.lif.unicon.net
 
     - name: Update the lif-advisor-app ECS Service
       uses: ./.github/actions/update-cluster
