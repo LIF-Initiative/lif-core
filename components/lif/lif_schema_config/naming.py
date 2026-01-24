@@ -98,9 +98,9 @@ def to_camel_case(s: str) -> str:
         >>> to_camel_case("hello-world")
         'helloWorld'
     """
-    s = re.sub(r"([_\-\s]+)([a-zA-Z])", lambda m: m.group(2).upper(), s)
     if not s:
         return s
+    s = re.sub(r"([_\-\s]+)([a-zA-Z])", lambda m: m.group(2).upper(), s)
     return s[0].lower() + s[1:]
 
 
