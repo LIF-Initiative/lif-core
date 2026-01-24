@@ -59,18 +59,18 @@
       "CourseLearningExperience": [
         {
           "informationSourceId": "Org3",
-          "informationSourceOrganization": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
           "AssertedByRefOrganization": {
             "informationSourceId": "Org3",
             "name": "Summit Valley University",
             "identificationSystem": "Summit Valley University SIS",
             "organizationType": [],
-            "informationSourceOrganization": "Regional University",
+            "informationSourceOrganization": "Summit Valley University",
             "identifier": "organization-summit-valley-university-org3-001"
           },
           "RefCourse": {
             "informationSourceId": "Org3",
-            "informationSourceOrganization": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
             "identifier": "CS651",
             "name": "Computer Science 651",
             "Identifier": [
@@ -91,14 +91,14 @@
               "University"
             ],
             "informationSourceId": "Org3",
-            "informationSourceOrganization": "Regional University",
+            "informationSourceOrganization": "Summit Valley University",
             "identifier": "organization-state-university-org3-001"
           },
           "RefCredentialAward": {
             "informationSourceId": "Org3",
-            "informationSourceOrganization": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
             "identifier": "34024cb4-4a2d-4ed6-ba42-50c65cd688b4",
-            "name": "Credential 401",
+            "name": "Computer Science 651 Course Completion",
             "awardIssueDate": "2021-11-15T20:13:56Z",
             "credentialAwardee": "Renee Green"
           },
@@ -108,13 +108,13 @@
       "CredentialAward": [
         {
           "informationSourceId": "Org3",
-          "informationSourceOrganization": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
           "awardStatus": "InProgress",
           "InstanceOfRefCredential": {
             "informationSourceId": "Org3",
-            "informationSourceOrganization": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
             "identifier": "dbd3c22f-1fd2-4829-b39d-be88d2052ca1",
-            "name": "Credential 400"
+            "name": "Adobe Certified Associate - Visual Design"
           },
           "identifier": "230826f6-7b40-4c79-9589-fb290deea1a3",
           "awardIssueDate": "2022-07-31T13:14:17Z",
@@ -124,12 +124,12 @@
           "awardStatus": "Completed",
           "InstanceOfRefCredential": {
             "informationSourceId": "Org3",
-            "informationSourceOrganization": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
             "identifier": "",
-            "name": "Credential 401"
+            "name": "Visual Design Proficiency Certificate"
           },
           "informationSourceId": "Org3",
-          "informationSourceOrganization": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
           "identifier": "cred-proficiency-certificate-001",
           "awardIssueDate": "2024-12-15T10:00:00Z",
           "credentialAwardee": "Renee Green"
@@ -138,12 +138,12 @@
           "awardStatus": "Completed",
           "InstanceOfRefCredential": {
             "informationSourceId": "Org3",
-            "informationSourceOrganization": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
             "identifier": "",
-            "name": "Credential 402"
+            "name": "Computer Science 651 Course Completion"
           },
           "informationSourceId": "Org3",
-          "informationSourceOrganization": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
           "identifier": "34024cb4-4a2d-4ed6-ba42-50c65cd688b4",
           "awardIssueDate": "2021-11-15T20:13:56Z",
           "credentialAwardee": "Renee Green"
@@ -159,9 +159,9 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
             "informationSourceId": "Org3",
-            "informationSourceOrganization": "Org3"
+            "informationSourceOrganization": "Summit Valley University"
           },
-          "informationSourceOrganization": "Regional University",
+          "informationSourceOrganization": "Summit Valley University",
           "identifier": "proficiency-applies-elements-and-principle-org3-001"
         },
         {
@@ -173,9 +173,9 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
             "informationSourceId": "Org3",
-            "informationSourceOrganization": "Org3"
+            "informationSourceOrganization": "Summit Valley University"
           },
-          "informationSourceOrganization": "Regional University",
+          "informationSourceOrganization": "Summit Valley University",
           "identifier": "proficiency-utilizes-color-theory-org3-002"
         },
         {
@@ -187,9 +187,9 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
             "informationSourceId": "Org3",
-            "informationSourceOrganization": "Org3"
+            "informationSourceOrganization": "Summit Valley University"
           },
-          "informationSourceOrganization": "Regional University",
+          "informationSourceOrganization": "Summit Valley University",
           "identifier": "proficiency-applies-typography-principles-org3-003"
         },
         {
@@ -201,9 +201,9 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
             "informationSourceId": "Org3",
-            "informationSourceOrganization": "Org3"
+            "informationSourceOrganization": "Summit Valley University"
           },
-          "informationSourceOrganization": "Regional University",
+          "informationSourceOrganization": "Summit Valley University",
           "identifier": "proficiency-creates-layouts-for-print-and--org3-004"
         },
         {
@@ -215,9 +215,9 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
             "informationSourceId": "Org3",
-            "informationSourceOrganization": "Org3"
+            "informationSourceOrganization": "Summit Valley University"
           },
-          "informationSourceOrganization": "Regional University",
+          "informationSourceOrganization": "Summit Valley University",
           "identifier": "proficiency-employs-design-thinking-proces-org3-005"
         },
         {
@@ -229,9 +229,9 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
             "informationSourceId": "Org3",
-            "informationSourceOrganization": "Org3"
+            "informationSourceOrganization": "Summit Valley University"
           },
-          "informationSourceOrganization": "Regional University",
+          "informationSourceOrganization": "Summit Valley University",
           "identifier": "proficiency-uses-industry-standard-design--org3-006"
         }
       ],
