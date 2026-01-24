@@ -18,7 +18,7 @@ Tests are organized by layer:
 
 ## Prerequisites
 
-1. Docker environment running with `docker-compose up` from `development/advisor-demo-3orgs/`
+1. Docker environment running with `docker-compose up` from `deployments/advisor-demo-docker/`
 2. Sample data seeded in MongoDB (automatic when containers start)
 3. Python dependencies:
    ```bash
