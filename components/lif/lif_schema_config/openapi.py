@@ -65,6 +65,16 @@ DEFAULT_ATTRIBUTE_KEYS: List[str] = [
 ]
 
 
+def _get_nested(doc: Dict[str, Any], path: List[str]) -> Optional[Dict[str, Any]]:
+    """Traverse a nested dict by path, returning None if any key is missing."""
+    node = doc
+    for key in path:
+        if not isinstance(node, dict) or key not in node:
+            return None
+        node = node[key]
+    return node
+
+
 def get_schemas(openapi_doc: Dict[str, Any]) -> Dict[str, Any]:
     """
     Extract schemas from an OpenAPI document.
@@ -81,12 +91,14 @@ def get_schemas(openapi_doc: Dict[str, Any]) -> Dict[str, Any]:
         ValueError: If no schemas found in document
     """
     # Try OpenAPI 3.x path first
-    if "components" in openapi_doc and "schemas" in openapi_doc["components"]:
-        return openapi_doc["components"]["schemas"]
+    schemas = _get_nested(openapi_doc, OpenAPIPaths.SCHEMAS_PATH)
+    if schemas is not None:
+        return schemas
 
     # Fall back to Swagger 2.x path
-    if "definitions" in openapi_doc:
-        return openapi_doc["definitions"]
+    schemas = _get_nested(openapi_doc, OpenAPIPaths.DEFINITIONS_PATH)
+    if schemas is not None:
+        return schemas
 
     raise ValueError("No schemas found in OpenAPI document (checked components/schemas and definitions)")
 
