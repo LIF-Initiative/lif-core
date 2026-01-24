@@ -50,7 +50,7 @@ def adjust_fragment_path_for_root_person_list(fragment_path: str) -> str:
         return "person.0" + fragment_path[6::]
     elif fragment_path.startswith("Person."):
         # Convert PascalCase to lowercase for internal navigation
-        return "person.0." + fragment_path[7:]
+        return "person.0" + fragment_path[6:]
     else:
         return fragment_path
 
