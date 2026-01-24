@@ -18,15 +18,15 @@ import re
 from typing import Optional
 
 
-def to_graphql_query_name(schema_name: str) -> str:
+def to_graphql_query_name(schema_name: Optional[str]) -> Optional[str]:
     """
     Convert schema entity name to GraphQL query field name.
 
     Args:
-        schema_name: PascalCase entity name (e.g., "Person", "Course")
+        schema_name: PascalCase entity name (e.g., "Person", "Course"), or None
 
     Returns:
-        camelCase query name (e.g., "person", "course")
+        camelCase query name (e.g., "person", "course"), or None if input is None/empty
 
     Example:
         >>> to_graphql_query_name("Person")
@@ -39,15 +39,15 @@ def to_graphql_query_name(schema_name: str) -> str:
     return schema_name[0].lower() + schema_name[1:]
 
 
-def to_schema_name(graphql_name: str) -> str:
+def to_schema_name(graphql_name: Optional[str]) -> Optional[str]:
     """
     Convert GraphQL query name back to schema entity name.
 
     Args:
-        graphql_name: camelCase query name (e.g., "person", "course")
+        graphql_name: camelCase query name (e.g., "person", "course"), or None
 
     Returns:
-        PascalCase entity name (e.g., "Person", "Course")
+        PascalCase entity name (e.g., "Person", "Course"), or None if input is None/empty
 
     Example:
         >>> to_schema_name("person")
@@ -80,17 +80,17 @@ def to_mutation_name(schema_name: str, action: str = "update") -> str:
     return f"{action}{schema_name}"
 
 
-def to_camel_case(s: str) -> str:
+def to_camel_case(s: Optional[str]) -> Optional[str]:
     """
     Convert a string to camelCase.
 
     Handles snake_case, kebab-case, and space-separated strings.
 
     Args:
-        s: Input string
+        s: Input string, or None
 
     Returns:
-        camelCase string
+        camelCase string, or None if input is None/empty
 
     Example:
         >>> to_camel_case("hello_world")
