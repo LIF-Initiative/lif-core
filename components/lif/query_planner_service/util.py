@@ -19,7 +19,9 @@ logger = get_logger(__name__)
 PERSON_DOT: str = "person."
 PERSON_DOT_PASCAL: str = "Person."
 PERSON_DOT_ALL: str = "person.all"
-PERSON_DOT_ZERO = "person.0"
+PERSON_DOT_ZERO: str = "person.0"
+PERSON_DOT_PASCAL_ZERO: str = "Person.0"
+PERSON_KEY_PASCAL: str = "Person"
 PERSON_JSON_PATH_PREFIX: str = "$.person[0]."
 
 PERSON_DOT_LENGTH: int = len(PERSON_DOT)
