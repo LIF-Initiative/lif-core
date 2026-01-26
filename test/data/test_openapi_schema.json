@@ -1,0 +1,71 @@
+{
+  "openapi": "3.0.0",
+  "info": {"title": "Test", "version": "1.0"},
+  "paths": {},
+  "components": {
+    "schemas": {
+      "Person": {
+        "type": "object",
+        "properties": {
+          "Identifier": {
+            "type": "array",
+            "properties": {
+              "identifier": {
+                "type": "string",
+                "description": "A number and/or alphanumeric code used to uniquely identify the entity",
+                "x-queryable": true
+              },
+              "identifierType": {
+                "type": "string",
+                "description": "The types of sources of identifiers used to uniquely identify the entity",
+                "x-queryable": true
+              }
+            }
+          },
+          "Name": {
+            "type": "array",
+            "properties": {
+              "firstName": {
+                "type": "string",
+                "description": "The first name of a person or individual",
+                "x-mutable": false
+              },
+              "lastName": {
+                "type": "string", 
+                "description": "The last name of a person or individual",
+                "x-mutable": false
+              }
+            }
+          },
+          "Proficiency": {
+            "type": "array",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Name of the proficiency"
+              },
+              "description": {
+                "type": "string",
+                "description": "Description of the proficiency"
+              }
+            }
+          },
+          "Contact": {
+            "type": "array",
+            "properties": {
+              "Email": {
+                "type": "array",
+                "properties": {
+                  "emailAddress": {
+                    "type": "string",
+                    "description": "The electronic mail address of an individual or person"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
