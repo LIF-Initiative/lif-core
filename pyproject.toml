@@ -111,6 +111,8 @@ dev-dependencies = ["polylith-cli"]
 "components/lif/translator" = "lif/translator"
 "components/lif/mdr_utils" = "lif/mdr_utils"
 "components/lif/mdr_dto" = "lif/mdr_dto"
+"components/lif/schema" = "lif/schema"
+"components/lif/dynamic_models" = "lif/dynamic_models"
 
 [tool.ruff]
 line-length = 120
