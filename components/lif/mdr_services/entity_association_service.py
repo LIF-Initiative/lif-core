@@ -1,4 +1,5 @@
 from typing import List, Optional
+
 from fastapi import HTTPException
 from lif.datatypes.mdr_sql_model import DataModel, DataModelType, Entity, EntityAssociation, ExtInclusionsFromBaseDM
 from lif.mdr_dto.entity_association_dto import (
@@ -11,9 +12,8 @@ from lif.mdr_services.entity_service import get_entity_by_id
 from lif.mdr_services.helper_service import check_datamodel_by_id, check_entity_by_id
 from lif.mdr_utils.logger_config import get_logger
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlmodel import or_, select
 from sqlalchemy.orm import aliased
-
+from sqlmodel import or_, select
 
 logger = get_logger(__name__)
 
@@ -61,6 +61,20 @@ async def check_existing_association(
     return result.scalar_one_or_none() is not None
 
 
+async def check_entity_association_strict(
+    session: AsyncSession, parent_entity_id: int, child_entity_id: int, extended_by_data_model_id: int | None
+) -> bool:
+    query = select(EntityAssociation).where(
+        EntityAssociation.ParentEntityId == parent_entity_id,
+        EntityAssociation.ChildEntityId == child_entity_id,
+        EntityAssociation.Deleted == False,
+        EntityAssociation.ExtendedByDataModelId == extended_by_data_model_id,
+    )
+    result = await session.execute(query)
+    return result.scalar_one_or_none() is not None
+
+
+# TODO: Should any of this go into check_transformation_attribute()?
 async def validate_entity_associations_for_transformation_attribute(
     session: AsyncSession, transformation_attribute: TransformationAttributeDTO
 ) -> bool:

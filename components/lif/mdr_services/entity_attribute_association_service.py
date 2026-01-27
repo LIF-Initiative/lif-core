@@ -1,6 +1,6 @@
 from typing import List, Optional, Tuple
+
 from fastapi import HTTPException
-from sqlalchemy import Select, func, or_, select
 from lif.datatypes.mdr_sql_model import (
     Attribute,
     DataModelType,
@@ -15,6 +15,7 @@ from lif.mdr_dto.entity_attribute_association_dto import (
 )
 from lif.mdr_services.helper_service import check_attribute_by_id, check_datamodel_by_id, check_entity_by_id
 from lif.mdr_utils.logger_config import get_logger
+from sqlalchemy import Select, func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 logger = get_logger(__name__)
@@ -36,6 +37,19 @@ async def check_existing_association(
             EntityAttributeAssociation.ExtendedByDataModelId == None,
             EntityAttributeAssociation.ExtendedByDataModelId == extended_by_data_model_id,
         ),
+    )
+    result = await session.execute(query)
+    return result.scalar_one_or_none() is not None
+
+
+async def check_entity_attribute_association_strict(
+    session: AsyncSession, entity_id: int, attribute_id: int, extended_by_data_model_id: int | None
+) -> bool:
+    query = select(EntityAttributeAssociation).where(
+        EntityAttributeAssociation.EntityId == entity_id,
+        EntityAttributeAssociation.AttributeId == attribute_id,
+        EntityAttributeAssociation.Deleted == False,
+        EntityAttributeAssociation.ExtendedByDataModelId == extended_by_data_model_id,
     )
     result = await session.execute(query)
     return result.scalar_one_or_none() is not None

@@ -1,7 +1,10 @@
 from typing import Dict, List
+
 from fastapi import HTTPException
 from lif.datatypes.mdr_sql_model import (
     DataModel,
+    DatamodelElementType,
+    DataModelType,
     EntityAttributeAssociation,
     Transformation,
     TransformationAttribute,
@@ -17,24 +20,29 @@ from lif.mdr_dto.transformation_dto import (
     UpdateTransformationDTO,
 )
 from lif.mdr_dto.transformation_group_dto import (
-    TransformationGroupDTO,
     CreateTransformationGroupDTO,
+    TransformationGroupDTO,
     UpdateTransformationGroupDTO,
 )
 from lif.mdr_services.attribute_service import get_attribute_dto_by_id
-from lif.mdr_services.entity_association_service import validate_entity_associations_for_transformation_attribute
+from lif.mdr_services.entity_association_service import (
+    check_entity_association_strict,
+    validate_entity_associations_for_transformation_attribute,
+)
+from lif.mdr_services.entity_attribute_association_service import check_entity_attribute_association_strict
 from lif.mdr_services.entity_service import is_entity_by_unique_name
 from lif.mdr_services.helper_service import (
     check_attribute_by_id,
+    check_datamodel_by_id,
     check_entity_attribute_association,
     check_entity_by_id,
-    check_datamodel_by_id,
 )
+from lif.mdr_services.inclusions_service import check_existing_inclusion
 from lif.mdr_utils.logger_config import get_logger
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlmodel import select, func
-from sqlalchemy.orm import aliased
 from sqlalchemy import and_
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import aliased
+from sqlmodel import func, select
 
 logger = get_logger(__name__)
 
@@ -55,6 +63,103 @@ async def validate_entity_id_path(session: AsyncSession, transformation_attribut
             status_code=400,
             detail=f"EntityIdPath '{transformation_attribute.EntityIdPath}' is not valid for the provided EntityId {transformation_attribute.EntityId}. It must either correspond to an Entity with that UniqueName or a valid chain of EntityAssociations by entity name.",
         )
+
+
+def parse_transformation_path(id_path: str) -> List[int]:
+    """
+    Parses IDs from a transformation path string into a list of IDs which represent entity or attribute IDs, which is which is not known at this stage.
+
+    All IDs in the path are expected to be integers.
+
+    :param id_path:
+        Format is `id1,id2,...,idN`
+    :type id_path: str
+    :return: A list of entity (or attribute) IDs.
+    """
+    if not id_path:
+        msg = "Invalid EntityIdPath format. The path must not be empty."
+        logger.error(msg)
+        raise HTTPException(status_code=400, detail=msg)
+
+    ids = []
+    for id_str in id_path.split(","):
+        try:
+            id = int(id_str)
+            ids.append(id)
+        except ValueError:
+            logger.error(
+                f"Invalid EntityIdPath format: '{id_path}'. IDs must be in the format 'id1,id2,...,idN' and all IDs must be integers."
+            )
+            raise HTTPException(
+                status_code=400,
+                detail="Invalid EntityIdPath format. IDs must be in the format 'id1,id2,...,idN' and all IDs must be integers.",
+            )
+
+    if len(ids) < 2:
+        logger.error(f"Invalid EntityIdPath format: '{id_path}'. The path must contain at least two IDs.")
+        raise HTTPException(
+            status_code=400, detail="Invalid EntityIdPath format. The path must contain at least two IDs."
+        )
+
+    return ids
+
+
+async def check_transformation_attribute(session: AsyncSession, anchor_data_model: DataModel, id_path: str):
+    """
+    Confirms the provided ID path is valid for the given transformation attribute.
+
+    :param session: DB session
+    :param anchor_data_model_id: Data Model ID for the anchor of this transformation attribute. Should be either the source or target data model for the transformation group.
+    :param id_path: ID path representing the chain of entity IDs with the final ID being an attribute ID.
+    :return: The attribute object if validation is successful:
+    - The path must not be empty and must be in the correct format
+    - The path must start with a non-deleted entity, and only contain non-deleted entities, up until the last element, which is a non-deleted attribute.
+    - Entities and attributes must 'chain' together via the association tables. This is different based on the type of the anchor Data Model:
+        - Base LIF && Source Schema: The extended-by-data-model-id in the association tables will be Null
+        - Org LIF & Partner LIF: The extended-by-data-model-id in the association tables will be the anchor Data Model ID
+    """
+    transformation_path_ids = parse_transformation_path(id_path)
+    previous_id = None
+    for i, node_id in enumerate(transformation_path_ids):
+        logger.debug(
+            f"Checking EntityIdPath ID {i}: AnchorDataModelId={anchor_data_model.Id}, EntityOrAttributeId={node_id}"
+        )
+
+        is_self_contained_model = anchor_data_model.Type in [DataModelType.BaseLIF, DataModelType.SourceSchema]
+        extended_by_data_model_id = None if is_self_contained_model else anchor_data_model.Id
+
+        if i == 0:
+            # Ensure the first ID (which is an entity) originated on the anchor_data_model
+            entity = await check_entity_by_id(session=session, id=node_id)
+            if anchor_data_model.Id != entity.DataModelId:
+                # The entity did not originate in the anchor data model nor was included in it
+                logger.info(
+                    f"Entity (ID = {node_id}) in the entityIdPath {id_path} did not originate in the anchor data model (ID = {anchor_data_model.Id}). Checking for inclusion."
+                )
+
+                # If the entity is not included in the anchor data model, this check will raise an exception
+                await check_existing_inclusion(
+                    session=session,
+                    type=DatamodelElementType.Entity,
+                    node_id=node_id,
+                    included_by_data_model_id=anchor_data_model.Id,
+                )
+        elif i != len(transformation_path_ids) - 1:
+            # Not the first or last pair; must be an entity
+            await check_entity_by_id(session=session, id=node_id)
+            await check_entity_association_strict(
+                session=session,
+                parent_entity_id=previous_id,
+                child_entity_id=node_id,
+                extended_by_data_model_id=extended_by_data_model_id,
+            )
+        else:
+            # Ensure the last pair is an active attribute and properly associated to the last entity
+            await check_attribute_by_id(session=session, id=node_id)
+            await check_entity_attribute_association_strict(
+                session=session, entity_id=previous_id, attribute_id=node_id, extended_by_data_model_id=None
+            )
+        previous_id = node_id
 
 
 async def create_transformation(session: AsyncSession, data: CreateTransformationDTO):
@@ -161,6 +266,100 @@ async def create_transformation(session: AsyncSession, data: CreateTransformatio
     )
 
 
+# Once the UX is in place, fold these changes for entityIdPath into the
+# create_transformation method, and remove the following.
+async def create_transformation_with_portable_entity_id_path(session: AsyncSession, data: CreateTransformationDTO):
+    # Checking if transformation group exists
+    transformation_group = await get_transformation_group_by_id(session=session, id=data.TransformationGroupId)
+
+    # Validate source attributes
+    source_anchor_data_model = await check_datamodel_by_id(session=session, id=transformation_group.SourceDataModelId)
+    for attribute in data.SourceAttributes:
+        await check_transformation_attribute(
+            session=session, anchor_data_model=source_anchor_data_model, id_path=attribute.EntityIdPath
+        )
+
+    # Validate target attribute
+    target_anchor_data_model = await check_datamodel_by_id(session=session, id=transformation_group.TargetDataModelId)
+    await check_transformation_attribute(
+        session=session, anchor_data_model=target_anchor_data_model, id_path=data.TargetAttribute.EntityIdPath
+    )
+
+    # Step 1: Create the Transformation
+    transformation = Transformation(
+        TransformationGroupId=data.TransformationGroupId,
+        Name=data.Name,
+        Expression=data.Expression,
+        ExpressionLanguage=data.ExpressionLanguage,
+        Notes=data.Notes,
+        Alignment=data.Alignment,
+        CreationDate=data.CreationDate,
+        ActivationDate=data.ActivationDate,
+        DeprecationDate=data.DeprecationDate,
+        Contributor=data.Contributor,
+        ContributorOrganization=data.ContributorOrganization,
+    )
+    session.add(transformation)
+    await session.commit()
+    await session.refresh(transformation)
+
+    # Step 2: Create TransformationAttributes (Source and Target)
+    source_attributes = []
+    for attribute in data.SourceAttributes:
+        source_attribute = TransformationAttribute(
+            TransformationId=transformation.Id,
+            # Last ID in the path is attribute ID. Not strictly needed, but not changing the DDL (Not Null > Null) for now.
+            AttributeId=int(attribute.EntityIdPath.split(",")[-1]),
+            EntityId=attribute.EntityId,
+            AttributeType="Source",
+            Notes=attribute.Notes,
+            CreationDate=attribute.CreationDate,
+            ActivationDate=attribute.ActivationDate,
+            DeprecationDate=attribute.DeprecationDate,
+            Contributor=attribute.Contributor,
+            ContributorOrganization=attribute.ContributorOrganization,
+            EntityIdPath=attribute.EntityIdPath,
+        )
+        source_attributes.append(TransformationAttributeDTO.from_orm(source_attribute))
+        session.add(source_attribute)
+
+    target_attribute = TransformationAttribute(
+        TransformationId=transformation.Id,
+        # Last ID in the path is attribute ID. Not strictly needed, but not changing the DDL (Not Null > Null) for now.
+        AttributeId=int(data.TargetAttribute.EntityIdPath.split(",")[-1]),
+        EntityId=data.TargetAttribute.EntityId,
+        AttributeType="Target",
+        Notes=data.TargetAttribute.Notes,
+        CreationDate=data.TargetAttribute.CreationDate,
+        ActivationDate=data.TargetAttribute.ActivationDate,
+        DeprecationDate=data.TargetAttribute.DeprecationDate,
+        Contributor=data.TargetAttribute.Contributor,
+        ContributorOrganization=data.TargetAttribute.ContributorOrganization,
+        EntityIdPath=data.TargetAttribute.EntityIdPath,
+    )
+
+    session.add(target_attribute)
+    await session.commit()
+
+    # Step 3: Return the newly created TransformationDTO
+    return TransformationDTO(
+        Id=transformation.Id,
+        TransformationGroupId=transformation.TransformationGroupId,
+        Name=transformation.Name,
+        ExpressionLanguage=transformation.ExpressionLanguage,
+        Expression=transformation.Expression,
+        Notes=transformation.Notes,
+        Alignment=transformation.Alignment,
+        CreationDate=transformation.CreationDate,
+        ActivationDate=transformation.ActivationDate,
+        DeprecationDate=transformation.DeprecationDate,
+        Contributor=transformation.Contributor,
+        ContributorOrganization=transformation.ContributorOrganization,
+        SourceAttributes=source_attributes,
+        TargetAttribute=TransformationAttributeDTO.from_orm(target_attribute),
+    )
+
+
 async def get_transformation_by_id(session: AsyncSession, transformation_id: int) -> dict:
     # Get the transformation
     transformation = await session.get(Transformation, transformation_id)
@@ -226,6 +425,7 @@ async def get_transformation_by_id(session: AsyncSession, transformation_id: int
     return transformation_dto
 
 
+# TODO: Check attribute paths!
 async def update_transformation(session: AsyncSession, transformation_id: int, data: UpdateTransformationDTO) -> dict:
     # Validate transformation
     transformation = await session.get(Transformation, transformation_id)
