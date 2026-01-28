@@ -1,48 +1,66 @@
 """
-ASGI application generator for OpenAPI-to-GraphQL.
+ASGI application generator for LIF GraphQL.
 
-Converts OpenAPI schema definitions to a Strawberry GraphQL API dynamically.
-Generates Python types, input filters, enums, and root query objects from OpenAPI JSON schemas.
+This base wires environment configuration, constructs the HTTP backend,
+builds the GraphQL schema via the `lif.graphql.schema_factory`, and mounts
+the GraphQL endpoint using Strawberry's FastAPI router.
 """
 
+from __future__ import annotations
+
 import os
-from contextlib import asynccontextmanager
-from typing import AsyncGenerator
+from pathlib import Path
+
 from fastapi import FastAPI
 from strawberry.fastapi import GraphQLRouter
 
-from lif.logging import get_logger
-from lif.mdr_client import get_openapi_lif_data_model
-from lif.openapi_to_graphql.core import generate_graphql_schema
+from lif.graphql.core import HttpBackend
+from lif.graphql.schema_factory import build_schema
+from lif.logging.core import get_logger
+from lif.openapi_schema.core import get_schema_fields
+from lif.utils.core import get_required_env_var
+from lif.utils.validation import is_truthy
 
 logger = get_logger(__name__)
 
-
-LIF_QUERY_PLANNER_URL = os.getenv("LIF_QUERY_PLANNER_URL", "http://localhost:8002")
-LIF_GRAPHQL_ROOT_TYPE_NAME = os.getenv("LIF_GRAPHQL_ROOT_TYPE_NAME", "Person")
-
-logger.info(f"LIF_QUERY_PLANNER_URL: {LIF_QUERY_PLANNER_URL}")
-logger.info(f"LIF_GRAPHQL_ROOT_TYPE_NAME: {LIF_GRAPHQL_ROOT_TYPE_NAME}")
-logger.info(f"LIF_MDR_API_URL: {os.getenv('LIF_MDR_API_URL')}")
+# Environment variable validation at import time
+LIF_QUERY_PLANNER_URL = get_required_env_var("LIF_QUERY_PLANNER_URL")
 
 
-async def fetch_dynamic_graphql_schema(openapi: dict):
-    return await generate_graphql_schema(
-        openapi=openapi,
-        root_type_name=LIF_GRAPHQL_ROOT_TYPE_NAME,
-        query_planner_query_url=LIF_QUERY_PLANNER_URL.rstrip("/") + "/query",
-        query_planner_update_url=LIF_QUERY_PLANNER_URL.rstrip("/") + "/update",
-    )
+def create_app() -> FastAPI:
+	# Ensure process cwd is the project root so Rich/Strawberry can compute relative paths
+	try:
+		project_root = Path(__file__).resolve().parents[4]  # lif-main
+		os.chdir(project_root)
+		logger.debug(f"Set working directory to project root: {project_root}")
+	except Exception:
+		logger.debug("Could not change working directory to project root", exc_info=True)
 
+	root_type = os.getenv("LIF_GRAPHQL_ROOT_TYPE_NAME", "Person")
 
-@asynccontextmanager
-async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
-    openapi = await get_openapi_lif_data_model()
-    schema = await fetch_dynamic_graphql_schema(openapi=openapi)
-    logger.info("GraphQL schema successfully created")
-    app.include_router(GraphQLRouter(schema, prefix="/graphql"))
-    logger.info("GraphQL router successfully created and included in FastAPI app")
-    yield
+	# TODO: The graphql api should only contact the query planner and not the query cache directly
+	# HTTP-only backend configuration
 
+	# Back-compat fallback from planner URL if provided
+	base_url = LIF_QUERY_PLANNER_URL.rstrip("/")
+	query_url = f"{base_url}/query"
+	update_url = f"{base_url}/update"
 
-app = FastAPI(lifespan=lifespan)
+	logger.info(f"GraphQL root type: {root_type}")
+	logger.info(f"Query URL: {query_url}")
+	logger.info(f"Update URL: {update_url}")
+
+	backend = HttpBackend(query_url=query_url, update_url=update_url)
+	fields = get_schema_fields()
+	schema = build_schema(schema_fields=fields, root_node=root_type, backend=backend)
+
+	# Optional schema artifact dumping for tooling
+	if is_truthy(os.getenv("LIF_GRAPHQL_DUMP_SCHEMA")):
+		out_dir = Path(__file__).parent / "_artifacts"
+		out_dir.mkdir(parents=True, exist_ok=True)
+		(out_dir / "schema.graphql").write_text(schema.as_str(), encoding="utf-8")
+		logger.info(f"Wrote schema to {out_dir / 'schema.graphql'}")
+
+	app = FastAPI()
+	app.include_router(GraphQLRouter(schema), prefix="/graphql")
+	return app
