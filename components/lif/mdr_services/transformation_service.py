@@ -119,10 +119,11 @@ async def check_transformation_node_grounded_in_data_model(
     Args:
         session (AsyncSession): DB session
         anchor_data_model_id (int): Data Model ID for the anchor of this transformation attribute. Should be either the source or target data model for the transformation group.
-        raw_node_id (int): ID of the node to check. A negative ID indicate an attribute.
+        raw_node_id (int): ID of the node to check. A negative ID indicates an attribute.
         id_path (str): ID path representing the chain of entity/attribute IDs with the final ID being an attribute ID IF it's a negative value.
         fail_if_origin_data_model_is_not_the_anchor (bool): If True, raises an exception if the node does not originate in the anchor data model.
         is_last_node (bool): Whether this node is the last node in the path
+        is_self_contained_anchor_model (bool): Whether the anchor data model can have associations with other data models (Base LIF or Source Schema)
 
     Returns:
         DatamodelElementType: The type of the node (Entity or Attribute)
@@ -159,7 +160,7 @@ async def check_transformation_node_grounded_in_data_model(
             f"{signature} did not originate in the anchor data model {anchor_data_model_id}. Checking for inclusion."
         )
 
-        # Only will be checked for Org LIF and Partner LIF anchor data models
+        # Will only be checked for Org LIF and Partner LIF anchor data models
         await check_existing_inclusion(
             session=session, type=node_type, node_id=cleaned_node_id, included_by_data_model_id=anchor_data_model_id
         )
@@ -176,12 +177,12 @@ async def check_transformation_attribute(session: AsyncSession, anchor_data_mode
     Confirms the provided ID path is valid for the given transformation attribute.
 
     :param session: DB session
-    :param anchor_data_model_id: Data model ID for the anchor of this transformation attribute. Should be either the source or target data model for the transformation group.
+    :param anchor_data_model: Data model for the anchor of this transformation attribute. Should be either the source or target data model for the transformation group.
     :param id_path: ID path representing the chain of entity IDs with the final ID possibly being an attribute ID (which is marked as such by a negative sign).
 
     - The path must be in the correct format and contain at least one ID.
     - The path may end with a non-deleted attribute, and the rest be non-deleted entities.
-    - Entities and attributes must belong to (Entity/Attribute.DataModelId) or be included in (ExtInclusionFromBaseDM.ExtDataModelId) the anchor data model.
+    - Entities and attributes via (Entity/Attribute.DataModelId) must belong to the anchor data model or be included in (ExtInclusionFromBaseDM.ExtDataModelId).
     - Entities and attributes must 'chain' together via the association tables. This is different based on the type of the anchor Data Model:
         - Base LIF && Source Schema: The ExtendedByDataModelId in the association tables will be Null
         - Org LIF & Partner LIF: The ExtendedByDataModelId in the association tables will be:
@@ -431,7 +432,13 @@ async def get_transformation_by_id(session: AsyncSession, transformation_id: int
 async def update_transformation(session: AsyncSession, transformation_id: int, data: UpdateTransformationDTO) -> dict:
     # Once the UX is in place, only keep the `is_entity_id_path_v2` code flows
     is_entity_id_path_v2 = (
-        True if data.TargetAttribute and data.TargetAttribute.EntityIdPath.__contains__(",") else False
+        True
+        if data.TargetAttribute
+        and (
+            data.TargetAttribute.EntityIdPath.__contains__(",")
+            or data.TargetAttribute.EntityIdPath.lstrip("-").isdigit()
+        )
+        else False
     )
     logger.info(f"Updating transformation; is_entity_id_path_v2={is_entity_id_path_v2}")
 
