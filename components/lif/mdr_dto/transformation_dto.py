@@ -1,8 +1,8 @@
-from pydantic import BaseModel
-from typing import List, Optional
 from datetime import datetime
+from typing import List, Optional
 
 from lif.datatypes.mdr_sql_model import ExpressionLanguageType
+from pydantic import BaseModel
 
 
 class TransformationAttributeDTO(BaseModel):
@@ -24,7 +24,7 @@ class TransformationAttributeDTO(BaseModel):
 
 
 class CreateTransformationAttributeDTO(BaseModel):
-    AttributeId: int
+    AttributeId: Optional[int] = None  # No longer used
     EntityId: Optional[int] = None  # Existing column
     # AttributeName: Optional[str] = None
     # EntityName: Optional[str] = None

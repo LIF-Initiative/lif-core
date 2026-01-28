@@ -1,9 +1,54 @@
+import copy
 from pathlib import Path
-from typing import Tuple
+from typing import Optional, Tuple
 
+from deepdiff import DeepDiff
 from httpx import AsyncClient
 
 HEADER_MDR_API_KEY_GRAPHQL = {"X-API-Key": "changeme1"}
+
+
+def find_object_property_by_unique_name(schema: dict, unique_name: str, property_name: str) -> str | None:
+    """
+    Recursively search for an object with the given UniqueName.
+
+    Returns:
+        The object dictionary if found, None otherwise
+    """
+
+    for _, value in schema.items():
+        if isinstance(value, dict):
+            # Check if this dict has the matching UniqueName
+            if value.get("UniqueName") == unique_name:
+                if property_name in value:
+                    return value[property_name]
+                else:
+                    # Found the object but the property doesn't exist
+                    raise AssertionError(
+                        f"Property '{property_name}' not found in object with UniqueName '{unique_name}'. Object: {value}"
+                    )
+
+            # Recursively search this dict
+            result = find_object_property_by_unique_name(value, unique_name, property_name)
+            if result is not None:
+                return result
+
+    # Return None if not found (let caller decide to assert)
+    return None
+
+
+def convert_unique_names_to_id_path(schema: dict, unique_names: list[str], ends_in_an_attribute: bool) -> str:
+    assert len(unique_names) > 0, "unique_names list must not be empty"
+    sub_schema = schema.get("components", {}).get("schemas", None)
+    assert sub_schema is not None, f"Could not find components.schemas in schema: {schema}"
+    id_path_list = []
+    for unique_name in unique_names:
+        object_id = find_object_property_by_unique_name(sub_schema, unique_name, "Id")
+        assert object_id is not None, f"Could not find object ID for UniqueName '{unique_name}' in schema: {sub_schema}"
+        id_path_list.append(str(object_id))
+    if ends_in_an_attribute:
+        id_path_list[-1] = str(int(id_path_list[-1]) * -1)  # Mark the last ID as an attribute (a negative id)
+    return ",".join(id_path_list)
 
 
 async def create_data_model_by_upload(
@@ -132,6 +177,8 @@ async def create_transformation(
     mapping_expression: str,  # '{ "User": { "Skills": { "Genre": Person.Courses.Grade } } }'
     transformation_name: str,  # "User.Skills.Genre",
     headers: dict = HEADER_MDR_API_KEY_GRAPHQL,
+    expected_status_code: int = 201,
+    expected_response: Optional[dict] = None,
 ) -> str:
     """
     Helper function to create a transform between a single source attribute and a target attribute
@@ -178,50 +225,99 @@ async def create_transformation(
     )
 
     # Confirm transform response and gather ID
-
-    assert response.status_code == 201, str(response.text) + str(response.headers)
-    transformation_id = response.json()["Id"]
-    assert response.json() == {
-        "Id": transformation_id,
-        "TransformationGroupId": transformation_group_id,
-        "Name": transformation_name,
-        "Expression": mapping_expression,
-        "ExpressionLanguage": "JSONata",
-        "Notes": None,
-        "Alignment": None,
-        "CreationDate": None,
-        "ActivationDate": None,
-        "DeprecationDate": None,
-        "Contributor": None,
-        "ContributorOrganization": None,
-        "SourceAttributes": [
+    response_json = response.json()
+    if expected_status_code == 201:
+        assert response.status_code == 201, str(response.text) + str(response.headers)
+        transformation_id = response_json["Id"]
+        diff = DeepDiff(
+            response_json,
             {
-                "AttributeId": source_attribute_id,
-                "EntityId": source_parent_entity_id,
-                "AttributeName": None,
-                "AttributeType": "Source",
+                "Id": transformation_id,
+                "TransformationGroupId": transformation_group_id,
+                "Name": transformation_name,
+                "Expression": mapping_expression,
+                "ExpressionLanguage": "JSONata",
                 "Notes": None,
+                "Alignment": None,
                 "CreationDate": None,
                 "ActivationDate": None,
                 "DeprecationDate": None,
                 "Contributor": None,
                 "ContributorOrganization": None,
-                "EntityIdPath": source_entity_path,
-            }
-        ],
-        "TargetAttribute": {
-            "AttributeId": target_attribute_id,
-            "EntityId": target_parent_entity_id,
-            "AttributeName": None,
-            "AttributeType": "Target",
-            "Notes": None,
-            "CreationDate": None,
-            "ActivationDate": None,
-            "DeprecationDate": None,
-            "Contributor": None,
-            "ContributorOrganization": None,
-            "EntityIdPath": target_entity_path,
-        },
-    }
+                "SourceAttributes": [
+                    {
+                        "AttributeId": source_attribute_id,
+                        "EntityId": source_parent_entity_id,
+                        "AttributeName": None,
+                        "AttributeType": "Source",
+                        "Notes": None,
+                        "CreationDate": None,
+                        "ActivationDate": None,
+                        "DeprecationDate": None,
+                        "Contributor": None,
+                        "ContributorOrganization": None,
+                        "EntityIdPath": source_entity_path,
+                    }
+                ],
+                "TargetAttribute": {
+                    "AttributeId": target_attribute_id,
+                    "EntityId": target_parent_entity_id,
+                    "AttributeName": None,
+                    "AttributeType": "Target",
+                    "Notes": None,
+                    "CreationDate": None,
+                    "ActivationDate": None,
+                    "DeprecationDate": None,
+                    "Contributor": None,
+                    "ContributorOrganization": None,
+                    "EntityIdPath": target_entity_path,
+                },
+            },
+        )
+        assert diff == {}, diff
+        return response_json
+    else:
+        assert response.status_code == expected_status_code, str(response.text) + str(response.headers)
+        if expected_response is not None:
+            assert response.json() == expected_response, str(response.text) + str(response.headers)
+        return response.json()
 
-    return transformation_id
+
+async def update_transformation(
+    *,
+    async_client_mdr: AsyncClient,
+    original_transformation: dict,
+    expression: Optional[str],  # '{ "User": { "Skills": { "Genre": Person.Courses.Grade } } }'
+    headers: dict = HEADER_MDR_API_KEY_GRAPHQL,
+    expected_status_code: int = 200,
+    expected_response: Optional[dict] = None,
+) -> Optional[str]:
+    """
+    Helper function to update a transform
+
+    Currently only supports updating the Expression field. More to come!
+    """
+
+    expected_transformation = copy.deepcopy(original_transformation)
+    update_payload = {"TransformationGroupId": original_transformation["TransformationGroupId"]}
+
+    if expression:
+        expected_transformation["Expression"] = expression
+        update_payload["Expression"] = expression
+
+    response = await async_client_mdr.put(
+        f"/transformation_groups/transformations/{original_transformation['Id']}", headers=headers, json=update_payload
+    )
+
+    # Confirm transform response
+
+    if expected_status_code == 200:
+        assert response.status_code == 200, str(response.text) + str(response.headers)
+        diff = DeepDiff(response.json(), expected_transformation)
+        assert diff == {}, diff
+    else:
+        assert response.status_code == expected_status_code, str(response.text) + str(response.headers)
+        if expected_response is not None:
+            assert response.json() == expected_response, str(response.text) + str(response.headers)
+        return response.text
+    return None

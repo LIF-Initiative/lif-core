@@ -1,12 +1,12 @@
 from fastapi import HTTPException
+from lif.datatypes.mdr_sql_model import DatamodelElementType, EntityAttributeAssociation, ExtInclusionsFromBaseDM
 from lif.mdr_dto.inclusion_dto import CreateInclusionDTO, InclusionDTO, UpdateInclusionDTO
 from lif.mdr_services.attribute_service import get_attribute_by_id
 from lif.mdr_services.entity_service import get_entity_by_id
 from lif.mdr_services.helper_service import check_datamodel_by_id
 from lif.mdr_utils.logger_config import get_logger
 from sqlalchemy.ext.asyncio import AsyncSession
-from lif.datatypes.mdr_sql_model import EntityAttributeAssociation, ExtInclusionsFromBaseDM
-from sqlmodel import select, func
+from sqlmodel import func, select
 
 logger = get_logger(__name__)
 
@@ -229,3 +229,19 @@ async def get_attribute_inclusions_by_data_model_id_and_entity_id(
     inclusions = result.scalars().all()
     inclusion_dtos = [InclusionDTO.from_orm(inclusion) for inclusion in inclusions]
     return inclusion_dtos
+
+
+async def check_existing_inclusion(
+    session: AsyncSession, type: DatamodelElementType, node_id: int, included_by_data_model_id: int
+) -> None:
+    query = select(ExtInclusionsFromBaseDM).where(
+        ExtInclusionsFromBaseDM.ExtDataModelId == included_by_data_model_id,
+        ExtInclusionsFromBaseDM.IncludedElementId == node_id,
+        ExtInclusionsFromBaseDM.ElementType == type,
+        ExtInclusionsFromBaseDM.Deleted == False,
+    )
+    result = await session.execute(query)
+    if result.scalar_one_or_none() is None:
+        raise HTTPException(
+            status_code=404, detail=f"Inclusion of {type} {node_id} not found in data model {included_by_data_model_id}"
+        )
