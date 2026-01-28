@@ -66,15 +66,26 @@ def _compare_values(
     path: str,
     differences: list[Difference],
     ignore_keys: set[str] | None = None,
+    allow_extra: bool = False,
 ) -> None:
-    """Recursively compare two values, collecting differences."""
+    """Recursively compare two values, collecting differences.
+
+    Args:
+        expected: Expected value
+        actual: Actual value
+        path: Current path in the data structure
+        differences: List to append differences to
+        ignore_keys: Set of keys to ignore during comparison
+        allow_extra: If True, allow extra keys in dicts and longer lists in actual
+    """
     ignore_keys = ignore_keys or set()
 
     # Handle None cases
     if expected is None and actual is None:
         return
     if expected is None:
-        differences.append(Difference(path, expected, actual, "extra"))
+        if not allow_extra:
+            differences.append(Difference(path, expected, actual, "extra"))
         return
     if actual is None:
         differences.append(Difference(path, expected, actual, "missing"))
@@ -98,26 +109,31 @@ def _compare_values(
                 continue
             new_path = f"{path}.{key}" if path else key
             if key not in expected:
-                differences.append(Difference(new_path, None, actual[key], "extra"))
+                # Extra key in actual - only report if not allowing extra
+                if not allow_extra:
+                    differences.append(Difference(new_path, None, actual[key], "extra"))
             elif key not in actual:
                 differences.append(Difference(new_path, expected[key], None, "missing"))
             else:
-                _compare_values(expected[key], actual[key], new_path, differences, ignore_keys)
+                _compare_values(expected[key], actual[key], new_path, differences, ignore_keys, allow_extra)
         return
 
     # List comparison
     if isinstance(expected, list):
         if len(expected) != len(actual):
-            differences.append(
-                Difference(
-                    f"{path}[len]",
-                    len(expected),
-                    len(actual),
-                    "value_mismatch",
+            # Only report length mismatch if actual is shorter (missing data)
+            # or if we're not allowing extra
+            if len(actual) < len(expected) or not allow_extra:
+                differences.append(
+                    Difference(
+                        f"{path}[len]",
+                        len(expected),
+                        len(actual),
+                        "value_mismatch",
+                    )
                 )
-            )
         for i, (exp_item, act_item) in enumerate(zip(expected, actual)):
-            _compare_values(exp_item, act_item, f"{path}[{i}]", differences, ignore_keys)
+            _compare_values(exp_item, act_item, f"{path}[{i}]", differences, ignore_keys, allow_extra)
         return
 
     # Scalar comparison
@@ -132,6 +148,7 @@ def compare_person_data(
     org_id: str,
     layer: str,
     ignore_keys: set[str] | None = None,
+    allow_extra: bool = False,
 ) -> ComparisonResult:
     """Compare expected Person data against actual data from a service layer.
 
@@ -142,12 +159,13 @@ def compare_person_data(
         org_id: Organization ID (for reporting)
         layer: Service layer name (for reporting)
         ignore_keys: Optional set of keys to ignore during comparison
+        allow_extra: If True, allow extra keys/items in actual data (for aggregated data)
 
     Returns:
         ComparisonResult with list of differences
     """
     differences: list[Difference] = []
-    _compare_values(expected, actual, "", differences, ignore_keys)
+    _compare_values(expected, actual, "", differences, ignore_keys, allow_extra)
     return ComparisonResult(
         person_name=person_name,
         org_id=org_id,

@@ -189,6 +189,7 @@
       "EmploymentPreferences": [
         {
           "informationSourceId": "Org2",
+          "identifier": "employment-preferences-alan-org2-001",
           "OfferedByRefOrganization": {
             "informationSourceId": "Org2",
             "name": "Three Trees Compliance",
@@ -206,6 +207,7 @@
         },
         {
           "informationSourceId": "Org2",
+          "identifier": "employment-preferences-alan-org2-002",
           "OfferedByRefOrganization": {
             "informationSourceId": "Org2",
             "name": "RIA Compliance Consultants",
@@ -223,6 +225,7 @@
         },
         {
           "informationSourceId": "Org2",
+          "identifier": "employment-preferences-alan-org2-003",
           "OfferedByRefOrganization": {
             "informationSourceId": "Org2",
             "name": "Utah ISO Consultants",

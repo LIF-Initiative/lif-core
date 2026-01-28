@@ -14,7 +14,8 @@ from utils.comparison import compare_person_data, summarize_results, ComparisonR
 
 # Keys to ignore when comparing MongoDB data to sample files
 # MongoDB adds _id, and there may be other internal fields
-IGNORE_KEYS = {"_id"}
+# Interactions are captured by the advisor app and are expected to be present
+IGNORE_KEYS = {"_id", "Interactions"}
 
 
 @pytest.mark.layer("mongodb")
@@ -28,7 +29,12 @@ class TestMongoDBDataIntegrity:
         sample_data: SampleDataLoader,
         require_mongodb: None,
     ) -> None:
-        """Verify MongoDB has the expected number of person documents."""
+        """Verify MongoDB has at least the expected number of person documents.
+
+        MongoDB may contain additional person records from data aggregation across
+        organizations. This test verifies that at minimum, the expected persons
+        from sample data are present (actual >= expected).
+        """
         from pymongo import MongoClient
 
         expected_count = len(sample_data.persons)
@@ -38,8 +44,8 @@ class TestMongoDBDataIntegrity:
             collection = db["person"]
             actual_count = collection.count_documents({})
 
-        assert actual_count == expected_count, (
-            f"{org_id}: Expected {expected_count} persons in MongoDB, "
+        assert actual_count >= expected_count, (
+            f"{org_id}: Expected at least {expected_count} persons in MongoDB, "
             f"found {actual_count}"
         )
 
@@ -92,7 +98,12 @@ class TestMongoDBDataIntegrity:
         sample_data: SampleDataLoader,
         require_mongodb: None,
     ) -> None:
-        """Verify MongoDB person data matches the sample files exactly."""
+        """Verify MongoDB person data contains all expected data from sample files.
+
+        MongoDB may contain additional data from aggregation across organizations.
+        This test verifies that all expected data from sample files is present,
+        but allows for extra data from other sources (allow_extra=True).
+        """
         from pymongo import MongoClient
 
         results: list[ComparisonResult] = []
@@ -128,6 +139,7 @@ class TestMongoDBDataIntegrity:
                         org_id=org_id,
                         layer="mongodb",
                         ignore_keys=IGNORE_KEYS,
+                        allow_extra=True,  # Allow extra data from aggregation
                     )
                     results.append(result)
                 else:
@@ -179,10 +191,15 @@ class TestMongoDBDataIntegrity:
         sample_data: SampleDataLoader,
         require_mongodb: None,
     ) -> None:
-        """Verify entity counts (credentials, courses, etc.) match sample data."""
+        """Verify entity counts (credentials, courses, etc.) are at least what sample data expects.
+
+        MongoDB may contain aggregated data from multiple organizations, so actual counts
+        may be higher than the sample data for a single org. This test verifies that at
+        minimum, the expected data is present (actual >= expected).
+        """
         from pymongo import MongoClient
 
-        mismatches = []
+        missing_data = []
         entity_types = [
             "CredentialAward",
             "CourseLearningExperience",
@@ -219,14 +236,16 @@ class TestMongoDBDataIntegrity:
                     expected_count = person_data.get_entity_count(entity_type)
                     actual_count = len(mongo_person.get(entity_type, []))
 
-                    if expected_count != actual_count:
-                        mismatches.append(
+                    # Only fail if actual count is LESS than expected (missing data)
+                    # Allow actual > expected for aggregated data from multiple orgs
+                    if actual_count < expected_count:
+                        missing_data.append(
                             f"{person_data.full_name}.{entity_type}: "
-                            f"expected {expected_count}, found {actual_count}"
+                            f"expected at least {expected_count}, found {actual_count}"
                         )
 
-        if mismatches:
+        if missing_data:
             pytest.fail(
-                f"{org_id} entity count mismatches:\n"
-                + "\n".join(f"  - {m}" for m in mismatches)
+                f"{org_id} missing entity data:\n"
+                + "\n".join(f"  - {m}" for m in missing_data)
             )

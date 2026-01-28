@@ -140,6 +140,7 @@
       "EmploymentPreferences": [
         {
           "informationSourceId": "Org2",
+          "identifier": "employment-preferences-jenna-org2-001",
           "OfferedByRefOrganization": {
             "informationSourceId": "Org2",
             "name": "Springfield Hospital",

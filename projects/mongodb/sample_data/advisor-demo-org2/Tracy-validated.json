@@ -312,6 +312,7 @@
       "EmploymentPreferences": [
         {
           "informationSourceId": "Org2",
+          "identifier": "employment-preferences-tracy-org2-001",
           "OfferedByRefOrganization": {
             "informationSourceId": "Org2",
             "name": "Discount Computer Supplies",

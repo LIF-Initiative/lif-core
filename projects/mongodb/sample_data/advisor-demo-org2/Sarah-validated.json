@@ -215,6 +215,7 @@
       "EmploymentPreferences": [
         {
           "informationSourceId": "Org2",
+          "identifier": "employment-preferences-sarah-org2-001",
           "OfferedByRefOrganization": {
             "informationSourceId": "Org2",
             "name": "Shafer's Clinic",
