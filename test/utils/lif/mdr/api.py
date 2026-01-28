@@ -1,3 +1,4 @@
+import copy
 from pathlib import Path
 from typing import Optional, Tuple
 
@@ -36,7 +37,7 @@ def find_object_property_by_unique_name(schema: dict, unique_name: str, property
     return None
 
 
-def convert_unique_names_to_id_path(schema: dict, unique_names: list[str]) -> str:
+def convert_unique_names_to_id_path(schema: dict, unique_names: list[str], ends_in_an_attribute: bool) -> str:
     assert len(unique_names) > 0, "unique_names list must not be empty"
     sub_schema = schema.get("components", {}).get("schemas", None)
     assert sub_schema is not None, f"Could not find components.schemas in schema: {schema}"
@@ -45,6 +46,8 @@ def convert_unique_names_to_id_path(schema: dict, unique_names: list[str]) -> st
         object_id = find_object_property_by_unique_name(sub_schema, unique_name, "Id")
         assert object_id is not None, f"Could not find object ID for UniqueName '{unique_name}' in schema: {sub_schema}"
         id_path_list.append(str(object_id))
+    if ends_in_an_attribute:
+        id_path_list[-1] = str(int(id_path_list[-1]) * -1)  # Mark the last ID as an attribute (a negative id)
     return ",".join(id_path_list)
 
 
@@ -222,12 +225,12 @@ async def create_transformation(
     )
 
     # Confirm transform response and gather ID
-
+    response_json = response.json()
     if expected_status_code == 201:
         assert response.status_code == 201, str(response.text) + str(response.headers)
-        transformation_id = response.json()["Id"]
+        transformation_id = response_json["Id"]
         diff = DeepDiff(
-            response.json(),
+            response_json,
             {
                 "Id": transformation_id,
                 "TransformationGroupId": transformation_group_id,
@@ -272,9 +275,49 @@ async def create_transformation(
             },
         )
         assert diff == {}, diff
-        return transformation_id
+        return response_json
+    else:
+        assert response.status_code == expected_status_code, str(response.text) + str(response.headers)
+        if expected_response is not None:
+            assert response.json() == expected_response, str(response.text) + str(response.headers)
+        return response.json()
+
+
+async def update_transformation(
+    *,
+    async_client_mdr: AsyncClient,
+    original_transformation: dict,
+    expression: Optional[str],  # '{ "User": { "Skills": { "Genre": Person.Courses.Grade } } }'
+    headers: dict = HEADER_MDR_API_KEY_GRAPHQL,
+    expected_status_code: int = 200,
+    expected_response: Optional[dict] = None,
+) -> Optional[str]:
+    """
+    Helper function to update a transform
+
+    Currently only supports updating the Expression field. More to come!
+    """
+
+    expected_transformation = copy.deepcopy(original_transformation)
+    update_payload = {"TransformationGroupId": original_transformation["TransformationGroupId"]}
+
+    if expression:
+        expected_transformation["Expression"] = expression
+        update_payload["Expression"] = expression
+
+    response = await async_client_mdr.put(
+        f"/transformation_groups/transformations/{original_transformation['Id']}", headers=headers, json=update_payload
+    )
+
+    # Confirm transform response
+
+    if expected_status_code == 200:
+        assert response.status_code == 200, str(response.text) + str(response.headers)
+        diff = DeepDiff(response.json(), expected_transformation)
+        assert diff == {}, diff
     else:
         assert response.status_code == expected_status_code, str(response.text) + str(response.headers)
         if expected_response is not None:
             assert response.json() == expected_response, str(response.text) + str(response.headers)
         return response.text
+    return None

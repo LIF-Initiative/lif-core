@@ -63,7 +63,7 @@ async def check_existing_association(
 
 async def check_entity_association_strict(
     session: AsyncSession, parent_entity_id: int, child_entity_id: int, extended_by_data_model_id: int | None
-) -> bool:
+) -> None:
     query = select(EntityAssociation).where(
         EntityAssociation.ParentEntityId == parent_entity_id,
         EntityAssociation.ChildEntityId == child_entity_id,
@@ -71,10 +71,14 @@ async def check_entity_association_strict(
         EntityAssociation.ExtendedByDataModelId == extended_by_data_model_id,
     )
     result = await session.execute(query)
-    return result.scalar_one_or_none() is not None
+    association = result.scalar_one_or_none() is not None
+    if not association:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Entity {child_entity_id} with parent {parent_entity_id} not found in data model association with extended-by data model of '{extended_by_data_model_id}'",
+        )
 
 
-# TODO: Should any of this go into check_transformation_attribute()?
 async def validate_entity_associations_for_transformation_attribute(
     session: AsyncSession, transformation_attribute: TransformationAttributeDTO
 ) -> bool:

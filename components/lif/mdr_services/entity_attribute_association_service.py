@@ -44,7 +44,7 @@ async def check_existing_association(
 
 async def check_entity_attribute_association_strict(
     session: AsyncSession, entity_id: int, attribute_id: int, extended_by_data_model_id: int | None
-) -> bool:
+) -> None:
     query = select(EntityAttributeAssociation).where(
         EntityAttributeAssociation.EntityId == entity_id,
         EntityAttributeAssociation.AttributeId == attribute_id,
@@ -52,7 +52,12 @@ async def check_entity_attribute_association_strict(
         EntityAttributeAssociation.ExtendedByDataModelId == extended_by_data_model_id,
     )
     result = await session.execute(query)
-    return result.scalar_one_or_none() is not None
+    association = result.scalar_one_or_none() is not None
+    if not association:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Attribute {attribute_id} association with entity {entity_id} not found in data model association with extended-by data model of '{extended_by_data_model_id}'",
+        )
 
 
 async def create_entity_attribute_association(session: AsyncSession, data: CreateEntityAttributeAssociationDTO):

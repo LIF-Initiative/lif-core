@@ -4,6 +4,7 @@ from pathlib import Path
 from httpx import AsyncClient
 
 from test.utils.lif.mdr.api import (
+    convert_unique_names_to_id_path,
     create_data_model_by_upload,
     create_transformation_groups,
     find_object_property_by_unique_name,
@@ -15,10 +16,12 @@ class DatasetTransformDeepLiteralAttribute:
     source_data_model_id: str
     source_parent_entity_id: str
     source_attribute_id: str
+    source_entity_id_path: str
     source_schema: dict
     target_data_model_id: str
     target_parent_entity_id: str
     target_attribute_id: str
+    target_entity_id_path: str
     target_schema: dict
     transformation_group_id: str
 
@@ -48,6 +51,9 @@ class DatasetTransformDeepLiteralAttribute:
         assert source_attribute_id is not None, "Could not find source attribute ID for person.courses.grade... " + str(
             source_schema
         )
+        source_entity_id_path = convert_unique_names_to_id_path(
+            source_schema, ["person", "person.courses", "person.courses.grade"], True
+        )
 
         # Create Target Data Model and extract IDs for the entity and attribute
 
@@ -65,6 +71,9 @@ class DatasetTransformDeepLiteralAttribute:
         assert target_attribute_id is not None, "Could not find target attribute ID for user.skills.genre... " + str(
             target_schema
         )
+        target_entity_id_path = convert_unique_names_to_id_path(
+            target_schema, ["user", "user.skills", "user.skills.genre"], True
+        )
 
         # Create transform group between source and target
 
@@ -78,10 +87,12 @@ class DatasetTransformDeepLiteralAttribute:
             source_data_model_id=source_data_model_id,
             source_parent_entity_id=source_parent_entity_id,
             source_attribute_id=source_attribute_id,
+            source_entity_id_path=source_entity_id_path,
             source_schema=source_schema,
             target_data_model_id=target_data_model_id,
             target_parent_entity_id=target_parent_entity_id,
             target_attribute_id=target_attribute_id,
-            transformation_group_id=transformation_group_id,
+            target_entity_id_path=target_entity_id_path,
             target_schema=target_schema,
+            transformation_group_id=transformation_group_id,
         )

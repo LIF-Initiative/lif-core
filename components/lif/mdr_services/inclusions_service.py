@@ -233,7 +233,7 @@ async def get_attribute_inclusions_by_data_model_id_and_entity_id(
 
 async def check_existing_inclusion(
     session: AsyncSession, type: DatamodelElementType, node_id: int, included_by_data_model_id: int
-) -> bool:
+) -> None:
     query = select(ExtInclusionsFromBaseDM).where(
         ExtInclusionsFromBaseDM.ExtDataModelId == included_by_data_model_id,
         ExtInclusionsFromBaseDM.IncludedElementId == node_id,
@@ -241,4 +241,7 @@ async def check_existing_inclusion(
         ExtInclusionsFromBaseDM.Deleted == False,
     )
     result = await session.execute(query)
-    return result.scalar_one_or_none() is not None
+    if result.scalar_one_or_none() is None:
+        raise HTTPException(
+            status_code=404, detail=f"Inclusion of {type} {node_id} not found in data model {included_by_data_model_id}"
+        )

@@ -4,7 +4,7 @@ import pytest
 
 from test.utils.lif.datasets.transform_deep_literal_attribute.loader import DatasetTransformDeepLiteralAttribute
 from test.utils.lif.datasets.transform_with_embeddings.loader import DatasetTransformWithEmbeddings
-from test.utils.lif.mdr.api import convert_unique_names_to_id_path, create_transformation
+from test.utils.lif.mdr.api import convert_unique_names_to_id_path, create_transformation, update_transformation
 from test.utils.lif.translator.api import create_translation
 
 
@@ -87,12 +87,14 @@ async def test_transforms_deep_literal_attribute(async_client_mdr, async_client_
         source_parent_entity_id=None,
         source_attribute_id=dataset_transform_deep_literal_attribute.source_attribute_id,
         source_entity_path=convert_unique_names_to_id_path(
-            dataset_transform_deep_literal_attribute.source_schema, ["person", "person.courses", "person.courses.grade"]
+            dataset_transform_deep_literal_attribute.source_schema,
+            ["person", "person.courses", "person.courses.grade"],
+            True,
         ),
         target_parent_entity_id=None,
         target_attribute_id=dataset_transform_deep_literal_attribute.target_attribute_id,
         target_entity_path=convert_unique_names_to_id_path(
-            dataset_transform_deep_literal_attribute.target_schema, ["user", "user.skills", "user.skills.genre"]
+            dataset_transform_deep_literal_attribute.target_schema, ["user", "user.skills", "user.skills.genre"], True
         ),
         mapping_expression='{ "User": { "Skills": { "Genre": Person.Courses.Grade } } }',
         transformation_name="User.Skills.Genre",
@@ -111,9 +113,62 @@ async def test_transforms_deep_literal_attribute(async_client_mdr, async_client_
 
 
 @pytest.mark.asyncio
-async def test_create_transform_fail_single_id_in_source_attribute_path(async_client_mdr, async_client_translator):
+async def test_transforms_into_target_entity(async_client_mdr, async_client_translator, mdr_api_headers):
     """
-    Confirms a single ID in the source attribute path is rejected.
+    Transform a 'deep' literal attribute into a target entity.
+
+    Source and Target are source schemas.
+
+    """
+
+    test_case_name = inspect.currentframe().f_code.co_name
+
+    # General setup for dataset deep_literal_attribute
+
+    dataset_transform_deep_literal_attribute = await DatasetTransformDeepLiteralAttribute.prepare(
+        async_client_mdr=async_client_mdr,
+        source_data_model_name=f"{test_case_name}_source",
+        target_data_model_name=f"{test_case_name}_target",
+        transformation_group_name=f"{test_case_name}_transform_group",
+    )
+
+    # Create transform
+
+    _ = await create_transformation(
+        async_client_mdr=async_client_mdr,
+        transformation_group_id=dataset_transform_deep_literal_attribute.transformation_group_id,
+        source_parent_entity_id=None,
+        source_attribute_id=dataset_transform_deep_literal_attribute.source_attribute_id,
+        source_entity_path=convert_unique_names_to_id_path(
+            dataset_transform_deep_literal_attribute.source_schema,
+            ["person", "person.courses", "person.courses.grade"],
+            True,
+        ),
+        target_parent_entity_id=None,
+        target_attribute_id=dataset_transform_deep_literal_attribute.target_attribute_id,
+        target_entity_path=convert_unique_names_to_id_path(
+            dataset_transform_deep_literal_attribute.target_schema, ["user"], False
+        ),
+        mapping_expression='{ "User": Person.Courses.Grade }',
+        transformation_name="User.Skills.Genre",
+    )
+
+    # Use the transform via the Translator endpoint
+
+    translated_json = await create_translation(
+        async_client_translator=async_client_translator,
+        source_data_model_id=dataset_transform_deep_literal_attribute.source_data_model_id,
+        target_data_model_id=dataset_transform_deep_literal_attribute.target_data_model_id,
+        json_to_translate={"Person": {"Courses": {"Grade": "A", "Style": "Lecture"}}},
+        headers=mdr_api_headers,
+    )
+    assert translated_json == {"User": "A"}
+
+
+@pytest.mark.asyncio
+async def test_create_transform_fail_empty_source_attribute_path(async_client_mdr, async_client_translator):
+    """
+    Confirms an empty source attribute path is rejected.
 
     Source and Target are source schemas.
 
@@ -137,14 +192,14 @@ async def test_create_transform_fail_single_id_in_source_attribute_path(async_cl
         transformation_group_id=dataset_transform_deep_literal_attribute.transformation_group_id,
         source_parent_entity_id=dataset_transform_deep_literal_attribute.source_parent_entity_id,
         source_attribute_id=dataset_transform_deep_literal_attribute.source_attribute_id,
-        source_entity_path=f"{dataset_transform_deep_literal_attribute.source_parent_entity_id}",  # This is the point of the test!
+        source_entity_path="",  # This is the point of the test!
         target_parent_entity_id=dataset_transform_deep_literal_attribute.target_parent_entity_id,
         target_attribute_id=dataset_transform_deep_literal_attribute.target_attribute_id,
         target_entity_path="0,0",  # Doesn't matter for this test
         mapping_expression='{ "User": { "Skills": { "Genre": Person.Courses.Grade } } }',
         transformation_name="User.Skills.Genre",
         expected_status_code=400,
-        expected_response={"detail": "Invalid EntityIdPath format. The path must contain at least two IDs."},
+        expected_response={"detail": "Invalid EntityIdPath format. The path must not be empty."},
     )
 
 
@@ -358,3 +413,68 @@ async def test_transforms_with_embeddings(async_client_mdr, async_client_transla
             "Preferences": {"WorkPreference": "Advanced"},
         }
     }
+
+
+@pytest.mark.asyncio
+async def test_update_transform_only_expression(async_client_mdr, async_client_translator, mdr_api_headers):
+    """
+    Confirms a transformation update can occur for just the expression.
+
+    Source and Target are source schemas.
+
+    """
+
+    test_case_name = inspect.currentframe().f_code.co_name
+
+    # General setup for dataset deep_literal_attribute (source sourceSchema, target sourceSchema, transform group, and relevant IDs)
+
+    dataset_transform_deep_literal_attribute = await DatasetTransformDeepLiteralAttribute.prepare(
+        async_client_mdr=async_client_mdr,
+        source_data_model_name=f"{test_case_name}_source",
+        target_data_model_name=f"{test_case_name}_target",
+        transformation_group_name=f"{test_case_name}_transform_group",
+    )
+
+    # Create transform
+
+    transformation = await create_transformation(
+        async_client_mdr=async_client_mdr,
+        transformation_group_id=dataset_transform_deep_literal_attribute.transformation_group_id,
+        source_parent_entity_id=dataset_transform_deep_literal_attribute.source_parent_entity_id,
+        source_attribute_id=dataset_transform_deep_literal_attribute.source_attribute_id,
+        source_entity_path=dataset_transform_deep_literal_attribute.source_entity_id_path,
+        target_parent_entity_id=dataset_transform_deep_literal_attribute.target_parent_entity_id,
+        target_attribute_id=dataset_transform_deep_literal_attribute.target_attribute_id,
+        target_entity_path=dataset_transform_deep_literal_attribute.target_entity_id_path,
+        mapping_expression='{ "User": { "Skills": { "Genre": Person.Courses.Grade } } }',
+        transformation_name="User.Skills.Genre",
+    )
+
+    # Use the transform via the Translator endpoint to prove original translation
+
+    json_to_translate = {"Person": {"Courses": {"Grade": "K"}}}
+    translated_json = await create_translation(
+        async_client_translator=async_client_translator,
+        source_data_model_id=dataset_transform_deep_literal_attribute.source_data_model_id,
+        target_data_model_id=dataset_transform_deep_literal_attribute.target_data_model_id,
+        json_to_translate=json_to_translate,
+        headers=mdr_api_headers,
+    )
+    assert translated_json == {"User": {"Skills": {"Genre": "K"}}}
+
+    _ = await update_transformation(
+        async_client_mdr=async_client_mdr,
+        original_transformation=transformation,
+        expression='{ "User": { "Skills": { "Genre": Person.Courses } } }',
+    )
+
+    # Use the transform via the Translator endpoint to prove the updated expression
+
+    translated_json = await create_translation(
+        async_client_translator=async_client_translator,
+        source_data_model_id=dataset_transform_deep_literal_attribute.source_data_model_id,
+        target_data_model_id=dataset_transform_deep_literal_attribute.target_data_model_id,
+        json_to_translate=json_to_translate,
+        headers=mdr_api_headers,
+    )
+    assert translated_json == {"User": {"Skills": {"Genre": {"Grade": "K"}}}}

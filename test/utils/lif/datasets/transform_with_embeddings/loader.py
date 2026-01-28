@@ -77,6 +77,7 @@ class DatasetTransformWithEmbeddings:
                 "person.courses.skillsgainedfromcourses",
                 "person.courses.skillsgainedfromcourses.skilllevel",
             ],
+            True,
         )
 
         flow2_source_parent_entity_id = find_object_property_by_unique_name(
@@ -100,6 +101,7 @@ class DatasetTransformWithEmbeddings:
                 "person.employment.profession",
                 "person.employment.profession.durationatprofession",
             ],
+            True,
         )
 
         flow3_source_parent_entity_id = find_object_property_by_unique_name(
@@ -123,6 +125,7 @@ class DatasetTransformWithEmbeddings:
                 "person.courses.skillsgainedfromcourses",
                 "person.courses.skillsgainedfromcourses.skilllevel",
             ],
+            True,
         )
 
         # Create Target Data Model and extract IDs for the entity and attribute
@@ -148,6 +151,7 @@ class DatasetTransformWithEmbeddings:
         flow1_target_entity_id_path = convert_unique_names_to_id_path(
             target_schema,
             ["user", "user.abilities", "user.abilities.skills", "user.abilities.skills.levelofskillability"],
+            True,
         )
 
         flow2_target_parent_entity_id = find_object_property_by_unique_name(
@@ -165,6 +169,7 @@ class DatasetTransformWithEmbeddings:
         flow2_target_entity_id_path = convert_unique_names_to_id_path(
             target_schema,
             ["user", "user.abilities", "user.abilities.skills", "user.abilities.skills.levelofskillability"],
+            True,
         )
 
         flow3_target_parent_entity_id = find_object_property_by_unique_name(target_schema, "user.preferences", "Id")
@@ -178,7 +183,7 @@ class DatasetTransformWithEmbeddings:
             "Could not find target attribute ID of user.preferences.workpreference..." + str(target_schema)
         )
         flow3_target_entity_id_path = convert_unique_names_to_id_path(
-            target_schema, ["user", "user.preferences", "user.preferences.workpreference"]
+            target_schema, ["user", "user.preferences", "user.preferences.workpreference"], True
         )
 
         # Create transform group between source and target

@@ -24,10 +24,7 @@ logger = get_logger(__name__)
 async def create_transformation(
     data: CreateTransformationDTO, response: Response, session: AsyncSession = Depends(get_session)
 ):
-    if data.TargetAttribute.EntityIdPath.__contains__(","):
-        transformation = await transformation_service.create_transformation_with_portable_entity_id_path(session, data)
-    else:
-        transformation = await transformation_service.create_transformation(session, data)
+    transformation = await transformation_service.create_transformation(session, data)
     # Set the Location header with the new entity association ID
     response.headers["Location"] = f"/transformation_groups/transformations/{transformation.Id}"
     return transformation
