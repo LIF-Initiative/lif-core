@@ -353,6 +353,8 @@ services:
       OPENAPI_JSON_FILENAME: ${OPENAPI_JSON_FILENAME:-openapi_constrained_with_interactions.json}
       SEMANTIC_SEARCH_SERVICE__GRAPHQL_TIMEOUT__READ: ${SEMANTIC_SEARCH_SERVICE__GRAPHQL_TIMEOUT__READ:-300}
       USE_OPENAPI_DATA_MODEL_FROM_FILE: ${USE_OPENAPI_DATA_MODEL_FROM_FILE:-false}
+    ports:
+      - "8003:8003"
     networks:
       - lif-net-org1
     depends_on:

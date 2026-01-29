@@ -30,6 +30,7 @@ packages = ["lif"]
 "../../components/lif/datatypes" = "lif/datatypes"
 "../../components/lif/exceptions" = "lif/exceptions"
 "../../components/lif/openapi_schema_parser" = "lif/openapi_schema_parser"
+"../../components/lif/schema_state_manager" = "lif/schema_state_manager"
 "../../components/lif/semantic_search_service" = "lif/semantic_search_service"
 "../../components/lif/string_utils" = "lif/string_utils"
 "../../components/lif/mdr_client" = "lif/mdr_client"

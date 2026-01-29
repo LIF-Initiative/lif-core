@@ -151,3 +151,11 @@ def require_query_planner(org_ports: OrgPorts, skip_unavailable: bool) -> None:
     if not org_ports.query_planner_url:
         pytest.skip(f"Query Planner not exposed for {org_ports.org_id}")
     check_service_available(org_ports.query_planner_url, skip_unavailable)
+
+
+@pytest.fixture
+def require_semantic_search(skip_unavailable: bool) -> None:
+    """Ensure Semantic Search MCP server is available."""
+    from utils.ports import SEMANTIC_SEARCH_HEALTH_URL
+
+    check_service_available(SEMANTIC_SEARCH_HEALTH_URL, skip_unavailable)
