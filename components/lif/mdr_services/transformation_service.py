@@ -26,10 +26,10 @@ from lif.mdr_dto.transformation_group_dto import (
 )
 from lif.mdr_services.attribute_service import get_attribute_dto_by_id
 from lif.mdr_services.entity_association_service import (
-    check_entity_association_strict,
+    retrieve_all_entity_associations,
     validate_entity_associations_for_transformation_attribute,
 )
-from lif.mdr_services.entity_attribute_association_service import check_entity_attribute_association_strict
+from lif.mdr_services.entity_attribute_association_service import retrieve_all_entity_attribute_associations
 from lif.mdr_services.entity_service import is_entity_by_unique_name
 from lif.mdr_services.helper_service import (
     check_attribute_by_id,
@@ -104,74 +104,6 @@ def parse_transformation_path(id_path: str) -> List[int]:
     return ids
 
 
-async def check_transformation_node_grounded_in_data_model(
-    session: AsyncSession,
-    anchor_data_model_id: int,
-    raw_node_id: int,
-    id_path: str,
-    fail_if_origin_data_model_is_not_the_anchor: bool,
-    is_last_node: bool,
-    is_self_contained_anchor_model: bool,
-) -> tuple[DatamodelElementType, bool]:
-    """
-    Checks whether the node identified by node_id in the provided id_path is grounded in the anchor data model.
-
-    Args:
-        session (AsyncSession): DB session
-        anchor_data_model_id (int): Data Model ID for the anchor of this transformation attribute. Should be either the source or target data model for the transformation group.
-        raw_node_id (int): ID of the node to check. A negative ID indicates an attribute.
-        id_path (str): ID path representing the chain of entity/attribute IDs with the final ID being an attribute ID IF it's a negative value.
-        fail_if_origin_data_model_is_not_the_anchor (bool): If True, raises an exception if the node does not originate in the anchor data model.
-        is_last_node (bool): Whether this node is the last node in the path
-        is_self_contained_anchor_model (bool): Whether the anchor data model can have associations with other data models (Base LIF or Source Schema)
-
-    Returns:
-        DatamodelElementType: The type of the node (Entity or Attribute)
-        bool: Whether the node originates from the anchor data model
-    """
-    node_type = DatamodelElementType.Attribute if is_last_node and raw_node_id < 0 else DatamodelElementType.Entity
-    if node_type == DatamodelElementType.Entity and raw_node_id < 0:
-        raise HTTPException(
-            status_code=400,
-            detail=f"Invalid EntityIdPath format: '{id_path}'. Only the last ID in the path can be an attribute ID (negative value).",
-        )
-
-    cleaned_node_id = abs(raw_node_id)
-    node_data_model_id = (
-        await check_entity_by_id(session=session, id=cleaned_node_id)
-        if node_type == DatamodelElementType.Entity
-        else await check_attribute_by_id(session=session, id=cleaned_node_id)
-    ).DataModelId
-
-    originates_in_anchor = anchor_data_model_id == node_data_model_id
-    if not originates_in_anchor:
-        signature = f"{node_type} {raw_node_id}({cleaned_node_id}) for data model {node_data_model_id} in the entityIdPath {id_path}"
-        if fail_if_origin_data_model_is_not_the_anchor:
-            message = f"{signature} should, but does not, originate in the anchor data model {anchor_data_model_id}."
-            logger.warning(message)
-            raise HTTPException(status_code=400, detail=message)
-
-        if is_self_contained_anchor_model:
-            message = f"{signature} does not originate in the anchor data model {anchor_data_model_id}, which is a self-contained data model. Therefore, it cannot be included via inclusions."
-            logger.warning(message)
-            raise HTTPException(status_code=400, detail=message)
-
-        logger.debug(
-            f"{signature} did not originate in the anchor data model {anchor_data_model_id}. Checking for inclusion."
-        )
-
-        # Will only be checked for Org LIF and Partner LIF anchor data models
-        await check_existing_inclusion(
-            session=session, type=node_type, node_id=cleaned_node_id, included_by_data_model_id=anchor_data_model_id
-        )
-
-        logger.debug(
-            f"{signature} is not directly part of, but is included in, the anchor data model {anchor_data_model_id}."
-        )
-
-    return (node_type, originates_in_anchor)
-
-
 async def check_transformation_attribute(session: AsyncSession, anchor_data_model: DataModel, id_path: str):
     """
     Confirms the provided ID path is valid for the given transformation attribute.
@@ -182,53 +114,116 @@ async def check_transformation_attribute(session: AsyncSession, anchor_data_mode
 
     - The path must be in the correct format and contain at least one ID.
     - The path may end with a non-deleted attribute, and the rest be non-deleted entities.
+    - If the anchor data model is a Base LIF or Source Schema, all entities and attributes in the path must originate from the anchor data model.
+    - For Org LIF and Partner LIF anchor data models, the entities and attributes must be included in the anchor data model.
     - Entities and attributes via (Entity/Attribute.DataModelId) must belong to the anchor data model or be included in (ExtInclusionFromBaseDM.ExtDataModelId).
-    - Entities and attributes must 'chain' together via the association tables. This is different based on the type of the anchor Data Model:
-        - Base LIF && Source Schema: The ExtendedByDataModelId in the association tables will be Null
-        - Org LIF & Partner LIF: The ExtendedByDataModelId in the association tables will be:
-            - The anchor Data Model ID if the entity/attribute does not originate in the anchor data model
-            - Null if the entity/attribute does originate in the anchor data model
+    - Entities and attributes must 'chain' together via the association tables. This is different based on the type of the anchor data model.
     """
     transformation_path_ids = parse_transformation_path(id_path)
     previous_id = None
 
     for i, raw_node_id in enumerate(transformation_path_ids):
-        logger.debug(
-            f"Checking node {raw_node_id} in entityIdPath {id_path} with the anchor data model {anchor_data_model.Id}"
-        )
+        # Gather details
 
-        (node_type, originates_in_anchor) = await check_transformation_node_grounded_in_data_model(
-            session=session,
-            anchor_data_model_id=anchor_data_model.Id,
-            raw_node_id=raw_node_id,
-            id_path=id_path,
-            fail_if_origin_data_model_is_not_the_anchor=(
-                i == 0
-            ),  # Only fail if the first node does not originate on the anchor data model
-            is_last_node=(i == len(transformation_path_ids) - 1),
-            is_self_contained_anchor_model=anchor_data_model.Type
-            in [DataModelType.BaseLIF, DataModelType.SourceSchema],
-        )
+        is_last_node = i == len(transformation_path_ids) - 1
+        # if it's the last node and negative it's an attribute, otherwise it's an entity
+        node_type = DatamodelElementType.Attribute if is_last_node and raw_node_id < 0 else DatamodelElementType.Entity
+        cleaned_node_id = abs(raw_node_id)
+        # Also confirms the entity / attribute exists and is not deleted
+        node_data_model_id = (
+            await check_entity_by_id(session=session, id=cleaned_node_id)
+            if node_type == DatamodelElementType.Entity
+            else await check_attribute_by_id(session=session, id=cleaned_node_id)
+        ).DataModelId
+        anchor_data_model_id = anchor_data_model.Id
+        is_self_contained_anchor_model = anchor_data_model.Type in [DataModelType.BaseLIF, DataModelType.SourceSchema]
+        originates_in_anchor = anchor_data_model_id == node_data_model_id
+        signature = f"{node_type} {raw_node_id}({cleaned_node_id}) for data model {node_data_model_id} in the entityIdPath {id_path}"
+        logger.debug(f"{signature} - Checking node against the anchor data model {anchor_data_model_id}")
 
-        extended_by_data_model_id = None if originates_in_anchor else anchor_data_model.Id
+        # Validations
+
+        if node_type == DatamodelElementType.Entity and raw_node_id < 0:
+            message = f"{signature} - Invalid EntityIdPath format. Only the last ID in the path can be an attribute ID (negative value)."
+            logger.error(message)
+            raise HTTPException(status_code=400, detail=message)
+
+        if is_self_contained_anchor_model:
+            if not originates_in_anchor:
+                message = f"{signature} - Does not originate in the anchor data model {anchor_data_model_id}, which is a self-contained data model"
+                logger.warning(message)
+                raise HTTPException(status_code=400, detail=message)
+            logger.debug(f"{signature} - Originates in the self-contained anchor data model {anchor_data_model_id}.")
+
+        if not is_self_contained_anchor_model:
+            # Will only be checked for Org LIF and Partner LIF anchor data models, but should _always_ be checked for those data model types.
+            await check_existing_inclusion(
+                session=session, type=node_type, node_id=cleaned_node_id, included_by_data_model_id=anchor_data_model_id
+            )
+            logger.debug(
+                f"{signature} - Is included in the non-self-contained anchor data model {anchor_data_model_id}."
+            )
 
         # First node has no association checks needed, check the rest for associations
         if i > 0:
-            if node_type == DatamodelElementType.Entity:
-                await check_entity_association_strict(
+            nodes = (
+                await retrieve_all_entity_associations(
                     session=session,
                     parent_entity_id=previous_id,
                     child_entity_id=raw_node_id,
-                    extended_by_data_model_id=extended_by_data_model_id,
+                    extended_by_data_model_id=None,
                 )
-            else:
-                # Must be an attribute. Remove the negative sign and check attribute association
-                await check_entity_attribute_association_strict(
+                if node_type == DatamodelElementType.Entity
+                else await retrieve_all_entity_attribute_associations(
                     session=session,
                     entity_id=previous_id,
                     attribute_id=abs(raw_node_id),
-                    extended_by_data_model_id=extended_by_data_model_id,
+                    extended_by_data_model_id=None,
                 )
+            )
+            logger.debug(f"{signature} - Retrieved {len(nodes)} associations to review.")
+
+            found_valid_association = False
+            # A node is either an entity or attribute
+            for node in nodes:
+                if is_self_contained_anchor_model:
+                    if (node_type == DatamodelElementType.Entity and node.Extension == True) or (
+                        node.ExtendedByDataModelId is not None
+                    ):
+                        # Base LIF and Source Schema should not have extensions
+                        message = f"{signature} - Association from parent {previous_id} to child {raw_node_id} is marked as an extension, but {anchor_data_model.Id} is a self-contained data model."
+                        logger.warning(message)
+                        raise HTTPException(status_code=400, detail=message)
+                    found_valid_association = True
+                    logger.debug(
+                        f"{signature} - Association from parent {previous_id} to child {raw_node_id} in the self-contained model is valid"
+                    )
+                    break
+                else:
+                    # Org LIF and Partner LIF may have extensions
+                    if (
+                        node_type == DatamodelElementType.Attribute or (node.Extension == False)
+                    ) and node.ExtendedByDataModelId is None:
+                        found_valid_association = True
+                        logger.debug(
+                            f"{signature} - Association from parent {previous_id} to child {raw_node_id} is valid and originates in the anchor data model"
+                        )
+                        break
+                    elif (
+                        node_type == DatamodelElementType.Attribute or (node.Extension == True)
+                    ) and node.ExtendedByDataModelId == anchor_data_model_id:
+                        found_valid_association = True
+                        logger.debug(
+                            f"{signature} - Association from parent {previous_id} to child {raw_node_id} is valid and extended by the anchor data model"
+                        )
+                        break
+
+            if not found_valid_association:
+                message = (
+                    f"{signature} - Unable to find valid association from parent {previous_id} to child {raw_node_id}."
+                )
+                logger.warning(message)
+                raise HTTPException(status_code=400, detail=message)
 
         # this will always be a positive id except for possibly the last node
         previous_id = raw_node_id

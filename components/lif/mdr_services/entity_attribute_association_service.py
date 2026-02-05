@@ -1,4 +1,4 @@
-from typing import List, Optional, Tuple
+from typing import List, Optional, Sequence, Tuple
 
 from fastapi import HTTPException
 from lif.datatypes.mdr_sql_model import (
@@ -42,22 +42,26 @@ async def check_existing_association(
     return result.scalar_one_or_none() is not None
 
 
-async def check_entity_attribute_association_strict(
-    session: AsyncSession, entity_id: int, attribute_id: int, extended_by_data_model_id: int | None
-) -> None:
+async def retrieve_all_entity_attribute_associations(
+    session: AsyncSession, entity_id: int, attribute_id: int, extended_by_data_model_id: int
+) -> Sequence[EntityAttributeAssociation]:
     query = select(EntityAttributeAssociation).where(
         EntityAttributeAssociation.EntityId == entity_id,
         EntityAttributeAssociation.AttributeId == attribute_id,
         EntityAttributeAssociation.Deleted == False,
-        EntityAttributeAssociation.ExtendedByDataModelId == extended_by_data_model_id,
+        or_(
+            EntityAttributeAssociation.ExtendedByDataModelId == None,
+            EntityAttributeAssociation.ExtendedByDataModelId == extended_by_data_model_id,
+        ),
     )
     result = await session.execute(query)
-    association = result.scalar_one_or_none() is not None
-    if not association:
+    associations = result.scalars().all()
+    if not associations or len(associations) == 0:
         raise HTTPException(
             status_code=404,
-            detail=f"Attribute {attribute_id} association with entity {entity_id} not found in data model association with extended-by data model of '{extended_by_data_model_id}'",
+            detail=f"Attribute {attribute_id} association with entity {entity_id} not found in data model association",
         )
+    return associations
 
 
 async def create_entity_attribute_association(session: AsyncSession, data: CreateEntityAttributeAssociationDTO):

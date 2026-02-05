@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List, Optional, Sequence
 
 from fastapi import HTTPException
 from lif.datatypes.mdr_sql_model import DataModel, DataModelType, Entity, EntityAssociation, ExtInclusionsFromBaseDM
@@ -61,22 +61,26 @@ async def check_existing_association(
     return result.scalar_one_or_none() is not None
 
 
-async def check_entity_association_strict(
-    session: AsyncSession, parent_entity_id: int, child_entity_id: int, extended_by_data_model_id: int | None
-) -> None:
+async def retrieve_all_entity_associations(
+    session: AsyncSession, parent_entity_id: int, child_entity_id: int, extended_by_data_model_id: int
+) -> Sequence[EntityAssociation]:
     query = select(EntityAssociation).where(
         EntityAssociation.ParentEntityId == parent_entity_id,
         EntityAssociation.ChildEntityId == child_entity_id,
         EntityAssociation.Deleted == False,
-        EntityAssociation.ExtendedByDataModelId == extended_by_data_model_id,
+        or_(
+            EntityAssociation.ExtendedByDataModelId == None,
+            EntityAssociation.ExtendedByDataModelId == extended_by_data_model_id,
+        ),
     )
     result = await session.execute(query)
-    association = result.scalar_one_or_none() is not None
-    if not association:
+    associations = result.scalars().all()
+    if not associations or len(associations) == 0:
         raise HTTPException(
             status_code=404,
-            detail=f"Entity {child_entity_id} with parent {parent_entity_id} not found in data model association with extended-by data model of '{extended_by_data_model_id}'",
+            detail=f"Child {child_entity_id} association with parent {parent_entity_id} not found in data model association",
         )
+    return associations
 
 
 async def validate_entity_associations_for_transformation_attribute(
