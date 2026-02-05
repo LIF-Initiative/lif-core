@@ -129,38 +129,44 @@ async def check_transformation_attribute(session: AsyncSession, anchor_data_mode
         # if it's the last node and negative it's an attribute, otherwise it's an entity
         node_type = DatamodelElementType.Attribute if is_last_node and raw_node_id < 0 else DatamodelElementType.Entity
         cleaned_node_id = abs(raw_node_id)
+        initial_signature = f"Node {raw_node_id}({cleaned_node_id}) in the entityIdPath ({id_path})"
         # Also confirms the entity / attribute exists and is not deleted
-        node_data_model_id = (
-            await check_entity_by_id(session=session, id=cleaned_node_id)
-            if node_type == DatamodelElementType.Entity
-            else await check_attribute_by_id(session=session, id=cleaned_node_id)
-        ).DataModelId
+        try:
+            node_data_model_id = (
+                await check_entity_by_id(session=session, id=cleaned_node_id)
+                if node_type == DatamodelElementType.Entity
+                else await check_attribute_by_id(session=session, id=cleaned_node_id)
+            ).DataModelId
+        except HTTPException as e:
+            logger.error(f"{initial_signature} - {e.detail}")
+            raise
+        initial_signature = f"Node {raw_node_id}({cleaned_node_id}) with originating data model ({node_data_model_id}) in the entityIdPath ({id_path})"
+
         anchor_data_model_id = anchor_data_model.Id
         is_self_contained_anchor_model = anchor_data_model.Type in [DataModelType.BaseLIF, DataModelType.SourceSchema]
         originates_in_anchor = anchor_data_model_id == node_data_model_id
-        signature = f"{node_type} {raw_node_id}({cleaned_node_id}) for data model {node_data_model_id} in the entityIdPath {id_path}"
-        logger.debug(f"{signature} - Checking node against the anchor data model {anchor_data_model_id}")
-
-        # Validations
-
         if node_type == DatamodelElementType.Entity and raw_node_id < 0:
-            message = f"{signature} - Invalid EntityIdPath format. Only the last ID in the path can be an attribute ID (negative value)."
+            message = f"{initial_signature} - Invalid EntityIdPath format. Only the last ID in the path can be an attribute ID (negative value)."
             logger.error(message)
             raise HTTPException(status_code=400, detail=message)
+        signature = f"{node_type.name} {raw_node_id}({cleaned_node_id}) with originating data model ({node_data_model_id}) in the entityIdPath ({id_path})"
+        logger.info(f"{signature} - Checking node against the anchor data model {anchor_data_model_id}")
+
+        # Validations
 
         if is_self_contained_anchor_model:
             if not originates_in_anchor:
                 message = f"{signature} - Does not originate in the anchor data model {anchor_data_model_id}, which is a self-contained data model"
                 logger.warning(message)
                 raise HTTPException(status_code=400, detail=message)
-            logger.debug(f"{signature} - Originates in the self-contained anchor data model {anchor_data_model_id}.")
+            logger.info(f"{signature} - Originates in the self-contained anchor data model {anchor_data_model_id}.")
 
         if not is_self_contained_anchor_model:
             # Will only be checked for Org LIF and Partner LIF anchor data models, but should _always_ be checked for those data model types.
             await check_existing_inclusion(
                 session=session, type=node_type, node_id=cleaned_node_id, included_by_data_model_id=anchor_data_model_id
             )
-            logger.debug(
+            logger.info(
                 f"{signature} - Is included in the non-self-contained anchor data model {anchor_data_model_id}."
             )
 
@@ -181,7 +187,7 @@ async def check_transformation_attribute(session: AsyncSession, anchor_data_mode
                     extended_by_data_model_id=None,
                 )
             )
-            logger.debug(f"{signature} - Retrieved {len(nodes)} associations to review.")
+            logger.info(f"{signature} - Retrieved {len(nodes)} associations to review.")
 
             found_valid_association = False
             # A node is either an entity or attribute
@@ -195,7 +201,7 @@ async def check_transformation_attribute(session: AsyncSession, anchor_data_mode
                         logger.warning(message)
                         raise HTTPException(status_code=400, detail=message)
                     found_valid_association = True
-                    logger.debug(
+                    logger.info(
                         f"{signature} - Association from parent {previous_id} to child {raw_node_id} in the self-contained model is valid"
                     )
                     break
@@ -205,7 +211,7 @@ async def check_transformation_attribute(session: AsyncSession, anchor_data_mode
                         node_type == DatamodelElementType.Attribute or (node.Extension == False)
                     ) and node.ExtendedByDataModelId is None:
                         found_valid_association = True
-                        logger.debug(
+                        logger.info(
                             f"{signature} - Association from parent {previous_id} to child {raw_node_id} is valid and originates in the anchor data model"
                         )
                         break
@@ -213,7 +219,7 @@ async def check_transformation_attribute(session: AsyncSession, anchor_data_mode
                         node_type == DatamodelElementType.Attribute or (node.Extension == True)
                     ) and node.ExtendedByDataModelId == anchor_data_model_id:
                         found_valid_association = True
-                        logger.debug(
+                        logger.info(
                             f"{signature} - Association from parent {previous_id} to child {raw_node_id} is valid and extended by the anchor data model"
                         )
                         break
@@ -457,6 +463,9 @@ async def update_transformation(session: AsyncSession, transformation_id: int, d
             setattr(transformation, key, value)
     session.add(transformation)
 
+    source_data_model = await check_datamodel_by_id(session=session, id=transformation_group.SourceDataModelId)
+    target_data_model = await check_datamodel_by_id(session=session, id=transformation_group.TargetDataModelId)
+
     # Update the source attributes
     source_attributes = []
     if data.SourceAttributes:
@@ -465,7 +474,7 @@ async def update_transformation(session: AsyncSession, transformation_id: int, d
             # Validate source attribute
             if is_entity_id_path_v2:
                 await check_transformation_attribute(
-                    session=session, anchor_data_model=transformation_group.SourceDataModelId, id_path=attr.EntityIdPath
+                    session=session, anchor_data_model=source_data_model, id_path=attr.EntityIdPath
                 )
             else:
                 attribute = await check_attribute_by_id(session=session, id=attr.AttributeId)
@@ -554,9 +563,7 @@ async def update_transformation(session: AsyncSession, transformation_id: int, d
         # Validate target attribute
         if is_entity_id_path_v2:
             await check_transformation_attribute(
-                session=session,
-                anchor_data_model=transformation_group.TargetDataModelId,
-                id_path=data.TargetAttribute.EntityIdPath,
+                session=session, anchor_data_model=target_data_model, id_path=data.TargetAttribute.EntityIdPath
             )
         else:
             tar_attribute = await check_attribute_by_id(session=session, id=data.TargetAttribute.AttributeId)
