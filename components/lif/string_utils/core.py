@@ -19,6 +19,7 @@ def safe_identifier(name: str) -> str:
     s1 = re.sub(r"(.)([A-Z][a-z]+)", r"\1_\2", name)
     s2 = re.sub(r"([a-z0-9])([A-Z])", r"\1_\2", s1)
     safe = re.sub(r"\W|^(?=\d)", "_", s2)
+    safe = re.sub(r"_+", "_", safe)  # Collapse consecutive underscores
     return safe.lower()
 
 
@@ -31,7 +32,24 @@ def to_pascal_case(*parts: str) -> str:
     Returns:
         str: PascalCase string.
     """
-    return "".join("".join(word.capitalize() for word in part.split("_")) for part in parts if part)
+    result = []
+    for part in parts:
+        if not part:
+            continue
+        # First, insert separators at case boundaries (camelCase -> camel_Case)
+        s1 = re.sub(r"(.)([A-Z][a-z]+)", r"\1_\2", part.strip())
+        s2 = re.sub(r"([a-z0-9])([A-Z])", r"\1_\2", s1)
+        # Now split on all separators (underscores, hyphens, spaces)
+        words = re.split(r"[_\-\s]+", s2)
+        for word in words:
+            if not word:
+                continue
+            # If word is all uppercase (acronym), keep it; otherwise capitalize
+            if word.isupper():
+                result.append(word)
+            else:
+                result.append(word.capitalize())
+    return "".join(result)
 
 
 def to_snake_case(name: str) -> str:
@@ -41,12 +59,10 @@ def to_snake_case(name: str) -> str:
 
 
 def to_camel_case(s: str) -> str:
-    """Converts snake_case to lowerCamelCase."""
+    """Convert string to camelCase."""
+    s = re.sub(r"([_\-\s]+)([a-zA-Z])", lambda m: m.group(2).upper(), s)
     if not s:
         return s
-    if "_" in s:
-        parts = s.lower().split("_")
-        return parts[0] + "".join(word.capitalize() for word in parts[1:])
     return s[0].lower() + s[1:]
 
 
