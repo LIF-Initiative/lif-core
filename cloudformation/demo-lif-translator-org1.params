@@ -53,7 +53,7 @@
   },
   {
     "ParameterKey": "ImageUrl",
-    "ParameterValue": "381492161417.dkr.ecr.us-east-1.amazonaws.com/lif/dev/lif_translator_api:2025-11-21-23-32-27-e63e5c5"
+    "ParameterValue": "381492161417.dkr.ecr.us-east-1.amazonaws.com/lif/dev/lif_translator_api:2026-02-04-01-54-09-e86843d"
   },
   {
     "ParameterKey": "TaskDefIncludesFile",

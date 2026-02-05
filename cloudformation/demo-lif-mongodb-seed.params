@@ -13,7 +13,7 @@
   },
   {
     "ParameterKey": "ImageUrl",
-    "ParameterValue": "381492161417.dkr.ecr.us-east-1.amazonaws.com/lif/dev/mongodb_seed:2025-07-28-16-46-03-8f4bb41"
+    "ParameterValue": "381492161417.dkr.ecr.us-east-1.amazonaws.com/lif/dev/mongodb_seed:2025-10-08-16-39-57-a78b55c"
   },
   {
     "ParameterKey": "TaskDefIncludesFile",
