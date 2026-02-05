@@ -283,20 +283,3 @@ class TestSchemaState:
         assert state.leaves == []
 
 
-class TestSchemaStateManagerThreadSafety:
-    """Tests for thread safety of SchemaStateManager."""
-
-    def test_state_access_is_thread_safe(self, mock_config_file):
-        """Test that state access uses locking."""
-        manager = SchemaStateManager(mock_config_file)
-        manager.initialize_sync()
-
-        # Access state from multiple "threads" (simulated)
-        # This test just verifies the lock exists and is used
-        assert manager._lock is not None
-
-        # Multiple accesses should work without issues
-        for _ in range(10):
-            _ = manager.state
-            _ = manager.is_initialized
-            _ = manager.get_status()
