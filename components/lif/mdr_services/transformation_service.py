@@ -177,14 +177,14 @@ async def check_transformation_attribute(session: AsyncSession, anchor_data_mode
                     session=session,
                     parent_entity_id=previous_id,
                     child_entity_id=raw_node_id,
-                    extended_by_data_model_id=None,
+                    extended_by_data_model_id=anchor_data_model_id,
                 )
                 if node_type == DatamodelElementType.Entity
                 else await retrieve_all_entity_attribute_associations(
                     session=session,
                     entity_id=previous_id,
                     attribute_id=abs(raw_node_id),
-                    extended_by_data_model_id=None,
+                    extended_by_data_model_id=anchor_data_model_id,
                 )
             )
             logger.info(f"{signature} - Retrieved {len(nodes)} associations to review.")
