@@ -46,6 +46,49 @@
     ./aws-deploy -s <name>
     ```
 
+## Release to Demo
+
+Update demo CloudFormation parameter files with the latest image tags from dev ECR.
+
+### Prerequisites
+- AWS CLI configured with `lif` profile (or appropriate profile for account 381492161417)
+- `jq` installed
+
+### Usage
+
+1. **Preview changes** (dry-run, no files modified):
+   ```bash
+   AWS_PROFILE=lif ./release-demo.sh
+   ```
+
+2. **Apply changes** to param files:
+   ```bash
+   AWS_PROFILE=lif ./release-demo.sh --apply
+   ```
+
+3. **Deploy the updated stacks**:
+   ```bash
+   ./aws-deploy.sh -s demo
+   ```
+
+4. **Commit and create PR** with the updated param files.
+
+### How It Works
+
+The script:
+1. Finds all `demo*.params` files containing `ImageUrl` parameters
+2. Queries ECR for the image tagged `latest` in each repository
+3. Resolves the actual version tag (e.g., `2025-02-05-12-30-00-abc1234`)
+4. Updates the param files with the new tag
+
+### Options
+
+| Option | Description |
+|--------|-------------|
+| `--apply` | Apply changes (default is dry-run) |
+| `--verbose` | Show detailed output for unchanged files |
+| `--help` | Show help message |
+
 ## Notes
 ### GitHubRepos Parameter
 Set GitHubRepos to your GitHub organization and repository pattern (e.g., `myorg/myrepo` or `myorg/*` for all repos) in the <name>-lif-repositories.params file. This value configures the OIDC trust policy for GitHub Actions integration with AWS. If this value is incorrect, your GitHub Actions workflows will fail to run.

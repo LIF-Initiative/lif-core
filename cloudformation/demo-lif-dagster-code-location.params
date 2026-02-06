@@ -49,7 +49,7 @@
   },
   {
     "ParameterKey": "ImageUrl",
-    "ParameterValue": "381492161417.dkr.ecr.us-east-1.amazonaws.com/lif/dev/dagster_code_location:2025-11-21-23-32-25-e63e5c5"
+    "ParameterValue": "381492161417.dkr.ecr.us-east-1.amazonaws.com/lif/dev/dagster_code_location:2026-02-05-17-41-04-09cd17b"
   },
   {
     "ParameterKey": "TaskDefIncludesFile",
