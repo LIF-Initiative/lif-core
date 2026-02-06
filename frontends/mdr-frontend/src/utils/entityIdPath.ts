@@ -1,7 +1,7 @@
 /**
  * Utility functions for handling the portable EntityIdPath format.
  *
- * New API format: comma-separated numeric IDs where the last element is
+ * API format: comma-separated numeric IDs where the last element is
  * negative if it represents an attribute ID.
  *
  * Examples:
@@ -9,6 +9,10 @@
  *   - Entity path ending in entity:    "654,22,6,6543"
  *
  * Internal format (PathId): dot-separated entity IDs, e.g., "654.22.6"
+ *
+ * NOTE: Legacy formats (dot-separated or name-based paths like "Person.CredentialAward")
+ * are NOT supported. The backend should migrate any existing data to the comma-separated
+ * format. Legacy paths will trigger a console warning and be skipped.
  */
 
 export interface ParsedEntityIdPath {
@@ -21,18 +25,19 @@ export interface ParsedEntityIdPath {
 }
 
 /**
- * Check if a path string uses the old dot-separated format.
- * Old format was: "Entity.Child.attribute" (names) or "4.238.6" (IDs with dots)
+ * Check if a path string uses the legacy dot-separated format.
+ * Legacy format was: "Entity.Child.attribute" (names) or "4.238.6" (IDs with dots)
+ * This is used for detection/warning purposes only - legacy format is NOT supported.
  */
-export function isOldDotFormat(path: string | null | undefined): boolean {
+export function isLegacyDotFormat(path: string | null | undefined): boolean {
   if (!path) return false;
   const trimmed = path.trim();
-  // Old format uses dots, new format uses commas
+  // Legacy format uses dots, new format uses commas
   return trimmed.includes('.') && !trimmed.includes(',');
 }
 
 /**
- * Check if a path string uses the new comma-separated format.
+ * Check if a path string uses the supported comma-separated format.
  */
 export function isNewCommaFormat(path: string | null | undefined): boolean {
   if (!path) return false;
@@ -41,10 +46,13 @@ export function isNewCommaFormat(path: string | null | undefined): boolean {
 
 /**
  * Parse an EntityIdPath from the API (comma-separated format) into its components.
- * Handles both old dot format and new comma format for backwards compatibility.
+ *
+ * ONLY supports the comma-separated format (e.g., "654,22,6,-352").
+ * Legacy formats (dot-separated or name-based) are NOT supported and will
+ * trigger a console warning. Backend migration should convert existing data.
  *
  * @param path The EntityIdPath string from the API
- * @returns Parsed path components, or null if parsing fails
+ * @returns Parsed path components, or null if parsing fails or legacy format encountered
  */
 export function parseEntityIdPath(path: string | null | undefined): ParsedEntityIdPath | null {
   if (!path) return null;
@@ -53,27 +61,36 @@ export function parseEntityIdPath(path: string | null | undefined): ParsedEntity
   if (!trimmed) return null;
 
   try {
+    // Check for legacy dot-separated format - NOT supported
+    if (isLegacyDotFormat(trimmed)) {
+      console.warn(
+        `EntityIdPath: Encountered legacy dot-separated format: "${path}". ` +
+        `This format is not supported. Backend data migration is required to convert to comma-separated format.`
+      );
+      return null;
+    }
+
     let parts: string[];
 
     if (isNewCommaFormat(trimmed)) {
-      // New comma-separated format: "654,22,6,-352"
+      // Comma-separated format: "654,22,6,-352"
       parts = trimmed.split(',').map((s) => s.trim()).filter(Boolean);
-    } else if (isOldDotFormat(trimmed)) {
-      // Old dot-separated format: "4.238.6" or "Person.Child.attr"
-      parts = trimmed.split('.').map((s) => s.trim()).filter(Boolean);
     } else {
-      // Single element
+      // Single element - check if numeric
       parts = [trimmed];
     }
 
     if (parts.length === 0) return null;
 
-    // Check if all parts are numeric (handles both old numeric dot and new comma format)
+    // Check if all parts are numeric
     const allNumeric = parts.every((p) => /^-?\d+$/.test(p));
 
     if (!allNumeric) {
-      // Old name-based format - can't parse into IDs, log and skip
-      console.warn(`EntityIdPath uses old name-based format, cannot parse: "${path}"`);
+      // Non-numeric format - cannot parse
+      console.warn(
+        `EntityIdPath: Encountered non-numeric path format: "${path}". ` +
+        `This is a legacy format that requires backend migration to comma-separated numeric format.`
+      );
       return null;
     }
 
@@ -196,9 +213,12 @@ export function apiPathToDotFormat(apiPath: string | null | undefined): { dotPat
  * Build a lookup key for wire matching from an EntityIdPath and attribute ID.
  * Used to match transformation attributes with DOM elements.
  *
- * @param entityIdPath The EntityIdPath from API (or internal PathId)
+ * ONLY supports comma-separated format. Legacy dot-separated formats will
+ * trigger a warning and return an empty key (wire will not be drawn).
+ *
+ * @param entityIdPath The EntityIdPath from API (comma-separated format)
  * @param attributeId The attribute ID
- * @returns A consistent lookup key string
+ * @returns A consistent lookup key string, or empty if legacy format
  */
 export function buildAttributeLookupKey(
   entityIdPath: string | null | undefined,
@@ -210,21 +230,22 @@ export function buildAttributeLookupKey(
   let normalizedPath = '';
 
   if (entityIdPath) {
+    // Check for legacy format first and warn
+    if (isLegacyDotFormat(entityIdPath)) {
+      console.warn(
+        `buildAttributeLookupKey: Encountered legacy dot-separated format: "${entityIdPath}". ` +
+        `This format is not supported. Backend data migration is required.`
+      );
+      // Return empty - wire won't be drawn for legacy format
+      return '';
+    }
+
     if (isNewCommaFormat(entityIdPath)) {
       // Convert API format to internal format
       const { dotPath } = apiPathToDotFormat(entityIdPath);
       normalizedPath = dotPath;
-    } else if (isOldDotFormat(entityIdPath)) {
-      // Check if it's numeric dot format vs name-based
-      const parts = entityIdPath.split('.').map((s) => s.trim()).filter(Boolean);
-      if (parts.every((p) => /^\d+$/.test(p))) {
-        // Already in internal numeric dot format
-        normalizedPath = entityIdPath;
-      } else {
-        // Name-based format - can't normalize, use as-is for fallback
-        normalizedPath = entityIdPath;
-      }
     } else {
+      // Single numeric value or unknown format
       normalizedPath = entityIdPath;
     }
   }
