@@ -31,6 +31,11 @@ import {
 } from '../../../services/modelService';
 import { buildDefaultAssignmentExpression } from '../../../utils/jsonataUtils';
 import {
+    parseEntityIdPath,
+    dotPathToApiFormat,
+    extractEntityIds,
+} from '../../../utils/entityIdPath';
+import {
     DataModelWithDetailsDTO,
     DataModelWithDetailsWithTree,
     EntityDTO,
@@ -164,31 +169,46 @@ const MappingsView: React.FC = () => {
     } | null>(null);
 
     // Build a default expression path like EntityA.EntityB.Attribute from an EntityIdPath and attribute name
+    // Supports both old dot format ("654.22.6") and new comma format ("654,22,6,-352")
     const buildDirectKeyExpression = useCallback(
         (entityIdPath?: string | null, attributeName?: string | null) => {
             const parts: string[] = [];
             if (entityIdPath) {
-                const rawSegs = String(entityIdPath)
-                    .split('.')
-                    .map((s) => s.trim())
-                    .filter(Boolean);
-                rawSegs.forEach((seg) => {
-                    if (/^\d+$/.test(seg)) {
-                        // Numeric entity id
-                        const id = parseInt(seg, 10);
+                // Use utility to extract entity IDs (handles both old and new formats)
+                const entityIds = extractEntityIds(entityIdPath);
+                if (entityIds.length > 0) {
+                    entityIds.forEach((id) => {
                         const ent = entityByIdRef.current.get(id);
                         if (ent?.Name) {
                             parts.push(String(ent.Name));
+                        } else {
+                            // Fallback to ID if name lookup fails
+                            parts.push(String(id));
                         }
-                        // If lookup fails, fall back to raw segment (unlikely)
-                        else {
+                    });
+                } else {
+                    // Fallback for old name-based format (e.g., "Person.Assessment")
+                    const rawSegs = String(entityIdPath)
+                        .split(/[.,]/)
+                        .map((s) => s.trim())
+                        .filter(Boolean);
+                    rawSegs.forEach((seg) => {
+                        // Skip negative numbers (attribute IDs in new format)
+                        if (/^-\d+$/.test(seg)) return;
+                        if (/^\d+$/.test(seg)) {
+                            const id = parseInt(seg, 10);
+                            const ent = entityByIdRef.current.get(id);
+                            if (ent?.Name) {
+                                parts.push(String(ent.Name));
+                            } else {
+                                parts.push(seg);
+                            }
+                        } else {
+                            // Already a PathName token
                             parts.push(seg);
                         }
-                    } else {
-                        // Already a PathName token (e.g., 'Assessment', 'offeredByOrganization')
-                        parts.push(seg);
-                    }
-                });
+                    });
+                }
             }
             if (attributeName) {
                 // Avoid duplicating final segment if attribute name already equals last path token
@@ -302,7 +322,8 @@ const MappingsView: React.FC = () => {
                         });
                     };
                     if (targetModel.EntityTree) build(targetModel.EntityTree);
-                    const idSegments = entityIdPath.split('.').map(s => parseInt(s, 10)).filter(n => !isNaN(n));
+                    // Use extractEntityIds to handle both old and new EntityIdPath formats
+                    const idSegments = extractEntityIds(entityIdPath);
                     const entityNames = idSegments.map(id => map.get(id)).filter(Boolean) as string[];
                     // Find attribute name in target model: search in Entities list by attribute id
                     let attrName: string | null = null;
@@ -1118,8 +1139,7 @@ const MappingsView: React.FC = () => {
                         )
                             ? ((existing as any).SourceAttributes as any[])
                             : (existing as any).SourceAttributes?.[0]?.AttributeId
-                            ? [
-                                  {
+                            ? [{
                                       AttributeId:
                                           (existing as any).SourceAttributes?.[0]?.AttributeId,
                                       AttributeType:
@@ -1129,18 +1149,17 @@ const MappingsView: React.FC = () => {
                                           (existing as any).SourceAttributes?.[0] as any
                                       )?.EntityIdPath,
                                       EntityId: (() => {
+                                          // Use parseEntityIdPath to handle both old and new formats
                                           const p = (
                                               (existing as any).SourceAttributes?.[0] as any
                                           )?.EntityIdPath as string | undefined;
-                                          const seg = p
-                                              ? String(p).split('.').pop()
-                                              : undefined;
-                                          const idn = seg
-                                              ? Number(seg)
-                                              : undefined;
-                                          return Number.isFinite(idn as any)
-                                              ? (idn as number)
-                                              : ((existing as any).SourceAttributes?.[0] as any)?.EntityId;
+                                          if (p) {
+                                              const parsed = parseEntityIdPath(p);
+                                              if (parsed && parsed.entityIds.length > 0) {
+                                                  return parsed.entityIds[parsed.entityIds.length - 1];
+                                              }
+                                          }
+                                          return ((existing as any).SourceAttributes?.[0] as any)?.EntityId;
                                       })(),
                                   },
                               ]
@@ -1153,11 +1172,11 @@ const MappingsView: React.FC = () => {
                             attrId: number | undefined
                         ): number | undefined => {
                             if (!attrId) return undefined;
+                            // Use parseEntityIdPath to handle both old and new formats
                             if (path) {
-                                const seg = String(path).split('.').pop();
-                                if (seg && /^\d+$/.test(seg)) {
-                                    const n = Number(seg);
-                                    if (Number.isFinite(n)) return n;
+                                const parsed = parseEntityIdPath(path);
+                                if (parsed && parsed.entityIds.length > 0) {
+                                    return parsed.entityIds[parsed.entityIds.length - 1];
                                 }
                             }
                             // Scan source model as fallback
@@ -1171,7 +1190,7 @@ const MappingsView: React.FC = () => {
                         const newSrc = {
                             AttributeId: dragSourceAttr.Id,
                             AttributeType: 'Source',
-                            EntityIdPath: srcPath,
+                            EntityIdPath: dotPathToApiFormat(srcPath, dragSourceAttr.Id),
                             EntityId: deriveEntityIdForUpdate(srcPath, dragSourceAttr.Id),
                         } as any;
                         if (!nextSrcs.some((s) => key(s) === key(newSrc))) {
@@ -1209,12 +1228,11 @@ const MappingsView: React.FC = () => {
                             modelRef: typeof sourceModel | typeof targetModel
                         ): number | undefined => {
                             if (!attrId) return undefined;
-                            // 1. Try final numeric segment of path
+                            // 1. Use parseEntityIdPath to handle both old and new formats
                             if (path) {
-                                const seg = String(path).split('.').pop();
-                                if (seg && /^\d+$/.test(seg)) {
-                                    const n = Number(seg);
-                                    if (Number.isFinite(n)) return n;
+                                const parsed = parseEntityIdPath(path);
+                                if (parsed && parsed.entityIds.length > 0) {
+                                    return parsed.entityIds[parsed.entityIds.length - 1];
                                 }
                             }
                             // 2. Scan model for entity containing attribute
@@ -1228,14 +1246,14 @@ const MappingsView: React.FC = () => {
                         const srcAttrPayload = {
                             AttributeId: dragSourceAttr.Id,
                             AttributeType: 'Source',
-                            EntityIdPath: srcPath,
+                            EntityIdPath: dotPathToApiFormat(srcPath, dragSourceAttr.Id),
                             EntityId:
                                 deriveEntityId(srcPath, dragSourceAttr.Id, sourceModel),
                         } as any;
                         const tgtAttrPayload = {
                             AttributeId: dragTargetAttrId,
                             AttributeType: 'Target',
-                            EntityIdPath: tgtPath,
+                            EntityIdPath: dotPathToApiFormat(tgtPath, dragTargetAttrId),
                             EntityId: deriveEntityId(tgtPath, dragTargetAttrId, targetModel),
                         } as any;
                         // Build source & target JSONata paths for naming and default expression
@@ -1427,8 +1445,11 @@ const MappingsView: React.FC = () => {
                     const p = r.EntityIdPath as string | undefined;
                     let eid: number | undefined;
                     if (p) {
-                        const seg = p.split('.').pop();
-                        if (seg && /^\d+$/.test(seg)) eid = Number(seg);
+                        // Use parseEntityIdPath to handle both old and new formats
+                        const parsed = parseEntityIdPath(p);
+                        if (parsed && parsed.entityIds.length > 0) {
+                            eid = parsed.entityIds[parsed.entityIds.length - 1];
+                        }
                     }
                     if (!eid && sourceModel?.Entities) {
                         for (const ewa of sourceModel.Entities as any[]) {
@@ -1593,10 +1614,10 @@ const MappingsView: React.FC = () => {
                                 EntityId: (() => {
                                     const p = (firstSrc as any)?.EntityIdPath as string | undefined;
                                     if (p) {
-                                        const seg = p.split('.').pop();
-                                        if (seg && /^\d+$/.test(seg)) {
-                                            const n = Number(seg);
-                                            if (Number.isFinite(n)) return n;
+                                        // Use parseEntityIdPath to handle both old and new formats
+                                        const parsed = parseEntityIdPath(p);
+                                        if (parsed && parsed.entityIds.length > 0) {
+                                            return parsed.entityIds[parsed.entityIds.length - 1];
                                         }
                                     }
                                     // fallback search target/source model
@@ -1626,10 +1647,10 @@ const MappingsView: React.FC = () => {
                                             const p = s.EntityIdPath as string | undefined;
                                             let eid: number | undefined;
                                             if (p) {
-                                                const seg = p.split('.').pop();
-                                                if (seg && /^\d+$/.test(seg)) {
-                                                    const n = Number(seg);
-                                                    if (Number.isFinite(n)) eid = n;
+                                                // Use parseEntityIdPath to handle both old and new formats
+                                                const parsed = parseEntityIdPath(p);
+                                                if (parsed && parsed.entityIds.length > 0) {
+                                                    eid = parsed.entityIds[parsed.entityIds.length - 1];
                                                 }
                                             }
                                             if (!eid) {
@@ -1693,19 +1714,18 @@ const MappingsView: React.FC = () => {
                                           EntityIdPath: (firstSrc as any)
                                               ?.EntityIdPath,
                                           EntityId: (() => {
+                                              // Use parseEntityIdPath to handle both old and new formats
                                               const p = (firstSrc as any)
                                                   ?.EntityIdPath as
                                                   | string
                                                   | undefined;
-                                              const seg = p
-                                                  ? String(p).split('.').pop()
-                                                  : undefined;
-                                              const idn = seg
-                                                  ? Number(seg)
-                                                  : undefined;
-                                              return Number.isFinite(idn as any)
-                                                  ? (idn as number)
-                                                  : (firstSrc as any)?.EntityId;
+                                              if (p) {
+                                                  const parsed = parseEntityIdPath(p);
+                                                  if (parsed && parsed.entityIds.length > 0) {
+                                                      return parsed.entityIds[parsed.entityIds.length - 1];
+                                                  }
+                                              }
+                                              return (firstSrc as any)?.EntityId;
                                           })(),
                                       }
                                     : undefined;
@@ -1715,11 +1735,11 @@ const MappingsView: React.FC = () => {
                                 modelRef: typeof sourceModel | typeof targetModel
                             ): number | undefined => {
                                 if (!attrId) return undefined;
+                                // Use parseEntityIdPath to handle both old and new formats
                                 if (path) {
-                                    const seg = String(path).split('.').pop();
-                                    if (seg && /^\d+$/.test(seg)) {
-                                        const n = Number(seg);
-                                        if (Number.isFinite(n)) return n;
+                                    const parsed = parseEntityIdPath(path);
+                                    if (parsed && parsed.entityIds.length > 0) {
+                                        return parsed.entityIds[parsed.entityIds.length - 1];
                                     }
                                 }
                                 const ents = modelRef?.Entities || [];
@@ -1732,7 +1752,7 @@ const MappingsView: React.FC = () => {
                             const tgtAttrPayload = {
                                 AttributeId: reassignHoverTargetId!,
                                 AttributeType: 'Target',
-                                EntityIdPath: tgtPath,
+                                EntityIdPath: dotPathToApiFormat(tgtPath, reassignHoverTargetId!),
                                 EntityId: deriveEntityId(
                                     tgtPath,
                                     reassignHoverTargetId!,

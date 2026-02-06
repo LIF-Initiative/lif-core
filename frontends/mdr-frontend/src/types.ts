@@ -237,7 +237,9 @@ export interface TransformationAttributeDTO {
   DeprecationDate?: string | null;
   Contributor?: string | null;
   ContributorOrganization?: string | null;
-  // New in backend: period-delimited parent entity path for this attribute
+  // API format: comma-separated numeric IDs, e.g. "654,22,6,-352"
+  // Last element is negative when it's an attribute ID (e.g., "-352" means attribute 352)
+  // All positive = path ends with entity; negative last = path ends with attribute
   EntityIdPath?: string | null;
 }
 
@@ -294,8 +296,10 @@ export interface DataModelWithDetailsDTO {
 
 // ----- Entity Tree (derived client-side) -----
 export interface EntityTreeNode {
-  PathId: string; // e.g. "1.2.3" (index path among siblings)
-  PathName: string; // e.g. "Parent.Child.Grandchild"
+  // Internal format: dot-separated entity IDs, e.g. "654.22.6"
+  // This is converted to API format (comma-separated with negative attr ID) when sending to backend
+  PathId: string;
+  PathName: string; // e.g. "Parent.Child.Grandchild" (human-readable names)
   EntityId: number;
   // Reference to the original object held in DataModelWithDetailsDTO.Entities (same reference, not a copy)
   Entity: EntityWithAttributesDTO | EntityDTO;

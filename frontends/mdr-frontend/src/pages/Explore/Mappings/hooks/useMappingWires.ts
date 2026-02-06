@@ -1,4 +1,5 @@
 import { MutableRefObject, useCallback, useEffect, useLayoutEffect, useState } from 'react';
+import { buildAttributeLookupKey, apiPathToDotFormat } from '../../../../utils/entityIdPath';
 
 export type WirePath = {
   /** Unique id for SVG keying; now derived from source/target named paths */
@@ -70,9 +71,16 @@ export function useMappingWires<TTrans extends { Id: number; TargetAttribute?: a
         : [];
       const tgtId = t.TargetAttribute?.AttributeId;
       if (!tgtId || sources.length === 0) return;
-      const tgtKey = t.TargetAttribute?.EntityIdPath ? `${t.TargetAttribute.EntityIdPath}|${tgtId}` : String(tgtId);
+      // Use buildAttributeLookupKey to normalize EntityIdPath (handles both old dot and new comma formats)
+      const tgtKey = buildAttributeLookupKey(t.TargetAttribute?.EntityIdPath, tgtId);
       const rightEl = attrElementsRight.current.get(tgtKey) || attrElementsRight.current.get(String(tgtId));
-      if (!rightEl) return;
+      if (!rightEl) {
+        // Log for debugging when EntityIdPath parsing fails (legacy data or bad format)
+        if (t.TargetAttribute?.EntityIdPath) {
+          console.warn(`useMappingWires: Could not find element for target path "${t.TargetAttribute?.EntityIdPath}" (key: ${tgtKey}), skipping wire`);
+        }
+        return;
+      }
       const rightDot = rightEl.querySelector<HTMLElement>('.mappings-column__dot--start');
       const rb = (rightDot || rightEl).getBoundingClientRect();
       const endX = rb.left + rb.width / 2 - containerRect.left;
@@ -81,9 +89,16 @@ export function useMappingWires<TTrans extends { Id: number; TargetAttribute?: a
       sources.forEach((srcAttr: any, idx: number) => {
         const srcId = srcAttr?.AttributeId;
         if (!srcId) return;
-        const srcKey = srcAttr?.EntityIdPath ? `${srcAttr.EntityIdPath}|${srcId}` : String(srcId);
+        // Use buildAttributeLookupKey to normalize EntityIdPath (handles both old dot and new comma formats)
+        const srcKey = buildAttributeLookupKey(srcAttr?.EntityIdPath, srcId);
         const leftEl = attrElementsLeft.current.get(srcKey) || attrElementsLeft.current.get(String(srcId));
-        if (!leftEl) return;
+        if (!leftEl) {
+          // Log for debugging when EntityIdPath parsing fails (legacy data or bad format)
+          if (srcAttr?.EntityIdPath) {
+            console.warn(`useMappingWires: Could not find element for source path "${srcAttr?.EntityIdPath}" (key: ${srcKey}), skipping wire`);
+          }
+          return;
+        }
         const leftDot = leftEl.querySelector<HTMLElement>('.mappings-column__dot--end');
         const lb = (leftDot || leftEl).getBoundingClientRect();
         const startX = lb.left + lb.width / 2 - containerRect.left;

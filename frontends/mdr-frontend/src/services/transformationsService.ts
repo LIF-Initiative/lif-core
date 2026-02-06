@@ -1,4 +1,5 @@
 import api from './api';
+import { parseEntityIdPath } from '../utils/entityIdPath';
 
 const apiBaseUrl = import.meta.env.VITE_API_URL;
 
@@ -38,7 +39,7 @@ export interface TransformationData {
     SourceAttributes?: Array<{
         AttributeId: number;
         AttributeType?: string;
-        EntityIdPath?: string; // format "id.id.id"
+        EntityIdPath?: string; // format: comma-separated IDs, e.g. "654,22,6,-352" (negative = attribute)
         Notes?: string;
         CreationDate?: string;
         ActivationDate?: string;
@@ -65,7 +66,7 @@ export interface CreateTransformationAttribute {
     AttributeId: number;
     AttributeType: string;
     EntityId?: number; // required by backend validation
-    EntityIdPath?: string; // optional, backend stores on TransformationAttributes
+    EntityIdPath?: string; // API format: comma-separated IDs, e.g. "654,22,6,-352" (negative = attribute)
     Notes?: string;
     CreationDate?: string;
     ActivationDate?: string;
@@ -528,10 +529,12 @@ export const forkTransformationGroup = async (
                             AttributeType: s.AttributeType || 'Source',
                             EntityIdPath: (s as any).EntityIdPath,
                             EntityId: (s as any)?.EntityId || (() => {
-                                const p = (s as any)?.EntityIdPath as string | undefined;
-                                const seg = p ? String(p).split('.').pop() : undefined;
-                                const idn = seg ? Number(seg) : undefined;
-                                return Number.isFinite(idn as any) ? (idn as number) : undefined;
+                                // Derive EntityId from EntityIdPath (supports both old dot and new comma format)
+                                const parsed = parseEntityIdPath((s as any)?.EntityIdPath);
+                                if (parsed && parsed.entityIds.length > 0) {
+                                    return parsed.entityIds[parsed.entityIds.length - 1];
+                                }
+                                return undefined;
                             })(),
                         });
                     }
@@ -545,10 +548,12 @@ export const forkTransformationGroup = async (
                     AttributeType: g.AttributeType || 'Target',
                     EntityIdPath: (g as any).EntityIdPath,
                     EntityId: (g as any)?.EntityId || (() => {
-                        const p = (g as any)?.EntityIdPath as string | undefined;
-                        const seg = p ? String(p).split('.').pop() : undefined;
-                        const idn = seg ? Number(seg) : undefined;
-                        return Number.isFinite(idn as any) ? (idn as number) : undefined;
+                        // Derive EntityId from EntityIdPath (supports both old dot and new comma format)
+                        const parsed = parseEntityIdPath((g as any)?.EntityIdPath);
+                        if (parsed && parsed.entityIds.length > 0) {
+                            return parsed.entityIds[parsed.entityIds.length - 1];
+                        }
+                        return undefined;
                     })(),
                 };
             }

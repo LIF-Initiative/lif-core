@@ -5,6 +5,7 @@ import type {
     AttributeDTO,
     EntityTreeNode,
 } from '../../../../types';
+import { apiPathToDotFormat, isNewCommaFormat } from '../../../../utils/entityIdPath';
 
 // Types re-declared locally to avoid tight coupling; import actual interfaces from caller when wiring up
 export interface DisplayTransformationDataLike {
@@ -116,13 +117,13 @@ const ModelColumn: React.FC<ModelColumnProps> = ({
                 const attributes: AttributeDTO[] = (ewa?.Attributes ??
                     []) as AttributeDTO[];
                 // PathId can repeat for references/reuse; compose a more unique, but stable-enough key per map position
-                const entityKey = `${(node as any).PathName || node.PathId || ''}|${entityId}|${idx}`;
+                const entityKey = `${node.PathId || ''}|${entityId}|${idx}`;
                 return (
                     <div
                         key={entityKey}
                         className="mappings-entity"
                         data-entity-id={entityId}
-                        data-entity-path={(node as any).PathName || node.PathId}
+                        data-entity-path={node.PathId}
                     >
                         <div className="mappings-entity__header">
                             <span className="mappings-square mappings-square--entity" />
@@ -133,20 +134,31 @@ const ModelColumn: React.FC<ModelColumnProps> = ({
                         <div className="mappings-attributes">
                             {attributes.map((attr) => {
                                 // Path-specific mapped check so reused attributes at different paths don't all show as mapped
-                                const currentPath = (node as any).PathName || node.PathId;
+                                // Use PathId (numeric) for matching against API data
+                                const currentPath = node.PathId;
+                                // Helper to normalize API EntityIdPath to internal dot format for comparison
+                                const normalizeForComparison = (apiPath: string | null | undefined): string => {
+                                    if (!apiPath) return '';
+                                    if (isNewCommaFormat(apiPath)) {
+                                        return apiPathToDotFormat(apiPath).dotPath;
+                                    }
+                                    // For legacy name-based paths, we can't match against numeric PathId
+                                    // Return the apiPath as-is (it won't match, which is correct behavior)
+                                    return apiPath;
+                                };
                                 let isMapped = false;
                                 if (transformations && transformations.length) {
                                     if (side === 'left') {
                                         isMapped = (transformations as any[]).some((t) =>
                                             Array.isArray((t as any).SourceAttributes) &&
                                             (t as any).SourceAttributes.some(
-                                                (s: any) => s.AttributeId === attr.Id && s.EntityIdPath === currentPath
+                                                (s: any) => s.AttributeId === attr.Id && normalizeForComparison(s.EntityIdPath) === currentPath
                                             )
                                         );
                                     } else {
                                         isMapped = (transformations as any[]).some((t: any) =>
                                             t.TargetAttribute?.AttributeId === attr.Id &&
-                                            t.TargetAttribute?.EntityIdPath === currentPath
+                                            normalizeForComparison(t.TargetAttribute?.EntityIdPath) === currentPath
                                         );
                                     }
                                 }
@@ -305,18 +317,17 @@ const ModelColumn: React.FC<ModelColumnProps> = ({
                                         className={`mappings-attr mappings-attr--${side} ${
                                             side === 'right' &&
                                             dragTargetAttrId === attr.Id &&
-                                            dragTargetPath === ((node as any).PathName || node.PathId)
+                                            dragTargetPath === node.PathId
                                                 ? 'mappings-attr--drop-target'
                                                 : ''
                                         }`}
                                         ref={(el) => {
-                                            const path = (node as any).PathName || node.PathId;
-                                            registerAttrElement(side, attr.Id, el, path);
+                                            registerAttrElement(side, attr.Id, el, node.PathId);
                                         }}
                                         data-attr-id={attr.Id}
-                                        data-entity-path={(node as any).PathName || node.PathId || ''}
+                                        data-entity-path={node.PathId || ''}
                                         onMouseEnter={() => {
-                                            const key = `${(node as any).PathName || node.PathId || ''}|${attr.Id}`;
+                                            const key = `${node.PathId || ''}|${attr.Id}`;
                                             onHoverAttr(key);
                                         }}
                                         onMouseLeave={() => onHoverAttr(null)}
@@ -326,7 +337,7 @@ const ModelColumn: React.FC<ModelColumnProps> = ({
                                                 onStartDrag
                                             ) {
                                                 e.preventDefault();
-                                                onStartDrag(attr, (node as any).PathName || node.PathId);
+                                                onStartDrag(attr, node.PathId);
                                             }
                                         }}
                                     >
