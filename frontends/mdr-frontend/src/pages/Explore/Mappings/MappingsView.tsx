@@ -169,12 +169,13 @@ const MappingsView: React.FC = () => {
     } | null>(null);
 
     // Build a default expression path like EntityA.EntityB.Attribute from an EntityIdPath and attribute name
-    // Supports both old dot format ("654.22.6") and new comma format ("654,22,6,-352")
+    // ONLY supports the new comma-separated format (e.g., "654,22,6,-352")
+    // Legacy dot-separated or name-based formats will trigger a warning and be skipped
     const buildDirectKeyExpression = useCallback(
         (entityIdPath?: string | null, attributeName?: string | null) => {
             const parts: string[] = [];
             if (entityIdPath) {
-                // Use utility to extract entity IDs (handles both old and new formats)
+                // Use utility to extract entity IDs (returns null with warning for legacy format)
                 const entityIds = extractEntityIds(entityIdPath);
                 if (entityIds.length > 0) {
                     entityIds.forEach((id) => {
@@ -186,29 +187,8 @@ const MappingsView: React.FC = () => {
                             parts.push(String(id));
                         }
                     });
-                } else {
-                    // Fallback for old name-based format (e.g., "Person.Assessment")
-                    const rawSegs = String(entityIdPath)
-                        .split(/[.,]/)
-                        .map((s) => s.trim())
-                        .filter(Boolean);
-                    rawSegs.forEach((seg) => {
-                        // Skip negative numbers (attribute IDs in new format)
-                        if (/^-\d+$/.test(seg)) return;
-                        if (/^\d+$/.test(seg)) {
-                            const id = parseInt(seg, 10);
-                            const ent = entityByIdRef.current.get(id);
-                            if (ent?.Name) {
-                                parts.push(String(ent.Name));
-                            } else {
-                                parts.push(seg);
-                            }
-                        } else {
-                            // Already a PathName token
-                            parts.push(seg);
-                        }
-                    });
                 }
+                // Legacy formats already warned by extractEntityIds, just skip
             }
             if (attributeName) {
                 // Avoid duplicating final segment if attribute name already equals last path token
