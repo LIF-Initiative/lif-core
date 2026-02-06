@@ -232,10 +232,6 @@ export function buildAttributeLookupKey(
   if (entityIdPath) {
     // Check for legacy format first and warn
     if (isLegacyDotFormat(entityIdPath)) {
-      console.warn(
-        `buildAttributeLookupKey: Encountered legacy dot-separated format: "${entityIdPath}". ` +
-        `This format is not supported. Backend data migration is required.`
-      );
       // Return empty - wire won't be drawn for legacy format
       return '';
     }

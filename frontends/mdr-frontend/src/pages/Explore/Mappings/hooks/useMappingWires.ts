@@ -1,5 +1,8 @@
-import { MutableRefObject, useCallback, useEffect, useLayoutEffect, useState } from 'react';
+import { MutableRefObject, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { buildAttributeLookupKey, apiPathToDotFormat } from '../../../../utils/entityIdPath';
+
+// Track warned paths to avoid spamming console on every scroll
+const warnedPaths = new Set<string>();
 
 export type WirePath = {
   /** Unique id for SVG keying; now derived from source/target named paths */
@@ -75,8 +78,9 @@ export function useMappingWires<TTrans extends { Id: number; TargetAttribute?: a
       const tgtKey = buildAttributeLookupKey(t.TargetAttribute?.EntityIdPath, tgtId);
       const rightEl = attrElementsRight.current.get(tgtKey) || attrElementsRight.current.get(String(tgtId));
       if (!rightEl) {
-        // Log for debugging when EntityIdPath parsing fails (legacy data or bad format)
-        if (t.TargetAttribute?.EntityIdPath) {
+        // Log once per unique path when EntityIdPath parsing fails (legacy data or bad format)
+        if (t.TargetAttribute?.EntityIdPath && !warnedPaths.has(tgtKey)) {
+          warnedPaths.add(tgtKey);
           console.warn(`useMappingWires: Could not find element for target path "${t.TargetAttribute?.EntityIdPath}" (key: ${tgtKey}), skipping wire`);
         }
         return;
@@ -93,8 +97,9 @@ export function useMappingWires<TTrans extends { Id: number; TargetAttribute?: a
         const srcKey = buildAttributeLookupKey(srcAttr?.EntityIdPath, srcId);
         const leftEl = attrElementsLeft.current.get(srcKey) || attrElementsLeft.current.get(String(srcId));
         if (!leftEl) {
-          // Log for debugging when EntityIdPath parsing fails (legacy data or bad format)
-          if (srcAttr?.EntityIdPath) {
+          // Log once per unique path when EntityIdPath parsing fails (legacy data or bad format)
+          if (srcAttr?.EntityIdPath && !warnedPaths.has(srcKey)) {
+            warnedPaths.add(srcKey);
             console.warn(`useMappingWires: Could not find element for source path "${srcAttr?.EntityIdPath}" (key: ${srcKey}), skipping wire`);
           }
           return;
