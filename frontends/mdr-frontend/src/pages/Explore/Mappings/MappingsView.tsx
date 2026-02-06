@@ -13,6 +13,7 @@ import {
     TransformationData,
     TransformationGroupDetails,
     createTransformation,
+    createOrUpdateTransformation,
     deleteTransformation,
     updateTransformation,
     updateTransformationGroup,
@@ -1271,30 +1272,43 @@ const MappingsView: React.FC = () => {
                             sourcePathExpr || '',
                             targetPathExpr || ''
                         ) || (targetPathExpr && sourcePathExpr ? `${targetPathExpr} = ${sourcePathExpr}` : sourcePathExpr || targetPathExpr || '');
-                        const created = await createTransformation({
+                        // Use createOrUpdateTransformation to handle duplicate target attributes
+                        const existingTransforms = group?.Transformations || transformations;
+                        const result = await createOrUpdateTransformation({
                             TransformationGroupId: group.Id,
                             ExpressionLanguage: 'JSONata',
                             Expression: equalityExpr,
                             Name: targetPathExpr,
                             SourceAttributes: [srcAttrPayload],
                             TargetAttribute: tgtAttrPayload,
-                        });
-                        const createdWithAttrs: any = {
-                            ...created,
-                            SourceAttributes: (created as any)
+                        }, existingTransforms);
+                        const resultWithAttrs: any = {
+                            ...result,
+                            SourceAttributes: (result as any)
                                 ?.SourceAttributes ?? [srcAttrPayload],
                             TargetAttribute:
-                                (created as any)?.TargetAttribute ??
+                                (result as any)?.TargetAttribute ??
                                 tgtAttrPayload,
                         };
+                        // Check if this was an update (existing ID found) or a new creation
+                        const wasUpdate = existingTransforms.some((t) => t.Id === result.Id);
                         setTransformations((prev) => {
-                            const firstSrc = createdWithAttrs.SourceAttributes?.[0];
+                            const firstSrc = resultWithAttrs.SourceAttributes?.[0];
                             const srcEntity = entityByIdRef.current.get(firstSrc?.EntityId);
-                            const tgtEntity = entityByIdRef.current.get(createdWithAttrs.TargetAttribute?.EntityId);
+                            const tgtEntity = entityByIdRef.current.get(resultWithAttrs.TargetAttribute?.EntityId);
+                            if (wasUpdate) {
+                                // Replace existing transformation
+                                return prev.map((t) =>
+                                    t.Id === result.Id
+                                        ? { ...resultWithAttrs, SourceEntity: srcEntity, TargetEntity: tgtEntity } as any
+                                        : t
+                                );
+                            }
+                            // Append new transformation
                             return [
                                 ...prev,
                                 {
-                                    ...(createdWithAttrs || {}),
+                                    ...(resultWithAttrs || {}),
                                     SourceEntity: srcEntity,
                                     TargetEntity: tgtEntity,
                                 } as any,
@@ -1304,10 +1318,14 @@ const MappingsView: React.FC = () => {
                             prev
                                 ? {
                                       ...prev,
-                                      Transformations: [
-                                          ...prev.Transformations,
-                                          created as any,
-                                      ],
+                                      Transformations: wasUpdate
+                                          ? prev.Transformations.map((t) =>
+                                                t.Id === result.Id ? (result as any) : t
+                                            )
+                                          : [
+                                                ...prev.Transformations,
+                                                result as any,
+                                            ],
                                   }
                                 : prev
                         );
@@ -1780,7 +1798,9 @@ const MappingsView: React.FC = () => {
                                 sourcePathExpr || '',
                                 targetPathExpr || ''
                             ) || (targetPathExpr && sourcePathExpr ? `${targetPathExpr} = ${sourcePathExpr}` : sourcePathExpr || targetPathExpr || '');
-                            const created = await createTransformation({
+                            // Use createOrUpdateTransformation to handle duplicate target attributes
+                            const existingTransforms = group?.Transformations || transformations;
+                            const result = await createOrUpdateTransformation({
                                 TransformationGroupId:
                                     t.TransformationGroupId,
                                 ExpressionLanguage:
@@ -1791,42 +1811,54 @@ const MappingsView: React.FC = () => {
                                     ? [srcAttrPayload]
                                     : undefined,
                                 TargetAttribute: tgtAttrPayload,
-                            });
-                            const createdWithAttrs: any = {
-                                ...created,
+                            }, existingTransforms);
+                            const resultWithAttrs: any = {
+                                ...result,
                                 SourceAttributes:
-                                    (created as any)?.SourceAttributes ??
+                                    (result as any)?.SourceAttributes ??
                                     (srcAttrPayload
                                         ? [srcAttrPayload]
                                         : undefined),
                                 TargetAttribute:
-                                    (created as any)?.TargetAttribute ??
+                                    (result as any)?.TargetAttribute ??
                                     tgtAttrPayload,
                             };
+                            // Check if this was an update (merged into existing) vs new creation
+                            const wasUpdate = existingTransforms.some((tr) => tr.Id === result.Id && tr.Id !== t.Id);
                             await deleteTransformation(t.Id);
                             setTransformations((prev) => {
                                 const filtered = prev.filter(
                                     (p) => p.Id !== t.Id
                                 );
+                                if (wasUpdate) {
+                                    // Replace the existing transformation we merged into
+                                    return filtered.map((p) =>
+                                        p.Id === result.Id ? { ...resultWithAttrs } as any : p
+                                    );
+                                }
                                 return [
                                     ...filtered,
-                                    { ...(createdWithAttrs || {}) } as any,
+                                    { ...(resultWithAttrs || {}) } as any,
                                 ];
                             });
                             setGroup((prev) =>
                                 prev
                                     ? {
                                           ...prev,
-                                          Transformations: [
-                                              ...prev.Transformations.filter(
-                                                  (x) => x.Id !== t.Id
-                                              ),
-                                              createdWithAttrs as any,
-                                          ],
+                                          Transformations: wasUpdate
+                                              ? prev.Transformations.filter((x) => x.Id !== t.Id).map((x) =>
+                                                    x.Id === result.Id ? (resultWithAttrs as any) : x
+                                                )
+                                              : [
+                                                    ...prev.Transformations.filter(
+                                                        (x) => x.Id !== t.Id
+                                                    ),
+                                                    resultWithAttrs as any,
+                                                ],
                                       }
                                     : prev
                             );
-                            results.push(createdWithAttrs as any);
+                            results.push(resultWithAttrs as any);
                         }
                     } catch (err) {
                         console.error('Failed to reassign transformation', err);
