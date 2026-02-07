@@ -169,9 +169,10 @@ const MappingsView: React.FC = () => {
         transforms: DisplayTransformationData[];
     } | null>(null);
 
-    // Build a default expression path like EntityA.EntityB.Attribute from an EntityIdPath and attribute name
-    // ONLY supports the new comma-separated format (e.g., "654,22,6,-352")
-    // Legacy dot-separated or name-based formats will trigger a warning and be skipped
+    // Build a JSONata-compatible expression path like EntityA.EntityB.Attribute from an EntityIdPath.
+    // Uses entity/attribute NAMES (not IDs) because JSONata navigates JSON documents by property names.
+    // Note: Names aren't globally unique, but within a hierarchical path they should be unambiguous.
+    // This is for display and expression building - NOT for unique identification (use PathId for that).
     const buildDirectKeyExpression = useCallback(
         (entityIdPath?: string | null, attributeName?: string | null) => {
             const parts: string[] = [];
