@@ -1,18 +1,18 @@
 /**
  * Utility functions for handling the portable EntityIdPath format.
  *
- * API format: comma-separated numeric IDs where the last element is
- * negative if it represents an attribute ID.
+ * UNIFIED FORMAT: Both API format and internal PathId use comma-separated numeric IDs.
+ * The last element is negative if it represents an attribute ID.
  *
  * Examples:
  *   - Entity path ending in attribute: "654,22,6,-352"
- *   - Entity path ending in entity:    "654,22,6,6543"
+ *   - Entity path ending in entity:    "654,22,6"
+ *   - Internal PathId (same format):   "654,22,6"
  *
- * Internal format (PathId): dot-separated entity IDs, e.g., "654.22.6"
- *
- * NOTE: Legacy formats (dot-separated or name-based paths like "Person.CredentialAward")
- * are NOT supported. The backend should migrate any existing data to the comma-separated
- * format. Legacy paths will trigger a console warning and be skipped.
+ * NOTE: Legacy formats (dot-separated like "654.22.6" or name-based paths like
+ * "Person.CredentialAward") are NOT supported. The backend should migrate any
+ * existing data to the comma-separated format. Legacy paths will trigger a
+ * console warning and be skipped.
  */
 
 export interface ParsedEntityIdPath {
@@ -144,58 +144,43 @@ export function buildEntityIdPath(entityIds: number[], attributeId?: number): st
 }
 
 /**
- * Convert an internal PathId (dot-separated entity IDs) to API format (comma-separated).
- * Optionally append an attribute ID as a negative number.
+ * Append an attribute ID to a PathId to create a full EntityIdPath.
+ * Since PathId and API format are now both comma-separated, this just appends
+ * the negative attribute ID.
  *
- * @param dotPathId Internal PathId like "654.22.6"
- * @param attributeId Optional attribute ID to append as negative
- * @returns API format EntityIdPath like "654,22,6,-352"
+ * @param pathId Internal PathId like "654,22,6" (comma-separated entity IDs)
+ * @param attributeId Attribute ID to append as negative
+ * @returns Full EntityIdPath like "654,22,6,-352"
  */
-export function dotPathToApiFormat(dotPathId: string | null | undefined, attributeId?: number): string {
-  if (!dotPathId) {
-    // No entity path provided - this likely means the path lookup failed
-    console.warn(`dotPathToApiFormat: No entity path provided for attributeId=${attributeId}. Returning just -attributeId.`);
-    if (attributeId) {
-      return String(-Math.abs(attributeId));
-    }
-    return '';
+export function appendAttributeToPath(pathId: string | null | undefined, attributeId: number | null | undefined): string {
+  if (!attributeId) {
+    return pathId || '';
   }
-
-  const parts = dotPathId
-    .split('.')
-    .map((s) => s.trim())
-    .filter(Boolean);
-
-  // Validate all parts are numeric
-  const numericParts = parts.filter((p) => /^\d+$/.test(p)).map((p) => parseInt(p, 10));
-
-  if (numericParts.length !== parts.length) {
-    console.warn(`dotPathToApiFormat: PathId contains non-numeric segments: "${dotPathId}". Only numeric parts will be used.`);
+  
+  const negAttr = -Math.abs(attributeId);
+  
+  if (!pathId) {
+    return String(negAttr);
   }
-
-  // If no numeric parts found (e.g., path was all names like "Person.Assessment"),
-  // we can't build a valid numeric path
-  if (numericParts.length === 0) {
-    console.warn(`dotPathToApiFormat: Could not extract any numeric IDs from path "${dotPathId}". attributeId=${attributeId}`);
-    if (attributeId) {
-      return String(-Math.abs(attributeId));
-    }
-    return '';
-  }
-
-  if (attributeId !== undefined && attributeId !== null) {
-    numericParts.push(-Math.abs(attributeId));
-  }
-
-  return numericParts.join(',');
+  
+  return `${pathId},${negAttr}`;
 }
 
 /**
- * Convert an API format EntityIdPath (comma-separated) to internal PathId format (dot-separated).
- * Strips off the attribute ID (negative number) if present.
+ * @deprecated Use appendAttributeToPath instead. This function exists only for backward compatibility.
+ */
+export function dotPathToApiFormat(pathId: string | null | undefined, attributeId?: number): string {
+  return appendAttributeToPath(pathId, attributeId);
+}
+
+/**
+ * Parse an API format EntityIdPath and extract the entity path and attribute ID.
+ * Since internal PathId and API format are now unified (comma-separated), this
+ * returns the entity path in the same comma-separated format.
  *
  * @param apiPath API format path like "654,22,6,-352"
- * @returns Internal PathId like "654.22.6" and extracted attributeId
+ * @returns Entity path as comma-separated string and extracted attributeId
+ * @deprecated Renamed from apiPathToDotFormat. The dotPath field now contains comma-separated format.
  */
 export function apiPathToDotFormat(apiPath: string | null | undefined): { dotPath: string; attributeId?: number } {
   const parsed = parseEntityIdPath(apiPath);
@@ -204,7 +189,8 @@ export function apiPathToDotFormat(apiPath: string | null | undefined): { dotPat
   }
 
   return {
-    dotPath: parsed.entityIds.join('.'),
+    // Now returns comma-separated format (unified with internal PathId)
+    dotPath: parsed.entityIds.join(','),
     attributeId: parsed.attributeId,
   };
 }
@@ -213,12 +199,12 @@ export function apiPathToDotFormat(apiPath: string | null | undefined): { dotPat
  * Build a lookup key for wire matching from an EntityIdPath and attribute ID.
  * Used to match transformation attributes with DOM elements.
  *
- * ONLY supports comma-separated format. Legacy dot-separated formats will
- * trigger a warning and return an empty key (wire will not be drawn).
+ * Uses unified comma-separated format for both API paths and internal PathId.
+ * Legacy dot-separated formats will trigger a warning and return an empty key (wire will not be drawn).
  *
- * @param entityIdPath The EntityIdPath from API (comma-separated format)
+ * @param entityIdPath The EntityIdPath (comma-separated format)
  * @param attributeId The attribute ID
- * @returns A consistent lookup key string, or empty if legacy format
+ * @returns A consistent lookup key string like "654,22,6|352", or empty if legacy format
  */
 export function buildAttributeLookupKey(
   entityIdPath: string | null | undefined,
@@ -226,7 +212,7 @@ export function buildAttributeLookupKey(
 ): string {
   if (!attributeId) return '';
 
-  // Normalize the path to internal dot format for consistent lookups
+  // Parse the path to normalize it
   let normalizedPath = '';
 
   if (entityIdPath) {
@@ -236,12 +222,12 @@ export function buildAttributeLookupKey(
       return '';
     }
 
-    if (isNewCommaFormat(entityIdPath)) {
-      // Convert API format to internal format
-      const { dotPath } = apiPathToDotFormat(entityIdPath);
-      normalizedPath = dotPath;
-    } else {
-      // Single numeric value or unknown format
+    // Parse to get entity IDs and rebuild as comma-separated
+    const parsed = parseEntityIdPath(entityIdPath);
+    if (parsed && parsed.entityIds.length > 0) {
+      normalizedPath = parsed.entityIds.join(',');
+    } else if (!isNewCommaFormat(entityIdPath)) {
+      // Single numeric value - use as-is
       normalizedPath = entityIdPath;
     }
   }

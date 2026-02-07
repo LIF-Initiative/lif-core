@@ -134,12 +134,13 @@ const ModelColumn: React.FC<ModelColumnProps> = ({
                         <div className="mappings-attributes">
                             {attributes.map((attr) => {
                                 // Path-specific mapped check so reused attributes at different paths don't all show as mapped
-                                // Use PathId (numeric) for matching against API data
+                                // Use PathId (comma-separated numeric) for matching against API data
                                 const currentPath = node.PathId;
-                                // Helper to normalize API EntityIdPath to internal dot format for comparison
+                                // Helper to normalize API EntityIdPath for comparison (unified comma format)
                                 const normalizeForComparison = (apiPath: string | null | undefined): string => {
                                     if (!apiPath) return '';
                                     if (isNewCommaFormat(apiPath)) {
+                                        // Both internal PathId and API format use comma-separated format now
                                         return apiPathToDotFormat(apiPath).dotPath;
                                     }
                                     // For legacy name-based paths, we can't match against numeric PathId

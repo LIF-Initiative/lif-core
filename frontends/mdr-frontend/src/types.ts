@@ -296,10 +296,9 @@ export interface DataModelWithDetailsDTO {
 
 // ----- Entity Tree (derived client-side) -----
 export interface EntityTreeNode {
-  // Internal format: dot-separated entity IDs, e.g. "654.22.6"
-  // This is converted to API format (comma-separated with negative attr ID) when sending to backend
+  // Unified format: comma-separated entity IDs, e.g. "654,22,6"
+  // This matches the API EntityIdPath format directly (no conversion needed)
   PathId: string;
-  PathName: string; // e.g. "Parent.Child.Grandchild" (human-readable names)
   EntityId: number;
   // Reference to the original object held in DataModelWithDetailsDTO.Entities (same reference, not a copy)
   Entity: EntityWithAttributesDTO | EntityDTO;

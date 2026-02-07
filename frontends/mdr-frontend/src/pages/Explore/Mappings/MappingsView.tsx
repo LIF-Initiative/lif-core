@@ -33,7 +33,7 @@ import {
 import { buildDefaultAssignmentExpression } from '../../../utils/jsonataUtils';
 import {
     parseEntityIdPath,
-    dotPathToApiFormat,
+    appendAttributeToPath,
     extractEntityIds,
 } from '../../../utils/entityIdPath';
 import {
@@ -1171,7 +1171,7 @@ const MappingsView: React.FC = () => {
                         const newSrc = {
                             AttributeId: dragSourceAttr.Id,
                             AttributeType: 'Source',
-                            EntityIdPath: dotPathToApiFormat(srcPath, dragSourceAttr.Id),
+                            EntityIdPath: appendAttributeToPath(srcPath, dragSourceAttr.Id),
                             EntityId: deriveEntityIdForUpdate(srcPath, dragSourceAttr.Id),
                         } as any;
                         if (!nextSrcs.some((s) => key(s) === key(newSrc))) {
@@ -1227,14 +1227,14 @@ const MappingsView: React.FC = () => {
                         const srcAttrPayload = {
                             AttributeId: dragSourceAttr.Id,
                             AttributeType: 'Source',
-                            EntityIdPath: dotPathToApiFormat(srcPath, dragSourceAttr.Id),
+                            EntityIdPath: appendAttributeToPath(srcPath, dragSourceAttr.Id),
                             EntityId:
                                 deriveEntityId(srcPath, dragSourceAttr.Id, sourceModel),
                         } as any;
                         const tgtAttrPayload = {
                             AttributeId: dragTargetAttrId,
                             AttributeType: 'Target',
-                            EntityIdPath: dotPathToApiFormat(tgtPath, dragTargetAttrId),
+                            EntityIdPath: appendAttributeToPath(tgtPath, dragTargetAttrId),
                             EntityId: deriveEntityId(tgtPath, dragTargetAttrId, targetModel),
                         } as any;
                         // Build source & target JSONata paths for naming and default expression
@@ -1750,7 +1750,7 @@ const MappingsView: React.FC = () => {
                             const tgtAttrPayload = {
                                 AttributeId: reassignHoverTargetId!,
                                 AttributeType: 'Target',
-                                EntityIdPath: dotPathToApiFormat(tgtPath, reassignHoverTargetId!),
+                                EntityIdPath: appendAttributeToPath(tgtPath, reassignHoverTargetId!),
                                 EntityId: deriveEntityId(
                                     tgtPath,
                                     reassignHoverTargetId!,

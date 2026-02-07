@@ -74,7 +74,7 @@ export function useMappingWires<TTrans extends { Id: number; TargetAttribute?: a
         : [];
       const tgtId = t.TargetAttribute?.AttributeId;
       if (!tgtId || sources.length === 0) return;
-      // Use buildAttributeLookupKey to normalize EntityIdPath (handles both old dot and new comma formats)
+      // Use buildAttributeLookupKey to normalize EntityIdPath to unified comma format
       const tgtKey = buildAttributeLookupKey(t.TargetAttribute?.EntityIdPath, tgtId);
       const rightEl = attrElementsRight.current.get(tgtKey) || attrElementsRight.current.get(String(tgtId));
       if (!rightEl) {
@@ -93,7 +93,7 @@ export function useMappingWires<TTrans extends { Id: number; TargetAttribute?: a
       sources.forEach((srcAttr: any, idx: number) => {
         const srcId = srcAttr?.AttributeId;
         if (!srcId) return;
-        // Use buildAttributeLookupKey to normalize EntityIdPath (handles both old dot and new comma formats)
+        // Use buildAttributeLookupKey to normalize EntityIdPath to unified comma format
         const srcKey = buildAttributeLookupKey(srcAttr?.EntityIdPath, srcId);
         const leftEl = attrElementsLeft.current.get(srcKey) || attrElementsLeft.current.get(String(srcId));
         if (!leftEl) {
