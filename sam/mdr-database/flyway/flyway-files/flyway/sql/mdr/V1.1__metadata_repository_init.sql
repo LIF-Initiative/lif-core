@@ -18299,7 +18299,7 @@ SELECT pg_catalog.setval('public."ExtMappedValueSet_Id_seq"', 1, false);
 -- Name: TransformationAttributes_Id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."TransformationAttributes_Id_seq"', 2743, true);
+SELECT pg_catalog.setval('public."TransformationAttributes_Id_seq"', 2756, true);
 
 
 --
@@ -18313,7 +18313,7 @@ SELECT pg_catalog.setval('public."TransformationsGroup_Id_seq"', 27, true);
 -- Name: Transformations_Id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."Transformations_Id_seq"', 1373, true);
+SELECT pg_catalog.setval('public."Transformations_Id_seq"', 1380, true);
 
 
 --
