@@ -25,15 +25,19 @@ export interface ParsedEntityIdPath {
 }
 
 /**
- * Check if a path string uses the legacy dot-separated format.
- * Legacy format was: "Entity.Child.attribute" (names) or "4.238.6" (IDs with dots)
+ * Check if a path string uses the legacy format (name-based or dot-separated).
+ * Legacy formats include:
+ *   - Name-based paths: "Person", "Person.CredentialAward"
+ *   - Old numeric dot-separated: "4.238.6"
  * This is used for detection/warning purposes only - legacy format is NOT supported.
  */
 export function isLegacyDotFormat(path: string | null | undefined): boolean {
   if (!path) return false;
   const trimmed = path.trim();
-  // Legacy format uses dots, new format uses commas
-  return trimmed.includes('.') && !trimmed.includes(',');
+  // Legacy if it contains dots (old format) or contains non-numeric characters (name-based)
+  const hasDots = trimmed.includes('.') && !trimmed.includes(',');
+  const hasNonNumeric = /[^\d,\s-]/.test(trimmed);
+  return hasDots || hasNonNumeric;
 }
 
 /**
@@ -167,44 +171,30 @@ export function appendAttributeToPath(pathId: string | null | undefined, attribu
 }
 
 /**
- * @deprecated Use appendAttributeToPath instead. This function exists only for backward compatibility.
- */
-export function dotPathToApiFormat(pathId: string | null | undefined, attributeId?: number): string {
-  return appendAttributeToPath(pathId, attributeId);
-}
-
-/**
- * Parse an API format EntityIdPath and extract the entity path and attribute ID.
- * Since internal PathId and API format are now unified (comma-separated), this
- * returns the entity path in the same comma-separated format.
+ * Extract the entity-only portion of an EntityIdPath, stripping any trailing attribute ID.
+ * For example: "654,22,6,-352" → "654,22,6"
+ *              "654,22,6"      → "654,22,6" (already entity-only)
  *
- * @param apiPath API format path like "654,22,6,-352"
- * @returns Entity path as comma-separated string and extracted attributeId
- * @deprecated Renamed from apiPathToDotFormat. The dotPath field now contains comma-separated format.
+ * @param entityIdPath Full EntityIdPath that may end with a negative attribute ID
+ * @returns Entity-only comma-separated path, or empty string if parsing fails
  */
-export function apiPathToDotFormat(apiPath: string | null | undefined): { dotPath: string; attributeId?: number } {
-  const parsed = parseEntityIdPath(apiPath);
-  if (!parsed) {
-    return { dotPath: '', attributeId: undefined };
-  }
-
-  return {
-    // Now returns comma-separated format (unified with internal PathId)
-    dotPath: parsed.entityIds.join(','),
-    attributeId: parsed.attributeId,
-  };
+export function extractEntityPath(entityIdPath: string | null | undefined): string {
+  const parsed = parseEntityIdPath(entityIdPath);
+  if (!parsed) return '';
+  return parsed.entityIds.join(',');
 }
 
 /**
  * Build a lookup key for wire matching from an EntityIdPath and attribute ID.
- * Used to match transformation attributes with DOM elements.
+ * Used to match transformation attributes with DOM elements registered via
+ * registerAttrElement (which stores as `${PathId}|${AttrId}`).
  *
- * Uses unified comma-separated format for both API paths and internal PathId.
- * Legacy dot-separated formats will trigger a warning and return an empty key (wire will not be drawn).
+ * Parses the EntityIdPath to extract the entity-only portion, then appends
+ * the positive attribute ID after a pipe separator.
  *
- * @param entityIdPath The EntityIdPath (comma-separated format)
+ * @param entityIdPath The EntityIdPath (comma-separated format, may include negative attribute suffix)
  * @param attributeId The attribute ID
- * @returns A consistent lookup key string like "654,22,6|352", or empty if legacy format
+ * @returns A consistent lookup key string like "654,22,6|352", or just "352" if no entity path
  */
 export function buildAttributeLookupKey(
   entityIdPath: string | null | undefined,
@@ -238,8 +228,8 @@ export function buildAttributeLookupKey(
 /**
  * Extract entity IDs from an internal PathId or API EntityIdPath for entity lookups.
  *
- * @param path Either internal PathId ("654.22.6") or API path ("654,22,6,-352")
- * @returns Array of entity IDs
+ * @param path API path like "654,22,6,-352" or PathId like "654,22,6"
+ * @returns Array of entity IDs (positive only)
  */
 export function extractEntityIds(path: string | null | undefined): number[] {
   const parsed = parseEntityIdPath(path);

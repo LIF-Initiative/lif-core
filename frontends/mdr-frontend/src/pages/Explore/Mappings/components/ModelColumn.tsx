@@ -5,7 +5,7 @@ import type {
     AttributeDTO,
     EntityTreeNode,
 } from '../../../../types';
-import { apiPathToDotFormat, isNewCommaFormat } from '../../../../utils/entityIdPath';
+import { extractEntityPath, isNewCommaFormat } from '../../../../utils/entityIdPath';
 
 // Types re-declared locally to avoid tight coupling; import actual interfaces from caller when wiring up
 export interface DisplayTransformationDataLike {
@@ -140,8 +140,8 @@ const ModelColumn: React.FC<ModelColumnProps> = ({
                                 const normalizeForComparison = (apiPath: string | null | undefined): string => {
                                     if (!apiPath) return '';
                                     if (isNewCommaFormat(apiPath)) {
-                                        // Both internal PathId and API format use comma-separated format now
-                                        return apiPathToDotFormat(apiPath).dotPath;
+                                        // Extract entity-only path from EntityIdPath (strips negative attribute suffix)
+                                        return extractEntityPath(apiPath);
                                     }
                                     // For legacy name-based paths, we can't match against numeric PathId
                                     // Return the apiPath as-is (it won't match, which is correct behavior)

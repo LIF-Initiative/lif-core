@@ -11,7 +11,7 @@ export type WirePath = {
   tgtPathName?: string;
   srcEntityIdPath?: string;
   tgtEntityIdPath?: string;
-  srcKey?: string; // EntityIdPath|AttrId composite
+  srcKey?: string; // PathId|AttrId composite for element registry matching
   tgtKey?: string;
 };
 
