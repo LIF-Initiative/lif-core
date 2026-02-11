@@ -1,7 +1,11 @@
-#!/bin/bash
+#!/bin/bash -eu
 #
 # Release to Demo
 # Updates demo CloudFormation parameter files with the latest image tags from dev ECR.
+#
+# Author: LIF Initiative
+# Date: 2026-02-05
+# Version: 1.0.0
 #
 # Usage:
 #   ./release-demo.sh              # Dry-run (preview changes)
@@ -9,7 +13,7 @@
 #   ./release-demo.sh --help       # Show help
 #
 
-set -euo pipefail
+set -o pipefail
 
 # Colors for output
 RED='\033[0;31m'
@@ -21,6 +25,12 @@ NC='\033[0m' # No Color
 DRY_RUN=true
 VERBOSE=false
 ERRORS=()
+
+# Global variables for inter-function communication
+_CURR_URL=""
+_NEW_URL=""
+_REPO=""
+_TAG=""
 
 usage() {
     echo "Usage: $0 [OPTIONS]"
@@ -67,14 +77,36 @@ get_release_tag() {
         return 1
     fi
 
-    # Extract repository name from URL
+    # Extract repository name from URL with validation
     # Example: 381492161417.dkr.ecr.us-east-1.amazonaws.com/lif/dev/lif_graphql_api:tag
     #       -> lif/dev/lif_graphql_api
     local repo
-    repo=$(echo "$curr_val" | sed 's#[^/]*/##' | sed 's#:.*##')
+
+    # Strip optional tag (everything after the first ':')
+    local repo_url_no_tag="${curr_val%%:*}"
+
+    # Remove registry domain (everything up to and including the first '/')
+    local repo_path="${repo_url_no_tag#*/}"
+
+    # Validate that a '/' was present; if not, the format is unexpected
+    if [[ "$repo_path" == "$repo_url_no_tag" ]]; then
+        log_error "Unexpected ImageUrl format (missing repository path): $curr_val"
+        return 1
+    fi
+
+    repo="$repo_path"
 
     if [[ -z "$repo" ]]; then
         log_error "Could not extract repository name from $curr_val"
+        return 1
+    fi
+
+    # Extract AWS region from image URL
+    local region
+    region=$(echo "$curr_val" | sed -n 's/.*\.ecr\.\([^.]*\)\.amazonaws.*/\1/p')
+
+    if [[ -z "$region" ]]; then
+        log_error "Could not extract AWS region from $curr_val"
         return 1
     fi
 
@@ -83,20 +115,21 @@ get_release_tag() {
     local ecr_output
     local tag
 
-    ecr_output=$(aws ecr describe-images --repository-name "$repo" 2>&1)
+    ecr_output=$(aws ecr describe-images --repository-name "$repo" --region "$region" 2>&1)
 
     if echo "$ecr_output" | grep -q "AccessDeniedException"; then
-        log_error "Access denied to ECR (repo: $repo)"
+        log_error "Access denied to ECR (repo: $repo, region: $region)"
         log_error "Ensure you're authenticated to the correct AWS account"
         return 1
     fi
 
     if echo "$ecr_output" | grep -q "RepositoryNotFoundException"; then
-        log_error "Repository not found: $repo"
+        log_error "Repository not found: $repo (region: $region)"
         return 1
     fi
 
-    tag=$(echo "$ecr_output" | jq -r '.imageDetails[] | select(has("imageTags")) | select(.imageTags | any(. == "latest")) | .imageTags - ["latest"] | .[0]' 2>/dev/null)
+    # Sort tags for predictable selection when multiple tags exist
+    tag=$(echo "$ecr_output" | jq -r '.imageDetails[] | select(has("imageTags")) | select(.imageTags | any(. == "latest")) | (.imageTags - ["latest"]) | sort | .[0]' 2>/dev/null)
 
     if [[ -z "$tag" || "$tag" == "null" ]]; then
         log_error "No 'latest' tag found for repository: $repo"
@@ -119,6 +152,12 @@ get_release_tag() {
 # Update a single params file
 update_params_file() {
     local file=$1
+
+    # Initialize global variables to avoid stale values from previous iterations
+    _CURR_URL=""
+    _NEW_URL=""
+    _REPO=""
+    _TAG=""
 
     if ! get_release_tag "$file"; then
         ERRORS+=("$file")
@@ -143,10 +182,10 @@ update_params_file() {
         return 0
     fi
 
-    # Apply the change
+    # Apply the change - validate old value to ensure we're updating the expected value
     local contents
     contents=$(jq --arg old "$_CURR_URL" --arg new "$_NEW_URL" \
-        '(.[] | select(.ParameterKey == "ImageUrl") | .ParameterValue) |= $new' "$file")
+        '(.[] | select(.ParameterKey == "ImageUrl" and .ParameterValue == $old) | .ParameterValue) |= $new' "$file")
 
     if [[ -z "$contents" ]]; then
         log_error "Failed to generate updated JSON for $file"
@@ -154,8 +193,29 @@ update_params_file() {
         return 1
     fi
 
-    echo "$contents" | jq '.' > "$file"
-    log_success "Updated $(basename "$file")"
+    # Safely write updated JSON to a temporary file, then move it into place
+    local temp_file
+    temp_file=$(mktemp) || {
+        log_error "Failed to create temporary file for $file"
+        ERRORS+=("$file")
+        return 1
+    }
+
+    if echo "$contents" | jq '.' > "$temp_file"; then
+        if mv "$temp_file" "$file"; then
+            log_success "Updated $(basename "$file")"
+        else
+            log_error "Failed to move temporary file into place for $file"
+            ERRORS+=("$file")
+            rm -f "$temp_file"
+            return 1
+        fi
+    else
+        log_error "Failed to write updated JSON to temporary file for $file"
+        ERRORS+=("$file")
+        rm -f "$temp_file"
+        return 1
+    fi
 }
 
 # Main
@@ -200,11 +260,25 @@ main() {
         exit 1
     fi
 
-    # Find param files
-    local param_files
-    param_files=$(ls -1 cloudformation/demo*.params 2>/dev/null | xargs -I {} grep -l ImageUrl {} 2>/dev/null || true)
+    # Find param files using arrays for proper handling of filenames
+    shopt -s nullglob
+    local -a all_param_files=(cloudformation/demo*.params)
+    shopt -u nullglob
 
-    if [[ -z "$param_files" ]]; then
+    if [[ ${#all_param_files[@]} -eq 0 ]]; then
+        log_warn "No demo param files found"
+        exit 0
+    fi
+
+    # Filter to only files containing ImageUrl
+    local -a param_files=()
+    for f in "${all_param_files[@]}"; do
+        if grep -q ImageUrl "$f" 2>/dev/null; then
+            param_files+=("$f")
+        fi
+    done
+
+    if [[ ${#param_files[@]} -eq 0 ]]; then
         log_warn "No demo param files with ImageUrl found"
         exit 0
     fi
@@ -223,7 +297,7 @@ main() {
     local updated=0
     local skipped=0
 
-    for file in $param_files; do
+    for file in "${param_files[@]}"; do
         if update_params_file "$file"; then
             if [[ "$_CURR_URL" != "$_NEW_URL" ]]; then
                 ((updated++))
