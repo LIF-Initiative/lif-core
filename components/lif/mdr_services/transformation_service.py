@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional
+from typing import Dict, List
 
 from fastapi import HTTPException
 from lif.datatypes.mdr_sql_model import (
@@ -120,8 +120,8 @@ async def check_transformation_attribute(session: AsyncSession, anchor_data_mode
     - Entities and attributes must 'chain' together via the association tables. This is different based on the type of the anchor data model.
     """
     transformation_path_ids = parse_transformation_path(id_path)
-    previous_id = None
-
+    previous_node = None
+    current_node = None
     for i, raw_node_id in enumerate(transformation_path_ids):
         # Gather details
 
@@ -132,11 +132,15 @@ async def check_transformation_attribute(session: AsyncSession, anchor_data_mode
         initial_signature = f"Node {raw_node_id}({cleaned_node_id}) in the entityIdPath ({id_path})"
         # Also confirms the entity / attribute exists and is not deleted
         try:
-            node_data_model_id = (
+            # If there is a current node, capture it as the previous node for association checks.
+            if current_node:
+                previous_node = current_node
+            current_node = (
                 await check_entity_by_id(session=session, id=cleaned_node_id)
                 if node_type == DatamodelElementType.Entity
                 else await check_attribute_by_id(session=session, id=cleaned_node_id)
-            ).DataModelId
+            )
+            node_data_model_id = current_node.DataModelId
         except HTTPException as e:
             logger.error(f"{initial_signature} - {e.detail}")
             raise
@@ -170,65 +174,105 @@ async def check_transformation_attribute(session: AsyncSession, anchor_data_mode
                 f"{signature} - Is included in the non-self-contained anchor data model {anchor_data_model_id}."
             )
 
-        # First node has no association checks needed, check the rest for associations
-        if i > 0:
-            nodes = (
+        # First node has no association checks needed, check the rest for associations (ie all that have a previous node to associate from)
+        if previous_node:
+            associations = (
                 await retrieve_all_entity_associations(
                     session=session,
-                    parent_entity_id=previous_id,
+                    parent_entity_id=previous_node.Id,
                     child_entity_id=raw_node_id,
                     extended_by_data_model_id=anchor_data_model_id,
                 )
                 if node_type == DatamodelElementType.Entity
                 else await retrieve_all_entity_attribute_associations(
                     session=session,
-                    entity_id=previous_id,
+                    entity_id=previous_node.Id,
                     attribute_id=abs(raw_node_id),
                     extended_by_data_model_id=anchor_data_model_id,
                 )
             )
-            logger.info(f"{signature} - Retrieved {len(nodes)} associations to review.")
+            logger.info(f"{signature} - Retrieved {len(associations)} associations to review.")
 
             found_valid_association = False
-            # A node is either an entity or attribute
-            for node in nodes:
+            # An association is either for an entity or attribute
+            for association in associations:
+                logger.info(f"{signature} - Reviewing association {association.Id}: {association}")
                 if is_self_contained_anchor_model:
-                    if (node_type == DatamodelElementType.Entity and node.Extension == True) or (
-                        node.ExtendedByDataModelId is not None
+                    if (node_type == DatamodelElementType.Entity and association.Extension == True) or (
+                        association.ExtendedByDataModelId is not None
                     ):
                         # Base LIF and Source Schema should not have extensions
-                        message = f"{signature} - Association from parent {previous_id} to child {raw_node_id} is marked as an extension, but {anchor_data_model.Id} is a self-contained data model."
-                        logger.warning(message)
+                        message = f"{signature} - Association from parent {previous_node.Id} to child {raw_node_id} is marked as an extension, but {anchor_data_model.Id} is a self-contained data model."
+                        logger.warning(f"{message} - association: {association}")
                         raise HTTPException(status_code=400, detail=message)
                     found_valid_association = True
                     logger.info(
-                        f"{signature} - Association from parent {previous_id} to child {raw_node_id} in the self-contained model is valid"
+                        f"{signature} - Association from parent {previous_node.Id} to child {raw_node_id} in the self-contained model is valid"
                     )
                     break
                 else:
                     # Org LIF and Partner LIF may have extensions
-                    if (
-                        node_type == DatamodelElementType.Attribute or (node.Extension == False)
-                    ) and node.ExtendedByDataModelId is None:
-                        found_valid_association = True
+                    if node_type == DatamodelElementType.Entity:
+                        # If either the current or previous node is an Extension, the association must
+                        # be an extension and have ExtendedByDataModelId set to the anchor data model
+                        if (
+                            (current_node.Extension == True or previous_node.Extension == True)
+                            and association.Extension == True
+                            and association.ExtendedByDataModelId == anchor_data_model_id
+                        ):
+                            found_valid_association = True
+                            logger.info(
+                                f"{signature} - Entity association from parent {previous_node.Id} to child {raw_node_id} is valid (Extension on current or parent is True, and association is an extension with extendedByDataModelId matching the anchor data model)"
+                            )
+                            break
+                        # If both the current and previous nodes are not Extensions, the association must not
+                        # be an extension but must have ExtendedByDataModelId set to the anchor data model
+                        elif (
+                            current_node.Extension == False
+                            and previous_node.Extension == False
+                            and association.Extension == False
+                            and association.ExtendedByDataModelId is anchor_data_model_id
+                        ):
+                            found_valid_association = True
+                            logger.info(
+                                f"{signature} - Entity association from parent {previous_node.Id} to child {raw_node_id} is valid (Extension on current, parent, and association is false, but the association ExtendedByDataModelId matches the anchor data model)"
+                            )
+                            break
                         logger.info(
-                            f"{signature} - Association from parent {previous_id} to child {raw_node_id} is valid and originates in the anchor data model"
+                            f"{signature} - Invalid non-self-contained data model entity association from parent (id={previous_node.Id}, extension={previous_node.Extension}) to child (id={raw_node_id}, extension={current_node.Extension}) is invalid: {association}"
                         )
-                        break
-                    elif (
-                        node_type == DatamodelElementType.Attribute or (node.Extension == True)
-                    ) and node.ExtendedByDataModelId == anchor_data_model_id:
-                        found_valid_association = True
+                    else:
+                        # Must be an attribute association
+
+                        # If either the current or previous node is an Extension, the association
+                        # must have ExtendedByDataModelId set to the anchor data model
+                        if (
+                            current_node.Extension == True or previous_node.Extension == True
+                        ) and association.ExtendedByDataModelId == anchor_data_model_id:
+                            found_valid_association = True
+                            logger.info(
+                                f"{signature} - Attribute association from parent {previous_node.Id} to child {raw_node_id} is valid (Extension on current or parent is True, and association's extendedByDataModelId matches the anchor data model)"
+                            )
+                            break
+                        # If both the current and previous nodes are not Extensions, the
+                        # association must have ExtendedByDataModelId set to the None
+                        elif (
+                            current_node.Extension == False
+                            and previous_node.Extension == False
+                            and association.ExtendedByDataModelId is None
+                        ):
+                            found_valid_association = True
+                            logger.info(
+                                f"{signature} - Attribute association from parent {previous_node.Id} to child {raw_node_id} is valid (Extension on current and parent are false, and the association ExtendedByDataModelId is None)"
+                            )
+                            break
                         logger.info(
-                            f"{signature} - Association from parent {previous_id} to child {raw_node_id} is valid and extended by the anchor data model"
+                            f"{signature} - Invalid non-self-contained data model attribute association from parent (id={previous_node.Id}, extension={previous_node.Extension}) to child (id={raw_node_id}, extension={current_node.Extension}) is invalid: {association}"
                         )
-                        break
 
             if not found_valid_association:
-                message = (
-                    f"{signature} - Unable to find valid association from parent {previous_id} to child {raw_node_id}."
-                )
-                logger.warning(message)
+                message = f"{signature} - Unable to find valid association from parent {previous_node.Id} to child {raw_node_id}."
+                logger.warning(f"{message} ")
                 raise HTTPException(status_code=400, detail=message)
 
         # this will always be a positive id except for possibly the last node
