@@ -60,6 +60,10 @@ x-lif-graphql-api-environment-template: &lif-graphql-api-environment-template
   OPENAPI_DATA_MODEL_ID: ${OPENAPI_DATA_MODEL_ID:-17}
   OPENAPI_JSON_FILENAME: ${OPENAPI_JSON_FILENAME:-openapi_constrained_with_interactions.json}
   USE_OPENAPI_DATA_MODEL_FROM_FILE: ${USE_OPENAPI_DATA_MODEL_FROM_FILE:-false}
+  # API Key Auth configuration (empty = auth disabled, format: "key1:name1,key2:name2")
+  GRAPHQL_AUTH__API_KEYS: ${GRAPHQL_AUTH__API_KEYS:-}
+  GRAPHQL_AUTH__PUBLIC_PATHS: ${GRAPHQL_AUTH__PUBLIC_PATHS:-/health,/health-check}
+  GRAPHQL_AUTH__PUBLIC_PATH_PREFIXES: ${GRAPHQL_AUTH__PUBLIC_PATH_PREFIXES:-/docs,/openapi.json}
 
 # ----------- SERVICES -----------
 
