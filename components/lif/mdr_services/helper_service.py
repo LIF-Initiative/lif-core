@@ -44,20 +44,6 @@ async def check_attribute_by_id(session: AsyncSession, id: int):
     return attribute
 
 
-async def check_entity_attribute_association(session: AsyncSession, entity_id: int, attribute_id: int):
-    query = select(EntityAttributeAssociation).where(
-        EntityAttributeAssociation.EntityId == entity_id, EntityAttributeAssociation.AttributeId == attribute_id
-    )
-    result = await session.execute(query)
-    associations = result.fetchall()
-    if not associations:
-        raise HTTPException(
-            status_code=404,
-            detail=f"EntityAttributeAssociation with EntityId {entity_id} and AttributeId {attribute_id} not found",
-        )
-    return associations
-
-
 async def check_value_set_by_id(session: AsyncSession, id: int):
     value_set = await session.get(ValueSet, id)
     if not value_set:

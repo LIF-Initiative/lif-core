@@ -7,7 +7,6 @@ from lif.mdr_dto.entity_association_dto import (
     EntityAssociationDTO,
     UpdateEntityAssociationDTO,
 )
-from lif.mdr_dto.transformation_dto import TransformationAttributeDTO
 from lif.mdr_services.entity_service import get_entity_by_id
 from lif.mdr_services.helper_service import check_datamodel_by_id, check_entity_by_id
 from lif.mdr_utils.logger_config import get_logger
@@ -81,97 +80,6 @@ async def retrieve_all_entity_associations(
             detail=f"Child {child_entity_id} association with parent {parent_entity_id} not found in data model association",
         )
     return associations
-
-
-async def validate_entity_associations_for_transformation_attribute(
-    session: AsyncSession, transformation_attribute: TransformationAttributeDTO
-) -> bool:
-    immediate_parent_entity_id = transformation_attribute.EntityId
-    immediate_parent_entity = await get_entity_by_id(session=session, id=immediate_parent_entity_id)
-    entity_path = transformation_attribute.EntityIdPath
-    entities = entity_path.split(".")
-    grandparent_entity_name = entities[-2] if len(entities) > 1 else None
-    logger.info(
-        f"Validating for entity association with current entity name: {entities[-1]} and grandparent entity name: {grandparent_entity_name}"
-    )
-
-    query = select(EntityAssociation).where(
-        EntityAssociation.ChildEntityId == immediate_parent_entity_id, EntityAssociation.Deleted == False
-    )
-    result = await session.execute(query)
-    entity_associations = result.scalars().all()
-    matching_entity_association = None
-    for entity_association in entity_associations:
-        # if entity_association.Relationship is not None and does not start with "has" or "relevant"
-        if entity_association.Relationship is not None and not (
-            entity_association.Relationship.startswith("has") or entity_association.Relationship.startswith("relevant")
-        ):
-            final_entity_name = entity_association.Relationship + immediate_parent_entity.Name
-            logger.info(f"Found entity association with final entity name: {final_entity_name}")
-            if final_entity_name == entities[-1]:
-                grandparent_entity = await get_entity_by_id(session=session, id=entity_association.ParentEntityId)
-                logger.info(f"Found grandparent entity with name: {grandparent_entity.Name}")
-                if grandparent_entity.Name == grandparent_entity_name:
-                    matching_entity_association = entity_association
-                    break
-        elif entities[-1] == immediate_parent_entity.Name:
-            grandparent_entity = await get_entity_by_id(session=session, id=entity_association.ParentEntityId)
-            logger.info(f"Found grandparent entity with name: {grandparent_entity.Name}")
-            if grandparent_entity.Name == grandparent_entity_name:
-                matching_entity_association = entity_association
-                break
-
-    logger.info(f"Matching entity association found: {matching_entity_association}")
-    if not matching_entity_association:
-        logger.error(
-            f"No matching entity association found for immediate parent entity ID {immediate_parent_entity_id} with name {entities[-1]} and grandparent entity name {grandparent_entity_name}"
-        )
-        return False
-
-    # Loop through the remaining values in the entities array going backwards to check for the rest of the entity associations
-    for i in range(
-        len(entities) - 2, 0, -1
-    ):  # Start from the second last entity and go backwards to the second from the first entity
-        current_entity_id = matching_entity_association.ParentEntityId
-        current_entity = await get_entity_by_id(session=session, id=current_entity_id)
-        grandparent_entity_name = entities[i - 1] if i - 1 >= 0 else None
-        logger.info(
-            f"Checking for entity association with current entity name: {entities[i]} and grandparent entity name: {grandparent_entity_name}"
-        )
-        query = select(EntityAssociation).where(
-            EntityAssociation.ChildEntityId == current_entity_id, EntityAssociation.Deleted == False
-        )
-        result = await session.execute(query)
-        entity_associations = result.scalars().all()
-        found_matching_association = False
-        for entity_association in entity_associations:
-            if entity_association.Relationship is not None and not (
-                entity_association.Relationship.startswith("has")
-                or entity_association.Relationship.startswith("relevant")
-            ):
-                final_entity_name = entity_association.Relationship + current_entity.Name
-                logger.info(f"Found entity association with final entity name: {final_entity_name}")
-                if final_entity_name == entities[i]:
-                    grandparent_entity = await get_entity_by_id(session=session, id=entity_association.ParentEntityId)
-                    logger.info(f"Found grandparent entity with name: {grandparent_entity.Name}")
-                    if grandparent_entity.Name == grandparent_entity_name:
-                        matching_entity_association = entity_association
-                        found_matching_association = True
-                        break
-            elif entities[i] == current_entity.Name:
-                grandparent_entity = await get_entity_by_id(session=session, id=entity_association.ParentEntityId)
-                logger.info(f"Found grandparent entity with name: {grandparent_entity.Name}")
-                if grandparent_entity.Name == grandparent_entity_name:
-                    matching_entity_association = entity_association
-                    found_matching_association = True
-                    break
-        if not found_matching_association:
-            logger.error(
-                f"No matching entity association found for parent entity with name {entities[i]} and grandparent entity name {grandparent_entity_name}"
-            )
-            return False
-
-    return True
 
 
 async def create_entity_association(session: AsyncSession, data: CreateEntityAssociationDTO):

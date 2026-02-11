@@ -25,18 +25,9 @@ from lif.mdr_dto.transformation_group_dto import (
     UpdateTransformationGroupDTO,
 )
 from lif.mdr_services.attribute_service import get_attribute_dto_by_id
-from lif.mdr_services.entity_association_service import (
-    retrieve_all_entity_associations,
-    validate_entity_associations_for_transformation_attribute,
-)
+from lif.mdr_services.entity_association_service import retrieve_all_entity_associations
 from lif.mdr_services.entity_attribute_association_service import retrieve_all_entity_attribute_associations
-from lif.mdr_services.entity_service import is_entity_by_unique_name
-from lif.mdr_services.helper_service import (
-    check_attribute_by_id,
-    check_datamodel_by_id,
-    check_entity_attribute_association,
-    check_entity_by_id,
-)
+from lif.mdr_services.helper_service import check_attribute_by_id, check_datamodel_by_id, check_entity_by_id
 from lif.mdr_services.inclusions_service import check_existing_inclusion
 from lif.mdr_utils.logger_config import get_logger
 from sqlalchemy import and_
@@ -45,24 +36,6 @@ from sqlalchemy.orm import aliased
 from sqlmodel import func, select
 
 logger = get_logger(__name__)
-
-
-async def validate_entity_id_path(session: AsyncSession, transformation_attribute: Dict):
-    if transformation_attribute.EntityIdPath:
-        # Validate that EntityIdPath either corresponds to an Entity with a UniqueName of the path
-        if await is_entity_by_unique_name(session=session, unique_name=transformation_attribute.EntityIdPath):
-            return True
-
-        # OR that it corresponds to a valid chain of EntityAssociations by entity name
-        if await validate_entity_associations_for_transformation_attribute(
-            session=session, transformation_attribute=transformation_attribute
-        ):
-            return True
-
-        raise HTTPException(
-            status_code=400,
-            detail=f"EntityIdPath '{transformation_attribute.EntityIdPath}' is not valid for the provided EntityId {transformation_attribute.EntityId}. It must either correspond to an Entity with that UniqueName or a valid chain of EntityAssociations by entity name.",
-        )
 
 
 def parse_transformation_path(id_path: str) -> List[int]:
@@ -231,7 +204,13 @@ async def check_transformation_attribute(session: AsyncSession, anchor_data_mode
                             current_node.Extension == False
                             and previous_node.Extension == False
                             and association.Extension == False
-                            and association.ExtendedByDataModelId is anchor_data_model_id
+                            and (
+                                # A value of 'None' looks to occur when a mapping is requested of A1
+                                # and the path is E1 > E2 > A1, but E1 was the association from
+                                # the originating data model
+                                association.ExtendedByDataModelId is anchor_data_model_id
+                                or association.ExtendedByDataModelId is None
+                            )
                         ):
                             found_valid_association = True
                             logger.info(
@@ -279,33 +258,7 @@ async def check_transformation_attribute(session: AsyncSession, anchor_data_mode
         previous_id = raw_node_id
 
 
-def check_is_entity_id_path_v2(transformation_attribute: CreateTransformationDTO | UpdateTransformationDTO) -> bool:
-    return (
-        (
-            transformation_attribute.SourceAttributes
-            and transformation_attribute.SourceAttributes[0].EntityIdPath
-            and (
-                transformation_attribute.SourceAttributes[0].EntityIdPath.__contains__(",")
-                or transformation_attribute.SourceAttributes[0].EntityIdPath.lstrip("-").isdigit()
-            )
-        )
-        or (
-            transformation_attribute.TargetAttribute
-            and transformation_attribute.TargetAttribute.EntityIdPath
-            and (
-                transformation_attribute.TargetAttribute.EntityIdPath.__contains__(",")
-                or transformation_attribute.TargetAttribute.EntityIdPath.lstrip("-").isdigit()
-            )
-        )
-        or False
-    )
-
-
 async def create_transformation(session: AsyncSession, data: CreateTransformationDTO):
-    # Once the UX is in place, only keep the `is_entity_id_path_v2` code flows
-    is_entity_id_path_v2 = check_is_entity_id_path_v2(data)
-    logger.info(f"Creating transformation; is_entity_id_path_v2={is_entity_id_path_v2}")
-
     # Checking if transformation group exists
     transformation_group = await get_transformation_group_by_id(session=session, id=data.TransformationGroupId)
     source_data_model = await check_datamodel_by_id(session=session, id=transformation_group.SourceDataModelId)
@@ -313,34 +266,14 @@ async def create_transformation(session: AsyncSession, data: CreateTransformatio
 
     # Validate source attributes
     for attribute in data.SourceAttributes:
-        if is_entity_id_path_v2:
-            await check_transformation_attribute(
-                session=session, anchor_data_model=source_data_model, id_path=attribute.EntityIdPath
-            )
-        else:
-            src_attribute = await check_attribute_by_id(session=session, id=attribute.AttributeId)
-            if src_attribute.DataModelId != transformation_group.SourceDataModelId:
-                raise HTTPException(
-                    status_code=400,
-                    detail="The source attribute  is not under the source data model for this transformation group.",
-                )
-            await check_entity_by_id(session=session, id=attribute.EntityId)
-            await check_entity_attribute_association(
-                session=session, entity_id=attribute.EntityId, attribute_id=attribute.AttributeId
-            )
+        await check_transformation_attribute(
+            session=session, anchor_data_model=source_data_model, id_path=attribute.EntityIdPath
+        )
 
     # Validate target attributes
-    if is_entity_id_path_v2:
-        await check_transformation_attribute(
-            session=session, anchor_data_model=target_data_model, id_path=data.TargetAttribute.EntityIdPath
-        )
-    else:
-        tar_attribute = await check_attribute_by_id(session=session, id=data.TargetAttribute.AttributeId)
-        # BS: removed check for same data model in target because an OrgLIF extends BaseLIF via inclusions and so can be mapped.
-        await check_entity_by_id(session=session, id=data.TargetAttribute.EntityId)
-        await check_entity_attribute_association(
-            session=session, entity_id=data.TargetAttribute.EntityId, attribute_id=data.TargetAttribute.AttributeId
-        )
+    await check_transformation_attribute(
+        session=session, anchor_data_model=target_data_model, id_path=data.TargetAttribute.EntityIdPath
+    )
 
     # Step 1: Create the Transformation
     transformation = Transformation(
@@ -363,10 +296,6 @@ async def create_transformation(session: AsyncSession, data: CreateTransformatio
     # Step 2: Create TransformationAttributes (Source and Target)
     source_attributes = []
     for attribute in data.SourceAttributes:
-        if not is_entity_id_path_v2:
-            # Validate entity id path
-            await validate_entity_id_path(session, attribute)
-
         source_attribute = TransformationAttribute(
             TransformationId=transformation.Id,
             AttributeId=attribute.AttributeId,
@@ -382,10 +311,6 @@ async def create_transformation(session: AsyncSession, data: CreateTransformatio
         )
         source_attributes.append(TransformationAttributeDTO.from_orm(source_attribute))
         session.add(source_attribute)
-
-    if not is_entity_id_path_v2:
-        # Validate entity id path
-        await validate_entity_id_path(session, data.TargetAttribute)
 
     target_attribute = TransformationAttribute(
         TransformationId=transformation.Id,
@@ -489,10 +414,6 @@ async def get_transformation_by_id(session: AsyncSession, transformation_id: int
 
 
 async def update_transformation(session: AsyncSession, transformation_id: int, data: UpdateTransformationDTO) -> dict:
-    # Once the UX is in place, only keep the `is_entity_id_path_v2` code flows
-    is_entity_id_path_v2 = check_is_entity_id_path_v2(data)
-    logger.info(f"Updating transformation; is_entity_id_path_v2={is_entity_id_path_v2}")
-
     # Validate transformation
     transformation = await session.get(Transformation, transformation_id)
     if not transformation:
@@ -522,24 +443,9 @@ async def update_transformation(session: AsyncSession, transformation_id: int, d
         update_source_attribute_ids = []
         for attr in data.SourceAttributes:
             # Validate source attribute
-            if is_entity_id_path_v2:
-                await check_transformation_attribute(
-                    session=session, anchor_data_model=source_data_model, id_path=attr.EntityIdPath
-                )
-            else:
-                attribute = await check_attribute_by_id(session=session, id=attr.AttributeId)
-                if attribute.DataModelId != transformation_group.SourceDataModelId:
-                    raise HTTPException(
-                        status_code=400,
-                        detail="The source attribute  is not under the source data model for this transformation group.",
-                    )
-                await check_entity_by_id(session=session, id=attr.EntityId)
-                await check_entity_attribute_association(
-                    session=session, entity_id=attr.EntityId, attribute_id=attr.AttributeId
-                )
-
-                # Validate entity path
-                await validate_entity_id_path(session, attr)
+            await check_transformation_attribute(
+                session=session, anchor_data_model=source_data_model, id_path=attr.EntityIdPath
+            )
 
             update_source_attribute_ids.append(attr.AttributeId)
 
@@ -611,24 +517,9 @@ async def update_transformation(session: AsyncSession, transformation_id: int, d
 
     if data.TargetAttribute:
         # Validate target attribute
-        if is_entity_id_path_v2:
-            await check_transformation_attribute(
-                session=session, anchor_data_model=target_data_model, id_path=data.TargetAttribute.EntityIdPath
-            )
-        else:
-            tar_attribute = await check_attribute_by_id(session=session, id=data.TargetAttribute.AttributeId)
-            if tar_attribute.DataModelId != transformation_group.TargetDataModelId:
-                raise HTTPException(
-                    status_code=400,
-                    detail="The target attribute is not under the target data model for this transformation group.",
-                )
-            await check_entity_by_id(session=session, id=data.TargetAttribute.EntityId)
-            await check_entity_attribute_association(
-                session=session, entity_id=data.TargetAttribute.EntityId, attribute_id=data.TargetAttribute.AttributeId
-            )
-
-            # Validate entity path
-            await validate_entity_id_path(session, data.TargetAttribute)
+        await check_transformation_attribute(
+            session=session, anchor_data_model=target_data_model, id_path=data.TargetAttribute.EntityIdPath
+        )
 
         # Update target attribute
         if target_transformation_attribute:
