@@ -48,6 +48,17 @@ The Semantic Search MCP Server loads its schema from MDR at startup. It uses the
 
 The Semantic Search service requires an MDR API key stored in AWS SSM Parameter Store. The key must match what MDR expects for the semantic search service.
 
+### How Secrets Work
+
+SSM parameters are injected as **environment variables** at container runtime via ECS task definitions:
+
+1. Secrets are stored in SSM Parameter Store (secure, centralized)
+2. ECS task definitions reference SSM parameters in the `Secrets` section
+3. At container startup, ECS fetches values and injects them as env vars
+4. Application code reads standard environment variables
+
+For example, the SSM parameter `/${ENV}/semantic-search/MdrApiKey` becomes the environment variable `LIF_MDR_API_AUTH_TOKEN` inside the container. See `cloudformation/lif-semantic-search-taskdef-includes.yml` for the mapping.
+
 ### Create SSM Parameters
 
 For each environment (dev, demo, prod), create matching parameters:
