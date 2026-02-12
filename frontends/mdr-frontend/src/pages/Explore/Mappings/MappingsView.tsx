@@ -35,6 +35,7 @@ import {
     parseEntityIdPath,
     appendAttributeToPath,
     extractEntityIds,
+    extractEntityPath,
     buildAttributeLookupKey,
 } from '../../../utils/entityIdPath';
 import {
@@ -158,6 +159,9 @@ const MappingsView: React.FC = () => {
     const [reassignHoverTargetId, setReassignHoverTargetId] = useState<
         number | null
     >(null);
+    const [reassignHoverTargetPath, setReassignHoverTargetPath] = useState<
+        string | null
+    >(null);
     // Multi-wire (per-transformation) selection: store source AttributeIds for the currently selected transformation
     const [selectedWireSourceAttrIds, setSelectedWireSourceAttrIds] = useState<Set<number>>(new Set());
     // Multi-wire detach drag state (supports one or many selected source wires for the single selected transformation)
@@ -173,6 +177,7 @@ const MappingsView: React.FC = () => {
     // the latest value without needing reassignHoverTargetId in the dep array
     // (which caused effect re-runs + duplicate handleUp registrations).
     const reassignHoverTargetIdRef = useRef<number | null>(null);
+    const reassignHoverTargetPathRef = useRef<string | null>(null);
     // Guard against duplicate handleUp invocations caused by the synthetic mouseup
     // that handleMove dispatches after the button is released.
     const reassignProcessingRef = useRef(false);
@@ -249,7 +254,9 @@ const MappingsView: React.FC = () => {
         setReassignTransformations([]);
         setReassignPaths([]);
         setReassignHoverTargetId(null);
+        setReassignHoverTargetPath(null);
         reassignHoverTargetIdRef.current = null;
+        reassignHoverTargetPathRef.current = null;
         setSelectedTargetAttrId(null);
         setSelectedTransformationIds(new Set());
         setSelectionAll(false);
@@ -1552,6 +1559,7 @@ const MappingsView: React.FC = () => {
             ) as HTMLElement | null;
             let node: HTMLElement | null = el;
             let targetId: number | null = null;
+            let targetEntityPath: string | null = null;
             while (node) {
                 if (
                     node.classList?.contains('mappings-attr') &&
@@ -1559,12 +1567,15 @@ const MappingsView: React.FC = () => {
                 ) {
                     if (node.classList.contains('mappings-attr--right'))
                         targetId = Number(node.dataset.attrId);
+                    targetEntityPath = node.dataset.entityPath || null;
                     break;
                 }
                 node = node.parentElement;
             }
             reassignHoverTargetIdRef.current = targetId;
+            reassignHoverTargetPathRef.current = targetEntityPath;
             setReassignHoverTargetId(targetId);
+            setReassignHoverTargetPath(targetEntityPath);
         };
         const handleUp = async () => {
             // Guard: prevent duplicate invocations caused by the synthetic mouseup
@@ -1574,17 +1585,35 @@ const MappingsView: React.FC = () => {
             // Read from ref so we always get the latest hover target, regardless of
             // which effect-closure version of handleUp fires.
             const reassignHoverTargetId = reassignHoverTargetIdRef.current;
-            const droppingOnTarget =
-                !!reassignHoverTargetId &&
-                reassignHoverTargetId !== selectedTargetAttrId;
+            const reassignHoverTargetEntityPath = reassignHoverTargetPathRef.current;
+            // Determine if drop target is genuinely different from the current target.
+            // Compare both attribute ID and entity path so that the same attribute in a
+            // different entity is recognised as a valid drop target.
+            const droppingOnTarget = (() => {
+                if (!reassignHoverTargetId) return false;
+                const currentT = reassignTransformations[0];
+                const currentTgtAttrId = currentT?.TargetAttribute?.AttributeId;
+                const currentTgtEntityIdPath = (currentT?.TargetAttribute as any)?.EntityIdPath;
+                const currentTgtEntityPath = currentTgtEntityIdPath
+                    ? extractEntityPath(currentTgtEntityIdPath)
+                    : null;
+                // Different attribute ID → definitely a different target
+                if (reassignHoverTargetId !== currentTgtAttrId) return true;
+                // Same attribute ID but different entity path → different target
+                if (
+                    reassignHoverTargetEntityPath != null &&
+                    currentTgtEntityPath != null &&
+                    reassignHoverTargetEntityPath !== currentTgtEntityPath
+                ) return true;
+                // One path known and the other not → treat as different
+                if (
+                    (reassignHoverTargetEntityPath != null) !== (currentTgtEntityPath != null)
+                ) return true;
+                return false;
+            })();
             try {
             if (droppingOnTarget) {
-                // Determine target path from DOM or tree
-                const targetAttrEl = rightScrollRef.current?.querySelector(
-                    `[data-attr-id="${reassignHoverTargetId}"]`
-                ) as HTMLElement | null;
-                const tgtPathFromDom =
-                    targetAttrEl?.dataset?.entityPath || null;
+                const tgtPathFromDom = reassignHoverTargetEntityPath;
                 const tgtPath =
                     tgtPathFromDom ??
                     (() => {
@@ -1923,7 +1952,9 @@ const MappingsView: React.FC = () => {
             setReassignActive(false);
             setReassignPaths([]);
             setReassignHoverTargetId(null);
+            setReassignHoverTargetPath(null);
             reassignHoverTargetIdRef.current = null;
+            reassignHoverTargetPathRef.current = null;
             pendingReassignRef.current = null;
             reassignProcessingRef.current = false;
             }
@@ -1948,7 +1979,9 @@ const MappingsView: React.FC = () => {
         if (!reassignActive) {
             setReassignPaths([]);
             setReassignHoverTargetId(null);
+            setReassignHoverTargetPath(null);
             reassignHoverTargetIdRef.current = null;
+            reassignHoverTargetPathRef.current = null;
         }
     }, [reassignActive]);
 
@@ -2660,6 +2693,7 @@ const MappingsView: React.FC = () => {
                             setReassignTransformations:
                                 setReassignTransformations as any,
                             reassignHoverTargetId,
+                            reassignHoverTargetPath,
                             prepareReassign: (
                                 e: React.MouseEvent,
                                 transforms: any[]
@@ -2711,6 +2745,7 @@ const MappingsView: React.FC = () => {
                             setReassignTransformations:
                                 setReassignTransformations as any,
                             reassignHoverTargetId,
+                            reassignHoverTargetPath,
                             prepareReassign: (
                                 e: React.MouseEvent,
                                 transforms: any[]

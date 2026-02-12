@@ -32,6 +32,7 @@ export interface SelectionContextLike {
         React.SetStateAction<DisplayTransformationDataLike[]>
     >;
     reassignHoverTargetId: number | null;
+    reassignHoverTargetPath?: string | null;
     prepareReassign?: (
         e: React.MouseEvent,
         transforms: DisplayTransformationDataLike[]
@@ -349,7 +350,9 @@ const ModelColumn: React.FC<ModelColumnProps> = ({
                                                 <span
                                                     className={`mappings-attr__name ${
                                                         selectionContext?.reassignHoverTargetId ===
-                                                        attr.Id
+                                                        attr.Id &&
+                                                        (selectionContext?.reassignHoverTargetPath == null ||
+                                                         selectionContext?.reassignHoverTargetPath === node.PathId)
                                                             ? 'mappings-attr--drop-target'
                                                             : ''
                                                     }`}
@@ -819,7 +822,8 @@ const ModelColumn: React.FC<ModelColumnProps> = ({
                                                                   <span
                                                                       className={`mappings-attr__name ${
                                                                           selectionContext?.reassignHoverTargetId ===
-                                                                          attr.Id
+                                                                          attr.Id &&
+                                                                          selectionContext?.reassignHoverTargetPath == null
                                                                               ? 'mappings-attr--drop-target'
                                                                               : ''
                                                                       }`}
