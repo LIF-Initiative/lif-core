@@ -154,7 +154,7 @@ Set appropriate CPU and memory values for your containers:
 
 To enable external access to GraphQL with API key authentication:
 
-1. **Create SSM parameter** with API keys (format: `key:name` pairs):
+1. **Create SSM parameter** with API keys (format: CSV of `key:name` pairs):
    ```bash
    ENV=demo
    aws ssm put-parameter \
