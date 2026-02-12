@@ -238,11 +238,14 @@ async def check_transformation_attribute(session: AsyncSession, anchor_data_mode
                         elif (
                             current_node.Extension == False
                             and previous_node.Extension == False
-                            and association.ExtendedByDataModelId is None
+                            and (
+                                association.ExtendedByDataModelId is None
+                                or association.ExtendedByDataModelId == anchor_data_model_id
+                            )
                         ):
                             found_valid_association = True
                             logger.info(
-                                f"{signature} - Attribute association from parent {previous_node.Id} to child {raw_node_id} is valid (Extension on current and parent are false, and the association ExtendedByDataModelId is None)"
+                                f"{signature} - Attribute association from parent {previous_node.Id} to child {raw_node_id} is valid (Extension on current and parent are false, and the association ExtendedByDataModelId is None or the anchor data model)"
                             )
                             break
                         logger.info(
