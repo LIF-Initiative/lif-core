@@ -149,3 +149,40 @@ Set appropriate CPU and memory values for your containers:
 - For Fargate, CPU and memory must be valid combinations
 - See [AWS Fargate task size documentation](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/fargate-tasks-services.html#fargate-tasks-size) for supported combinations
 - Start with smaller values and scale up based on monitoring data
+
+### GraphQL API Key Authentication
+
+To enable external access to GraphQL with API key authentication:
+
+1. **Create SSM parameter** with API keys (format: CSV of `key:name` pairs):
+   ```bash
+   ENV=demo
+   aws ssm put-parameter \
+     --name "/${ENV}/graphql-org1/ApiKeys" \
+     --value "key1:client1,key2:client2" \
+     --type "SecureString" \
+     --overwrite
+   ```
+
+2. **Make GraphQL public** by updating the params file:
+   ```json
+   {"ParameterKey": "UseLbForService", "ParameterValue": "true"},
+   {"ParameterKey": "DomainNames", "ParameterValue": "graphql-org1.demo.lif.unicon.net"},
+   {"ParameterKey": "Priority", "ParameterValue": "30"},
+   {"ParameterKey": "HealthCheckUrl", "ParameterValue": "/docs"}
+   ```
+
+3. **Deploy** the changes:
+   ```bash
+   ./aws-deploy.sh -s demo --only-stack demo-lif-graphql-org1
+   ```
+
+4. **Test** with the API key:
+   ```bash
+   curl -X POST https://graphql-org1.demo.lif.unicon.net/graphql \
+     -H "Content-Type: application/json" \
+     -H "X-API-Key: key1" \
+     -d '{"query": "{ person { Name { firstName } } }"}'
+   ```
+
+To **revoke access**, update the SSM parameter to remove the key and restart the service.

@@ -1,6 +1,6 @@
 Environment:
   - Name: LIF_QUERY_PLANNER_URL
-    Value: 
+    Value:
       Fn::Sub: "http://query-planner-${OrganizationName}.lif.${EnvironmentName}.aws:8002"
   - Name: LIF_GRAPHQL_ROOT_TYPE_NAME
     Value: Person
@@ -15,7 +15,17 @@ Environment:
     Value: "openapi_constrained_with_interactions.json"
   - Name: USE_OPENAPI_DATA_MODEL_FROM_FILE
     Value: "false"
+  # API Key Auth configuration (public paths that don't require auth)
+  - Name: GRAPHQL_AUTH__PUBLIC_PATHS
+    Value: "/health,/health-check"
+  - Name: GRAPHQL_AUTH__PUBLIC_PATH_PREFIXES
+    Value: "/docs,/openapi.json"
 Secrets:
   - Name: LIF_MDR_API_AUTH_TOKEN
-    ValueFrom: 
+    ValueFrom:
       Fn::Sub: "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${EnvironmentName}/${ServiceName}/MdrApiKey"
+  # API Keys for external access (optional - if not set, auth is disabled)
+  # Format: "key1:client1,key2:client2"
+  - Name: GRAPHQL_AUTH__API_KEYS
+    ValueFrom:
+      Fn::Sub: "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${EnvironmentName}/${ServiceName}/ApiKeys"
