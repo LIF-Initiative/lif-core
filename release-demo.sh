@@ -68,9 +68,12 @@ log_error() {
 get_release_tag() {
     local file=$1
 
-    # Extract current ImageUrl value
+    # Extract current ImageUrl value (guarded against jq failure)
     local curr_val
-    curr_val=$(jq -r '.[] | select(.ParameterKey == "ImageUrl") | .ParameterValue' "$file")
+    if ! curr_val=$(jq -er '.[] | select(.ParameterKey == "ImageUrl") | .ParameterValue' "$file" 2>/dev/null); then
+        log_error "Could not extract ImageUrl from $file (jq failed or value is null)"
+        return 1
+    fi
 
     if [[ -z "$curr_val" ]]; then
         log_error "Could not extract ImageUrl from $file"
@@ -113,23 +116,31 @@ get_release_tag() {
     # Query ECR for the tag associated with "latest"
     # The "latest" tag is an alias; we want the actual version tag
     local ecr_output
+    local ecr_exit_code
     local tag
 
-    ecr_output=$(aws ecr describe-images --repository-name "$repo" --region "$region" 2>&1)
+    # Guard against -e exit by capturing exit code separately
+    ecr_output=$(aws ecr describe-images --repository-name "$repo" --region "$region" 2>&1) || ecr_exit_code=$?
 
-    if echo "$ecr_output" | grep -q "AccessDeniedException"; then
-        log_error "Access denied to ECR (repo: $repo, region: $region)"
-        log_error "Ensure you're authenticated to the correct AWS account"
+    if [[ -n "${ecr_exit_code:-}" ]]; then
+        if echo "$ecr_output" | grep -q "AccessDeniedException"; then
+            log_error "Access denied to ECR (repo: $repo, region: $region)"
+            log_error "Ensure you're authenticated to the correct AWS account"
+            return 1
+        fi
+
+        if echo "$ecr_output" | grep -q "RepositoryNotFoundException"; then
+            log_error "Repository not found: $repo (region: $region)"
+            return 1
+        fi
+
+        # Generic error
+        log_error "ECR query failed for $repo (region: $region): $ecr_output"
         return 1
     fi
 
-    if echo "$ecr_output" | grep -q "RepositoryNotFoundException"; then
-        log_error "Repository not found: $repo (region: $region)"
-        return 1
-    fi
-
-    # Sort tags for predictable selection when multiple tags exist
-    tag=$(echo "$ecr_output" | jq -r '.imageDetails[] | select(has("imageTags")) | select(.imageTags | any(. == "latest")) | (.imageTags - ["latest"]) | sort | .[0]' 2>/dev/null)
+    # Sort tags and select the most recent (lexicographically largest for timestamp-based tags)
+    tag=$(echo "$ecr_output" | jq -r '.imageDetails[] | select(has("imageTags")) | select(.imageTags | any(. == "latest")) | (.imageTags - ["latest"]) | sort | last' 2>/dev/null)
 
     if [[ -z "$tag" || "$tag" == "null" ]]; then
         log_error "No 'latest' tag found for repository: $repo"
@@ -184,11 +195,22 @@ update_params_file() {
 
     # Apply the change - validate old value to ensure we're updating the expected value
     local contents
-    contents=$(jq --arg old "$_CURR_URL" --arg new "$_NEW_URL" \
-        '(.[] | select(.ParameterKey == "ImageUrl" and .ParameterValue == $old) | .ParameterValue) |= $new' "$file")
+    if ! contents=$(jq --arg old "$_CURR_URL" --arg new "$_NEW_URL" \
+        '(.[] | select(.ParameterKey == "ImageUrl" and .ParameterValue == $old) | .ParameterValue) |= $new' "$file" 2>/dev/null); then
+        log_error "Failed to parse or update JSON for $file"
+        ERRORS+=("$file")
+        return 1
+    fi
 
     if [[ -z "$contents" ]]; then
         log_error "Failed to generate updated JSON for $file"
+        ERRORS+=("$file")
+        return 1
+    fi
+
+    # Verify the update actually happened (old value was found and replaced)
+    if echo "$contents" | jq -e --arg old "$_CURR_URL" '.[] | select(.ParameterKey == "ImageUrl" and .ParameterValue == $old)' &>/dev/null; then
+        log_error "ImageUrl value was not updated in $file (old value still present)"
         ERRORS+=("$file")
         return 1
     fi

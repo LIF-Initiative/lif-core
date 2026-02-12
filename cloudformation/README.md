@@ -56,6 +56,8 @@ Update demo CloudFormation parameter files with the latest image tags from dev E
 
 ### Usage
 
+Run all commands from the **repository root** directory (not from `cloudformation/`).
+
 1. **Preview changes** (dry-run, no files modified):
    ```bash
    AWS_PROFILE=lif ./release-demo.sh
