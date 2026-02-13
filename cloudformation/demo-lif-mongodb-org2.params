@@ -53,7 +53,7 @@
   },
   {
     "ParameterKey": "ImageUrl",
-    "ParameterValue": "381492161417.dkr.ecr.us-east-1.amazonaws.com/lif/dev/mongodb:2025-11-19-22-48-46-0f97c66"
+    "ParameterValue": "381492161417.dkr.ecr.us-east-1.amazonaws.com/lif/dev/mongodb:2026-01-29-06-11-01-00cd5b3"
   },
   {
     "ParameterKey": "TaskDefIncludesFile",
