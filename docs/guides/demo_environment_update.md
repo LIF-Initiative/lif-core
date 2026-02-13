@@ -15,6 +15,59 @@ This guide walks through the end-to-end process of promoting the current dev bui
 
 All commands below are run from the **repository root**.
 
+## Step 0: Ensure SSM parameters exist
+
+Several services read secrets from AWS SSM Parameter Store at startup. If these parameters are missing, the ECS tasks will fail to launch. This step only needs to be done once per environment (or when adding new services).
+
+### MDR API keys
+
+The MDR API authenticates requests from GraphQL, semantic search, and translator services using shared API keys. Each key is stored on both the server side (MDR API) and client side (the calling service).
+
+The `setup-mdr-api-keys.sh` script generates keys and stores them in all the right places:
+
+```bash
+# Preview what will be created
+AWS_PROFILE=lif ./scripts/setup-mdr-api-keys.sh demo
+
+# Create missing keys (skips existing, fixes mismatches)
+AWS_PROFILE=lif ./scripts/setup-mdr-api-keys.sh demo --apply
+
+# Regenerate all keys (overwrites existing)
+AWS_PROFILE=lif ./scripts/setup-mdr-api-keys.sh demo --apply --force
+```
+
+The script manages these parameters:
+
+| Key group | Server parameter (MDR API) | Client parameter(s) |
+|-----------|---------------------------|---------------------|
+| GraphQL | `/{env}/mdr-api/MdrAuthServiceApiKeyGraphql` | `/{env}/graphql-org{1,2,3}/MdrApiKey` |
+| Semantic Search | `/{env}/mdr-api/MdrAuthServiceApiKeySemanticSearch` | `/{env}/semantic-search/MdrApiKey` |
+| Translator | `/{env}/mdr-api/MdrAuthServiceApiKeyTranslator` | `/{env}/translator-org1/MdrApiKey` |
+
+After creating or rotating keys, restart affected services to pick up the new values:
+
+```bash
+./aws-deploy.sh -s demo --update-ecs
+```
+
+### GraphQL API keys (external access)
+
+GraphQL services also require an `ApiKeys` SSM parameter for external API key authentication. For internal-only instances, create the parameter with a blank value to disable auth while still allowing the task to start:
+
+```bash
+AWS_PROFILE=lif aws ssm put-parameter --name "/demo/graphql-org1/ApiKeys" --value " " --type SecureString --overwrite
+AWS_PROFILE=lif aws ssm put-parameter --name "/demo/graphql-org2/ApiKeys" --value " " --type SecureString --overwrite
+AWS_PROFILE=lif aws ssm put-parameter --name "/demo/graphql-org3/ApiKeys" --value " " --type SecureString --overwrite
+```
+
+To enable external access on a specific instance, set the value to comma-separated `key:name` pairs:
+
+```bash
+AWS_PROFILE=lif aws ssm put-parameter --name "/demo/graphql-org1/ApiKeys" --value "mykey123:client-name" --type SecureString --overwrite
+```
+
+See `cloudformation/README.md` for full details on enabling public GraphQL access.
+
 ## Step 1: Update image tags in param files
 
 The `release-demo.sh` script reads every `cloudformation/demo-*.params` file that contains an `ImageUrl` parameter, queries ECR for the image currently tagged `latest` in each repository, resolves its version tag, and updates the param file.
@@ -159,6 +212,8 @@ Create a PR so the pinned image tags are tracked in version control.
 
 | What | Command |
 |------|---------|
+| Audit MDR API keys | `AWS_PROFILE=lif ./scripts/setup-mdr-api-keys.sh demo` |
+| Create missing MDR API keys | `AWS_PROFILE=lif ./scripts/setup-mdr-api-keys.sh demo --apply` |
 | Preview image tag updates | `AWS_PROFILE=lif ./release-demo.sh` |
 | Apply image tag updates | `AWS_PROFILE=lif ./release-demo.sh --apply` |
 | Deploy all stacks | `./aws-deploy.sh -s demo` |
@@ -180,6 +235,13 @@ AWS_PROFILE=lif aws sts get-caller-identity
 
 ### `release-demo.sh` reports "No image tagged 'latest'"
 The dev CI pipeline tags the most recent build as `latest`. If a repository has no `latest` tag, the dev build may not have completed successfully for that service.
+
+### ECS task fails to start with "missing SSM parameter"
+A required SSM parameter doesn't exist. Run the MDR API key setup script to check for missing parameters:
+```bash
+AWS_PROFILE=lif ./scripts/setup-mdr-api-keys.sh demo
+```
+Also verify the GraphQL `ApiKeys` parameters exist (see Step 0). If a service references an SSM parameter that doesn't exist, the ECS task definition cannot be created and the container won't start.
 
 ### CloudFormation stack stuck in `UPDATE_IN_PROGRESS`
 The `cfn-wait.sh` script polls until completion. If a stack is stuck, check the CloudFormation console for event details. Common causes: ECS health check failures, container crash loops, or insufficient permissions.
