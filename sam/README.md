@@ -78,6 +78,8 @@ The `pImageTag` parameter is set to a timestamp on each deploy. Because the valu
 - [yq](https://github.com/mikefarah/yq)
 - [AWS SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/install-sam-cli.html)
 
+> **Apple Silicon note:** The Flyway Lambda runs on x86_64. Both `deploy-sam.sh` and `reset-mdr-database.sh` build with `--platform linux/amd64` so images are correct regardless of the host architecture.
+
 ### Commands
 
 From the repository root:
@@ -124,6 +126,29 @@ The `.aws` files (not checked in) provide `AWS_REGION` and `SAM_CONFIG_ENV`.
    cd sam && bash deploy-sam.sh -s mdr-database/<env> -d mdr-database
    ```
 3. The deploy rebuilds the Flyway Docker image (bundling the new SQL file), pushes it to ECR, and the CloudFormation update triggers Flyway to apply pending migrations.
+
+### MDR database — replacing V1.1 (full reset)
+
+When `V1.1__metadata_repository_init.sql` is **replaced** rather than adding a new version, a standard deploy won't work — Flyway sees V1.1 as already applied and skips it. The database must be cleaned and re-migrated from scratch.
+
+Use the reset script from the repository root:
+
+```bash
+# Preview
+AWS_PROFILE=lif ./scripts/reset-mdr-database.sh <env>
+
+# Execute (WARNING: destroys all MDR data)
+AWS_PROFILE=lif ./scripts/reset-mdr-database.sh <env> --apply
+```
+
+The script:
+
+1. Builds the Flyway Docker image with the updated SQL files
+2. Pushes it to ECR
+3. Updates the Lambda function to use the new image
+4. Waits for the Lambda update to complete
+5. Invokes the Lambda with a `Reset` payload (runs `flyway clean` then `flyway migrate`)
+6. Runs the full SAM deploy to sync the CloudFormation state with the new image tag
 
 ### Dagster database
 

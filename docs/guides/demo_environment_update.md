@@ -197,6 +197,29 @@ Each SAM deploy:
 
 See `sam/README.md` for details on the migration mechanism and how to add new SQL files.
 
+### 4c. Reset the MDR database (when V1.1 is replaced)
+
+When `V1.1__metadata_repository_init.sql` is **replaced** (not a new V1.2 added), Flyway won't re-run it because it's already marked as applied. The database must be cleaned and re-migrated from scratch.
+
+**WARNING:** This destroys all data in the MDR database.
+
+```bash
+# Preview
+AWS_PROFILE=lif ./scripts/reset-mdr-database.sh demo
+
+# Execute
+AWS_PROFILE=lif ./scripts/reset-mdr-database.sh demo --apply
+```
+
+The script automates what was previously a manual process:
+
+1. Builds the Flyway Docker image with the updated SQL files
+2. Pushes to ECR
+3. Updates the Lambda function to use the new image
+4. Waits for the Lambda update to complete
+5. Invokes the Lambda with a `Reset` payload (`flyway clean` + `flyway migrate`)
+6. Runs the full SAM deploy to sync CloudFormation state
+
 ## Step 5: Commit and create PR
 
 After verifying the deployment is healthy:
@@ -224,6 +247,7 @@ Create a PR so the pinned image tags are tracked in version control.
 | Deploy SAM databases | `./aws-deploy.sh -s demo --update-sam` |
 | Deploy MDR database only | `cd sam && bash deploy-sam.sh -s ../demo -d mdr-database` |
 | Deploy Dagster database only | `cd sam && bash deploy-sam.sh -s ../demo -d dagster-database` |
+| Reset MDR database (V1.1 replaced) | `./scripts/reset-mdr-database.sh demo --apply` |
 
 ## Troubleshooting
 
@@ -251,3 +275,25 @@ Ensure Node.js 20+ is installed (`node --version`). The build requires `npm ci` 
 
 ### Flyway migration fails
 Check the Flyway Lambda logs in CloudWatch (`/aws/lambda/{env}-{user}-flyway`). Common causes: SQL syntax errors in a new migration file, or a migration that conflicts with the current database state.
+
+### SAM stack stuck in `UPDATE_ROLLBACK_FAILED`
+If a SAM deploy fails (e.g., the Flyway Lambda trigger times out), the nested CloudFormation stack may end up in `UPDATE_ROLLBACK_FAILED`. To recover:
+
+```bash
+# Run continue-update-rollback on the parent stack, skipping the stuck resource in the nested stack
+AWS_PROFILE=lif aws cloudformation continue-update-rollback \
+  --stack-name demo-lif-mdr-db-resources \
+  --resources-to-skip "demo-lif-mdr-db-resources-MDRDatabase-<NESTED_ID>.FlywayLambdaFnTrigger"
+```
+
+Find the nested stack ID in the CloudFormation console or with `aws cloudformation list-stacks --stack-status-filter UPDATE_ROLLBACK_FAILED`. Once both stacks reach `UPDATE_ROLLBACK_COMPLETE`, you can re-run the SAM deploy.
+
+### MDR database reset step 6 fails
+The reset script (`reset-mdr-database.sh`) has 6 steps. Steps 1–5 (build, push, update Lambda, invoke reset) can succeed while step 6 (SAM deploy to sync CloudFormation state) fails independently. If this happens:
+
+1. The database itself is fine — the reset already completed in step 5
+2. Resolve the CloudFormation stack state (see above if stuck in `UPDATE_ROLLBACK_FAILED`)
+3. Re-run just the SAM deploy to sync state:
+   ```bash
+   cd sam && bash deploy-sam.sh -s ../demo -d mdr-database
+   ```
