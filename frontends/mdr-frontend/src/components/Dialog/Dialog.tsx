@@ -45,6 +45,7 @@ export interface DialogField {
   accept?: string;
   inputMode?: InputMode;
   pattern?: string;
+  patternErr?: string;
 }
 
 export interface DialogItem {
@@ -92,6 +93,10 @@ export const CrudDialog: React.FC<CrudDialogProps> = ({
           nextParams.BaseDataModelId = null;
         }
       }
+      // # Disabled pattern validation here; now handled on handleCreateOrEdit
+      // if (field.pattern && createParams[field.name] && !new RegExp(field.pattern).test(createParams[field.name])) {
+      //   setCreateError(`The following fields have invalid values:\n > ${field.patternErr}`);
+      // }
       return nextParams;
     });
   };
@@ -109,6 +114,12 @@ export const CrudDialog: React.FC<CrudDialogProps> = ({
     const missingFields = requiredFields.filter((f) => !createParams[f]);
     if (missingFields.length) {
       setCreateError(`Please complete all required fields: ${missingFields.join(", ")}`);
+      return;
+    }
+
+    const regexFields = fields.filter((f) => f.pattern && createParams[f.name] && !new RegExp(f.pattern).test(createParams[f.name]));
+    if (regexFields.length) {
+      setCreateError(`The following fields have invalid values:\n > ${regexFields.map(f => f.patternErr).join("\n > ")}`);
       return;
     }
   
@@ -228,7 +239,7 @@ export const CrudDialog: React.FC<CrudDialogProps> = ({
           {createError && (
             <>
               <br /><br />
-              <Text color="red" size="2" mb="3">
+              <Text color="red" size="2" mb="3" style={{ whiteSpace: "pre-line" }}>
                 {createError}
               </Text>
             </>
@@ -298,6 +309,7 @@ export const CrudDialog: React.FC<CrudDialogProps> = ({
                     onChange={(e) => handleFieldValueChange(field, e.target.value) }
                     inputMode={field.inputMode}
                     pattern={field.pattern}
+                    title={field.patternErr ?? ""}
                     readOnly={field.readOnly || (isEditMode && field.name === "CreationDate")}
                   />
                 )}
