@@ -1,4 +1,5 @@
-#!/bin/bash -eu
+#!/usr/bin/env bash
+set -eu
 
 #title           :deploy
 #description     :This script AWS resources
@@ -124,7 +125,7 @@ buildDockerImages() {
 
     aws ecr get-login-password | docker login --username AWS --password-stdin ${REGISTRY}
     printGreen "building Docker image: $REGISTRY/$REPOSITORY:latest"
-    docker build . -t $REGISTRY/$REPOSITORY:latest
+    docker build --platform linux/amd64 . -t $REGISTRY/$REPOSITORY:latest
     docker push $REGISTRY/$REPOSITORY:latest
     docker tag $REGISTRY/$REPOSITORY:latest $REGISTRY/$REPOSITORY:$DATE_TAG
     docker push $REGISTRY/$REPOSITORY:$DATE_TAG 
