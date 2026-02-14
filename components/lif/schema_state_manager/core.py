@@ -45,11 +45,7 @@ from lif.mdr_client import (
 )
 from lif.openapi_schema_parser import load_schema_leaves
 from lif.openapi_schema_parser.core import SchemaLeaf
-from lif.semantic_search_service.core import (
-    build_embeddings,
-    build_dynamic_filter_model,
-    build_dynamic_mutation_model,
-)
+from lif.semantic_search_service.core import build_embeddings, build_dynamic_filter_model, build_dynamic_mutation_model
 
 logger = get_logger(__name__)
 
@@ -95,11 +91,7 @@ class SchemaStateManager:
         attribute_keys: Attribute keys to extract from schema leaves
     """
 
-    def __init__(
-        self,
-        config: LIFSchemaConfig,
-        attribute_keys: Optional[List[str]] = None,
-    ):
+    def __init__(self, config: LIFSchemaConfig, attribute_keys: Optional[List[str]] = None):
         self._config = config
         self._attribute_keys = attribute_keys or [
             "dataType",
@@ -270,22 +262,13 @@ class SchemaStateManager:
 
         except Exception as e:
             logger.error(f"Schema refresh failed: {e}")
-            return {
-                "success": False,
-                "error": str(e),
-                "current_source": self._state.source if self._state else None,
-            }
+            return {"success": False, "error": str(e), "current_source": self._state.source if self._state else None}
 
     def get_status(self) -> Dict[str, Any]:
         """Get current schema status and metadata."""
         with self._lock:
             if not self._initialized or self._state is None:
-                return {
-                    "initialized": False,
-                    "source": None,
-                    "leaf_count": 0,
-                    "roots": [],
-                }
+                return {"initialized": False, "source": None, "leaf_count": 0, "roots": []}
 
             return {
                 "initialized": True,
@@ -313,9 +296,7 @@ class SchemaStateManager:
         if force_file:
             logger.info("Loading OpenAPI schema from bundled file (force_file=True)")
             try:
-                openapi = get_openapi_lif_data_model_from_file(
-                    self._config.openapi_json_filename
-                )
+                openapi = get_openapi_lif_data_model_from_file(self._config.openapi_json_filename)
                 return openapi, "file"
             except Exception as e:
                 logger.error(f"Failed to load OpenAPI schema from file: {e}")
@@ -352,32 +333,24 @@ class SchemaStateManager:
         # A future enhancement could add async MDR fetch
         return self._load_openapi_schema_sync(force_file)
 
-    def _load_schema_leaves(
-        self, openapi: dict
-    ) -> tuple[List[SchemaLeaf], Dict[str, List[SchemaLeaf]]]:
+    def _load_schema_leaves(self, openapi: dict) -> tuple[List[SchemaLeaf], Dict[str, List[SchemaLeaf]]]:
         """Load schema leaves for all configured root types."""
         all_leaves: List[SchemaLeaf] = []
         leaves_by_root: Dict[str, List[SchemaLeaf]] = {}
 
         for root_node in self._config.all_root_types:
             try:
-                root_leaves = load_schema_leaves(
-                    openapi, root_node, attribute_keys=self._attribute_keys
-                )
+                root_leaves = load_schema_leaves(openapi, root_node, attribute_keys=self._attribute_keys)
                 leaves_by_root[root_node] = root_leaves
                 all_leaves.extend(root_leaves)
                 logger.info(f"Loaded {len(root_leaves)} schema leaves for root '{root_node}'")
             except Exception as e:
                 # Primary root is required; additional roots are optional
                 if root_node == self._config.root_type_name:
-                    logger.critical(
-                        f"Failed to load schema leaves for required root '{root_node}': {e}"
-                    )
+                    logger.critical(f"Failed to load schema leaves for required root '{root_node}': {e}")
                     sys.exit(1)
                 else:
-                    logger.warning(
-                        f"Failed to load schema leaves for optional root '{root_node}': {e}"
-                    )
+                    logger.warning(f"Failed to load schema leaves for optional root '{root_node}': {e}")
 
         logger.info(f"Total schema leaves loaded: {len(all_leaves)}")
         return all_leaves, leaves_by_root
@@ -410,9 +383,7 @@ class SchemaStateManager:
 
         # Verify required root has filter model
         if self._config.root_type_name not in filter_models:
-            logger.critical(
-                f"Failed to build filter model for required root '{self._config.root_type_name}'"
-            )
+            logger.critical(f"Failed to build filter model for required root '{self._config.root_type_name}'")
             sys.exit(1)
 
         return filter_models, mutation_models
@@ -427,9 +398,7 @@ class SchemaStateManager:
             logger.critical(f"Failed to load SentenceTransformer model: {e}")
             sys.exit(1)
 
-    def _build_embeddings(
-        self, leaves: List[SchemaLeaf], model: SentenceTransformer
-    ) -> np.ndarray:
+    def _build_embeddings(self, leaves: List[SchemaLeaf], model: SentenceTransformer) -> np.ndarray:
         """Build embeddings for all schema leaves."""
         logger.info(f"Building embeddings for {len(leaves)} schema leaves")
         embedding_texts = [leaf.description for leaf in leaves]

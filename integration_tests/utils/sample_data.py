@@ -85,9 +85,7 @@ class SampleDataLoader:
         for candidate in candidates:
             if candidate.exists():
                 return candidate
-        raise FileNotFoundError(
-            f"Could not find sample_data directory. Tried: {candidates}"
-        )
+        raise FileNotFoundError(f"Could not find sample_data directory. Tried: {candidates}")
 
     def _load(self) -> None:
         """Load all sample data files for this org."""
@@ -103,13 +101,7 @@ class SampleDataLoader:
         for json_file in sorted(org_dir.glob("*.json")):
             with open(json_file, "r", encoding="utf-8") as f:
                 data = json.load(f)
-                self._persons.append(
-                    PersonData(
-                        filename=json_file.name,
-                        raw_data=data,
-                        org_id=self.org_id,
-                    )
-                )
+                self._persons.append(PersonData(filename=json_file.name, raw_data=data, org_id=self.org_id))
 
         self._loaded = True
 
@@ -153,8 +145,5 @@ def load_all_orgs() -> dict[str, SampleDataLoader]:
     loaders = {}
     for org_id, ports in ORG_PORTS.items():
         if ports.sample_data_key:
-            loaders[org_id] = SampleDataLoader(
-                org_id=org_id,
-                sample_data_key=ports.sample_data_key,
-            )
+            loaders[org_id] = SampleDataLoader(org_id=org_id, sample_data_key=ports.sample_data_key)
     return loaders

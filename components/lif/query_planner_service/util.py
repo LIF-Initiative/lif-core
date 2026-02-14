@@ -15,8 +15,6 @@ from lif.lif_schema_config import (
     PERSON_DOT_PASCAL,
     PERSON_DOT_ALL,
     PERSON_DOT_ZERO,
-    PERSON_DOT_PASCAL_ZERO,
-    PERSON_KEY_PASCAL,
     PERSON_JSON_PATH_PREFIX,
     PERSON_DOT_LENGTH,
 )
@@ -74,7 +72,9 @@ def adjust_lif_fragments_for_initial_orchestrator_simplification(
                 current_field = fragment.fragment[0]
                 for key in keys:
                     # Handle case-insensitive lookup for "person"/"Person" root key
-                    actual_key = _find_key_case_insensitive(current_field, key) if isinstance(current_field, dict) else key
+                    actual_key = (
+                        _find_key_case_insensitive(current_field, key) if isinstance(current_field, dict) else key
+                    )
                     if key == last_key:
                         if actual_key and actual_key in current_field:
                             current_field = current_field[actual_key]

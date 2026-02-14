@@ -8,8 +8,7 @@ import pytest
 from typing import Any
 
 from utils.ports import OrgPorts
-from utils.sample_data import SampleDataLoader, PersonData
-from utils.comparison import compare_person_data, summarize_results, ComparisonResult
+from utils.sample_data import SampleDataLoader
 
 
 @pytest.mark.layer("query_cache")
@@ -17,10 +16,7 @@ class TestQueryCacheDataIntegrity:
     """Tests for Query Cache data integrity."""
 
     def _make_query_payload(
-        self,
-        identifier: str,
-        identifier_type: str = "SCHOOL_ASSIGNED_NUMBER",
-        selected_fields: list[str] | None = None,
+        self, identifier: str, identifier_type: str = "SCHOOL_ASSIGNED_NUMBER", selected_fields: list[str] | None = None
     ) -> dict[str, Any]:
         """Build a LIFQuery payload for the Query Cache API."""
         if selected_fields is None:
@@ -38,23 +34,12 @@ class TestQueryCacheDataIntegrity:
             ]
 
         return {
-            "filter": {
-                "Person": {
-                    "Identifier": {
-                        "identifier": identifier,
-                        "identifierType": identifier_type,
-                    }
-                }
-            },
+            "filter": {"Person": {"Identifier": {"identifier": identifier, "identifierType": identifier_type}}},
             "selected_fields": selected_fields,
         }
 
     def test_query_cache_health(
-        self,
-        org_id: str,
-        org_ports: OrgPorts,
-        http_client: Any,
-        require_query_cache: None,
+        self, org_id: str, org_ports: OrgPorts, http_client: Any, require_query_cache: None
     ) -> None:
         """Verify Query Cache API is responding."""
         response = http_client.get(f"{org_ports.query_cache_url}/")
@@ -82,19 +67,13 @@ class TestQueryCacheDataIntegrity:
             pytest.skip(f"No school number for {person_data.full_name}")
 
         payload = self._make_query_payload(school_num)
-        response = http_client.post(
-            f"{org_ports.query_cache_url}/query",
-            json=payload,
-        )
+        response = http_client.post(f"{org_ports.query_cache_url}/query", json=payload)
 
-        assert response.status_code == 200, (
-            f"Query Cache query failed: {response.status_code} - {response.text}"
-        )
+        assert response.status_code == 200, f"Query Cache query failed: {response.status_code} - {response.text}"
 
         records = response.json()
         assert len(records) > 0, (
-            f"Query Cache returned no records for {person_data.full_name} "
-            f"(school_num: {school_num})"
+            f"Query Cache returned no records for {person_data.full_name} (school_num: {school_num})"
         )
 
     def test_all_persons_queryable(
@@ -114,27 +93,18 @@ class TestQueryCacheDataIntegrity:
                 continue
 
             payload = self._make_query_payload(school_num)
-            response = http_client.post(
-                f"{org_ports.query_cache_url}/query",
-                json=payload,
-            )
+            response = http_client.post(f"{org_ports.query_cache_url}/query", json=payload)
 
             if response.status_code != 200:
-                missing_persons.append(
-                    f"{person_data.full_name} (ID: {school_num}): "
-                    f"HTTP {response.status_code}"
-                )
+                missing_persons.append(f"{person_data.full_name} (ID: {school_num}): HTTP {response.status_code}")
                 continue
 
             records = response.json()
             if not records:
-                missing_persons.append(
-                    f"{person_data.full_name} (ID: {school_num}): no records returned"
-                )
+                missing_persons.append(f"{person_data.full_name} (ID: {school_num}): no records returned")
 
-        assert not missing_persons, (
-            f"{org_id}: Persons not queryable via Query Cache:\n"
-            + "\n".join(f"  - {p}" for p in missing_persons)
+        assert not missing_persons, f"{org_id}: Persons not queryable via Query Cache:\n" + "\n".join(
+            f"  - {p}" for p in missing_persons
         )
 
     def test_person_name_matches_sample(
@@ -153,14 +123,8 @@ class TestQueryCacheDataIntegrity:
             if not school_num:
                 continue
 
-            payload = self._make_query_payload(
-                school_num,
-                selected_fields=["Person.Name"],
-            )
-            response = http_client.post(
-                f"{org_ports.query_cache_url}/query",
-                json=payload,
-            )
+            payload = self._make_query_payload(school_num, selected_fields=["Person.Name"])
+            response = http_client.post(f"{org_ports.query_cache_url}/query", json=payload)
 
             if response.status_code != 200:
                 continue
@@ -195,10 +159,7 @@ class TestQueryCacheDataIntegrity:
                 )
 
         if mismatches:
-            pytest.fail(
-                f"{org_id} name mismatches in Query Cache:\n"
-                + "\n".join(f"  - {m}" for m in mismatches)
-            )
+            pytest.fail(f"{org_id} name mismatches in Query Cache:\n" + "\n".join(f"  - {m}" for m in mismatches))
 
     def test_entity_counts_match_sample(
         self,
@@ -214,12 +175,7 @@ class TestQueryCacheDataIntegrity:
         counts may be higher than the sample data for a single org. This test verifies
         that at minimum, the expected data is present (actual >= expected).
         """
-        entity_types = [
-            "CredentialAward",
-            "CourseLearningExperience",
-            "EmploymentLearningExperience",
-            "Proficiency",
-        ]
+        entity_types = ["CredentialAward", "CourseLearningExperience", "EmploymentLearningExperience", "Proficiency"]
         missing_data = []
 
         for person_data in sample_data.persons:
@@ -231,10 +187,7 @@ class TestQueryCacheDataIntegrity:
             selected_fields = [f"Person.{et}" for et in entity_types]
             payload = self._make_query_payload(school_num, selected_fields=selected_fields)
 
-            response = http_client.post(
-                f"{org_ports.query_cache_url}/query",
-                json=payload,
-            )
+            response = http_client.post(f"{org_ports.query_cache_url}/query", json=payload)
 
             if response.status_code != 200:
                 continue
@@ -258,12 +211,8 @@ class TestQueryCacheDataIntegrity:
                 # Allow actual > expected for aggregated data from multiple orgs
                 if actual_count < expected_count:
                     missing_data.append(
-                        f"{person_data.full_name}.{entity_type}: "
-                        f"expected at least {expected_count}, got {actual_count}"
+                        f"{person_data.full_name}.{entity_type}: expected at least {expected_count}, got {actual_count}"
                     )
 
         if missing_data:
-            pytest.fail(
-                f"{org_id} missing entity data in Query Cache:\n"
-                + "\n".join(f"  - {m}" for m in missing_data)
-            )
+            pytest.fail(f"{org_id} missing entity data in Query Cache:\n" + "\n".join(f"  - {m}" for m in missing_data))

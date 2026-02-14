@@ -124,14 +124,7 @@ def _compare_values(
             # Only report length mismatch if actual is shorter (missing data)
             # or if we're not allowing extra
             if len(actual) < len(expected) or not allow_extra:
-                differences.append(
-                    Difference(
-                        f"{path}[len]",
-                        len(expected),
-                        len(actual),
-                        "value_mismatch",
-                    )
-                )
+                differences.append(Difference(f"{path}[len]", len(expected), len(actual), "value_mismatch"))
         for i, (exp_item, act_item) in enumerate(zip(expected, actual)):
             _compare_values(exp_item, act_item, f"{path}[{i}]", differences, ignore_keys, allow_extra)
         return
@@ -166,12 +159,7 @@ def compare_person_data(
     """
     differences: list[Difference] = []
     _compare_values(expected, actual, "", differences, ignore_keys, allow_extra)
-    return ComparisonResult(
-        person_name=person_name,
-        org_id=org_id,
-        layer=layer,
-        differences=differences,
-    )
+    return ComparisonResult(person_name=person_name, org_id=org_id, layer=layer, differences=differences)
 
 
 def format_diff(expected: Any, actual: Any, context_lines: int = 3) -> str:
@@ -208,12 +196,7 @@ def summarize_results(results: list[ComparisonResult]) -> str:
     passed = sum(1 for r in results if r.passed)
     failed = len(results) - passed
 
-    lines = [
-        "",
-        "=" * 60,
-        f"SUMMARY: {passed} passed, {failed} failed",
-        "=" * 60,
-    ]
+    lines = ["", "=" * 60, f"SUMMARY: {passed} passed, {failed} failed", "=" * 60]
 
     if failed > 0:
         lines.append("")

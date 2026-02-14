@@ -16,12 +16,7 @@ from typing import Any
 
 import httpx
 
-from utils.ports import (
-    SEMANTIC_SEARCH_HEALTH_URL,
-    SEMANTIC_SEARCH_STATUS_URL,
-    SEMANTIC_SEARCH_MCP_URL,
-    get_org_ports,
-)
+from utils.ports import SEMANTIC_SEARCH_HEALTH_URL, SEMANTIC_SEARCH_STATUS_URL, SEMANTIC_SEARCH_MCP_URL, get_org_ports
 from utils.sample_data import SampleDataLoader
 
 
@@ -33,12 +28,12 @@ ORG1_GRAPHQL_URL = get_org_ports("org1").graphql_url
 def require_graphql_org1(skip_unavailable: bool) -> None:
     """Ensure org1's GraphQL API is available."""
     from conftest import check_service_available
+
     check_service_available(ORG1_GRAPHQL_URL, skip_unavailable)
 
 
 def query_graphql_by_identifier(
-    identifier: str,
-    identifier_type: str = "SCHOOL_ASSIGNED_NUMBER",
+    identifier: str, identifier_type: str = "SCHOOL_ASSIGNED_NUMBER"
 ) -> dict[str, Any] | None:
     """Query GraphQL for a person by their identifier.
 
@@ -79,23 +74,11 @@ def query_graphql_by_identifier(
     }
     """
 
-    variables = {
-        "filter": {
-            "Identifier": [
-                {
-                    "identifier": identifier,
-                    "identifierType": identifier_type,
-                }
-            ]
-        }
-    }
+    variables = {"filter": {"Identifier": [{"identifier": identifier, "identifierType": identifier_type}]}}
 
     try:
         with httpx.Client(timeout=60.0) as client:
-            response = client.post(
-                ORG1_GRAPHQL_URL,
-                json={"query": query, "variables": variables},
-            )
+            response = client.post(ORG1_GRAPHQL_URL, json={"query": query, "variables": variables})
 
         if response.status_code != 200:
             return None
@@ -140,9 +123,7 @@ class TestSemanticSearchHealth:
         assert "Person" in status["roots"]
         assert "Person" in status["filter_models"]
 
-    def test_schema_status_has_embeddings_ready(
-        self, require_semantic_search: None
-    ) -> None:
+    def test_schema_status_has_embeddings_ready(self, require_semantic_search: None) -> None:
         """Verify schema has been loaded with embeddings (leaf_count > 0)."""
         with httpx.Client(timeout=30.0) as client:
             response = client.get(SEMANTIC_SEARCH_STATUS_URL)
@@ -151,9 +132,7 @@ class TestSemanticSearchHealth:
         status = response.json()
 
         # Schema should have a reasonable number of leaves for LIF
-        assert status["leaf_count"] >= 50, (
-            f"Expected at least 50 schema leaves, got {status['leaf_count']}"
-        )
+        assert status["leaf_count"] >= 50, f"Expected at least 50 schema leaves, got {status['leaf_count']}"
 
 
 @pytest.mark.layer("semantic_search")
@@ -164,11 +143,7 @@ class TestSemanticSearchMCPTools:
     to verify semantic search returns relevant results.
     """
 
-    def _call_mcp_tool(
-        self,
-        tool_name: str,
-        arguments: dict[str, Any],
-    ) -> dict[str, Any]:
+    def _call_mcp_tool(self, tool_name: str, arguments: dict[str, Any]) -> dict[str, Any]:
         """
         Call an MCP tool via the HTTP interface.
 
@@ -180,17 +155,12 @@ class TestSemanticSearchMCPTools:
             "jsonrpc": "2.0",
             "id": 1,
             "method": "tools/call",
-            "params": {
-                "name": tool_name,
-                "arguments": arguments,
-            },
+            "params": {"name": tool_name, "arguments": arguments},
         }
 
         with httpx.Client(timeout=120.0) as client:
             response = client.post(
-                SEMANTIC_SEARCH_MCP_URL,
-                json=request_body,
-                headers={"Content-Type": "application/json"},
+                SEMANTIC_SEARCH_MCP_URL, json=request_body, headers={"Content-Type": "application/json"}
             )
 
         if response.status_code != 200:
@@ -198,20 +168,9 @@ class TestSemanticSearchMCPTools:
 
         return response.json()
 
-    def _make_person_filter(
-        self,
-        identifier: str,
-        identifier_type: str = "SCHOOL_ASSIGNED_NUMBER",
-    ) -> dict[str, Any]:
+    def _make_person_filter(self, identifier: str, identifier_type: str = "SCHOOL_ASSIGNED_NUMBER") -> dict[str, Any]:
         """Build a person filter for the lif_query tool."""
-        return {
-            "Identifier": [
-                {
-                    "identifier": identifier,
-                    "identifierType": identifier_type,
-                }
-            ]
-        }
+        return {"Identifier": [{"identifier": identifier, "identifierType": identifier_type}]}
 
 
 @pytest.mark.layer("semantic_search")
@@ -226,11 +185,7 @@ class TestSemanticSearchHTTPInterface:
         """Verify the MCP endpoint is accessible (even if it rejects invalid requests)."""
         with httpx.Client(timeout=30.0) as client:
             # Send an empty request to verify the endpoint exists
-            response = client.post(
-                SEMANTIC_SEARCH_MCP_URL,
-                json={},
-                headers={"Content-Type": "application/json"},
-            )
+            response = client.post(SEMANTIC_SEARCH_MCP_URL, json={}, headers={"Content-Type": "application/json"})
 
         # MCP endpoint should respond (may return error for invalid request)
         # but should not be 404 or 503
@@ -266,28 +221,19 @@ class TestSemanticSearchDataConsistency:
     @pytest.fixture
     def org1_sample_data(self) -> SampleDataLoader:
         """Load sample data for org1 (core users)."""
-        return SampleDataLoader(
-            org_id="org1",
-            sample_data_key="advisor-demo-org1",
-        )
+        return SampleDataLoader(org_id="org1", sample_data_key="advisor-demo-org1")
 
     @pytest.fixture
     def org2_sample_data(self) -> SampleDataLoader:
         """Load sample data for org2 (source of async users Alan, Jenna)."""
-        return SampleDataLoader(
-            org_id="org2",
-            sample_data_key=self.ASYNC_USER_SOURCE_ORG,
-        )
+        return SampleDataLoader(org_id="org2", sample_data_key=self.ASYNC_USER_SOURCE_ORG)
 
     def _is_async_user(self, user_name: str) -> bool:
         """Check if user is async-ingested."""
         return user_name in self.ASYNC_USERS
 
     def _get_sample_data_for_user(
-        self,
-        user_name: str,
-        org1_sample_data: SampleDataLoader,
-        org2_sample_data: SampleDataLoader,
+        self, user_name: str, org1_sample_data: SampleDataLoader, org2_sample_data: SampleDataLoader
     ):
         """Get sample data for a user from appropriate org."""
         if self._is_async_user(user_name):
@@ -295,29 +241,19 @@ class TestSemanticSearchDataConsistency:
         return org1_sample_data.get_person_by_name(user_name)
 
     def _get_user_identifier(
-        self,
-        user_name: str,
-        org1_sample_data: SampleDataLoader,
-        org2_sample_data: SampleDataLoader,
+        self, user_name: str, org1_sample_data: SampleDataLoader, org2_sample_data: SampleDataLoader
     ) -> str | None:
         """Get SCHOOL_ASSIGNED_NUMBER for a user from sample data."""
-        sample_person = self._get_sample_data_for_user(
-            user_name, org1_sample_data, org2_sample_data
-        )
+        sample_person = self._get_sample_data_for_user(user_name, org1_sample_data, org2_sample_data)
         if sample_person:
             return sample_person.school_assigned_number
         return None
 
     def _query_user_in_graphql(
-        self,
-        user_name: str,
-        org1_sample_data: SampleDataLoader,
-        org2_sample_data: SampleDataLoader,
+        self, user_name: str, org1_sample_data: SampleDataLoader, org2_sample_data: SampleDataLoader
     ) -> dict[str, Any] | None:
         """Query GraphQL for a user by their identifier from sample data."""
-        identifier = self._get_user_identifier(
-            user_name, org1_sample_data, org2_sample_data
-        )
+        identifier = self._get_user_identifier(user_name, org1_sample_data, org2_sample_data)
         if not identifier:
             return None
         return query_graphql_by_identifier(identifier)
@@ -346,9 +282,7 @@ class TestSemanticSearchDataConsistency:
         missing_async = []
 
         for user_name in self.ALL_USERS:
-            graphql_data = self._query_user_in_graphql(
-                user_name, org1_sample_data, org2_sample_data
-            )
+            graphql_data = self._query_user_in_graphql(user_name, org1_sample_data, org2_sample_data)
             if graphql_data:
                 found_users.add(user_name)
             elif self._is_async_user(user_name):
@@ -360,7 +294,7 @@ class TestSemanticSearchDataConsistency:
         assert not missing_core, f"Core users missing from GraphQL: {missing_core}"
 
         # Log summary
-        print(f"\n--- GraphQL User Availability ---")
+        print("\n--- GraphQL User Availability ---")
         print(f"Users found: {sorted(found_users)}")
         if missing_async:
             print(f"Async users pending: {missing_async}")
@@ -375,9 +309,7 @@ class TestSemanticSearchDataConsistency:
         user_name: str,
     ) -> None:
         """Verify each test user is queryable via GraphQL."""
-        graphql_data = self._query_user_in_graphql(
-            user_name, org1_sample_data, org2_sample_data
-        )
+        graphql_data = self._query_user_in_graphql(user_name, org1_sample_data, org2_sample_data)
         self._handle_missing_user_graphql(user_name, graphql_data)
 
         # User found - verify they have a name
@@ -394,15 +326,11 @@ class TestSemanticSearchDataConsistency:
         user_name: str,
     ) -> None:
         """Verify each user has proficiency data in GraphQL for semantic search."""
-        graphql_data = self._query_user_in_graphql(
-            user_name, org1_sample_data, org2_sample_data
-        )
+        graphql_data = self._query_user_in_graphql(user_name, org1_sample_data, org2_sample_data)
         self._handle_missing_user_graphql(user_name, graphql_data)
 
         proficiencies = graphql_data.get("Proficiency", [])
-        assert len(proficiencies) > 0, (
-            f"{user_name} has no proficiencies in GraphQL - semantic search needs this data"
-        )
+        assert len(proficiencies) > 0, f"{user_name} has no proficiencies in GraphQL - semantic search needs this data"
 
     @pytest.mark.parametrize("user_name", ["Matt", "Renee", "Sarah", "Tracy", "Alan", "Jenna"])
     def test_user_has_identifier_in_graphql(
@@ -414,9 +342,7 @@ class TestSemanticSearchDataConsistency:
         user_name: str,
     ) -> None:
         """Verify each user has identifier data in GraphQL."""
-        graphql_data = self._query_user_in_graphql(
-            user_name, org1_sample_data, org2_sample_data
-        )
+        graphql_data = self._query_user_in_graphql(user_name, org1_sample_data, org2_sample_data)
         self._handle_missing_user_graphql(user_name, graphql_data)
 
         identifiers = graphql_data.get("Identifier", [])
@@ -437,9 +363,7 @@ class TestSemanticSearchDataConsistency:
         Users with proficiencies should have at least some with descriptions.
         """
         # Get expected data from sample files
-        sample_person = self._get_sample_data_for_user(
-            user_name, org1_sample_data, org2_sample_data
-        )
+        sample_person = self._get_sample_data_for_user(user_name, org1_sample_data, org2_sample_data)
         if sample_person is None:
             # No sample data for this user - valid for async users
             return
@@ -467,9 +391,7 @@ class TestSemanticSearchDataConsistency:
         missing_async = []
 
         for user_name in self.ALL_USERS:
-            graphql_data = self._query_user_in_graphql(
-                user_name, org1_sample_data, org2_sample_data
-            )
+            graphql_data = self._query_user_in_graphql(user_name, org1_sample_data, org2_sample_data)
 
             if graphql_data is None:
                 status = "ASYNC PENDING" if self._is_async_user(user_name) else "MISSING"
@@ -509,9 +431,7 @@ class TestSemanticSearchDataConsistency:
 class TestSchemaSourceIntegrity:
     """Tests verifying the schema source and integrity."""
 
-    def test_schema_loaded_from_expected_source(
-        self, require_semantic_search: None
-    ) -> None:
+    def test_schema_loaded_from_expected_source(self, require_semantic_search: None) -> None:
         """Verify schema is loaded from MDR when MDR is available."""
         with httpx.Client(timeout=30.0) as client:
             response = client.get(SEMANTIC_SEARCH_STATUS_URL)
@@ -522,18 +442,11 @@ class TestSchemaSourceIntegrity:
         # In docker-compose setup, should load from MDR
         # USE_OPENAPI_DATA_MODEL_FROM_FILE defaults to false
         if status["source"] == "file":
-            pytest.xfail(
-                "Schema loaded from file instead of MDR. "
-                "This may indicate MDR was not available at startup."
-            )
+            pytest.xfail("Schema loaded from file instead of MDR. This may indicate MDR was not available at startup.")
 
-        assert status["source"] == "mdr", (
-            f"Expected schema from 'mdr', got '{status['source']}'"
-        )
+        assert status["source"] == "mdr", f"Expected schema from 'mdr', got '{status['source']}'"
 
-    def test_schema_has_required_filter_models(
-        self, require_semantic_search: None
-    ) -> None:
+    def test_schema_has_required_filter_models(self, require_semantic_search: None) -> None:
         """Verify schema includes required filter models for querying."""
         with httpx.Client(timeout=30.0) as client:
             response = client.get(SEMANTIC_SEARCH_STATUS_URL)
@@ -544,9 +457,7 @@ class TestSchemaSourceIntegrity:
         filter_models = status.get("filter_models", [])
         assert "Person" in filter_models, "Person filter model required"
 
-    def test_schema_has_mutation_models(
-        self, require_semantic_search: None
-    ) -> None:
+    def test_schema_has_mutation_models(self, require_semantic_search: None) -> None:
         """Verify schema includes mutation models if mutations are supported."""
         with httpx.Client(timeout=30.0) as client:
             response = client.get(SEMANTIC_SEARCH_STATUS_URL)
@@ -560,6 +471,4 @@ class TestSchemaSourceIntegrity:
         if not mutation_models:
             pytest.skip("No mutation models available (this may be expected)")
 
-        assert "Person" in mutation_models, (
-            "If mutation models exist, Person should be included"
-        )
+        assert "Person" in mutation_models, "If mutation models exist, Person should be included"

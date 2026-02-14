@@ -1,14 +1,11 @@
 """Tests for the SchemaStateManager component."""
 
-import os
-from unittest import mock
 from unittest.mock import MagicMock, patch
 
 import httpx
 import pytest
 
 from lif.lif_schema_config import LIFSchemaConfig
-from lif.mdr_client import MDRClientException, MDRConfigurationError
 from lif.schema_state_manager import SchemaState, SchemaStateManager
 
 
@@ -281,5 +278,3 @@ class TestSchemaState:
         assert state.openapi == {"openapi": "3.0.0"}
         assert state.source == "file"
         assert state.leaves == []
-
-

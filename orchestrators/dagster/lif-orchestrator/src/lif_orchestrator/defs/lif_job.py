@@ -146,7 +146,7 @@ def run_translation(
         response.raise_for_status()
 
         translated_data = response.json()
-        
+
         context.log.info(f"Translation API response: {translated_data}")
 
         # temporary method to extract fragments based on requested paths

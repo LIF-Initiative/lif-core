@@ -18,10 +18,7 @@ Example:
     print(config.graphql_query_name)  # "person"
 """
 
-from lif.lif_schema_config.core import (
-    LIFSchemaConfig,
-    LIFSchemaConfigError,
-)
+from lif.lif_schema_config.core import LIFSchemaConfig, LIFSchemaConfigError
 from lif.lif_schema_config.naming import (
     normalize_identifier_type,
     safe_identifier,
@@ -56,12 +53,7 @@ from lif.lif_schema_config.openapi import (
     list_schema_names,
     resolve_ref,
 )
-from lif.lif_schema_config.type_mappings import (
-    PYTHON_TO_XSD,
-    XSD_TO_PYTHON,
-    python_type_for_xsd,
-    xsd_type_for_python,
-)
+from lif.lif_schema_config.type_mappings import PYTHON_TO_XSD, XSD_TO_PYTHON, python_type_for_xsd, xsd_type_for_python
 
 __all__ = [
     # Core config
