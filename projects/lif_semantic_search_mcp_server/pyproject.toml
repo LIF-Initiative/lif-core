@@ -33,4 +33,5 @@ packages = ["lif"]
 "../../components/lif/schema_state_manager" = "lif/schema_state_manager"
 "../../components/lif/semantic_search_service" = "lif/semantic_search_service"
 "../../components/lif/string_utils" = "lif/string_utils"
+"../../components/lif/graphql_client" = "lif/graphql_client"
 "../../components/lif/mdr_client" = "lif/mdr_client"
