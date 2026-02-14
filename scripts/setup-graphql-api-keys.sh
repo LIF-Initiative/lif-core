@@ -87,11 +87,15 @@ generate_key() {
 
 get_ssm_param() {
     local param_name="$1"
-    aws ssm get-parameter \
+    local value
+    value=$(aws ssm get-parameter \
         --name "$param_name" \
         --with-decryption \
         --query "Parameter.Value" \
-        --output text 2>/dev/null || echo ""
+        --output text 2>/dev/null || echo "")
+    # Trim whitespace and strip leading/trailing commas
+    value=$(echo "$value" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//;s/^,*//;s/,*$//')
+    echo "$value"
 }
 
 put_ssm_param() {
@@ -105,6 +109,11 @@ put_ssm_param() {
         --type "SecureString" \
         --description "$description" \
         --overwrite
+}
+
+# Clean a comma-separated value: remove empty entries, leading/trailing commas
+clean_csv() {
+    echo "$1" | tr ',' '\n' | (sed '/^[[:space:]]*$/d' || true) | tr '\n' ',' | sed 's/,$//'
 }
 
 # ----------- Workshop mode -----------
@@ -141,7 +150,8 @@ run_workshop_mode() {
 
     # Build combined server value — remove existing entries with matching prefix
     if [[ -n "$existing_server_value" ]]; then
-        FILTERED_VALUE=$(echo "$existing_server_value" | tr ',' '\n' | grep -v ":${WORKSHOP_PREFIX}-" | tr '\n' ',' | sed 's/,$//')
+        FILTERED_VALUE=$(echo "$existing_server_value" | tr ',' '\n' | (grep -v ":${WORKSHOP_PREFIX}-" || true) | tr '\n' ',' | sed 's/,$//')
+        FILTERED_VALUE=$(clean_csv "$FILTERED_VALUE")
         if [[ -n "$NEW_ENTRIES" ]]; then
             if [[ -n "$FILTERED_VALUE" ]]; then
                 SERVER_VALUE="${FILTERED_VALUE},${NEW_ENTRIES}"
@@ -236,7 +246,8 @@ run_service_mode() {
         if echo "$existing_server_value" | grep -q ":${CLIENT_LABEL}"; then
             echo "  Entry for '${CLIENT_LABEL}' already exists — will replace it"
             # Remove existing entry for this client and append updated one
-            UPDATED_VALUE=$(echo "$existing_server_value" | tr ',' '\n' | grep -v ":${CLIENT_LABEL}$" | tr '\n' ',' | sed 's/,$//')
+            UPDATED_VALUE=$(echo "$existing_server_value" | tr ',' '\n' | (grep -v ":${CLIENT_LABEL}$" || true) | tr '\n' ',' | sed 's/,$//')
+            UPDATED_VALUE=$(clean_csv "$UPDATED_VALUE")
             if [[ -n "$UPDATED_VALUE" ]]; then
                 SERVER_VALUE="${UPDATED_VALUE},${NEW_ENTRY}"
             else
@@ -244,7 +255,7 @@ run_service_mode() {
             fi
         else
             echo "  Appending new entry for '${CLIENT_LABEL}'"
-            SERVER_VALUE="${existing_server_value},${NEW_ENTRY}"
+            SERVER_VALUE=$(clean_csv "${existing_server_value},${NEW_ENTRY}")
         fi
     else
         echo "No existing server ApiKeys — will create with single entry"
