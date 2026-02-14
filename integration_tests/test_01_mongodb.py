@@ -5,10 +5,9 @@ and matches the source JSON files.
 """
 
 import pytest
-from typing import Any
 
 from utils.ports import OrgPorts
-from utils.sample_data import SampleDataLoader, PersonData
+from utils.sample_data import SampleDataLoader
 from utils.comparison import compare_person_data, summarize_results, ComparisonResult
 
 
@@ -23,11 +22,7 @@ class TestMongoDBDataIntegrity:
     """Tests for MongoDB data integrity."""
 
     def test_mongodb_has_expected_person_count(
-        self,
-        org_id: str,
-        org_ports: OrgPorts,
-        sample_data: SampleDataLoader,
-        require_mongodb: None,
+        self, org_id: str, org_ports: OrgPorts, sample_data: SampleDataLoader, require_mongodb: None
     ) -> None:
         """Verify MongoDB has at least the expected number of person documents.
 
@@ -45,16 +40,11 @@ class TestMongoDBDataIntegrity:
             actual_count = collection.count_documents({})
 
         assert actual_count >= expected_count, (
-            f"{org_id}: Expected at least {expected_count} persons in MongoDB, "
-            f"found {actual_count}"
+            f"{org_id}: Expected at least {expected_count} persons in MongoDB, found {actual_count}"
         )
 
     def test_all_persons_exist_in_mongodb(
-        self,
-        org_id: str,
-        org_ports: OrgPorts,
-        sample_data: SampleDataLoader,
-        require_mongodb: None,
+        self, org_id: str, org_ports: OrgPorts, sample_data: SampleDataLoader, require_mongodb: None
     ) -> None:
         """Verify all expected persons exist in MongoDB."""
         from pymongo import MongoClient
@@ -73,30 +63,20 @@ class TestMongoDBDataIntegrity:
                 # Query by school assigned number within nested Identifier array
                 query = {
                     "Person.Identifier": {
-                        "$elemMatch": {
-                            "identifierType": "SCHOOL_ASSIGNED_NUMBER",
-                            "identifier": school_num,
-                        }
+                        "$elemMatch": {"identifierType": "SCHOOL_ASSIGNED_NUMBER", "identifier": school_num}
                     }
                 }
                 doc = collection.find_one(query)
 
                 if not doc:
-                    missing_persons.append(
-                        f"{person_data.full_name} (ID: {school_num})"
-                    )
+                    missing_persons.append(f"{person_data.full_name} (ID: {school_num})")
 
-        assert not missing_persons, (
-            f"{org_id}: Missing persons in MongoDB:\n"
-            + "\n".join(f"  - {p}" for p in missing_persons)
+        assert not missing_persons, f"{org_id}: Missing persons in MongoDB:\n" + "\n".join(
+            f"  - {p}" for p in missing_persons
         )
 
     def test_person_data_matches_sample_files(
-        self,
-        org_id: str,
-        org_ports: OrgPorts,
-        sample_data: SampleDataLoader,
-        require_mongodb: None,
+        self, org_id: str, org_ports: OrgPorts, sample_data: SampleDataLoader, require_mongodb: None
     ) -> None:
         """Verify MongoDB person data contains all expected data from sample files.
 
@@ -120,10 +100,7 @@ class TestMongoDBDataIntegrity:
                 # Find the document in MongoDB
                 query = {
                     "Person.Identifier": {
-                        "$elemMatch": {
-                            "identifierType": "SCHOOL_ASSIGNED_NUMBER",
-                            "identifier": school_num,
-                        }
+                        "$elemMatch": {"identifierType": "SCHOOL_ASSIGNED_NUMBER", "identifier": school_num}
                     }
                 }
                 doc = collection.find_one(query)
@@ -145,6 +122,7 @@ class TestMongoDBDataIntegrity:
                 else:
                     # Create a failure result for missing person
                     from utils.comparison import ComparisonResult, Difference
+
                     results.append(
                         ComparisonResult(
                             person_name=person_data.full_name,
@@ -152,10 +130,7 @@ class TestMongoDBDataIntegrity:
                             layer="mongodb",
                             differences=[
                                 Difference(
-                                    path="",
-                                    expected=f"Person with ID {school_num}",
-                                    actual=None,
-                                    diff_type="missing",
+                                    path="", expected=f"Person with ID {school_num}", actual=None, diff_type="missing"
                                 )
                             ],
                         )
@@ -167,12 +142,7 @@ class TestMongoDBDataIntegrity:
             report = summarize_results(results)
             pytest.fail(f"{org_id} MongoDB data validation failed:\n{report}")
 
-    def test_mongodb_indexes_exist(
-        self,
-        org_id: str,
-        org_ports: OrgPorts,
-        require_mongodb: None,
-    ) -> None:
+    def test_mongodb_indexes_exist(self, org_id: str, org_ports: OrgPorts, require_mongodb: None) -> None:
         """Verify expected indexes exist in MongoDB."""
         from pymongo import MongoClient
 
@@ -185,11 +155,7 @@ class TestMongoDBDataIntegrity:
         assert "_id_" in indexes, f"{org_id}: Missing _id index in MongoDB"
 
     def test_entity_counts_per_person(
-        self,
-        org_id: str,
-        org_ports: OrgPorts,
-        sample_data: SampleDataLoader,
-        require_mongodb: None,
+        self, org_id: str, org_ports: OrgPorts, sample_data: SampleDataLoader, require_mongodb: None
     ) -> None:
         """Verify entity counts (credentials, courses, etc.) are at least what sample data expects.
 
@@ -200,12 +166,7 @@ class TestMongoDBDataIntegrity:
         from pymongo import MongoClient
 
         missing_data = []
-        entity_types = [
-            "CredentialAward",
-            "CourseLearningExperience",
-            "EmploymentLearningExperience",
-            "Proficiency",
-        ]
+        entity_types = ["CredentialAward", "CourseLearningExperience", "EmploymentLearningExperience", "Proficiency"]
 
         with MongoClient(org_ports.mongodb_uri) as client:
             db = client["LIF"]
@@ -218,10 +179,7 @@ class TestMongoDBDataIntegrity:
 
                 query = {
                     "Person.Identifier": {
-                        "$elemMatch": {
-                            "identifierType": "SCHOOL_ASSIGNED_NUMBER",
-                            "identifier": school_num,
-                        }
+                        "$elemMatch": {"identifierType": "SCHOOL_ASSIGNED_NUMBER", "identifier": school_num}
                     }
                 }
                 doc = collection.find_one(query)
@@ -245,7 +203,4 @@ class TestMongoDBDataIntegrity:
                         )
 
         if missing_data:
-            pytest.fail(
-                f"{org_id} missing entity data:\n"
-                + "\n".join(f"  - {m}" for m in missing_data)
-            )
+            pytest.fail(f"{org_id} missing entity data:\n" + "\n".join(f"  - {m}" for m in missing_data))

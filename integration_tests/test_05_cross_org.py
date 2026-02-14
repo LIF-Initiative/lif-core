@@ -6,8 +6,8 @@ Verifies data isolation between organizations and consistency of shared persons.
 import pytest
 from typing import Any
 
-from utils.ports import OrgPorts, get_org_ports, get_all_org_ids
-from utils.sample_data import SampleDataLoader, load_all_orgs
+from utils.ports import get_org_ports, get_all_org_ids
+from utils.sample_data import load_all_orgs
 
 
 # GraphQL query for cross-org validation
@@ -30,43 +30,22 @@ query GetPerson($filter: PersonFilter!) {
 """
 
 
-def _make_graphql_request(
-    graphql_url: str,
-    query: str,
-    variables: dict[str, Any],
-) -> dict[str, Any]:
+def _make_graphql_request(graphql_url: str, query: str, variables: dict[str, Any]) -> dict[str, Any]:
     """Make a GraphQL request and return the response."""
     import httpx
 
     with httpx.Client(timeout=60.0) as client:
-        response = client.post(
-            graphql_url,
-            json={"query": query, "variables": variables},
-        )
+        response = client.post(graphql_url, json={"query": query, "variables": variables})
 
     if response.status_code != 200:
-        raise AssertionError(
-            f"GraphQL request failed: {response.status_code} - {response.text}"
-        )
+        raise AssertionError(f"GraphQL request failed: {response.status_code} - {response.text}")
 
     return response.json()
 
 
-def _make_filter(
-    identifier: str,
-    identifier_type: str = "SCHOOL_ASSIGNED_NUMBER",
-) -> dict[str, Any]:
+def _make_filter(identifier: str, identifier_type: str = "SCHOOL_ASSIGNED_NUMBER") -> dict[str, Any]:
     """Build a GraphQL filter for person lookup."""
-    return {
-        "filter": {
-            "Identifier": [
-                {
-                    "identifier": identifier,
-                    "identifierType": identifier_type,
-                }
-            ]
-        }
-    }
+    return {"filter": {"Identifier": [{"identifier": identifier, "identifierType": identifier_type}]}}
 
 
 def _check_graphql_available(graphql_url: str) -> bool:
@@ -74,10 +53,7 @@ def _check_graphql_available(graphql_url: str) -> bool:
     import httpx
 
     try:
-        response = httpx.get(
-            graphql_url.replace("/graphql", ""),
-            timeout=5.0,
-        )
+        response = httpx.get(graphql_url.replace("/graphql", ""), timeout=5.0)
         return response.status_code < 500
     except httpx.RequestError:
         return False
@@ -115,20 +91,14 @@ class TestCrossOrgDataIsolation:
                     if skip_unavailable:
                         continue
                     else:
-                        pytest.fail(
-                            f"GraphQL not available for {target_org_id}"
-                        )
+                        pytest.fail(f"GraphQL not available for {target_org_id}")
 
                 # Try to find source org's persons in target org
                 for school_num in source_school_numbers:
                     variables = _make_filter(school_num)
 
                     try:
-                        result = _make_graphql_request(
-                            target_ports.graphql_url,
-                            PERSON_QUERY,
-                            variables,
-                        )
+                        result = _make_graphql_request(target_ports.graphql_url, PERSON_QUERY, variables)
 
                         person_list = result.get("data", {}).get("Person", [])
 
@@ -137,8 +107,7 @@ class TestCrossOrgDataIsolation:
                             person_source_id = person.get("informationSourceId", "")
                             if person_source_id == source_org_id.replace("org", "Org"):
                                 cross_access_issues.append(
-                                    f"{source_org_id} person (ID: {school_num}) "
-                                    f"accessible from {target_org_id}"
+                                    f"{source_org_id} person (ID: {school_num}) accessible from {target_org_id}"
                                 )
 
                     except Exception:
@@ -146,10 +115,7 @@ class TestCrossOrgDataIsolation:
                         pass
 
         if cross_access_issues:
-            pytest.fail(
-                "Data isolation issues found:\n"
-                + "\n".join(f"  - {issue}" for issue in cross_access_issues)
-            )
+            pytest.fail("Data isolation issues found:\n" + "\n".join(f"  - {issue}" for issue in cross_access_issues))
 
 
 @pytest.mark.layer("cross_org")
@@ -185,14 +151,9 @@ class TestCrossOrgConsistency:
 
         if unavailable:
             if skip_unavailable:
-                pytest.skip(
-                    f"GraphQL unavailable for: {', '.join(unavailable)}"
-                )
+                pytest.skip(f"GraphQL unavailable for: {', '.join(unavailable)}")
             else:
-                pytest.fail(
-                    f"GraphQL unavailable for:\n"
-                    + "\n".join(f"  - {u}" for u in unavailable)
-                )
+                pytest.fail("GraphQL unavailable for:\n" + "\n".join(f"  - {u}" for u in unavailable))
 
     def test_org_identifiers_unique(self) -> None:
         """Verify school assigned numbers are unique within each org."""
@@ -210,10 +171,7 @@ class TestCrossOrgConsistency:
                 seen.add(num)
 
         if duplicates:
-            pytest.fail(
-                "Duplicate identifiers found:\n"
-                + "\n".join(f"  - {d}" for d in duplicates)
-            )
+            pytest.fail("Duplicate identifiers found:\n" + "\n".join(f"  - {d}" for d in duplicates))
 
     def test_sample_data_structure_consistent(self) -> None:
         """Verify sample data files have consistent structure across orgs."""
@@ -225,31 +183,20 @@ class TestCrossOrgConsistency:
             for person_data in loader.persons:
                 # Check required fields exist
                 if not person_data.person.get("Name"):
-                    issues.append(
-                        f"{org_id}/{person_data.filename}: Missing Name"
-                    )
+                    issues.append(f"{org_id}/{person_data.filename}: Missing Name")
 
                 if not person_data.person.get("Identifier"):
-                    issues.append(
-                        f"{org_id}/{person_data.filename}: Missing Identifier"
-                    )
+                    issues.append(f"{org_id}/{person_data.filename}: Missing Identifier")
 
                 # Check identifiers have required fields
                 for ident in person_data.person.get("Identifier", []):
                     if not ident.get("identifier"):
-                        issues.append(
-                            f"{org_id}/{person_data.filename}: Identifier missing 'identifier'"
-                        )
+                        issues.append(f"{org_id}/{person_data.filename}: Identifier missing 'identifier'")
                     if not ident.get("identifierType"):
-                        issues.append(
-                            f"{org_id}/{person_data.filename}: Identifier missing 'identifierType'"
-                        )
+                        issues.append(f"{org_id}/{person_data.filename}: Identifier missing 'identifierType'")
 
         if issues:
-            pytest.fail(
-                "Sample data structure issues:\n"
-                + "\n".join(f"  - {issue}" for issue in issues)
-            )
+            pytest.fail("Sample data structure issues:\n" + "\n".join(f"  - {issue}" for issue in issues))
 
 
 @pytest.mark.layer("cross_org")
@@ -261,12 +208,7 @@ class TestCrossOrgSummary:
         all_loaders = load_all_orgs()
         all_org_ids = get_all_org_ids()
 
-        report_lines = [
-            "",
-            "=" * 60,
-            "CROSS-ORG SUMMARY REPORT",
-            "=" * 60,
-        ]
+        report_lines = ["", "=" * 60, "CROSS-ORG SUMMARY REPORT", "=" * 60]
 
         for org_id in all_org_ids:
             ports = get_org_ports(org_id)
@@ -297,9 +239,7 @@ class TestCrossOrgSummary:
 
             # Check GraphQL availability
             graphql_available = _check_graphql_available(ports.graphql_url)
-            report_lines.append(
-                f"  GraphQL available: {'Yes' if graphql_available else 'No'}"
-            )
+            report_lines.append(f"  GraphQL available: {'Yes' if graphql_available else 'No'}")
 
         report_lines.append("")
         report_lines.append("=" * 60)

@@ -1,9 +1,9 @@
-import copy
 import pytest
 from lif.translator.utils import deep_merge, convert_transformation_to_mappings
 
 
 # ------------------------------ deep_merge tests ------------------------------ #
+
 
 def test_deep_merge_recurses_on_dicts_and_overwrites_scalars():
     dst = {"a": {"b": 1}, "c": 10}
@@ -22,12 +22,7 @@ def test_deep_merge_recurses_on_dicts_and_overwrites_scalars():
 
 
 def test_deep_merge_lists_of_dicts_are_merged_by_index():
-    dst = {
-        "images": [
-            {"caption": "first"},
-            {"imageId": "id-2"},
-        ]
-    }
+    dst = {"images": [{"caption": "first"}, {"imageId": "id-2"}]}
     src = {
         "images": [
             {"imageId": "id-1"},  # merges with index 0 in dst
@@ -96,16 +91,12 @@ def test_deep_merge_does_not_alias_source_structures():
 
 # -------- convert_transformation_to_mappings tests (extraction behaviour) ------- #
 
+
 def test_convert_transformation_to_mappings_basic_extraction():
-    transformation = {
-        "data": [
-            {"TransformationExpression": "{ \"a\": 1 }"},
-            {"TransformationExpression": "{ \"b\": 2 }"},
-        ]
-    }
+    transformation = {"data": [{"TransformationExpression": '{ "a": 1 }'}, {"TransformationExpression": '{ "b": 2 }'}]}
 
     expressions = convert_transformation_to_mappings(transformation)
-    assert expressions == ["{ \"a\": 1 }", "{ \"b\": 2 }"]
+    assert expressions == ['{ "a": 1 }', '{ "b": 2 }']
 
 
 def test_convert_transformation_to_mappings_skips_missing_or_empty():
@@ -114,12 +105,12 @@ def test_convert_transformation_to_mappings_skips_missing_or_empty():
             {},  # missing
             {"TransformationExpression": None},  # falsy
             {"TransformationExpression": ""},  # empty string -> falsy -> skipped
-            {"TransformationExpression": "{ \"ok\": true }"},
+            {"TransformationExpression": '{ "ok": true }'},
         ]
     }
 
     expressions = convert_transformation_to_mappings(transformation)
-    assert expressions == ["{ \"ok\": true }"]
+    assert expressions == ['{ "ok": true }']
 
 
 def test_convert_transformation_to_mappings_no_data_returns_empty():

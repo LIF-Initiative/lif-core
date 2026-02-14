@@ -89,9 +89,7 @@ class LIFSchemaConfig:
 
     # Root Type Configuration
     root_type_name: str = "Person"
-    additional_root_types: List[str] = field(
-        default_factory=lambda: ["Course", "Organization", "Credential"]
-    )
+    additional_root_types: List[str] = field(default_factory=lambda: ["Course", "Organization", "Credential"])
 
     # Query Planner URLs
     query_planner_base_url: str = "http://localhost:8002"
@@ -170,21 +168,16 @@ class LIFSchemaConfig:
             LIFSchemaConfig: Configuration loaded from environment.
         """
         # Parse root types
-        root_type_name = os.getenv("LIF_GRAPHQL_ROOT_TYPE_NAME",
-                                   os.getenv("LIF_GRAPHQL_ROOT_NODE", "Person"))
+        root_type_name = os.getenv("LIF_GRAPHQL_ROOT_TYPE_NAME", os.getenv("LIF_GRAPHQL_ROOT_NODE", "Person"))
 
         # Parse additional root types (these serve as reference data)
         root_nodes_str = os.getenv("LIF_GRAPHQL_ROOT_NODES", "Course,Organization,Credential")
         additional_root_types = [
-            node.strip() for node in root_nodes_str.split(",")
-            if node.strip() and node.strip() != root_type_name
+            node.strip() for node in root_nodes_str.split(",") if node.strip() and node.strip() != root_type_name
         ]
 
         # Support both new and old env var names for top_k
-        top_k = int(os.getenv(
-            "SEMANTIC_SEARCH__TOP_K",
-            os.getenv("TOP_K", "200")
-        ))
+        top_k = int(os.getenv("SEMANTIC_SEARCH__TOP_K", os.getenv("TOP_K", "200")))
 
         return cls(
             # Root types
@@ -198,23 +191,12 @@ class LIFSchemaConfig:
             mdr_api_auth_token=os.getenv("LIF_MDR_API_AUTH_TOKEN", "no_auth_token_set"),
             mdr_timeout_seconds=int(os.getenv("MDR_TIMEOUT_SECONDS", "30")),
             openapi_data_model_id=os.getenv("OPENAPI_DATA_MODEL_ID"),
-            openapi_json_filename=os.getenv(
-                "OPENAPI_JSON_FILENAME",
-                "openapi_constrained_with_interactions.json"
-            ),
-            use_openapi_from_file=os.getenv(
-                "USE_OPENAPI_DATA_MODEL_FROM_FILE", "false"
-            ).lower() == "true",
+            openapi_json_filename=os.getenv("OPENAPI_JSON_FILENAME", "openapi_constrained_with_interactions.json"),
+            use_openapi_from_file=os.getenv("USE_OPENAPI_DATA_MODEL_FROM_FILE", "false").lower() == "true",
             # Semantic search
-            semantic_search_model_name=os.getenv(
-                "SEMANTIC_SEARCH__MODEL_NAME",
-                "all-MiniLM-L6-v2"
-            ),
+            semantic_search_model_name=os.getenv("SEMANTIC_SEARCH__MODEL_NAME", "all-MiniLM-L6-v2"),
             semantic_search_top_k=top_k,
-            semantic_search_timeout=int(os.getenv(
-                "SEMANTIC_SEARCH__GRAPHQL_TIMEOUT__READ",
-                "300"
-            )),
+            semantic_search_timeout=int(os.getenv("SEMANTIC_SEARCH__GRAPHQL_TIMEOUT__READ", "300")),
         )
 
     # Computed properties for convenience

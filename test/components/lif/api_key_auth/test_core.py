@@ -67,9 +67,7 @@ class TestApiKeyConfig:
 
     def test_from_environment_empty_keys(self):
         """Test loading configuration with empty API keys."""
-        env_vars = {
-            "TEST_AUTH__API_KEYS": "",
-        }
+        env_vars = {"TEST_AUTH__API_KEYS": ""}
         with patch.dict(os.environ, env_vars, clear=False):
             config = ApiKeyConfig.from_environment(prefix="TEST_AUTH")
 
@@ -78,9 +76,7 @@ class TestApiKeyConfig:
 
     def test_from_environment_malformed_keys(self):
         """Test loading configuration with malformed API keys (no colon)."""
-        env_vars = {
-            "TEST_AUTH__API_KEYS": "validkey:validname,invalidkey,another:valid",
-        }
+        env_vars = {"TEST_AUTH__API_KEYS": "validkey:validname,invalidkey,another:valid"}
         with patch.dict(os.environ, env_vars, clear=False):
             config = ApiKeyConfig.from_environment(prefix="TEST_AUTH")
 
@@ -92,9 +88,7 @@ class TestApiKeyConfig:
 
     def test_from_environment_whitespace_handling(self):
         """Test that whitespace is properly trimmed from keys and names."""
-        env_vars = {
-            "TEST_AUTH__API_KEYS": "  key1 : client1 , key2:client2  ",
-        }
+        env_vars = {"TEST_AUTH__API_KEYS": "  key1 : client1 , key2:client2  "}
         with patch.dict(os.environ, env_vars, clear=False):
             config = ApiKeyConfig.from_environment(prefix="TEST_AUTH")
 
@@ -120,9 +114,7 @@ class TestApiKeyAuthMiddleware:
     def app_with_auth(self):
         """Create a FastAPI app with auth middleware enabled."""
         config = ApiKeyConfig(
-            api_keys={"valid-key": "test-client"},
-            public_paths={"/health"},
-            public_path_prefixes={"/docs"},
+            api_keys={"valid-key": "test-client"}, public_paths={"/health"}, public_path_prefixes={"/docs"}
         )
         app = FastAPI()
         app.add_middleware(ApiKeyAuthMiddleware, config=config)

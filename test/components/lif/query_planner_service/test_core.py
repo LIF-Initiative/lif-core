@@ -233,7 +233,9 @@ def test_run_post_orchestration_results(mock_post):
                     filter=LIFQueryFilter(
                         root=LIFQueryPersonFilter(
                             person=LIFPersonIdentifiers(
-                                Identifier=LIFPersonIdentifier(identifier="12345", identifierType="School-assigned number")
+                                Identifier=LIFPersonIdentifier(
+                                    identifier="12345", identifierType="School-assigned number"
+                                )
                             )
                         )
                     ),

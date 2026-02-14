@@ -82,9 +82,7 @@ class LIFQueryPersonFilter(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
     # Use alias="Person" to accept PascalCase from GraphQL API while keeping lowercase internally
-    person: LIFPersonIdentifiers = Field(
-        ..., alias="Person", description="Person identifier for the query"
-    )
+    person: LIFPersonIdentifiers = Field(..., alias="Person", description="Person identifier for the query")
 
 
 class LIFQueryFilter(RootModel[LIFQueryPersonFilter]):

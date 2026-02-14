@@ -310,10 +310,7 @@ def to_graphql_field_list(obj: Any, indent=0) -> str:
     return ""
 
 
-def filter_paths_for_graphql(
-    paths: List[str],
-    config: Optional[LIFSchemaConfig] = None,
-) -> List[str]:
+def filter_paths_for_graphql(paths: List[str], config: Optional[LIFSchemaConfig] = None) -> List[str]:
     """Filter and transform paths for GraphQL query generation.
 
     The semantic search indexes multiple root entities (Person, Course, Organization, Credential)
@@ -353,7 +350,7 @@ def filter_paths_for_graphql(
 
         # For Person paths, strip the "Person." prefix since PersonItem fields are direct
         if root == primary_root and "." in path:
-            transformed_path = path[len(primary_root) + 1:]  # Strip "Person."
+            transformed_path = path[len(primary_root) + 1 :]  # Strip "Person."
             filtered_paths.append(transformed_path)
         elif root != primary_root:
             # Keep other paths as-is (shouldn't happen with current indexing)

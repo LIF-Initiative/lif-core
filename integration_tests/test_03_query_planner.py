@@ -8,8 +8,7 @@ import pytest
 from typing import Any
 
 from utils.ports import OrgPorts
-from utils.sample_data import SampleDataLoader, PersonData
-from utils.comparison import compare_person_data, summarize_results, ComparisonResult
+from utils.sample_data import SampleDataLoader
 
 
 @pytest.mark.layer("query_planner")
@@ -17,10 +16,7 @@ class TestQueryPlannerDataIntegrity:
     """Tests for Query Planner data integrity."""
 
     def _make_query_payload(
-        self,
-        identifier: str,
-        identifier_type: str = "SCHOOL_ASSIGNED_NUMBER",
-        selected_fields: list[str] | None = None,
+        self, identifier: str, identifier_type: str = "SCHOOL_ASSIGNED_NUMBER", selected_fields: list[str] | None = None
     ) -> dict[str, Any]:
         """Build a LIFQuery payload for the Query Planner API."""
         if selected_fields is None:
@@ -37,23 +33,12 @@ class TestQueryPlannerDataIntegrity:
             ]
 
         return {
-            "filter": {
-                "Person": {
-                    "Identifier": {
-                        "identifier": identifier,
-                        "identifierType": identifier_type,
-                    }
-                }
-            },
+            "filter": {"Person": {"Identifier": {"identifier": identifier, "identifierType": identifier_type}}},
             "selected_fields": selected_fields,
         }
 
     def test_query_planner_health(
-        self,
-        org_id: str,
-        org_ports: OrgPorts,
-        http_client: Any,
-        require_query_planner: None,
+        self, org_id: str, org_ports: OrgPorts, http_client: Any, require_query_planner: None
     ) -> None:
         """Verify Query Planner API is responding."""
         response = http_client.get(f"{org_ports.query_planner_url}/")
@@ -83,20 +68,15 @@ class TestQueryPlannerDataIntegrity:
 
         # Query Planner may take longer due to orchestration
         import httpx
-        with httpx.Client(timeout=60.0) as client:
-            response = client.post(
-                f"{org_ports.query_planner_url}/query",
-                json=payload,
-            )
 
-        assert response.status_code == 200, (
-            f"Query Planner query failed: {response.status_code} - {response.text}"
-        )
+        with httpx.Client(timeout=60.0) as client:
+            response = client.post(f"{org_ports.query_planner_url}/query", json=payload)
+
+        assert response.status_code == 200, f"Query Planner query failed: {response.status_code} - {response.text}"
 
         records = response.json()
         assert len(records) > 0, (
-            f"Query Planner returned no records for {person_data.full_name} "
-            f"(school_num: {school_num})"
+            f"Query Planner returned no records for {person_data.full_name} (school_num: {school_num})"
         )
 
     def test_all_persons_queryable(
@@ -111,6 +91,7 @@ class TestQueryPlannerDataIntegrity:
         missing_persons = []
 
         import httpx
+
         with httpx.Client(timeout=60.0) as client:
             for person_data in sample_data.persons:
                 school_num = person_data.school_assigned_number
@@ -118,27 +99,18 @@ class TestQueryPlannerDataIntegrity:
                     continue
 
                 payload = self._make_query_payload(school_num)
-                response = client.post(
-                    f"{org_ports.query_planner_url}/query",
-                    json=payload,
-                )
+                response = client.post(f"{org_ports.query_planner_url}/query", json=payload)
 
                 if response.status_code != 200:
-                    missing_persons.append(
-                        f"{person_data.full_name} (ID: {school_num}): "
-                        f"HTTP {response.status_code}"
-                    )
+                    missing_persons.append(f"{person_data.full_name} (ID: {school_num}): HTTP {response.status_code}")
                     continue
 
                 records = response.json()
                 if not records:
-                    missing_persons.append(
-                        f"{person_data.full_name} (ID: {school_num}): no records returned"
-                    )
+                    missing_persons.append(f"{person_data.full_name} (ID: {school_num}): no records returned")
 
-        assert not missing_persons, (
-            f"{org_id}: Persons not queryable via Query Planner:\n"
-            + "\n".join(f"  - {p}" for p in missing_persons)
+        assert not missing_persons, f"{org_id}: Persons not queryable via Query Planner:\n" + "\n".join(
+            f"  - {p}" for p in missing_persons
         )
 
     def test_person_name_matches_sample(
@@ -153,20 +125,15 @@ class TestQueryPlannerDataIntegrity:
         mismatches = []
 
         import httpx
+
         with httpx.Client(timeout=60.0) as client:
             for person_data in sample_data.persons:
                 school_num = person_data.school_assigned_number
                 if not school_num:
                     continue
 
-                payload = self._make_query_payload(
-                    school_num,
-                    selected_fields=["Person.Name"],
-                )
-                response = client.post(
-                    f"{org_ports.query_planner_url}/query",
-                    json=payload,
-                )
+                payload = self._make_query_payload(school_num, selected_fields=["Person.Name"])
+                response = client.post(f"{org_ports.query_planner_url}/query", json=payload)
 
                 if response.status_code != 200:
                     continue
@@ -199,10 +166,7 @@ class TestQueryPlannerDataIntegrity:
                     )
 
         if mismatches:
-            pytest.fail(
-                f"{org_id} name mismatches in Query Planner:\n"
-                + "\n".join(f"  - {m}" for m in mismatches)
-            )
+            pytest.fail(f"{org_id} name mismatches in Query Planner:\n" + "\n".join(f"  - {m}" for m in mismatches))
 
     def test_entity_counts_match_sample(
         self,
@@ -218,15 +182,11 @@ class TestQueryPlannerDataIntegrity:
         counts may be higher than the sample data for a single org. This test verifies
         that at minimum, the expected data is present (actual >= expected).
         """
-        entity_types = [
-            "CredentialAward",
-            "CourseLearningExperience",
-            "EmploymentLearningExperience",
-            "Proficiency",
-        ]
+        entity_types = ["CredentialAward", "CourseLearningExperience", "EmploymentLearningExperience", "Proficiency"]
         missing_data = []
 
         import httpx
+
         with httpx.Client(timeout=60.0) as client:
             for person_data in sample_data.persons:
                 school_num = person_data.school_assigned_number
@@ -236,10 +196,7 @@ class TestQueryPlannerDataIntegrity:
                 selected_fields = [f"Person.{et}" for et in entity_types]
                 payload = self._make_query_payload(school_num, selected_fields=selected_fields)
 
-                response = client.post(
-                    f"{org_ports.query_planner_url}/query",
-                    json=payload,
-                )
+                response = client.post(f"{org_ports.query_planner_url}/query", json=payload)
 
                 if response.status_code != 200:
                     continue
@@ -269,6 +226,5 @@ class TestQueryPlannerDataIntegrity:
 
         if missing_data:
             pytest.fail(
-                f"{org_id} missing entity data in Query Planner:\n"
-                + "\n".join(f"  - {m}" for m in missing_data)
+                f"{org_id} missing entity data in Query Planner:\n" + "\n".join(f"  - {m}" for m in missing_data)
             )

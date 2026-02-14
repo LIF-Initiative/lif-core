@@ -48,9 +48,7 @@ class ApiKeyConfig:
     public_path_prefixes: Set[str] = field(default_factory=lambda: {"/docs", "/openapi.json"})
 
     # HTTP methods that require authentication (empty set = no auth required)
-    methods_requiring_auth: Set[str] = field(
-        default_factory=lambda: {"GET", "POST", "PUT", "DELETE", "PATCH"}
-    )
+    methods_requiring_auth: Set[str] = field(default_factory=lambda: {"GET", "POST", "PUT", "DELETE", "PATCH"})
 
     @classmethod
     def from_environment(cls, prefix: str = "API_AUTH") -> "ApiKeyConfig":
@@ -82,18 +80,10 @@ class ApiKeyConfig:
                 if key and name:
                     api_keys[key] = name
 
-        public_paths = cls._parse_csv_set(
-            os.environ.get(f"{prefix}__PUBLIC_PATHS", "/health,/health-check")
-        )
-        public_prefixes = cls._parse_csv_set(
-            os.environ.get(f"{prefix}__PUBLIC_PATH_PREFIXES", "/docs,/openapi.json")
-        )
+        public_paths = cls._parse_csv_set(os.environ.get(f"{prefix}__PUBLIC_PATHS", "/health,/health-check"))
+        public_prefixes = cls._parse_csv_set(os.environ.get(f"{prefix}__PUBLIC_PATH_PREFIXES", "/docs,/openapi.json"))
 
-        return cls(
-            api_keys=api_keys,
-            public_paths=public_paths,
-            public_path_prefixes=public_prefixes,
-        )
+        return cls(api_keys=api_keys, public_paths=public_paths, public_path_prefixes=public_prefixes)
 
     @staticmethod
     def _parse_csv_set(value: str) -> Set[str]:
@@ -158,9 +148,7 @@ class ApiKeyAuthMiddleware(BaseHTTPMiddleware):
         if not client_name:
             logger.warning("Request to %s rejected: invalid API key", path)
             return JSONResponse(
-                status_code=401,
-                content={"detail": "Invalid API key."},
-                headers={"WWW-Authenticate": "X-API-Key"},
+                status_code=401, content={"detail": "Invalid API key."}, headers={"WWW-Authenticate": "X-API-Key"}
             )
 
         # Store client info for downstream use (logging, auditing, etc.)

@@ -19,12 +19,11 @@ from __future__ import annotations
 
 import argparse
 import difflib
-import os
 import re
 import sys
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterable, List, Optional, Sequence, Tuple
+from typing import List, Optional, Sequence, Tuple
 
 # -----------------------------
 # Config
@@ -35,9 +34,7 @@ DEFAULT_ALLOWLIST = [
     re.compile(r"arn:aws:[^:]+:[^:]*:[^:]*:"),  # generic ARN noise
 ]
 
-ECR_IMAGE_REF_RE = re.compile(
-    r'([0-9]{12}\.dkr\.ecr\.[a-z0-9-]+\.amazonaws\.com/[A-Za-z0-9._\-/]+):([A-Za-z0-9._-]+)'
-)
+ECR_IMAGE_REF_RE = re.compile(r"([0-9]{12}\.dkr\.ecr\.[a-z0-9-]+\.amazonaws\.com/[A-Za-z0-9._\-/]+):([A-Za-z0-9._-]+)")
 
 # Heuristic: only count a non-env diff as a "warning" if it hits any of these.
 SUSPICIOUS_NONENV_PATTERNS = [
@@ -55,11 +52,13 @@ SUSPICIOUS_NONENV_PATTERNS = [
 # Data types
 # -----------------------------
 
+
 @dataclass(frozen=True)
 class Pair:
     key: str
     dev: Path
     demo: Path
+
 
 @dataclass
 class CheckResult:
@@ -74,16 +73,20 @@ class CheckResult:
     docker_warnings: List[str]
     cross_env_warnings: List[str]
 
+
 # -----------------------------
 # Helpers
 # -----------------------------
 
+
 def read_text(path: Path) -> str:
     return path.read_text(encoding="utf-8", errors="replace")
+
 
 def split_lines_keepends(s: str) -> List[str]:
     # difflib wants lists of lines *with* newline endings to preserve formatting
     return s.splitlines(keepends=True)
+
 
 def canonicalize_env(s: str) -> str:
     """
@@ -107,19 +110,14 @@ def canonicalize_env(s: str) -> str:
     s = ECR_IMAGE_REF_RE.sub(r"\1:__TAG__", s)
     return s
 
+
 def unified_diff(a_text: str, b_text: str, a_name: str, b_name: str) -> str:
     a_lines = split_lines_keepends(a_text)
     b_lines = split_lines_keepends(b_text)
-    diff_lines = difflib.unified_diff(
-        a_lines,
-        b_lines,
-        fromfile=a_name,
-        tofile=b_name,
-        lineterm="",
-        n=3,
-    )
+    diff_lines = difflib.unified_diff(a_lines, b_lines, fromfile=a_name, tofile=b_name, lineterm="", n=3)
     # difflib.unified_diff already provides lines without trailing newline when lineterm=""
     return "\n".join(diff_lines)
+
 
 def diff_changed_lines(diff_text: str) -> List[str]:
     """
@@ -132,6 +130,7 @@ def diff_changed_lines(diff_text: str) -> List[str]:
             out.append(line)
     return out
 
+
 def is_suspicious_nonenv(diff_text: str) -> bool:
     changed = diff_changed_lines(diff_text)
     for line in changed:
@@ -140,10 +139,14 @@ def is_suspicious_nonenv(diff_text: str) -> bool:
                 return True
     return False
 
+
 def any_allowlisted(line: str, allowlist: Sequence[re.Pattern]) -> bool:
     return any(p.search(line) for p in allowlist)
 
-def find_cross_env_leftovers(lines: Sequence[str], forbidden_token: str, allowlist: Sequence[re.Pattern]) -> List[Tuple[int, str]]:
+
+def find_cross_env_leftovers(
+    lines: Sequence[str], forbidden_token: str, allowlist: Sequence[re.Pattern]
+) -> List[Tuple[int, str]]:
     """
     Find occurrences of forbidden_token as a whole word in lines that are not allowlisted.
     Returns list of (lineno, line).
@@ -155,6 +158,7 @@ def find_cross_env_leftovers(lines: Sequence[str], forbidden_token: str, allowli
             hits.append((i, line.rstrip("\n")))
     return hits
 
+
 def extract_ecr_images(content: str) -> List[Tuple[str, str]]:
     """
     Return list of (image_repo, tag)
@@ -163,6 +167,7 @@ def extract_ecr_images(content: str) -> List[Tuple[str, str]]:
     for m in ECR_IMAGE_REF_RE.finditer(content):
         hits.append((m.group(1), m.group(2)))
     return hits
+
 
 def check_docker_policy(env: str, filename: str, content: str) -> List[str]:
     """
@@ -176,6 +181,7 @@ def check_docker_policy(env: str, filename: str, content: str) -> List[str]:
             warnings.append(f"{filename}: demo files must NOT use :latest but found :latest ({image}:{tag})")
     return warnings
 
+
 def list_env_files(directory: Path) -> List[Path]:
     out: List[Path] = []
     for p in directory.iterdir():
@@ -185,14 +191,15 @@ def list_env_files(directory: Path) -> List[Path]:
                 out.append(p)
     return out
 
+
 def pair_files(paths: Sequence[Path]) -> Tuple[List[Pair], List[str]]:
     dev_map = {}
     demo_map = {}
     for p in paths:
         if p.name.startswith("dev-"):
-            dev_map[p.name[len("dev-"):]] = p
+            dev_map[p.name[len("dev-") :]] = p
         elif p.name.startswith("demo-"):
-            demo_map[p.name[len("demo-"):]] = p
+            demo_map[p.name[len("demo-") :]] = p
 
     keys = sorted(set(dev_map) | set(demo_map))
     pairs: List[Pair] = []
@@ -208,39 +215,32 @@ def pair_files(paths: Sequence[Path]) -> Tuple[List[Pair], List[str]]:
 
     return pairs, orphans
 
+
 def print_section(title: str) -> None:
     print("\n" + "=" * 60)
     print(title)
     print("=" * 60)
 
+
 # -----------------------------
 # Main check logic
 # -----------------------------
+
 
 def check_pair(pair: Pair, allowlist: Sequence[re.Pattern], show_full_diff: bool) -> CheckResult:
     dev_text = read_text(pair.dev)
     demo_text = read_text(pair.demo)
 
     # Full diff (demo vs dev) to match your usual reading order
-    full = unified_diff(
-        demo_text,
-        dev_text,
-        a_name=pair.demo.name,
-        b_name=pair.dev.name,
-    )
+    full = unified_diff(demo_text, dev_text, a_name=pair.demo.name, b_name=pair.dev.name)
 
     # Normalized diff
     demo_norm = canonicalize_env(demo_text)
     dev_norm = canonicalize_env(dev_text)
-    norm = unified_diff(
-        demo_norm,
-        dev_norm,
-        a_name=pair.demo.name + ".norm",
-        b_name=pair.dev.name + ".norm",
-    )
+    norm = unified_diff(demo_norm, dev_norm, a_name=pair.demo.name + ".norm", b_name=pair.dev.name + ".norm")
 
-    env_only = (full != "" and norm == "")
-    has_nonenv = (norm != "")
+    env_only = full != "" and norm == ""
+    has_nonenv = norm != ""
     suspicious = is_suspicious_nonenv(norm) if has_nonenv else False
 
     # Docker policy warnings
@@ -285,10 +285,15 @@ def check_pair(pair: Pair, allowlist: Sequence[re.Pattern], show_full_diff: bool
         cross_env_warnings=cross_env_warnings,
     )
 
+
 def main(argv: Optional[Sequence[str]] = None) -> int:
     ap = argparse.ArgumentParser(add_help=True)
     ap.add_argument("--dir", default=".", help="Directory to scan for dev-* and demo-* files")
-    ap.add_argument("--no-diff", action="store_true", help="Do not print full diffs; still prints normalized diffs for non-env cases")
+    ap.add_argument(
+        "--no-diff",
+        action="store_true",
+        help="Do not print full diffs; still prints normalized diffs for non-env cases",
+    )
     ap.add_argument("--allow", action="append", default=[], help="Regex allowlist for cross-env leftovers (can repeat)")
     ap.add_argument("--show-env-only", action="store_true", help="Also print env-only full diffs (can be noisy)")
 
@@ -390,6 +395,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     for w in warnings:
         print(" -", w)
     return 2
+
 
 if __name__ == "__main__":
     raise SystemExit(main())
