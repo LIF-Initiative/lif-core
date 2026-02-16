@@ -21,3 +21,6 @@ Secrets:
   - Name: LIF_MDR_API_AUTH_TOKEN
     ValueFrom:
       Fn::Sub: "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${EnvironmentName}/${ServiceName}/MdrApiKey"
+  - Name: LIF_GRAPHQL_API_KEY
+    ValueFrom:
+      Fn::Sub: "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${EnvironmentName}/${ServiceName}/GraphqlApiKey"

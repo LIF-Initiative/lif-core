@@ -349,6 +349,7 @@ services:
       dockerfile: projects/lif_semantic_search_mcp_server/Dockerfile2
     container_name: lif-semantic-search-mcp-server
     environment:
+      LIF_GRAPHQL_API_KEY: ${LIF_SEMANTIC_SEARCH__LIF_GRAPHQL_API_KEY:-}
       LIF_GRAPHQL_API_URL: ${LIF_GRAPHQL_API_URL:-http://lif-graphql-api-org1:8000/graphql}
       LIF_GRAPHQL_ROOT_NODE: ${LIF_GRAPHQL_ROOT_NODE:-Person}
       LIF_MDR_API_URL: ${LIF_MDR_API_URL:-http://lif-mdr-api:8012}
