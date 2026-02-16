@@ -51,7 +51,7 @@
 Update demo CloudFormation parameter files with the latest image tags from dev ECR.
 
 ### Prerequisites
-- AWS CLI configured with `lif` profile (or appropriate profile for account 381492161417)
+- AWS CLI configured with `lif` profile (or the appropriate AWS profile)
 - `jq` installed
 
 ### Usage

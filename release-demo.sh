@@ -1,4 +1,4 @@
-#!/bin/bash -eu
+#!/usr/bin/env bash
 #
 # Release to Demo
 # Updates demo CloudFormation parameter files with the latest image tags from dev ECR.
@@ -13,7 +13,7 @@
 #   ./release-demo.sh --help       # Show help
 #
 
-set -o pipefail
+set -euo pipefail
 
 # Colors for output
 RED='\033[0;31m'
@@ -81,7 +81,7 @@ get_release_tag() {
     fi
 
     # Extract repository name from URL with validation
-    # Example: 381492161417.dkr.ecr.us-east-1.amazonaws.com/lif/dev/lif_graphql_api:tag
+    # Example: <account-id>.dkr.ecr.us-east-1.amazonaws.com/lif/dev/lif_graphql_api:tag
     #       -> lif/dev/lif_graphql_api
     local repo
 

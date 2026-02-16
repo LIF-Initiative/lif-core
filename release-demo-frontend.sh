@@ -1,4 +1,4 @@
-#!/bin/bash -eu
+#!/usr/bin/env bash
 #
 # Release MDR Frontend to Demo
 # Builds the MDR frontend from a specific git ref and deploys to the demo S3 bucket.
@@ -9,14 +9,13 @@
 #   ./release-demo-frontend.sh --help                  # Show help
 #
 
-set -o pipefail
+set -euo pipefail
 
 # Configuration
 ENV_NAME=demo
 SERVICE_NAME=mdr
 AWS_REGION=us-east-1
-AWS_ACCOUNT_ID=381492161417
-S3_BUCKET="${ENV_NAME}-${SERVICE_NAME}-${AWS_ACCOUNT_ID}-${AWS_REGION}"
+S3_BUCKET=""  # Resolved after AWS credentials are verified
 SSM_DISTRIBUTION_ID="/${ENV_NAME}/${SERVICE_NAME}/DistributionId"
 VITE_API_URL="https://mdr-api.${ENV_NAME}.lif.unicon.net"
 FRONTEND_DIR="frontends/mdr-frontend"
@@ -79,6 +78,8 @@ main() {
     parse_args "$@"
     check_dependencies
     validate_git_ref
+    verify_aws_credentials
+    resolve_s3_bucket
 
     echo ""
     if [[ "$DRY_RUN" == "true" ]]; then
@@ -103,8 +104,6 @@ main() {
         log_info "Run with --apply to build and deploy"
         return 0
     fi
-
-    verify_aws_credentials
     checkout_worktree "$resolved_sha"
     build_frontend
     deploy_to_s3
@@ -188,6 +187,15 @@ verify_aws_credentials() {
         log_error "AWS credentials not configured or expired"
         exit 1
     fi
+}
+
+resolve_s3_bucket() {
+    local account_id
+    account_id=$(aws sts get-caller-identity --query Account --output text) || {
+        log_error "Failed to resolve AWS account ID"
+        exit 1
+    }
+    S3_BUCKET="${ENV_NAME}-${SERVICE_NAME}-${account_id}-${AWS_REGION}"
 }
 
 checkout_worktree() {

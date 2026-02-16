@@ -4,7 +4,7 @@ This guide walks through the end-to-end process of promoting the current dev bui
 
 ## Prerequisites
 
-- AWS CLI v2 configured with the `lif` profile (or the appropriate profile for account `381492161417`)
+- AWS CLI v2 configured with the `lif` profile (or the appropriate AWS profile)
 - AWS SSO session active (the deploy script will prompt for login if needed)
 - Bash 4+
 - `jq`
@@ -164,7 +164,7 @@ The script:
 
 1. Creates a temporary git worktree at the specified ref (does not disturb your working tree)
 2. Runs `npm ci` and `npm run build` with `VITE_API_URL` pointing to the demo MDR API
-3. Syncs the built `dist/` directory to `s3://demo-mdr-381492161417-us-east-1`
+3. Syncs the built `dist/` directory to the demo S3 bucket
 4. Invalidates the CloudFront distribution so the new version is served immediately
 5. Cleans up the temporary worktree
 
@@ -289,7 +289,7 @@ AWS_PROFILE=lif aws cloudformation continue-update-rollback \
 Find the nested stack ID in the CloudFormation console or with `aws cloudformation list-stacks --stack-status-filter UPDATE_ROLLBACK_FAILED`. Once both stacks reach `UPDATE_ROLLBACK_COMPLETE`, you can re-run the SAM deploy.
 
 ### MDR database reset step 6 fails
-The reset script (`reset-mdr-database.sh`) has 6 steps. Steps 1–5 (build, push, update Lambda, invoke reset) can succeed while step 6 (SAM deploy to sync CloudFormation state) fails independently. If this happens:
+The reset script (`reset-mdr-database.sh`) has 6 steps. Steps 1–5 (build, push, update Lambda, wait for update, invoke reset) can succeed while step 6 (SAM deploy to sync CloudFormation state) fails independently. If this happens:
 
 1. The database itself is fine — the reset already completed in step 5
 2. Resolve the CloudFormation stack state (see above if stuck in `UPDATE_ROLLBACK_FAILED`)
