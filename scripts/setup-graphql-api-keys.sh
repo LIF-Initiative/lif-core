@@ -2,23 +2,7 @@
 #
 # setup-graphql-api-keys.sh — Manage GraphQL org1 API keys in AWS SSM Parameter Store
 #
-# Modes:
-#   Service mode (default): Sets up the semantic-search service key (server + client SSM params)
-#   Workshop mode: Generates keys for workshop participants (server SSM only, keys printed to stdout)
-#
-# Usage:
-#   # Service key setup
-#   AWS_PROFILE=lif ./scripts/setup-graphql-api-keys.sh <env>           # Preview
-#   AWS_PROFILE=lif ./scripts/setup-graphql-api-keys.sh <env> --apply   # Create/update
-#
-#   # Workshop key generation
-#   AWS_PROFILE=lif ./scripts/setup-graphql-api-keys.sh <env> --workshop <count> [--prefix <label>] [--apply]
-#
-# Examples:
-#   AWS_PROFILE=lif ./scripts/setup-graphql-api-keys.sh demo
-#   AWS_PROFILE=lif ./scripts/setup-graphql-api-keys.sh demo --apply
-#   AWS_PROFILE=lif ./scripts/setup-graphql-api-keys.sh demo --workshop 10 --apply
-#   AWS_PROFILE=lif ./scripts/setup-graphql-api-keys.sh dev --workshop 5 --prefix attendee --apply
+# Run with --help for usage details.
 
 set -euo pipefail
 
@@ -32,24 +16,42 @@ CLIENT_LABEL="semantic-search"
 
 ENV="${1:-}"
 APPLY=false
-WORKSHOP_COUNT=""
-WORKSHOP_PREFIX="workshop"
+TEMPORARY_COUNT=""
+TEMPORARY_PREFIX="temporary"
 
-if [[ -z "$ENV" ]]; then
+usage() {
     echo "Usage: $0 <env> [options]"
     echo ""
-    echo "  Service mode (default):"
+    echo "Manage GraphQL org1 API keys in AWS SSM Parameter Store."
+    echo ""
+    echo "Modes:"
+    echo "  Service mode (default): Sets up the semantic-search service key (server + client SSM params)"
+    echo "  Temporary key mode:     Generates temporary keys for external users (server SSM only, keys printed to stdout)"
+    echo ""
+    echo "  Service mode:"
     echo "    $0 <env> [--apply]"
     echo ""
-    echo "  Workshop mode:"
-    echo "    $0 <env> --workshop <count> [--prefix <label>] [--apply]"
+    echo "  Temporary key mode:"
+    echo "    $0 <env> --temporary <count> [--prefix <label>] [--apply]"
     echo ""
     echo "  Options:"
-    echo "    <env>               Environment name (e.g., dev, demo)"
-    echo "    --apply             Actually create/update SSM parameters (default: preview only)"
-    echo "    --workshop <count>  Generate <count> workshop user keys"
-    echo "    --prefix <label>    Label prefix for workshop keys (default: workshop)"
-    exit 1
+    echo "    <env>                Environment name (e.g., dev, demo)"
+    echo "    --apply              Actually create/update SSM parameters (default: preview only)"
+    echo "    --temporary <count>  Generate <count> temporary keys for external users"
+    echo "    --prefix <label>     Label prefix for temporary keys (default: temporary)"
+    echo "    --help               Show this help message"
+    echo ""
+    echo "Examples:"
+    echo "    $0 demo                                              # Preview service key setup"
+    echo "    $0 demo --apply                                      # Create/update service key"
+    echo "    $0 demo --temporary 10 --apply                       # Generate 10 temporary keys"
+    echo "    $0 dev --temporary 5 --prefix attendee --apply       # Generate 5 keys with custom prefix"
+    echo "    $0 demo --temporary 0 --apply                        # Remove all temporary keys"
+}
+
+if [[ -z "$ENV" || "$ENV" == "--help" || "$ENV" == "-h" ]]; then
+    usage
+    exit "${ENV:+1}"
 fi
 
 shift
@@ -59,13 +61,17 @@ while [[ $# -gt 0 ]]; do
             APPLY=true
             shift
             ;;
-        --workshop)
-            WORKSHOP_COUNT="$2"
+        --temporary)
+            TEMPORARY_COUNT="$2"
             shift 2
             ;;
         --prefix)
-            WORKSHOP_PREFIX="$2"
+            TEMPORARY_PREFIX="$2"
             shift 2
+            ;;
+        --help|-h)
+            usage
+            exit 0
             ;;
         *)
             echo "Unknown option: $1"
@@ -116,29 +122,29 @@ clean_csv() {
     echo "$1" | tr ',' '\n' | (sed '/^[[:space:]]*$/d' || true) | tr '\n' ',' | sed 's/,$//'
 }
 
-# ----------- Workshop mode -----------
+# ----------- Temporary key mode -----------
 
-run_workshop_mode() {
-    echo "=== GraphQL Workshop Key Generation ==="
+run_temporary_mode() {
+    echo "=== GraphQL Temporary Key Generation ==="
     echo "Environment: ${ENV}"
     echo "Server param: ${SERVER_PARAM}"
-    echo "Key count: ${WORKSHOP_COUNT}"
-    echo "Label prefix: ${WORKSHOP_PREFIX}"
+    echo "Key count: ${TEMPORARY_COUNT}"
+    echo "Label prefix: ${TEMPORARY_PREFIX}"
     echo ""
 
     existing_server_value=$(get_ssm_param "$SERVER_PARAM")
 
     # Generate keys
-    declare -a WORKSHOP_KEYS
-    declare -a WORKSHOP_LABELS
+    declare -a TEMPORARY_KEYS
+    declare -a TEMPORARY_LABELS
     NEW_ENTRIES=""
 
-    if [[ "$WORKSHOP_COUNT" -gt 0 ]]; then
-        for i in $(seq 1 "$WORKSHOP_COUNT"); do
-            label="${WORKSHOP_PREFIX}-$(printf '%02d' "$i")"
+    if [[ "$TEMPORARY_COUNT" -gt 0 ]]; then
+        for i in $(seq 1 "$TEMPORARY_COUNT"); do
+            label="${TEMPORARY_PREFIX}-$(printf '%02d' "$i")"
             key=$(generate_key)
-            WORKSHOP_KEYS+=("$key")
-            WORKSHOP_LABELS+=("$label")
+            TEMPORARY_KEYS+=("$key")
+            TEMPORARY_LABELS+=("$label")
             entry="${key}:${label}"
             if [[ -n "$NEW_ENTRIES" ]]; then
                 NEW_ENTRIES="${NEW_ENTRIES},${entry}"
@@ -150,7 +156,7 @@ run_workshop_mode() {
 
     # Build combined server value — remove existing entries with matching prefix
     if [[ -n "$existing_server_value" ]]; then
-        FILTERED_VALUE=$(echo "$existing_server_value" | tr ',' '\n' | (grep -v ":${WORKSHOP_PREFIX}-" || true) | tr '\n' ',' | sed 's/,$//')
+        FILTERED_VALUE=$(echo "$existing_server_value" | tr ',' '\n' | (grep -v ":${TEMPORARY_PREFIX}-" || true) | tr '\n' ',' | sed 's/,$//')
         FILTERED_VALUE=$(clean_csv "$FILTERED_VALUE")
         if [[ -n "$NEW_ENTRIES" ]]; then
             if [[ -n "$FILTERED_VALUE" ]]; then
@@ -158,15 +164,15 @@ run_workshop_mode() {
             else
                 SERVER_VALUE="${NEW_ENTRIES}"
             fi
-            echo "Existing server ApiKeys found — replacing any '${WORKSHOP_PREFIX}-*' entries"
+            echo "Existing server ApiKeys found — replacing any '${TEMPORARY_PREFIX}-*' entries"
         else
             SERVER_VALUE="${FILTERED_VALUE}"
-            echo "Existing server ApiKeys found — removing all '${WORKSHOP_PREFIX}-*' entries"
+            echo "Existing server ApiKeys found — removing all '${TEMPORARY_PREFIX}-*' entries"
         fi
     else
         SERVER_VALUE="${NEW_ENTRIES}"
         if [[ -n "$NEW_ENTRIES" ]]; then
-            echo "No existing server ApiKeys — will create with workshop entries"
+            echo "No existing server ApiKeys — will create with temporary entries"
         else
             echo "No existing server ApiKeys and nothing to remove"
             exit 0
@@ -174,19 +180,19 @@ run_workshop_mode() {
     fi
 
     echo ""
-    if [[ "$WORKSHOP_COUNT" -gt 0 ]]; then
+    if [[ "$TEMPORARY_COUNT" -gt 0 ]]; then
         echo "--- Generated keys ---"
-        for i in $(seq 0 $((WORKSHOP_COUNT - 1))); do
-            printf "  %-20s %s\n" "${WORKSHOP_LABELS[$i]}" "${WORKSHOP_KEYS[$i]}"
+        for i in $(seq 0 $((TEMPORARY_COUNT - 1))); do
+            printf "  %-20s %s\n" "${TEMPORARY_LABELS[$i]}" "${TEMPORARY_KEYS[$i]}"
         done
     fi
 
     echo ""
     echo "--- Server param update ---"
-    if [[ "$WORKSHOP_COUNT" -gt 0 ]]; then
-        echo "  ${SERVER_PARAM}: ${WORKSHOP_COUNT} workshop entries (+ existing service keys)"
+    if [[ "$TEMPORARY_COUNT" -gt 0 ]]; then
+        echo "  ${SERVER_PARAM}: ${TEMPORARY_COUNT} temporary entries (+ existing service keys)"
     else
-        echo "  ${SERVER_PARAM}: removing all workshop entries (service keys preserved)"
+        echo "  ${SERVER_PARAM}: removing all temporary entries (service keys preserved)"
     fi
 
     if [[ "$APPLY" != "true" ]]; then
@@ -204,11 +210,11 @@ run_workshop_mode() {
     echo "Done. Redeploy GraphQL org1 to pick up the new keys:"
     echo "  ./aws-deploy.sh -s ${ENV} --only-stack ${ENV}-lif-graphql-org1"
 
-    if [[ "$WORKSHOP_COUNT" -gt 0 ]]; then
+    if [[ "$TEMPORARY_COUNT" -gt 0 ]]; then
         echo ""
         echo "=== Keys for distribution ==="
-        for i in $(seq 0 $((WORKSHOP_COUNT - 1))); do
-            echo "${WORKSHOP_KEYS[$i]}"
+        for i in $(seq 0 $((TEMPORARY_COUNT - 1))); do
+            echo "${TEMPORARY_KEYS[$i]}"
         done
     fi
 }
@@ -293,8 +299,8 @@ run_service_mode() {
 
 # ----------- Main -----------
 
-if [[ -n "$WORKSHOP_COUNT" ]]; then
-    run_workshop_mode
+if [[ -n "$TEMPORARY_COUNT" ]]; then
+    run_temporary_mode
 else
     run_service_mode
 fi

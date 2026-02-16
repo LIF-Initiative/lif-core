@@ -21,6 +21,12 @@ def _build_headers(api_key: str = "") -> dict:
     return {}
 
 
+async def _post(url: str, json: dict, headers: dict, timeout: httpx.Timeout | None = None) -> httpx.Response:
+    """Send a POST request via httpx. Separated for testability."""
+    async with httpx.AsyncClient(timeout=timeout) as client:
+        return await client.post(url, json=json, headers=headers)
+
+
 async def graphql_query(query: str, url: str = "", api_key: str = "", timeout_read: float = 0) -> dict:
     """Execute a GraphQL query with optional API key auth.
 
@@ -42,8 +48,7 @@ async def graphql_query(query: str, url: str = "", api_key: str = "", timeout_re
     timeout = httpx.Timeout(connect=5.0, read=timeout_read, write=5.0, pool=5.0)
 
     try:
-        async with httpx.AsyncClient(timeout=timeout) as client:
-            response = await client.post(url, json={"query": query}, headers=headers)
+        response = await _post(url, json={"query": query}, headers=headers, timeout=timeout)
         response.raise_for_status()
         return response.json()
     except httpx.HTTPStatusError as e:
@@ -74,8 +79,7 @@ async def graphql_mutation(query: str, url: str = "", api_key: str = "") -> dict
     headers = _build_headers(api_key)
 
     try:
-        async with httpx.AsyncClient() as client:
-            response = await client.post(url, json={"query": query}, headers=headers)
+        response = await _post(url, json={"query": query}, headers=headers)
         response.raise_for_status()
         return response.json()
     except httpx.HTTPStatusError as e:

@@ -21,7 +21,7 @@ def _create_mock_response(status_code: int, json_data: dict, url: str):
     return mock_response
 
 
-@patch("httpx.AsyncClient.post")
+@patch("lif.graphql_client.core._post")
 async def test_graphql_query_with_api_key(mock_post):
     mock_post.return_value = _create_mock_response(200, {"data": {"person": []}}, "http://localhost:8000/graphql")
 
@@ -35,7 +35,7 @@ async def test_graphql_query_with_api_key(mock_post):
     assert call_kwargs.kwargs["headers"] == {"X-API-Key": "test-key-123"}
 
 
-@patch("httpx.AsyncClient.post")
+@patch("lif.graphql_client.core._post")
 async def test_graphql_query_without_api_key(mock_post):
     """When no api_key is passed and module-level env var is empty, no auth header is sent."""
     mock_post.return_value = _create_mock_response(200, {"data": {"person": []}}, "http://localhost:8000/graphql")
@@ -50,7 +50,7 @@ async def test_graphql_query_without_api_key(mock_post):
     assert call_kwargs.kwargs["headers"] == {}
 
 
-@patch("httpx.AsyncClient.post")
+@patch("lif.graphql_client.core._post")
 async def test_graphql_query_env_var_fallback(mock_post):
     """When no api_key param is passed, falls back to module-level LIF_GRAPHQL_API_KEY."""
     mock_post.return_value = _create_mock_response(200, {"data": {"person": []}}, "http://localhost:8000/graphql")
@@ -65,7 +65,7 @@ async def test_graphql_query_env_var_fallback(mock_post):
     assert call_kwargs.kwargs["headers"] == {"X-API-Key": "env-key-456"}
 
 
-@patch("httpx.AsyncClient.post")
+@patch("lif.graphql_client.core._post")
 async def test_graphql_query_http_error_raises_exception(mock_post):
     mock_post.return_value = _create_mock_response(401, {"detail": "Unauthorized"}, "http://localhost:8000/graphql")
 
@@ -73,7 +73,7 @@ async def test_graphql_query_http_error_raises_exception(mock_post):
         await core.graphql_query(query="{ person { Name { firstName } } }", url="http://localhost:8000/graphql")
 
 
-@patch("httpx.AsyncClient.post")
+@patch("lif.graphql_client.core._post")
 async def test_graphql_query_connection_error_raises_exception(mock_post):
     mock_post.side_effect = httpx.ConnectError("Connection refused")
 
@@ -81,7 +81,7 @@ async def test_graphql_query_connection_error_raises_exception(mock_post):
         await core.graphql_query(query="{ person { Name { firstName } } }", url="http://localhost:8000/graphql")
 
 
-@patch("httpx.AsyncClient.post")
+@patch("lif.graphql_client.core._post")
 async def test_graphql_mutation_with_api_key(mock_post):
     mock_post.return_value = _create_mock_response(200, {"data": {"updatePerson": {}}}, "http://localhost:8000/graphql")
 
@@ -96,7 +96,7 @@ async def test_graphql_mutation_with_api_key(mock_post):
     assert call_kwargs.kwargs["headers"] == {"X-API-Key": "test-key-123"}
 
 
-@patch("httpx.AsyncClient.post")
+@patch("lif.graphql_client.core._post")
 async def test_graphql_mutation_http_error_raises_exception(mock_post):
     mock_post.return_value = _create_mock_response(
         500, {"detail": "Internal Server Error"}, "http://localhost:8000/graphql"
@@ -109,7 +109,7 @@ async def test_graphql_mutation_http_error_raises_exception(mock_post):
         )
 
 
-@patch("httpx.AsyncClient.post")
+@patch("lif.graphql_client.core._post")
 async def test_graphql_query_uses_default_url(mock_post):
     mock_post.return_value = _create_mock_response(200, {"data": {"person": []}}, core.LIF_GRAPHQL_API_URL)
 
@@ -120,7 +120,7 @@ async def test_graphql_query_uses_default_url(mock_post):
     assert call_kwargs.args[0] == core.LIF_GRAPHQL_API_URL
 
 
-@patch("httpx.AsyncClient.post")
+@patch("lif.graphql_client.core._post")
 async def test_graphql_query_custom_timeout(mock_post):
     mock_post.return_value = _create_mock_response(200, {"data": {"person": []}}, "http://localhost:8000/graphql")
 
