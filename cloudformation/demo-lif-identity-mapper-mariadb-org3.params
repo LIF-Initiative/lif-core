@@ -53,7 +53,7 @@
   },
   {
     "ParameterKey": "ImageUrl",
-    "ParameterValue": "381492161417.dkr.ecr.us-east-1.amazonaws.com/lif/dev/lif_identity_mapper_mariadb:2025-11-21-23-32-23-e63e5c5"
+    "ParameterValue": "381492161417.dkr.ecr.us-east-1.amazonaws.com/lif/dev/lif_identity_mapper_mariadb:2026-01-27-22-17-38-f983b2d"
   },
   {
     "ParameterKey": "TaskDefIncludesFile",
