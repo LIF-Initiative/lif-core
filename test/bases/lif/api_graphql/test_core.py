@@ -3,7 +3,8 @@ import os
 from unittest import mock
 from unittest.mock import patch
 from lif.api_graphql import core
-from lif.mdr_client import get_openapi_lif_data_model
+from lif.lif_schema_config import LIFSchemaConfig
+from lif.mdr_client import load_openapi_schema
 
 
 def test_sample():
@@ -61,7 +62,8 @@ async def test_fetch_dynamic_graphql_schema(mock_post):
     mock_post.return_value = mock_response
 
     async def run_test():
-        openapi = await get_openapi_lif_data_model()
+        config = LIFSchemaConfig.from_environment()
+        openapi, source = load_openapi_schema(config)
         schema = await core.fetch_dynamic_graphql_schema(openapi=openapi)
         # print("Generated Schema: ", schema)
         assert schema is not None

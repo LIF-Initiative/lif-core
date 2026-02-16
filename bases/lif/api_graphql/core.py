@@ -14,7 +14,7 @@ from strawberry.fastapi import GraphQLRouter
 from lif.api_key_auth import ApiKeyAuthMiddleware, ApiKeyConfig
 from lif.lif_schema_config import LIFSchemaConfig
 from lif.logging import get_logger
-from lif.mdr_client import get_openapi_lif_data_model
+from lif.mdr_client import load_openapi_schema
 from lif.openapi_to_graphql.core import generate_graphql_schema
 
 logger = get_logger(__name__)
@@ -39,7 +39,8 @@ async def fetch_dynamic_graphql_schema(openapi: dict):
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
-    openapi = await get_openapi_lif_data_model()
+    openapi, source = load_openapi_schema(CONFIG)
+    logger.info(f"OpenAPI schema loaded from {source}")
     schema = await fetch_dynamic_graphql_schema(openapi=openapi)
     logger.info("GraphQL schema successfully created")
     app.include_router(GraphQLRouter(schema, prefix="/graphql"))
