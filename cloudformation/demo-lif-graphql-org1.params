@@ -5,7 +5,7 @@
   },
   {
     "ParameterKey": "DomainNames",
-    "ParameterValue": "notapplicable"
+    "ParameterValue": "graphql-org1.demo.lif.unicon.net"
   },
   {
     "ParameterKey": "EnvironmentName",
@@ -41,7 +41,7 @@
   },
   {
     "ParameterKey": "UseLbForService",
-    "ParameterValue": "false"
+    "ParameterValue": "true"
   },
   {
     "ParameterKey": "InstanceType",
