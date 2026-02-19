@@ -17,9 +17,7 @@ Usage:
 import json
 import re
 import sys
-import uuid
 from pathlib import Path
-from typing import Any
 
 
 # Mapping from informationSourceId to informationSourceOrganization
@@ -188,10 +186,7 @@ def fix_entity(
 
 
 def fix_array_of_entities(
-    arr: list,
-    entity_type: str,
-    required_fields: dict[str, list[str]],
-    parent_info_source: str | None = None,
+    arr: list, entity_type: str, required_fields: dict[str, list[str]], parent_info_source: str | None = None
 ) -> tuple[list, list[str]]:
     """Fix an array of entity objects."""
     all_changes = []
@@ -199,9 +194,7 @@ def fix_array_of_entities(
 
     for i, item in enumerate(arr):
         if isinstance(item, dict):
-            fixed_item, changes = fix_entity(
-                item, entity_type, required_fields, i, parent_info_source
-            )
+            fixed_item, changes = fix_entity(item, entity_type, required_fields, i, parent_info_source)
             # Recursively fix nested entities
             fixed_item, nested_changes = fix_nested_entities(
                 fixed_item, required_fields, item.get("informationSourceId", parent_info_source)
@@ -216,9 +209,7 @@ def fix_array_of_entities(
 
 
 def fix_nested_entities(
-    obj: dict,
-    required_fields: dict[str, list[str]],
-    parent_info_source: str | None = None,
+    obj: dict, required_fields: dict[str, list[str]], parent_info_source: str | None = None
 ) -> tuple[dict, list[str]]:
     """Recursively fix nested entities within an object."""
     all_changes = []
@@ -226,18 +217,13 @@ def fix_nested_entities(
     for key, value in list(obj.items()):
         if key in KEY_TO_ENTITY:
             if isinstance(value, list):
-                fixed_value, changes = fix_array_of_entities(
-                    value, key, required_fields, parent_info_source
-                )
+                fixed_value, changes = fix_array_of_entities(value, key, required_fields, parent_info_source)
                 obj[key] = fixed_value
                 all_changes.extend(changes)
             elif isinstance(value, dict):
-                fixed_value, changes = fix_entity(
-                    value, key, required_fields, 0, parent_info_source
-                )
+                fixed_value, changes = fix_entity(value, key, required_fields, 0, parent_info_source)
                 fixed_value, nested_changes = fix_nested_entities(
-                    fixed_value, required_fields,
-                    value.get("informationSourceId", parent_info_source)
+                    fixed_value, required_fields, value.get("informationSourceId", parent_info_source)
                 )
                 obj[key] = fixed_value
                 all_changes.extend([f"{key}: {c}" for c in changes])
@@ -261,18 +247,12 @@ def fix_sample_data(data: dict, required_fields: dict[str, list[str]]) -> tuple[
         value = data[key]
 
         if isinstance(value, list):
-            fixed_value, changes = fix_array_of_entities(
-                value, key, required_fields, top_info_source
-            )
+            fixed_value, changes = fix_array_of_entities(value, key, required_fields, top_info_source)
             data[key] = fixed_value
             all_changes.extend(changes)
         elif isinstance(value, dict):
-            fixed_value, changes = fix_entity(
-                value, key, required_fields, 0, top_info_source
-            )
-            fixed_value, nested_changes = fix_nested_entities(
-                fixed_value, required_fields, top_info_source
-            )
+            fixed_value, changes = fix_entity(value, key, required_fields, 0, top_info_source)
+            fixed_value, nested_changes = fix_nested_entities(fixed_value, required_fields, top_info_source)
             data[key] = fixed_value
             all_changes.extend([f"{key}: {c}" for c in changes])
             all_changes.extend([f"{key}.{c}" for c in nested_changes])
@@ -280,11 +260,7 @@ def fix_sample_data(data: dict, required_fields: dict[str, list[str]]) -> tuple[
     return data, all_changes
 
 
-def process_file(
-    file_path: Path,
-    required_fields: dict[str, list[str]],
-    dry_run: bool = False,
-) -> list[str]:
+def process_file(file_path: Path, required_fields: dict[str, list[str]], dry_run: bool = False) -> list[str]:
     """Process a single sample data file."""
     print(f"\nProcessing: {file_path.name}")
 
@@ -316,14 +292,8 @@ def process_file(
 def main():
     import argparse
 
-    parser = argparse.ArgumentParser(
-        description="Fix sample data files against the new LIF schema"
-    )
-    parser.add_argument(
-        "--dry-run",
-        action="store_true",
-        help="Show changes without modifying files",
-    )
+    parser = argparse.ArgumentParser(description="Fix sample data files against the new LIF schema")
+    parser.add_argument("--dry-run", action="store_true", help="Show changes without modifying files")
     parser.add_argument(
         "--schema-path",
         type=Path,
@@ -337,10 +307,7 @@ def main():
         help="Directory containing sample data files (default: projects/mongodb/sample_data)",
     )
     parser.add_argument(
-        "files",
-        nargs="*",
-        type=Path,
-        help="Specific files to process (default: all *-validated.json files)",
+        "files", nargs="*", type=Path, help="Specific files to process (default: all *-validated.json files)"
     )
 
     args = parser.parse_args()
@@ -355,7 +322,7 @@ def main():
     schema = load_schema(args.schema_path)
     required_fields = get_required_fields(schema)
 
-    print(f"\nRequired fields by entity:")
+    print("\nRequired fields by entity:")
     for entity, fields in sorted(required_fields.items()):
         if fields:
             print(f"  {entity}: {', '.join(fields)}")

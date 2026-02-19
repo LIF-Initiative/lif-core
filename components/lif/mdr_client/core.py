@@ -102,9 +102,7 @@ def get_openapi_lif_data_model_from_file(filename: Optional[str] = None) -> dict
 
 
 def fetch_schema_from_mdr(
-    config: "LIFSchemaConfig",
-    include_attr_md: bool = True,
-    include_entity_md: bool = False,
+    config: "LIFSchemaConfig", include_attr_md: bool = True, include_entity_md: bool = False
 ) -> dict:
     """
     Fetch OpenAPI schema from MDR using configuration.
@@ -204,10 +202,7 @@ def load_openapi_schema(config: "LIFSchemaConfig") -> tuple[dict, str]:
 
 
 def get_data_model_schema_sync(
-    data_model_id: str,
-    include_attr_md: bool = False,
-    include_entity_md: bool = False,
-    timeout: Optional[int] = None,
+    data_model_id: str, include_attr_md: bool = False, include_entity_md: bool = False, timeout: Optional[int] = None
 ) -> dict:
     """
     Synchronous version of get_data_model_schema using env vars.
@@ -249,8 +244,7 @@ def get_data_model_schema_sync(
         logger.error(f"MDR Client HTTP error: {e.response.status_code} - {e.response.text}")
         if e.response.status_code == 404:
             raise ResourceNotFoundException(
-                resource_id=data_model_id,
-                message=f"Data model with ID {data_model_id} not found in MDR.",
+                resource_id=data_model_id, message=f"Data model with ID {data_model_id} not found in MDR."
             )
         else:
             raise e
@@ -284,19 +278,14 @@ def get_openapi_lif_data_model_sync(timeout: Optional[int] = None) -> tuple[dict
         return get_openapi_lif_data_model_from_file(), "file"
 
     if openapi_data_model_id is None:
-        logger.warning(
-            f"OPENAPI_DATA_MODEL_ID not set. Falling back to file {openapi_json_filename}"
-        )
+        logger.warning(f"OPENAPI_DATA_MODEL_ID not set. Falling back to file {openapi_json_filename}")
         return get_openapi_lif_data_model_from_file(), "file"
 
     # Try MDR - this legacy function falls back to file on failure
     logger.info(f"Fetching OpenAPI data model {openapi_data_model_id} from MDR")
     try:
         openapi = get_data_model_schema_sync(
-            openapi_data_model_id,
-            include_attr_md=True,
-            include_entity_md=False,
-            timeout=timeout,
+            openapi_data_model_id, include_attr_md=True, include_entity_md=False, timeout=timeout
         )
         logger.info("Successfully loaded OpenAPI data model from MDR")
         return openapi, "mdr"

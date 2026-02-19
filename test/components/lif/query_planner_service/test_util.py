@@ -121,20 +121,12 @@ def test_get_lif_fragment_paths_from_query_with_pascal_case_input():
     query_filter = LIFQueryFilter(root=person_filter)
     query = LIFQuery(
         filter=query_filter,
-        selected_fields=[
-            "Person.Name",
-            "Person.CredentialAward",
-            "Person.CourseLearningExperience",
-        ],
+        selected_fields=["Person.Name", "Person.CredentialAward", "Person.CourseLearningExperience"],
     )
 
     fragment_paths = util.get_lif_fragment_paths_from_query(query)
     assert len(fragment_paths) == 3
-    assert fragment_paths == [
-        "Person.Name",
-        "Person.CredentialAward",
-        "Person.CourseLearningExperience",
-    ]
+    assert fragment_paths == ["Person.Name", "Person.CredentialAward", "Person.CourseLearningExperience"]
 
 
 def test_get_lif_fragment_paths_not_found_in_lif_record():

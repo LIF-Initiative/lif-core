@@ -8,8 +8,7 @@ import pytest
 from typing import Any
 
 from utils.ports import OrgPorts
-from utils.sample_data import SampleDataLoader, PersonData
-from utils.comparison import compare_person_data, summarize_results, ComparisonResult
+from utils.sample_data import SampleDataLoader
 
 
 # GraphQL query to fetch a person with all fields
@@ -103,51 +102,25 @@ class TestGraphQLDataIntegrity:
     """Tests for GraphQL API data integrity."""
 
     def _make_graphql_request(
-        self,
-        http_client: Any,
-        graphql_url: str,
-        query: str,
-        variables: dict[str, Any],
+        self, http_client: Any, graphql_url: str, query: str, variables: dict[str, Any]
     ) -> dict[str, Any]:
         """Make a GraphQL request and return the response."""
         import httpx
 
         with httpx.Client(timeout=60.0) as client:
-            response = client.post(
-                graphql_url,
-                json={"query": query, "variables": variables},
-            )
+            response = client.post(graphql_url, json={"query": query, "variables": variables})
 
         if response.status_code != 200:
-            raise AssertionError(
-                f"GraphQL request failed: {response.status_code} - {response.text}"
-            )
+            raise AssertionError(f"GraphQL request failed: {response.status_code} - {response.text}")
 
         return response.json()
 
-    def _make_filter(
-        self,
-        identifier: str,
-        identifier_type: str = "SCHOOL_ASSIGNED_NUMBER",
-    ) -> dict[str, Any]:
+    def _make_filter(self, identifier: str, identifier_type: str = "SCHOOL_ASSIGNED_NUMBER") -> dict[str, Any]:
         """Build a GraphQL filter for person lookup."""
-        return {
-            "filter": {
-                "Identifier": [
-                    {
-                        "identifier": identifier,
-                        "identifierType": identifier_type,
-                    }
-                ]
-            }
-        }
+        return {"filter": {"Identifier": [{"identifier": identifier, "identifierType": identifier_type}]}}
 
     def test_graphql_schema_loads(
-        self,
-        org_id: str,
-        org_ports: OrgPorts,
-        http_client: Any,
-        require_graphql: None,
+        self, org_id: str, org_ports: OrgPorts, http_client: Any, require_graphql: None
     ) -> None:
         """Verify GraphQL schema loads successfully."""
         # Introspection query to verify schema
@@ -161,25 +134,13 @@ class TestGraphQLDataIntegrity:
         }
         """
 
-        result = self._make_graphql_request(
-            http_client,
-            org_ports.graphql_url,
-            introspection_query,
-            {},
-        )
+        result = self._make_graphql_request(http_client, org_ports.graphql_url, introspection_query, {})
 
-        assert "errors" not in result or not result["errors"], (
-            f"GraphQL introspection failed: {result.get('errors')}"
-        )
+        assert "errors" not in result or not result["errors"], f"GraphQL introspection failed: {result.get('errors')}"
         assert result.get("data", {}).get("__schema") is not None
 
     def test_query_returns_person_by_school_number(
-        self,
-        org_id: str,
-        org_ports: OrgPorts,
-        sample_data: SampleDataLoader,
-        http_client: Any,
-        require_graphql: None,
+        self, org_id: str, org_ports: OrgPorts, sample_data: SampleDataLoader, http_client: Any, require_graphql: None
     ) -> None:
         """Verify GraphQL returns person data by school assigned number."""
         persons = sample_data.persons
@@ -192,12 +153,7 @@ class TestGraphQLDataIntegrity:
             pytest.skip(f"No school number for {person_data.full_name}")
 
         variables = self._make_filter(school_num)
-        result = self._make_graphql_request(
-            http_client,
-            org_ports.graphql_url,
-            PERSON_NAME_QUERY,
-            variables,
-        )
+        result = self._make_graphql_request(http_client, org_ports.graphql_url, PERSON_NAME_QUERY, variables)
 
         assert "errors" not in result or not result["errors"], (
             f"GraphQL query failed for {person_data.full_name}: {result.get('errors')}"
@@ -205,17 +161,11 @@ class TestGraphQLDataIntegrity:
 
         person_list = result.get("data", {}).get("person", [])
         assert len(person_list) > 0, (
-            f"GraphQL returned no Person records for {person_data.full_name} "
-            f"(school_num: {school_num})"
+            f"GraphQL returned no Person records for {person_data.full_name} (school_num: {school_num})"
         )
 
     def test_all_persons_queryable(
-        self,
-        org_id: str,
-        org_ports: OrgPorts,
-        sample_data: SampleDataLoader,
-        http_client: Any,
-        require_graphql: None,
+        self, org_id: str, org_ports: OrgPorts, sample_data: SampleDataLoader, http_client: Any, require_graphql: None
     ) -> None:
         """Verify all persons from sample data can be queried via GraphQL."""
         missing_persons = []
@@ -228,43 +178,27 @@ class TestGraphQLDataIntegrity:
             variables = self._make_filter(school_num)
 
             try:
-                result = self._make_graphql_request(
-                    http_client,
-                    org_ports.graphql_url,
-                    PERSON_NAME_QUERY,
-                    variables,
-                )
+                result = self._make_graphql_request(http_client, org_ports.graphql_url, PERSON_NAME_QUERY, variables)
 
                 if "errors" in result and result["errors"]:
                     missing_persons.append(
-                        f"{person_data.full_name} (ID: {school_num}): "
-                        f"GraphQL error: {result['errors']}"
+                        f"{person_data.full_name} (ID: {school_num}): GraphQL error: {result['errors']}"
                     )
                     continue
 
                 person_list = result.get("data", {}).get("person", [])
                 if not person_list:
-                    missing_persons.append(
-                        f"{person_data.full_name} (ID: {school_num}): no records returned"
-                    )
+                    missing_persons.append(f"{person_data.full_name} (ID: {school_num}): no records returned")
 
             except Exception as e:
-                missing_persons.append(
-                    f"{person_data.full_name} (ID: {school_num}): {e}"
-                )
+                missing_persons.append(f"{person_data.full_name} (ID: {school_num}): {e}")
 
-        assert not missing_persons, (
-            f"{org_id}: Persons not queryable via GraphQL:\n"
-            + "\n".join(f"  - {p}" for p in missing_persons)
+        assert not missing_persons, f"{org_id}: Persons not queryable via GraphQL:\n" + "\n".join(
+            f"  - {p}" for p in missing_persons
         )
 
     def test_person_name_matches_sample(
-        self,
-        org_id: str,
-        org_ports: OrgPorts,
-        sample_data: SampleDataLoader,
-        http_client: Any,
-        require_graphql: None,
+        self, org_id: str, org_ports: OrgPorts, sample_data: SampleDataLoader, http_client: Any, require_graphql: None
     ) -> None:
         """Verify GraphQL returns correct name data."""
         mismatches = []
@@ -277,12 +211,7 @@ class TestGraphQLDataIntegrity:
             variables = self._make_filter(school_num)
 
             try:
-                result = self._make_graphql_request(
-                    http_client,
-                    org_ports.graphql_url,
-                    PERSON_NAME_QUERY,
-                    variables,
-                )
+                result = self._make_graphql_request(http_client, org_ports.graphql_url, PERSON_NAME_QUERY, variables)
 
                 if "errors" in result and result["errors"]:
                     continue
@@ -314,18 +243,10 @@ class TestGraphQLDataIntegrity:
                 mismatches.append(f"{person_data.full_name}: {e}")
 
         if mismatches:
-            pytest.fail(
-                f"{org_id} name mismatches in GraphQL:\n"
-                + "\n".join(f"  - {m}" for m in mismatches)
-            )
+            pytest.fail(f"{org_id} name mismatches in GraphQL:\n" + "\n".join(f"  - {m}" for m in mismatches))
 
     def test_entity_counts_match_sample(
-        self,
-        org_id: str,
-        org_ports: OrgPorts,
-        sample_data: SampleDataLoader,
-        http_client: Any,
-        require_graphql: None,
+        self, org_id: str, org_ports: OrgPorts, sample_data: SampleDataLoader, http_client: Any, require_graphql: None
     ) -> None:
         """Verify entity counts from GraphQL are at least what sample data expects.
 
@@ -333,12 +254,7 @@ class TestGraphQLDataIntegrity:
         counts may be higher than the sample data for a single org. This test verifies
         that at minimum, the expected data is present (actual >= expected).
         """
-        entity_types = [
-            "CredentialAward",
-            "CourseLearningExperience",
-            "EmploymentLearningExperience",
-            "Proficiency",
-        ]
+        entity_types = ["CredentialAward", "CourseLearningExperience", "EmploymentLearningExperience", "Proficiency"]
         missing_data = []
 
         for person_data in sample_data.persons:
@@ -349,12 +265,7 @@ class TestGraphQLDataIntegrity:
             variables = self._make_filter(school_num)
 
             try:
-                result = self._make_graphql_request(
-                    http_client,
-                    org_ports.graphql_url,
-                    PERSON_QUERY,
-                    variables,
-                )
+                result = self._make_graphql_request(http_client, org_ports.graphql_url, PERSON_QUERY, variables)
 
                 if "errors" in result and result["errors"]:
                     continue
@@ -382,18 +293,10 @@ class TestGraphQLDataIntegrity:
                 missing_data.append(f"{person_data.full_name}: {e}")
 
         if missing_data:
-            pytest.fail(
-                f"{org_id} missing entity data in GraphQL:\n"
-                + "\n".join(f"  - {m}" for m in missing_data)
-            )
+            pytest.fail(f"{org_id} missing entity data in GraphQL:\n" + "\n".join(f"  - {m}" for m in missing_data))
 
     def test_credential_award_details(
-        self,
-        org_id: str,
-        org_ports: OrgPorts,
-        sample_data: SampleDataLoader,
-        http_client: Any,
-        require_graphql: None,
+        self, org_id: str, org_ports: OrgPorts, sample_data: SampleDataLoader, http_client: Any, require_graphql: None
     ) -> None:
         """Verify CredentialAward details match sample data."""
         mismatches = []
@@ -410,12 +313,7 @@ class TestGraphQLDataIntegrity:
             variables = self._make_filter(school_num)
 
             try:
-                result = self._make_graphql_request(
-                    http_client,
-                    org_ports.graphql_url,
-                    PERSON_QUERY,
-                    variables,
-                )
+                result = self._make_graphql_request(http_client, org_ports.graphql_url, PERSON_QUERY, variables)
 
                 if "errors" in result and result["errors"]:
                     continue
@@ -429,31 +327,18 @@ class TestGraphQLDataIntegrity:
                 # Check that each expected credential exists
                 for exp_cred in expected_credentials:
                     exp_id = exp_cred.get("identifier")
-                    found = any(
-                        act.get("identifier") == exp_id
-                        for act in actual_credentials
-                    )
+                    found = any(act.get("identifier") == exp_id for act in actual_credentials)
                     if not found:
-                        mismatches.append(
-                            f"{person_data.full_name}: Missing CredentialAward '{exp_id}'"
-                        )
+                        mismatches.append(f"{person_data.full_name}: Missing CredentialAward '{exp_id}'")
 
             except Exception as e:
                 mismatches.append(f"{person_data.full_name}: {e}")
 
         if mismatches:
-            pytest.fail(
-                f"{org_id} CredentialAward mismatches:\n"
-                + "\n".join(f"  - {m}" for m in mismatches)
-            )
+            pytest.fail(f"{org_id} CredentialAward mismatches:\n" + "\n".join(f"  - {m}" for m in mismatches))
 
     def test_course_learning_experience_details(
-        self,
-        org_id: str,
-        org_ports: OrgPorts,
-        sample_data: SampleDataLoader,
-        http_client: Any,
-        require_graphql: None,
+        self, org_id: str, org_ports: OrgPorts, sample_data: SampleDataLoader, http_client: Any, require_graphql: None
     ) -> None:
         """Verify CourseLearningExperience details match sample data."""
         mismatches = []
@@ -470,12 +355,7 @@ class TestGraphQLDataIntegrity:
             variables = self._make_filter(school_num)
 
             try:
-                result = self._make_graphql_request(
-                    http_client,
-                    org_ports.graphql_url,
-                    PERSON_QUERY,
-                    variables,
-                )
+                result = self._make_graphql_request(http_client, org_ports.graphql_url, PERSON_QUERY, variables)
 
                 if "errors" in result and result["errors"]:
                     continue
@@ -489,20 +369,12 @@ class TestGraphQLDataIntegrity:
                 # Check that each expected course exists
                 for exp_course in expected_courses:
                     exp_id = exp_course.get("identifier")
-                    found = any(
-                        act.get("identifier") == exp_id
-                        for act in actual_courses
-                    )
+                    found = any(act.get("identifier") == exp_id for act in actual_courses)
                     if not found:
-                        mismatches.append(
-                            f"{person_data.full_name}: Missing CourseLearningExperience '{exp_id}'"
-                        )
+                        mismatches.append(f"{person_data.full_name}: Missing CourseLearningExperience '{exp_id}'")
 
             except Exception as e:
                 mismatches.append(f"{person_data.full_name}: {e}")
 
         if mismatches:
-            pytest.fail(
-                f"{org_id} CourseLearningExperience mismatches:\n"
-                + "\n".join(f"  - {m}" for m in mismatches)
-            )
+            pytest.fail(f"{org_id} CourseLearningExperience mismatches:\n" + "\n".join(f"  - {m}" for m in mismatches))

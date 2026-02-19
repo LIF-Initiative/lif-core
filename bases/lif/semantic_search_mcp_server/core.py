@@ -24,10 +24,7 @@ from starlette.responses import JSONResponse, PlainTextResponse
 from lif.lif_schema_config import DEFAULT_ATTRIBUTE_KEYS, LIFSchemaConfig
 from lif.logging import get_logger
 from lif.schema_state_manager import SchemaStateManager
-from lif.semantic_search_service.core import (
-    run_mutation,
-    run_semantic_search,
-)
+from lif.semantic_search_service.core import run_mutation, run_semantic_search
 
 logger = get_logger(__name__)
 
@@ -119,9 +116,7 @@ async def schema_refresh(request: Request) -> JSONResponse:
 
 
 @mcp.tool(
-    name="lif_query",
-    description="Use this tool to run a LIF data query",
-    annotations={"title": "Execute LIF Query"},
+    name="lif_query", description="Use this tool to run a LIF data query", annotations={"title": "Execute LIF Query"}
 )
 async def lif_query(
     filter: Annotated[Filter, Field(description="Parameters for LIF query")],
