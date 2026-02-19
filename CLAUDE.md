@@ -156,7 +156,7 @@ All enforced automatically on commit:
 ## LIF Schema & Data Model
 
 ### Schema Hierarchy
-1. **`new-lif-schema.json`** (repo root) - Source of truth for LIF data model rules and policies
+1. **`schemas/lif-schema.json`** - Source of truth for LIF data model rules and policies
 2. **MDR (Metadata Registry)** - Captures schema dynamically, allows extension by deployers
 3. **Seed data** - Must validate against the schema from MDR
 4. **Components** - Must honor the schema, load from MDR with short cache if needed
