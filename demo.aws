@@ -21,7 +21,7 @@ STACKS['demo-lif-graphql-org1']='service'
 STACKS['demo-lif-semantic-search']='service'
 STACKS['demo-lif-advisor-api']='service'
 STACKS['demo-lif-advisor-app']='service'
-STACKS['demo-lif-orchestrator-api']='service'
+STACKS['demo-lif-orchestrator']='service'
 STACKS['demo-lif-example-data-source-rest-api']='service'
 
 # Org2 services (new)
@@ -83,7 +83,7 @@ STACK_ORDER=(
   demo-lif-query-planner-org3
   demo-lif-graphql-org3
  
-  demo-lif-orchestrator-api
+  demo-lif-orchestrator
   demo-lif-mdr-frontend
   demo-lif-mdr-api
 

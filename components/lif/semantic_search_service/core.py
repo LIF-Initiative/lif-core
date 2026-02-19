@@ -22,13 +22,15 @@ from enum import Enum
 import os
 from typing import Annotated, Any, Dict, List, Optional, Tuple, Type
 
-import httpx
 import numpy as np
 from fastmcp.exceptions import ToolError
 from pydantic import BaseModel, Field
 from sentence_transformers import SentenceTransformer
 from string import Template
 
+from lif.graphql_client import graphql_query as execute_graphql_query
+from lif.graphql_client import graphql_mutation as execute_graphql_mutation
+from lif.graphql_client import GraphQLClientException
 from lif.lif_schema_config import LIFSchemaConfig, XSD_TO_PYTHON
 from lif.logging import get_logger
 from lif.openapi_schema_parser.core import SchemaLeaf
@@ -419,13 +421,14 @@ async def run_semantic_search(
     graphql_query = query_template.substitute(filter=filter_literal, query=graphql_fields)
     logger.info(f"Generated GraphQL for query [{query}]:\n{graphql_query}")
     try:
-        timeout = httpx.Timeout(connect=5.0, read=SEMANTIC_SEARCH_SERVICE__GRAPHQL_TIMEOUT__READ, write=5.0, pool=5.0)
-        async with httpx.AsyncClient(timeout=timeout) as client:
-            response = await client.post(graphql_url, json={"query": graphql_query})
-        response.raise_for_status()
-        response_json = response.json()
+        response_json = await execute_graphql_query(
+            query=graphql_query, url=graphql_url, timeout_read=SEMANTIC_SEARCH_SERVICE__GRAPHQL_TIMEOUT__READ
+        )
         return [response_json] if response_json else [{"result": "No matches found."}]
 
+    except GraphQLClientException as e:
+        logger.error(f"LIF query tool error: {e}")
+        raise ToolError(f"LIF query tool error: {e}")
     except Exception as e:
         logger.error(f"LIF query tool error: {e}")
         raise ToolError(f"LIF query tool error: {e}")
@@ -440,10 +443,10 @@ async def run_mutation(filter: BaseModel, input: BaseModel, graphql_url: str) ->
     graphql_mutation = mutation_template.substitute(filter=filter_literal, input=input_literal, fields=fields_literal)
 
     try:
-        async with httpx.AsyncClient() as client:
-            response = await client.post(graphql_url, json={"query": graphql_mutation})
-        response.raise_for_status()
-        return response.json()
+        return await execute_graphql_mutation(query=graphql_mutation, url=graphql_url)
+    except GraphQLClientException as e:
+        logger.error(f"LIF mutation tool error: {e}")
+        raise ToolError(f"LIF mutation tool error: {e}")
     except Exception as e:
         logger.error(f"LIF mutation tool error: {e}")
         raise ToolError(f"LIF mutation tool error: {e}")

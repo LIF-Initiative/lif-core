@@ -35,7 +35,7 @@
         * update GitHubRepos
 8. Run the deploy script to create the LIF ECR repositories and GitHub Action role
     ```
-    ./aws-deploy -s <name> --only-stack <name>-lif-repositories
+    ./aws-deploy.sh -s <name> --only-stack <name>-lif-repositories
     ```
     * this must be run by an administrator user
     * the script will initiate an Identity Center SSO login
@@ -43,8 +43,53 @@
     * this should be run on your local machine, or in a virtual machine to which you have console access
 9. Run the deploy script to deploy all stacks
     ```
-    ./aws-deploy -s <name>
+    ./aws-deploy.sh -s <name>
     ```
+
+## Release to Demo
+
+Update demo CloudFormation parameter files with the latest image tags from dev ECR.
+
+### Prerequisites
+- AWS CLI configured with `lif` profile (or the appropriate AWS profile)
+- `jq` installed
+
+### Usage
+
+Run all commands from the **repository root** directory (not from `cloudformation/`).
+
+1. **Preview changes** (dry-run, no files modified):
+   ```bash
+   AWS_PROFILE=lif ./release-demo.sh
+   ```
+
+2. **Apply changes** to param files:
+   ```bash
+   AWS_PROFILE=lif ./release-demo.sh --apply
+   ```
+
+3. **Deploy the updated stacks**:
+   ```bash
+   ./aws-deploy.sh -s demo
+   ```
+
+4. **Commit and create PR** with the updated param files.
+
+### How It Works
+
+The script:
+1. Finds all `demo*.params` files containing `ImageUrl` parameters
+2. Queries ECR for the image tagged `latest` in each repository
+3. Resolves the actual version tag (e.g., `2025-02-05-12-30-00-abc1234`)
+4. Updates the param files with the new tag
+
+### Options
+
+| Option | Description |
+|--------|-------------|
+| `--apply` | Apply changes (default is dry-run) |
+| `--verbose` | Show detailed output for unchanged files |
+| `--help` | Show help message |
 
 ## Notes
 ### GitHubRepos Parameter
