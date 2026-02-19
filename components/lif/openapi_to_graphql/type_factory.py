@@ -24,6 +24,7 @@ from typing import Any, Dict, List, Optional, Set, Type, Union, get_args, get_or
 import httpx
 import strawberry
 from dateutil import parser
+from strawberry.types import Info
 
 from lif.lif_schema_config import (
     XSD_TO_PYTHON,
@@ -808,8 +809,8 @@ def build_root_query_type(
         return_type = type_class if is_nested_list else List[type_class]
         # Add type annotations for Strawberry's introspection
         resolver.__annotations__ = {
-            "self": object,
-            "info": object,
+            "self": Any,
+            "info": Info,
             "filter": Optional[input_class],
             "return": return_type,
         }
@@ -906,8 +907,8 @@ def build_root_mutation_type(
             raise Exception(f"Mutation failed: {response.status_code}: {response.text}")
 
     update_resolver.__annotations__ = {
-        "self": object,
-        "info": object,
+        "self": Any,
+        "info": Info,
         "filter": filter_class,
         "input": input_class,
         "return": type_class,
