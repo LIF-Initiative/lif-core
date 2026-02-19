@@ -1,14 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 #
-# Setup Demo User Password
-# Stores a shared demo user password in AWS SSM Parameter Store
-# for the Advisor API and MDR API services.
-#
-# Usage:
-#   ./scripts/setup-demo-user-password.sh <env>             # Dry-run (preview)
-#   ./scripts/setup-demo-user-password.sh <env> --apply      # Store password
-#   ./scripts/setup-demo-user-password.sh --help              # Show help
+# Setup Demo User Password — run with --help for usage details.
 #
 
 # Colors

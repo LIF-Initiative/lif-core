@@ -24,7 +24,6 @@ from lif.mdr_utils.config import get_settings
 import os
 
 from lif.mdr_utils.logger_config import get_logger
-from passlib.context import CryptContext
 from pydantic import BaseModel
 
 logger = get_logger(__name__)
@@ -34,9 +33,6 @@ DEMO_USER_PASSWORD = os.environ.get("LIF_DEMO_USER_PASSWORD", "changeme")
 app = FastAPI(title="LIF Metadata Repository API", description="API for the LIF Metadata Repository", version="1.0.0")
 
 settings = get_settings()
-
-# Password hashing context
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 # --- Mock Database and State ---
 users_db: List[Dict[str, Any]] = [
@@ -348,17 +344,6 @@ app.add_middleware(
 
 # Add pagination to the FastAPI app
 # add_pagination(app)
-
-
-# --- Authentication Helper Functions ---
-def verify_password(plain_password: str, hashed_password: str) -> bool:
-    """Verify a password against its hash"""
-    return pwd_context.verify(plain_password, hashed_password)
-
-
-def get_password_hash(password: str) -> str:
-    """Generate password hash"""
-    return pwd_context.hash(password)
 
 
 def find_user(username: str, password: str) -> Dict[str, Any] | None:
