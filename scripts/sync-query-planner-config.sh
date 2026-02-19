@@ -1,15 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 #
-# Sync Query Planner Information Sources Config to SSM
-# Compares local YAML config files against SSM Parameter Store values
-# and optionally updates SSM to match the repo source of truth.
-#
-# Usage:
-#   ./scripts/sync-query-planner-config.sh <env>                    # Dry-run (all orgs)
-#   ./scripts/sync-query-planner-config.sh <env> --apply            # Write changes to SSM
-#   ./scripts/sync-query-planner-config.sh <env> --org org1         # Single org only
-#   ./scripts/sync-query-planner-config.sh --help                   # Show help
+# Sync Query Planner Information Sources Config to SSM — run with --help for usage details.
 #
 
 # Colors
