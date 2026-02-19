@@ -327,8 +327,8 @@ def main():
     parser.add_argument(
         "--schema-path",
         type=Path,
-        default=Path("/tmp/new-lif-schema.json"),
-        help="Path to the new LIF schema JSON file",
+        default=Path(__file__).resolve().parent.parent / "schemas" / "lif-schema.json",
+        help="Path to the LIF schema JSON file (default: schemas/lif-schema.json)",
     )
     parser.add_argument(
         "--sample-dir",
@@ -348,7 +348,7 @@ def main():
     # Load schema
     if not args.schema_path.exists():
         print(f"Error: Schema file not found: {args.schema_path}")
-        print("Run: gh api repos/LIF-Initiative/lif-data-model/contents/lif.json --jq '.content' | base64 -d > /tmp/new-lif-schema.json")
+        print("Expected at: schemas/lif-schema.json (relative to repo root)")
         sys.exit(1)
 
     print(f"Loading schema from: {args.schema_path}")
