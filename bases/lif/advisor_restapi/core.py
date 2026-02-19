@@ -1,3 +1,4 @@
+import os
 import uuid
 from typing import Any, Dict, List
 
@@ -12,12 +13,12 @@ from lif.logging import get_logger
 
 logger = get_logger(__name__)
 
+DEMO_USER_PASSWORD = os.environ.get("LIF_DEMO_USER_PASSWORD", "changeme")
 
 # --- Mock Database and State ---
 users_db: List[Dict[str, Any]] = [
     {
         "username": "atsatrian_lifdemo@stateu.edu",
-        "password": "liffy4life!",  # cspell:disable-line
         "firstname": "Alan",
         "lastname": "Tsatrian",  # cspell:disable-line
         "identifier": "100001",
@@ -26,7 +27,6 @@ users_db: List[Dict[str, Any]] = [
     },
     {
         "username": "jdiaz_lifdemo@stateu.edu",
-        "password": "liffy4life!",
         "firstname": "Jenna",
         "lastname": "Diaz",  # cspell:disable-line
         "identifier": "100002",
@@ -35,7 +35,6 @@ users_db: List[Dict[str, Any]] = [
     },
     {
         "username": "smarin_lifdemo@stateu.edu",
-        "password": "liffy4life!",
         "firstname": "Sarah",
         "lastname": "Marin",
         "identifier": "100003",
@@ -44,7 +43,6 @@ users_db: List[Dict[str, Any]] = [
     },
     {
         "username": "Rgreen11Fdemo@stateu.edu",
-        "password": "liffy4life!",
         "firstname": "Renee",
         "lastname": "Green",
         "identifier": "100004",
@@ -53,7 +51,6 @@ users_db: List[Dict[str, Any]] = [
     },
     {
         "username": "tthatcher_lifdemo@stateu.edu",
-        "password": "liffy4life!",
         "firstname": "Tracy",
         "lastname": "Thatcher",
         "identifier": "100006",
@@ -62,7 +59,6 @@ users_db: List[Dict[str, Any]] = [
     },
     {
         "username": "mhanson_lifdemo@stateu.edu",
-        "password": "liffy4life!",
         "firstname": "Matt",
         "lastname": "Hanson",
         "identifier": "100005",
@@ -138,7 +134,7 @@ async def login(request: LoginRequest) -> LoginResponse:
     Authenticate a user and provide a JWT token.
     """
     user = next((user for user in users_db if user["username"] == request.username), None)
-    if user and user["password"] == request.password:
+    if user and request.password == DEMO_USER_PASSWORD:
         access_token = create_access_token({"sub": user["username"]})
         refresh_token = create_refresh_token({"sub": user["username"]})
         refresh_tokens_store[user["username"]] = refresh_token

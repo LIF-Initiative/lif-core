@@ -36,3 +36,6 @@ Secrets:
   - Name: MDR__AUTH__SERVICE_API_KEY__TRANSLATOR
     ValueFrom:
       Fn::Sub: "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${EnvironmentName}/${ServiceName}/MdrAuthServiceApiKeyTranslator"
+  - Name: LIF_DEMO_USER_PASSWORD
+    ValueFrom:
+      Fn::Sub: "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${EnvironmentName}/${ServiceName}/DemoUserPassword"

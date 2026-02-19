@@ -21,11 +21,15 @@ from lif.mdr_restapi import (
     valueset_endpoint,
 )
 from lif.mdr_utils.config import get_settings
+import os
+
 from lif.mdr_utils.logger_config import get_logger
 from passlib.context import CryptContext
 from pydantic import BaseModel
 
 logger = get_logger(__name__)
+
+DEMO_USER_PASSWORD = os.environ.get("LIF_DEMO_USER_PASSWORD", "changeme")
 
 app = FastAPI(title="LIF Metadata Repository API", description="API for the LIF Metadata Repository", version="1.0.0")
 
@@ -38,7 +42,6 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 users_db: List[Dict[str, Any]] = [
     {
         "username": "atsatrian_lifdemo@stateu.edu",
-        "password": "$2b$12$pJyJLoYE2QcygmcdEfUhx.7OW1hbo79e3CbrHTyKy7ATJyUPRB4CK",  # "liffy4life!"
         "firstname": "Alan",
         "lastname": "Tsatrian",  # cspell:disable-line
         "identifier": "100001",
@@ -47,7 +50,6 @@ users_db: List[Dict[str, Any]] = [
     },
     {
         "username": "jdiaz_lifdemo@stateu.edu",
-        "password": "$2b$12$pJyJLoYE2QcygmcdEfUhx.7OW1hbo79e3CbrHTyKy7ATJyUPRB4CK",  # "liffy4life!"
         "firstname": "Jenna",
         "lastname": "Diaz",  # cspell:disable-line
         "identifier": "100002",
@@ -56,7 +58,6 @@ users_db: List[Dict[str, Any]] = [
     },
     {
         "username": "smarin_lifdemo@stateu.edu",
-        "password": "$2b$12$pJyJLoYE2QcygmcdEfUhx.7OW1hbo79e3CbrHTyKy7ATJyUPRB4CK",  # "liffy4life!"
         "firstname": "Sarah",
         "lastname": "Marin",
         "identifier": "100003",
@@ -65,7 +66,6 @@ users_db: List[Dict[str, Any]] = [
     },
     {
         "username": "Rgreen11Fdemo@stateu.edu",
-        "password": "$2b$12$pJyJLoYE2QcygmcdEfUhx.7OW1hbo79e3CbrHTyKy7ATJyUPRB4CK",  # "liffy4life!"
         "firstname": "Renee",
         "lastname": "Green",
         "identifier": "100004",
@@ -74,7 +74,6 @@ users_db: List[Dict[str, Any]] = [
     },
     {
         "username": "mhanson_lifdemo@stateu.edu",
-        "password": "$2b$12$pJyJLoYE2QcygmcdEfUhx.7OW1hbo79e3CbrHTyKy7ATJyUPRB4CK",  # "liffy4life!"
         "firstname": "Matt",
         "lastname": "Hanson",
         "identifier": "100005",
@@ -83,7 +82,6 @@ users_db: List[Dict[str, Any]] = [
     },
     {
         "username": "tthatcher_lifdemo@stateu.edu",
-        "password": "$2b$12$pJyJLoYE2QcygmcdEfUhx.7OW1hbo79e3CbrHTyKy7ATJyUPRB4CK",  # "liffy4life!"
         "firstname": "Tracy",
         "lastname": "Thatcher",
         "identifier": "100006",
@@ -92,7 +90,6 @@ users_db: List[Dict[str, Any]] = [
     },
     {
         "username": "nsmith_lifdemo@stateu.edu",
-        "password": "$2b$12$pJyJLoYE2QcygmcdEfUhx.7OW1hbo79e3CbrHTyKy7ATJyUPRB4CK",  # "liffy4life!"
         "firstname": "Nancy",
         "lastname": "Smith",
         "identifier": "100007",
@@ -101,7 +98,6 @@ users_db: List[Dict[str, Any]] = [
     },
     {
         "username": "bwang_lifdemo@stateu.edu",
-        "password": "$2b$12$pJyJLoYE2QcygmcdEfUhx.7OW1hbo79e3CbrHTyKy7ATJyUPRB4CK",  # "liffy4life!"
         "firstname": "Ben",
         "lastname": "Wang",
         "identifier": "100008",
@@ -110,7 +106,6 @@ users_db: List[Dict[str, Any]] = [
     },
     {
         "username": "gdavis_lifdemo@stateu.edu",
-        "password": "$2b$12$pJyJLoYE2QcygmcdEfUhx.7OW1hbo79e3CbrHTyKy7ATJyUPRB4CK",  # "liffy4life!"
         "firstname": "George",
         "lastname": "Davis",
         "identifier": "100009",
@@ -119,7 +114,6 @@ users_db: List[Dict[str, Any]] = [
     },
     {
         "username": "cwilliams_lifdemo@stateu.edu",
-        "password": "$2b$12$pJyJLoYE2QcygmcdEfUhx.7OW1hbo79e3CbrHTyKy7ATJyUPRB4CK",  # "liffy4life!"
         "firstname": "Caleb",
         "lastname": "Williams",
         "identifier": "100010",
@@ -128,7 +122,6 @@ users_db: List[Dict[str, Any]] = [
     },
     {
         "username": "dharris_lifdemo@stateu.edu",
-        "password": "$2b$12$pJyJLoYE2QcygmcdEfUhx.7OW1hbo79e3CbrHTyKy7ATJyUPRB4CK",  # "liffy4life!"
         "firstname": "Daniel",
         "lastname": "Harris",
         "identifier": "100011",
@@ -137,7 +130,6 @@ users_db: List[Dict[str, Any]] = [
     },
     {
         "username": "emoore_lifdemo@stateu.edu",
-        "password": "$2b$12$pJyJLoYE2QcygmcdEfUhx.7OW1hbo79e3CbrHTyKy7ATJyUPRB4CK",  # "liffy4life!"
         "firstname": "Edward",
         "lastname": "Moore",
         "identifier": "100012",
@@ -146,7 +138,6 @@ users_db: List[Dict[str, Any]] = [
     },
     {
         "username": "fwalker_lifdemo@stateu.edu",
-        "password": "$2b$12$pJyJLoYE2QcygmcdEfUhx.7OW1hbo79e3CbrHTyKy7ATJyUPRB4CK",  # "liffy4life!"
         "firstname": "Freya",
         "lastname": "Walker",
         "identifier": "100013",
@@ -155,7 +146,6 @@ users_db: List[Dict[str, Any]] = [
     },
     {
         "username": "hwhite_lifdemo@stateu.edu",
-        "password": "$2b$12$pJyJLoYE2QcygmcdEfUhx.7OW1hbo79e3CbrHTyKy7ATJyUPRB4CK",  # "liffy4life!"
         "firstname": "Henry",
         "lastname": "White",
         "identifier": "100014",
@@ -164,7 +154,6 @@ users_db: List[Dict[str, Any]] = [
     },
     {
         "username": "ilee_lifdemo@stateu.edu",
-        "password": "$2b$12$pJyJLoYE2QcygmcdEfUhx.7OW1hbo79e3CbrHTyKy7ATJyUPRB4CK",  # "liffy4life!"
         "firstname": "Isabella",
         "lastname": "Lee",
         "identifier": "100015",
@@ -173,7 +162,6 @@ users_db: List[Dict[str, Any]] = [
     },
     {
         "username": "kthomas_lifdemo@stateu.edu",
-        "password": "$2b$12$pJyJLoYE2QcygmcdEfUhx.7OW1hbo79e3CbrHTyKy7ATJyUPRB4CK",  # "liffy4life!"
         "firstname": "Kai",
         "lastname": "Thomas",
         "identifier": "100016",
@@ -182,7 +170,6 @@ users_db: List[Dict[str, Any]] = [
     },
     {
         "username": "llopez_lifdemo@stateu.edu",
-        "password": "$2b$12$pJyJLoYE2QcygmcdEfUhx.7OW1hbo79e3CbrHTyKy7ATJyUPRB4CK",  # "liffy4life!"
         "firstname": "Lily",
         "lastname": "Lopez",
         "identifier": "100017",
@@ -191,7 +178,6 @@ users_db: List[Dict[str, Any]] = [
     },
     {
         "username": "lbrown_lifdemo@stateu.edu",
-        "password": "$2b$12$pJyJLoYE2QcygmcdEfUhx.7OW1hbo79e3CbrHTyKy7ATJyUPRB4CK",  # "liffy4life!"
         "firstname": "Leo",
         "lastname": "Brown",
         "identifier": "100018",
@@ -200,7 +186,6 @@ users_db: List[Dict[str, Any]] = [
     },
     {
         "username": "mlewis_lifdemo@stateu.edu",
-        "password": "$2b$12$pJyJLoYE2QcygmcdEfUhx.7OW1hbo79e3CbrHTyKy7ATJyUPRB4CK",  # "liffy4life!"
         "firstname": "Mia",
         "lastname": "Lewis",
         "identifier": "100019",
@@ -209,7 +194,6 @@ users_db: List[Dict[str, Any]] = [
     },
     {
         "username": "ocap_lifdemo@stateu.edu",
-        "password": "$2b$12$pJyJLoYE2QcygmcdEfUhx.7OW1hbo79e3CbrHTyKy7ATJyUPRB4CK",  # "liffy4life!"
         "firstname": "Oliver",
         "lastname": "Cap",
         "identifier": "100020",
@@ -218,7 +202,6 @@ users_db: List[Dict[str, Any]] = [
     },
     {
         "username": "ptaylor_lifdemo@stateu.edu",
-        "password": "$2b$12$pJyJLoYE2QcygmcdEfUhx.7OW1hbo79e3CbrHTyKy7ATJyUPRB4CK",  # "liffy4life!"
         "firstname": "Poppy",
         "lastname": "Taylor",
         "identifier": "100021",
@@ -227,7 +210,6 @@ users_db: List[Dict[str, Any]] = [
     },
     {
         "username": "rclark_lifdemo@stateu.edu",
-        "password": "$2b$12$pJyJLoYE2QcygmcdEfUhx.7OW1hbo79e3CbrHTyKy7ATJyUPRB4CK",  # "liffy4life!"
         "firstname": "Rosie",
         "lastname": "Clark",
         "identifier": "100022",
@@ -236,7 +218,6 @@ users_db: List[Dict[str, Any]] = [
     },
     {
         "username": "ujackson_lifdemo@stateu.edu",
-        "password": "$2b$12$pJyJLoYE2QcygmcdEfUhx.7OW1hbo79e3CbrHTyKy7ATJyUPRB4CK",  # "liffy4life!"
         "firstname": "Umar",  # cspell:disable-line
         "lastname": "Jackson",
         "identifier": "100023",
@@ -245,7 +226,6 @@ users_db: List[Dict[str, Any]] = [
     },
     {
         "username": "vperez_lifdemo@stateu.edu",
-        "password": "$2b$12$pJyJLoYE2QcygmcdEfUhx.7OW1hbo79e3CbrHTyKy7ATJyUPRB4CK",  # "liffy4life!"
         "firstname": "Violet",
         "lastname": "Perez",
         "identifier": "100024",
@@ -254,7 +234,6 @@ users_db: List[Dict[str, Any]] = [
     },
     {
         "username": "wjones_lifdemo@stateu.edu",
-        "password": "$2b$12$pJyJLoYE2QcygmcdEfUhx.7OW1hbo79e3CbrHTyKy7ATJyUPRB4CK",  # "liffy4life!"
         "firstname": "Willow",
         "lastname": "Jones",
         "identifier": "100025",
@@ -263,7 +242,6 @@ users_db: List[Dict[str, Any]] = [
     },
     {
         "username": "yrodriguez_lifdemo@stateu.edu",
-        "password": "$2b$12$pJyJLoYE2QcygmcdEfUhx.7OW1hbo79e3CbrHTyKy7ATJyUPRB4CK",  # "liffy4life!"
         "firstname": "Yasmin",  # cspell:disable-line
         "lastname": "Rodriguez",
         "identifier": "100026",
@@ -272,7 +250,6 @@ users_db: List[Dict[str, Any]] = [
     },
     {
         "username": "zgarcia_lifdemo@stateu.edu",
-        "password": "$2b$12$pJyJLoYE2QcygmcdEfUhx.7OW1hbo79e3CbrHTyKy7ATJyUPRB4CK",  # "liffy4life!"
         "firstname": "Zachary",
         "lastname": "Garcia",
         "identifier": "100027",
@@ -281,7 +258,6 @@ users_db: List[Dict[str, Any]] = [
     },
     {
         "username": "ftorres_lifdemo@stateu.edu",
-        "password": "$2b$12$pJyJLoYE2QcygmcdEfUhx.7OW1hbo79e3CbrHTyKy7ATJyUPRB4CK",  # "liffy4life!"
         "firstname": "Frank",
         "lastname": "Torres",
         "identifier": "100028",
@@ -290,7 +266,6 @@ users_db: List[Dict[str, Any]] = [
     },
     {
         "username": "mmiller_lifdemo@stateu.edu",
-        "password": "$2b$12$pJyJLoYE2QcygmcdEfUhx.7OW1hbo79e3CbrHTyKy7ATJyUPRB4CK",  # "liffy4life!"
         "firstname": "Mary",
         "lastname": "Miller",
         "identifier": "100029",
@@ -299,7 +274,6 @@ users_db: List[Dict[str, Any]] = [
     },
     {
         "username": "abaker_lifdemo@stateu.edu",
-        "password": "$2b$12$pJyJLoYE2QcygmcdEfUhx.7OW1hbo79e3CbrHTyKy7ATJyUPRB4CK",  # "liffy4life!"
         "firstname": "Aaron",
         "lastname": "Baker",
         "identifier": "100030",
@@ -388,12 +362,12 @@ def get_password_hash(password: str) -> str:
 
 
 def find_user(username: str, password: str) -> Dict[str, Any] | None:
-    """Find user by username and verify password"""
+    """Find user by username and verify password against the shared demo password."""
     logger.info(f"Looking for user: {username}")
     for user in users_db:
         if user["username"] == username:
             logger.info(f"Found user {username}, verifying password...")
-            if verify_password(password, user["password"]):
+            if password == DEMO_USER_PASSWORD:
                 logger.info(f"Password verification successful for {username}")
                 return user
             else:
