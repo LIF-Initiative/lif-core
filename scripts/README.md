@@ -36,6 +36,14 @@ Utility scripts for managing deployments, credentials, and data. All AWS scripts
 |--------|---------|
 | `reset-mdr-database.sh` | **Destructive.** Wipes and recreates the MDR database via Flyway clean + migrate. Required when `V1.1__metadata_repository_init.sql` is replaced rather than versioned incrementally. |
 
+## Demo Release
+
+| Script | Purpose |
+|--------|---------|
+| `release-demo.sh` | Update demo CloudFormation parameter files with the latest image tags from dev ECR. Queries ECR for each `latest`-tagged image and resolves its version tag. |
+| `release-demo-frontend.sh` | Build the MDR frontend from a specific git ref and deploy to the demo S3 bucket + CloudFront. Usage: `./scripts/release-demo-frontend.sh <git-ref> --apply` |
+| `verify-demo-images.sh` | Compare image tags in demo param files against what is actually running in the demo ECS cluster. Reports matches, mismatches, and services not running. |
+
 ## ECS Operations
 
 | Script | Purpose |

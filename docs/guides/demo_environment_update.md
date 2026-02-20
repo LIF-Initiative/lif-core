@@ -75,7 +75,7 @@ The `release-demo.sh` script reads every `cloudformation/demo-*.params` file tha
 ### 1a. Preview changes (dry-run)
 
 ```bash
-AWS_PROFILE=lif ./release-demo.sh
+AWS_PROFILE=lif ./scripts/release-demo.sh
 ```
 
 This shows which files would change and what the new tags would be. No files are modified.
@@ -83,7 +83,7 @@ This shows which files would change and what the new tags would be. No files are
 ### 1b. Apply changes
 
 ```bash
-AWS_PROFILE=lif ./release-demo.sh --apply
+AWS_PROFILE=lif ./scripts/release-demo.sh --apply
 ```
 
 Review the output to confirm all files updated successfully. Any failures are listed in the summary.
@@ -142,7 +142,7 @@ The MDR frontend is a static Vite/React app hosted on S3 + CloudFront — not an
 ### 3a. Preview (dry-run)
 
 ```bash
-AWS_PROFILE=lif ./release-demo-frontend.sh main
+AWS_PROFILE=lif ./scripts/release-demo-frontend.sh main
 ```
 
 This resolves the git ref, shows the commit SHA, target S3 bucket, and API URL, then exits without building or deploying.
@@ -150,14 +150,14 @@ This resolves the git ref, shows the commit SHA, target S3 bucket, and API URL, 
 ### 3b. Build and deploy
 
 ```bash
-AWS_PROFILE=lif ./release-demo-frontend.sh main --apply
+AWS_PROFILE=lif ./scripts/release-demo-frontend.sh main --apply
 ```
 
 You can use any git ref — a branch name, tag, or commit SHA:
 
 ```bash
-AWS_PROFILE=lif ./release-demo-frontend.sh v1.2.0 --apply
-AWS_PROFILE=lif ./release-demo-frontend.sh abc1234 --apply
+AWS_PROFILE=lif ./scripts/release-demo-frontend.sh v1.2.0 --apply
+AWS_PROFILE=lif ./scripts/release-demo-frontend.sh abc1234 --apply
 ```
 
 The script:
@@ -237,13 +237,13 @@ Create a PR so the pinned image tags are tracked in version control.
 |------|---------|
 | Audit MDR API keys | `AWS_PROFILE=lif ./scripts/setup-mdr-api-keys.sh demo` |
 | Create missing MDR API keys | `AWS_PROFILE=lif ./scripts/setup-mdr-api-keys.sh demo --apply` |
-| Preview image tag updates | `AWS_PROFILE=lif ./release-demo.sh` |
-| Apply image tag updates | `AWS_PROFILE=lif ./release-demo.sh --apply` |
+| Preview image tag updates | `AWS_PROFILE=lif ./scripts/release-demo.sh` |
+| Apply image tag updates | `AWS_PROFILE=lif ./scripts/release-demo.sh --apply` |
 | Deploy all stacks | `./aws-deploy.sh -s demo` |
 | Deploy one stack | `./aws-deploy.sh -s demo --only-stack <stack-name>` |
 | Force ECS redeployment | `./aws-deploy.sh -s demo --update-ecs` |
-| Preview MDR frontend deploy | `./release-demo-frontend.sh <git-ref>` |
-| Deploy MDR frontend | `./release-demo-frontend.sh <git-ref> --apply` |
+| Preview MDR frontend deploy | `./scripts/release-demo-frontend.sh <git-ref>` |
+| Deploy MDR frontend | `./scripts/release-demo-frontend.sh <git-ref> --apply` |
 | Deploy SAM databases | `./aws-deploy.sh -s demo --update-sam` |
 | Deploy MDR database only | `cd sam && bash deploy-sam.sh -s ../demo -d mdr-database` |
 | Deploy Dagster database only | `cd sam && bash deploy-sam.sh -s ../demo -d dagster-database` |
@@ -251,13 +251,13 @@ Create a PR so the pinned image tags are tracked in version control.
 
 ## Troubleshooting
 
-### `release-demo.sh` reports ECR access denied
+### `scripts/release-demo.sh` reports ECR access denied
 Ensure your AWS session is active and targeting the correct account:
 ```bash
 AWS_PROFILE=lif aws sts get-caller-identity
 ```
 
-### `release-demo.sh` reports "No image tagged 'latest'"
+### `scripts/release-demo.sh` reports "No image tagged 'latest'"
 The dev CI pipeline tags the most recent build as `latest`. If a repository has no `latest` tag, the dev build may not have completed successfully for that service.
 
 ### ECS task fails to start with "missing SSM parameter"
