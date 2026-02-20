@@ -8,9 +8,9 @@
 # Version: 1.0.0
 #
 # Usage:
-#   ./release-demo.sh              # Dry-run (preview changes)
-#   ./release-demo.sh --apply      # Apply changes to files
-#   ./release-demo.sh --help       # Show help
+#   ./scripts/release-demo.sh              # Dry-run (preview changes)
+#   ./scripts/release-demo.sh --apply      # Apply changes to files
+#   ./scripts/release-demo.sh --help       # Show help
 #
 
 set -euo pipefail

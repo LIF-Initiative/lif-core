@@ -6,8 +6,8 @@ set -euo pipefail
 # running in the demo ECS cluster.
 #
 # Usage:
-#   ./verify-demo-images.sh              # Compare all services
-#   ./verify-demo-images.sh --help       # Show help
+#   ./scripts/verify-demo-images.sh              # Compare all services
+#   ./scripts/verify-demo-images.sh --help       # Show help
 #
 
 # Colors

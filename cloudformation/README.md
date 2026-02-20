@@ -60,12 +60,12 @@ Run all commands from the **repository root** directory (not from `cloudformatio
 
 1. **Preview changes** (dry-run, no files modified):
    ```bash
-   AWS_PROFILE=lif ./release-demo.sh
+   AWS_PROFILE=lif ./scripts/release-demo.sh
    ```
 
 2. **Apply changes** to param files:
    ```bash
-   AWS_PROFILE=lif ./release-demo.sh --apply
+   AWS_PROFILE=lif ./scripts/release-demo.sh --apply
    ```
 
 3. **Deploy the updated stacks**:

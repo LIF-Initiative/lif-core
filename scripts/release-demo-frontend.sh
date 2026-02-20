@@ -4,9 +4,9 @@
 # Builds the MDR frontend from a specific git ref and deploys to the demo S3 bucket.
 #
 # Usage:
-#   ./release-demo-frontend.sh <git-ref>              # Dry-run (preview)
-#   ./release-demo-frontend.sh <git-ref> --apply      # Build and deploy
-#   ./release-demo-frontend.sh --help                  # Show help
+#   ./scripts/release-demo-frontend.sh <git-ref>              # Dry-run (preview)
+#   ./scripts/release-demo-frontend.sh <git-ref> --apply      # Build and deploy
+#   ./scripts/release-demo-frontend.sh --help                  # Show help
 #
 
 set -euo pipefail

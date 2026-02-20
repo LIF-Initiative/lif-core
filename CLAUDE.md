@@ -319,9 +319,9 @@ After key changes, redeploy affected services:
 | Script | Purpose |
 |--------|---------|
 | `aws-deploy.sh` | Deploy CloudFormation stacks (`-s demo`, `--only-stack`, `--update-ecs`, `--update-sam`) |
-| `release-demo.sh` | Update demo param files with latest ECR image tags from dev |
-| `release-demo-frontend.sh` | Build and deploy MDR frontend to S3/CloudFront from a git ref |
-| `verify-demo-images.sh` | Compare param file image tags against running ECS tasks |
+| `scripts/release-demo.sh` | Update demo param files with latest ECR image tags from dev |
+| `scripts/release-demo-frontend.sh` | Build and deploy MDR frontend to S3/CloudFront from a git ref |
+| `scripts/verify-demo-images.sh` | Compare param file image tags against running ECS tasks |
 | `scripts/setup-mdr-api-keys.sh` | Generate and store MDR service API keys in SSM Parameter Store |
 | `scripts/setup-graphql-api-keys.sh` | Generate and store GraphQL org1 API keys in SSM (service + workshop modes) |
 | `scripts/reset-mdr-database.sh` | Reset MDR database (flyway clean + migrate) when V1.1 SQL is replaced |
@@ -329,7 +329,7 @@ After key changes, redeploy affected services:
 
 ### Environment Differences
 - **Dev** uses `:latest` ECR image tags in param files; **demo** uses pinned version tags (e.g., `:1.2.3`)
-- `release-demo.sh` copies the current dev image tags to demo param files for promotion
+- `scripts/release-demo.sh` copies the current dev image tags to demo param files for promotion
 - Dev has a single-org setup (`dev-single-org`); demo has multi-org (`advisor-demo-org1/2/3`)
 
 ### Key Operational Notes
@@ -338,7 +338,7 @@ After key changes, redeploy affected services:
 - **Apple Silicon**: Docker images for Lambda must use `--platform linux/amd64` (already handled in scripts)
 - **SSM parameters**: ECS tasks fail to start if referenced SSM parameters are missing, even optional ones like `ApiKeys`
 - **Deploy sequentially**: Running multiple `aws-deploy.sh` commands in parallel causes SSO login conflicts
-- **MDR frontend**: Deployed to S3 + CloudFront (not ECS); use `release-demo-frontend.sh` for demo
+- **MDR frontend**: Deployed to S3 + CloudFront (not ECS); use `scripts/release-demo-frontend.sh` for demo
 - **Bash `grep -v` with `pipefail`**: In scripts using `set -o pipefail`, `grep -v` returns exit code 1 when all lines are filtered out (no matches). Wrap in `(grep -v ... || true)` to prevent script failure.
 
 ## Key Technologies
