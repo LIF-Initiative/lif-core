@@ -235,6 +235,8 @@ The LIF schema uses a specific naming convention based on data type:
    - Uses `strawberry.field(name=field_name)` to preserve original schema case
    - `resolve_actual_type()` preserves `List` wrappers for proper type resolution
    - `dict_to_dataclass()` handles nested type conversion
+   - **Resolver annotations must use `Info` type** — dynamic resolvers in `build_root_query_type` and `build_root_mutation_type` must annotate `info` as `strawberry.types.Info`, not `object` or `Any`. Strawberry identifies the `info` parameter by type (name-based fallback was removed in 0.297.0).
+   - **MDR schemas have no `$ref`** — the MDR `generate_openapi_schema()` function deep-copies and inlines all referenced schemas. The `$ref` branch in `create_type()` exists but is not exercised by production schemas.
 
 2. **Fragment paths** use format `person.EntityName` (e.g., `person.EmploymentPreferences`)
 
@@ -340,6 +342,53 @@ After key changes, redeploy affected services:
 - **Deploy sequentially**: Running multiple `aws-deploy.sh` commands in parallel causes SSO login conflicts
 - **MDR frontend**: Deployed to S3 + CloudFront (not ECS); use `release-demo-frontend.sh` for demo
 - **Bash `grep -v` with `pipefail`**: In scripts using `set -o pipefail`, `grep -v` returns exit code 1 when all lines are filtered out (no matches). Wrap in `(grep -v ... || true)` to prevent script failure.
+
+### Docker Build Dependency Resolution (IMPORTANT)
+
+Project Dockerfiles (`projects/*/Dockerfile2`) build wheels independently from the monorepo lock file. The runtime stage installs the wheel with `uv pip install --system`, which resolves dependencies from PyPI based on the wheel's metadata constraints — **not** from `uv.lock`. This means Docker images can get different dependency versions than local development.
+
+**PEP 440 `~=` gotcha**: `~=0.275` means `>= 0.275, == 0.*` (any `0.x` >= 0.275), NOT `>= 0.275, < 0.276`. To constrain to a minor version range, use `~=0.275.0` (which means `>= 0.275.0, < 0.276.0`). This distinction caused a production crash when `strawberry-graphql~=0.275` resolved to `0.297.0` in Docker.
+
+### Debugging ECS Services
+
+**CloudWatch log group**: All dev ECS services share a single log group named `dev`. Log streams are prefixed by service name (e.g., `graphql-org1/graphql-org1/<task-id>`).
+
+```bash
+# Tail recent logs for a service
+AWS_PROFILE=lif AWS_REGION=us-east-1 aws logs filter-log-events \
+  --log-group-name dev --log-stream-name-prefix graphql-org1 \
+  --start-time $(python3 -c "import time; print(int((time.time()-3600)*1000))") \
+  --limit 100 --query 'events[].message' --output text
+
+# Filter for errors only
+AWS_PROFILE=lif AWS_REGION=us-east-1 aws logs filter-log-events \
+  --log-group-name dev --log-stream-name-prefix graphql-org1 \
+  --filter-pattern "ERROR" --limit 20 --query 'events[].message' --output text
+
+# Check service status and recent events
+AWS_PROFILE=lif AWS_REGION=us-east-1 aws ecs describe-services \
+  --cluster dev --services graphql-org1-FARGATE \
+  --query 'services[0].{status:status,running:runningCount,events:events[:3]}'
+```
+
+**ECS Exec** is enabled on dev services but requires the Session Manager Plugin (`session-manager-plugin`) installed locally.
+
+### Querying the MDR API
+
+The MDR API provides the OpenAPI schema that GraphQL services load at startup. Useful for debugging schema-related issues.
+
+```bash
+# Get the MDR API key for a service (stored in SSM)
+AWS_PROFILE=lif AWS_REGION=us-east-1 aws ssm get-parameter \
+  --name /dev/graphql-org1/MdrApiKey --with-decryption \
+  --query 'Parameter.Value' --output text
+
+# Fetch the OpenAPI schema (data model ID 17 for dev)
+curl -s -H "X-API-Key: <key>" \
+  "https://mdr-api.dev.lif.unicon.net/datamodels/open_api_schema/17?include_attr_md=true&include_entity_md=false"
+```
+
+**MDR auth uses `X-API-Key` header** (not Bearer token). The endpoint path is `/datamodels/open_api_schema/{data_model_id}`.
 
 ## Key Technologies
 
