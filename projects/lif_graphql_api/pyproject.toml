@@ -11,7 +11,7 @@ requires-python = ">=3.13,<3.14"
 dependencies = [
     "fastapi~=0.115",
     "httpx~=0.28",
-    "strawberry-graphql[asgi]~=0.275",
+    "strawberry-graphql[asgi]~=0.275.0",
     "uvicorn~=0.34",
 ]
 
