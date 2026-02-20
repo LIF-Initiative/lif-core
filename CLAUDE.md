@@ -88,7 +88,23 @@ Types encouraged: `feat:`, `fix:`, `docs:`, `refactor:`
 
 ## Testing
 
-### Unit Tests
+### Unit Test Principles
+
+Write tests that earn their keep. Every test should justify its existence by verifying something non-obvious.
+
+**What to test:**
+- **Non-trivial transformations** — regex, recursion, type dispatch, multi-step logic where inputs interact in non-obvious ways
+- **Boundary conditions** — empty inputs, None values, edge cases where behavior changes (e.g., leading digits in identifiers)
+- **Regression tests for bugs** — every bug fix should include a test that would have caught it. The test should fail without the fix.
+- **Integration-style unit tests** — testing a function end-to-end with real inputs is more valuable than mocking every internal call (e.g., test `generate_graphql_schema()` with a real schema, not with mocked sub-functions)
+
+**What not to test:**
+- **Trivial wrappers** — if a function is a one-liner delegating to another tested function (e.g., `".".join([f(x) for x in path.split(".")])`)
+- **Framework behavior** — don't test that Pydantic validates types or that `re.sub` works; test *your* logic
+- **Obvious guard clauses** — `if not s: return s` doesn't need its own test case unless the empty-input behavior is part of a documented contract
+- **Coverage for coverage's sake** — a placeholder test like `assert module is not None` has no value; either write a real test or leave the file empty
+
+### Unit Test Mechanics
 - Tests are in `test/` mirroring source structure
 - Uses pytest with `asyncio_mode = auto`
 - Run specific module tests: `uv run pytest test/components/lif/<module>/`
