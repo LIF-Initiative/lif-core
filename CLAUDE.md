@@ -347,7 +347,7 @@ After key changes, redeploy affected services:
 
 Project Dockerfiles (`projects/*/Dockerfile2`) build wheels independently from the monorepo lock file. The runtime stage installs the wheel with `uv pip install --system`, which resolves dependencies from PyPI based on the wheel's metadata constraints — **not** from `uv.lock`. This means Docker images can get different dependency versions than local development.
 
-**PEP 440 `~=` gotcha**: `~=0.275` means `>= 0.275, == 0.*` (any `0.x` >= 0.275), NOT `>= 0.275, < 0.276`. To constrain to a minor version range, use `~=0.275.0` (which means `>= 0.275.0, < 0.276.0`). This distinction caused a production crash when `strawberry-graphql~=0.275` resolved to `0.297.0` in Docker.
+**PEP 440 `~=` gotcha**: `~=0.275` means `>= 0.275, < 1.0`, NOT `>= 0.275, < 0.276`. To constrain to a minor version range, use `~=0.275.0` (which means `>= 0.275.0, < 0.276.0`). This distinction caused a production crash when `strawberry-graphql~=0.275` resolved to `0.297.0` in Docker.
 
 ### Debugging ECS Services
 
