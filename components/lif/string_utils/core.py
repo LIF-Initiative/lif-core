@@ -19,6 +19,7 @@ def safe_identifier(name: str) -> str:
     s1 = re.sub(r"(.)([A-Z][a-z]+)", r"\1_\2", name)
     s2 = re.sub(r"([a-z0-9])([A-Z])", r"\1_\2", s1)
     safe = re.sub(r"\W|^(?=\d)", "_", s2)
+    safe = re.sub(r"_+", "_", safe)  # Collapse consecutive underscores
     return safe.lower()
 
 
