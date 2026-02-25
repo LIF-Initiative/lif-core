@@ -34,7 +34,7 @@ dependencies = [
     "sentence-transformers~=4.1",
     "sqlalchemy~=2.0",
     "sqlmodel~=0.0",
-    "strawberry-graphql[asgi]~=0.275",
+    "strawberry-graphql[asgi]~=0.275.0",
     "testing-postgresql>=1.3.0",
     "uvicorn~=0.34",
 ]
@@ -54,7 +54,7 @@ dev = [
     "pytest~=8.4",
     "pytest-asyncio~=1.1",
     "ruff~=0.11",
-    "strawberry-graphql[debug-server]~=0.275",
+    "strawberry-graphql[debug-server]~=0.275.0",
     "testcontainers[postgres]~=4.13",
     "ty~=0.0",
 ]
