@@ -1,5 +1,8 @@
 import { DialogField } from "../Dialog/Dialog";
 
+
+const PatternRegex = "^[A-Za-z][A-Za-z0-9_./-]*$";
+const PatternErrStr = " must start with a letter and contain only letters, numbers, underscores, periods, hyphens, and forward slashes.";
 const capitalize = (s: string): string => { return s?.length ? s.charAt(0).toUpperCase() + s.slice(1) : ""; }
 
 /** Dev Note: Once we get actual user data we should use that for Contributor and ContributorOrganization */
@@ -13,12 +16,21 @@ export const entityCreateFields = (model: any): DialogField[] => {
       hidden: true,
       defaultValue: model?.Id,
     },
-    { name: "Name", type: "text" as const, label: "Name", required: true },
+    {
+      name: "Name",
+      type: "text" as const,
+      label: "Name",
+      required: true,
+      pattern: PatternRegex,
+      patternErr: "Name" + PatternErrStr,
+    },
     {
       name: "UniqueName",
       type: "text" as const,
       label: "Unique Name",
       required: true,
+      pattern: PatternRegex,
+      patternErr: "Unique Name" + PatternErrStr,
     },
     { name: "Description", type: "text" as const, label: "Description" },
     {
@@ -90,12 +102,21 @@ export const attributeCreateFields = (model: any, valueSetId: string | number | 
       hidden: true,
       defaultValue: valueSetId?.toString(),
     },
-    { name: "Name", type: "text" as const, label: "Name", required: true },
+    {
+      name: "Name",
+      type: "text" as const,
+      label: "Name",
+      required: true,
+      pattern: PatternRegex,
+      patternErr: "Name" + PatternErrStr,
+    },
     {
       name: "UniqueName",
       type: "text" as const,
       label: "Unique Name",
       required: true,
+      pattern: PatternRegex,
+      patternErr: "Unique Name" + PatternErrStr,
     },
     {
       name: "DataType",
@@ -173,7 +194,14 @@ export const valueSetCreateFields = (model: any): DialogField[] => {
       hidden: true,
       defaultValue: model?.Id,
     },
-    { name: "Name", type: "text" as const, label: "Name", required: true },
+    {
+      name: "Name",
+      type: "text" as const,
+      label: "Name",
+      required: true,
+      pattern: PatternRegex,
+      patternErr: "Name" + PatternErrStr,
+    },
     { name: "Description", type: "text" as const, label: "Description" },
     {
       name: "Use Considerations",
@@ -223,6 +251,8 @@ export const valueCreateFields = (model: any): DialogField[] => {
       type: "text" as const,
       label: "Value Name",
       required: true,
+      pattern: PatternRegex,
+      patternErr: "Value Name" + PatternErrStr,
     },
     { name: "Description", type: "text" as const, label: "Description" },
     {
