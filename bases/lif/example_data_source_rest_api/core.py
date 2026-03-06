@@ -39,22 +39,73 @@ r1_demo_data = {
     "100001": {
         "person": {
             "id": "100001",
-            "employment": {"preferences": {"preferred_org_types": ["Public Sector", "Private Sector"]}},
+            "employment": {
+                "preferences": {
+                    "id": "employment-preferences-100001-001",
+                    "preferred_org_types": ["Public Sector", "Private Sector"],
+                    "preferred_org_names": ["Government Agencies", "Technology Companies"],
+                }
+            },
         }
     },
-    "100002": {"person": {"id": "100002", "employment": {"preferences": {"preferred_org_types": ["Non-Profit"]}}}},
-    "100003": {"person": {"id": "100003", "employment": {"preferences": {"preferred_org_types": ["Private Sector"]}}}},
-    "100004": {"person": {"id": "100004", "employment": {"preferences": {"preferred_org_types": ["Public Sector"]}}}},
+    "100002": {
+        "person": {
+            "id": "100002",
+            "employment": {
+                "preferences": {
+                    "id": "employment-preferences-100002-001",
+                    "preferred_org_types": ["Non-Profit"],
+                    "preferred_org_names": ["Healthcare Organizations", "Community Services"],
+                }
+            },
+        }
+    },
+    "100003": {
+        "person": {
+            "id": "100003",
+            "employment": {
+                "preferences": {
+                    "id": "employment-preferences-100003-001",
+                    "preferred_org_types": ["Private Sector"],
+                    "preferred_org_names": ["Corporate Partners", "Technology Companies"],
+                }
+            },
+        }
+    },
+    "100004": {
+        "person": {
+            "id": "100004",
+            "employment": {
+                "preferences": {
+                    "id": "employment-preferences-100004-001",
+                    "preferred_org_types": ["Public Sector"],
+                    "preferred_org_names": ["Government Agencies", "Educational Institutions"],
+                }
+            },
+        }
+    },
     "100005": {
         "person": {
             "id": "100005",
-            "employment": {"preferences": {"preferred_org_types": ["Non-Profit", "Private Sector"]}},
+            "employment": {
+                "preferences": {
+                    "id": "employment-preferences-100005-001",
+                    "preferred_org_types": ["Non-Profit", "Private Sector"],
+                    "preferred_org_names": ["Healthcare Organizations", "Research Institutions"],
+                }
+            },
         }
     },
     "100006": {
         "person": {
             "id": "100006",
-            "employment": {"preferences": {"preferred_org_types": ["Non-Profit", "Public Sector"]}},
+            "employment": {
+                "preferences": {
+                    "id": "employment-preferences-100006-001",
+                    "preferred_org_types": ["Non-Profit", "Public Sector"],
+                    "preferred_org_names": ["Community Services", "Government Agencies"],
+                }
+            },
         }
     },
 }

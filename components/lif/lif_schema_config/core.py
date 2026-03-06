@@ -89,9 +89,7 @@ class LIFSchemaConfig:
 
     # Root Type Configuration
     root_type_name: str = "Person"
-    additional_root_types: List[str] = field(
-        default_factory=lambda: ["Course", "Organization", "Credential"]
-    )
+    additional_root_types: List[str] = field(default_factory=lambda: ["Course", "Organization", "Credential"])
 
     # Query Planner URLs
     query_planner_base_url: str = "http://localhost:8002"
@@ -100,6 +98,7 @@ class LIFSchemaConfig:
     # MDR Configuration
     mdr_api_url: str = "http://localhost:8012"
     mdr_api_auth_token: str = "no_auth_token_set"
+    mdr_timeout_seconds: int = 30
     openapi_data_model_id: Optional[str] = None
     openapi_json_filename: str = "openapi_constrained_with_interactions.json"
     use_openapi_from_file: bool = False
@@ -129,6 +128,8 @@ class LIFSchemaConfig:
         # Validate timeouts are positive
         if self.query_timeout_seconds <= 0:
             errors.append(f"query_timeout_seconds must be positive, got {self.query_timeout_seconds}")
+        if self.mdr_timeout_seconds <= 0:
+            errors.append(f"mdr_timeout_seconds must be positive, got {self.mdr_timeout_seconds}")
         if self.semantic_search_timeout <= 0:
             errors.append(f"semantic_search_timeout must be positive, got {self.semantic_search_timeout}")
         if self.semantic_search_top_k <= 0:
@@ -155,6 +156,7 @@ class LIFSchemaConfig:
             LIF_QUERY_TIMEOUT_SECONDS: Query timeout in seconds
             LIF_MDR_API_URL: MDR API URL
             LIF_MDR_API_AUTH_TOKEN: MDR authentication token
+            MDR_TIMEOUT_SECONDS: Timeout for MDR API calls (default: 30)
             OPENAPI_DATA_MODEL_ID: MDR data model ID
             OPENAPI_JSON_FILENAME: Local OpenAPI filename
             USE_OPENAPI_DATA_MODEL_FROM_FILE: Use local file instead of MDR
@@ -166,21 +168,16 @@ class LIFSchemaConfig:
             LIFSchemaConfig: Configuration loaded from environment.
         """
         # Parse root types
-        root_type_name = os.getenv("LIF_GRAPHQL_ROOT_TYPE_NAME",
-                                   os.getenv("LIF_GRAPHQL_ROOT_NODE", "Person"))
+        root_type_name = os.getenv("LIF_GRAPHQL_ROOT_TYPE_NAME", os.getenv("LIF_GRAPHQL_ROOT_NODE", "Person"))
 
         # Parse additional root types (these serve as reference data)
         root_nodes_str = os.getenv("LIF_GRAPHQL_ROOT_NODES", "Course,Organization,Credential")
         additional_root_types = [
-            node.strip() for node in root_nodes_str.split(",")
-            if node.strip() and node.strip() != root_type_name
+            node.strip() for node in root_nodes_str.split(",") if node.strip() and node.strip() != root_type_name
         ]
 
         # Support both new and old env var names for top_k
-        top_k = int(os.getenv(
-            "SEMANTIC_SEARCH__TOP_K",
-            os.getenv("TOP_K", "200")
-        ))
+        top_k = int(os.getenv("SEMANTIC_SEARCH__TOP_K", os.getenv("TOP_K", "200")))
 
         return cls(
             # Root types
@@ -192,24 +189,14 @@ class LIFSchemaConfig:
             # MDR
             mdr_api_url=os.getenv("LIF_MDR_API_URL", "http://localhost:8012"),
             mdr_api_auth_token=os.getenv("LIF_MDR_API_AUTH_TOKEN", "no_auth_token_set"),
+            mdr_timeout_seconds=int(os.getenv("MDR_TIMEOUT_SECONDS", "30")),
             openapi_data_model_id=os.getenv("OPENAPI_DATA_MODEL_ID"),
-            openapi_json_filename=os.getenv(
-                "OPENAPI_JSON_FILENAME",
-                "openapi_constrained_with_interactions.json"
-            ),
-            use_openapi_from_file=os.getenv(
-                "USE_OPENAPI_DATA_MODEL_FROM_FILE", "false"
-            ).lower() == "true",
+            openapi_json_filename=os.getenv("OPENAPI_JSON_FILENAME", "openapi_constrained_with_interactions.json"),
+            use_openapi_from_file=os.getenv("USE_OPENAPI_DATA_MODEL_FROM_FILE", "false").lower() == "true",
             # Semantic search
-            semantic_search_model_name=os.getenv(
-                "SEMANTIC_SEARCH__MODEL_NAME",
-                "all-MiniLM-L6-v2"
-            ),
+            semantic_search_model_name=os.getenv("SEMANTIC_SEARCH__MODEL_NAME", "all-MiniLM-L6-v2"),
             semantic_search_top_k=top_k,
-            semantic_search_timeout=int(os.getenv(
-                "SEMANTIC_SEARCH__GRAPHQL_TIMEOUT__READ",
-                "300"
-            )),
+            semantic_search_timeout=int(os.getenv("SEMANTIC_SEARCH__GRAPHQL_TIMEOUT__READ", "300")),
         )
 
     # Computed properties for convenience
@@ -217,7 +204,10 @@ class LIFSchemaConfig:
     @property
     def graphql_query_name(self) -> str:
         """GraphQL query field name (e.g., 'person' for root 'Person')."""
-        return to_graphql_query_name(self.root_type_name)
+        # root_type_name is validated to be non-empty, so result will never be None
+        result = to_graphql_query_name(self.root_type_name)
+        assert result is not None  # Validated in __post_init__
+        return result
 
     @property
     def mutation_name(self) -> str:

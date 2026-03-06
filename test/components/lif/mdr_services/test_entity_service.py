@@ -1,6 +1,7 @@
 import types
-import pytest
 from unittest.mock import AsyncMock, MagicMock
+
+import pytest
 
 pytestmark = pytest.mark.asyncio
 
@@ -265,13 +266,6 @@ async def test_check_entity_exists_returns_none_when_absent(fake_session):
     fake_session.execute.return_value = _ScalarListResult([])
     out = await svc.check_entity_exists(fake_session, "X", 1)
     assert out is None
-
-
-async def test_is_entity_by_unique_name_true_false(fake_session):
-    fake_session.execute.return_value = _ScalarListResult([types.SimpleNamespace(Id=1)])
-    assert await svc.is_entity_by_unique_name(fake_session, "dm.e") is True
-    fake_session.execute.return_value = _ScalarListResult([])
-    assert await svc.is_entity_by_unique_name(fake_session, "dm.e") is False
 
 
 async def test_get_entities_by_ids_maps_to_dtos(fake_session):

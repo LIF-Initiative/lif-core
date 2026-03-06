@@ -9,11 +9,10 @@ from typing import Any, Dict, Optional
 import jwt
 from fastapi import HTTPException, Request, status
 from fastapi.responses import JSONResponse
-from starlette.middleware.base import BaseHTTPMiddleware
-
 from lif.mdr_utils.collection_utils import convert_csv_to_set
 from lif.mdr_utils.config import get_settings
 from lif.mdr_utils.logger_config import get_logger
+from starlette.middleware.base import BaseHTTPMiddleware
 
 logger = get_logger(__name__)
 
@@ -162,8 +161,6 @@ class AuthMiddleware(BaseHTTPMiddleware):
                 if request.state.principal is None:
                     logger.warning("Auth Bearer token 'sub' is missing")
                     return _build_unauthorized(detail="Could not validate credentials")
-
-            return await call_next(request)
         except HTTPException as e:
             logger.exception("Auth middleware HTTPException")
             body = {"detail": str(e.detail)}
@@ -173,3 +170,5 @@ class AuthMiddleware(BaseHTTPMiddleware):
         except Exception:
             logger.exception("Unhandled auth middleware error")
             return JSONResponse(status_code=500, content={"detail": "Internal authentication error"})
+
+        return await call_next(request)

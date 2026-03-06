@@ -6,8 +6,6 @@ from unittest.mock import patch
 
 from lif.lif_schema_config import (
     LIFSchemaConfig,
-    LIFSchemaConfigError,
-    # Naming functions
     to_graphql_query_name,
     to_schema_name,
     to_mutation_name,
@@ -34,6 +32,7 @@ from datetime import date, datetime
 # LIFSchemaConfig Tests
 # =============================================================================
 
+
 class TestLIFSchemaConfig:
     """Tests for the main configuration class."""
 
@@ -56,10 +55,7 @@ class TestLIFSchemaConfig:
 
     def test_reference_data_roots_derived_from_additional(self):
         """Test that reference_data_roots is derived from additional_root_types."""
-        config = LIFSchemaConfig(
-            root_type_name="Person",
-            additional_root_types=["Course", "Organization"],
-        )
+        config = LIFSchemaConfig(root_type_name="Person", additional_root_types=["Course", "Organization"])
         assert config.reference_data_roots == {"Course", "Organization"}
 
     def test_from_environment(self):
@@ -86,10 +82,7 @@ class TestLIFSchemaConfig:
 
     def test_get_queryable_roots(self):
         """Test getting queryable (non-reference) roots."""
-        config = LIFSchemaConfig(
-            root_type_name="Person",
-            additional_root_types=["Course", "Organization"],
-        )
+        config = LIFSchemaConfig(root_type_name="Person", additional_root_types=["Course", "Organization"])
         queryable = config.get_queryable_roots()
         assert queryable == ["Person"]
 
@@ -97,6 +90,7 @@ class TestLIFSchemaConfig:
 # =============================================================================
 # Naming Convention Tests
 # =============================================================================
+
 
 class TestNamingConventions:
     """Tests for naming convention functions."""
@@ -143,6 +137,7 @@ class TestNamingConventions:
 # Type Mapping Tests
 # =============================================================================
 
+
 class TestTypeMappings:
     """Tests for XSD type mappings."""
 
@@ -169,30 +164,20 @@ class TestTypeMappings:
 # OpenAPI Helper Tests
 # =============================================================================
 
+
 class TestOpenAPIHelpers:
     """Tests for OpenAPI document helpers."""
 
     def test_get_schemas_openapi3(self):
         """Test extracting schemas from OpenAPI 3.x document."""
-        doc = {
-            "components": {
-                "schemas": {
-                    "Person": {"type": "object"},
-                    "Course": {"type": "object"},
-                }
-            }
-        }
+        doc = {"components": {"schemas": {"Person": {"type": "object"}, "Course": {"type": "object"}}}}
         schemas = get_schemas(doc)
         assert "Person" in schemas
         assert "Course" in schemas
 
     def test_get_schemas_swagger2(self):
         """Test extracting schemas from Swagger 2.x document."""
-        doc = {
-            "definitions": {
-                "Person": {"type": "object"},
-            }
-        }
+        doc = {"definitions": {"Person": {"type": "object"}}}
         schemas = get_schemas(doc)
         assert "Person" in schemas
 
@@ -210,12 +195,7 @@ class TestOpenAPIHelpers:
 
     def test_is_queryable_nested(self):
         """Test queryable detection in nested objects."""
-        field_def = {
-            "type": "object",
-            "properties": {
-                "id": {"x-queryable": True},
-            }
-        }
+        field_def = {"type": "object", "properties": {"id": {"x-queryable": True}}}
         assert is_queryable(field_def) is True
 
     def test_is_mutable(self):

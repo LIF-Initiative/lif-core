@@ -60,6 +60,10 @@ x-lif-graphql-api-environment-template: &lif-graphql-api-environment-template
   OPENAPI_DATA_MODEL_ID: ${OPENAPI_DATA_MODEL_ID:-17}
   OPENAPI_JSON_FILENAME: ${OPENAPI_JSON_FILENAME:-openapi_constrained_with_interactions.json}
   USE_OPENAPI_DATA_MODEL_FROM_FILE: ${USE_OPENAPI_DATA_MODEL_FROM_FILE:-false}
+  # API Key Auth configuration (empty = auth disabled, format: "key1:name1,key2:name2")
+  GRAPHQL_AUTH__API_KEYS: ${GRAPHQL_AUTH__API_KEYS:-}
+  GRAPHQL_AUTH__PUBLIC_PATHS: ${GRAPHQL_AUTH__PUBLIC_PATHS:-/health,/health-check}
+  GRAPHQL_AUTH__PUBLIC_PATH_PREFIXES: ${GRAPHQL_AUTH__PUBLIC_PATH_PREFIXES:-/docs,/openapi.json}
 
 # ----------- SERVICES -----------
 
@@ -345,6 +349,7 @@ services:
       dockerfile: projects/lif_semantic_search_mcp_server/Dockerfile2
     container_name: lif-semantic-search-mcp-server
     environment:
+      LIF_GRAPHQL_API_KEY: ${LIF_SEMANTIC_SEARCH__LIF_GRAPHQL_API_KEY:-}
       LIF_GRAPHQL_API_URL: ${LIF_GRAPHQL_API_URL:-http://lif-graphql-api-org1:8000/graphql}
       LIF_GRAPHQL_ROOT_NODE: ${LIF_GRAPHQL_ROOT_NODE:-Person}
       LIF_MDR_API_URL: ${LIF_MDR_API_URL:-http://lif-mdr-api:8012}
@@ -353,6 +358,8 @@ services:
       OPENAPI_JSON_FILENAME: ${OPENAPI_JSON_FILENAME:-openapi_constrained_with_interactions.json}
       SEMANTIC_SEARCH_SERVICE__GRAPHQL_TIMEOUT__READ: ${SEMANTIC_SEARCH_SERVICE__GRAPHQL_TIMEOUT__READ:-300}
       USE_OPENAPI_DATA_MODEL_FROM_FILE: ${USE_OPENAPI_DATA_MODEL_FROM_FILE:-false}
+    ports:
+      - "8003:8003"
     networks:
       - lif-net-org1
     depends_on:
@@ -381,6 +388,7 @@ services:
       LIF_ADVISOR_MAX_CONVERSATION_SIZE: ${LIF_ADVISOR_MAX_CONVERSATION_SIZE:-2048}
       LIF_ADVISOR_MAX_SUMMARY_SIZE: ${LIF_ADVISOR_MAX_SUMMARY_SIZE:-1024}
       OPENAI_API_KEY: ${OPENAI_API_KEY}
+      LIF_DEMO_USER_PASSWORD: ${LIF_DEMO_USER_PASSWORD:-changeme}
       CONFIG_KEY_STORE: ${CONFIG_KEY_STORE:-/etc/keys}
     ports:
       - "8004:8004"
@@ -461,6 +469,7 @@ services:
       MDR__AUTH__REFRESH_TOKEN_EXPIRE_DAYS: ${MDR__AUTH__REFRESH_TOKEN_EXPIRE_DAYS:-7}
       MDR__AUTH__PUBLIC_ALLOWLIST_EXACT: ${MDR__AUTH__PUBLIC_ALLOWLIST_EXACT:-/login,/refresh-token,/health-check}
       MDR__AUTH__PUBLIC_ALLOWLIST_STARTS_WITH: ${MDR__AUTH__PUBLIC_ALLOWLIST_STARTS_WITH:-/docs,/openapi.json}
+      LIF_DEMO_USER_PASSWORD: ${LIF_DEMO_USER_PASSWORD:-changeme}
     ports:
       - "8012:8012"
     networks:

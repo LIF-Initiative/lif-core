@@ -1,4 +1,5 @@
 import api from './api';
+import { parseEntityIdPath } from '../utils/entityIdPath';
 
 const apiBaseUrl = import.meta.env.VITE_API_URL;
 
@@ -38,7 +39,7 @@ export interface TransformationData {
     SourceAttributes?: Array<{
         AttributeId: number;
         AttributeType?: string;
-        EntityIdPath?: string; // format "id.id.id"
+        EntityIdPath?: string; // format: comma-separated IDs, e.g. "654,22,6,-352" (negative = attribute)
         Notes?: string;
         CreationDate?: string;
         ActivationDate?: string;
@@ -65,7 +66,7 @@ export interface CreateTransformationAttribute {
     AttributeId: number;
     AttributeType: string;
     EntityId?: number; // required by backend validation
-    EntityIdPath?: string; // optional, backend stores on TransformationAttributes
+    EntityIdPath?: string; // API format: comma-separated IDs, e.g. "654,22,6,-352" (negative = attribute)
     Notes?: string;
     CreationDate?: string;
     ActivationDate?: string;
@@ -264,6 +265,95 @@ export const createTransformation = async (
     };
     const result = await api.post(url, payload);
     return result.data;
+};
+
+/**
+ * Creates a new transformation or updates an existing one if a transformation
+ * with the same target attribute already exists in the group.
+ * When updating, the new source attributes are appended to the existing SourceAttributes array.
+ * @param transformation - The transformation to create or merge
+ * @param existingTransformations - Optional array of existing transformations to check against.
+ *                                   If not provided, will fetch from the group.
+ * @returns The created or updated transformation data
+ */
+export const createOrUpdateTransformation = async (
+    transformation: CreateTransformation,
+    existingTransformations?: TransformationData[]
+): Promise<TransformationData> => {
+    const { TransformationGroupId, TargetAttribute, SourceAttributes } = transformation;
+    
+    // If no target attribute specified, just create a new transformation
+    if (!TargetAttribute?.AttributeId) {
+        return await createTransformation(transformation);
+    }
+
+    // Get existing transformations if not provided
+    let transformations = existingTransformations;
+    if (!transformations) {
+        const groupData = await getTransformationsForGroup(TransformationGroupId, false);
+        transformations = groupData?.data?.Transformations || [];
+    }
+
+    // Find existing transformation with the same target attribute
+    const existingTransformation = transformations.find((t) => {
+        const tgtAttr = t.TargetAttribute;
+        if (!tgtAttr) return false;
+        
+        // Match by AttributeId and EntityIdPath (if present)
+        const matchesAttributeId = tgtAttr.AttributeId === TargetAttribute.AttributeId;
+        const matchesEntityIdPath = 
+            (!TargetAttribute.EntityIdPath && !tgtAttr.EntityIdPath) ||
+            tgtAttr.EntityIdPath === TargetAttribute.EntityIdPath;
+        
+        return matchesAttributeId && matchesEntityIdPath;
+    });
+
+    if (existingTransformation) {
+        // Merge source attributes - append new ones to existing
+        const existingSourceAttrs = existingTransformation.SourceAttributes || [];
+        const newSourceAttrs = SourceAttributes || [];
+        
+        // Filter out duplicates based on AttributeId and EntityIdPath
+        const mergedSourceAttrs = [...existingSourceAttrs];
+        for (const newAttr of newSourceAttrs) {
+            const isDuplicate = existingSourceAttrs.some(
+                (existing) =>
+                    existing.AttributeId === newAttr.AttributeId &&
+                    existing.EntityIdPath === newAttr.EntityIdPath
+            );
+            if (!isDuplicate) {
+                mergedSourceAttrs.push(newAttr as any);
+            }
+        }
+
+        // Build target attribute payload from existing transformation to ensure v2 validation
+        // is triggered on the backend (it checks TargetAttribute.EntityIdPath for format detection)
+        const existingTarget = existingTransformation.TargetAttribute;
+        const targetAttrPayload: CreateTransformationAttribute | undefined = existingTarget
+            ? {
+                  AttributeId: existingTarget.AttributeId,
+                  AttributeType: existingTarget.AttributeType || 'Target',
+                  EntityId: existingTarget.EntityId,
+                  EntityIdPath: existingTarget.EntityIdPath,
+              }
+            : TargetAttribute;
+
+        // Update the existing transformation with merged source attributes
+        // Pass TargetAttribute so backend uses v2 EntityIdPath validation
+        const updated = await updateTransformationAttributes(
+            existingTransformation.Id,
+            { 
+                SourceAttributes: mergedSourceAttrs as CreateTransformationAttribute[],
+                TargetAttribute: targetAttrPayload,
+            },
+            TransformationGroupId
+        );
+        
+        return updated as TransformationData;
+    }
+
+    // No existing transformation found, create a new one
+    return await createTransformation(transformation);
 };
 
 export const updateTransformation = async (
@@ -528,10 +618,12 @@ export const forkTransformationGroup = async (
                             AttributeType: s.AttributeType || 'Source',
                             EntityIdPath: (s as any).EntityIdPath,
                             EntityId: (s as any)?.EntityId || (() => {
-                                const p = (s as any)?.EntityIdPath as string | undefined;
-                                const seg = p ? String(p).split('.').pop() : undefined;
-                                const idn = seg ? Number(seg) : undefined;
-                                return Number.isFinite(idn as any) ? (idn as number) : undefined;
+                                // Derive EntityId from EntityIdPath (supports both old dot and new comma format)
+                                const parsed = parseEntityIdPath((s as any)?.EntityIdPath);
+                                if (parsed && parsed.entityIds.length > 0) {
+                                    return parsed.entityIds[parsed.entityIds.length - 1];
+                                }
+                                return undefined;
                             })(),
                         });
                     }
@@ -545,10 +637,12 @@ export const forkTransformationGroup = async (
                     AttributeType: g.AttributeType || 'Target',
                     EntityIdPath: (g as any).EntityIdPath,
                     EntityId: (g as any)?.EntityId || (() => {
-                        const p = (g as any)?.EntityIdPath as string | undefined;
-                        const seg = p ? String(p).split('.').pop() : undefined;
-                        const idn = seg ? Number(seg) : undefined;
-                        return Number.isFinite(idn as any) ? (idn as number) : undefined;
+                        // Derive EntityId from EntityIdPath (supports both old dot and new comma format)
+                        const parsed = parseEntityIdPath((g as any)?.EntityIdPath);
+                        if (parsed && parsed.entityIds.length > 0) {
+                            return parsed.entityIds[parsed.entityIds.length - 1];
+                        }
+                        return undefined;
                     })(),
                 };
             }

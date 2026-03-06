@@ -49,7 +49,7 @@
   },
   {
     "ParameterKey": "ImageUrl",
-    "ParameterValue": "381492161417.dkr.ecr.us-east-1.amazonaws.com/lif/dev/lif_advisor_app:2025-10-31-20-44-54-5334514"
+    "ParameterValue": "381492161417.dkr.ecr.us-east-1.amazonaws.com/lif/dev/lif_advisor_app:2026-02-17-demo-advisor-api-fix"
   },
   {
     "ParameterKey": "TaskDefIncludesFile",

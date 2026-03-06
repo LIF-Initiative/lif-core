@@ -1,6 +1,7 @@
 from copy import deepcopy
 from typing import List
 
+
 def deep_merge(dst, src):
     """
     Merge src into dst in place.

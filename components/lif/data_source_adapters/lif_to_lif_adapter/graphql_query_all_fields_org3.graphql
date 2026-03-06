@@ -26,8 +26,8 @@ query GetPersonByIdentifier($identifier: String!, $identifierType: String!) {
         name
       }
       identifier
-      #awardIssueDate
-      #credentialAwardee
+      awardIssueDate
+      credentialAwardee
     }
     CourseLearningExperience {
       informationSourceId
@@ -42,8 +42,6 @@ query GetPersonByIdentifier($identifier: String!, $identifierType: String!) {
         informationSourceOrganization
         identifier
         name
-        #awardIssueDate
-        #credentialAwardee
       }
     }
     Proficiency {
@@ -52,8 +50,6 @@ query GetPersonByIdentifier($identifier: String!, $identifierType: String!) {
       description
       RefCredentialAward {
         identifier
-        #awardIssueDate
-        #credentialAwardee
         informationSourceId
         informationSourceOrganization
       }

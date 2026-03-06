@@ -97,21 +97,39 @@ pre-commit run --all-files
 
 ---
 
-## Running Tests
+## Testing
 
-Tests are required for new features and bugfixes.
+Tests are required for new features and bug fixes.
 
-Run the test suite with:
-
-```bash
-uxv pytest
-```
-
-Or if the virtual environment has been activated with `source .venv/bin.activate`:
+### Running Tests
 
 ```bash
-pytest
+uv run pytest                                    # Run all tests
+uv run pytest test/components/lif/<module>/      # Run tests for a specific component
+uv run pytest test/path/to/test_file.py -v       # Run a specific test file
 ```
+
+### What Makes a Good Unit Test
+
+Write tests that earn their keep. Every test should verify something non-obvious about the code's behavior.
+
+**Do test:**
+- **Non-trivial transformations** — regex logic, recursion, type dispatch, multi-step pipelines where inputs interact in unexpected ways
+- **Boundary conditions** — empty inputs, None values, edge cases where behavior changes (e.g., leading digits in identifiers, CamelCase splitting combined with special characters)
+- **Bug regressions** — every bug fix should include a test that fails without the fix and passes with it
+- **End-to-end behavior** — testing a function with real inputs is more valuable than mocking every internal call. For example, test `generate_graphql_schema()` with an actual OpenAPI schema rather than mocking sub-functions.
+
+**Don't test:**
+- **Trivial wrappers** — if a function is a one-liner delegating to another tested function, testing it adds noise, not confidence
+- **Framework behavior** — don't test that Pydantic validates types or that `re.sub` works; test *your* logic that uses them
+- **Obvious guard clauses** — `if not s: return s` doesn't need its own test case unless the empty-input behavior is a documented contract
+- **Coverage for coverage's sake** — a placeholder test like `assert module is not None` has no value. Either write a real test or leave the file empty.
+
+**Guidelines:**
+- Mirror the source structure in `test/` (`test/components/lif/<module>/test_core.py`)
+- Group related tests into classes for organization
+- Prefer real objects over mocks when practical — mocks can mask bugs in the interaction between components
+- Use `pytest.raises()` with `match=` to verify specific error messages, not just error types
 
 ---
 

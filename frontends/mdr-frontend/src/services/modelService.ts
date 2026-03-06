@@ -148,14 +148,12 @@ export const getModelDetailsWithTree = async (
   const makeNode = (
     ewa: EntityWithAttributesDTO,
     pathEntityIds: string,
-    namePrefix: string,
     siblingIndex: number,
     visitedIds: Set<number>
   ): EntityTreeNode => {
-    // PathId should be the entity ID chain (e.g., "4.238") to align with backend EntityIdPath
+    // PathId uses comma-separated entity IDs (e.g., "4,238,6") to align with backend EntityIdPath format
     const eid = String(ewa.Entity.Id);
-    const pathId = pathEntityIds ? `${pathEntityIds}.${eid}` : eid;
-    const pathName = namePrefix ? `${namePrefix}.${ewa.Entity.Name}` : ewa.Entity.Name;
+    const pathId = pathEntityIds ? `${pathEntityIds},${eid}` : eid;
 
     // Avoid infinite loops in case of accidental cycles
     const nextVisited = new Set(visitedIds);
@@ -180,11 +178,9 @@ export const getModelDetailsWithTree = async (
       };
 
       if (isRef) {
-        const childPathId = `${pathId}.${child.Entity.Id}`;
-        const childPathName = `${pathName}.${displayName}`;
+        const childPathId = `${pathId},${child.Entity.Id}`;
         children.push({
           PathId: childPathId,
-          PathName: childPathName,
           EntityId: child.Entity.Id,
           Entity: adjustedChild,
           Children: [],
@@ -192,12 +188,11 @@ export const getModelDetailsWithTree = async (
         return;
       }
 
-      children.push(makeNode(adjustedChild, pathId, pathName, idx + 1, nextVisited));
+      children.push(makeNode(adjustedChild, pathId, idx + 1, nextVisited));
     });
 
     return {
       PathId: pathId,
-      PathName: pathName,
       EntityId: ewa.Entity.Id,
       Entity: ewa, // keep reference to the same object
       Children: children,
@@ -205,7 +200,7 @@ export const getModelDetailsWithTree = async (
   };
 
   const tree: EntityTreeNode[] = roots.map((ewa, idx) =>
-    makeNode(ewa, "", "", idx + 1, new Set())
+    makeNode(ewa, "", idx + 1, new Set())
   );
 
   // console.log("Entity tree:", tree, "Reference-only promoted roots:", Array.from(referenceOnlyEntityIds));

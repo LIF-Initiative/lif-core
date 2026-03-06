@@ -1,4 +1,5 @@
 from typing import List
+
 from fastapi import HTTPException
 from lif.datatypes.mdr_sql_model import (
     Attribute,
@@ -13,7 +14,7 @@ from lif.mdr_services.attribute_service import soft_delete_attribute
 from lif.mdr_services.helper_service import check_datamodel_by_id
 from lif.mdr_utils.logger_config import get_logger
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlmodel import or_, select, func
+from sqlmodel import func, or_, select
 
 logger = get_logger(__name__)
 
@@ -237,13 +238,6 @@ async def check_entity_exists(session: AsyncSession, unique_name: str, data_mode
     #     return True  # Entity with the same name exists
 
     # return False  # No entity with the same name exists
-
-
-async def is_entity_by_unique_name(session: AsyncSession, unique_name: str):
-    query = select(Entity).where(Entity.UniqueName == unique_name, Entity.Deleted == False)
-    result = await session.execute(query)
-    entity = result.scalars().first()
-    return entity is not None
 
 
 # async def get_list_of_attribute(session: AsyncSession, id: int):

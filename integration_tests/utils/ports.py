@@ -75,14 +75,25 @@ ORG_PORTS = {
 
 # Ports that are in use by other services (avoid these for testing)
 RESERVED_PORTS = {
+    8003,  # lif-semantic-search-mcp-server
     8004,  # lif-advisor-api
     8005,  # lif-orchestrator-api
     8007,  # lif-translator
     8011,  # lif-example-data-source-rest-api
-    8012,  # Reserved/in use
+    8012,  # lif-mdr-api
     3000,  # dagster-webserver
     5174,  # lif-advisor-app
 }
+
+# Global service URLs (not per-org)
+SEMANTIC_SEARCH_PORT = 8003
+SEMANTIC_SEARCH_BASE_URL = f"http://localhost:{SEMANTIC_SEARCH_PORT}"
+SEMANTIC_SEARCH_HEALTH_URL = f"{SEMANTIC_SEARCH_BASE_URL}/health"
+SEMANTIC_SEARCH_STATUS_URL = f"{SEMANTIC_SEARCH_BASE_URL}/schema/status"
+SEMANTIC_SEARCH_MCP_URL = f"{SEMANTIC_SEARCH_BASE_URL}/mcp"
+
+MDR_PORT = 8012
+MDR_BASE_URL = f"http://localhost:{MDR_PORT}"
 
 
 def get_org_ports(org_id: str) -> OrgPorts:

@@ -13,6 +13,7 @@ import {
     TransformationData,
     TransformationGroupDetails,
     createTransformation,
+    createOrUpdateTransformation,
     deleteTransformation,
     updateTransformation,
     updateTransformationGroup,
@@ -30,6 +31,13 @@ import {
     generateJsonSchema,
 } from '../../../services/modelService';
 import { buildDefaultAssignmentExpression } from '../../../utils/jsonataUtils';
+import {
+    parseEntityIdPath,
+    appendAttributeToPath,
+    extractEntityIds,
+    extractEntityPath,
+    buildAttributeLookupKey,
+} from '../../../utils/entityIdPath';
 import {
     DataModelWithDetailsDTO,
     DataModelWithDetailsWithTree,
@@ -113,7 +121,7 @@ const MappingsView: React.FC = () => {
     const leftScrollRef = useRef<HTMLDivElement | null>(null);
     const rightScrollRef = useRef<HTMLDivElement | null>(null);
     const wiresSlotRef = useRef<HTMLDivElement | null>(null);
-    // Path-aware attribute element registries: keys are `${EntityIdPath}|${AttributeId}` or just `${AttributeId}` as fallback
+    // Path-aware attribute element registries: keys are `${PathId}|${AttributeId}` or just `${AttributeId}` as fallback
     const attrElementsLeft = useRef<Map<string, HTMLElement>>(new Map());
     const attrElementsRight = useRef<Map<string, HTMLElement>>(new Map());
 
@@ -137,6 +145,9 @@ const MappingsView: React.FC = () => {
     const [selectedTargetAttrId, setSelectedTargetAttrId] = useState<
         number | null
     >(null);
+    const [selectedTargetAttrPath, setSelectedTargetAttrPath] = useState<
+        string | null
+    >(null);
     const [selectionIndex, setSelectionIndex] = useState(0);
     const [selectionAll, setSelectionAll] = useState(false);
     const [selectedTransformationIds, setSelectedTransformationIds] =
@@ -151,6 +162,9 @@ const MappingsView: React.FC = () => {
     const [reassignHoverTargetId, setReassignHoverTargetId] = useState<
         number | null
     >(null);
+    const [reassignHoverTargetPath, setReassignHoverTargetPath] = useState<
+        string | null
+    >(null);
     // Multi-wire (per-transformation) selection: store source AttributeIds for the currently selected transformation
     const [selectedWireSourceAttrIds, setSelectedWireSourceAttrIds] = useState<Set<number>>(new Set());
     // Multi-wire detach drag state (supports one or many selected source wires for the single selected transformation)
@@ -162,33 +176,37 @@ const MappingsView: React.FC = () => {
         startY: number;
         transforms: DisplayTransformationData[];
     } | null>(null);
+    // Ref mirror of reassignHoverTargetId so the reassign effect's handleUp reads
+    // the latest value without needing reassignHoverTargetId in the dep array
+    // (which caused effect re-runs + duplicate handleUp registrations).
+    const reassignHoverTargetIdRef = useRef<number | null>(null);
+    const reassignHoverTargetPathRef = useRef<string | null>(null);
+    // Guard against duplicate handleUp invocations caused by the synthetic mouseup
+    // that handleMove dispatches after the button is released.
+    const reassignProcessingRef = useRef(false);
 
-    // Build a default expression path like EntityA.EntityB.Attribute from an EntityIdPath and attribute name
+    // Build a JSONata-compatible expression path like EntityA.EntityB.Attribute from an EntityIdPath.
+    // Uses entity/attribute NAMES (not IDs) because JSONata navigates JSON documents by property names.
+    // Note: Names aren't globally unique, but within a hierarchical path they should be unambiguous.
+    // This is for display and expression building - NOT for unique identification (use PathId for that).
     const buildDirectKeyExpression = useCallback(
         (entityIdPath?: string | null, attributeName?: string | null) => {
             const parts: string[] = [];
             if (entityIdPath) {
-                const rawSegs = String(entityIdPath)
-                    .split('.')
-                    .map((s) => s.trim())
-                    .filter(Boolean);
-                rawSegs.forEach((seg) => {
-                    if (/^\d+$/.test(seg)) {
-                        // Numeric entity id
-                        const id = parseInt(seg, 10);
+                // Use utility to extract entity IDs (returns null with warning for legacy format)
+                const entityIds = extractEntityIds(entityIdPath);
+                if (entityIds.length > 0) {
+                    entityIds.forEach((id) => {
                         const ent = entityByIdRef.current.get(id);
                         if (ent?.Name) {
                             parts.push(String(ent.Name));
+                        } else {
+                            // Fallback to ID if name lookup fails
+                            parts.push(String(id));
                         }
-                        // If lookup fails, fall back to raw segment (unlikely)
-                        else {
-                            parts.push(seg);
-                        }
-                    } else {
-                        // Already a PathName token (e.g., 'Assessment', 'offeredByOrganization')
-                        parts.push(seg);
-                    }
-                });
+                    });
+                }
+                // Legacy formats already warned by extractEntityIds, just skip
             }
             if (attributeName) {
                 // Avoid duplicating final segment if attribute name already equals last path token
@@ -239,7 +257,11 @@ const MappingsView: React.FC = () => {
         setReassignTransformations([]);
         setReassignPaths([]);
         setReassignHoverTargetId(null);
+        setReassignHoverTargetPath(null);
+        reassignHoverTargetIdRef.current = null;
+        reassignHoverTargetPathRef.current = null;
         setSelectedTargetAttrId(null);
+        setSelectedTargetAttrPath(null);
         setSelectedTransformationIds(new Set());
         setSelectionAll(false);
     }, []);
@@ -302,7 +324,8 @@ const MappingsView: React.FC = () => {
                         });
                     };
                     if (targetModel.EntityTree) build(targetModel.EntityTree);
-                    const idSegments = entityIdPath.split('.').map(s => parseInt(s, 10)).filter(n => !isNaN(n));
+                    // Use extractEntityIds to handle both old and new EntityIdPath formats
+                    const idSegments = extractEntityIds(entityIdPath);
                     const entityNames = idSegments.map(id => map.get(id)).filter(Boolean) as string[];
                     // Find attribute name in target model: search in Entities list by attribute id
                     let attrName: string | null = null;
@@ -1100,14 +1123,34 @@ const MappingsView: React.FC = () => {
                             return undefined;
                         })();
 
+                    // Build the full source EntityIdPath (includes attribute as negative suffix)
+                    const fullSrcEntityIdPath = appendAttributeToPath(srcPath, dragSourceAttr.Id);
+                    // Build the full target EntityIdPath for comparison (includes attribute as negative suffix)
+                    const fullTgtEntityIdPath = appendAttributeToPath(tgtPath, dragTargetAttrId);
+
+                    // Check if this exact source->target pair already exists in ANY transformation
+                    const duplicateExists = (group.Transformations || []).some((t) => {
+                        const tpath = (t.TargetAttribute as any)?.EntityIdPath || '';
+                        const targetMatches =
+                            t.TargetAttribute?.AttributeId === dragTargetAttrId &&
+                            String(tpath) === String(fullTgtEntityIdPath || '');
+                        if (!targetMatches) return false;
+                        // Check if this specific source attribute is already mapped
+                        const srcs: any[] = Array.isArray((t as any).SourceAttributes) ? (t as any).SourceAttributes : [];
+                        return srcs.some((s: any) => String(s.EntityIdPath || '') === String(fullSrcEntityIdPath || ''));
+                    });
+                    if (duplicateExists) {
+                        // Source->target pair already exists; silently cancel
+                        return;
+                    }
+
                     // Enforce 1 transformation per target (EntityIdPath+AttributeId)
                     const existing = (group.Transformations || []).find((t) => {
-                        const tid = t.TargetAttribute?.AttributeId;
                         const tpath =
-                            (t.TargetAttribute as any)?.EntityIdPath || null;
+                            (t.TargetAttribute as any)?.EntityIdPath || '';
                         return (
-                            tid === dragTargetAttrId &&
-                            String(tpath || '') === String(tgtPath || '')
+                            t.TargetAttribute?.AttributeId === dragTargetAttrId &&
+                            String(tpath) === String(fullTgtEntityIdPath || '')
                         );
                     });
 
@@ -1118,8 +1161,7 @@ const MappingsView: React.FC = () => {
                         )
                             ? ((existing as any).SourceAttributes as any[])
                             : (existing as any).SourceAttributes?.[0]?.AttributeId
-                            ? [
-                                  {
+                            ? [{
                                       AttributeId:
                                           (existing as any).SourceAttributes?.[0]?.AttributeId,
                                       AttributeType:
@@ -1129,35 +1171,33 @@ const MappingsView: React.FC = () => {
                                           (existing as any).SourceAttributes?.[0] as any
                                       )?.EntityIdPath,
                                       EntityId: (() => {
+                                          // Use parseEntityIdPath to handle both old and new formats
                                           const p = (
                                               (existing as any).SourceAttributes?.[0] as any
                                           )?.EntityIdPath as string | undefined;
-                                          const seg = p
-                                              ? String(p).split('.').pop()
-                                              : undefined;
-                                          const idn = seg
-                                              ? Number(seg)
-                                              : undefined;
-                                          return Number.isFinite(idn as any)
-                                              ? (idn as number)
-                                              : ((existing as any).SourceAttributes?.[0] as any)?.EntityId;
+                                          if (p) {
+                                              const parsed = parseEntityIdPath(p);
+                                              if (parsed && parsed.entityIds.length > 0) {
+                                                  return parsed.entityIds[parsed.entityIds.length - 1];
+                                              }
+                                          }
+                                          return ((existing as any).SourceAttributes?.[0] as any)?.EntityId;
                                       })(),
                                   },
                               ]
                             : [];
-                        const key = (sa: any) =>
-                            `${sa.EntityIdPath || ''}|${sa.AttributeId}`;
+                        const key = (sa: any) => String(sa.EntityIdPath || '');
                         const nextSrcs = [...currentSrcs];
                         const deriveEntityIdForUpdate = (
                             path: string | null | undefined,
                             attrId: number | undefined
                         ): number | undefined => {
                             if (!attrId) return undefined;
+                            // Use parseEntityIdPath to handle both old and new formats
                             if (path) {
-                                const seg = String(path).split('.').pop();
-                                if (seg && /^\d+$/.test(seg)) {
-                                    const n = Number(seg);
-                                    if (Number.isFinite(n)) return n;
+                                const parsed = parseEntityIdPath(path);
+                                if (parsed && parsed.entityIds.length > 0) {
+                                    return parsed.entityIds[parsed.entityIds.length - 1];
                                 }
                             }
                             // Scan source model as fallback
@@ -1171,12 +1211,15 @@ const MappingsView: React.FC = () => {
                         const newSrc = {
                             AttributeId: dragSourceAttr.Id,
                             AttributeType: 'Source',
-                            EntityIdPath: srcPath,
+                            EntityIdPath: appendAttributeToPath(srcPath, dragSourceAttr.Id),
                             EntityId: deriveEntityIdForUpdate(srcPath, dragSourceAttr.Id),
                         } as any;
-                        if (!nextSrcs.some((s) => key(s) === key(newSrc))) {
-                            nextSrcs.push(newSrc);
+                        const sourceAlreadyExists = nextSrcs.some((s) => key(s) === key(newSrc));
+                        if (sourceAlreadyExists) {
+                            // Source->target pair already exists; cancel without making any changes
+                            return;
                         }
+                        nextSrcs.push(newSrc);
                         const updated = await updateTransformationAttributes(
                             existing.Id,
                             {
@@ -1209,12 +1252,11 @@ const MappingsView: React.FC = () => {
                             modelRef: typeof sourceModel | typeof targetModel
                         ): number | undefined => {
                             if (!attrId) return undefined;
-                            // 1. Try final numeric segment of path
+                            // 1. Use parseEntityIdPath to handle both old and new formats
                             if (path) {
-                                const seg = String(path).split('.').pop();
-                                if (seg && /^\d+$/.test(seg)) {
-                                    const n = Number(seg);
-                                    if (Number.isFinite(n)) return n;
+                                const parsed = parseEntityIdPath(path);
+                                if (parsed && parsed.entityIds.length > 0) {
+                                    return parsed.entityIds[parsed.entityIds.length - 1];
                                 }
                             }
                             // 2. Scan model for entity containing attribute
@@ -1228,14 +1270,14 @@ const MappingsView: React.FC = () => {
                         const srcAttrPayload = {
                             AttributeId: dragSourceAttr.Id,
                             AttributeType: 'Source',
-                            EntityIdPath: srcPath,
+                            EntityIdPath: appendAttributeToPath(srcPath, dragSourceAttr.Id),
                             EntityId:
                                 deriveEntityId(srcPath, dragSourceAttr.Id, sourceModel),
                         } as any;
                         const tgtAttrPayload = {
                             AttributeId: dragTargetAttrId,
                             AttributeType: 'Target',
-                            EntityIdPath: tgtPath,
+                            EntityIdPath: appendAttributeToPath(tgtPath, dragTargetAttrId),
                             EntityId: deriveEntityId(tgtPath, dragTargetAttrId, targetModel),
                         } as any;
                         // Build source & target JSONata paths for naming and default expression
@@ -1273,30 +1315,43 @@ const MappingsView: React.FC = () => {
                             sourcePathExpr || '',
                             targetPathExpr || ''
                         ) || (targetPathExpr && sourcePathExpr ? `${targetPathExpr} = ${sourcePathExpr}` : sourcePathExpr || targetPathExpr || '');
-                        const created = await createTransformation({
+                        // Use createOrUpdateTransformation to handle duplicate target attributes
+                        const existingTransforms = group?.Transformations || transformations;
+                        const result = await createOrUpdateTransformation({
                             TransformationGroupId: group.Id,
                             ExpressionLanguage: 'JSONata',
                             Expression: equalityExpr,
                             Name: targetPathExpr,
                             SourceAttributes: [srcAttrPayload],
                             TargetAttribute: tgtAttrPayload,
-                        });
-                        const createdWithAttrs: any = {
-                            ...created,
-                            SourceAttributes: (created as any)
+                        }, existingTransforms);
+                        const resultWithAttrs: any = {
+                            ...result,
+                            SourceAttributes: (result as any)
                                 ?.SourceAttributes ?? [srcAttrPayload],
                             TargetAttribute:
-                                (created as any)?.TargetAttribute ??
+                                (result as any)?.TargetAttribute ??
                                 tgtAttrPayload,
                         };
+                        // Check if this was an update (existing ID found) or a new creation
+                        const wasUpdate = existingTransforms.some((t) => t.Id === result.Id);
                         setTransformations((prev) => {
-                            const firstSrc = createdWithAttrs.SourceAttributes?.[0];
+                            const firstSrc = resultWithAttrs.SourceAttributes?.[0];
                             const srcEntity = entityByIdRef.current.get(firstSrc?.EntityId);
-                            const tgtEntity = entityByIdRef.current.get(createdWithAttrs.TargetAttribute?.EntityId);
+                            const tgtEntity = entityByIdRef.current.get(resultWithAttrs.TargetAttribute?.EntityId);
+                            if (wasUpdate) {
+                                // Replace existing transformation
+                                return prev.map((t) =>
+                                    t.Id === result.Id
+                                        ? { ...resultWithAttrs, SourceEntity: srcEntity, TargetEntity: tgtEntity } as any
+                                        : t
+                                );
+                            }
+                            // Append new transformation
                             return [
                                 ...prev,
                                 {
-                                    ...(createdWithAttrs || {}),
+                                    ...(resultWithAttrs || {}),
                                     SourceEntity: srcEntity,
                                     TargetEntity: tgtEntity,
                                 } as any,
@@ -1306,10 +1361,14 @@ const MappingsView: React.FC = () => {
                             prev
                                 ? {
                                       ...prev,
-                                      Transformations: [
-                                          ...prev.Transformations,
-                                          created as any,
-                                      ],
+                                      Transformations: wasUpdate
+                                          ? prev.Transformations.map((t) =>
+                                                t.Id === result.Id ? (result as any) : t
+                                            )
+                                          : [
+                                                ...prev.Transformations,
+                                                result as any,
+                                            ],
                                   }
                                 : prev
                         );
@@ -1344,7 +1403,7 @@ const MappingsView: React.FC = () => {
 
         const computeStart = (srcAttrId: number) => {
             const srcEntry = (transformation as any).SourceAttributes?.find((s: any) => s.AttributeId === srcAttrId);
-            const srcKey = srcEntry?.EntityIdPath ? `${srcEntry.EntityIdPath}|${srcAttrId}` : String(srcAttrId);
+            const srcKey = buildAttributeLookupKey(srcEntry?.EntityIdPath, srcAttrId);
             const leftEl = attrElementsLeft.current.get(srcKey) || attrElementsLeft.current.get(String(srcAttrId));
             const leftDot = leftEl?.querySelector<HTMLElement>('.mappings-column__dot--end') || leftEl || null;
             const lb = leftDot?.getBoundingClientRect();
@@ -1427,8 +1486,11 @@ const MappingsView: React.FC = () => {
                     const p = r.EntityIdPath as string | undefined;
                     let eid: number | undefined;
                     if (p) {
-                        const seg = p.split('.').pop();
-                        if (seg && /^\d+$/.test(seg)) eid = Number(seg);
+                        // Use parseEntityIdPath to handle both old and new formats
+                        const parsed = parseEntityIdPath(p);
+                        if (parsed && parsed.entityIds.length > 0) {
+                            eid = parsed.entityIds[parsed.entityIds.length - 1];
+                        }
                     }
                     if (!eid && sourceModel?.Entities) {
                         for (const ewa of sourceModel.Entities as any[]) {
@@ -1476,10 +1538,8 @@ const MappingsView: React.FC = () => {
                     (t as any).SourceAttributes?.[0];
                 const srcId = srcAttr?.AttributeId;
                 if (!srcId) return;
-                const srcKey = srcAttr?.EntityIdPath
-                    ? `${srcAttr.EntityIdPath}|${srcId}`
-                    : String(srcId);
-                const leftEl = attrElementsLeft.current.get(srcKey);
+                const srcKey = buildAttributeLookupKey(srcAttr?.EntityIdPath, srcId);
+                const leftEl = attrElementsLeft.current.get(srcKey) || attrElementsLeft.current.get(String(srcId));
                 if (!leftEl) return;
                 const leftDot =
                     leftEl.querySelector<HTMLElement>(
@@ -1503,6 +1563,7 @@ const MappingsView: React.FC = () => {
             ) as HTMLElement | null;
             let node: HTMLElement | null = el;
             let targetId: number | null = null;
+            let targetEntityPath: string | null = null;
             while (node) {
                 if (
                     node.classList?.contains('mappings-attr') &&
@@ -1510,23 +1571,53 @@ const MappingsView: React.FC = () => {
                 ) {
                     if (node.classList.contains('mappings-attr--right'))
                         targetId = Number(node.dataset.attrId);
+                    targetEntityPath = node.dataset.entityPath || null;
                     break;
                 }
                 node = node.parentElement;
             }
+            reassignHoverTargetIdRef.current = targetId;
+            reassignHoverTargetPathRef.current = targetEntityPath;
             setReassignHoverTargetId(targetId);
+            setReassignHoverTargetPath(targetEntityPath);
         };
         const handleUp = async () => {
-            const droppingOnTarget =
-                !!reassignHoverTargetId &&
-                reassignHoverTargetId !== selectedTargetAttrId;
+            // Guard: prevent duplicate invocations caused by the synthetic mouseup
+            // that handleMove dispatches when e.buttons indicates the button is already released.
+            if (reassignProcessingRef.current) return;
+            reassignProcessingRef.current = true;
+            // Read from ref so we always get the latest hover target, regardless of
+            // which effect-closure version of handleUp fires.
+            const reassignHoverTargetId = reassignHoverTargetIdRef.current;
+            const reassignHoverTargetEntityPath = reassignHoverTargetPathRef.current;
+            // Determine if drop target is genuinely different from the current target.
+            // Compare both attribute ID and entity path so that the same attribute in a
+            // different entity is recognised as a valid drop target.
+            const droppingOnTarget = (() => {
+                if (!reassignHoverTargetId) return false;
+                const currentT = reassignTransformations[0];
+                const currentTgtAttrId = currentT?.TargetAttribute?.AttributeId;
+                const currentTgtEntityIdPath = (currentT?.TargetAttribute as any)?.EntityIdPath;
+                const currentTgtEntityPath = currentTgtEntityIdPath
+                    ? extractEntityPath(currentTgtEntityIdPath)
+                    : null;
+                // Different attribute ID → definitely a different target
+                if (reassignHoverTargetId !== currentTgtAttrId) return true;
+                // Same attribute ID but different entity path → different target
+                if (
+                    reassignHoverTargetEntityPath != null &&
+                    currentTgtEntityPath != null &&
+                    reassignHoverTargetEntityPath !== currentTgtEntityPath
+                ) return true;
+                // One path known and the other not → treat as different
+                if (
+                    (reassignHoverTargetEntityPath != null) !== (currentTgtEntityPath != null)
+                ) return true;
+                return false;
+            })();
+            try {
             if (droppingOnTarget) {
-                // Determine target path from DOM or tree
-                const targetAttrEl = rightScrollRef.current?.querySelector(
-                    `[data-attr-id="${reassignHoverTargetId}"]`
-                ) as HTMLElement | null;
-                const tgtPathFromDom =
-                    targetAttrEl?.dataset?.entityPath || null;
+                const tgtPathFromDom = reassignHoverTargetEntityPath;
                 const tgtPath =
                     tgtPathFromDom ??
                     (() => {
@@ -1545,20 +1636,38 @@ const MappingsView: React.FC = () => {
                     })();
 
                 const results: Array<TransformationData | null> = [];
+                // Build full target EntityIdPath (includes attribute as negative suffix) for proper comparison
+                const fullReassignTgtPath = appendAttributeToPath(tgtPath, reassignHoverTargetId!);
                 for (const t of reassignTransformations) {
                     try {
                         const firstSrc: any = (t as any).SourceAttributes?.[0];
+                        const srcEntityIdPath = String((firstSrc as any)?.EntityIdPath || '');
+
+                        // Check if this exact source->target pair already exists; if so, skip entirely (revert the move)
+                        const duplicateExists = (group?.Transformations || []).some((et) => {
+                            if (et.Id === t.Id) return false; // don't match the transformation being moved
+                            const tpath = (et.TargetAttribute as any)?.EntityIdPath || '';
+                            const targetMatches =
+                                et.TargetAttribute?.AttributeId === reassignHoverTargetId &&
+                                String(tpath) === String(fullReassignTgtPath || '');
+                            if (!targetMatches) return false;
+                            const srcs: any[] = Array.isArray((et as any).SourceAttributes) ? (et as any).SourceAttributes : [];
+                            return srcs.some((s: any) => String(s.EntityIdPath || '') === srcEntityIdPath);
+                        });
+                        if (duplicateExists) {
+                            // Source->target pair already exists; skip this reassignment (revert)
+                            results.push(null);
+                            continue;
+                        }
+
                         // Check if a transformation already exists for this target (id+path)
                         const existing = (group?.Transformations || []).find(
                             (et) => {
-                                const tid = et.TargetAttribute?.AttributeId;
                                 const tpath =
-                                    (et.TargetAttribute as any)?.EntityIdPath ||
-                                    null;
+                                    (et.TargetAttribute as any)?.EntityIdPath || '';
                                 return (
-                                    tid === reassignHoverTargetId &&
-                                    String(tpath || '') ===
-                                        String(tgtPath || '')
+                                    et.TargetAttribute?.AttributeId === reassignHoverTargetId &&
+                                    String(tpath) === String(fullReassignTgtPath || '')
                                 );
                             }
                         );
@@ -1583,8 +1692,7 @@ const MappingsView: React.FC = () => {
                                       },
                                   ]
                                 : [];
-                            const key = (sa: any) =>
-                                `${sa.EntityIdPath || ''}|${sa.AttributeId}`;
+                            const key = (sa: any) => String(sa.EntityIdPath || '');
                             const merged = [...currentSrcs];
                             const newSrc = {
                                 AttributeId: firstSrc?.AttributeId || firstSrc?.Id,
@@ -1593,10 +1701,10 @@ const MappingsView: React.FC = () => {
                                 EntityId: (() => {
                                     const p = (firstSrc as any)?.EntityIdPath as string | undefined;
                                     if (p) {
-                                        const seg = p.split('.').pop();
-                                        if (seg && /^\d+$/.test(seg)) {
-                                            const n = Number(seg);
-                                            if (Number.isFinite(n)) return n;
+                                        // Use parseEntityIdPath to handle both old and new formats
+                                        const parsed = parseEntityIdPath(p);
+                                        if (parsed && parsed.entityIds.length > 0) {
+                                            return parsed.entityIds[parsed.entityIds.length - 1];
                                         }
                                     }
                                     // fallback search target/source model
@@ -1611,12 +1719,13 @@ const MappingsView: React.FC = () => {
                                     return undefined;
                                 })(),
                             } as any;
-                            if (
-                                newSrc.AttributeId &&
-                                !merged.some((s) => key(s) === key(newSrc))
-                            ) {
-                                merged.push(newSrc);
+                            const sourceAlreadyExists = newSrc.AttributeId && merged.some((s) => key(s) === key(newSrc));
+                            if (sourceAlreadyExists) {
+                                // Source->target pair already exists in target; skip this reassignment (don't merge or delete)
+                                results.push(null);
+                                continue;
                             }
+                            merged.push(newSrc);
                             const updated =
                                 await updateTransformationAttributes(
                                     existing.Id,
@@ -1626,10 +1735,10 @@ const MappingsView: React.FC = () => {
                                             const p = s.EntityIdPath as string | undefined;
                                             let eid: number | undefined;
                                             if (p) {
-                                                const seg = p.split('.').pop();
-                                                if (seg && /^\d+$/.test(seg)) {
-                                                    const n = Number(seg);
-                                                    if (Number.isFinite(n)) eid = n;
+                                                // Use parseEntityIdPath to handle both old and new formats
+                                                const parsed = parseEntityIdPath(p);
+                                                if (parsed && parsed.entityIds.length > 0) {
+                                                    eid = parsed.entityIds[parsed.entityIds.length - 1];
                                                 }
                                             }
                                             if (!eid) {
@@ -1693,19 +1802,18 @@ const MappingsView: React.FC = () => {
                                           EntityIdPath: (firstSrc as any)
                                               ?.EntityIdPath,
                                           EntityId: (() => {
+                                              // Use parseEntityIdPath to handle both old and new formats
                                               const p = (firstSrc as any)
                                                   ?.EntityIdPath as
                                                   | string
                                                   | undefined;
-                                              const seg = p
-                                                  ? String(p).split('.').pop()
-                                                  : undefined;
-                                              const idn = seg
-                                                  ? Number(seg)
-                                                  : undefined;
-                                              return Number.isFinite(idn as any)
-                                                  ? (idn as number)
-                                                  : (firstSrc as any)?.EntityId;
+                                              if (p) {
+                                                  const parsed = parseEntityIdPath(p);
+                                                  if (parsed && parsed.entityIds.length > 0) {
+                                                      return parsed.entityIds[parsed.entityIds.length - 1];
+                                                  }
+                                              }
+                                              return (firstSrc as any)?.EntityId;
                                           })(),
                                       }
                                     : undefined;
@@ -1715,11 +1823,11 @@ const MappingsView: React.FC = () => {
                                 modelRef: typeof sourceModel | typeof targetModel
                             ): number | undefined => {
                                 if (!attrId) return undefined;
+                                // Use parseEntityIdPath to handle both old and new formats
                                 if (path) {
-                                    const seg = String(path).split('.').pop();
-                                    if (seg && /^\d+$/.test(seg)) {
-                                        const n = Number(seg);
-                                        if (Number.isFinite(n)) return n;
+                                    const parsed = parseEntityIdPath(path);
+                                    if (parsed && parsed.entityIds.length > 0) {
+                                        return parsed.entityIds[parsed.entityIds.length - 1];
                                     }
                                 }
                                 const ents = modelRef?.Entities || [];
@@ -1732,22 +1840,14 @@ const MappingsView: React.FC = () => {
                             const tgtAttrPayload = {
                                 AttributeId: reassignHoverTargetId!,
                                 AttributeType: 'Target',
-                                EntityIdPath: tgtPath,
+                                EntityIdPath: appendAttributeToPath(tgtPath, reassignHoverTargetId!),
                                 EntityId: deriveEntityId(
                                     tgtPath,
                                     reassignHoverTargetId!,
                                     targetModel
                                 ),
                             } as any;
-                            // Build source & target JSONata paths for naming and default expression on reassignment create
-                            const srcAttrName =
-                                (firstSrc as any)?.AttributeName ||
-                                (firstSrc as any)?.Name ||
-                                undefined;
-                            const sourcePathExpr = buildDirectKeyExpression(
-                                (firstSrc as any)?.EntityIdPath,
-                                srcAttrName || null
-                            );
+                            // Derive target attribute name for the transformation name
                             const targetAttrName = (() => {
                                 if (targetModel?.Entities) {
                                     for (const ewa of targetModel.Entities) {
@@ -1766,67 +1866,70 @@ const MappingsView: React.FC = () => {
                                     tgtPath,
                                     targetAttrName
                                 ) || targetAttrName;
-                            let srcSchema: any = null;
-                            let tgtSchema: any = null;
-                            try {
-                                if (sourceModel?.EntityTree) srcSchema = generateJsonSchema(sourceModel, sourceModel.EntityTree);
-                            } catch { /* ignore */ }
-                            try {
-                                if (targetModel?.EntityTree) tgtSchema = generateJsonSchema(targetModel, targetModel.EntityTree);
-                            } catch { /* ignore */ }
-                            const equalityExpr = buildDefaultAssignmentExpression(
-                                srcSchema,
-                                tgtSchema,
-                                sourcePathExpr || '',
-                                targetPathExpr || ''
-                            ) || (targetPathExpr && sourcePathExpr ? `${targetPathExpr} = ${sourcePathExpr}` : sourcePathExpr || targetPathExpr || '');
-                            const created = await createTransformation({
+                            // Copy the expression from the old transformation instead of generating a new one.
+                            // This preserves any manual edits the user may have made to the expression.
+                            const preservedExpression = t.Expression;
+                            // Use createOrUpdateTransformation to handle duplicate target attributes
+                            const existingTransforms = group?.Transformations || transformations;
+                            const result = await createOrUpdateTransformation({
                                 TransformationGroupId:
                                     t.TransformationGroupId,
                                 ExpressionLanguage:
                                     (t.ExpressionLanguage as any) || 'JSONata',
-                                Expression: equalityExpr,
+                                Expression: preservedExpression,
                                 Name: targetPathExpr,
                                 SourceAttributes: srcAttrPayload
                                     ? [srcAttrPayload]
                                     : undefined,
                                 TargetAttribute: tgtAttrPayload,
-                            });
-                            const createdWithAttrs: any = {
-                                ...created,
+                            }, existingTransforms);
+                            const resultWithAttrs: any = {
+                                ...result,
                                 SourceAttributes:
-                                    (created as any)?.SourceAttributes ??
+                                    (result as any)?.SourceAttributes ??
                                     (srcAttrPayload
                                         ? [srcAttrPayload]
                                         : undefined),
                                 TargetAttribute:
-                                    (created as any)?.TargetAttribute ??
+                                    (result as any)?.TargetAttribute ??
                                     tgtAttrPayload,
                             };
+                            // Check if this was an update (merged into existing) vs new creation
+                            const wasUpdate = existingTransforms.some((tr) => tr.Id === result.Id && tr.Id !== t.Id);
                             await deleteTransformation(t.Id);
                             setTransformations((prev) => {
                                 const filtered = prev.filter(
                                     (p) => p.Id !== t.Id
                                 );
+                                if (wasUpdate) {
+                                    // Replace the existing transformation we merged into
+                                    return filtered.map((p) =>
+                                        p.Id === result.Id ? { ...resultWithAttrs } as any : p
+                                    );
+                                }
                                 return [
                                     ...filtered,
-                                    { ...(createdWithAttrs || {}) } as any,
+                                    { ...(resultWithAttrs || {}) } as any,
                                 ];
                             });
                             setGroup((prev) =>
                                 prev
                                     ? {
                                           ...prev,
-                                          Transformations: [
-                                              ...prev.Transformations.filter(
-                                                  (x) => x.Id !== t.Id
-                                              ),
-                                              createdWithAttrs as any,
-                                          ],
+                                          Transformations: wasUpdate
+                                              ? prev.Transformations.filter((x) => x.Id !== t.Id).map((x) =>
+                                                    x.Id === result.Id ? (resultWithAttrs as any) : x
+                                                )
+                                              : [
+                                                    ...prev.Transformations.filter(
+                                                        (x) => x.Id !== t.Id
+                                                    ),
+                                                    resultWithAttrs as any,
+                                                ],
                                       }
                                     : prev
                             );
-                            results.push(createdWithAttrs as any);
+                            results.push(resultWithAttrs as any);
                         }
                     } catch (err) {
                         console.error('Failed to reassign transformation', err);
@@ -1848,11 +1951,17 @@ const MappingsView: React.FC = () => {
                     cleanupSelection();
                 }
             }
+            } finally {
             // Always exit reassign mode and clear dashed overlays
             setReassignActive(false);
             setReassignPaths([]);
             setReassignHoverTargetId(null);
+            setReassignHoverTargetPath(null);
+            reassignHoverTargetIdRef.current = null;
+            reassignHoverTargetPathRef.current = null;
             pendingReassignRef.current = null;
+            reassignProcessingRef.current = false;
+            }
         };
         window.addEventListener('mousemove', handleMove);
         window.addEventListener('mouseup', handleUp, { once: true });
@@ -1863,7 +1972,6 @@ const MappingsView: React.FC = () => {
     }, [
         reassignActive,
         reassignTransformations,
-        reassignHoverTargetId,
         selectedTargetAttrId,
     cleanupSelection,
     wireDetachDragging,
@@ -1875,6 +1983,9 @@ const MappingsView: React.FC = () => {
         if (!reassignActive) {
             setReassignPaths([]);
             setReassignHoverTargetId(null);
+            setReassignHoverTargetPath(null);
+            reassignHoverTargetIdRef.current = null;
+            reassignHoverTargetPathRef.current = null;
         }
     }, [reassignActive]);
 
@@ -2578,6 +2689,7 @@ const MappingsView: React.FC = () => {
                         disableInteractions={groupId < 0}
                         selectionContext={{
                             selectedTargetAttrId, setSelectedTargetAttrId,
+                            selectedTargetAttrPath, setSelectedTargetAttrPath,
                             selectionIndex, setSelectionIndex,
                             selectionAll, setSelectionAll,
                             selectedTransformationIds, setSelectedTransformationIds,
@@ -2586,6 +2698,7 @@ const MappingsView: React.FC = () => {
                             setReassignTransformations:
                                 setReassignTransformations as any,
                             reassignHoverTargetId,
+                            reassignHoverTargetPath,
                             prepareReassign: (
                                 e: React.MouseEvent,
                                 transforms: any[]
@@ -2629,6 +2742,7 @@ const MappingsView: React.FC = () => {
                         disableInteractions={groupId < 0}
                         selectionContext={{
                             selectedTargetAttrId, setSelectedTargetAttrId,
+                            selectedTargetAttrPath, setSelectedTargetAttrPath,
                             selectionIndex, setSelectionIndex,
                             selectionAll, setSelectionAll,
                             selectedTransformationIds, setSelectedTransformationIds,
@@ -2637,6 +2751,7 @@ const MappingsView: React.FC = () => {
                             setReassignTransformations:
                                 setReassignTransformations as any,
                             reassignHoverTargetId,
+                            reassignHoverTargetPath,
                             prepareReassign: (
                                 e: React.MouseEvent,
                                 transforms: any[]

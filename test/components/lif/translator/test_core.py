@@ -109,18 +109,40 @@ def test_base_translator_final_validation_failure():
 # New test for Translator.run with employment preferences mapping
 @pytest.mark.asyncio
 async def test_translator_run_with_employment_preferences(monkeypatch):
-    # Input data from the prompt
+    # Input data matching the r1_demo_data structure in example_data_source_rest_api/core.py
     input_data = {
         "person": {
             "id": "100001",
-            "employment": {"preferences": {"preferred_org_types": ["Public Sector", "Private Sector"]}},
+            "employment": {
+                "preferences": {
+                    "id": "employment-preferences-100001-001",
+                    "preferred_org_types": ["Public Sector", "Private Sector"],
+                    "preferred_org_names": ["Government Agencies", "Technology Companies"],
+                }
+            },
         }
     }
 
-    # Expected result from the prompt
-    expected = {"Person": [{"EmploymentPreferences": [{"organizationTypes": ["Public Sector", "Private Sector"]}]}]}
+    # Expected LIF output matching schemas/lif-schema.json EmploymentPreferences requirements
+    expected = {
+        "Person": [
+            {
+                "EmploymentPreferences": [
+                    {
+                        "identifier": "employment-preferences-100001-001",
+                        "organizationTypes": ["Public Sector", "Private Sector"],
+                        "organizationNames": ["Government Agencies", "Technology Companies"],
+                    }
+                ]
+            }
+        ]
+    }
 
-    # Transformation payload mimicking the MDR response in transformations_for_26_to_17.json
+    # Transformation payload mimicking the MDR response
+    # Maps source fields to LIF EmploymentPreferences fields:
+    #   person.employment.preferences.id -> EmploymentPreferences.identifier
+    #   person.employment.preferences.preferred_org_types -> EmploymentPreferences.organizationTypes
+    #   person.employment.preferences.preferred_org_names -> EmploymentPreferences.organizationNames
     transformation_payload = {
         "total": 2,
         "page": 1,
@@ -138,7 +160,7 @@ async def test_translator_run_with_employment_preferences(monkeypatch):
                 "TransformationGroupDescription": None,
                 "TransformationGroupNotes": None,
                 "TransformationId": 1375,
-                "TransformationExpression": '{ "Person": [{ "EmploymentPreferences": [{ "organizationTypes": person.employment.preferences.preferred_org_types }] }] }',
+                "TransformationExpression": '{ "Person": [{ "EmploymentPreferences": [{ "identifier": person.employment.preferences.id, "organizationTypes": person.employment.preferences.preferred_org_types, "organizationNames": person.employment.preferences.preferred_org_names }] }] }',
                 "TransformationExpressionLanguage": "JSONata",
                 "TransformationNotes": None,
                 "TransformationAlignment": None,
@@ -148,6 +170,19 @@ async def test_translator_run_with_employment_preferences(monkeypatch):
                 "TransformationContributor": None,
                 "TransformationContributorOrganization": None,
                 "TransformationSourceAttributes": [
+                    {
+                        "AttributeId": 1896,
+                        "EntityId": 377,
+                        "AttributeName": "id",
+                        "AttributeType": "Source",
+                        "Notes": None,
+                        "CreationDate": None,
+                        "ActivationDate": None,
+                        "DeprecationDate": None,
+                        "Contributor": None,
+                        "ContributorOrganization": None,
+                        "EntityIdPath": "person.employment.preferences",
+                    },
                     {
                         "AttributeId": 1895,
                         "EntityId": 377,
@@ -160,7 +195,20 @@ async def test_translator_run_with_employment_preferences(monkeypatch):
                         "Contributor": None,
                         "ContributorOrganization": None,
                         "EntityIdPath": "person.employment.preferences",
-                    }
+                    },
+                    {
+                        "AttributeId": 1897,
+                        "EntityId": 377,
+                        "AttributeName": "preferred_org_names",
+                        "AttributeType": "Source",
+                        "Notes": None,
+                        "CreationDate": None,
+                        "ActivationDate": None,
+                        "DeprecationDate": None,
+                        "Contributor": None,
+                        "ContributorOrganization": None,
+                        "EntityIdPath": "person.employment.preferences",
+                    },
                 ],
                 "TransformationTargetAttribute": {
                     "AttributeId": 1876,

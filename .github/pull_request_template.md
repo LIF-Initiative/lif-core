@@ -7,36 +7,6 @@ Contributing guide: https://github.com/lif-initiative/lif-core/blob/main/docs/CO
 Code of Conduct: https://github.com/lif-initiative/lif-core/blob/main/CODE_OF_CONDUCT.md
 -->
 
-##### Checklist
-<!-- Remove items that do not apply. For completed items, change [ ] to [x]. -->
-
-- [ ] commit message follows commit guidelines (see commitlint.config.mjs)
-- [ ] tests are included (unit and/or integration tests)
-- [ ] all tests are successful
-- [ ] documentation is changed or added (in /docs directory)
-- [ ] code passes linting checks (`uv run ruff check`)
-- [ ] code passes formatting checks (`uv run ruff format`)
-- [ ] code passes type checking (`uv run ty check`)
-- [ ] pre-commit hooks have been run successfully
-- [ ] database schema changes: migration files created and CHANGELOG.md updated
-- [ ] API changes: base (Python code) documentation in `docs/`
-      and project README updated
-- [ ] configuration changes: relevant folder README updated
-- [ ] breaking changes: added to MIGRATION.md with upgrade instructions
-      and CHANGELOG.md entry
-
-##### Type of Change
-<!-- Check all that apply -->
-
-- [ ] Bug fix (non-breaking change which fixes an issue)
-- [ ] New feature (non-breaking change which adds functionality)
-- [ ] Breaking change (fix or feature that would cause existing functionality
-      to not work as expected)
-- [ ] Documentation update
-- [ ] Infrastructure/deployment change
-- [ ] Performance improvement
-- [ ] Code refactoring
-
 ##### Description of Change
 <!-- Provide a clear and detailed description of the change below this comment.
 Include:
@@ -51,12 +21,18 @@ Include:
 
 Closes # [[add Github issue number]]
 
-##### Testing
-<!-- Describe the testing you've done -->
 
-- [ ] Manual testing performed
-- [ ] Automated tests added/updated
-- [ ] Integration testing completed
+##### Type of Change
+<!-- Check all that apply -->
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality
+      to not work as expected)
+- [ ] Documentation update
+- [ ] Infrastructure/deployment change
+- [ ] Performance improvement
+- [ ] Code refactoring
 
 ##### Project Area(s) Affected
 <!-- Check all project areas affected by this change -->
@@ -71,6 +47,32 @@ Closes # [[add Github issue number]]
 - [ ] API endpoints
 - [ ] Documentation
 - [ ] Testing
+
+---
+
+##### Checklist
+<!-- REMOVE ITEMS that do not apply. For completed items, change [ ] to [x]. -->
+
+- [ ] commit message follows commit guidelines (see commitlint.config.mjs)
+- [ ] tests are included (unit and/or integration tests)
+- [ ] documentation is changed or added (in /docs directory)
+- [ ] code passes linting checks (`uv run ruff check`)
+- [ ] code passes formatting checks (`uv run ruff format`)
+- [ ] code passes type checking (`uv run ty check`)
+- [ ] pre-commit hooks have been run successfully
+- [ ] database schema changes: migration files created and CHANGELOG.md updated
+- [ ] API changes: base (Python code) documentation in `docs/`
+      and project README updated
+- [ ] configuration changes: relevant folder README updated
+- [ ] breaking changes: added to MIGRATION.md with upgrade instructions
+      and CHANGELOG.md entry
+
+##### Testing
+<!-- Describe the testing you've done -->
+
+- [ ] Manual testing performed
+- [ ] Automated tests added/updated
+- [ ] Integration testing completed
 
 ##### Additional Notes
 <!-- Any additional information that reviewers should know -->

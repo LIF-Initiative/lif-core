@@ -13,23 +13,14 @@ from utils.sample_data import SampleDataLoader
 
 def pytest_configure(config: pytest.Config) -> None:
     """Register custom markers."""
-    config.addinivalue_line(
-        "markers",
-        "org(org_id): mark test to run only for specific org(s)",
-    )
-    config.addinivalue_line(
-        "markers",
-        "layer(name): mark test for a specific service layer",
-    )
+    config.addinivalue_line("markers", "org(org_id): mark test to run only for specific org(s)")
+    config.addinivalue_line("markers", "layer(name): mark test for a specific service layer")
 
 
 def pytest_addoption(parser: pytest.Parser) -> None:
     """Add custom command line options."""
     parser.addoption(
-        "--org",
-        action="append",
-        default=[],
-        help="Run tests only for specified org(s). Can be used multiple times.",
+        "--org", action="append", default=[], help="Run tests only for specified org(s). Can be used multiple times."
     )
     parser.addoption(
         "--skip-unavailable",
@@ -59,10 +50,7 @@ def org_ports(org_id: str) -> OrgPorts:
 @pytest.fixture
 def sample_data(org_id: str, org_ports: OrgPorts) -> SampleDataLoader:
     """Load sample data for the current org."""
-    return SampleDataLoader(
-        org_id=org_id,
-        sample_data_key=org_ports.sample_data_key,
-    )
+    return SampleDataLoader(org_id=org_id, sample_data_key=org_ports.sample_data_key)
 
 
 @pytest.fixture
@@ -151,3 +139,11 @@ def require_query_planner(org_ports: OrgPorts, skip_unavailable: bool) -> None:
     if not org_ports.query_planner_url:
         pytest.skip(f"Query Planner not exposed for {org_ports.org_id}")
     check_service_available(org_ports.query_planner_url, skip_unavailable)
+
+
+@pytest.fixture
+def require_semantic_search(skip_unavailable: bool) -> None:
+    """Ensure Semantic Search MCP server is available."""
+    from utils.ports import SEMANTIC_SEARCH_HEALTH_URL
+
+    check_service_available(SEMANTIC_SEARCH_HEALTH_URL, skip_unavailable)

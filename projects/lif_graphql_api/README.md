@@ -26,3 +26,39 @@ docker run -d --name lif_graphql_api -p 8000:8000 lif_graphql_api
 ```
 
 The graphql api (and GraphiQL UI) can now be accessed at http://localhost:8000/graphql
+
+## API Key Authentication
+
+The GraphQL API supports optional API key authentication via the `X-API-Key` header.
+
+### Configuration
+
+Authentication is configured via environment variables:
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `GRAPHQL_AUTH__API_KEYS` | Comma-separated `key:name` pairs | Empty (auth disabled) |
+| `GRAPHQL_AUTH__PUBLIC_PATHS` | Paths that bypass auth | `/health,/health-check` |
+| `GRAPHQL_AUTH__PUBLIC_PATH_PREFIXES` | Path prefixes that bypass auth | `/docs,/openapi.json` |
+
+### Enable Authentication
+
+```shell
+# Run with API key authentication enabled
+docker run -d --name lif_graphql_api -p 8000:8000 \
+  -e GRAPHQL_AUTH__API_KEYS="key1:client1,key2:client2" \
+  lif_graphql_api
+```
+
+### Usage
+
+When authentication is enabled, include the API key in requests:
+
+```shell
+curl -X POST http://localhost:8000/graphql \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: key1" \
+  -d '{"query": "{ person { Name { firstName } } }"}'
+```
+
+When `GRAPHQL_AUTH__API_KEYS` is not set or empty, authentication is disabled and all requests are allowed.

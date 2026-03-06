@@ -21,24 +21,23 @@ from lif.mdr_restapi import (
     valueset_endpoint,
 )
 from lif.mdr_utils.config import get_settings
+import os
+
 from lif.mdr_utils.logger_config import get_logger
-from passlib.context import CryptContext
 from pydantic import BaseModel
 
 logger = get_logger(__name__)
+
+DEMO_USER_PASSWORD = os.environ.get("LIF_DEMO_USER_PASSWORD", "changeme")
 
 app = FastAPI(title="LIF Metadata Repository API", description="API for the LIF Metadata Repository", version="1.0.0")
 
 settings = get_settings()
 
-# Password hashing context
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
 # --- Mock Database and State ---
 users_db: List[Dict[str, Any]] = [
     {
         "username": "atsatrian_lifdemo@stateu.edu",
-        "password": "$2b$12$pJyJLoYE2QcygmcdEfUhx.7OW1hbo79e3CbrHTyKy7ATJyUPRB4CK",  # "liffy4life!"
         "firstname": "Alan",
         "lastname": "Tsatrian",  # cspell:disable-line
         "identifier": "100001",
@@ -47,7 +46,6 @@ users_db: List[Dict[str, Any]] = [
     },
     {
         "username": "jdiaz_lifdemo@stateu.edu",
-        "password": "$2b$12$pJyJLoYE2QcygmcdEfUhx.7OW1hbo79e3CbrHTyKy7ATJyUPRB4CK",  # "liffy4life!"
         "firstname": "Jenna",
         "lastname": "Diaz",  # cspell:disable-line
         "identifier": "100002",
@@ -56,7 +54,6 @@ users_db: List[Dict[str, Any]] = [
     },
     {
         "username": "smarin_lifdemo@stateu.edu",
-        "password": "$2b$12$pJyJLoYE2QcygmcdEfUhx.7OW1hbo79e3CbrHTyKy7ATJyUPRB4CK",  # "liffy4life!"
         "firstname": "Sarah",
         "lastname": "Marin",
         "identifier": "100003",
@@ -65,7 +62,6 @@ users_db: List[Dict[str, Any]] = [
     },
     {
         "username": "Rgreen11Fdemo@stateu.edu",
-        "password": "$2b$12$pJyJLoYE2QcygmcdEfUhx.7OW1hbo79e3CbrHTyKy7ATJyUPRB4CK",  # "liffy4life!"
         "firstname": "Renee",
         "lastname": "Green",
         "identifier": "100004",
@@ -74,7 +70,6 @@ users_db: List[Dict[str, Any]] = [
     },
     {
         "username": "mhanson_lifdemo@stateu.edu",
-        "password": "$2b$12$pJyJLoYE2QcygmcdEfUhx.7OW1hbo79e3CbrHTyKy7ATJyUPRB4CK",  # "liffy4life!"
         "firstname": "Matt",
         "lastname": "Hanson",
         "identifier": "100005",
@@ -83,7 +78,6 @@ users_db: List[Dict[str, Any]] = [
     },
     {
         "username": "tthatcher_lifdemo@stateu.edu",
-        "password": "$2b$12$pJyJLoYE2QcygmcdEfUhx.7OW1hbo79e3CbrHTyKy7ATJyUPRB4CK",  # "liffy4life!"
         "firstname": "Tracy",
         "lastname": "Thatcher",
         "identifier": "100006",
@@ -92,7 +86,6 @@ users_db: List[Dict[str, Any]] = [
     },
     {
         "username": "nsmith_lifdemo@stateu.edu",
-        "password": "$2b$12$pJyJLoYE2QcygmcdEfUhx.7OW1hbo79e3CbrHTyKy7ATJyUPRB4CK",  # "liffy4life!"
         "firstname": "Nancy",
         "lastname": "Smith",
         "identifier": "100007",
@@ -101,7 +94,6 @@ users_db: List[Dict[str, Any]] = [
     },
     {
         "username": "bwang_lifdemo@stateu.edu",
-        "password": "$2b$12$pJyJLoYE2QcygmcdEfUhx.7OW1hbo79e3CbrHTyKy7ATJyUPRB4CK",  # "liffy4life!"
         "firstname": "Ben",
         "lastname": "Wang",
         "identifier": "100008",
@@ -110,7 +102,6 @@ users_db: List[Dict[str, Any]] = [
     },
     {
         "username": "gdavis_lifdemo@stateu.edu",
-        "password": "$2b$12$pJyJLoYE2QcygmcdEfUhx.7OW1hbo79e3CbrHTyKy7ATJyUPRB4CK",  # "liffy4life!"
         "firstname": "George",
         "lastname": "Davis",
         "identifier": "100009",
@@ -119,10 +110,169 @@ users_db: List[Dict[str, Any]] = [
     },
     {
         "username": "cwilliams_lifdemo@stateu.edu",
-        "password": "$2b$12$pJyJLoYE2QcygmcdEfUhx.7OW1hbo79e3CbrHTyKy7ATJyUPRB4CK",  # "liffy4life!"
         "firstname": "Caleb",
         "lastname": "Williams",
         "identifier": "100010",
+        "identifier_type": "SCHOOL_ASSIGNED_NUMBER",
+        "identifier_type_enum": "SCHOOL_ASSIGNED_NUMBER",
+    },
+    {
+        "username": "dharris_lifdemo@stateu.edu",
+        "firstname": "Daniel",
+        "lastname": "Harris",
+        "identifier": "100011",
+        "identifier_type": "SCHOOL_ASSIGNED_NUMBER",
+        "identifier_type_enum": "SCHOOL_ASSIGNED_NUMBER",
+    },
+    {
+        "username": "emoore_lifdemo@stateu.edu",
+        "firstname": "Edward",
+        "lastname": "Moore",
+        "identifier": "100012",
+        "identifier_type": "SCHOOL_ASSIGNED_NUMBER",
+        "identifier_type_enum": "SCHOOL_ASSIGNED_NUMBER",
+    },
+    {
+        "username": "fwalker_lifdemo@stateu.edu",
+        "firstname": "Freya",
+        "lastname": "Walker",
+        "identifier": "100013",
+        "identifier_type": "SCHOOL_ASSIGNED_NUMBER",
+        "identifier_type_enum": "SCHOOL_ASSIGNED_NUMBER",
+    },
+    {
+        "username": "hwhite_lifdemo@stateu.edu",
+        "firstname": "Henry",
+        "lastname": "White",
+        "identifier": "100014",
+        "identifier_type": "SCHOOL_ASSIGNED_NUMBER",
+        "identifier_type_enum": "SCHOOL_ASSIGNED_NUMBER",
+    },
+    {
+        "username": "ilee_lifdemo@stateu.edu",
+        "firstname": "Isabella",
+        "lastname": "Lee",
+        "identifier": "100015",
+        "identifier_type": "SCHOOL_ASSIGNED_NUMBER",
+        "identifier_type_enum": "SCHOOL_ASSIGNED_NUMBER",
+    },
+    {
+        "username": "kthomas_lifdemo@stateu.edu",
+        "firstname": "Kai",
+        "lastname": "Thomas",
+        "identifier": "100016",
+        "identifier_type": "SCHOOL_ASSIGNED_NUMBER",
+        "identifier_type_enum": "SCHOOL_ASSIGNED_NUMBER",
+    },
+    {
+        "username": "llopez_lifdemo@stateu.edu",
+        "firstname": "Lily",
+        "lastname": "Lopez",
+        "identifier": "100017",
+        "identifier_type": "SCHOOL_ASSIGNED_NUMBER",
+        "identifier_type_enum": "SCHOOL_ASSIGNED_NUMBER",
+    },
+    {
+        "username": "lbrown_lifdemo@stateu.edu",
+        "firstname": "Leo",
+        "lastname": "Brown",
+        "identifier": "100018",
+        "identifier_type": "SCHOOL_ASSIGNED_NUMBER",
+        "identifier_type_enum": "SCHOOL_ASSIGNED_NUMBER",
+    },
+    {
+        "username": "mlewis_lifdemo@stateu.edu",
+        "firstname": "Mia",
+        "lastname": "Lewis",
+        "identifier": "100019",
+        "identifier_type": "SCHOOL_ASSIGNED_NUMBER",
+        "identifier_type_enum": "SCHOOL_ASSIGNED_NUMBER",
+    },
+    {
+        "username": "ocap_lifdemo@stateu.edu",
+        "firstname": "Oliver",
+        "lastname": "Cap",
+        "identifier": "100020",
+        "identifier_type": "SCHOOL_ASSIGNED_NUMBER",
+        "identifier_type_enum": "SCHOOL_ASSIGNED_NUMBER",
+    },
+    {
+        "username": "ptaylor_lifdemo@stateu.edu",
+        "firstname": "Poppy",
+        "lastname": "Taylor",
+        "identifier": "100021",
+        "identifier_type": "SCHOOL_ASSIGNED_NUMBER",
+        "identifier_type_enum": "SCHOOL_ASSIGNED_NUMBER",
+    },
+    {
+        "username": "rclark_lifdemo@stateu.edu",
+        "firstname": "Rosie",
+        "lastname": "Clark",
+        "identifier": "100022",
+        "identifier_type": "SCHOOL_ASSIGNED_NUMBER",
+        "identifier_type_enum": "SCHOOL_ASSIGNED_NUMBER",
+    },
+    {
+        "username": "ujackson_lifdemo@stateu.edu",
+        "firstname": "Umar",  # cspell:disable-line
+        "lastname": "Jackson",
+        "identifier": "100023",
+        "identifier_type": "SCHOOL_ASSIGNED_NUMBER",
+        "identifier_type_enum": "SCHOOL_ASSIGNED_NUMBER",
+    },
+    {
+        "username": "vperez_lifdemo@stateu.edu",
+        "firstname": "Violet",
+        "lastname": "Perez",
+        "identifier": "100024",
+        "identifier_type": "SCHOOL_ASSIGNED_NUMBER",
+        "identifier_type_enum": "SCHOOL_ASSIGNED_NUMBER",
+    },
+    {
+        "username": "wjones_lifdemo@stateu.edu",
+        "firstname": "Willow",
+        "lastname": "Jones",
+        "identifier": "100025",
+        "identifier_type": "SCHOOL_ASSIGNED_NUMBER",
+        "identifier_type_enum": "SCHOOL_ASSIGNED_NUMBER",
+    },
+    {
+        "username": "yrodriguez_lifdemo@stateu.edu",
+        "firstname": "Yasmin",  # cspell:disable-line
+        "lastname": "Rodriguez",
+        "identifier": "100026",
+        "identifier_type": "SCHOOL_ASSIGNED_NUMBER",
+        "identifier_type_enum": "SCHOOL_ASSIGNED_NUMBER",
+    },
+    {
+        "username": "zgarcia_lifdemo@stateu.edu",
+        "firstname": "Zachary",
+        "lastname": "Garcia",
+        "identifier": "100027",
+        "identifier_type": "SCHOOL_ASSIGNED_NUMBER",
+        "identifier_type_enum": "SCHOOL_ASSIGNED_NUMBER",
+    },
+    {
+        "username": "ftorres_lifdemo@stateu.edu",
+        "firstname": "Frank",
+        "lastname": "Torres",
+        "identifier": "100028",
+        "identifier_type": "SCHOOL_ASSIGNED_NUMBER",
+        "identifier_type_enum": "SCHOOL_ASSIGNED_NUMBER",
+    },
+    {
+        "username": "mmiller_lifdemo@stateu.edu",
+        "firstname": "Mary",
+        "lastname": "Miller",
+        "identifier": "100029",
+        "identifier_type": "SCHOOL_ASSIGNED_NUMBER",
+        "identifier_type_enum": "SCHOOL_ASSIGNED_NUMBER",
+    },
+    {
+        "username": "abaker_lifdemo@stateu.edu",
+        "firstname": "Aaron",
+        "lastname": "Baker",
+        "identifier": "100030",
         "identifier_type": "SCHOOL_ASSIGNED_NUMBER",
         "identifier_type_enum": "SCHOOL_ASSIGNED_NUMBER",
     },
@@ -196,24 +346,13 @@ app.add_middleware(
 # add_pagination(app)
 
 
-# --- Authentication Helper Functions ---
-def verify_password(plain_password: str, hashed_password: str) -> bool:
-    """Verify a password against its hash"""
-    return pwd_context.verify(plain_password, hashed_password)
-
-
-def get_password_hash(password: str) -> str:
-    """Generate password hash"""
-    return pwd_context.hash(password)
-
-
 def find_user(username: str, password: str) -> Dict[str, Any] | None:
-    """Find user by username and verify password"""
+    """Find user by username and verify password against the shared demo password."""
     logger.info(f"Looking for user: {username}")
     for user in users_db:
         if user["username"] == username:
             logger.info(f"Found user {username}, verifying password...")
-            if verify_password(password, user["password"]):
+            if password == DEMO_USER_PASSWORD:
                 logger.info(f"Password verification successful for {username}")
                 return user
             else:

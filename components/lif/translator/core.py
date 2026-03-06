@@ -6,10 +6,7 @@ from pydantic import BaseModel, Field
 
 from lif.logging.core import get_logger
 from lif.mdr_client.core import get_data_model_schema, get_data_model_transformation
-from lif.translator.utils import (
-    convert_transformation_to_mappings,
-    deep_merge
-)
+from lif.translator.utils import convert_transformation_to_mappings, deep_merge
 
 logger = get_logger(__name__)
 

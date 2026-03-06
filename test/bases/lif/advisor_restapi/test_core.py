@@ -20,7 +20,7 @@ class MockAgent:
 
 
 # From the hard coded users in lif/advisor_restapi
-USER_DETAILS_ALEX = {"username": "atsatrian_lifdemo@stateu.edu", "password": "liffy4life!"}
+USER_DETAILS_ALEX = {"username": "atsatrian_lifdemo@stateu.edu", "password": "changeme"}
 
 
 @pytest.mark.asyncio

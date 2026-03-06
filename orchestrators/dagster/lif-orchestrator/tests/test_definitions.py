@@ -22,11 +22,7 @@ def test_query_planner_util_imports():
 
 def test_lif_schema_config_imports():
     """Test that lif_schema_config can be imported directly."""
-    from lif.lif_schema_config import (
-        PERSON_DOT_PASCAL,
-        PERSON_KEY_PASCAL,
-        LIFSchemaConfig,
-    )
+    from lif.lif_schema_config import PERSON_DOT_PASCAL, PERSON_KEY_PASCAL, LIFSchemaConfig
 
     assert PERSON_DOT_PASCAL == "Person."
     assert PERSON_KEY_PASCAL == "Person"
@@ -43,12 +39,7 @@ def test_data_source_adapters_imports():
 
 def test_datatypes_imports():
     """Test that datatypes can be imported."""
-    from lif.datatypes import (
-        LIFFragment,
-        LIFQueryPlanPart,
-        OrchestratorJobQueryPlanPartResults,
-        OrchestratorJobResults,
-    )
+    from lif.datatypes import LIFFragment, LIFQueryPlanPart, OrchestratorJobQueryPlanPartResults, OrchestratorJobResults
 
     assert LIFFragment is not None
     assert LIFQueryPlanPart is not None
