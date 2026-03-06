@@ -1,5 +1,8 @@
 import { DialogField } from "../Dialog/Dialog";
 
+
+const PatternRegex = "^[A-Za-z][A-Za-z0-9_./-]*$";
+const PatternErrStr = " must start with a letter and contain only letters, numbers, underscores, periods, hyphens, and forward slashes.";
 const capitalize = (s: string): string => { return s?.length ? s.charAt(0).toUpperCase() + s.slice(1) : ""; }
 
 /** Dev Note: Once we get actual user data we should use that for Contributor and ContributorOrganization */
@@ -18,16 +21,16 @@ export const entityCreateFields = (model: any): DialogField[] => {
       type: "text" as const,
       label: "Name",
       required: true,
-      pattern: "^[A-Za-z][A-Za-z0-9_]*$",
-      patternErr: "Name must start with a letter and contain only letters, numbers, and underscores.",
+      pattern: PatternRegex,
+      patternErr: "Name" + PatternErrStr,
     },
     {
       name: "UniqueName",
       type: "text" as const,
       label: "Unique Name",
       required: true,
-      pattern: "^[A-Za-z][A-Za-z0-9_]*$",
-      patternErr: "Unique Name must start with a letter and contain only letters, numbers, and underscores.",
+      pattern: PatternRegex,
+      patternErr: "Unique Name" + PatternErrStr,
     },
     { name: "Description", type: "text" as const, label: "Description" },
     {
@@ -104,16 +107,16 @@ export const attributeCreateFields = (model: any, valueSetId: string | number | 
       type: "text" as const,
       label: "Name",
       required: true,
-      pattern: "^[A-Za-z][A-Za-z0-9_]*$",
-      patternErr: "Name must start with a letter and contain only letters, numbers, and underscores.",
+      pattern: PatternRegex,
+      patternErr: "Name" + PatternErrStr,
     },
     {
       name: "UniqueName",
       type: "text" as const,
       label: "Unique Name",
       required: true,
-      pattern: "^[A-Za-z][A-Za-z0-9_]*$",
-      patternErr: "Unique Name must start with a letter and contain only letters, numbers, and underscores.",
+      pattern: PatternRegex,
+      patternErr: "Unique Name" + PatternErrStr,
     },
     {
       name: "DataType",
@@ -196,8 +199,8 @@ export const valueSetCreateFields = (model: any): DialogField[] => {
       type: "text" as const,
       label: "Name",
       required: true,
-      pattern: "^[A-Za-z][A-Za-z0-9_]*$",
-      patternErr: "Name must start with a letter and contain only letters, numbers, and underscores.",
+      pattern: PatternRegex,
+      patternErr: "Name" + PatternErrStr,
     },
     { name: "Description", type: "text" as const, label: "Description" },
     {
@@ -248,8 +251,8 @@ export const valueCreateFields = (model: any): DialogField[] => {
       type: "text" as const,
       label: "Value Name",
       required: true,
-      pattern: "^[A-Za-z][A-Za-z0-9_]*$",
-      patternErr: "Value Name must start with a letter and contain only letters, numbers, and underscores.",
+      pattern: PatternRegex,
+      patternErr: "Value Name" + PatternErrStr,
     },
     { name: "Description", type: "text" as const, label: "Description" },
     {
