@@ -1,6 +1,8 @@
+import json
 from typing import Any, Dict, List, Optional
 
 from fastapi import APIRouter, Depends, Query, Request, Response, status
+from fastapi.encoders import jsonable_encoder
 from lif.mdr_dto.transformation_dto import (
     CreateTransformationDTO,
     CreateTransformationGroupDTO,
@@ -223,6 +225,20 @@ async def get_all_transformation_groups(
         }
 
     return {"total": total_count, "data": transformations}
+
+
+@router.get("/{transformation_group_id}/export")
+async def export_transformation_group(transformation_group_id: int, session: AsyncSession = Depends(get_session)):
+    _, group_data = await transformation_service.get_paginated_transformations_for_a_group(
+        session=session, group_id=transformation_group_id, pagination=False, make_exportable=True
+    )
+    # Normalize to JSON-safe Python objects
+    encoded = jsonable_encoder(group_data)
+    # Force download as .json
+    filename = f"transformation-group-{transformation_group_id}.json"
+    headers = {"Content-Disposition": f'attachment; filename="{filename}"'}
+    payload = json.dumps(encoded, indent=2)
+    return Response(content=payload, media_type="application/json", headers=headers)
 
 
 @router.get("/{transformation_group_id}", response_model=Dict[str, Any])
