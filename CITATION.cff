@@ -1,0 +1,7 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - affiliation: LIF Initiative
+title: "LIF (Learner Information Framework)"
+repository-code: https://github.com/LIF-Initiative/lif-core
+license: Apache-2.0
