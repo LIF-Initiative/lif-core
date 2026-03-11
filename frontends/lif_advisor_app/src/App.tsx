@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import ChatInterface from './components/ChatInterface';
 import LoginPanel from './components/LoginPanel';
+import Banner from './components/Banner';
 import axiosInstance from './utils/axios';
 import { UserDetails } from './types';
 import { jwtDecode } from 'jwt-decode';
@@ -68,15 +69,39 @@ function App() {
     }
   }, []);
 
+  // Sample banner content with HTML and links - same as MDR frontend
+  const bannerContent = (
+    <>
+      Need to cite this project? Visit{" "}
+      <a 
+        href="https://github.com/LIF-Initiative/lif-core" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        className="text-blue-700 underline hover:text-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 rounded"
+      >
+        https://github.com/LIF-Initiative/lif-core
+      </a>{" "}
+      or click the copy button to grab the citation.
+    </>
+  );
+
+  // Text to be copied when copy button is clicked
+  const copyText = "LIF Initiative. (2026). LIF Core: Core framework of LIF components [Computer software]. GitHub. https://github.com/LIF-Initiative/lif-core";
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-2">
-      {isLoggedIn && user ? (
-        <div className="w-full max-w-5xl h-[90vh] shadow-2xl rounded-xl overflow-hidden border border-gray-200">
-          <ChatInterface key={user.username} onLogout={handleLogout} user={user} />
-        </div>
-      ) : (
-        <LoginPanel onLoginSuccess={handleLoginSuccess} />
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col">
+      {isLoggedIn && user && (
+        <Banner content={bannerContent} copyText={copyText} user={user} />
       )}
+      <div className="flex items-center justify-center p-2 flex-1">
+        {isLoggedIn && user ? (
+          <div className="w-full max-w-5xl h-[90vh] shadow-2xl rounded-xl overflow-hidden border border-gray-200">
+            <ChatInterface key={user.username} onLogout={handleLogout} user={user} />
+          </div>
+        ) : (
+          <LoginPanel onLoginSuccess={handleLoginSuccess} />
+        )}
+      </div>
     </div>
   );
 }

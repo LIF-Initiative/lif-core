@@ -49,7 +49,7 @@ This runs the application and automatically refreshes the browser as you change 
     ```
     npm run dev
     ```
-3.  open a web browser and visit <http://localhost:5173>
+3.  open a web browser and visit <http://localhost:5174>
 
 ### Docker
 
@@ -59,7 +59,7 @@ This runs the application and automatically refreshes the browser as you change 
     ```
 2. Run the image
     ``` shell
-    docker run -d --name lif_advisor_app -p 5173:80 lif_advisor_app
+    docker run -d --name lif_advisor_app -p 5174:80 lif_advisor_app
     ```
 
-The web application can then be accessed at http://localhost:5173
+The web application can then be accessed at http://localhost:5174

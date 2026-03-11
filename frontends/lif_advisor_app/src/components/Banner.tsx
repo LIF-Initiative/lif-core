@@ -1,33 +1,36 @@
 import React, { useState, useEffect } from "react";
-import { Button, Flex, Text } from "@radix-ui/themes";
-import { CopyIcon, Cross1Icon } from "@radix-ui/react-icons";
-import { useAuth } from "../../context/AuthContext";
-import "./Banner.css";
+import { Copy, X } from "lucide-react";
+import { UserDetails } from "../types";
 
 interface BannerProps {
   content: React.ReactNode;
   copyText?: string;
+  user: UserDetails | null;
 }
 
-const Banner: React.FC<BannerProps> = ({ content, copyText }) => {
+const Banner: React.FC<BannerProps> = ({ content, copyText, user }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [copySuccess, setCopySuccess] = useState(false);
-  const { user } = useAuth();
 
   // Check if banner should be shown
   useEffect(() => {
-    if (user) {
-      const bannerDismissed = localStorage.getItem(`banner-citation-${user.username || 'user'}`);
+    if (user && user.username) {
+      const storageKey = `banner-citation-${user.username}`;
+      const bannerDismissed = localStorage.getItem(storageKey);
+      
       if (!bannerDismissed) {
         setIsVisible(true);
+      } else {
+        setIsVisible(false);
       }
     }
   }, [user]);
 
   const handleDismiss = () => {
     setIsVisible(false);
-    if (user) {
-      localStorage.setItem(`banner-citation-${user.username || 'user'}`, 'true');
+    if (user && user.username) {
+      const storageKey = `banner-citation-${user.username}`;
+      localStorage.setItem(storageKey, 'true');
     }
   };
 
@@ -64,45 +67,46 @@ const Banner: React.FC<BannerProps> = ({ content, copyText }) => {
 
   return (
     <div 
-      className="banner"
+      className="bg-blue-50 border-b border-blue-200 text-gray-700 px-4 py-3 relative w-full z-50"
       role="banner"
       aria-label="Important notification"
       onKeyDown={handleKeyDown}
     >
-      <Flex className="banner-content" align="center" gap="3">
-        <div className="banner-text" aria-live="polite">
+      <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
+        <div className="flex-1 text-sm leading-relaxed" aria-live="polite">
           {content}
         </div>
         
-        <Flex className="banner-actions" align="center" gap="2">
+        <div className="flex items-center gap-2 flex-shrink-0">
           {copyText && (
-            <Button
-              variant="soft"
-              size="1"
-              className="banner-copy-button"
+            <button
+              className="inline-flex items-center justify-center p-1.5 rounded-md text-gray-700 hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 transition-colors relative"
               onClick={handleCopy}
               aria-label={copySuccess ? "Text copied to clipboard" : "Copy text to clipboard"}
               title={copySuccess ? "Copied!" : "Copy to clipboard"}
             >
-              <CopyIcon />
-              {copySuccess && <span className="copy-success-text">Copied!</span>}
-            </Button>
+              <Copy size={16} />
+              {copySuccess && (
+                <span className="absolute left-full ml-2 bg-green-600 text-white px-2 py-1 rounded text-xs whitespace-nowrap animate-fade-in-out">
+                  Copied!
+                </span>
+              )}
+            </button>
           )}
           
-          <Button
-            variant="ghost"
-            size="1"
-            className="banner-close-button"
+          <button
+            className="inline-flex items-center justify-center p-1.5 rounded-md text-black hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 transition-colors"
             onClick={handleDismiss}
             aria-label="Dismiss notification"
             title="Dismiss"
           >
-            <Cross1Icon />
-          </Button>
-        </Flex>
-      </Flex>
+            <X size={16} />
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
+
 
 export default Banner;
