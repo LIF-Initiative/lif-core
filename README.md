@@ -1,3 +1,13 @@
+> **If you use this software in research or presentations, please cite it.**
+> See the recommended citation below.
+
+## Citation
+
+If you use this project, please cite:
+
+LIF Initiative. *LIF (Learner Information Framework)*.  2026.  
+GitHub repository: https://github.com/LIF-Initiative/lif-core
+
 # lif-core
 
 The LIF Core project is a modular collection of components designed to facilitate the aggregation of learner
