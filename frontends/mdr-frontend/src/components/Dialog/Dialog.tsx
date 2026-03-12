@@ -44,7 +44,8 @@ export interface DialogField {
   help?: string; // potential help text
   accept?: string;
   inputMode?: InputMode;
-  pattern?: string;
+  patternRegex?: string;
+  patternDeny?: string;
   patternErr?: string;
 }
 
@@ -117,9 +118,13 @@ export const CrudDialog: React.FC<CrudDialogProps> = ({
       return;
     }
 
-    const regexFields = fields.filter((f) => f.pattern && createParams[f.name] && !new RegExp(f.pattern).test(createParams[f.name]));
-    if (regexFields.length) {
-      setCreateError(`The following fields have invalid values:\n > ${regexFields.map(f => f.patternErr).join("\n > ")}`);
+    let patternErrors: any = [];
+    const regexFields = fields.filter((f) => f.patternRegex && createParams[f.name] && !new RegExp(f.patternRegex).test(createParams[f.name]));
+    patternErrors = [...patternErrors, ...regexFields];
+    const deniedFields = fields.filter((f) => f.patternDeny && createParams[f.name] && new RegExp(f.patternDeny).test(createParams[f.name]));
+    patternErrors = [...patternErrors, ...deniedFields];
+    if (patternErrors.length) {
+      setCreateError(`The following fields have invalid values:\n > ${patternErrors.map((f: any) => f.patternErr).join("\n > ")}`);
       return;
     }
   
@@ -308,7 +313,7 @@ export const CrudDialog: React.FC<CrudDialogProps> = ({
                     placeholder={`Enter ${field.label.toLowerCase()}`}
                     onChange={(e) => handleFieldValueChange(field, e.target.value) }
                     inputMode={field.inputMode}
-                    pattern={field.pattern}
+                    pattern={field.patternRegex}
                     title={field.patternErr ?? ""}
                     readOnly={field.readOnly || (isEditMode && field.name === "CreationDate")}
                   />
