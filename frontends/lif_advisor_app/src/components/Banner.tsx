@@ -3,20 +3,33 @@ import { Copy, X } from "lucide-react";
 import { UserDetails } from "../types";
 
 interface BannerProps {
+  name: string;
   content: React.ReactNode;
   copyText?: string;
+  copyRichText?: string;
   user: UserDetails | null;
 }
 
-const Banner: React.FC<BannerProps> = ({ content, copyText, user }) => {
+const Banner: React.FC<BannerProps> = ({ name, content, copyText, copyRichText, user }) => {
+  name = name || "default";
+  copyRichText = copyRichText || "";
+  copyText = copyText || stripHtml(copyRichText) || "";
+
   const [isVisible, setIsVisible] = useState(false);
   const [copySuccess, setCopySuccess] = useState(false);
+
+  function stripHtml(html: string) {
+    const temporalDivElement = document.createElement("div"); 
+    temporalDivElement.innerHTML = html;
+    return temporalDivElement.textContent || temporalDivElement.innerText || ""; 
+  }
+
 
   // Check if banner should be shown
   useEffect(() => {
     if (user && user.username) {
-      const storageKey = `banner-citation-${user.username}`;
-      const bannerDismissed = localStorage.getItem(storageKey);
+      const storageKey = `banner-${name || 'default'}-${user.username}`;
+      const bannerDismissed = localStorage.getItem(storageKey) === 'true';
       
       if (!bannerDismissed) {
         setIsVisible(true);
@@ -24,12 +37,12 @@ const Banner: React.FC<BannerProps> = ({ content, copyText, user }) => {
         setIsVisible(false);
       }
     }
-  }, [user]);
+  }, [user, name]);
 
   const handleDismiss = () => {
     setIsVisible(false);
     if (user && user.username) {
-      const storageKey = `banner-citation-${user.username}`;
+      const storageKey = `banner-${name || 'default'}-${user.username}`;
       localStorage.setItem(storageKey, 'true');
     }
   };
@@ -38,14 +51,22 @@ const Banner: React.FC<BannerProps> = ({ content, copyText, user }) => {
     if (!copyText) return;
 
     try {
-      await navigator.clipboard.writeText(copyText);
+      if (copyRichText) {
+        const clipboardItem = new ClipboardItem({
+          'text/html': new Blob([copyRichText], { type: 'text/html' }),
+          'text/plain': new Blob([copyText || ''], { type: 'text/plain' })
+        });
+        await navigator.clipboard.write([clipboardItem]);
+      } else {
+        await navigator.clipboard.writeText(copyText);
+      }
       setCopySuccess(true);
       setTimeout(() => setCopySuccess(false), 2000);
     } catch (err) {
       console.error('Failed to copy text: ', err);
-      // Fallback for older browsers
+      // Final fallback for older browsers
       const textArea = document.createElement('textarea');
-      textArea.value = copyText;
+      textArea.value = copyText || "";
       document.body.appendChild(textArea);
       textArea.select();
       document.execCommand('copy');
@@ -78,7 +99,7 @@ const Banner: React.FC<BannerProps> = ({ content, copyText, user }) => {
         </div>
         
         <div className="flex items-center gap-2 flex-shrink-0">
-          {copyText && (
+          {(copyText || copyRichText) && (
             <button
               className="inline-flex items-center justify-center p-1.5 rounded-md text-gray-700 hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 transition-colors relative"
               onClick={handleCopy}

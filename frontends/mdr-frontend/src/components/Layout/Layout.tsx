@@ -21,12 +21,13 @@ const Layout: React.FC<any> = ({ children }) => {
     </>
   );
   // Text to be copied when copy button is clicked
-  const copyText = "LIF Initiative. LIF (Learner Information Framework). 2026. GitHub repository: https://github.com/LIF-Initiative/lif-core";
+  const copyText = `LIF Initiative. LIF (Learner Information Framework). 2026. GitHub repository: https://github.com/LIF-Initiative/lif-core`;
+  const copyRichText = `LIF Initiative. <em>LIF (Learner Information Framework)</em>. 2026.<br/> GitHub repository: <a href="https://github.com/LIF-Initiative/lif-core" target="_blank">https://github.com/LIF-Initiative/lif-core</a>`;
 
   return (
     <RouterWrapper>
       <Flex direction={"column"} className="app-container">
-        <Banner content={bannerContent} copyText={copyText} />
+        <Banner name="citation" content={bannerContent} copyText={copyText} copyRichText={copyRichText} />
         <Header />
         <main className="app-main">
           {location.pathname === "/" ? children : <Outlet />}
