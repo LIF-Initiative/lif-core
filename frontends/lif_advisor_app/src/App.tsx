@@ -86,14 +86,14 @@ function App() {
   );
 
   // Text to be copied when copy button is clicked
-  const copyText = "LIF Initiative. (2026). LIF Core: Core framework of LIF components [Computer software]. GitHub. https://github.com/LIF-Initiative/lif-core";
+  const copyText = "LIF Initiative. LIF (Learner Information Framework). 2026. GitHub repository: https://github.com/LIF-Initiative/lif-core";
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col">
       {isLoggedIn && user && (
         <Banner content={bannerContent} copyText={copyText} user={user} />
       )}
-      <div className="flex items-center justify-center p-2 flex-1">
+      <div className="flex items-center justify-center p-4 md:p-8 lg:p-12 flex-1">
         {isLoggedIn && user ? (
           <div className="w-full max-w-5xl h-[90vh] shadow-2xl rounded-xl overflow-hidden border border-gray-200">
             <ChatInterface key={user.username} onLogout={handleLogout} user={user} />

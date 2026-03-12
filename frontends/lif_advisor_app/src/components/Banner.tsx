@@ -67,7 +67,7 @@ const Banner: React.FC<BannerProps> = ({ content, copyText, user }) => {
 
   return (
     <div 
-      className="bg-blue-50 border-b border-blue-200 text-gray-700 px-4 py-3 relative w-full z-50"
+      className="sticky top-0 bg-blue-50 border-b border-blue-200 text-gray-700 px-4 py-3 relative w-full z-50"
       role="banner"
       aria-label="Important notification"
       onKeyDown={handleKeyDown}

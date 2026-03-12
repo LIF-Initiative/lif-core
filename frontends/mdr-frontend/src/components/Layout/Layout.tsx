@@ -21,7 +21,7 @@ const Layout: React.FC<any> = ({ children }) => {
     </>
   );
   // Text to be copied when copy button is clicked
-  const copyText = "LIF Initiative. (2026). LIF Core: Core framework of LIF components [Computer software]. GitHub. https://github.com/LIF-Initiative/lif-core";
+  const copyText = "LIF Initiative. LIF (Learner Information Framework). 2026. GitHub repository: https://github.com/LIF-Initiative/lif-core";
 
   return (
     <RouterWrapper>
