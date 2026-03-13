@@ -93,7 +93,7 @@ function App() {
       {isLoggedIn && user && (
         <Banner name="citation" content={bannerContent} copyText={copyText} copyRichText={copyRichText} user={user} />
       )}
-      <div className="flex items-center justify-center p-4 md:p-8 lg:p-12 flex-1">
+      <div className="flex items-center justify-center p-4 md:p-8 lg:p-11 flex-1">
         {isLoggedIn && user ? (
           <div className="w-full max-w-5xl h-[90vh] shadow-2xl rounded-xl overflow-hidden border border-gray-200">
             <ChatInterface key={user.username} onLogout={handleLogout} user={user} />
