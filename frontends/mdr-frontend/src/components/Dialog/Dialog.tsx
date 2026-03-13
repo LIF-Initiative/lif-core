@@ -44,7 +44,9 @@ export interface DialogField {
   help?: string; // potential help text
   accept?: string;
   inputMode?: InputMode;
-  pattern?: string;
+  patternRegex?: string;
+  patternDeny?: string;
+  patternErr?: string;
 }
 
 export interface DialogItem {
@@ -92,6 +94,10 @@ export const CrudDialog: React.FC<CrudDialogProps> = ({
           nextParams.BaseDataModelId = null;
         }
       }
+      // # Disabled pattern validation here; now handled on handleCreateOrEdit
+      // if (field.pattern && createParams[field.name] && !new RegExp(field.pattern).test(createParams[field.name])) {
+      //   setCreateError(`The following fields have invalid values:\n > ${field.patternErr}`);
+      // }
       return nextParams;
     });
   };
@@ -109,6 +115,16 @@ export const CrudDialog: React.FC<CrudDialogProps> = ({
     const missingFields = requiredFields.filter((f) => !createParams[f]);
     if (missingFields.length) {
       setCreateError(`Please complete all required fields: ${missingFields.join(", ")}`);
+      return;
+    }
+
+    let patternErrors: any = [];
+    const regexFields = fields.filter((f) => f.patternRegex && createParams[f.name] && !new RegExp(f.patternRegex).test(createParams[f.name]));
+    patternErrors = [...patternErrors, ...regexFields];
+    const deniedFields = fields.filter((f) => f.patternDeny && createParams[f.name] && new RegExp(f.patternDeny).test(createParams[f.name]));
+    patternErrors = [...patternErrors, ...deniedFields];
+    if (patternErrors.length) {
+      setCreateError(`The following fields have invalid values:\n > ${patternErrors.map((f: any) => f.patternErr).join("\n > ")}`);
       return;
     }
   
@@ -228,7 +244,7 @@ export const CrudDialog: React.FC<CrudDialogProps> = ({
           {createError && (
             <>
               <br /><br />
-              <Text color="red" size="2" mb="3">
+              <Text color="red" size="2" mb="3" style={{ whiteSpace: "pre-line" }}>
                 {createError}
               </Text>
             </>
@@ -297,7 +313,8 @@ export const CrudDialog: React.FC<CrudDialogProps> = ({
                     placeholder={`Enter ${field.label.toLowerCase()}`}
                     onChange={(e) => handleFieldValueChange(field, e.target.value) }
                     inputMode={field.inputMode}
-                    pattern={field.pattern}
+                    pattern={field.patternRegex}
+                    title={field.patternErr ?? ""}
                     readOnly={field.readOnly || (isEditMode && field.name === "CreationDate")}
                   />
                 )}
