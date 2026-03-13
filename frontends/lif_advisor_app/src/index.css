@@ -18,6 +18,21 @@
   50% { opacity: 1; }
 }
 
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  20%, 80% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+}
+
 .typing-dot {
   @apply w-2 h-2 bg-gray-400 rounded-full;
   animation: blink 1.4s infinite;
@@ -31,12 +46,17 @@
   animation-delay: 0.4s;
 }
 
+.animate-fade-in-out {
+  animation: fadeInOut 2s ease-in-out;
+}
+
 body {
   @apply bg-gray-50;
 }
 
 #root {
-  @apply h-screen p-4 md:p-8 lg:p-12;
+  /* @apply h-screen p-4 md:p-8 lg:p-12; */
+  padding: 0 !important;
 }
 
 /* Add smooth scrolling to the entire page */

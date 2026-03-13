@@ -1,0 +1,141 @@
+.banner {
+  background-color: var(--accent-2);
+  border-bottom: 1px solid var(--accent-6);
+  color: var(--accent-12);
+  position: relative;
+  width: 100%;
+  z-index: 100;
+}
+
+.banner-content {
+  padding: 0.75rem var(--padding-x, 1rem);
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.banner-text {
+  flex: 1;
+  line-height: 1.4;
+}
+
+.banner-text a {
+  color: var(--accent-11);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.banner-text a:hover,
+.banner-text a:focus {
+  color: var(--accent-12);
+  text-decoration-thickness: 2px;
+}
+
+.banner-text a:focus {
+  outline: 2px solid var(--focus-8);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.banner-actions {
+  flex-shrink: 0;
+}
+
+.banner-copy-button {
+  position: relative;
+  min-width: 2.5rem;
+  transition: all 0.2s ease;
+}
+
+.banner-copy-button:hover {
+  background-color: var(--accent-4);
+}
+
+.banner-copy-button:focus {
+  outline: 2px solid var(--focus-8);
+  outline-offset: 2px;
+}
+
+.copy-success-text {
+  position: absolute;
+  left: 100%;
+  margin-left: 0.5rem;
+  display: contents;
+  background-color: var(--green-9);
+  color: black;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  animation: fadeInOut 2s ease-in-out;
+}
+
+.banner-close-button {
+  color: var(--accent-11);
+  transition: all 0.2s ease;
+}
+
+.banner-close-button:hover {
+  color: var(--accent-12);
+  background-color: var(--accent-4);
+}
+
+.banner-close-button:focus {
+  outline: 2px solid var(--focus-8);
+  outline-offset: 2px;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  20%, 80% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .banner {
+    border-bottom: 2px solid;
+  }
+  
+  .banner-text a {
+    text-decoration-thickness: 2px;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .banner-copy-button,
+  .banner-close-button {
+    transition: none;
+  }
+  
+  .copy-success-text {
+    animation: none;
+  }
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .banner {
+    padding: 0.5rem;
+  }
+  
+  .banner-content {
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: flex-start;
+  }
+  
+  .banner-actions {
+    align-self: flex-end;
+  }
+}
