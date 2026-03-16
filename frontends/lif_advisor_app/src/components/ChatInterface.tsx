@@ -4,6 +4,7 @@ import MessageInput from './MessageInput';
 import { useChat } from '../hooks/useChat';
 import { BarChart3, Search, LogOut } from 'lucide-react';
 import { UserDetails } from '../types';
+import { trackLogout } from '../utils/analytics';
 
 interface ChatInterfaceProps {
   onLogout: () => void;
@@ -21,6 +22,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onLogout, user }) => {
   const handleLogout = async () => {
     if (isUserActionsDisabled) return;
     setLoggingOut(true);
+    trackLogout();
     displayLoggingOutMessage();
     await onLogout();
   };

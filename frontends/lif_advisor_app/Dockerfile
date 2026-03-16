@@ -1,9 +1,11 @@
 # Stage 1: build the vite application
 FROM node:20-alpine AS build
 
-# Accept a build-time argument for the API URL
+# Accept build-time arguments
 ARG LIF_ADVISOR_API_URL
 ENV LIF_ADVISOR_API_URL=${LIF_ADVISOR_API_URL}
+ARG GA_MEASUREMENT_ID
+ENV GA_MEASUREMENT_ID=${GA_MEASUREMENT_ID}
 
 # Set working directory
 WORKDIR /app
@@ -15,8 +17,9 @@ RUN apk update && apk upgrade && npm ci
 # Copy the rest of the application
 COPY . .
 
-# Inject Vite environment variable and build
+# Inject Vite environment variables and build
 RUN echo "VITE_LIF_ADVISOR_API_URL=${LIF_ADVISOR_API_URL}" > .env && \
+    echo "VITE_GA_MEASUREMENT_ID=${GA_MEASUREMENT_ID}" >> .env && \
     npm run build
 
 # Stage 2: serve the built app with nginx

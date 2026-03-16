@@ -60,6 +60,7 @@ import EditGroupDialog from './components/EditGroupDialog';
 import ForkGroupDialog from './components/ForkGroupDialog';
 import DetachSourcesDialog from './components/DetachSourcesDialog';
 import BulkTransformationsDialog from './components/BulkTransformationsDialog';
+import { trackEvent } from '../../../utils/analytics';
 
 interface DisplayTransformationData extends TransformationData {
     SourceEntity?: EntityDTO;
@@ -648,6 +649,7 @@ const MappingsView: React.FC = () => {
         if (groupIdParam != null) {
             const id = parseInt(groupIdParam, 10);
             if (!isNaN(id)) {
+                trackEvent('mapping_opened', { group_id: String(id) });
                 setGroupId(id);
                 setError(null);
             } else {

@@ -6,6 +6,7 @@ import { SimpleTree, transformData } from "./SimpleTree";
 import { CrudDialog } from "../Dialog/Dialog";
 import ModelTree from "../ModelExplorer/ModelExplorer";
 import { errorToString } from "../../utils/errorUtils";
+import { trackEvent } from "../../utils/analytics";
 
 const FileDEBUG = false;
 const debugLog = (...args: any[]) => { if(FileDEBUG) console.log(...args); };
@@ -44,6 +45,10 @@ const DataModelSelector: React.FC<ExplorePageLayoutProps> = ({
       console.warn("Model not found for ID:", id);
       return;
     }
+    trackEvent('model_selected', {
+      model_id: String(id),
+      model_type: model.Type ?? 'unknown',
+    });
     model.urlParam = extraPath;
     setModelPath(path);
     setSelectedModel(model);

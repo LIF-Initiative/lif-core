@@ -4,6 +4,7 @@ import { RouterProvider } from "react-router-dom";
 import { MdrProvider } from "./context/MdrContext";
 import { AuthProvider } from "./context/AuthContext";
 import router from "./pages/Routes";
+import "./utils/analytics";
 import "./index.css";
 import "@radix-ui/themes/styles.css";
 

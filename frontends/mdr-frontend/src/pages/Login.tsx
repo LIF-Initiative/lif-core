@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import authService from "../services/authService";
+import { trackLogin, trackLoginFailed } from "../utils/analytics";
 import {
   Box,
   Card,
@@ -42,10 +43,12 @@ const Login: React.FC = () => {
 
     try {
       await authService.login({ username, password });
+      trackLogin('password');
       // Redirect to the intended page or home
       const from = location.state?.from?.pathname || "/";
       window.location.href = from;
     } catch (error) {
+      trackLoginFailed('password');
       setError("Invalid username or password");
     } finally {
       setIsLoading(false);
