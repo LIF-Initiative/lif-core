@@ -47,6 +47,7 @@ jobs:
       run: |
         npm ci
         echo "VITE_API_URL=https://mdr-api.${{ env.ENV_NAME }}.${{ env.DOMAIN }}" > .env
+        echo "VITE_GA_MEASUREMENT_ID=G-VZ515ZL70E" >> .env
         npm run build
 
     - name: Sync to S3
