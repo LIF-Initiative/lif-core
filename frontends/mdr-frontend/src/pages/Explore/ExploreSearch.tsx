@@ -3,6 +3,7 @@ import { Box, Card, Flex, Separator, Text } from "@radix-ui/themes";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { searchAll } from "../../services/searchService";
 import { getAttributeEntityAssociationsByAttr } from "../../services/attributesService";
+import { trackEvent } from "../../utils/analytics";
 
 const ExploreSearch: React.FC = () => {
     const [params] = useSearchParams();
@@ -10,6 +11,7 @@ const ExploreSearch: React.FC = () => {
     const navigate = useNavigate();
 
     const fetchSearchResults = async (keyword: string) => {
+        trackEvent('search_performed', { search_term: keyword });
         const results = await searchAll(keyword);
         console.log("results", results);
         setSearchResults(results);

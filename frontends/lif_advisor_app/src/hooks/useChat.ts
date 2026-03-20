@@ -3,6 +3,7 @@ import { Message } from '../types';
 import { generateId, delay } from '../utils/helpers';
 import axios from 'axios';
 import axiosInstance from '../utils/axios';
+import { trackEvent } from '../utils/analytics';
 
 export const useChat = () => {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -81,6 +82,7 @@ export const useChat = () => {
         if (isMounted) {
           setIsTyping(false);
           setIsInitializing(false);
+          trackEvent('conversation_started');
         }
       }
     };
@@ -104,6 +106,7 @@ export const useChat = () => {
     };
 
     setMessages(prev => [...prev, userMessage]);
+    trackEvent('message_sent');
 
     const typingMessage: Message = {
       id: generateId(),
