@@ -25,8 +25,8 @@ FROM nginx:1.26-alpine AS serve
 # Copy built files from the previous stage
 COPY --from=build /app/dist /usr/share/nginx/html/
 
-# Optionally: copy custom nginx config - for SPA, you'll need this, similar to mdr-frontend
-# COPY ./docker/nginx.conf /etc/nginx/conf.d/default.conf
+# Copy custom nginx config for SPA fallback routing
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Expose default Nginx port
 EXPOSE 80
