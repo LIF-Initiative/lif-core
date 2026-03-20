@@ -6,6 +6,7 @@ from lif.datatypes.mdr_sql_model import (
     DatamodelElementType,
     DataModelType,
     EntityAttributeAssociation,
+    ExpressionLanguageType,
     Transformation,
     TransformationAttribute,
     TransformationGroup,
@@ -1023,8 +1024,53 @@ async def get_transformation_group_by_id(session: AsyncSession, id: int):
     return transformation_group
 
 
+async def _resolve_entity_id_path_to_named_path(
+    session: AsyncSession, id_path: str, cache: dict[tuple[str, int], str]
+) -> str:
+    from lif.datatypes.mdr_sql_model import Attribute, Entity
+
+    ids = parse_transformation_path(id_path)
+    segments: list[str] = []
+
+    for i, raw_id in enumerate(ids):
+        is_last = i == len(ids) - 1
+        if not is_last and raw_id < 0:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Unable to export - invalid path '{id_path}': non-terminal ID '{raw_id}' must be positive",
+            )
+        is_attribute = is_last and raw_id < 0
+        cleaned_id = abs(raw_id)
+        cache_key = ("attribute" if is_attribute else "entity", cleaned_id)
+
+        if cache_key not in cache:
+            record = await session.get(Attribute, cleaned_id) if is_attribute else await session.get(Entity, cleaned_id)
+            record_type = cache_key[0].capitalize()
+            if not record:
+                raise HTTPException(
+                    status_code=404,
+                    detail=f"Unable to export - {record_type} ID {cleaned_id} in path '{id_path}' not found",
+                )
+            if record.Deleted == True:
+                raise HTTPException(
+                    status_code=404,
+                    detail=f"Unable to export - {record_type} ID {cleaned_id} in path '{id_path}' is deleted",
+                )
+            record_type_flag = "~" if is_attribute else ""
+            cache[cache_key] = f"{record.DataModelId}:{record_type_flag}{record.UniqueName}"
+
+        segments.append(cache[cache_key])
+
+    return ",".join(segments)
+
+
 async def get_paginated_transformations_for_a_group(
-    session: AsyncSession, group_id: int, offset: int = 0, limit: int = 10, pagination: bool = True
+    session: AsyncSession,
+    group_id: int,
+    offset: int = 0,
+    limit: int = 10,
+    pagination: bool = True,
+    make_exportable: bool = False,  # Only is honored when pagination is False and this is set to True.
 ):
     transformation_group = await get_transformation_group_by_id(session=session, id=group_id)
     transformation_group_dto = TransformationGroupDTO.from_orm(transformation_group)
@@ -1053,15 +1099,14 @@ async def get_paginated_transformations_for_a_group(
             .limit(limit)
         )
     else:
-        transformations_query = (
-            select(Transformation)
-            .where(Transformation.TransformationGroupId == group_id, Transformation.Deleted == False)
-            .order_by(Transformation.Id)
-        )
+        where_expressions = [Transformation.TransformationGroupId == group_id, Transformation.Deleted == False]
+        if make_exportable:
+            where_expressions.append(Transformation.ExpressionLanguage == ExpressionLanguageType.JSONata)
+        transformations_query = select(Transformation).where(*where_expressions).order_by(Transformation.Id)
 
     result = await session.execute(transformations_query)
     transformations = result.scalars().all()
-
+    entity_attribute_cache: dict[tuple[str, int], str] = {}
     for transformation in transformations:
         # Get related transformation attributes
         query = select(TransformationAttribute).where(
@@ -1100,6 +1145,11 @@ async def get_paginated_transformations_for_a_group(
                 ContributorOrganization=transformation_attribute.ContributorOrganization,
                 EntityIdPath=transformation_attribute.EntityIdPath,
             )
+
+            if make_exportable:
+                attribute_dto.EntityIdPath = await _resolve_entity_id_path_to_named_path(
+                    session=session, id_path=transformation_attribute.EntityIdPath, cache=entity_attribute_cache
+                )
 
             # Assign based on the attribute type (Source or Target)
             if transformation_attribute.AttributeType == "Source":
