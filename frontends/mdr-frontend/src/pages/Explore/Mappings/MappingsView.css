@@ -86,7 +86,7 @@
   display: grid;
   grid-template-columns: 1fr auto; /* name | actions */
   align-items: center;
-  gap: 12px;
+  gap: 8px;
 }
 
 .mappings-group-header__name {
@@ -195,7 +195,7 @@
 .mappings-group-header__actions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
   margin-left: 4px;
 }
 
