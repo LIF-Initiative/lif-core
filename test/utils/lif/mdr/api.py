@@ -110,6 +110,13 @@ async def create_transformation_groups(
     source_data_model_id: str,
     target_data_model_id: str,
     group_name: str,
+    group_contributor: str | None = None,
+    group_contributor_organization: str | None = None,
+    group_description: str | None = None,
+    group_notes: str | None = None,
+    group_creation_date: str | None = None,
+    group_activation_date: str | None = None,
+    group_deprecation_date: str | None = None,
     headers: dict = HEADER_MDR_API_KEY_GRAPHQL,
 ) -> str:
     """
@@ -120,6 +127,13 @@ async def create_transformation_groups(
         source_data_model_id: The ID of the source data model
         target_data_model_id: The ID of the target data model
         group_name: The name to assign to the transformation group
+        group_contributor: The name of the contributor for the transformation group (optional)
+        group_contributor_organization: The organization of the contributor for the transformation group (optional)
+        group_description: The description of the transformation group (optional)
+        group_notes: Notes for the transformation group (optional)
+        group_creation_date: The creation date of the transformation group (optional)
+        group_activation_date: The activation date of the transformation group (optional)
+        group_deprecation_date: The deprecation date of the transformation group (optional)
         headers: Optional headers to include in the request (default is HEADER_MDR_API_KEY_GRAPHQL)
 
     Returns:
@@ -127,39 +141,55 @@ async def create_transformation_groups(
     """
 
     # Create transformation group between source and target
+    payload = {
+        "SourceDataModelId": source_data_model_id,
+        "TargetDataModelId": target_data_model_id,
+        "Name": group_name,
+        "GroupVersion": "1.0",
+    }
+    if group_contributor:
+        payload["Contributor"] = group_contributor
+    if group_contributor_organization:
+        payload["ContributorOrganization"] = group_contributor_organization
+    if group_description:
+        payload["Description"] = group_description
+    if group_notes:
+        payload["Notes"] = group_notes
+    if group_creation_date:
+        payload["CreationDate"] = group_creation_date
+    if group_activation_date:
+        payload["ActivationDate"] = group_activation_date
+    if group_deprecation_date:
+        payload["DeprecationDate"] = group_deprecation_date
 
-    response = await async_client_mdr.post(
-        "/transformation_groups/",
-        headers=headers,
-        json={
-            "SourceDataModelId": source_data_model_id,
-            "TargetDataModelId": target_data_model_id,
-            "Name": group_name,
-            "GroupVersion": "1.0",
-        },
-    )
+    response = await async_client_mdr.post("/transformation_groups/", headers=headers, json=payload)
 
     # Confirm transformation group response and gather ID
 
     assert response.status_code == 201, str(response.text) + str(response.headers)
-    group_id = response.json()["Id"]
-    assert response.json() == {
-        "Id": group_id,
-        "SourceDataModelId": source_data_model_id,
-        "TargetDataModelId": target_data_model_id,
-        "SourceDataModelName": None,
-        "TargetDataModelName": None,
-        "Name": group_name,
-        "GroupVersion": "1.0",
-        "Description": None,
-        "Notes": None,
-        "CreationDate": None,
-        "ActivationDate": None,
-        "DeprecationDate": None,
-        "Contributor": None,
-        "ContributorOrganization": None,
-        "Tags": None,
-    }
+    response_data = response.json()
+    group_id = response_data["Id"]
+    diff = DeepDiff(
+        response_data,
+        {
+            "Id": group_id,
+            "SourceDataModelId": source_data_model_id,
+            "TargetDataModelId": target_data_model_id,
+            "SourceDataModelName": None,
+            "TargetDataModelName": None,
+            "Name": group_name,
+            "GroupVersion": "1.0",
+            "Description": group_description,
+            "Notes": group_notes,
+            "CreationDate": group_creation_date,
+            "ActivationDate": group_activation_date,
+            "DeprecationDate": group_deprecation_date,
+            "Contributor": group_contributor,
+            "ContributorOrganization": group_contributor_organization,
+            "Tags": None,
+        },
+    )
+    assert diff == {}, f"Failed to create transformation group: {diff}"
 
     return group_id
 
@@ -179,7 +209,7 @@ async def create_transformation(
     headers: dict = HEADER_MDR_API_KEY_GRAPHQL,
     expected_status_code: int = 201,
     expected_response: Optional[dict] = None,
-) -> str:
+) -> dict:
     """
     Helper function to create a transform between a single source attribute and a target attribute
 
@@ -197,7 +227,7 @@ async def create_transformation(
         headers: Optional headers to include in the request (default is HEADER_MDR_API_KEY_GRAPHQL)
 
     Returns:
-        The ID of the created transformation
+        The created transformation as a dictionary
     """
     response = await async_client_mdr.post(
         "/transformation_groups/transformations/",
@@ -321,3 +351,34 @@ async def update_transformation(
             assert response.json() == expected_response, str(response.text) + str(response.headers)
         return response.text
     return None
+
+
+async def export_transformation_group(
+    *,
+    async_client_mdr: AsyncClient,
+    transformation_group_id: str,
+    headers: dict = HEADER_MDR_API_KEY_GRAPHQL,
+    expected_status_code: int = 200,
+    expected_response_data: Optional[dict] = None,
+) -> dict:
+    """
+    Helper function to export transformation group
+
+    Args:
+        async_client_mdr: An instance of AsyncClient to make HTTP requests to the MDR API
+        transformation_group_id: The ID of the transformation group to export
+        headers: Optional headers to include in the request (default is HEADER_MDR_API_KEY_GRAPHQL)
+
+    Returns:
+        The response json
+    """
+    response = await async_client_mdr.get(f"/transformation_groups/{transformation_group_id}/export", headers=headers)
+
+    # Confirm response
+    response_json = response.json()
+    assert response.status_code == expected_status_code, str(response.text) + str(response.headers)
+    if expected_response_data is not None:
+        diff = DeepDiff(response_json, expected_response_data)
+        assert diff == {}, diff
+
+    return response_json

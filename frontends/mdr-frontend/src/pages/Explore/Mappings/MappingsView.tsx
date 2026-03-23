@@ -61,6 +61,7 @@ import ImportGroupDialog from './components/ImportGroupDialog';
 import ForkGroupDialog from './components/ForkGroupDialog';
 import DetachSourcesDialog from './components/DetachSourcesDialog';
 import BulkTransformationsDialog from './components/BulkTransformationsDialog';
+import { trackEvent } from '../../../utils/analytics';
 
 import { Pencil2Icon, LayersIcon, UploadIcon, DownloadIcon } from "@radix-ui/react-icons";
 
@@ -652,6 +653,7 @@ const MappingsView: React.FC = () => {
         if (groupIdParam != null) {
             const id = parseInt(groupIdParam, 10);
             if (!isNaN(id)) {
+                trackEvent('mapping_opened', { group_id: String(id) });
                 setGroupId(id);
                 setError(null);
             } else {

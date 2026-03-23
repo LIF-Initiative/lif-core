@@ -3,6 +3,7 @@ import axios from 'axios';
 import axiosInstance from '../utils/axios';
 import { KeyRound, User } from 'lucide-react';
 import { UserDetails } from '../types';
+import { trackLogin, trackLoginFailed } from '../utils/analytics';
 
 interface LoginPanelProps {
   onLoginSuccess: (user: UserDetails) => void;
@@ -40,10 +41,12 @@ const LoginPanel: React.FC<LoginPanelProps> = ({ onLoginSuccess }) => {
       if (response.data.success) {
         localStorage.setItem('token', response.data.access_token);
         localStorage.setItem('refreshToken', response.data.refresh_token);
+        trackLogin('password');
         onLoginSuccess(response.data.user);
       }
     } catch (error) {
       if (!axios.isCancel(error)) {
+        trackLoginFailed('password');
         setError('Invalid credentials. Please try again.');
       }
     } finally {

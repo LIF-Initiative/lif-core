@@ -18,6 +18,7 @@ AWS_REGION=us-east-1
 S3_BUCKET=""  # Resolved after AWS credentials are verified
 SSM_DISTRIBUTION_ID="/${ENV_NAME}/${SERVICE_NAME}/DistributionId"
 VITE_API_URL="https://mdr-api.${ENV_NAME}.lif.unicon.net"
+GA_MEASUREMENT_ID="G-VZ515ZL70E"
 FRONTEND_DIR="frontends/mdr-frontend"
 
 # Colors
@@ -226,6 +227,7 @@ build_frontend() {
 
     log_info "Building with VITE_API_URL=$VITE_API_URL..."
     echo "VITE_API_URL=$VITE_API_URL" > "$build_dir/.env"
+    echo "VITE_GA_MEASUREMENT_ID=$GA_MEASUREMENT_ID" >> "$build_dir/.env"
     (cd "$build_dir" && npm run build --silent) || {
         log_error "npm run build failed"
         exit 1
