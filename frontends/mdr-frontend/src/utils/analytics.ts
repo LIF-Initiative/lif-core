@@ -17,8 +17,8 @@ function loadGtag(): void {
 
   window.dataLayer = window.dataLayer || [];
   // Must use `arguments` (not rest params) — gtag.js checks for Arguments objects in dataLayer
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any, prefer-rest-params
-  window.gtag = function () { (window.dataLayer as any[]).push(arguments); } as any;
+  // eslint-disable-next-line prefer-rest-params
+  window.gtag = function () { window.dataLayer.push(arguments); };
   window.gtag('js', new Date());
   window.gtag('config', MEASUREMENT_ID, { anonymize_ip: true });
 }
