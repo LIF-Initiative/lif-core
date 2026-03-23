@@ -44,6 +44,13 @@ class DatasetTransformWithEmbeddings:
         source_data_model_name: str,
         target_data_model_name: str,
         transformation_group_name: str,
+        transformation_group_contributor: str | None = None,
+        transformation_group_contributor_organization: str | None = None,
+        transformation_group_description: str | None = None,
+        transformation_group_notes: str | None = None,
+        transformation_group_creation_date: str | None = None,
+        transformation_group_activation_date: str | None = None,
+        transformation_group_deprecation_date: str | None = None,
     ) -> "DatasetTransformWithEmbeddings":
         """Prepare the dataset by creating source/target data models and transformation group."""
 
@@ -133,7 +140,7 @@ class DatasetTransformWithEmbeddings:
         (target_data_model_id, target_schema) = await create_data_model_by_upload(
             async_client_mdr=async_client_mdr,
             schema_path=Path(__file__).parent / "transform_with_embeddings_target.json",
-            data_model_name=f"{source_data_model_name}_target",
+            data_model_name=f"{target_data_model_name}_target",
             data_model_type="SourceSchema",
         )
         flow1_target_parent_entity_id = find_object_property_by_unique_name(
@@ -193,6 +200,13 @@ class DatasetTransformWithEmbeddings:
             source_data_model_id=source_data_model_id,
             target_data_model_id=target_data_model_id,
             group_name=f"{transformation_group_name}_transform_group",
+            group_contributor=transformation_group_contributor,
+            group_contributor_organization=transformation_group_contributor_organization,
+            group_description=transformation_group_description,
+            group_notes=transformation_group_notes,
+            group_creation_date=transformation_group_creation_date,
+            group_activation_date=transformation_group_activation_date,
+            group_deprecation_date=transformation_group_deprecation_date,
         )
 
         return cls(
