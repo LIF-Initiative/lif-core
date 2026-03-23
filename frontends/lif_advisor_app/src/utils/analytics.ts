@@ -16,9 +16,10 @@ function loadGtag(): void {
   document.head.appendChild(script);
 
   window.dataLayer = window.dataLayer || [];
-  window.gtag = function gtag(...args: unknown[]) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (window.dataLayer as any[]).push(args);
+  // gtag.js expects the `arguments` object to be pushed into dataLayer (not a rest-parameter array)
+  // eslint-disable-next-line prefer-rest-params
+  window.gtag = function () {
+    window.dataLayer.push(arguments);
   };
   window.gtag('js', new Date());
   window.gtag('config', MEASUREMENT_ID, { anonymize_ip: true });
