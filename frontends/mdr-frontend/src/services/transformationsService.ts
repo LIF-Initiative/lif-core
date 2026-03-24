@@ -398,7 +398,7 @@ export const exportTransformationsForGroup = async (id: number) => {
         if (result.status !== 200) {
             throw new Error(`API export failed with status of ${result.status} ${result.statusText}`);
         }
-        return result?.data || result;
+        return result?.data;
     } catch (e) {
         console.error('Export failed, possibly due to missing endpoint.', url, e);
         return null;
