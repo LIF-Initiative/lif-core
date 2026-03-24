@@ -391,6 +391,21 @@ export const deleteTransformation = async (id: number) => {
     return result.data;
 };
 
+export const exportTransformationsForGroup = async (id: number) => {
+    let url = `${apiBaseUrl}/transformation_groups/${id}/export`;
+    try {
+        let result = await api.get(url);
+        if (result.status !== 200) {
+            throw new Error(`API export failed with status of ${result.status} ${result.statusText}`);
+        }
+        return result?.data || result;
+    } catch (e) {
+        console.error('Export failed, possibly due to missing endpoint.', url, e);
+        return null;
+    }
+};
+
+
 // ---------------- Value Mappings ----------------
 export interface ValueMapping {
     Id: number;

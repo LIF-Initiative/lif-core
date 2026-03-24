@@ -23,6 +23,7 @@ import {
     forkTransformationGroup,
     existsTransformationGroup,
     updateTransformationAttributes,
+    exportTransformationsForGroup,
 } from '../../../services/transformationsService';
 import {
     getModelDetailsWithTree,
@@ -62,7 +63,7 @@ import ForkGroupDialog from './components/ForkGroupDialog';
 import DetachSourcesDialog from './components/DetachSourcesDialog';
 import BulkTransformationsDialog from './components/BulkTransformationsDialog';
 import { trackEvent } from '../../../utils/analytics';
-
+import { downloadJsonFile } from '../../../utils/downloadJsonFile';
 import { Pencil2Icon, LayersIcon, UploadIcon, DownloadIcon } from "@radix-ui/react-icons";
 
 interface DisplayTransformationData extends TransformationData {
@@ -2184,11 +2185,12 @@ const MappingsView: React.FC = () => {
     }, [group]);
 
 
-    const onExportGroup = useCallback(() => {
+    const onExportGroup = useCallback(async () => {
         if (!group) return;
-        console.warn('> TODO: Implement export transformations for group from Issue #771');
-        // TODO: Use endpoint from https://github.com/LIF-Initiative/lif-core/issues/771
-        // TODO: New transofmrationService func calling `/transformation_groups/${id}/export`?
+        const result = await exportTransformationsForGroup(group.Id);
+        if (result) { // API doesn't return anything on failure, so only trigger download if we got a result back
+            downloadJsonFile(result, `transformation_group_${group.Id}.json`);
+        }
     }, [group]);
 
     /** Add dynamic keyboard listener for trigger wire deletion */
@@ -2397,9 +2399,9 @@ const MappingsView: React.FC = () => {
                                 <button type="button" className="mappings-icon-btn" title="Export transformations" onClick={onExportGroup}>
                                     <DownloadIcon />
                                 </button>
-                                <button type="button" className="mappings-icon-btn" title="Import transformations" onClick={() => setImportDialogOpen(true)}>
+                                {/* <button type="button" className="mappings-icon-btn" title="Import transformations" onClick={() => setImportDialogOpen(true)}>
                                     <UploadIcon />
-                                </button>
+                                </button> */}
                                 <button type="button" className="mappings-icon-btn" title="Edit details" onClick={onEditDetails}>
                                     <Pencil2Icon />
                                 </button>
