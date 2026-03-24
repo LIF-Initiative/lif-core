@@ -392,17 +392,20 @@ export const deleteTransformation = async (id: number) => {
 };
 
 export const exportTransformationsForGroup = async (id: number) => {
-    let url = `${apiBaseUrl}/transformation_groups/${id}/export`;
+    const url = `${apiBaseUrl}/transformation_groups/${id}/export`;
     try {
-        let result = await api.get(url);
-        if (result.status !== 200) {
-            throw new Error(`API export failed with status of ${result.status} ${result.statusText}`);
+        const result = await api.get(url);
+        if (result?.status !== 200) {
+            const resultText = `${result.status} ${result.statusText}${result.data?.detail ? ` - ${result.data.detail}` : ''}`;
+            console.error(`The transformation group failed to export. Response details: ${resultText}`);
+        } else {
+            return result.data;
         }
-        return result?.data;
-    } catch (e) {
-        console.error('Export failed, possibly due to missing endpoint.', url, e);
-        return null;
+    } catch(e: any) {
+        const eDetails = e?.response?.data?.detail || e.message || e;
+        console.error('Error occurred while exporting transformation group:', eDetails);
     }
+    return null;
 };
 
 

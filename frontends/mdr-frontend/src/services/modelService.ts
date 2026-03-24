@@ -10,6 +10,7 @@ import {
   DataModelWithDetailsWithTree,
   StateType,
 } from "../types";
+import { downloadJsonFile } from "../utils/downloadJsonFile";
 
 const apiBaseUrl = import.meta.env.VITE_API_URL;
 
@@ -863,15 +864,7 @@ export const downloadOpenApiSchema = async (id: number, type?: string, pub?: boo
   const fileName = `data_model_${id}_${type}_openapi_schema.json`;
   const result = await getOpenApiSchema(id, pub, mdEnt, mdAttr, mdFull, true);
   if (result) {
-    const link = document.createElement('a');
-    const url = window.URL.createObjectURL(result);
-    link.href = url;
-    link.setAttribute('type', 'hidden');
-    link.setAttribute('download', fileName);
-    document.body.appendChild(link);
-    link.click();
-    window.URL.revokeObjectURL(url);
-    document.body.removeChild(link);
+    downloadJsonFile(result, fileName);
   } else {
     console.error("No data received for file download.");
   }

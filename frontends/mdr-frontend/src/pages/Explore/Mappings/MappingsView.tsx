@@ -2396,10 +2396,10 @@ const MappingsView: React.FC = () => {
                                 })()}
                             </div>
                             <div className="mappings-group-header__actions">
-                                <button type="button" className="mappings-icon-btn" title="Export transformations" onClick={onExportGroup}>
+                                <button type="button" className="mappings-icon-btn" title="Export transformation group" onClick={onExportGroup}>
                                     <DownloadIcon />
                                 </button>
-                                {/* <button type="button" className="mappings-icon-btn" title="Import transformations" onClick={() => setImportDialogOpen(true)}>
+                                {/* <button type="button" className="mappings-icon-btn" title="Import transformation group" onClick={() => setImportDialogOpen(true)}>
                                     <UploadIcon />
                                 </button> */}
                                 <button type="button" className="mappings-icon-btn" title="Edit details" onClick={onEditDetails}>
