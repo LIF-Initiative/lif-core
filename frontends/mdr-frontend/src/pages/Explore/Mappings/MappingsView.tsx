@@ -2189,7 +2189,7 @@ const MappingsView: React.FC = () => {
 
 
     const onExportGroup = useCallback(async () => {
-        if (!group) { showToast("No group selected", 'warning'); return; }
+        if (!group) return;
         try {
             const result = await exportTransformationsForGroup(group.Id);
             const filename = `${result.Name ? result.Name : 'transformation_group_'}_v${result.GroupVersion}.json`;
