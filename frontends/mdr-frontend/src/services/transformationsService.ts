@@ -397,14 +397,14 @@ export const exportTransformationsForGroup = async (id: number) => {
         const result = await api.get(url);
         if (result?.status !== 200) {
             const resultText = `${result.status} ${result.statusText}${result.data?.detail ? ` - ${result.data.detail}` : ''}`;
-            console.error(`The transformation group failed to export. Response details: ${resultText}`);
+            // console.error(`The transformation group failed to export. Response details: ${resultText}`);
             throw new Error(`The transformation group failed to export. Response details: ${resultText}`);
         } else {
             return result.data;
         }
     } catch(e) {
         const eDetails = (e as any)?.response?.data?.detail || (e as any).message || e;
-        console.error(`Error occurred while exporting transformation group: ${eDetails}`);
+        // console.error(`Error occurred while exporting transformation group: ${eDetails}`);
         throw new Error(`Error occurred while exporting transformation group: ${eDetails}`);
     }
 };
