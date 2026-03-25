@@ -398,14 +398,15 @@ export const exportTransformationsForGroup = async (id: number) => {
         if (result?.status !== 200) {
             const resultText = `${result.status} ${result.statusText}${result.data?.detail ? ` - ${result.data.detail}` : ''}`;
             console.error(`The transformation group failed to export. Response details: ${resultText}`);
+            throw new Error(`The transformation group failed to export. Response details: ${resultText}`);
         } else {
             return result.data;
         }
-    } catch(e: any) {
-        const eDetails = e?.response?.data?.detail || e.message || e;
-        console.error('Error occurred while exporting transformation group:', eDetails);
+    } catch(e) {
+        const eDetails = (e as any)?.response?.data?.detail || (e as any).message || e;
+        console.error(`Error occurred while exporting transformation group: ${eDetails}`);
+        throw new Error(`Error occurred while exporting transformation group: ${eDetails}`);
     }
-    return null;
 };
 
 

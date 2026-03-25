@@ -65,6 +65,8 @@ import BulkTransformationsDialog from './components/BulkTransformationsDialog';
 import { trackEvent } from '../../../utils/analytics';
 import { downloadJsonFile } from '../../../utils/downloadJsonFile';
 import { Pencil2Icon, LayersIcon, UploadIcon, DownloadIcon } from "@radix-ui/react-icons";
+import { useToast } from "../../../context/ToastContext";
+import { errorToString } from '../../../utils/errorUtils';
 
 interface DisplayTransformationData extends TransformationData {
     SourceEntity?: EntityDTO;
@@ -77,6 +79,7 @@ const MappingsView: React.FC = () => {
     // Routing
     const { groupId: groupIdParam } = useParams();
     const navigate = useNavigate();
+    const { showToast } = useToast();
 
     // Top-level state
     const [error, setError] = useState<string | null>(null);
@@ -2186,10 +2189,15 @@ const MappingsView: React.FC = () => {
 
 
     const onExportGroup = useCallback(async () => {
-        if (!group) return;
-        const result = await exportTransformationsForGroup(group.Id);
-        if (result) { // API doesn't return anything on failure, so only trigger download if we got a result back
-            downloadJsonFile(result, `transformation_group_${group.Id}.json`);
+        if (!group) { showToast("No group selected", 'warning'); return; }
+        try {
+            const result = await exportTransformationsForGroup(group.Id);
+            const filename = `${result.Name ? result.Name : 'transformation_group_'}_v${result.GroupVersion}.json`;
+            downloadJsonFile(result, filename);
+            showToast(`${filename} downloaded successfully`, 'success');
+        } catch (e) {
+            // console.log("Failed to export transformations for group", e);
+            showToast(errorToString(e), 'error');
         }
     }, [group]);
 

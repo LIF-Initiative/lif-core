@@ -5,6 +5,7 @@ import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { CrudDialog, DeleteDialog, SelectDialog, SimpleAlertDialog } from "../Dialog/Dialog";
 import { TreeModelExplorer, transformData } from "./TreeModelExplorer";
 import ObjectDetails from "../ObjectDetails/ObjectDetails";
+import { useToast } from "../../context/ToastContext";
 import { errorToString } from "../../utils/errorUtils";
 
 const FileDEBUG = false;
@@ -97,7 +98,7 @@ interface ModelTreeProps {
   ContribOrg?: string;
 }
 
-const ModelTree: React.FC<ModelTreeProps> = ({
+const ModelTree: React.FC<ModelTreeProps> = ({ 
   crud = false,
   model,
   routPath,
@@ -105,6 +106,7 @@ const ModelTree: React.FC<ModelTreeProps> = ({
   ContribUser,
   ContribOrg,
 }) => {
+  const { showToast } = useToast();
   const navigate = useNavigate();
   const location = useLocation();
   const { entityId, valueSetId, valueId, attributeId } = useParams();
@@ -809,6 +811,17 @@ const ModelTree: React.FC<ModelTreeProps> = ({
     } else { alertDialog('Edit Model Dialog', 'Unable to get model parameters at this time.'); }
   };
 
+  // HANDLE DOWNLOAD WITH TOAST ERROR HANDLING
+  const handleDownloadWithToast = async (id: number, type?: string, pub?: boolean) => {
+    try {
+      await downloadOpenApiSchema(id, type, pub);
+      showToast("File downloaded successfully", 'success');
+    } catch (e) {
+      // console.log("Failed to download OpenApi Schema file", e);
+      showToast(errorToString(e), 'error');
+    }
+  };
+
 
   // HANDLE SELECT DIALOG
   const getSelectDialogOptions = async (type: "entity" | "attribute" | "valueSet", idFilter: any[]) => {
@@ -1091,7 +1104,7 @@ const ModelTree: React.FC<ModelTreeProps> = ({
             searchFilter
             onEditModel={handleEditModel}
             onAddNew={handleOnAddNew}
-            onFuncDownload={downloadOpenApiSchema}
+            onFuncDownload={handleDownloadWithToast}
             headerString={treeHeader}
             triggerModal={async (n, k, s) => { await s ? handleSelectDialog(n, k, s) : handleCreateDropdown(n, k); }}
             triggerCheckbox={async (n, f, v) => { await handleCheckboxToggle(n, f, v, false); }}

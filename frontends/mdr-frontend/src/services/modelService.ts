@@ -862,10 +862,12 @@ export const downloadOpenApiSchema = async (id: number, type?: string, pub?: boo
     default: break;
   }
   const fileName = `data_model_${id}_${type}_openapi_schema.json`;
-  const result = await getOpenApiSchema(id, pub, mdEnt, mdAttr, mdFull, true);
+  const result = await getOpenApiSchema(id, pub, mdEnt, mdAttr, mdFull);
   if (result) {
+    console.log("Initiating download of OpenAPI schema:", { fileName, result });
     downloadJsonFile(result, fileName);
   } else {
     console.error("No data received for file download.");
+    throw new Error("No data received for file download.");
   }
 };
