@@ -23,6 +23,7 @@ import {
     forkTransformationGroup,
     existsTransformationGroup,
     updateTransformationAttributes,
+    exportTransformationsForGroup,
 } from '../../../services/transformationsService';
 import {
     getModelDetailsWithTree,
@@ -57,10 +58,15 @@ import useSearchItems from './hooks/useSearchItems';
 import DeleteTransformationsDialog from './components/DeleteTransformationsDialog';
 import ExpressionEditorDialog from './components/ExpressionEditorDialog';
 import EditGroupDialog from './components/EditGroupDialog';
+import ImportGroupDialog from './components/ImportGroupDialog';
 import ForkGroupDialog from './components/ForkGroupDialog';
 import DetachSourcesDialog from './components/DetachSourcesDialog';
 import BulkTransformationsDialog from './components/BulkTransformationsDialog';
 import { trackEvent } from '../../../utils/analytics';
+import { downloadJsonFile } from '../../../utils/downloadJsonFile';
+import { Pencil2Icon, LayersIcon, UploadIcon, DownloadIcon } from "@radix-ui/react-icons";
+import { useToast } from "../../../context/ToastContext";
+import { errorToString } from '../../../utils/errorUtils';
 
 interface DisplayTransformationData extends TransformationData {
     SourceEntity?: EntityDTO;
@@ -73,6 +79,7 @@ const MappingsView: React.FC = () => {
     // Routing
     const { groupId: groupIdParam } = useParams();
     const navigate = useNavigate();
+    const { showToast } = useToast();
 
     // Top-level state
     const [error, setError] = useState<string | null>(null);
@@ -227,6 +234,7 @@ const MappingsView: React.FC = () => {
 
     const [exprDialogOpen, setExprDialogOpen] = useState(false);
     const [editGroupOpen, setEditGroupOpen] = useState(false);
+    const [importDialogOpen, setImportDialogOpen] = useState(false);
     const [forkDialogOpen, setForkDialogOpen] = useState(false);
     const [bulkDialogOpen, setBulkDialogOpen] = useState(false);
     const [editingTransformation, setEditingTransformation] =
@@ -237,7 +245,7 @@ const MappingsView: React.FC = () => {
     const [forkBump, setForkBump] = useState<'major' | 'minor'>('major');
     const [forkPreview, setForkPreview] = useState<string>('');
     // Aggregate dialog open state
-    const anyDialogOpen = deleteDialogOpen || exprDialogOpen || editGroupOpen || forkDialogOpen || bulkDialogOpen;
+    const anyDialogOpen = deleteDialogOpen || exprDialogOpen || editGroupOpen || importDialogOpen || forkDialogOpen || bulkDialogOpen;
     // Detach sources dialog state
     const [detachDialogOpen, setDetachDialogOpen] = useState(false);
     const [pendingDetach, setPendingDetach] = useState<null | { transId: number; srcAttrIds: number[]; willDelete: boolean }>(null);
@@ -2180,6 +2188,19 @@ const MappingsView: React.FC = () => {
     }, [group]);
 
 
+    const onExportGroup = useCallback(async () => {
+        if (!group) return;
+        try {
+            const result = await exportTransformationsForGroup(group.Id);
+            const filename = `${result.Name ? result.Name : 'transformation_group_'}_v${result.GroupVersion}.json`;
+            downloadJsonFile(result, filename);
+            showToast(`${filename} downloaded successfully`, 'success');
+        } catch (e) {
+            // console.log("Failed to export transformations for group", e);
+            showToast(errorToString(e), 'error');
+        }
+    }, [group]);
+
     /** Add dynamic keyboard listener for trigger wire deletion */
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -2383,21 +2404,17 @@ const MappingsView: React.FC = () => {
                                 })()}
                             </div>
                             <div className="mappings-group-header__actions">
-                                <button
-                                    type="button"
-                                    className="mappings-icon-btn"
-                                    title="Edit details"
-                                    onClick={onEditDetails}
-                                >
-                                    ✎
+                                <button type="button" className="mappings-icon-btn" title="Export transformation group" onClick={onExportGroup}>
+                                    <DownloadIcon />
                                 </button>
-                                <button
-                                    type="button"
-                                    className="mappings-icon-btn mappings-icon-btn--bulk"
-                                    title="Bulk edit transformations"
-                                    onClick={() => setBulkDialogOpen(true)}
-                                >
-                                    ⇱
+                                {/* <button type="button" className="mappings-icon-btn" title="Import transformation group" onClick={() => setImportDialogOpen(true)}>
+                                    <UploadIcon />
+                                </button> */}
+                                <button type="button" className="mappings-icon-btn" title="Edit details" onClick={onEditDetails}>
+                                    <Pencil2Icon />
+                                </button>
+                                <button type="button" className="mappings-icon-btn" title="Bulk edit transformations" onClick={() => setBulkDialogOpen(true)}>
+                                    <LayersIcon />
                                 </button>
                             </div>
                         </div>
@@ -2905,6 +2922,17 @@ const MappingsView: React.FC = () => {
                     } finally {
                         setEditGroupOpen(false);
                     }
+                }}
+            />
+            <ImportGroupDialog
+                open={importDialogOpen}
+                group={group}
+                onOpenChange={setImportDialogOpen}
+                onCancel={() => setImportDialogOpen(false)}
+                onSaved={async () => {
+                    if (!group) return;
+                    try { fetchTransformations(); }
+                    finally { setImportDialogOpen(false); }
                 }}
             />
             <ForkGroupDialog
