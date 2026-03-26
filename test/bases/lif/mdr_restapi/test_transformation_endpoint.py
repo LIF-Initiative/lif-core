@@ -9,6 +9,7 @@ from test.utils.lif.datasets.transform_with_embeddings.loader import DatasetTran
 from test.utils.lif.mdr.api import (
     convert_unique_names_to_id_path,
     create_transformation,
+    delete_transformation,
     export_transformation_group,
     update_transformation,
 )
@@ -295,6 +296,38 @@ async def test_transforms_with_embeddings(async_client_mdr, async_client_transla
         transformation_name="User.Preferences.WorkPreference",
     )
 
+    transformation_data_to_be_deleted = await create_transformation(
+        async_client_mdr=async_client_mdr,
+        transformation_group_id=dataset_transform_with_embeddings.transformation_group_id,
+        source_parent_entity_id=None,
+        source_attribute_id=dataset_transform_with_embeddings.flow3_source_attribute_id,
+        source_entity_path=dataset_transform_with_embeddings.flow3_source_entity_id_path,
+        target_parent_entity_id=None,
+        target_attribute_id=dataset_transform_with_embeddings.flow3_target_attribute_id,
+        target_entity_path=dataset_transform_with_embeddings.flow3_target_entity_id_path,
+        mapping_expression="{ }",
+        transformation_name="Transformation To Be Deleted",
+    )
+
+    await delete_transformation(
+        async_client_mdr=async_client_mdr, transformation_id=transformation_data_to_be_deleted["Id"]
+    )
+
+    # Add a non-JSONata transformation to confirm it is ignored in the export
+    await create_transformation(
+        async_client_mdr=async_client_mdr,
+        transformation_group_id=dataset_transform_with_embeddings.transformation_group_id,
+        source_parent_entity_id=None,
+        source_attribute_id=dataset_transform_with_embeddings.flow2_source_attribute_id,
+        source_entity_path=dataset_transform_with_embeddings.flow2_source_entity_id_path,
+        target_parent_entity_id=None,
+        target_attribute_id=dataset_transform_with_embeddings.flow2_target_attribute_id,
+        target_entity_path=dataset_transform_with_embeddings.flow2_target_entity_id_path,
+        expression_language="LIF_Pseudo_Code",
+        mapping_expression="foo(bar())",
+        transformation_name="Non-JSONata expression!",
+    )
+
     # Use the transformations via the Translator endpoint
 
     translated_json = await create_translation(
@@ -496,6 +529,173 @@ async def test_transforms_with_embeddings(async_client_mdr, async_client_transla
         '{ "User": { "Preferences": { "WorkPreference": Person.Courses.SkillsGainedFromCourses.SkillLevel } } }'
     )
     assert cleaned_expression2_actual == cleaned_expression2_expected
+
+
+@pytest.mark.asyncio
+async def test_transforms_export_fail_with_no_transforms(async_client_mdr, mdr_api_headers):
+    """
+    Confirms the export will fail nicely if there are no transformations in the group.
+
+    """
+
+    test_case_name = inspect.currentframe().f_code.co_name
+    group_contributor = f"{test_case_name}_contributor"
+    group_contributor_organization = f"{test_case_name}_contributor_org"
+    group_description = "group description"
+    group_notes = "group notes"
+    # Not precisely like the UX, that only sends the YYYY-MM-DD,
+    # but using the full format to avoid timezone issues with testing
+    group_creation_date = "2026-03-01T00:00:00Z"
+    group_activation_date = "2026-03-02T00:00:00Z"
+    group_deprecation_date = "2026-03-03T00:00:00Z"
+
+    dataset_transform_with_embeddings = await DatasetTransformWithEmbeddings.prepare(
+        async_client_mdr=async_client_mdr,
+        source_data_model_name=test_case_name,
+        target_data_model_name=test_case_name,
+        transformation_group_name=test_case_name,
+        transformation_group_contributor=group_contributor,
+        transformation_group_contributor_organization=group_contributor_organization,
+        transformation_group_description=group_description,
+        transformation_group_notes=group_notes,
+        transformation_group_creation_date=group_creation_date,
+        transformation_group_activation_date=group_activation_date,
+        transformation_group_deprecation_date=group_deprecation_date,
+    )
+
+    await export_transformation_group(
+        async_client_mdr=async_client_mdr,
+        transformation_group_id=dataset_transform_with_embeddings.transformation_group_id,
+        headers=mdr_api_headers,
+        expected_status_code=400,
+        expected_response_data={
+            "detail": (
+                "There are no valid transformations to export for this group / version. "
+                "Please add a transformation to this group's version and retry the export."
+            )
+        },
+    )
+
+
+@pytest.mark.asyncio
+async def test_transforms_export_fail_with_only_non_jsonata_transform(async_client_mdr, mdr_api_headers):
+    """
+    Confirms the export will fail nicely if there are no JSONata transformations in the group.
+
+    """
+
+    test_case_name = inspect.currentframe().f_code.co_name
+    group_contributor = f"{test_case_name}_contributor"
+    group_contributor_organization = f"{test_case_name}_contributor_org"
+    group_description = "group description"
+    group_notes = "group notes"
+    # Not precisely like the UX, that only sends the YYYY-MM-DD,
+    # but using the full format to avoid timezone issues with testing
+    group_creation_date = "2026-03-01T00:00:00Z"
+    group_activation_date = "2026-03-02T00:00:00Z"
+    group_deprecation_date = "2026-03-03T00:00:00Z"
+
+    dataset_transform_with_embeddings = await DatasetTransformWithEmbeddings.prepare(
+        async_client_mdr=async_client_mdr,
+        source_data_model_name=test_case_name,
+        target_data_model_name=test_case_name,
+        transformation_group_name=test_case_name,
+        transformation_group_contributor=group_contributor,
+        transformation_group_contributor_organization=group_contributor_organization,
+        transformation_group_description=group_description,
+        transformation_group_notes=group_notes,
+        transformation_group_creation_date=group_creation_date,
+        transformation_group_activation_date=group_activation_date,
+        transformation_group_deprecation_date=group_deprecation_date,
+    )
+
+    await create_transformation(
+        async_client_mdr=async_client_mdr,
+        transformation_group_id=dataset_transform_with_embeddings.transformation_group_id,
+        source_parent_entity_id=None,
+        source_attribute_id=dataset_transform_with_embeddings.flow2_source_attribute_id,
+        source_entity_path=dataset_transform_with_embeddings.flow2_source_entity_id_path,
+        target_parent_entity_id=None,
+        target_attribute_id=dataset_transform_with_embeddings.flow2_target_attribute_id,
+        target_entity_path=dataset_transform_with_embeddings.flow2_target_entity_id_path,
+        expression_language="LIF_Pseudo_Code",
+        mapping_expression="foo(bar())",
+        transformation_name="Non-JSONata expression!",
+    )
+
+    await export_transformation_group(
+        async_client_mdr=async_client_mdr,
+        transformation_group_id=dataset_transform_with_embeddings.transformation_group_id,
+        headers=mdr_api_headers,
+        expected_status_code=400,
+        expected_response_data={
+            "detail": (
+                "There are no valid transformations to export for this group / version. "
+                "Please add a transformation to this group's version and retry the export."
+            )
+        },
+    )
+
+
+@pytest.mark.asyncio
+async def test_transforms_export_fail_with_only_deleted_jsonata_transform(async_client_mdr, mdr_api_headers):
+    """
+    Confirms the export will fail nicely if there are no active JSONata transformations in the group.
+
+    """
+
+    test_case_name = inspect.currentframe().f_code.co_name
+    group_contributor = f"{test_case_name}_contributor"
+    group_contributor_organization = f"{test_case_name}_contributor_org"
+    group_description = "group description"
+    group_notes = "group notes"
+    # Not precisely like the UX, that only sends the YYYY-MM-DD,
+    # but using the full format to avoid timezone issues with testing
+    group_creation_date = "2026-03-01T00:00:00Z"
+    group_activation_date = "2026-03-02T00:00:00Z"
+    group_deprecation_date = "2026-03-03T00:00:00Z"
+
+    dataset_transform_with_embeddings = await DatasetTransformWithEmbeddings.prepare(
+        async_client_mdr=async_client_mdr,
+        source_data_model_name=test_case_name,
+        target_data_model_name=test_case_name,
+        transformation_group_name=test_case_name,
+        transformation_group_contributor=group_contributor,
+        transformation_group_contributor_organization=group_contributor_organization,
+        transformation_group_description=group_description,
+        transformation_group_notes=group_notes,
+        transformation_group_creation_date=group_creation_date,
+        transformation_group_activation_date=group_activation_date,
+        transformation_group_deprecation_date=group_deprecation_date,
+    )
+
+    transform_data = await create_transformation(
+        async_client_mdr=async_client_mdr,
+        transformation_group_id=dataset_transform_with_embeddings.transformation_group_id,
+        source_parent_entity_id=None,
+        source_attribute_id=dataset_transform_with_embeddings.flow2_source_attribute_id,
+        source_entity_path=dataset_transform_with_embeddings.flow2_source_entity_id_path,
+        target_parent_entity_id=None,
+        target_attribute_id=dataset_transform_with_embeddings.flow2_target_attribute_id,
+        target_entity_path=dataset_transform_with_embeddings.flow2_target_entity_id_path,
+        mapping_expression="{}",
+        transformation_name="Will be deleted!",
+    )
+
+    await delete_transformation(async_client_mdr=async_client_mdr, transformation_id=transform_data["Id"])
+
+    await export_transformation_group(
+        async_client_mdr=async_client_mdr,
+        transformation_group_id=dataset_transform_with_embeddings.transformation_group_id,
+        headers=mdr_api_headers,
+        expected_status_code=400,
+        expected_response_data={
+            "detail": (
+                "There are no valid transformations to export for this group / version. "
+                "Please add a transformation to this group's version and retry the export."
+            )
+        },
+    )
 
 
 @pytest.mark.asyncio

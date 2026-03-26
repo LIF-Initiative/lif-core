@@ -1087,6 +1087,9 @@ async def get_paginated_transformations_for_a_group(
         .where(Transformation.TransformationGroupId == group_id)
         .where(Transformation.Deleted == False)
     )
+    if not pagination and make_exportable:
+        total_query = total_query.where(Transformation.ExpressionLanguage == ExpressionLanguageType.JSONata)
+
     total_result = await session.execute(total_query)
     total_count = total_result.scalar()
 
