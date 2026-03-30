@@ -206,6 +206,7 @@ async def create_transformation(
     target_entity_path: str,  # "User.Skills"
     mapping_expression: str,  # '{ "User": { "Skills": { "Genre": Person.Courses.Grade } } }'
     transformation_name: str,  # "User.Skills.Genre",
+    expression_language: str = "JSONata",
     headers: dict = HEADER_MDR_API_KEY_GRAPHQL,
     expected_status_code: int = 201,
     expected_response: Optional[dict] = None,
@@ -225,6 +226,7 @@ async def create_transformation(
         mapping_expression: The JSONata expression that defines the transformation logic (e.g., '{ "User": { "Skills": { "Genre": Person.Courses.Grade } } }')
         transformation_name: The name to assign to the transformation
         headers: Optional headers to include in the request (default is HEADER_MDR_API_KEY_GRAPHQL)
+        expression_language: The language of the expression (default is "JSONata")
 
     Returns:
         The created transformation as a dictionary
@@ -233,7 +235,7 @@ async def create_transformation(
         "/transformation_groups/transformations/",
         headers=headers,
         json={
-            "ExpressionLanguage": "JSONata",
+            "ExpressionLanguage": expression_language,
             "TransformationGroupId": transformation_group_id,
             "Expression": mapping_expression,
             "Name": transformation_name,
@@ -266,7 +268,7 @@ async def create_transformation(
                 "TransformationGroupId": transformation_group_id,
                 "Name": transformation_name,
                 "Expression": mapping_expression,
-                "ExpressionLanguage": "JSONata",
+                "ExpressionLanguage": expression_language,
                 "Notes": None,
                 "Alignment": None,
                 "CreationDate": None,
@@ -311,6 +313,39 @@ async def create_transformation(
         if expected_response is not None:
             assert response.json() == expected_response, str(response.text) + str(response.headers)
         return response.json()
+
+
+async def delete_transformation(
+    *,
+    async_client_mdr: AsyncClient,
+    transformation_id: str,
+    headers: dict = HEADER_MDR_API_KEY_GRAPHQL,
+    expected_status_code: int = 200,
+    expected_response: Optional[dict] = None,
+) -> dict:
+    """
+    Helper function to delete a transform
+
+    Args:
+        async_client_mdr: An instance of AsyncClient to make HTTP requests to the MDR API
+        transformation_id: The ID of the transformation to delete
+        headers: Optional headers to include in the request (default is HEADER_MDR_API_KEY_GRAPHQL)
+        expected_status_code: The expected HTTP status code of the response (default is 200)
+        expected_response: The expected response body as a dictionary (optional)
+
+    Returns:
+        The response from the delete operation as a dictionary
+    """
+    response = await async_client_mdr.delete(
+        f"/transformation_groups/transformations/{transformation_id}", headers=headers
+    )
+
+    # Confirm transform response and gather ID
+    response_json = response.json()
+    assert response.status_code == expected_status_code, str(response.text) + str(response.headers)
+    if expected_response is not None:
+        assert response_json == expected_response, str(response.text) + str(response.headers)
+    return response_json
 
 
 async def update_transformation(
