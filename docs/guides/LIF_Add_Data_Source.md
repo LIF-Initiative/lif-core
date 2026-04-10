@@ -1,5 +1,7 @@
 # Add a New Data Source
 
+> **Related:** For the adapter class contract, return types, and design guidelines, see [`creating_a_data_source_adapter.md`](creating_a_data_source_adapter.md). This guide is the end-to-end tutorial; that doc is the reference.
+
 Data sources are used by the **Orchestrator** to fulfill LIF queries. These sources can be open or require authN/authZ, and return data in a variety of formats. Data sources are configured through an adapter so you can have multiple data sources that use the same adapter. Reference implementations for 2 adapter flows are provided in the repository:
 - LIF to LIF
 - Example Data Source to LIF
@@ -54,7 +56,7 @@ The `example-data-source-rest-api-to-lif` adapter is the reference implementatio
 
 4. Adjust the import code in `components/lif/data_source_adapters/sis_data_source_to_lif_adapter/__init__.py` to reflect the new adapter name of `SisDataSourceToLIFAdapter`
 
-4. Add the adapter id (`sis-data-source-to-lif`) into the `components/lif/data_source_adapters/__init__.py::_EXTERNAL_ADAPTERS` map and add the adapter import:
+5. Add the adapter id (`sis-data-source-to-lif`) into the `components/lif/data_source_adapters/__init__.py::_EXTERNAL_ADAPTERS` map and add the adapter import:
     ```python
     ...
     from .sis_data_source_to_lif_adapter.adapter import SisDataSourceToLIFAdapter
@@ -65,7 +67,7 @@ The `example-data-source-rest-api-to-lif` adapter is the reference implementatio
     }
     ```
 
-4. In the docker compose file for `dagster-code-location`, add the following environment variables with the appropriate configuration for the data source: 
+6. In the docker compose file for `dagster-code-location`, add the following environment variables with the appropriate configuration for the data source: 
     ```
     ADAPTERS__SIS_DATA_SOURCE_TO_LIF__ORG1_ACME_SIS_DATA_SOURCE__CREDENTIALS__HOST
     ADAPTERS__SIS_DATA_SOURCE_TO_LIF__ORG1_ACME_SIS_DATA_SOURCE__CREDENTIALS__SCHEME
@@ -74,13 +76,13 @@ The `example-data-source-rest-api-to-lif` adapter is the reference implementatio
 
     - Note the format is `ADAPTERS__[[ADAPTER_ID]]__[[ORG]][[DATA_SOURCE_ID]]__CREDENTIALS__...`
 
-4. Rebuild and start docker compose with `deployments/advisor-demo-docker` (from the root of the repo, you can run `docker-compose -f deployments/advisor-demo-docker/docker-compose.yml up --build`)
+7. Rebuild and start docker compose with `deployments/advisor-demo-docker` (from the root of the repo, you can run `docker-compose -f deployments/advisor-demo-docker/docker-compose.yml up --build`)
 
-5. In the **MDR** > `Data Models` tab, add a new `SourceSchema` Data Model that describes how the data will be returned from the data source. It does not need to be exhaustive, just enough to cover the data that will be mapped into the _Org LIF_ schema paths. Take note of the **MDR** data source ID (in the context path of the **MDR** URL and at the top of the right hand panel when the data model itself is selected). This ID will be used to configure the translation flow later on.
+8. In the **MDR** > `Data Models` tab, add a new `SourceSchema` Data Model that describes how the data will be returned from the data source. It does not need to be exhaustive, just enough to cover the data that will be mapped into the _Org LIF_ schema paths. Take note of the **MDR** data source ID (in the context path of the **MDR** URL and at the top of the right hand panel when the data model itself is selected). This ID will be used to configure the translation flow later on.
     - The unique name of entities, attributes, etc should be a 'dot path'. For example, if the source schema contains `user > details > address > state`, the `name` for the **MDR** entry should be _state_, and the `unique name` should be _user.details.address.state_.
     - Only attributes are able to be mapped, so for the above case, _state_ should be an attribute.
 
-6. In the **MDR** > `Mappings` tab, select the new data source. In the center column, click `Create`. Using the built in controls, configure the translations from the new `Source Data Model` into the `Target Data Model` with the sticky lines.
+9. In the **MDR** > `Mappings` tab, select the new data source. In the center column, click `Create`. Using the built in controls, configure the translations from the new `Source Data Model` into the `Target Data Model` with the sticky lines.
     - Reminder: Only attributes can be mapped.
     - Due to a bug in the user flow, after mapping an attribute, manually lower case the JSONata _expression_ by double clicking on the sticky line and adjusting the field. For example, given the expression:
         ```
@@ -91,14 +93,14 @@ The `example-data-source-rest-api-to-lif` adapter is the reference implementatio
         { "person": [{ "contact": [{ "address": [{ "addressCity": user.details.address.state }] }] }] }
         ```
 
-7. If target fields in the mappings need to be added into the _Org LIF_ model, first review the `Data Models` > _Base LIF_ data model to see if the field already exists and just needs to be marked as included in _Org LIF_ model (You can review this by accessing `StateU LIF` > `Base LIF Inclusions` > find the field and tick the `Inc` checkbox). If the field does not exist in the _Base LIF_ model, then in the _Org LIF_ model, use the three vertical dots button to create the needed entities and attributes. Please do not modify the _Base LIF_ model.
+10. If target fields in the mappings need to be added into the _Org LIF_ model, first review the `Data Models` > _Base LIF_ data model to see if the field already exists and just needs to be marked as included in _Org LIF_ model (You can review this by accessing `StateU LIF` > `Base LIF Inclusions` > find the field and tick the `Inc` checkbox). If the field does not exist in the _Base LIF_ model, then in the _Org LIF_ model, use the three vertical dots button to create the needed entities and attributes. Please do not modify the _Base LIF_ model.
     - If creating new entities or attributes:
         - Remember the dot.path for the unique name
         - Ensure the new fields have `Array` set to `Yes`
     - If you update your _Org LIF_ data model, you should also update `components/lif/mdr_client/resources/openapi_constrained_with_interactions.json`. This file must be updated from http://localhost:8012/datamodels/open_api_schema/17?include_attr_md=true which is not currently exportable from the **MDR** UI. You will need to include the user's Bearer token from using **MDR**'s UI in an `Authorization` header when retrieving the download, such as `curl 'http://localhost:8012/datamodels/open_api_schema/17?include_attr_md=true' -H 'Authorization: Bearer ...'  > components/lif/mdr_client/resources/openapi_constrained_with_interactions.json`. After changing the json file, rebuild and start docker compose (the rebuild/start can be done in a later step as well).
     - If the GraphQL schema isn't validating in the Strawberry GraphQL UI (`localhost:8010`) the way you'd expect, the json file needs to be updated (or the _Org LIF_ data model needs adjustment)
 
-8. Add a new block in `deployments/advisor-demo-docker/volumes/lif_query_planner/org1/information_sources_config_org1.yml` and enumerate the _Org LIF_ schema JSON paths the data source will populate (note the population occurs during translation). Only specify 2 nodes deep: for `person.contact.address.addressState`, just add `person.contact`.
+11. Add a new block in `deployments/advisor-demo-docker/volumes/lif_query_planner/org1/information_sources_config_org1.yml` and enumerate the _Org LIF_ schema JSON paths the data source will populate (note the population occurs during translation). Only specify 2 nodes deep: for `person.contact.address.addressState`, just add `person.contact`.
     ```yaml
     - information_source_id: "org1-acme-sis-data-source"
         information_source_organization: "Org1"
@@ -112,7 +114,7 @@ The `example-data-source-rest-api-to-lif` adapter is the reference implementatio
         target_schema_id: "17" <-- In the reference implementation, the Org LIF schema ID is constant (17)
     ```
 
-9. After a docker compose rebuild and start, you should be able to query LIF via the **LIF API**, which is exposed via the Strawberry GraphQL endpoint http://localhost:8010 with the following payload. Note `employmentPreferences > organizationTypes` is populated from `org1-example-data-source`, and the `custom > ...` and `contact > ...` are populated from `acme-sis-data-source`.
+12. After a docker compose rebuild and start, you should be able to query LIF via the **LIF API**, which is exposed via the Strawberry GraphQL endpoint http://localhost:8010 with the following payload. Note `employmentPreferences > organizationTypes` is populated from `org1-example-data-source`, and the `custom > ...` and `contact > ...` are populated from `acme-sis-data-source`.
     ```json
     query MyQuery {
     person(
@@ -134,7 +136,7 @@ The `example-data-source-rest-api-to-lif` adapter is the reference implementatio
     }
     ```
 
-10. In order for the new data source to be leveraged in the Advisor, additional work needs to occur:
+13. In order for the new data source to be leveraged in the Advisor, additional work needs to occur:
     - The MCP service needs to be aware additional _Org LIF_ schema changes
     - Your organization's user IDs needs to be available in the Advisor API so the Advisor login details matches the appropriate user in the new data source. Currently, there's only the 6 static users for demo purposes. In the future, this should be a configurable effort with robust authN and the LIF **Identity Mapper**.
 
