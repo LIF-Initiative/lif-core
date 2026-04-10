@@ -1,8 +1,8 @@
 # Creating a Data Source Adapter
 
-This guide covers how to build a custom data source adapter to bring external data into the LIF system. It is aimed at developers who want to write a new adapter from scratch or adapt the reference implementation to their own data source.
+This guide is the **reference** for the data source adapter contract: what adapters are, what they receive, what they return, and how to write one. It is aimed at developers adapting their own code to the LIF system or writing a new adapter from scratch.
 
-> **See also:** [LIF_Add_Data_Source.md](LIF_Add_Data_Source.md) for a walkthrough that also covers MDR schema setup and Docker Compose configuration.
+> **Looking for an end-to-end walkthrough?** [`LIF_Add_Data_Source.md`](LIF_Add_Data_Source.md) is the tutorial. It walks through a concrete scenario — building an SIS-style adapter, setting up the MDR source schema and JSONata mappings, wiring up Docker Compose, and verifying via GraphQL. Use that guide when you want step-by-step instructions; use this one when you need to understand the adapter contract.
 
 ## How Adapters Fit In
 
@@ -189,64 +189,17 @@ _EXTERNAL_ADAPTERS = {
 
 The registry key must match your adapter's `adapter_id`.
 
-### Step 4: Configure credentials
+### Step 4: Wire it up
 
-Set environment variables on the `dagster-code-location` container. The naming convention is:
+Once the adapter class is written and registered, three more things need to happen before it runs:
 
-```
-ADAPTERS__<ADAPTER_ID>__<INFORMATION_SOURCE_ID>__CREDENTIALS__<KEY>
-```
+1. **Credentials** — set environment variables on the `dagster-code-location` container using the naming convention `ADAPTERS__<ADAPTER_ID>__<INFORMATION_SOURCE_ID>__CREDENTIALS__<KEY>` (uppercased, dashes converted to underscores). Missing credentials produce a warning at startup but do not block initialization, so handle absent values gracefully in `__init__`.
 
-Dashes in the adapter ID and source ID are converted to underscores, and everything is uppercased. For example, if your `adapter_id` is `my-source-to-lif` and the information source ID is `org1-acme-sis`:
+2. **Information source config** — add an entry to the query planner's `information_sources_config_*.yml` referencing your `adapter_id`, the `lif_fragment_paths` your source provides, and a `translation` block with the MDR schema IDs (for pipeline-integrated adapters).
 
-```bash
-ADAPTERS__MY_SOURCE_TO_LIF__ORG1_ACME_SIS__CREDENTIALS__HOST=api.example.com
-ADAPTERS__MY_SOURCE_TO_LIF__ORG1_ACME_SIS__CREDENTIALS__SCHEME=https
-ADAPTERS__MY_SOURCE_TO_LIF__ORG1_ACME_SIS__CREDENTIALS__TOKEN=your-secret-token
-```
+3. **MDR schemas and mappings** — create a source schema describing your API response and JSONata mappings to the target LIF schema. Only attributes (leaf fields) can be mapped.
 
-Missing credentials produce a warning at startup but do not block initialization. Your adapter's `__init__` should handle missing values gracefully (e.g., default `scheme` to `"https"`).
-
-### Step 5: Add the information source to config
-
-Add an entry to the query planner's information sources config (e.g., `information_sources_config_org1.yml`):
-
-```yaml
-information_sources:
-  # ... existing sources ...
-  - information_source_id: "org1-acme-sis"
-    information_source_organization: "Org1"
-    adapter_id: "my-source-to-lif"
-    ttl_hours: 24
-    lif_fragment_paths:
-      - "Person.Contact"
-      - "Person.EmploymentPreferences"
-    translation:
-      source_schema_id: "28"     # MDR ID of your source schema
-      target_schema_id: "17"     # MDR ID of the Org LIF schema
-```
-
-Key config fields:
-
-| Field | Description |
-|-------|-------------|
-| `information_source_id` | Unique name for this data source instance |
-| `adapter_id` | Must match your adapter's `adapter_id` class variable |
-| `lif_fragment_paths` | LIF schema paths this source provides (2 levels deep: `Person.EntityName`) |
-| `translation` | Required for pipeline-integrated adapters. IDs reference MDR data models. |
-| `ttl_hours` | How long results are cached before re-fetching |
-
-### Step 6: Set up translation in the MDR
-
-For pipeline-integrated adapters, the MDR must have:
-
-1. **A source schema** — describes the structure of your API's response. Each field uses a dot-path as its unique name (e.g., `user.details.address.city`). Only attributes (leaf fields) can be mapped.
-
-2. **Transformation mappings** — JSONata expressions that map source fields to target LIF schema fields. These are created in the MDR Mappings tab by drawing connections between source and target attributes.
-
-The `source_schema_id` and `target_schema_id` in your config must match the MDR data model IDs. The target is typically `17` (the Org LIF schema) in the reference implementation.
-
-> **Note:** There is a known MDR issue where JSONata expressions may need manual lowercasing. After creating a mapping, double-click the mapping line and ensure the entity names in the expression are lowercase (e.g., `person`, `contact`, not `Person`, `Contact`).
+[`LIF_Add_Data_Source.md`](LIF_Add_Data_Source.md) walks through each of these with a concrete example — use it as the step-by-step companion when you are ready to wire your adapter into a running environment.
 
 ## Adapter Design Guidelines
 
@@ -300,21 +253,19 @@ The `example-data-source-rest-api-to-lif` adapter is the simplest starting point
 
 ## Troubleshooting
 
-### Check Dagster run logs
+For MDR mapping issues, empty fragments, cache invalidation, and Dagster run inspection, see the troubleshooting section of [`LIF_Add_Data_Source.md`](LIF_Add_Data_Source.md#troubleshooting). The items below are specific to adapter development.
 
-Navigate to `http://localhost:3000/runs/` and inspect the sub-process for your adapter. The logs will show your `logger.info` and `logger.error` messages.
+### Adapter not found
 
-### Empty fragment paths
+If the orchestrator raises `Unknown adapter_id`, the adapter class is not in `ADAPTER_REGISTRY`. Verify the import and `_EXTERNAL_ADAPTERS` entry in `components/lif/data_source_adapters/__init__.py`, and that the registry key matches the `adapter_id` class variable exactly.
 
-If a translation yields an empty LIF fragment, the Dagster job will fail when saving results to the Query Planner. Verify that your MDR JSONata expressions produce the expected output and that entity names are lowercased in the expressions.
+### Empty credentials
 
-### Cache interference
+If your adapter receives an empty `credentials` dict, check:
+- The env var naming matches the convention exactly (uppercased, dashes to underscores in both the adapter ID and information source ID)
+- The env vars are set on the `dagster-code-location` container, not another service
+- Your adapter's `credential_keys` list includes every key you read in `__init__` — only declared keys are loaded from the environment
 
-The Query Cache service caches results for `ttl_hours`. During development, you may need to clear the cache. Stop services, delete the `mongodb-org1` Docker volume, and restart.
+### Exceptions that don't retry
 
-### Credential issues
-
-If your adapter receives empty credentials, check:
-- The env var naming matches the convention exactly (uppercased, dashes to underscores)
-- The env vars are set on the `dagster-code-location` container (not another service)
-- Your adapter's `credential_keys` list includes all the keys you need
+The orchestrator retries adapter failures up to 3 times with exponential backoff — but only if your `run()` method raises. If you catch exceptions and return a malformed result instead, the orchestrator has nothing to retry on. Let exceptions propagate.
