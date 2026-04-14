@@ -8,6 +8,15 @@ Environment:
     Value: GET,POST,PUT,DELETE,OPTIONS,PATCH
   - Name: CORS_ALLOW_HEADERS
     Value: "*"
+  - Name: MDR__AUTH__COGNITO_USER_POOL_ID
+    Value:
+      Fn::Sub: "{{resolve:ssm:/${EnvironmentName}/mdr/CognitoUserPoolId}}"
+  - Name: MDR__AUTH__COGNITO_SPA_CLIENT_ID
+    Value:
+      Fn::Sub: "{{resolve:ssm:/${EnvironmentName}/mdr/CognitoSpaClientId}}"
+  - Name: MDR__AUTH__COGNITO_REGION
+    Value:
+      Fn::Sub: "${AWS::Region}"
 Secrets:
   - Name: POSTGRESQL_USER
     ValueFrom: 

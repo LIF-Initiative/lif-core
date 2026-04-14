@@ -6,6 +6,7 @@ import {
 
 import Home from "../pages/Home";
 import Login from "../pages/Login";
+import AuthCallback from "../pages/AuthCallback";
 import AuthGuard from "../components/AuthGuard";
 import LifModel from "./Explore/lif-model";
 import DataExtensions from "./Explore/data-extensions";
@@ -18,6 +19,10 @@ const routes: RouteObject[] = [
   {
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "/auth/callback",
+    element: <AuthCallback />,
   },
   {
     path: "/",

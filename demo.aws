@@ -40,6 +40,7 @@ STACKS['demo-lif-query-cache-org3']='service'
 STACKS['demo-lif-query-planner-org3']='service'
 STACKS['demo-lif-graphql-org3']='service'
 
+STACKS['demo-lif-mdr-cognito']='cognito-selfserve'
 STACKS['demo-lif-mdr-frontend']='s3-hosted-stackset'
 STACKS['demo-lif-mdr-api']='service'
 
@@ -84,6 +85,7 @@ STACK_ORDER=(
   demo-lif-graphql-org3
  
   demo-lif-orchestrator
+  demo-lif-mdr-cognito
   demo-lif-mdr-frontend
   demo-lif-mdr-api
 

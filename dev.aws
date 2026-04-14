@@ -43,6 +43,7 @@ STACKS['dev-lif-query-planner-org3']='service'
 STACKS['dev-lif-graphql-org3']='service'
 STACKS['dev-lif-mongodb-seed-org3']='scheduled-task'
 
+STACKS['dev-lif-mdr-cognito']='cognito-selfserve'
 STACKS['dev-lif-mdr-frontend']='s3-hosted-stackset'
 STACKS['dev-lif-mdr-api']='service'
 
@@ -90,6 +91,7 @@ STACK_ORDER=(
   dev-lif-mongodb-seed-org3
  
   dev-lif-orchestrator-api
+  dev-lif-mdr-cognito
   dev-lif-mdr-frontend
   dev-lif-mdr-api
 

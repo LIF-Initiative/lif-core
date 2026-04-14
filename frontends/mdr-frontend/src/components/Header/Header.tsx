@@ -18,7 +18,6 @@ const Header: React.FC = () => {
     logout = auth.logout;
   } else {
     console.warn("Auth context not available in Header, using fallback");
-    // Fallback logout function
     logout = async () => {
       await authService.logout();
     };
@@ -26,8 +25,14 @@ const Header: React.FC = () => {
 
   const handleLogout = async () => {
     await logout();
-    navigate("/login", { replace: true });
+    // For Cognito, logout() redirects away. For legacy, navigate to login.
+    if (!auth?.isCognito) {
+      navigate("/login", { replace: true });
+    }
   };
+
+  const displayName = user?.name || user?.email || "User";
+  const displayDetail = user?.organization;
 
   return (
     <header className="app-header">
@@ -45,18 +50,6 @@ const Header: React.FC = () => {
           >
             Explore
           </NavLink>
-          {/* <NavLink
-            to="/learn"
-            className={({ isActive }) => (isActive ? "active" : "")}
-          >
-            Learn
-          </NavLink>
-          <NavLink
-            to="/analyze"
-            className={({ isActive }) => (isActive ? "active" : "")}
-          >
-            Analyze
-          </NavLink> */}
         </nav>
 
         {/* User Menu */}
@@ -65,14 +58,18 @@ const Header: React.FC = () => {
             <DropdownMenu.Trigger>
               <Button variant="ghost" size="2">
                 <PersonIcon />
-                <Text size="2">{user?.username || 'User'}</Text>
+                <Text size="2">{displayName}</Text>
               </Button>
             </DropdownMenu.Trigger>
             <DropdownMenu.Content>
               <DropdownMenu.Label>
-                <Text size="2" weight="medium">{user?.firstname} {user?.lastname}</Text>
-                &nbsp;
-                <Text size="1" color="gray" className="block">({user?.identifier})</Text>
+                <Text size="2" weight="medium">{displayName}</Text>
+                {displayDetail && (
+                  <>
+                    &nbsp;
+                    <Text size="1" color="gray" className="block">({displayDetail})</Text>
+                  </>
+                )}
               </DropdownMenu.Label>
               <DropdownMenu.Separator />
               <DropdownMenu.Item onClick={handleLogout}>
@@ -82,15 +79,6 @@ const Header: React.FC = () => {
             </DropdownMenu.Content>
           </DropdownMenu.Root>
         </Flex>
-
-        {/* <div className="breadcrumbs">
-          {breadcrumbs.map((crumb, index) => (
-            <React.Fragment key={crumb.path}>
-              {index > 0 && " > "}
-              <NavLink to={crumb.path}>{crumb.handle?.name}</NavLink>
-            </React.Fragment>
-          ))}
-        </div> */}
       </div>
     </header>
   );

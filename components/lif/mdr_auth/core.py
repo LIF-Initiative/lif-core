@@ -1,5 +1,5 @@
 """
-Core authentication module with JWT token handling and API key support
+Core authentication module with JWT token handling, API key support, and Cognito JWT validation
 """
 
 import uuid
@@ -29,6 +29,57 @@ API_KEYS = {
     settings.mdr__auth__service_api_key__semantic_search: "semantic-search-service",
     settings.mdr__auth__service_api_key__translator: "translator-service",
 }
+
+# Cognito configuration
+COGNITO_USER_POOL_ID = settings.mdr__auth__cognito_user_pool_id
+COGNITO_REGION = settings.mdr__auth__cognito_region
+COGNITO_SPA_CLIENT_ID = settings.mdr__auth__cognito_spa_client_id
+COGNITO_ENABLED = bool(COGNITO_USER_POOL_ID)
+
+_cognito_jwk_client: Optional[jwt.PyJWKClient] = None
+
+
+def _get_cognito_jwk_client() -> jwt.PyJWKClient:
+    """Lazily initialize and cache the Cognito JWKS client."""
+    global _cognito_jwk_client  # noqa: PLW0603
+    if _cognito_jwk_client is None:
+        jwks_url = f"https://cognito-idp.{COGNITO_REGION}.amazonaws.com/{COGNITO_USER_POOL_ID}/.well-known/jwks.json"
+        _cognito_jwk_client = jwt.PyJWKClient(jwks_url, cache_keys=True, lifespan=3600)
+    return _cognito_jwk_client
+
+
+def decode_cognito_jwt(token: str) -> Dict[str, Any]:
+    """Decode and validate a Cognito-issued JWT (RS256 with JWKS).
+
+    Validates issuer, audience (for ID tokens) or client_id (for access tokens),
+    and token_use claims.
+    """
+    expected_issuer = f"https://cognito-idp.{COGNITO_REGION}.amazonaws.com/{COGNITO_USER_POOL_ID}"
+
+    jwk_client = _get_cognito_jwk_client()
+    signing_key = jwk_client.get_signing_key_from_jwt(token)
+
+    payload = jwt.decode(
+        token,
+        signing_key.key,
+        algorithms=["RS256"],
+        issuer=expected_issuer,
+        options={"verify_aud": False},  # Cognito access tokens use client_id, not aud
+    )
+
+    # Validate the token is from our SPA client
+    token_use = payload.get("token_use")
+    if token_use == "id":
+        if payload.get("aud") != COGNITO_SPA_CLIENT_ID:
+            raise jwt.InvalidTokenError("ID token audience does not match SPA client ID")
+    elif token_use == "access":
+        if payload.get("client_id") != COGNITO_SPA_CLIENT_ID:
+            raise jwt.InvalidTokenError("Access token client_id does not match SPA client ID")
+    else:
+        raise jwt.InvalidTokenError(f"Unexpected token_use: {token_use}")
+
+    return payload
+
 
 METHODS_TO_REQUIRE_AUTH = convert_csv_to_set(settings.mdr__auth__methods_to_require_auth)
 
@@ -143,23 +194,44 @@ class AuthMiddleware(BaseHTTPMiddleware):
                     logger.warning("Auth API key unknown or invalid. Trying Bearer token...")
 
             if getattr(request.state, "principal", None) is None:
-                # Fall back to JWT authentication
+                # Fall back to Bearer token authentication
                 credentials = _extract_bearer_token(request)
                 if not credentials:
                     logger.warning("Auth blocked due to no credentials provided")
                     return _build_unauthorized(detail="Authentication required: Provide either Bearer token or API key")
 
-                payload = decode_jwt(credentials)
+                # Determine token type by inspecting the JWT header
+                try:
+                    header = jwt.get_unverified_header(credentials)
+                except jwt.DecodeError:
+                    return _build_unauthorized(detail="Could not validate credentials")
 
-                # Validate token type
-                if payload.get("type") != "access":
-                    logger.warning("Auth Bearer token 'type' is not 'access'")
-                    return _build_unauthorized(detail="Invalid token type")
+                if COGNITO_ENABLED and header.get("kid"):
+                    # RS256 token with key ID — try Cognito validation
+                    try:
+                        payload = decode_cognito_jwt(credentials)
+                    except jwt.ExpiredSignatureError:
+                        logger.warning("Cognito token has expired")
+                        return _build_unauthorized(detail="Token has expired")
+                    except (jwt.InvalidTokenError, Exception) as e:
+                        logger.warning("Cognito token validation failed: %s", e)
+                        return _build_unauthorized(detail="Could not validate credentials")
 
-                # Check username
-                request.state.principal = payload.get("sub")
+                    # Extract principal from Cognito claims
+                    request.state.principal = payload.get("email") or payload.get("sub")
+                    request.state.cognito_groups = payload.get("cognito:groups", [])
+                else:
+                    # Legacy HS256 token (no kid) — existing local JWT validation
+                    payload = decode_jwt(credentials)
+
+                    if payload.get("type") != "access":
+                        logger.warning("Auth Bearer token 'type' is not 'access'")
+                        return _build_unauthorized(detail="Invalid token type")
+
+                    request.state.principal = payload.get("sub")
+
                 if request.state.principal is None:
-                    logger.warning("Auth Bearer token 'sub' is missing")
+                    logger.warning("Auth token 'sub'/'email' is missing")
                     return _build_unauthorized(detail="Could not validate credentials")
         except HTTPException as e:
             logger.exception("Auth middleware HTTPException")
