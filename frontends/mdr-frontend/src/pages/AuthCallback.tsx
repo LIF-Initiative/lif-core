@@ -3,10 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { Box, Spinner, Flex, Text, Callout, Container } from "@radix-ui/themes";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
 import authService from "../services/authService";
+import { useAuth } from "../context/AuthContext";
 import { trackLogin, trackLoginFailed } from "../utils/analytics";
 
 const AuthCallback: React.FC = () => {
   const navigate = useNavigate();
+  const { completeLogin } = useAuth();
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -28,7 +30,8 @@ const AuthCallback: React.FC = () => {
       }
 
       try {
-        await authService.handleCallback(code);
+        const user = await authService.handleCallback(code);
+        completeLogin(user);
         trackLogin("cognito");
         const returnUrl = authService.getReturnUrl();
         navigate(returnUrl, { replace: true });
@@ -39,7 +42,7 @@ const AuthCallback: React.FC = () => {
     };
 
     handleAuth();
-  }, [navigate]);
+  }, [navigate, completeLogin]);
 
   if (error) {
     return (

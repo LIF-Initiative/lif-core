@@ -8,6 +8,8 @@ interface AuthContextType {
   isLoading: boolean;
   login: (returnUrl?: string) => void;
   logout: () => Promise<void>;
+  /** Called after a successful login (Cognito callback or legacy form) to sync the context with the new user. */
+  completeLogin: (user: UserDetails) => void;
   /** True when Cognito is the auth provider, false for legacy password auth */
   isCognito: boolean;
 }
@@ -47,12 +49,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     // For legacy, the caller (Header) handles the navigate.
   };
 
+  const completeLogin = (newUser: UserDetails): void => {
+    setUser(newUser);
+  };
+
   const value: AuthContextType = {
     user,
     isAuthenticated: !!user && authService.isAuthenticated(),
     isLoading,
     login,
     logout,
+    completeLogin,
     isCognito: isCognitoEnabled,
   };
 
