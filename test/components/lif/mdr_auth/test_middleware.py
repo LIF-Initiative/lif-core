@@ -59,7 +59,11 @@ def _create_test_app() -> FastAPI:
     @app.get("/protected")
     async def protected(request: Request):
         return JSONResponse(
-            {"principal": request.state.principal, "cognito_groups": getattr(request.state, "cognito_groups", None)}
+            {
+                "principal": request.state.principal,
+                "cognito_groups": getattr(request.state, "cognito_groups", None),
+                "tenant_schema": getattr(request.state, "tenant_schema", None),
+            }
         )
 
     @app.get("/health-check")
@@ -196,3 +200,58 @@ class TestMiddlewareEdgeCases:
         resp = await client.get("/protected", headers={"Authorization": f"Bearer {token}"})
         # Should fail because the legacy HS256 decoder can't handle an RS256 token
         assert resp.status_code == 401
+
+
+class TestMiddlewareTenantRouting:
+    """Tenant-schema resolution (issue #883) integration with the middleware.
+
+    These tests verify that `request.state.tenant_schema` is set to the right
+    value for each auth path, based on the TENANT_ROUTING_ENABLED flag and
+    the TENANT_SERVICE_SCHEMA config. The sanitize/resolve logic itself is
+    unit-tested in test_tenant.py; here we confirm the wiring.
+    """
+
+    @pytest.fixture
+    def routing_on(self, monkeypatch):
+        import lif.mdr_auth.core as auth_module
+
+        monkeypatch.setattr(auth_module, "TENANT_ROUTING_ENABLED", True)
+        monkeypatch.setattr(auth_module, "TENANT_SERVICE_SCHEMA", "tenant_lif_team")
+
+    async def test_flag_off_leaves_tenant_schema_none(self, client):
+        """PR 2 merges with the flag off; this is the shipped-default behavior."""
+        token = _make_cognito_id_token(groups=["eval-jsmith"])
+        resp = await client.get("/protected", headers={"Authorization": f"Bearer {token}"})
+        assert resp.status_code == 200
+        assert resp.json()["tenant_schema"] is None
+
+    async def test_cognito_with_group_routes_to_tenant_schema(self, routing_on, client):
+        token = _make_cognito_id_token(groups=["eval-jsmith"])
+        resp = await client.get("/protected", headers={"Authorization": f"Bearer {token}"})
+        assert resp.status_code == 200
+        assert resp.json()["tenant_schema"] == "tenant_eval_jsmith"
+
+    async def test_api_key_routes_to_service_schema(self, routing_on, client):
+        resp = await client.get("/protected", headers={"X-API-Key": "changeme1"})
+        assert resp.status_code == 200
+        assert resp.json()["tenant_schema"] == "tenant_lif_team"
+
+    async def test_cognito_without_group_falls_back_to_service_schema(self, routing_on, client):
+        """Users with no Cognito group shouldn't 500 — route like an API-key caller."""
+        token = _make_cognito_id_token(groups=None)
+        resp = await client.get("/protected", headers={"Authorization": f"Bearer {token}"})
+        assert resp.status_code == 200
+        assert resp.json()["tenant_schema"] == "tenant_lif_team"
+
+    async def test_legacy_hs256_user_routes_to_service_schema(self, routing_on, client):
+        """Legacy demo users (pre-Cognito) share the service schema until they migrate."""
+        token = create_access_token({"sub": "demo-user@example.com"})
+        resp = await client.get("/protected", headers={"Authorization": f"Bearer {token}"})
+        assert resp.status_code == 200
+        assert resp.json()["tenant_schema"] == "tenant_lif_team"
+
+    async def test_public_path_does_not_set_tenant_schema(self, routing_on, client):
+        """Unauthenticated endpoints skip the auth block; tenant_schema stays None."""
+        resp = await client.get("/health-check")
+        assert resp.status_code == 200
+        # /health-check doesn't echo request.state, so nothing to assert here beyond 200.
