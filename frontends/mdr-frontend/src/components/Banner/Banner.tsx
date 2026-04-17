@@ -29,7 +29,7 @@ const Banner: React.FC<BannerProps> = ({ name, content, copyText, copyRichText }
   // Check if banner should be shown
   useEffect(() => {
     if (user) {
-      const bannerDismissed = localStorage.getItem(`banner-${name}-${user.username || 'user'}`) === 'true';
+      const bannerDismissed = localStorage.getItem(`banner-${name}-${user.email || 'user'}`) === 'true';
       if (!bannerDismissed) {
         setIsVisible(true);
       }
@@ -39,7 +39,7 @@ const Banner: React.FC<BannerProps> = ({ name, content, copyText, copyRichText }
   const handleDismiss = () => {
     setIsVisible(false);
     if (user) {
-      localStorage.setItem(`banner-${name}-${user.username || 'user'}`, 'true');
+      localStorage.setItem(`banner-${name}-${user.email || 'user'}`, 'true');
     }
   };
 

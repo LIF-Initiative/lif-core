@@ -19,6 +19,10 @@ class Settings(BaseSettings):
     mdr__auth__service_api_key__translator: str = "changeme3"
     mdr__auth__public_allowlist_exact: str = "/login,/refresh-token,/health-check"
     mdr__auth__public_allowlist_starts_with: str = "/docs,/openapi.json"
+    # Cognito configuration (empty user_pool_id = Cognito auth disabled)
+    mdr__auth__cognito_user_pool_id: str = ""
+    mdr__auth__cognito_region: str = "us-east-1"
+    mdr__auth__cognito_spa_client_id: str = ""
 
 
 _settings = Settings()

@@ -1,12 +1,17 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import authService, { LoginCredentials, UserDetails } from "../services/authService";
+import authService, { UserDetails } from "../services/authService";
+import { isCognitoEnabled } from "../config/auth";
 
 interface AuthContextType {
   user: UserDetails | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (credentials: LoginCredentials) => Promise<void>;
+  login: (returnUrl?: string) => void;
   logout: () => Promise<void>;
+  /** Called after a successful login (Cognito callback or legacy form) to sync the context with the new user. */
+  completeLogin: (user: UserDetails) => void;
+  /** True when Cognito is the auth provider, false for legacy password auth */
+  isCognito: boolean;
 }
 
 interface AuthProviderProps {
@@ -20,7 +25,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Initialize authentication on app load
     authService.initializeAuth();
     const currentUser = authService.getCurrentUser();
 
@@ -31,27 +35,32 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setIsLoading(false);
   }, []);
 
-  const login = async (credentials: LoginCredentials): Promise<void> => {
-    try {
-      const loginResponse = await authService.login(credentials);
-      setUser(loginResponse.user);
-    } catch (error) {
-      console.error("Login failed:", error);
-      throw error;
+  const login = (returnUrl?: string): void => {
+    if (isCognitoEnabled) {
+      authService.loginWithCognito(returnUrl);
     }
+    // Legacy login is handled by the Login form directly
   };
 
   const logout = async (): Promise<void> => {
     await authService.logout();
     setUser(null);
+    // For Cognito, logout() redirects to Cognito's logout endpoint.
+    // For legacy, the caller (Header) handles the navigate.
   };
 
-  const value = {
+  const completeLogin = (newUser: UserDetails): void => {
+    setUser(newUser);
+  };
+
+  const value: AuthContextType = {
     user,
     isAuthenticated: !!user && authService.isAuthenticated(),
     isLoading,
     login,
     logout,
+    completeLogin,
+    isCognito: isCognitoEnabled,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
@@ -60,7 +69,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    // More defensive error handling
     console.error("useAuth must be used within an AuthProvider");
     throw new Error("useAuth must be used within an AuthProvider");
   }

@@ -46,8 +46,12 @@ jobs:
       working-directory: ${{ env.WORKING_DIR }}
       run: |
         npm ci
+        cognito_domain=$(aws ssm get-parameter --name "/${{ env.ENV_NAME }}/mdr/CognitoDomain" --query "Parameter.Value" --output text 2>/dev/null || echo "")
+        cognito_client_id=$(aws ssm get-parameter --name "/${{ env.ENV_NAME }}/mdr/CognitoSpaClientId" --query "Parameter.Value" --output text 2>/dev/null || echo "")
         echo "VITE_API_URL=https://mdr-api.${{ env.ENV_NAME }}.${{ env.DOMAIN }}" > .env
         echo "VITE_GA_MEASUREMENT_ID=G-VZ515ZL70E" >> .env
+        echo "VITE_COGNITO_DOMAIN=${cognito_domain}" >> .env
+        echo "VITE_COGNITO_CLIENT_ID=${cognito_client_id}" >> .env
         npm run build
 
     - name: Sync to S3

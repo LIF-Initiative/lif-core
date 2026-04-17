@@ -6,6 +6,10 @@ ARG LIF_MDR_API_URL
 ENV LIF_MDR_API_URL=${LIF_MDR_API_URL}
 ARG GA_MEASUREMENT_ID
 ENV GA_MEASUREMENT_ID=${GA_MEASUREMENT_ID}
+ARG COGNITO_DOMAIN
+ENV COGNITO_DOMAIN=${COGNITO_DOMAIN}
+ARG COGNITO_CLIENT_ID
+ENV COGNITO_CLIENT_ID=${COGNITO_CLIENT_ID}
 
 # Set working directory
 WORKDIR /app
@@ -20,6 +24,8 @@ COPY . .
 # Inject Vite environment variables and build
 RUN echo "VITE_API_URL=${LIF_MDR_API_URL}" > .env && \
     echo "VITE_GA_MEASUREMENT_ID=${GA_MEASUREMENT_ID}" >> .env && \
+    echo "VITE_COGNITO_DOMAIN=${COGNITO_DOMAIN}" >> .env && \
+    echo "VITE_COGNITO_CLIENT_ID=${COGNITO_CLIENT_ID}" >> .env && \
     npm run build
 
 # Stage 2: serve the built app with nginx

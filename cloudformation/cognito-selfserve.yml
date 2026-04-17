@@ -1,0 +1,247 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >
+  Cognito User Pool for MDR self-serve registration.
+  Creates a User Pool with self-registration enabled, an SPA-compatible OAuth client,
+  and a post-confirmation Lambda that assigns each new user to their own Cognito group.
+
+Parameters:
+  EnvironmentName:
+    Type: String
+    Description: Environment name (dev, demo)
+  ServiceName:
+    Type: String
+    Default: mdr
+    Description: Service name prefix for resource naming
+  FrontendDomainName:
+    Type: String
+    Description: Frontend domain for OAuth callback URLs (e.g., mdr.dev.lif.unicon.net)
+  LocalDevCallbackUrl:
+    Type: String
+    Default: http://localhost:5173
+    Description: Local dev server URL for OAuth callbacks during development
+
+Resources:
+
+  # ---------------------------------------------------------------------------
+  # Cognito User Pool — self-registration enabled
+  # ---------------------------------------------------------------------------
+  UserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: !Sub ${EnvironmentName}-${ServiceName}-selfserve
+      AdminCreateUserConfig:
+        AllowAdminCreateUserOnly: false
+      AutoVerifiedAttributes:
+        - email
+      UsernameAttributes:
+        - email
+      Schema:
+        - Name: email
+          AttributeDataType: String
+          Required: true
+          Mutable: true
+        - Name: organization
+          AttributeDataType: String
+          Required: false
+          Mutable: true
+          StringAttributeConstraints:
+            MaxLength: "256"
+        - Name: role
+          AttributeDataType: String
+          Required: false
+          Mutable: true
+          StringAttributeConstraints:
+            MaxLength: "256"
+        - Name: reason
+          AttributeDataType: String
+          Required: false
+          Mutable: true
+          StringAttributeConstraints:
+            MaxLength: "1024"
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 8
+          RequireLowercase: true
+          RequireNumbers: true
+          RequireSymbols: false
+          RequireUppercase: true
+          TemporaryPasswordValidityDays: 7
+      AccountRecoverySetting:
+        RecoveryMechanisms:
+          - Name: verified_email
+            Priority: 1
+      LambdaConfig:
+        PostConfirmation: !GetAtt PostConfirmationLambda.Arn
+
+  # ---------------------------------------------------------------------------
+  # Cognito Domain — Hosted UI
+  # ---------------------------------------------------------------------------
+  UserPoolDomain:
+    Type: AWS::Cognito::UserPoolDomain
+    Properties:
+      Domain: !Sub ${EnvironmentName}-${ServiceName}-selfserve
+      UserPoolId: !Ref UserPool
+
+  # ---------------------------------------------------------------------------
+  # Cognito Client — SPA (public client, PKCE, no secret)
+  # ---------------------------------------------------------------------------
+  UserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      ClientName: !Sub ${EnvironmentName}-${ServiceName}-spa
+      UserPoolId: !Ref UserPool
+      GenerateSecret: false
+      ExplicitAuthFlows:
+        - ALLOW_REFRESH_TOKEN_AUTH
+      AllowedOAuthFlows:
+        - code
+      AllowedOAuthFlowsUserPoolClient: true
+      AllowedOAuthScopes:
+        - email
+        - openid
+        - profile
+      CallbackURLs:
+        - !Sub https://${FrontendDomainName}/auth/callback
+        - !Sub ${LocalDevCallbackUrl}/auth/callback
+      LogoutURLs:
+        - !Sub https://${FrontendDomainName}/login
+        - !Sub ${LocalDevCallbackUrl}/login
+      SupportedIdentityProviders:
+        - COGNITO
+      PreventUserExistenceErrors: ENABLED
+      RefreshTokenValidity: 30
+      IdTokenValidity: 60
+      AccessTokenValidity: 60
+      TokenValidityUnits:
+        AccessToken: minutes
+        IdToken: minutes
+        RefreshToken: days
+
+  # ---------------------------------------------------------------------------
+  # Post-Confirmation Lambda — creates a Cognito group for each new user
+  # ---------------------------------------------------------------------------
+  PostConfirmationLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub ${EnvironmentName}-${ServiceName}-post-confirm
+      Description: >
+        Cognito post-confirmation trigger: creates an eval-{username} group
+        and adds the confirmed user to it.
+      Runtime: python3.12
+      Handler: index.handler
+      Timeout: 10
+      ReservedConcurrentExecutions: 5
+      Role: !GetAtt PostConfirmationLambdaRole.Arn
+      Code:
+        ZipFile: |
+          import boto3
+          import re
+
+          cognito = boto3.client("cognito-idp")
+
+          def handler(event, context):
+              """Cognito PostConfirmation trigger.
+
+              Creates an eval-{username} group and adds the user to it.
+              Group creation failure (e.g., already exists) does not block confirmation.
+              """
+              user_pool_id = event["userPoolId"]
+              username = event["userName"]
+
+              # Sanitize for group name: lowercase, replace non-alphanumeric with hyphens
+              safe_name = re.sub(r"[^a-z0-9]", "-", username.lower()).strip("-")[:60]
+              group_name = f"eval-{safe_name}"
+
+              try:
+                  cognito.create_group(
+                      GroupName=group_name,
+                      UserPoolId=user_pool_id,
+                      Description=f"Auto-created group for {username}",
+                  )
+              except cognito.exceptions.GroupExistsException:
+                  pass  # Idempotent — group already exists
+
+              cognito.admin_add_user_to_group(
+                  UserPoolId=user_pool_id,
+                  Username=username,
+                  GroupName=group_name,
+              )
+
+              return event
+
+  PostConfirmationLambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub ${EnvironmentName}-${ServiceName}-post-confirm-role
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: CognitoGroupManagement
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - cognito-idp:CreateGroup
+                  - cognito-idp:AdminAddUserToGroup
+                Resource: !Sub arn:aws:cognito-idp:${AWS::Region}:${AWS::AccountId}:userpool/*
+
+  PostConfirmationLambdaPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref PostConfirmationLambda
+      Action: lambda:InvokeFunction
+      Principal: cognito-idp.amazonaws.com
+      SourceArn: !GetAtt UserPool.Arn
+
+  # ---------------------------------------------------------------------------
+  # SSM Parameters — consumed by MDR API task definition
+  # ---------------------------------------------------------------------------
+  UserPoolIdParam:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: !Sub /${EnvironmentName}/${ServiceName}/CognitoUserPoolId
+      Type: String
+      Value: !Ref UserPool
+      Description: Cognito User Pool ID for MDR self-serve registration
+
+  SpaClientIdParam:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: !Sub /${EnvironmentName}/${ServiceName}/CognitoSpaClientId
+      Type: String
+      Value: !Ref UserPoolClient
+      Description: Cognito SPA Client ID for MDR frontend
+
+  CognitoDomainParam:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: !Sub /${EnvironmentName}/${ServiceName}/CognitoDomain
+      Type: String
+      Value: !Sub ${EnvironmentName}-${ServiceName}-selfserve.auth.${AWS::Region}.amazoncognito.com
+      Description: Cognito Hosted UI domain for MDR self-serve
+
+Outputs:
+  UserPoolId:
+    Value: !Ref UserPool
+    Description: Cognito User Pool ID
+  UserPoolArn:
+    Value: !GetAtt UserPool.Arn
+    Description: Cognito User Pool ARN
+  SpaClientId:
+    Value: !Ref UserPoolClient
+    Description: SPA Client ID
+  CognitoDomain:
+    Value: !Sub ${EnvironmentName}-${ServiceName}-selfserve.auth.${AWS::Region}.amazoncognito.com
+    Description: Cognito Hosted UI domain
+  HostedUiUrl:
+    Value: !Sub >-
+      https://${EnvironmentName}-${ServiceName}-selfserve.auth.${AWS::Region}.amazoncognito.com/login?client_id=${UserPoolClient}&response_type=code&scope=email+openid+profile&redirect_uri=https://${FrontendDomainName}/auth/callback
+    Description: Hosted UI login URL (for reference)

@@ -1,0 +1,14 @@
+[
+  {
+    "ParameterKey": "EnvironmentName",
+    "ParameterValue": "demo"
+  },
+  {
+    "ParameterKey": "ServiceName",
+    "ParameterValue": "mdr"
+  },
+  {
+    "ParameterKey": "FrontendDomainName",
+    "ParameterValue": "mdr.demo.lif.unicon.net"
+  }
+]
