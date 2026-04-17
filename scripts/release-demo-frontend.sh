@@ -225,9 +225,17 @@ build_frontend() {
         exit 1
     }
 
+    local cognito_domain cognito_client_id
+    cognito_domain=$(aws ssm get-parameter --name "/${ENV_NAME}/${SERVICE_NAME}/CognitoDomain" --query "Parameter.Value" --output text 2>/dev/null || echo "")
+    cognito_client_id=$(aws ssm get-parameter --name "/${ENV_NAME}/${SERVICE_NAME}/CognitoSpaClientId" --query "Parameter.Value" --output text 2>/dev/null || echo "")
+
     log_info "Building with VITE_API_URL=$VITE_API_URL..."
-    echo "VITE_API_URL=$VITE_API_URL" > "$build_dir/.env"
-    echo "VITE_GA_MEASUREMENT_ID=$GA_MEASUREMENT_ID" >> "$build_dir/.env"
+    {
+        echo "VITE_API_URL=$VITE_API_URL"
+        echo "VITE_GA_MEASUREMENT_ID=$GA_MEASUREMENT_ID"
+        echo "VITE_COGNITO_DOMAIN=$cognito_domain"
+        echo "VITE_COGNITO_CLIENT_ID=$cognito_client_id"
+    } > "$build_dir/.env"
     (cd "$build_dir" && npm run build --silent) || {
         log_error "npm run build failed"
         exit 1
