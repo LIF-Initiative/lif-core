@@ -226,8 +226,20 @@ build_frontend() {
     }
 
     local cognito_domain cognito_client_id
-    cognito_domain=$(aws ssm get-parameter --name "/${ENV_NAME}/${SERVICE_NAME}/CognitoDomain" --query "Parameter.Value" --output text 2>/dev/null || echo "")
-    cognito_client_id=$(aws ssm get-parameter --name "/${ENV_NAME}/${SERVICE_NAME}/CognitoSpaClientId" --query "Parameter.Value" --output text 2>/dev/null || echo "")
+    local cognito_domain_param="/${ENV_NAME}/${SERVICE_NAME}/CognitoDomain"
+    local cognito_client_id_param="/${ENV_NAME}/${SERVICE_NAME}/CognitoSpaClientId"
+    cognito_domain=$(aws ssm get-parameter --region "$AWS_REGION" \
+        --name "$cognito_domain_param" --query "Parameter.Value" --output text) || {
+        log_error "Failed to fetch Cognito domain from SSM ($cognito_domain_param in $AWS_REGION)"
+        log_error "Shipping the demo frontend without Cognito config would silently disable auth."
+        exit 1
+    }
+    cognito_client_id=$(aws ssm get-parameter --region "$AWS_REGION" \
+        --name "$cognito_client_id_param" --query "Parameter.Value" --output text) || {
+        log_error "Failed to fetch Cognito SPA client ID from SSM ($cognito_client_id_param in $AWS_REGION)"
+        log_error "Shipping the demo frontend without Cognito config would silently disable auth."
+        exit 1
+    }
 
     log_info "Building with VITE_API_URL=$VITE_API_URL..."
     {
@@ -264,7 +276,7 @@ invalidate_cloudfront() {
     log_info "Fetching CloudFront distribution ID from SSM..."
 
     local distribution_id
-    distribution_id=$(aws ssm get-parameter \
+    distribution_id=$(aws ssm get-parameter --region "$AWS_REGION" \
         --name "$SSM_DISTRIBUTION_ID" \
         --query "Parameter.Value" \
         --output text 2>/dev/null) || {
