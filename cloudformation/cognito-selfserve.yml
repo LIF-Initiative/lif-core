@@ -125,25 +125,93 @@ Resources:
     Properties:
       FunctionName: !Sub ${EnvironmentName}-${ServiceName}-post-confirm
       Description: >
-        Cognito post-confirmation trigger: creates an eval-{username} group
-        and adds the confirmed user to it.
+        Cognito post-confirmation trigger: creates an eval-{username} group,
+        adds the confirmed user to it, and calls the MDR API to provision a
+        tenant_{group} PostgreSQL schema (issue #883 PR 4b).
       Runtime: python3.12
       Handler: index.handler
-      Timeout: 10
+      Timeout: 30
       ReservedConcurrentExecutions: 5
       Role: !GetAtt PostConfirmationLambdaRole.Arn
+      Environment:
+        Variables:
+          MDR_API_URL: !Sub https://${ServiceName}-api.${EnvironmentName}.lif.unicon.net
+          MDR_API_KEY_SSM_PARAM: !Sub /${EnvironmentName}/${ServiceName}-post-confirm/MdrApiKey
       Code:
         ZipFile: |
-          import boto3
+          import json
+          import logging
+          import os
           import re
+          import urllib.error
+          import urllib.request
+
+          import boto3
+
+          logger = logging.getLogger()
+          logger.setLevel(logging.INFO)
 
           cognito = boto3.client("cognito-idp")
+          ssm = boto3.client("ssm")
+
+          MDR_API_URL = os.environ["MDR_API_URL"]
+          MDR_API_KEY_SSM_PARAM = os.environ["MDR_API_KEY_SSM_PARAM"]
+
+          # Cache across warm invocations so we read SSM once per container.
+          _mdr_api_key = None
+
+
+          def _get_mdr_api_key():
+              global _mdr_api_key
+              if _mdr_api_key is None:
+                  resp = ssm.get_parameter(Name=MDR_API_KEY_SSM_PARAM, WithDecryption=True)
+                  _mdr_api_key = resp["Parameter"]["Value"]
+              return _mdr_api_key
+
+
+          def _provision_tenant(group_name):
+              """Call MDR API to create a tenant_{group} schema.
+
+              Failures are logged but not raised — Cognito has already confirmed
+              the user and re-raising would put them in an unrecoverable "confirmed
+              but unprovisioned" state from the Hosted UI perspective. Ops can
+              re-run provisioning manually by invoking the endpoint with the same
+              group_name (it's idempotent).
+              """
+              req = urllib.request.Request(
+                  f"{MDR_API_URL}/tenants/provision",
+                  data=json.dumps({"group_name": group_name}).encode("utf-8"),
+                  headers={
+                      "Content-Type": "application/json",
+                      "X-API-Key": _get_mdr_api_key(),
+                  },
+                  method="POST",
+              )
+              try:
+                  with urllib.request.urlopen(req, timeout=20) as resp:
+                      body = resp.read().decode("utf-8")
+                      logger.info(
+                          "Tenant provisioned: status=%s group=%s body=%s",
+                          resp.status, group_name, body,
+                      )
+              except urllib.error.HTTPError as e:
+                  logger.error(
+                      "MDR /tenants/provision returned %s for group %s: %s",
+                      e.code, group_name, e.read().decode("utf-8", errors="replace"),
+                  )
+              except (urllib.error.URLError, TimeoutError) as e:
+                  logger.error(
+                      "MDR /tenants/provision network error for group %s: %s",
+                      group_name, e,
+                  )
+
 
           def handler(event, context):
               """Cognito PostConfirmation trigger.
 
-              Creates an eval-{username} group and adds the user to it.
-              Group creation failure (e.g., already exists) does not block confirmation.
+              Creates an eval-{username} group, adds the user to it, and
+              provisions a tenant schema. Cognito group and tenant provisioning
+              failures do not block confirmation.
               """
               user_pool_id = event["userPoolId"]
               username = event["userName"]
@@ -166,6 +234,8 @@ Resources:
                   Username=username,
                   GroupName=group_name,
               )
+
+              _provision_tenant(group_name)
 
               return event
 
@@ -192,6 +262,18 @@ Resources:
                   - cognito-idp:CreateGroup
                   - cognito-idp:AdminAddUserToGroup
                 Resource: !Sub arn:aws:cognito-idp:${AWS::Region}:${AWS::AccountId}:userpool/*
+        - PolicyName: ReadMdrApiKey
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - ssm:GetParameter
+                Resource: !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${EnvironmentName}/${ServiceName}-post-confirm/MdrApiKey
+              - Effect: Allow
+                Action:
+                  - kms:Decrypt
+                Resource: !Sub arn:aws:kms:${AWS::Region}:${AWS::AccountId}:alias/aws/ssm
 
   PostConfirmationLambdaPermission:
     Type: AWS::Lambda::Permission
