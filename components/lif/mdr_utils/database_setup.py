@@ -30,15 +30,16 @@ async_session = sessionmaker(bind=engine, class_=AsyncSession, expire_on_commit=
 _TENANT_SCHEMA_RE = re.compile(r"^[A-Za-z_][A-Za-z0-9_]{0,62}$")
 
 
-async def get_session(request: Request | None = None) -> AsyncGenerator[AsyncSession, None]:
+async def get_session(request: Request) -> AsyncGenerator[AsyncSession, None]:
     """Yield an AsyncSession, optionally scoped to a tenant schema.
 
+    ``request`` is auto-injected by FastAPI whenever this runs as a Depends.
     When the auth middleware has set ``request.state.tenant_schema`` (i.e.
     the tenant-routing feature flag is on and a tenant could be resolved),
     this issues ``SET search_path`` so every query in the session resolves
-    against that schema. When unset — flag off, public endpoint, or no
-    request bound (background jobs, some tests) — the session uses PG's
-    default search_path and behaves exactly as it did before #883.
+    against that schema. When unset — flag off or a public endpoint that
+    bypassed auth — the session uses PG's default search_path and behaves
+    exactly as it did before #883.
 
     If ``tenant_schema`` is set but does not match the identifier pattern,
     the request is failed with 500 rather than silently falling back to
@@ -46,7 +47,7 @@ async def get_session(request: Request | None = None) -> AsyncGenerator[AsyncSes
     something the sanitizer never emits — treating that as "route to public"
     would either leak data across tenants or mask a resolver bug.
     """
-    tenant_schema = getattr(request.state, "tenant_schema", None) if request is not None else None
+    tenant_schema = getattr(request.state, "tenant_schema", None)
     async with async_session() as session:
         if tenant_schema and _TENANT_SCHEMA_RE.match(tenant_schema):
             await session.execute(text(f'SET search_path TO "{tenant_schema}"'))
