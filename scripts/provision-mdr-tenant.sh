@@ -1,26 +1,15 @@
 #!/usr/bin/env bash
 set -euo pipefail
 #
-# provision-mdr-tenant.sh — Create a tenant_{name} PostgreSQL schema in the MDR
-# database by cloning the DDL from the `public` schema. Optionally copies all
-# data from `public` as well (useful for the one-time migration of existing
-# demo data into tenant_lif_team).
+# provision-mdr-tenant.sh — Create a tenant_{name} PostgreSQL schema in the
+# MDR database by cloning DDL (and optionally data) from a source schema.
 #
-# This is Phase 2 (issue #883) infrastructure for MDR self-serve. It is a
-# pure ops tool — no runtime behavior changes. The caller is responsible for
-# providing network connectivity to the target PostgreSQL instance (local
-# docker-compose, VPN, SSH tunnel, etc.) via standard libpq env vars.
+# Phase 2 (issue #883) infrastructure for MDR self-serve. Pure ops tool —
+# no runtime behavior changes. The caller is responsible for providing
+# network connectivity to the target PostgreSQL instance (local
+# docker-compose, VPN, SSH tunnel, etc.).
 #
-# Usage:
-#   ./scripts/provision-mdr-tenant.sh <tenant-name>              # Dry-run
-#   ./scripts/provision-mdr-tenant.sh <tenant-name> --apply      # Execute
-#   ./scripts/provision-mdr-tenant.sh <tenant-name> --clone-data --apply
-#   ./scripts/provision-mdr-tenant.sh --help
-#
-# Required env vars (libpq):
-#   PGHOST, PGPORT, PGUSER, PGPASSWORD, PGDATABASE
-#
-# Backward-compat fallback: if PG* vars are unset, POSTGRESQL_* are used.
+# Run with --help for full usage, options, env vars, and examples.
 #
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -61,7 +50,8 @@ Options:
 
 Environment:
   PGHOST, PGPORT, PGUSER, PGPASSWORD, PGDATABASE — libpq connection params
-  (POSTGRESQL_HOST, _PORT, _USER, _PASSWORD, _DB accepted as fallback)
+  (POSTGRESQL_HOST, POSTGRESQL_PORT, POSTGRESQL_USER, POSTGRESQL_PASSWORD,
+  POSTGRESQL_DB accepted as fallback to match the MDR API's env var naming)
 
 Examples:
   # Preview what would happen
@@ -91,7 +81,7 @@ main() {
 
     log_info "Verifying PostgreSQL connection to ${PGUSER}@${PGHOST}:${PGPORT}/${PGDATABASE}"
     psql -Atc 'SELECT 1' >/dev/null || {
-        log_error "Unable to connect to PostgreSQL. Check PG* env vars and network access."
+        log_error "Unable to connect to PostgreSQL. Check PG* / POSTGRESQL_* env vars and network access."
         exit 1
     }
     log_success "Connected"
@@ -101,7 +91,7 @@ main() {
     local target_exists
     target_exists=$(schema_exists "$target_schema")
 
-    if [[ "$target_exists" == "t" && "$FORCE" != "true" ]]; then
+    if [[ "$target_exists" == "1" && "$FORCE" != "true" ]]; then
         log_error "Schema ${target_schema} already exists. Use --force to drop and re-create."
         exit 1
     fi
@@ -122,7 +112,7 @@ main() {
 
     if [[ "$DRY_RUN" == "true" ]]; then
         echo "  Steps that would be performed:"
-        [[ "$target_exists" == "t" && "$FORCE" == "true" ]] && \
+        [[ "$target_exists" == "1" && "$FORCE" == "true" ]] && \
             echo "    - DROP SCHEMA ${target_schema} CASCADE"
         echo "    - CREATE SCHEMA ${target_schema}"
         echo "    - Clone DDL from ${SOURCE_SCHEMA} (pg_dump --schema-only + rewrite)"
@@ -133,7 +123,7 @@ main() {
         return 0
     fi
 
-    if [[ "$target_exists" == "t" && "$FORCE" == "true" ]]; then
+    if [[ "$target_exists" == "1" && "$FORCE" == "true" ]]; then
         log_warn "Dropping existing schema ${target_schema}"
         psql -v ON_ERROR_STOP=1 -c "DROP SCHEMA ${target_schema} CASCADE" >/dev/null
     fi
@@ -153,9 +143,8 @@ main() {
     log_success "Tenant schema ${target_schema} provisioned"
 }
 
-# Clone DDL from source to target. pg_dump emits fully-qualified names like
-# "public.mytable"; sed rewrites those to the target schema. The CREATE SCHEMA
-# line and SET search_path lines are stripped because we manage those ourselves.
+# Pipe pg_dump's DDL output through the rewriter into psql. The rewrite
+# rules live with rewrite_schema_ddl below.
 clone_schema_ddl() {
     local source=$1
     local target=$2
@@ -226,14 +215,15 @@ rewrite_schema_data() {
         -e "/^ALTER TABLE /s/(^|[^A-Za-z0-9_\"])${source}\./\1${target}./g"
 }
 
+# Returns "1" if the schema exists, empty string otherwise.
 schema_exists() {
     local schema=$1
-    psql -Atc "SELECT EXISTS(SELECT 1 FROM information_schema.schemata WHERE schema_name = '${schema}')"
+    psql -Atc "SELECT 1 FROM information_schema.schemata WHERE schema_name = '${schema}'"
 }
 
 verify_source_schema() {
     local schema=$1
-    if [[ "$(schema_exists "$schema")" != "t" ]]; then
+    if [[ "$(schema_exists "$schema")" != "1" ]]; then
         log_error "Source schema '${schema}' does not exist in ${PGDATABASE}"
         exit 1
     fi
