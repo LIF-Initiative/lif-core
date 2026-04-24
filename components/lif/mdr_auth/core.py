@@ -29,6 +29,7 @@ API_KEYS = {
     settings.mdr__auth__service_api_key__graphql: "graphql-service",
     settings.mdr__auth__service_api_key__semantic_search: "semantic-search-service",
     settings.mdr__auth__service_api_key__translator: "translator-service",
+    settings.mdr__auth__service_api_key__post_confirm: "post-confirm-service",
 }
 
 # Cognito configuration

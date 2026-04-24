@@ -188,6 +188,14 @@ main() {
         "/${ENV_NAME}/mdr-api/MdrAuthServiceApiKeyTranslator" \
         "/${ENV_NAME}/translator-org1/MdrApiKey"
 
+    # Post-confirmation Lambda key (issue #883 PR 4b). Server-side entry is
+    # under /mdr-api/ to match the MDR API task def ValueFrom path; client-side
+    # key lives under /mdr-post-confirm/ where the Lambda's IAM policy reads it.
+    setup_key_group \
+        "Post-confirm Lambda service key" \
+        "/${ENV_NAME}/mdr-api/MdrAuthServiceApiKeyPostConfirm" \
+        "/${ENV_NAME}/mdr-post-confirm/MdrApiKey"
+
     echo ""
     echo "─────────────────────────────────────────"
     if [[ "$DRY_RUN" == "true" ]]; then
