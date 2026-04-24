@@ -441,6 +441,7 @@ services:
     volumes:
       - ../../projects/lif_mdr_database/backup.sql:/backup.sql
       - ../../projects/lif_mdr_database/restore.sh:/docker-entrypoint-initdb.d/restore.sh
+      - ../../sam/mdr-database/flyway/flyway-files/flyway/sql/mdr:/flyway-migrations:ro
     entrypoint: /docker-entrypoint-initdb.d/restore.sh
     networks:
       - lif-net-mdr-db
