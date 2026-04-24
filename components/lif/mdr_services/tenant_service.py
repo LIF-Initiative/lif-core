@@ -46,9 +46,13 @@ async def provision_tenant(session: AsyncSession, group_name: str) -> str:
         await session.execute(text("SELECT public.clone_lif_schema(:target)"), {"target": target})
         await session.commit()
     except DBAPIError as e:
-        sqlstate = getattr(getattr(e, "orig", None), "sqlstate", None) or getattr(
-            getattr(e, "orig", None), "pgcode", None
-        )
+        # SQLAlchemy wraps the driver-level exception in DBAPIError. The
+        # original driver exception (asyncpg or psycopg) is on `.orig` and
+        # exposes the PG SQLSTATE as either `.sqlstate` or `.pgcode`
+        # depending on the driver. We check both so this works against
+        # either backend.
+        orig = getattr(e, "orig", None)
+        sqlstate = getattr(orig, "sqlstate", None) or getattr(orig, "pgcode", None)
         if sqlstate == DUPLICATE_SCHEMA_SQLSTATE:
             raise TenantAlreadyExistsError(target) from e
         raise

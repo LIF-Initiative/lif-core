@@ -37,7 +37,10 @@
 -- having to broaden the API role's DDL privileges. The explicit search_path
 -- pin closes the usual SECURITY DEFINER hijack vector (an attacker who
 -- controls their own search_path can't redirect our unqualified names).
-CREATE OR REPLACE FUNCTION public.clone_lif_schema(target_schema text)
+CREATE OR REPLACE FUNCTION public.clone_lif_schema(
+    target_schema text,
+    include_data boolean DEFAULT true
+)
 RETURNS void
 LANGUAGE plpgsql
 SECURITY DEFINER
@@ -50,11 +53,17 @@ DECLARE
     fk_def text;
     fk_rec record;
 BEGIN
-    -- Defense in depth: API already sanitizes, but the function is callable
-    -- directly via SQL so re-validate that target matches the identifier
-    -- pattern the resolver produces.
-    IF target_schema !~ '^[A-Za-z_][A-Za-z0-9_]{0,62}$' THEN
-        RAISE EXCEPTION 'clone_lif_schema: invalid target_schema name %', target_schema;
+    -- Defense in depth: API already sanitizes to tenant_{...}, but this
+    -- function is callable directly via SQL so re-validate. The pattern
+    -- matches the tenant_schema_for_group output shape exactly: must start
+    -- with the tenant_ prefix, followed by a lowercase letter, then any
+    -- mix of lowercase/digit/underscore. This is stricter than a generic
+    -- PG identifier regex — it rejects e.g. clone_lif_schema('public_foo').
+    IF target_schema !~ '^tenant_[a-z][a-z0-9_]*$' THEN
+        RAISE EXCEPTION 'clone_lif_schema: target_schema must match tenant_[a-z][a-z0-9_]* (got %)', target_schema;
+    END IF;
+    IF length(target_schema) > 63 THEN
+        RAISE EXCEPTION 'clone_lif_schema: target_schema exceeds PG''s 63-char identifier limit (%)', target_schema;
     END IF;
 
     IF EXISTS (SELECT 1 FROM information_schema.schemata WHERE schema_name = target_schema) THEN
@@ -106,36 +115,49 @@ BEGIN
     END LOOP;
 
     -- Data: copy every row from public.{t} into target.{t}. Done after FKs
-    -- are in place so PK/FK/CHECK constraints are validated — if source
-    -- data violates them (it shouldn't), we'd rather fail here than paper
-    -- over a corrupt source.
-    FOR tbl_name IN
-        SELECT tablename FROM pg_tables WHERE schemaname = 'public' ORDER BY tablename
-    LOOP
-        EXECUTE format(
-            'INSERT INTO %I.%I SELECT * FROM public.%I',
-            target_schema, tbl_name, tbl_name
-        );
-    END LOOP;
+    -- are in place so PK/FK/CHECK constraints are validated on the way in
+    -- — if source data violates a constraint (it shouldn't), we want the
+    -- clone to fail loudly rather than silently produce a tenant schema
+    -- whose data doesn't match its own constraints.
+    --
+    -- Data clone is opt-in via `include_data`. The post-confirmation
+    -- Lambda passes TRUE (tenants start with the current LIF model +
+    -- demo rows); the one-time public → tenant_lif_team migration in PR 3
+    -- will also pass TRUE. Callers that want a bare-structure clone
+    -- (e.g., a future "reset to empty workspace") pass FALSE.
+    IF include_data THEN
+        FOR tbl_name IN
+            SELECT tablename FROM pg_tables WHERE schemaname = 'public' ORDER BY tablename
+        LOOP
+            EXECUTE format(
+                'INSERT INTO %I.%I SELECT * FROM public.%I',
+                target_schema, tbl_name, tbl_name
+            );
+        END LOOP;
+    END IF;
 
     -- Sequences: sync last_value so the next nextval() in the tenant
     -- schema starts after the copied data, not from 1. LIKE INCLUDING ALL
     -- creates per-tenant sequences (they're owned by identity columns in
     -- the cloned tables), so we just need to set their starting point.
-    FOR seq_name IN
-        SELECT sequence_name FROM information_schema.sequences
-        WHERE sequence_schema = target_schema
-    LOOP
-        EXECUTE format('SELECT last_value FROM public.%I', seq_name) INTO seq_value;
-        EXECUTE format('SELECT setval(%L, %s, true)', target_schema || '.' || seq_name, seq_value);
-    END LOOP;
+    -- Only bother when we actually copied data; otherwise the tenant
+    -- sequences are already at their defaults.
+    IF include_data THEN
+        FOR seq_name IN
+            SELECT sequence_name FROM information_schema.sequences
+            WHERE sequence_schema = target_schema
+        LOOP
+            EXECUTE format('SELECT last_value FROM public.%I', seq_name) INTO seq_value;
+            EXECUTE format('SELECT setval(%L, %s, true)', target_schema || '.' || seq_name, seq_value);
+        END LOOP;
+    END IF;
 END;
 $$;
 
-COMMENT ON FUNCTION public.clone_lif_schema(text) IS
-    'Clones the LIF schema from public into the given target schema (DDL + FKs + data + sequences). Raises duplicate_schema if target exists. Called by POST /tenants/provision when a new user registers.';
+COMMENT ON FUNCTION public.clone_lif_schema(text, boolean) IS
+    'Clones the LIF schema from public into the given target schema (DDL + FKs, plus data + sequences when include_data=true). Raises duplicate_schema if target exists. Called by POST /tenants/provision when a new user registers.';
 
 -- Allow the MDR API role to invoke the function. PUBLIC is broader than
 -- needed but matches how the existing deletedatamodelrecords procedure is
 -- exposed; we can tighten to a named role later if RBAC is introduced.
-GRANT EXECUTE ON FUNCTION public.clone_lif_schema(text) TO PUBLIC;
+GRANT EXECUTE ON FUNCTION public.clone_lif_schema(text, boolean) TO PUBLIC;

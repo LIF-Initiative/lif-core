@@ -31,10 +31,12 @@ async def require_service_principal(request: Request) -> str:
 
 
 class ProvisionTenantRequest(BaseModel):
+    # 128 matches Cognito's own GroupName limit — anything longer than that
+    # couldn't have come from a real cognito:groups claim, so reject early.
     group_name: str = Field(
         ...,
         min_length=1,
-        max_length=256,
+        max_length=128,
         description="Cognito group name (server sanitizes it into a tenant schema identifier)",
     )
 
