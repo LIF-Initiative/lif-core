@@ -5,7 +5,7 @@ import os
 import re
 from typing import AsyncGenerator
 
-from fastapi import Request
+from fastapi import HTTPException, Request, status
 from lif.mdr_utils.logger_config import get_logger
 
 from sqlalchemy import text
@@ -39,16 +39,22 @@ async def get_session(request: Request | None = None) -> AsyncGenerator[AsyncSes
     against that schema. When unset — flag off, public endpoint, or no
     request bound (background jobs, some tests) — the session uses PG's
     default search_path and behaves exactly as it did before #883.
+
+    If ``tenant_schema`` is set but does not match the identifier pattern,
+    the request is failed with 500 rather than silently falling back to
+    the default schema. An invalid name here means the middleware produced
+    something the sanitizer never emits — treating that as "route to public"
+    would either leak data across tenants or mask a resolver bug.
     """
     tenant_schema = getattr(request.state, "tenant_schema", None) if request is not None else None
     async with async_session() as session:
         if tenant_schema and _TENANT_SCHEMA_RE.match(tenant_schema):
             await session.execute(text(f'SET search_path TO "{tenant_schema}"'))
         elif tenant_schema:
-            # Middleware handed us a name we refuse to interpolate. Log and
-            # fall back to the default search_path rather than routing the
-            # request to the wrong schema or opening an injection vector.
             logger.error("Refusing to SET search_path to invalid tenant_schema %r", tenant_schema)
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Internal tenant routing error"
+            )
         yield session
 
 
