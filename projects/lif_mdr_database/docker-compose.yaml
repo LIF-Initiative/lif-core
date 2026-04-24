@@ -26,4 +26,5 @@ services:
     volumes:
      - ./backup.sql:/backup.sql
      - ./restore.sh:/docker-entrypoint-initdb.d/restore.sh
+     - ../../sam/mdr-database/flyway/flyway-files/flyway/sql/mdr:/flyway-migrations:ro
     entrypoint: /docker-entrypoint-initdb.d/restore.sh
