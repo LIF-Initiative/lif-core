@@ -9,7 +9,7 @@ from sqlalchemy import text
 from sqlalchemy.exc import DBAPIError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from lif.mdr_auth.tenant import tenant_schema_for_group
+from lif.tenant_routing import tenant_schema_for_group
 from lif.mdr_utils.logger_config import get_logger
 
 logger = get_logger(__name__)

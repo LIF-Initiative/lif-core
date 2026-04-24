@@ -44,6 +44,7 @@ packages = ["lif"]
 "../../components/lif/mdr_dto" = "lif/mdr_dto"
 "../../components/lif/mdr_services" = "lif/mdr_services"
 "../../components/lif/mdr_utils" = "lif/mdr_utils"
+"../../components/lif/tenant_routing" = "lif/tenant_routing"
 
 # [dev.dependencies]
 # httpx = "^0.26.0"

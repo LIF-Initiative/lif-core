@@ -2,11 +2,11 @@
 
 These are pure-function tests — no middleware, no DB, no Cognito.
 The middleware integration (that `request.state.tenant_schema` actually
-gets set) is covered separately in test_middleware.py.
+gets set) is covered separately in test/components/lif/mdr_auth/test_middleware.py.
 """
 
 import pytest
-from lif.mdr_auth.tenant import MAX_GROUP_NAME_LEN, resolve_tenant_schema, sanitize_group_name, tenant_schema_for_group
+from lif.tenant_routing import MAX_GROUP_NAME_LEN, resolve_tenant_schema, sanitize_group_name, tenant_schema_for_group
 
 
 class TestSanitizeGroupName:
