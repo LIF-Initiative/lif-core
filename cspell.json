@@ -152,6 +152,7 @@
         "VITE",
         "webassets",
         "workpreference",
+        "worktree",
         "xform"
     ],
     "ignorePaths": [
