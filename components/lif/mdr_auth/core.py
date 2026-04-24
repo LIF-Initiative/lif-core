@@ -9,7 +9,7 @@ from typing import Any, Dict, Optional
 import jwt
 from fastapi import HTTPException, Request, status
 from fastapi.responses import JSONResponse
-from lif.mdr_auth.tenant import resolve_tenant_schema
+from lif.tenant_routing import resolve_tenant_schema
 from lif.mdr_utils.collection_utils import convert_csv_to_set
 from lif.mdr_utils.config import get_settings
 from lif.mdr_utils.logger_config import get_logger

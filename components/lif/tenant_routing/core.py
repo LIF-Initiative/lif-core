@@ -1,8 +1,11 @@
-"""Tenant-schema resolution for multi-tenant MDR (issue #883).
+"""Tenant-schema resolution for multi-tenant LIF services (issue #883).
 
-Pure functions shared between the auth middleware (which sets
-`request.state.tenant_schema` per request) and the post-confirmation Lambda
-(which provisions a tenant schema when a new user registers).
+Pure functions with no framework or service dependencies. Currently used by
+the MDR auth middleware (to set ``request.state.tenant_schema``) and the
+MDR tenant-provisioning service (to derive the schema name for a new
+Cognito group). Extracted from ``lif.mdr_auth.tenant`` so other auth-gated
+services — Advisor, LIF API — can reuse the same sanitize/resolve contract
+without taking a dependency on MDR.
 
 Tenant schemas are named ``tenant_{sanitized-group-name}`` and must fit PG's
 63-char identifier limit. Group names come from Cognito and can contain
