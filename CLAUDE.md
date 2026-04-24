@@ -350,6 +350,14 @@ After key changes, redeploy affected services:
 - `scripts/release-demo.sh` copies the current dev image tags to demo param files for promotion
 - Dev has a single-org setup (`dev-single-org`); demo has multi-org (`advisor-demo-org1/2/3`)
 
+### MDR Schema Migrations (V1.2+)
+
+- **Deployed envs** run migrations via Flyway (tracked in `flyway_schema_history`).
+- **Local docker-compose** loads `backup.sql` (a pg_dump snapshot of V1.1 content) and then runs every `V1.*.sql` file in the Flyway directory through `psql` — it does *not* use real Flyway and does *not* track history. See `projects/lif_mdr_database/restore.sh`.
+- This only re-runs on first init (empty data dir) or after `docker compose down -v`. Persistent-volume `up`/`down` cycles are safe.
+- **Authoring convention:** every V1.2+ migration must be idempotent so local re-init is safe. Use `CREATE OR REPLACE FUNCTION`, `CREATE TABLE IF NOT EXISTS`, `DROP TRIGGER IF EXISTS … CREATE TRIGGER`, etc. rather than raw `CREATE`. This is a local-dev concession; deployed envs would tolerate non-idempotent migrations via Flyway's history tracking, but we keep one style across both.
+- Wiring real Flyway into local docker-compose is a known gap; deferred pending the broader MDR database tooling evaluation (`docs/proposals/mdr-mongodb-evaluation.md`).
+
 ### Key Operational Notes
 - **Demo update guide**: See `docs/guides/demo_environment_update.md` for the full end-to-end process
 - **SAM databases**: See `sam/README.md` for database deployment architecture and Flyway migration details
