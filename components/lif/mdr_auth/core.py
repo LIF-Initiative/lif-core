@@ -9,6 +9,7 @@ from typing import Any, Dict, Optional
 import jwt
 from fastapi import HTTPException, Request, status
 from fastapi.responses import JSONResponse
+from lif.mdr_auth.tenant import resolve_tenant_schema
 from lif.mdr_utils.collection_utils import convert_csv_to_set
 from lif.mdr_utils.config import get_settings
 from lif.mdr_utils.logger_config import get_logger
@@ -35,6 +36,11 @@ COGNITO_USER_POOL_ID = settings.mdr__auth__cognito_user_pool_id
 COGNITO_REGION = settings.mdr__auth__cognito_region
 COGNITO_SPA_CLIENT_ID = settings.mdr__auth__cognito_spa_client_id
 COGNITO_ENABLED = bool(COGNITO_USER_POOL_ID)
+
+# Tenant routing (issue #883) — read at request time via _tenant_routing_config
+# so tests can monkeypatch the settings object without re-importing this module.
+TENANT_ROUTING_ENABLED = settings.mdr__tenant_routing__enabled
+TENANT_SERVICE_SCHEMA = settings.mdr__tenant_routing__service_schema
 
 _cognito_jwk_client: Optional[jwt.PyJWKClient] = None
 
@@ -178,6 +184,8 @@ class AuthMiddleware(BaseHTTPMiddleware):
         Returns username for JWT or service name for API key
         """
         request.state.principal = None
+        request.state.cognito_groups = []
+        request.state.tenant_schema = None
 
         if request.method not in METHODS_TO_REQUIRE_AUTH or _is_public_path(request.url.path):
             return await call_next(request)
@@ -233,6 +241,14 @@ class AuthMiddleware(BaseHTTPMiddleware):
                 if request.state.principal is None:
                     logger.warning("Auth token 'sub'/'email' is missing")
                     return _build_unauthorized(detail="Could not validate credentials")
+
+            request.state.tenant_schema = resolve_tenant_schema(
+                enabled=TENANT_ROUTING_ENABLED,
+                is_service_principal=isinstance(request.state.principal, str)
+                and request.state.principal.startswith("service:"),
+                cognito_groups=getattr(request.state, "cognito_groups", None),
+                service_schema=TENANT_SERVICE_SCHEMA,
+            )
         except HTTPException as e:
             logger.exception("Auth middleware HTTPException")
             body = {"detail": str(e.detail)}

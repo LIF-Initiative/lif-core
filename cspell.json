@@ -30,6 +30,7 @@
         "ctdl",
         "cursorignore",
         "cursorindexingignore",
+        "cutover",
         "cython",
         "DAGSTER",
         "dagster",
