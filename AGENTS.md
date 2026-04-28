@@ -21,7 +21,7 @@ For a full overview of architecture, build commands, schema conventions, and dep
 | Curated list of every doc in the repo | [`docs/INDEX.md`](docs/INDEX.md) |
 | Code-contribution rules (commits, PRs, style) | [`CONTRIBUTING.md`](CONTRIBUTING.md) |
 | MCP servers, LLM integration patterns, agent conventions | [`docs/agents/`](docs/agents/) |
-| Design decisions and rationale | [`docs/design/adr/`](docs/design/adr/) (currently at `docs/adr/` pending move) |
+| Design decisions and rationale | [`docs/design/adr/`](docs/design/adr/) |
 
 ---
 

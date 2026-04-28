@@ -87,12 +87,12 @@ A suggested first walkthrough once you have access:
 ## Learn More
 
 - **Source code:** [LIF-Initiative/lif-core](https://github.com/LIF-Initiative/lif-core). MDR lives under `bases/lif/mdr_restapi/` (API) and `frontends/mdr-frontend/` (UI).
-- **MDR design document:** [`docs/LIF_Component_Design_Document-MDR.md`](LIF_Component_Design_Document-MDR.md)
+- **MDR design document:** [`docs/design/components/mdr.md`](../design/components/mdr.md)
 - **LIF schema source of truth:** `schemas/lif-schema.json` in the repo
-- **Add a data source walkthrough:** [`docs/guides/LIF_Add_Data_Source.md`](guides/LIF_Add_Data_Source.md) — step-by-step guide covering source schema creation, JSONata mappings, and pipeline wiring
-- **Data source adapter reference:** [`docs/guides/creating_a_data_source_adapter.md`](guides/creating_a_data_source_adapter.md) — what an adapter is, how it consumes MDR schemas at runtime
-- **Self-serve registration proposal:** [`docs/proposals/mdr-self-serve-registration.md`](proposals/mdr-self-serve-registration.md) — planned multi-tenant evolution with Cognito and per-tenant schema isolation
-- **LIF services overview:** [`docs/lif_services_overview.md`](lif_services_overview.md) — how MDR fits alongside the other LIF services
+- **Add a data source walkthrough:** [`docs/operations/guides/add-data-source.md`](../operations/guides/add-data-source.md) — step-by-step guide covering source schema creation, JSONata mappings, and pipeline wiring
+- **Data source adapter reference:** [`docs/operations/guides/creating-a-data-source-adapter.md`](../operations/guides/creating-a-data-source-adapter.md) — what an adapter is, how it consumes MDR schemas at runtime
+- **Self-serve registration proposal:** `docs/operations/proposals/mdr-self-serve-registration.md` — planned multi-tenant evolution with Cognito and per-tenant schema isolation *(currently untracked; will be relocated when committed)*
+- **LIF services overview:** [`docs/overview/services-overview.md`](services-overview.md) — how MDR fits alongside the other LIF services
 
 ## Contact
 
