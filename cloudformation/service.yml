@@ -220,6 +220,30 @@ Parameters:
       - 'false'
     Description: Enable Cognito authentication for this service
 
+  EnableTenantRouting:
+    Type: String
+    Default: 'false'
+    AllowedValues:
+      - 'true'
+      - 'false'
+    Description: >
+      Issue #883 Phase 2. When true, the MDR API resolves each request to
+      a tenant_{group} PG schema and issues SET search_path per session.
+      When false, requests hit the default search_path (public) exactly
+      as they did before #883 — provides a one-switch rollback if the
+      cutover needs to be reversed.
+
+  TenantServiceSchema:
+    Type: String
+    Default: public
+    Description: >
+      Issue #883 Phase 2. When tenant routing is enabled, this is the
+      PG schema that X-API-Key service callers (GraphQL, Semantic Search,
+      Translator, Cognito post-confirm Lambda) route to, and the fallback
+      for Cognito users whose group doesn't resolve to a tenant. Defaults
+      to public to match the flag-off behavior; set to tenant_lif_team
+      in dev/demo params once the cutover lands.
+
   EcsLaunchType:
     Type: String
     Default: FARGATE
