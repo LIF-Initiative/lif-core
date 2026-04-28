@@ -359,7 +359,7 @@ After key changes, redeploy affected services:
 - Wiring real Flyway into local docker-compose is a known gap; deferred pending the broader MDR database tooling evaluation (`docs/proposals/mdr-mongodb-evaluation.md`).
 
 ### Key Operational Notes
-- **Demo update guide**: See `docs/guides/demo_environment_update.md` for the full end-to-end process
+- **Demo update guide**: See `docs/operations/guides/demo-environment-update.md` for the full end-to-end process
 - **SAM databases**: See `sam/README.md` for database deployment architecture and Flyway migration details
 - **Apple Silicon**: Docker images for Lambda must use `--platform linux/amd64` (already handled in scripts)
 - **SSM parameters**: ECS tasks fail to start if referenced SSM parameters are missing, even optional ones like `ApiKeys`

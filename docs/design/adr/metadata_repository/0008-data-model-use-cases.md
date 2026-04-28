@@ -37,7 +37,7 @@ _Entities_ can be associated by **embedding** using the (`+ Existing Entity` > `
 
 Child _Attributes_ of these associated-by-embedding _Entities_ will display in the **associated** _Entity_ location(s) (including the schema export), and can be part of a Transformation mapping.
 
-The reference `Relationship` is a free form field, but **MDR** recognizes reserved words, detailed in the [LIF Data Model Rules](https://github.com/LIF-Initiative/lif-core/blob/main/docs/LIF_Data_Model_Rules.md).
+The reference `Relationship` is a free form field, but **MDR** recognizes reserved words, detailed in the [LIF Data Model Rules](https://github.com/LIF-Initiative/lif-core/blob/main/docs/specs/data-model-rules.md).
 
 **Associated _Attributes_**
 
