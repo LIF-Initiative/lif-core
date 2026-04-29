@@ -2,15 +2,15 @@
 
 This project uses t-shirt sizing to describe the relative scope and complexity of work items.
 
-**Important:**  
-T-shirt sizes do **not** represent time, hours, or delivery estimates.  
+**Important:**
+T-shirt sizes do **not** represent time, hours, or delivery estimates.
 They are intended to help contributors understand scope and help maintainers prioritize work.
 
 Sizing is based on:
 
-* Functional change  
-* Surface area of the codebase affected  
-* Risks and unknowns  
+* Functional change
+* Surface area of the codebase affected
+* Risks and unknowns
 * Required system understanding
 
 **Size Definitions:**

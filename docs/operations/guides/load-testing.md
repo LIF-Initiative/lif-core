@@ -2,7 +2,7 @@
 
 Date: 2025-09-30
 
-## Status  
+## Status
 Accepted
 
 ---
@@ -57,4 +57,4 @@ We have selected **k6** as the primary tool for load and performance testing.
 - [k6 Documentation](https://k6.io/docs/)
 - [xk6 Extensions](https://github.com/grafana/xk6)
 - [Load Testing GraphQL with k6](https://k6.io/docs/using-k6/guides/graphql-testing/)
-- [Internal Evaluation Report – Load Testing Tools](internal-link-if-applicable)
+- Internal evaluation report on load-testing tools (link to be added when available)

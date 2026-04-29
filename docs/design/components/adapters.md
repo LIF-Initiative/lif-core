@@ -151,7 +151,7 @@ By expanding the range of supported data source types and models, the framework 
 
 ## Key Concepts
 
-#### Adapter 
+#### Adapter
 
 **Adapter** enables a LIF system to connect to a data source system allowing for querying and updating different data sources as required to serve user requests. **Adapters** used within a LIF system fall into the following three categories based on whether the respective data source system is internal or external and whether the output data model is source-specific or LIF-compliant:
 
@@ -216,8 +216,8 @@ Each of these Adapter types leverages the core capabilities of the *LIF Adapter 
 An **Adapter** can operate in one of two modes: as a **standalone component**, or as a **task within a Data Pipeline**. In the latter case, the Adapter participates in a coordinated workflow managed by an **Orchestrator**, which executes a sequence of tasks as part of a defined pipeline. A typical Data Pipeline consists of the following three tasks:
 
 | Step | Task | Component |
-|---|---|---|  
-| 1 | Translate a LIF data query to a source data query   | Translator |  
+|---|---|---|
+| 1 | Translate a LIF data query to a source data query   | Translator |
 | 2 | Fetch data from a source system or organization | Adapter |
 | 3 | Translate the source data set to the LIF data set  | Translator |
 
@@ -261,7 +261,7 @@ The **Adapter** interacts with:
 
 3.  The external or internal data source system to which it connects for reading and writing requested data.
 
-## Design Assumptions 
+## Design Assumptions
 
 ### LIF Adapter Framework
 
@@ -307,11 +307,11 @@ Concurrent data fetch requirements are addressed by the **Pipeline** and **Adapt
 
 The component is modeled as a task that represents a node in a DAG (Directed Acyclic Graph). Modeling the component as a task abstracts its implementation and allows for seamless invocation by the data pipeline.
 
-### Plug-and-play 
+### Plug-and-play
 
 The component can be integrated with different task orchestration frameworks as plug-and-play without requiring any significant redesign to their implementation, though some orchestration frameworks might require a wrapper depending on their specific needs.
 
-## High Level Design 
+## High Level Design
 
 ### LIF Adapter Framework Design
 
@@ -428,7 +428,7 @@ The **Adapter** supports the following methods:
 
 3.  Save - An **Adapter** can be used to save new learner data by calling its save method with a source data set. The component validates the data with the source data model before using the data source connection to write the data to the respective data source system.
 
-## Workflow Models 
+## Workflow Models
 
 A **Pipeline** spins up an **Adapter** component when it comes across a data fetch or data write task in its DAG. The **Adapter** component is initialized with a corresponding source data model and data source connection information.
 

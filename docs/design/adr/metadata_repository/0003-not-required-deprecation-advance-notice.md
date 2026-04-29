@@ -25,7 +25,7 @@ We are deciding not to implement this feature at this time.
 At this time, we recommend that the steward, community, and implementing organizations utilize their expertise to consider the downstream impacts of deprecating any portion of the LIF data model and appropriately notify anyone affected.
 
 ## Consequences
-In the event that the steward, cummunity, and implementing organizations are not fully aware of all downstream LIF stakeholders, they may be adversely impacted by the premature deprecetation of data model elements. However, by not requiring a deadline for this at this time, these folks can consider the downstream impacts of deprecation and determine how they feel it would be best to handle these cases.
+In the event that the steward, community, and implementing organizations are not fully aware of all downstream LIF stakeholders, they may be adversely impacted by the premature deprecation of data model elements. However, by not requiring a deadline for this at this time, these folks can consider the downstream impacts of deprecation and determine how they feel it would be best to handle these cases.
 
 ## References
 N/A

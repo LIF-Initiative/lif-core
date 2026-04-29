@@ -67,7 +67,7 @@ One of the primary benefits of using **MDR** is the ability to _map_ or _transfo
 
 Transformations can be a mix of _Entities_ and/or _Attributes_. Currently the UX / API for mapping visualization only supports _Attribute_-to-_Attribute_ transformations. A workaround for leveraging _Entities_ is to map an _Attribute_, and then access the JSONata expression of that mapping and adjust to target the _Entity_. While the UX won't visually update the mapping, the JSONata is what the **Translator** uses for the actual JSON transforms.
 
-Source and target _Entities_ or _Attributes_ can be mapped in a many-to-many fashion (such as multiple source _Attributes_ to the same target _Attribute_, or a single source _Attribute_ to multiple target _Attributes_). While users can do a myriad of mappings, a practical approach to complex transforms (such as multiple source _Attributes_ to a single target _Attribute_) can be accomplished by mapping one of the source _Attributes_, and then adjust the JSONata expression to reference the other source _Attributes_. 
+Source and target _Entities_ or _Attributes_ can be mapped in a many-to-many fashion (such as multiple source _Attributes_ to the same target _Attribute_, or a single source _Attribute_ to multiple target _Attributes_). While users can do a myriad of mappings, a practical approach to complex transforms (such as multiple source _Attributes_ to a single target _Attribute_) can be accomplished by mapping one of the source _Attributes_, and then adjust the JSONata expression to reference the other source _Attributes_.
 
 Each _Attribute_ will be persisted with an ID path (`entityIdPath`). This path is meant to be absolute in the system, and easily convertible to a portable format.
 
@@ -85,7 +85,7 @@ _Entities_ and _Attributes_ must appropriately 'chain' together via the associat
 
 ### Base LIF
 
-The foundational model that all LIF adopters can use to seed and enhance their _Org LIF_ models. The intent is the LIF Steward manages the _Base LIF_ model, however since the LIF system is open source, anyone _could_ edit their copy of the _Base LIF_ model. 
+The foundational model that all LIF adopters can use to seed and enhance their _Org LIF_ models. The intent is the LIF Steward manages the _Base LIF_ model, however since the LIF system is open source, anyone _could_ edit their copy of the _Base LIF_ model.
 
 In order for an _Org LIF_ or _Partner LIF_ model to be in the system, there will need to be a _Base LIF_.
 
@@ -119,7 +119,7 @@ The origin _Value Set_ must be within the _Base LIF_.
 
 #### Org LIF
 
-A model specific to the LIF adopter, seeded and reliant on references from other _Data Models_ (_Base LIF_ (known as `Inclusions`), _Partner LIF_, or _Source Schema_), and with enhancements added directly by the LIF adopter (known as extensions). 
+A model specific to the LIF adopter, seeded and reliant on references from other _Data Models_ (_Base LIF_ (known as `Inclusions`), _Partner LIF_, or _Source Schema_), and with enhancements added directly by the LIF adopter (known as extensions).
 
 Requires the _Base LIF_ to be present.
 
@@ -153,7 +153,7 @@ The origin _Value Set_ must be from any other _Data Model_.
 
 ### Source Schema
 
-A self-contained model, without any dependencies on other data model types (including other _Source Schemas_). 
+A self-contained model, without any dependencies on other data model types (including other _Source Schemas_).
 
 #### Number Supported
 
@@ -185,7 +185,7 @@ The origin _Value Set_ must be within the _Source Schema_.
 
 ### Partner LIF
 
-An _Org LIF_ from a different LIF system. It will likely have references into the _Base LIF_ model (hence the importance of having the _Base LIF_ model be consistent across LIF systems). It is not meant to be altered as a _Partner LIF_ model. Instead, the origin _Org LIF_ should be adjusted as needed, exported, and then imported into a target LIF system as a _Partner LIF_ model. 
+An _Org LIF_ from a different LIF system. It will likely have references into the _Base LIF_ model (hence the importance of having the _Base LIF_ model be consistent across LIF systems). It is not meant to be altered as a _Partner LIF_ model. Instead, the origin _Org LIF_ should be adjusted as needed, exported, and then imported into a target LIF system as a _Partner LIF_ model.
 
 #### Number Supported
 

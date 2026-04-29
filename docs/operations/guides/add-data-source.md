@@ -1,6 +1,6 @@
 # Add a New Data Source
 
-> **Related:** For the adapter class contract, return types, and design guidelines, see [`creating_a_data_source_adapter.md`](creating_a_data_source_adapter.md). This guide is the end-to-end tutorial; that doc is the reference.
+> **Related:** For the adapter class contract, return types, and design guidelines, see [`creating-a-data-source-adapter.md`](creating-a-data-source-adapter.md). This guide is the end-to-end tutorial; that doc is the reference.
 
 Data sources are used by the **Orchestrator** to fulfill LIF queries. These sources can be open or require authN/authZ, and return data in a variety of formats. Data sources are configured through an adapter so you can have multiple data sources that use the same adapter. Reference implementations for 2 adapter flows are provided in the repository:
 - LIF to LIF
@@ -30,7 +30,7 @@ To configure a non-LIF data source that requires custom authentication or custom
 MDR Notes:
 - _Base LIF_ is the Data Model with a blue square under `Data Model Selector`, labeled in the reference implementation as `LIF`.
 - _Org LIF_ is the adopter's working organization model with a green square under `Data Model Selector`, labeled in the reference implementation as `StateU LIF`. The _Org LIF_ should include fields from the _Base LIF_ instead of custom fields where possible. You can rename the _Org LIF_ if you'd like.
-- All entities in _Org LIF_ should be _Arrays_. 
+- All entities in _Org LIF_ should be _Arrays_.
 - Attributes can be either _Arrays_ or objects
 - To be clear, for data models other than _Base LIF_ and _Org LIF_, entities do not have to be arrays.
 - There is a known bug in the **MDR** can manifests itself as an authorization error (another bug), but is really a database issue. The workarounds are in the tickets:
@@ -67,7 +67,7 @@ The `example-data-source-rest-api-to-lif` adapter is the reference implementatio
     }
     ```
 
-6. In the docker compose file for `dagster-code-location`, add the following environment variables with the appropriate configuration for the data source: 
+6. In the docker compose file for `dagster-code-location`, add the following environment variables with the appropriate configuration for the data source:
     ```
     ADAPTERS__SIS_DATA_SOURCE_TO_LIF__ORG1_ACME_SIS_DATA_SOURCE__CREDENTIALS__HOST
     ADAPTERS__SIS_DATA_SOURCE_TO_LIF__ORG1_ACME_SIS_DATA_SOURCE__CREDENTIALS__SCHEME
@@ -106,7 +106,7 @@ The `example-data-source-rest-api-to-lif` adapter is the reference implementatio
         information_source_organization: "Org1"
         adapter_id: "sis-data-source-to-lif"
         ttl_hours: 24
-        lif_fragment_paths: 
+        lif_fragment_paths:
         - "person.contact"
         - "person.custom"
         translation:
@@ -154,7 +154,7 @@ There is a known issue when a translation yields an empty LIF fragment, Dagster'
 If your LIF Fragment is empty, but it shouldn't be, check that the JSONata expressions are lower-cased as noted previously in this guide.
 
 ### Clear the Cache
-The **LIF Cache** service uses mongoDB to store LIF Query results so the Orchestration process does not always need to be executed. There is a TTL on the cache (default of 24 hours), and at times, it's desirable for updates to occur sooner then the TTL. 
+The **LIF Cache** service uses mongoDB to store LIF Query results so the Orchestration process does not always need to be executed. There is a TTL on the cache (default of 24 hours), and at times, it's desirable for updates to occur sooner then the TTL.
 
 To clear the cache, stop the services, delete the docker container `mongodb-org1`, and restart docker compose.
 

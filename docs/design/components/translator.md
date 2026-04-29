@@ -95,8 +95,8 @@ The **Pipeline Tasks** represent the set of tasks required to fetch data from a 
 
 | **Step** | **Task**  | **Component**  |
 |---------- | ------------ | ---------------------------------|
-| 1 | Translate a LIF data query to a source data query | Query Planner |             
-| 2 | Fetch data from a source system or organization | Adapter | 
+| 1 | Translate a LIF data query to a source data query | Query Planner |
+| 2 | Fetch data from a source system or organization | Adapter |
 | 3 | Translate the source data set to the LIF data set | Translator |
 
 
@@ -158,7 +158,7 @@ Concurrent data translation requirements are addressed by the data pipeline and 
 
 The component is modeled as a task that represents a node in a DAG (Directed Acyclic Graph). Modeling the component as a task abstracts its implementation and allows for seamless invocation by the data pipeline.
 
-### Plug-and-play 
+### Plug-and-play
 
 The component can be integrated with different task orchestration frameworks as plug-and-play without requiring any significant redesign to its implementation, though some orchestration frameworks might require a wrapper depending on their specific needs.
 
@@ -174,7 +174,7 @@ The **Translator** employs several patterns to translate an input data set with 
 
 -   (Possible Future Roadmap Item) **Decorator:** Allows the **Translator** to use different, dynamically-provided mappings for different translation tasks
 
-Once invoked by the host data pipeline, the **Translator** depends on the **MDR** to retreive the data model schemas and transformation mappings for the source and target data models. This is a light-weight component that does not maintain any information about a run. 
+Once invoked by the host data pipeline, the **Translator** depends on the **MDR** to retrieve the data model schemas and transformation mappings for the source and target data models. This is a light-weight component that does not maintain any information about a run.
 
 ### Translator Responsibilities
 
@@ -220,11 +220,11 @@ A successfully initialized **Translator** can be invoked by calling its run meth
 <br /><br />
 (Possible Future Roadmap Item) It may query the provided lookup tables (for enumerations) as specified in the mapping document while performing the translation. If required to use a lookup table, it expects the **MDR** to make the table available to use. The pipeline may decide to load all the look up tables required at the start or load them on demand when the translator needs it.
 
-After successfully building the target dataset, it validates that with the target data model before returning that to the underlying pipeline context. 
+After successfully building the target dataset, it validates that with the target data model before returning that to the underlying pipeline context.
 
 ## Workflow Model
 
-A data pipeline instance spins up a **Translator** component when it comes across a translation task in its DAG. 
+A data pipeline instance spins up a **Translator** component when it comes across a translation task in its DAG.
 
 The data pipeline then calls the **Translator** component with the source and target data model IDs as well as the source data set for translation.
 

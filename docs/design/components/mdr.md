@@ -166,70 +166,70 @@ At a high level, the **MDR** will support the following flow of data and relevan
 
 This component has the following specific requirements:
 
-1. **LIF data model**  
-	1.  **Goal:** Support the steward's ability to maintain the *LIF data model's* hierarchical structure through graphical user interface or by importing (Possible Future Roadmap Items) JSON schema file. The person-centric nature of LIF requires that all elements of the data model relate to the Person Entity.  
-	2.  **Capabilities and Features**      
-		1. **Entities**          
+1. **LIF data model**
+	1.  **Goal:** Support the steward's ability to maintain the *LIF data model's* hierarchical structure through graphical user interface or by importing (Possible Future Roadmap Items) JSON schema file. The person-centric nature of LIF requires that all elements of the data model relate to the Person Entity.
+	2.  **Capabilities and Features**
+		1. **Entities**
 			1. Support for defining core data structures (e.g., Person, Organization)
 			2. Ability to establish parent-child relationships between entities to support nested data representations
 			3. Ability to enforce the person-centric nature of LIF by requiring that all elements of the *LIF data model* are ultimately relate to the Person Entity
-			4. Ability to declare whether a branch of the *LIF data model*, defined as all children in a parent-child relationship path associated with an entity, is mutable      
+			4. Ability to declare whether a branch of the *LIF data model*, defined as all children in a parent-child relationship path associated with an entity, is mutable
 		2. **Attributes**
 			1. Ability to maintain definition of attribute including description, data type, example value, and mandatory/optional status
-            2. Ability to associate multiple attributes (e.g., shortName, identifier, birthDate) to an entity          
-            3. Ability to associate an attribute with multiple entities          
-            4. Ability to declare if an attribute is query-able though **LIF API**      
+            2. Ability to associate multiple attributes (e.g., shortName, identifier, birthDate) to an entity
+            3. Ability to associate an attribute with multiple entities
+            4. Ability to declare if an attribute is query-able though **LIF API**
         3. **Value Sets**
         	1. Ability to create enumerated lists of values for attributes (e.g., state, country)
 		4. **Values**
-			1.  Ability to assign individual values within value sets      
-		5.  **Changes Over Time** 
-			1.  Ability to associate activation and deprecation dates with elements of LIF data model to define its shape for a given date          
+			1.  Ability to assign individual values within value sets
+		5.  **Changes Over Time**
+			1.  Ability to associate activation and deprecation dates with elements of LIF data model to define its shape for a given date
 
 2. **Organization-specific LIF model**
-	1.  **Goal:** Support ability for the organization to define its own LIF model by deriving it from the *LIF data model* and extending or constraining it.  
-    2.  **Capabilities and Features**      
+	1.  **Goal:** Support ability for the organization to define its own LIF model by deriving it from the *LIF data model* and extending or constraining it.
+    2.  **Capabilities and Features**
     	1.  **Model inheritance**
-    		1.  Ability to explicitly include entities and attributes from the *LIF data model* for inheritance          
+    		1.  Ability to explicitly include entities and attributes from the *LIF data model* for inheritance
             2.  (Possible Future Roadmap Item) Ability to selectively adopt updates of the *LIF data model*
         2. **Model extensions**
         	1.  Ability to introduce new Entities and Attributes that are not present in the *LIF data model*
             2.  Ability to extend existing *LIF data model* Entities by adding organization-specific Attributes
             3.  Ability to define custom value sets or additional values to existing value sets
-    	3. **Model constraints** 
+    	3. **Model constraints**
     		1.  Ability to constrain the *LIF data model* by:
     			1.  Excluding specific Entities, Attributes, Value set and Values from the *organization-specific LIF model*
                 2. Defining organization specific validation rules (e.g., data type restrictions, allowed value ranges)
         4. **Changes Over Time**
         	1.  Similar to the *LIF data model,* support the ability to associate activation and deprecation dates with elements of the model
 
-3.  **Partner-accessible indicator**  
+3.  **Partner-accessible indicator**
 	1.  **Goal:** Support an organization's ability to indicate whether the data associated with a specific entity or attribute is available for partners
     2.  **Capabilities and Features**
     	1.  Ability to maintain the indicator at both the entity and attribute levels
         2. Ability to generate a *partner-accessible LIF data model* based on this indicator and make it available through in OpenAPI 3.x specifications for it to be retrieved by partners
 
-4.  **CEDS, Ed-Fi and other standard data models**  
-	1.  **Goal**: Support uploading of standard data models to ease maintenance of the source data model  
+4.  **CEDS, Ed-Fi and other standard data models**
+	1.  **Goal**: Support uploading of standard data models to ease maintenance of the source data model
     2.  **Capabilities and Features**:
     	1. Ability to upload schema of standard data models such as CEDS, Ed-Fi and other in OpenAPI
 
-5.  **Source data model:**  
-	1.  **Goal:** Ability to maintain structure of source data model  
+5.  **Source data model:**
+	1.  **Goal:** Ability to maintain structure of source data model
 	2.  **Capabilities and Features:** Maintaining a source data model will require the same capabilities needed to maintain the LIF data model
 
-6.  **Source Data to LIF Model Transformation:**  
-	1.  **Goal**: Support an organization's ability to maintain information to transform source data models to its *organization-specific data model*  
-    2.  **Capabilities and Features:**      
+6.  **Source Data to LIF Model Transformation:**
+	1.  **Goal**: Support an organization's ability to maintain information to transform source data models to its *organization-specific data model*
+    2.  **Capabilities and Features:**
     	1.  Ability to maintain transformation rules from source data models to organization-specific LIF models. The following is a non-exhaustive list of such transformations:
 			1. Direct Mapping: A *source data models* Attribute(s) directly mapped to *organization-specific LIF model* Attribute(s)
 			2. Values Mapping: Discrete values of *source data models* for an Attribute mapped to discrete values of *organization-specific LIF models*
 			3. Simple Transformation: Expressed using data transformation primitives such as equivalence, assignment, concatenation, substring extraction, splitting, and others
 			4. Complex Transformations: Transformation requiring complex conditional logic using JSONata. For extremely complex transformations, one may prefer to write a Python processor separate from MDR housed transformations
 			5. (Possible Future Roadmap Item) Mapping Document: Ability to generate mapping documents between models and make them available to the Query Planner
-7.  **MDR Registry at Steward (Future):**  
-	1.  **Goal:** Enable discoverability of *Partner-accessible LIF data models* gathered by the Steward  
-    2.  **Capabilities and Features:**      
+7.  **MDR Registry at Steward (Future):**
+	1.  **Goal:** Enable discoverability of *Partner-accessible LIF data models* gathered by the Steward
+    2.  **Capabilities and Features:**
     	1.  Ability for the Steward to make *partner-accessible LIF data models* of LIF implementing organizations available to the community via the **LIF API**
 
 ## Interaction with Other LIF Components
@@ -282,7 +282,7 @@ The MVC pattern separates the **MDR** application into three main logical compon
 2.  **MDR Services:** These services allow client programs and processes to perform lifecycle operations such as CRUD (Create, Read, Update, and Delete) on the **MDR**'**s** data assets. They act as the "controller" for the **MDR** application.
 
 3.  **MDR Views and MDR APIs:** The **MDR** uses two types of views:
-	-   **UX views** for end users performing lifecycle operations on MDR data assets  
+	-   **UX views** for end users performing lifecycle operations on MDR data assets
     -   **MDR APIs** for other external and internal systems to perform upload/download operations on the **MDR** data assets. **MDR APIs** can also be invoked by scheduled jobs, such as a cron job, to fetch desired data models from a partner organization.
 
 The separation of the three logical components helps organize code and make the application more modular, scalable, and easier to maintain.

@@ -206,7 +206,7 @@ This design presumes that an off-the-shelf orchestration tool such Airflow or Da
 
 ## High Level Design
 
-The **Orchestrator** is envisioned as an API server implementation built over an open-source workflow orchestration platform that serv as query engine over disparate and distributed data sources. The diagram below depicts the component model for the **Orchestrator**.
+The **Orchestrator** is envisioned as an API server implementation built over an open-source workflow orchestration platform that serves as query engine over disparate and distributed data sources. The diagram below depicts the component model for the **Orchestrator**.
 
 ![](media/image_orchestrator_4.png)
 
@@ -375,7 +375,7 @@ This exception occurs when an operator such as Adapter or Data Pipeline is not f
 
 ### OperatorException
 
-This exception is thrown by an operator when there is an error during its initiatlization or run.
+This exception is thrown by an operator when there is an error during its initialization or run.
 
 ### OutputQueueNotAvailableException
 
@@ -447,4 +447,4 @@ TBD
 
 ## Dependencies
 
-TBD 
+TBD

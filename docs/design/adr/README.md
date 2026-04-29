@@ -29,13 +29,13 @@ They follow the convention popularized by [Michael Nygard](https://cognitect.com
 
 ADRs may be grouped by scope:
 
-<pre lang="markdown"> <code> 
-adrs/  
-├── 0001-general-foundation.md # Broad decisions across the LIF system  
-├── query_cache/  
-│ └── 0002-query-cache-design.md # Decisions for LIF Query Cache  
-├── query_mapper/  
-│ └── 0003-query-mapper-interface.md # Decisions for LIF Query Mapper  
+<pre lang="markdown"> <code>
+adrs/
+├── 0001-general-foundation.md # Broad decisions across the LIF system
+├── query_cache/
+│ └── 0002-query-cache-design.md # Decisions for LIF Query Cache
+├── query_mapper/
+│ └── 0003-query-mapper-interface.md # Decisions for LIF Query Mapper
 └── ...
 </code> </pre>
 
@@ -49,24 +49,24 @@ Each ADR filename is prefixed with a sequential number for easy tracking.
 The following format is recommended:
 
     # ADR 000X: Title of the Decision
-    
+
     Date: YYYY-MM-DD
-    
+
     ## Status
     Proposed | Accepted | Superseded | Deprecated
-    
+
     ## Context
     What is the background or the problem that this decision aims to address?
-    
+
     ## Decision
     What is the architectural decision being made?
-    
+
     ## Alternatives
     What other options were considered, and why were they rejected?
-    
+
     ## Consequences
     What are the implications, trade-offs, or side effects of this decision?
-    
+
     ## References
     (Optional) Link to related issues, discussions, or documents.
 

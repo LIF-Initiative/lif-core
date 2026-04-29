@@ -62,7 +62,7 @@ The LIF Data Model utilizes a primitive JSON data type. Primitive data types inc
 
 **Reasoning:** The different naming styles were chosen to make the text not only easy to read, but also to help quickly identify whether you're looking at an entity or a property, since entities use UpperCamelCase and properties use standard camelCase.
 
-### Object Effective Date 
+### Object Effective Date
 Object effective dates are set when the object is created. The date indicates not only when the date was added but also when any previous objects in the array became deprecated. The Object Effective Date is stored in a field named `dateEffective` in ISO 8601 standard format: `YYYY-MM-DD`.
 
 **Reasoning:** Object effective dates inform the system and possibly users when data is valid. Not all objects will have an effective date. For example, a birth date would not have an effective date because it does not change. In contrast, a person’s primary address would have an effective date, as they may have lived at different addresses, but only their current address is considered their primary address.
@@ -90,8 +90,8 @@ There are two types of required fields:
 Every LIF Entity must include fields that help identify the source system of the data. These fields are `identifier`, `informationSourceId`, `informationSourceOrganization`, and optionally, `informationSourceSystem`.
 
 - The `identifier` field is to provide a unique identifier for that data. This field, along with `informationSourceId` and `informationSourceOrganization`, allows each block of data to be uniquely identified.
-- The `informationSourceId` field is an identifier used by the LIF software components to distinguish the source system of the data.  
-- The `informationSourceOrganization` field should specify the name of the organization that owns the source system.  
+- The `informationSourceId` field is an identifier used by the LIF software components to distinguish the source system of the data.
+- The `informationSourceOrganization` field should specify the name of the organization that owns the source system.
 - If an organization provides data from multiple source systems, the `informationSourceSystem` field can be used to specify which system the data originates from (e.g., “Canvas LMS”, “Ellucian SIS”). These fields include a description within the data model to help better understand how to use each field.
 
 **Reasoning:** When a LIF record is transferred to downstream systems, it is important to know that certain data originated from different source systems via the `informationSourceId`. Additionally, these downstream systems may have use cases that require a human-readable name for the data source, including the organization name and source system name.
@@ -110,17 +110,17 @@ Examples:
 The LIF data model contains a set of relationships used to associate an entity to another entity. The relationship type, followed by "Ref", is prepended to the entity name when it is referenced within another entity. For example, if the relationship type is "offeredBy" and the referenced entity is "Organization", then the name of the field for this reference is "offeredByRefOrganization". For another example, if there is no relationship type and the referenced entity is "Course", then the name of the field for this reference is "RefCourse".
 
 **List of relationships:**
-- **offeredBy** – Organization or entity providing a course, program, training, or credential.  
-- **accreditedBy** – Organization accrediting or recognizing standards.  
-- **issuedBy** – Authority that grants/awards credential.  
-- **approvedBy** – Entity or individual who reviewed/approved.  
-- **assertedBy** – Entity declaring a skill or competency.  
-- **basis** – Foundational data or rationale.  
-- **demonstrates** – Connects entity to competencies.  
-- **aligned** – Correspondence to framework or standard.  
-- **entailed** – Requirement implied within another.  
-- **instanceOf** – Links record to general class/type.  
-- **requires** – Specifies prerequisites.  
+- **offeredBy** – Organization or entity providing a course, program, training, or credential.
+- **accreditedBy** – Organization accrediting or recognizing standards.
+- **issuedBy** – Authority that grants/awards credential.
+- **approvedBy** – Entity or individual who reviewed/approved.
+- **assertedBy** – Entity declaring a skill or competency.
+- **basis** – Foundational data or rationale.
+- **demonstrates** – Connects entity to competencies.
+- **aligned** – Correspondence to framework or standard.
+- **entailed** – Requirement implied within another.
+- **instanceOf** – Links record to general class/type.
+- **requires** – Specifies prerequisites.
 - **withdrawalProcess** – Describes removal process.
 
 **Reasoning:** These prefixes provide consistency and avoid duplication.
@@ -164,7 +164,7 @@ json {   "Person": [
     }   ] }
 ```
 
-### Descriptions 
+### Descriptions
 All entities, attributes, and values should have descriptions explaining what data is captured. Each relationship should also have a description.
 
 ### Common The LIF data model includes a limited set of common elements:
@@ -178,11 +178,11 @@ All entities, attributes, and values should have descriptions explaining what da
 - `modifiable` indicates if data can be edited. Default is `false`.
 
 ### Organization Specific LIF Data Model
-- One org-specific model per MDR instance.  
-- Can extend base model with enums/entities.  
+- One org-specific model per MDR instance.
+- Can extend base model with enums/entities.
 - Maintains consistency.
 
-### Enumerations 
+### Enumerations
 **Strict Enumeration Fields include:**
 - Competency.language
 - AddressState
@@ -208,5 +208,5 @@ All entities, attributes, and values should have descriptions explaining what da
 - MilitaryLearningExperience.branch
 - NormalTimeCompletionUnits
 
-### Authoritative System(s) 
-Authoritative system(s) are not defined in the model. Each organization must determine which systems are the authoritative system(s). 
+### Authoritative System(s)
+Authoritative system(s) are not defined in the model. Each organization must determine which systems are the authoritative system(s).
