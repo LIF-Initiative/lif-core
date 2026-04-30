@@ -16,7 +16,7 @@ Under Functional Requirements, this used to be the first item in the list, "1. T
 
 
 ## Decision
-It is the Query Planner's responsibility to determine when a LIF data query corresponds to a non-LIF source system and plan for the Orchestrator to call the translator to retreive this data.
+It is the Query Planner's responsibility to determine when a LIF data query corresponds to a non-LIF source system and plan for the Orchestrator to call the translator to retrieve this data.
 
 ## Alternatives
 Alternatively, the translator could convert LIF queries into source system queries, but we did not choose this because then the translator would be duplicating the efforts of the Query Planner and Orchestrator.

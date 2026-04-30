@@ -4,9 +4,9 @@ Version 1.0.0
 
 **Table of Contents**
 
-[Overview](#overview) 
+[Overview](#overview)
 
-[Motivation](#motivation) 
+[Motivation](#motivation)
 
 [Design Proposal](#design-proposal)
 

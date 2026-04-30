@@ -14,12 +14,12 @@ Line 254 of the documentation previously stated: "1.  The **MDR** serves as the 
 
 Under High Level Design, the following line used to be present: "**Partner organizations:** This includes a list of organizations that can act as a source for retrieving *partner-accessible LIF data models*. This also includes **LIF API** information for these organizations, along with additional metadata to successfully connect and fetch their data models"
 
-The following section of functional requirements used to exist in the document:  
-4. **LIF partner organizations**  
-1. **Goal:** Designate partners to retrieve partner-accessible *LIF models*  
-2. **Capabilities and Features**  
-    1. Ability to maintain list of organizations identified with a unique Id to *retrieve partner-accessible* *LIF models*  
-    2. Ability to maintain URL path for connecting to partner organization's **LIF API**  
+The following section of functional requirements used to exist in the document:
+4. **LIF partner organizations**
+1. **Goal:** Designate partners to retrieve partner-accessible *LIF models*
+2. **Capabilities and Features**
+    1. Ability to maintain list of organizations identified with a unique Id to *retrieve partner-accessible* *LIF models*
+    2. Ability to maintain URL path for connecting to partner organization's **LIF API**
     3. Ability to retrieve the *partner-accessible LIF model* from a partner organization and identify any changes from the previously retrieved model
 
 ## Decision

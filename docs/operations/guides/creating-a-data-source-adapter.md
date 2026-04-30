@@ -2,7 +2,7 @@
 
 This guide is the **reference** for the data source adapter contract: what adapters are, what they receive, what they return, and how to write one. It is aimed at developers adapting their own code to the LIF system or writing a new adapter from scratch.
 
-> **Looking for an end-to-end walkthrough?** [`LIF_Add_Data_Source.md`](LIF_Add_Data_Source.md) is the tutorial. It walks through a concrete scenario — building an SIS-style adapter, setting up the MDR source schema and JSONata mappings, wiring up Docker Compose, and verifying via GraphQL. Use that guide when you want step-by-step instructions; use this one when you need to understand the adapter contract.
+> **Looking for an end-to-end walkthrough?** [`add-data-source.md`](add-data-source.md) is the tutorial. It walks through a concrete scenario — building an SIS-style adapter, setting up the MDR source schema and JSONata mappings, wiring up Docker Compose, and verifying via GraphQL. Use that guide when you want step-by-step instructions; use this one when you need to understand the adapter contract.
 
 ## How Adapters Fit In
 
@@ -199,7 +199,7 @@ Once the adapter class is written and registered, three more things need to happ
 
 3. **MDR schemas and mappings** — create a source schema describing your API response and JSONata mappings to the target LIF schema. Only attributes (leaf fields) can be mapped.
 
-[`LIF_Add_Data_Source.md`](LIF_Add_Data_Source.md) walks through each of these with a concrete example — use it as the step-by-step companion when you are ready to wire your adapter into a running environment.
+[`add-data-source.md`](add-data-source.md) walks through each of these with a concrete example — use it as the step-by-step companion when you are ready to wire your adapter into a running environment.
 
 ## Adapter Design Guidelines
 
@@ -253,7 +253,7 @@ The `example-data-source-rest-api-to-lif` adapter is the simplest starting point
 
 ## Troubleshooting
 
-For MDR mapping issues, empty fragments, cache invalidation, and Dagster run inspection, see the troubleshooting section of [`LIF_Add_Data_Source.md`](LIF_Add_Data_Source.md#troubleshooting). The items below are specific to adapter development.
+For MDR mapping issues, empty fragments, cache invalidation, and Dagster run inspection, see the troubleshooting section of [`add-data-source.md`](add-data-source.md#troubleshooting). The items below are specific to adapter development.
 
 ### Adapter not found
 

@@ -63,8 +63,8 @@ Version 1.0.0
 
 ## Overview
 
-The **Query Planner** is the central component of LIF. It processes and serves *LIF queries* from the **LIF API**. A *LIF query* supports both read and write requests. 
-* A *LIF read query* requests specific information about one or more learners, and it is fulfilled by one or more corresponding *LIF records*. 
+The **Query Planner** is the central component of LIF. It processes and serves *LIF queries* from the **LIF API**. A *LIF query* supports both read and write requests.
+* A *LIF read query* requests specific information about one or more learners, and it is fulfilled by one or more corresponding *LIF records*.
 * (Possible Future Roadmap Item) A *LIF write query* includes specific learner information to be saved into a target source data system.
 
 There are many ways a *LIF query* could be fulfilled, as LIF components serve different discrete functions that support the user receiving a holistic, context-rich record from one or multiple data sources and/or caches.
@@ -104,8 +104,8 @@ A sample *LIF fragment* may look like the following:
 
 A *LIF query* may reference one or more learners and can be fulfilled by one or more *LIF records*. A *LIF query* is represented as ~~a JSON path expression that includes all~~ valid query expressions.
 
-The *LIF query* supports both an identity query and a parametric query. 
-* The identity query allows for LIF to find learner information based on a learner ID. 
+The *LIF query* supports both an identity query and a parametric query.
+* The identity query allows for LIF to find learner information based on a learner ID.
 * (Possible Future Roadmap Item) The parametric query allows for LIF to find learner information based on specific attributes.
 
 In addition, the *LIF query* also supports retrieving query results by a Correlation ID for previously-submitted, long-running identity and parametric queries that were served asynchronously.
