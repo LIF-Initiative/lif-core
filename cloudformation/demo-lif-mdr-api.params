@@ -8,6 +8,14 @@
     "ParameterValue": "false"
   },
   {
+    "ParameterKey": "EnableTenantRouting",
+    "ParameterValue": "true"
+  },
+  {
+    "ParameterKey": "TenantServiceSchema",
+    "ParameterValue": "tenant_lif_team"
+  },
+  {
     "ParameterKey": "DomainNames",
     "ParameterValue": "mdr-api.demo.lif.unicon.net"
   },

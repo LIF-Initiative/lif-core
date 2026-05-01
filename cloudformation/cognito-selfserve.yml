@@ -118,6 +118,21 @@ Resources:
         RefreshToken: days
 
   # ---------------------------------------------------------------------------
+  # LIF team group — routes to tenant_lif_team when tenant routing is enabled
+  # (issue #883 PR 3). Group membership is NOT managed by CloudFormation:
+  # the LIF team adds themselves via the Cognito console or Admin API as a
+  # one-time post-deploy step. Evaluators auto-join their own eval-{username}
+  # group via the post-confirmation Lambda and never land here.
+  # ---------------------------------------------------------------------------
+  LifTeamGroup:
+    Type: AWS::Cognito::UserPoolGroup
+    Properties:
+      UserPoolId: !Ref UserPool
+      GroupName: lif-team
+      Description: Internal LIF team — MDR API routes their requests to tenant_lif_team.
+      Precedence: 10
+
+  # ---------------------------------------------------------------------------
   # Post-Confirmation Lambda — creates a Cognito group for each new user
   # ---------------------------------------------------------------------------
   PostConfirmationLambda:

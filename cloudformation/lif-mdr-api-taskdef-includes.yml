@@ -17,6 +17,12 @@ Environment:
   - Name: MDR__AUTH__COGNITO_REGION
     Value:
       Fn::Sub: "${AWS::Region}"
+  - Name: MDR__TENANT_ROUTING__ENABLED
+    Value:
+      Ref: EnableTenantRouting
+  - Name: MDR__TENANT_ROUTING__SERVICE_SCHEMA
+    Value:
+      Ref: TenantServiceSchema
 Secrets:
   - Name: POSTGRESQL_USER
     ValueFrom: 
