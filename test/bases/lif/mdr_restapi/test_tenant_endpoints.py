@@ -3,7 +3,7 @@
 Uses a minimal FastAPI app with just AuthMiddleware and the tenant router
 — the DB service is mocked so these run without a live Postgres. The
 Postgres-backed tests that verify clone_lif_schema's actual behavior
-belong in integration_tests/ (PR 5), not here.
+live in test_clone_lif_schema_sql.py.
 """
 
 # database_setup constructs a SQLAlchemy engine at import time from the
