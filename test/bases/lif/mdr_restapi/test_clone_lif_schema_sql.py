@@ -111,10 +111,12 @@ def _row_count(cur, schema: str, table: str) -> int:
 
 class TestCloneSchemaStructure:
     def test_clone_creates_every_public_table(self, pg_conn, tenant_schema):
-        """Every table in public must exist in the clone — the function picks
-        them up dynamically from pg_tables, so a new V1.x table flows through
-        automatically. This test is what catches the day someone adds a table
-        in a CREATE-but-not-clone way."""
+        """DDL parity: every table in public exists in the clone, no extras.
+
+        The function iterates pg_tables dynamically, so this passes by
+        construction today. The test guards against regressions that break
+        that contract — e.g. filtering tables by name pattern, switching to
+        a hardcoded list, or narrowing the pg_tables query."""
         with pg_conn.cursor() as cur:
             cur.execute("SELECT public.clone_lif_schema(%s)", (tenant_schema,))
             assert _schema_table_names(cur, tenant_schema) == _public_table_names(cur)
