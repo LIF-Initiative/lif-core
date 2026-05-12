@@ -188,6 +188,7 @@ class AuthMiddleware(BaseHTTPMiddleware):
         """
         request.state.principal = None
         request.state.cognito_groups = []
+        request.state.cognito_sub = None
         request.state.tenant_schema = None
 
         if request.method not in METHODS_TO_REQUIRE_AUTH or _is_public_path(request.url.path):
@@ -228,9 +229,13 @@ class AuthMiddleware(BaseHTTPMiddleware):
                         logger.warning("Cognito token validation failed: %s", e)
                         return _build_unauthorized(detail="Could not validate credentials")
 
-                    # Extract principal from Cognito claims
+                    # Extract principal from Cognito claims. We surface the
+                    # raw sub separately so endpoints that need a stable
+                    # identity (e.g. Cognito Admin API calls) don't have to
+                    # guess whether principal is an email or a sub.
                     request.state.principal = payload.get("email") or payload.get("sub")
                     request.state.cognito_groups = payload.get("cognito:groups", [])
+                    request.state.cognito_sub = payload.get("sub")
                 else:
                     # Legacy HS256 token (no kid) — existing local JWT validation
                     payload = decode_jwt(credentials)

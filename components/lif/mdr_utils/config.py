@@ -39,6 +39,11 @@ class Settings(BaseSettings):
     # local HTTP dev so the browser will accept it; deployed envs run on
     # HTTPS and should keep this True.
     mdr__cookie__secure: bool = True
+    # Invite token max age in seconds (issue #884 Phase 3 PR 2). Default
+    # 7 days. Tokens are self-contained (no DB store), so this is the
+    # only knob bounding their lifetime; short enough to limit damage if
+    # one leaks, long enough to share via email.
+    mdr__invite__token_max_age_seconds: int = 7 * 24 * 60 * 60
 
 
 _settings = Settings()
