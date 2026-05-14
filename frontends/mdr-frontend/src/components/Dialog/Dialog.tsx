@@ -61,6 +61,7 @@ interface CrudDialogProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
   title?: string;
+  message?: string;
   fields: DialogField[];
   isEditMode: boolean;
   itemToEdit: DialogItem | null;
@@ -73,6 +74,7 @@ export const CrudDialog: React.FC<CrudDialogProps> = ({
   isOpen,
   onOpenChange,
   title,
+  message,
   fields,
   isEditMode,
   itemToEdit,
@@ -228,6 +230,9 @@ export const CrudDialog: React.FC<CrudDialogProps> = ({
     setDisableSubmitData(missingFields.length > 0);
   }, [createParams, requiredFields]);
 
+  let description = isEditMode ? `Update ${itemToEdit?.Name}'s details.` : `Add a new ${title?.toLowerCase()} to the system.`
+  description += message ? ` ${message}` : '';
+
   return (
     <Dialog.Root open={isOpen} onOpenChange={onOpenChange}>
       <Dialog.Content className="dialogCRUD" style={{ maxHeight: "88vh", overflowY: "auto"}}  ref={crudDialogRef}>
@@ -237,10 +242,7 @@ export const CrudDialog: React.FC<CrudDialogProps> = ({
             : `Create New ${title}`}
         </Dialog.Title>
         <Dialog.Description size="2" mb="4">
-          {isEditMode
-            ? `Update ${itemToEdit?.Name}'s details`
-            : `Add a new ${title?.toLowerCase()} to the system.`
-          }
+          {description}
           {createError && (
             <>
               <br /><br />
@@ -250,7 +252,6 @@ export const CrudDialog: React.FC<CrudDialogProps> = ({
             </>
           )}
         </Dialog.Description>
-        
 
         <Flex direction="column" gap="3">
           {fields
