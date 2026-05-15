@@ -17,6 +17,7 @@ class Settings(BaseSettings):
     mdr__auth__service_api_key__graphql: str = "changeme1"
     mdr__auth__service_api_key__semantic_search: str = "changeme2"
     mdr__auth__service_api_key__translator: str = "changeme3"
+    mdr__auth__service_api_key__learner_data_export: str = "changeme6"
     # Used by the Cognito post-confirmation Lambda to call POST /tenants/provision
     # when a new user registers (issue #883 PR 4b).
     mdr__auth__service_api_key__post_confirm: str = "changeme5"

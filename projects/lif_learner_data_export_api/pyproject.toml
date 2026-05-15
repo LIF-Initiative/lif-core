@@ -1,0 +1,39 @@
+[build-system]
+requires = ["hatchling", "hatch-polylith-bricks"]
+build-backend = "hatchling.build"
+
+[project]
+name = "lif_learner_data_export_api"
+version = "0.1.0"
+
+requires-python = ">=3.13,<3.14"
+
+dependencies = [
+    "fastapi~=0.115",
+    "langchain~=0.3",
+    "langchain-mcp-adapters>=0.1.14,<0.2.0",
+    "langchain-openai~=0.3",
+    "langgraph~=0.4",
+    "langgraph-prebuilt~=0.2",
+    "langmem~=0.0",
+    "mcp>=1.10,<2.0",
+    "mcp-graphql~=0.3",
+    "pyjwt~=2.10",
+    "uvicorn~=0.34",
+]
+
+# This section is needed for the Hatchling build backend, to activate the polylith build hook.
+[tool.hatch.build.hooks.polylith-bricks]
+
+# This section is needed for building
+[tool.hatch.build.targets.wheel]
+packages = ["lif"]
+
+[tool.polylith.bricks]
+"../../bases/lif/learner_data_export_api" = "lif/learner_data_export_api"
+"../../components/lif/logging" = "lif/logging"
+"../../components/lif/auth" = "lif/auth"
+"../../components/lif/datatypes" = "lif/datatypes"
+"../../components/lif/mdr_utils" = "lif/mdr_utils"
+"../../components/lif/mdr_auth" = "lif/mdr_auth"
+"../../components/lif/tenant_routing" = "lif/tenant_routing"

@@ -1,4 +1,5 @@
 import warnings
+from http import HTTPStatus
 from typing import Any, Dict, List
 
 from pydantic import BaseModel, ConfigDict, Field, RootModel, field_validator
@@ -247,3 +248,36 @@ class LIFQueryPlan(RootModel[List[LIFQueryPlanPart]]):
 
     def __len__(self):
         return len(self.root)
+
+
+class TargetTransformationDataModelDTO(BaseModel):
+    """
+    Model for a target transformation Data Model.
+
+    Attributes:
+        name: Data Model name
+        version: Data Model version
+        contributorOrganization: Contributor organization for the Data Model
+        transformationVersions: List of transformation versions for the Data Model
+    """
+
+    name: str = Field(..., description="Data Model name")
+    version: str = Field(..., description="Data Model version")
+    contributorOrganization: str = Field(..., description="Contributor organization for the Data Model")
+    transformationVersions: list[str] = Field(..., description="List of transformation versions for the Data Model")
+
+
+class TargetTransformationDataModelsDTO(BaseModel):
+    """
+    Model for a list of target transformation Data Models.
+
+    Attributes:
+        data (LIFUpdatePersonPayload): Update person.
+    """
+
+    root: list[TargetTransformationDataModelDTO] = Field(..., description="List of target transformation Data Models")
+
+
+class HealthCheckResponse(BaseModel):
+    status: HTTPStatus
+    message: str

@@ -9,10 +9,10 @@ from typing import Any, Dict, Optional
 import jwt
 from fastapi import HTTPException, Request, status
 from fastapi.responses import JSONResponse
-from lif.tenant_routing import resolve_tenant_schema
 from lif.mdr_utils.collection_utils import convert_csv_to_set
 from lif.mdr_utils.config import get_settings
 from lif.mdr_utils.logger_config import get_logger
+from lif.tenant_routing import resolve_tenant_schema
 from starlette.middleware.base import BaseHTTPMiddleware
 
 logger = get_logger(__name__)
@@ -30,6 +30,7 @@ API_KEYS = {
     settings.mdr__auth__service_api_key__semantic_search: "semantic-search-service",
     settings.mdr__auth__service_api_key__translator: "translator-service",
     settings.mdr__auth__service_api_key__post_confirm: "post-confirm-service",
+    settings.mdr__auth__service_api_key__learner_data_export: "learner-data-export-service",
 }
 
 # Cognito configuration
