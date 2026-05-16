@@ -6,6 +6,19 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 LIF Core (Learner Information Framework) is a modular monorepo for aggregating learner information from multiple systems (SIS, LMS, HR) into standardized data records. Uses **Polylith architecture** for clean separation between reusable business logic and deployment contexts.
 
+## Companion docs
+
+`CLAUDE.md` is the dense agent-oriented map. For deeper / more human-readable coverage of the same material, see:
+
+- [`ARCHITECTURE.md`](ARCHITECTURE.md) — repo-root landing page with polylith primer + service-map Mermaid diagram.
+- [`docs/INDEX.md`](docs/INDEX.md) — curated one-line-per-doc index of everything under `docs/`.
+- [`docs/overview/services-overview.md`](docs/overview/services-overview.md) — per-service responsibilities, endpoints, and inter-service flows.
+- [`docs/design/cross-cutting/self-serve-tenant-auth.md`](docs/design/cross-cutting/self-serve-tenant-auth.md) — Cognito sign-up → schema-per-tenant → workspace selection → invite tokens (#882/#883/#884).
+- [`docs/specs/data-model-rules.md`](docs/specs/data-model-rules.md) — PascalCase entities vs camelCase scalars and the files that must follow the convention.
+- [`docs/operations/guides/adding-a-new-microservice.md`](docs/operations/guides/adding-a-new-microservice.md) — runbook for standing up a new HTTP service (Polylith brick layout, pyproject hygiene, Dockerfile2, AuthMiddleware, compose wiring).
+
+Each base and component also has a brick-level `README.md` describing purpose, public surface, and consumers.
+
 ## Commands
 
 ### Setup

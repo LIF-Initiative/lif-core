@@ -58,7 +58,9 @@
 
 ### `docs/design/cross-cutting/` — Topics spanning services
 
-*Currently no docs in this layer; planned topics include `auth.md`, `schema-loading.md`, `polylith-conventions.md`.*
+- [`self-serve-tenant-auth.md`](design/cross-cutting/self-serve-tenant-auth.md) — Self-serve tenant onboarding narrative: Cognito sign-up → post-confirmation Lambda → schema-per-tenant provisioning → workspace selection cookie → invite tokens (#882/#883/#884).
+
+*Other planned topics: `auth.md` (all-service auth model), `schema-loading.md`, `polylith-conventions.md`.*
 
 ---
 
@@ -69,6 +71,7 @@
 ### `docs/operations/guides/` — Runbooks
 
 - [`add-data-source.md`](operations/guides/add-data-source.md) — Adding a new data source to a LIF deployment: source schema, JSONata mappings, pipeline wiring.
+- [`adding-a-new-microservice.md`](operations/guides/adding-a-new-microservice.md) — Runbook for standing up a new HTTP microservice: Polylith brick layout, pyproject hygiene, Dockerfile2, AuthMiddleware wiring, docker-compose entry.
 - [`creating-a-data-source-adapter.md`](operations/guides/creating-a-data-source-adapter.md) — Reference for the data source adapter contract: what adapters are, what they receive, what they return.
 - [`demo-environment-update.md`](operations/guides/demo-environment-update.md) — End-to-end runbook for promoting dev images to demo.
 - [`load-testing.md`](operations/guides/load-testing.md) — Load testing notes for LIF services.
