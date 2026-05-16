@@ -191,6 +191,7 @@
         "sqlmodel",
         "sqls",
         "stateu",
+        "Starlette",
         "Streamable",
         "streamlit",
         "subcomponent",
