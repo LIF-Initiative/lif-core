@@ -3,7 +3,7 @@ Thank you for your pull request. Please review the requirements below.
 
 Bug fixes and new features should be reported on the issue tracker: https://github.com/lif-initiative/lif-core/issues
 
-Contributing guide: https://github.com/lif-initiative/lif-core/blob/main/docs/CONTRIBUTING.md
+Contributing guide: https://github.com/lif-initiative/lif-core/blob/main/CONTRIBUTING.md
 Code of Conduct: https://github.com/lif-initiative/lif-core/blob/main/CODE_OF_CONDUCT.md
 -->
 
@@ -39,14 +39,17 @@ Closes # [[add Github issue number]]
 
 - [ ] bases/
 - [ ] components/
+- [ ] projects/
 - [ ] orchestrators/
 - [ ] frontends/
 - [ ] deployments/
-- [ ] CloudFormation/SAM templates
-- [ ] Database schema
+- [ ] cloudformation/ or sam/ templates
+- [ ] schemas/
+- [ ] scripts/
+- [ ] test/ or e2e/
+- [ ] Database schema (migrations)
 - [ ] API endpoints
-- [ ] Documentation
-- [ ] Testing
+- [ ] Documentation (docs/, READMEs, ARCHITECTURE.md, CLAUDE.md)
 
 ---
 
