@@ -156,6 +156,8 @@
         "pyenv",
         "pyflow",
         "pyjwt",
+        "Pydantic",
+        "pydantic",
         "pymysql",
         "pypa",
         "pypackages",
