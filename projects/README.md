@@ -22,7 +22,7 @@ These directories correspond to typical Python project structures, including a `
 ## Example Structure
 
 <pre lang="markdown"> <code> 
-frontends/  
+projects/  
 ├── lif_query_cache_api/  
 │ ├── pyproject.toml # Project metadata and dependencies  
 │ ├── Dockerfile # Container build instructions  
