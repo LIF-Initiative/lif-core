@@ -3,8 +3,11 @@
 Thanks for your interest in contributing! We welcome pull requests, ideas, and
 feedback to help improve this project.
 
-This guide outlines how to get set up, our coding standards, and how to propose
-changes.
+> **Command reference lives in [`CLAUDE.md`](CLAUDE.md).** That file is the
+> canonical, up-to-date reference for setup, linting, type checking, testing,
+> schema conventions, and architecture. This guide focuses on the contributor
+> *process* (how to propose changes, review etiquette, commit format) and links
+> into `CLAUDE.md` for the mechanics rather than duplicating them.
 
 ---
 
@@ -17,132 +20,88 @@ changes.
    cd lif-core
    ```
 
-2. **Install dependencies and create virtual environment**:
-
-   ```bash
-   uv sync
-   ```
-
-3. **Install pre-commit hooks** (lint / format / type-check / tests / cspell / commitlint run on every commit):
-
-   ```bash
-   uv run pre-commit install
-   uv run pre-commit install --hook-type commit-msg
-   ```
+2. Set up the dev environment per [CLAUDE.md → Setup](CLAUDE.md#setup)
+   (`uv sync` plus the two `pre-commit install` invocations).
 
 ---
 
 ## How to Contribute
 
 - **Report bugs** or **suggest features** by opening an issue.
-- **Fix bugs**, **add features**, or **improve documentation**
-  via pull requests (PRs).
-- Contributions should generally **start with an open issue or a well-defined task**.
+- **Fix bugs**, **add features**, or **improve documentation** via pull
+  requests (PRs).
+- Contributions should generally **start with an open issue or a well-defined
+  task**.
 
 ---
 
 ## Pull Request Guidelines
 
 We aim to keep our codebase clean, reviewable, and maintainable.
-Please follow these guidelines:
 
-- **Small and focused**: PRs should address **one issue or task**.
-  Avoid combining multiple unrelated changes
-  (e.g., don’t fix bugs and add new features in the same PR).
-- **Descriptive**: Provide a clear summary of what the PR does and why,
+- **Small and focused**: PRs should address **one issue or task**. Avoid
+  combining unrelated changes (e.g., don't fix a bug and add a new feature in
+  the same PR).
+- **Descriptive**: provide a clear summary of what the PR does and why,
   referencing the related issue number (e.g., `Closes #42`).
 - **Review protocol**:
   - PR authors **should not approve their own pull requests**, except for:
     - Trivial changes (e.g., typo fixes)
     - Documentation-only updates
   - All other PRs require review and approval from another contributor.
-- **Tests**: Include or update tests as appropriate.
-- Make sure the code:
-  - Passes linting and formatting checks (`ruff`)
-  - Passes type checking (`ty`)
-  - Passes all tests (`pytest`)
+- **Tests**: include or update tests as appropriate.
+- **Checks must pass**: linting (`ruff`), type checking (`ty`), tests
+  (`pytest`). Commands live in
+  [CLAUDE.md → Development](CLAUDE.md#development).
 
 ---
 
-## 🧹 Code Style & Tooling
+## Code Style
 
-We enforce consistent code style using:
+Tooling — `ruff` (format + lint), `ty` (type check), `pre-commit` (automation)
+— and the commands to run them are documented in
+[CLAUDE.md → Development](CLAUDE.md#development).
 
-- [`ruff`](https://github.com/astral-sh/ruff) – code formatter / fast linter
-- [`ty`](https://github.com/astral-sh/ty) - static type checker
-- [`pre-commit`](https://pre-commit.com/) – automates checks
+### File layout (Python)
 
-### Before You Commit
+In modules that combine Pydantic models, helper functions, and FastAPI
+endpoint handlers (the typical shape of a `bases/lif/*_restapi/core.py` or
+router module), group each category contiguously:
 
-Make sure code passes formatting and linting:
+1. **Pydantic request/response models** at the top
+2. **Helper functions** in the middle
+3. **Endpoint handlers** at the bottom
 
-```bash
-uv run ruff check
-uv run ruff format
-uv run ty check
-```
+Don't interleave the three. A reader scanning the file should be able to find
+all the data shapes in one block and all the routes in another, without
+scrolling past helpers wedged between two endpoints. Small modules with one
+model and one endpoint don't need to enforce this, but the convention scales
+with file size.
 
-Or alternatively:
+### Schema conventions
 
-```bash
-source .venv/bin/activate
-ruff check
-ruff format
-ty check
-```
-
-Or run all checks at once with:
-
-```bash
-uv run pre-commit run --all-files
-```
-Or if the virtual environment has been activated with `source .venv/bin/activate`:
-
-```bash
-pre-commit run --all-files
-```
+The LIF data model uses PascalCase for entities and camelCase for scalars
+(`Name`, `Identifier` vs. `firstName`, `informationSourceId`). Full rules:
+[CLAUDE.md → Capitalization Convention](CLAUDE.md#capitalization-convention-important)
+and [`docs/specs/data-model-rules.md`](docs/specs/data-model-rules.md).
 
 ---
 
 ## Testing
 
-Tests are required for new features and bug fixes.
+Tests are required for new features and bug fixes. See
+[CLAUDE.md → Testing](CLAUDE.md#testing) for:
 
-### Running Tests
-
-```bash
-uv run pytest                                    # Run all tests
-uv run pytest test/components/lif/<module>/      # Run tests for a specific component
-uv run pytest test/path/to/test_file.py -v       # Run a specific test file
-```
-
-### What Makes a Good Unit Test
-
-Write tests that earn their keep. Every test should verify something non-obvious about the code's behavior.
-
-**Do test:**
-- **Non-trivial transformations** — regex logic, recursion, type dispatch, multi-step pipelines where inputs interact in unexpected ways
-- **Boundary conditions** — empty inputs, None values, edge cases where behavior changes (e.g., leading digits in identifiers, CamelCase splitting combined with special characters)
-- **Bug regressions** — every bug fix should include a test that fails without the fix and passes with it
-- **End-to-end behavior** — testing a function with real inputs is more valuable than mocking every internal call. For example, test `generate_graphql_schema()` with an actual OpenAPI schema rather than mocking sub-functions.
-
-**Don't test:**
-- **Trivial wrappers** — if a function is a one-liner delegating to another tested function, testing it adds noise, not confidence
-- **Framework behavior** — don't test that Pydantic validates types or that `re.sub` works; test *your* logic that uses them
-- **Obvious guard clauses** — `if not s: return s` doesn't need its own test case unless the empty-input behavior is a documented contract
-- **Coverage for coverage's sake** — a placeholder test like `assert module is not None` has no value. Either write a real test or leave the file empty.
-
-**Guidelines:**
-- Mirror the source structure in `test/` (`test/components/lif/<module>/test_core.py`)
-- Group related tests into classes for organization
-- Prefer real objects over mocks when practical — mocks can mask bugs in the interaction between components
-- Use `pytest.raises()` with `match=` to verify specific error messages, not just error types
+- What makes a good unit test (and what not to test)
+- How to run the suite (unit + integration)
+- Integration-test conventions and sample-data layout
 
 ---
 
 ## Commit Guidelines
 
-Commit messages must reference a tracking issue and follow the format enforced by `commitlint.config.mjs`:
+Commit messages must reference a tracking issue and follow the format enforced
+by `commitlint.config.mjs`:
 
 ```
 Issue #XXX: Brief description
@@ -154,7 +113,8 @@ For changes touching multiple issues, list them comma-separated:
 Issue #123, Issue #456: Brief description
 ```
 
-Type prefixes are encouraged in the description for readability (not required by commitlint):
+Type prefixes are encouraged in the description for readability (not required
+by commitlint):
 
 - `feat:` for new features
 - `fix:` for bug fixes
@@ -162,6 +122,9 @@ Type prefixes are encouraged in the description for readability (not required by
 - `refactor:` for internal changes that don't affect behavior
 
 Example: `Issue #884: feat: Add invite-link endpoints`
+
+See [CLAUDE.md → Commit Convention](CLAUDE.md#commit-convention) for the
+canonical statement of this rule.
 
 ---
 
@@ -180,5 +143,6 @@ When contributing, please ensure:
 
 We appreciate your contributions and interest in the project!
 
-If you're not sure where to start, check out [open issues](https://github.com/LIF-Initiative/lif-core/issues),
+If you're not sure where to start, check out
+[open issues](https://github.com/LIF-Initiative/lif-core/issues),
 especially those labeled `good first issue` or `help wanted`.
