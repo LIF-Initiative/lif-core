@@ -141,6 +141,7 @@ ignore = [
 exclude = [
   "scripts/",
   "test/",
+  "integration_tests/",
   "bases/lif/advisor_restapi/",
   "bases/lif/api_graphql/",
   "bases/lif/mdr_restapi/",
