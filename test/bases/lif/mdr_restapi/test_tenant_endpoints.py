@@ -359,3 +359,54 @@ class TestAcceptInvite:
         resp = await client.post("/tenants/invite/accept", json={"token": self._make_token()})
         assert resp.status_code == 400
         mock_cognito.assert_not_called()
+
+
+# --- Workspace reset (issue #884 Phase 3 PR 3) ---
+
+
+@pytest.fixture
+def mock_reset(monkeypatch):
+    """Stand in for tenant_service.reset_tenant — these tests verify the
+    endpoint's auth/validation behavior, not the actual DROP+clone SQL
+    (which is covered in test_clone_lif_schema_sql.py)."""
+    fake = mock.AsyncMock()
+    monkeypatch.setattr(tenant_endpoints, "reset_tenant", fake)
+    return fake
+
+
+class TestResetWorkspace:
+    async def test_no_auth_returns_401(self, client, mock_reset):
+        resp = await client.post("/tenants/reset", json={"group": "lif-team"})
+        assert resp.status_code == 401
+        mock_reset.assert_not_awaited()
+
+    async def test_service_principal_returns_403(self, client, mock_reset):
+        """Reset is per-user — service principals don't have 'their' workspace."""
+        resp = await client.post("/tenants/reset", json={"group": "lif-team"}, headers={"X-API-Key": VALID_SERVICE_KEY})
+        assert resp.status_code == 403
+        mock_reset.assert_not_awaited()
+
+    async def test_resetting_a_user_group_returns_200(self, client, monkeypatch, mock_reset):
+        mock_reset.return_value = "tenant_lif_team"
+        _stub_cognito_principal(monkeypatch, "user@example.com", ["lif-team", "acme-univ"])
+        resp = await client.post("/tenants/reset", json={"group": "lif-team"})
+        assert resp.status_code == 200
+        assert resp.json() == {"group": "lif-team", "tenant_schema": "tenant_lif_team"}
+        # Verify reset_tenant was called with the sanitized group string —
+        # the endpoint passes workspace.group, not the raw body.group, so a
+        # later change to find_workspace can't drift them out of sync.
+        mock_reset.assert_awaited_once()
+        assert mock_reset.await_args.args[1] == "lif-team"
+
+    async def test_resetting_a_non_member_group_returns_404(self, client, monkeypatch, mock_reset):
+        """User isn't in 'acme-univ' — refuse rather than trust the body."""
+        _stub_cognito_principal(monkeypatch, "user@example.com", ["lif-team"])
+        resp = await client.post("/tenants/reset", json={"group": "acme-univ"})
+        assert resp.status_code == 404
+        mock_reset.assert_not_awaited()
+
+    async def test_empty_group_rejected_by_pydantic(self, client, monkeypatch, mock_reset):
+        _stub_cognito_principal(monkeypatch, "user@example.com", ["lif-team"])
+        resp = await client.post("/tenants/reset", json={"group": ""})
+        assert resp.status_code == 422
+        mock_reset.assert_not_awaited()

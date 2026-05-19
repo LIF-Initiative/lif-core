@@ -58,3 +58,38 @@ async def provision_tenant(session: AsyncSession, group_name: str) -> str:
         raise
 
     return target
+
+
+async def reset_tenant(session: AsyncSession, group_name: str) -> str:
+    """Reset a tenant schema back to the LIF seed state.
+
+    Drops the existing schema (CASCADE — all tables, data, FKs go) and
+    re-clones from public in the same transaction. Idempotent: if the
+    schema doesn't exist, the DROP IF EXISTS is a no-op and the clone
+    just provisions it fresh.
+
+    The endpoint layer is responsible for authorizing the caller — this
+    helper assumes the caller has already been verified as a member of
+    the target group. By design this is irrecoverable; there is no
+    snapshot of the prior tenant state.
+
+    Returns the resulting tenant schema name. Raises:
+      - InvalidGroupNameError if the group sanitizes to empty.
+    """
+    target = tenant_schema_for_group(group_name)
+    if target is None:
+        raise InvalidGroupNameError(f"Group name {group_name!r} does not produce a valid tenant schema")
+
+    # CASCADE removes everything that depends on the schema (tables,
+    # constraints, sequences, FKs into the schema). Anything outside this
+    # schema is untouched. clone_lif_schema then rebuilds DDL + data from
+    # public. Both run in the session's open transaction; if the clone
+    # raises, the drop is rolled back and the tenant data is preserved.
+    #
+    # Identifiers can't be bound as parameters, so we interpolate `target`
+    # directly. Safety: `tenant_schema_for_group` enforces the
+    # `tenant_[a-z][a-z0-9_]*` shape, so there's no injection surface.
+    await session.execute(text(f'DROP SCHEMA IF EXISTS "{target}" CASCADE'))
+    await session.execute(text("SELECT public.clone_lif_schema(:target)"), {"target": target})
+    await session.commit()
+    return target
