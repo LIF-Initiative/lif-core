@@ -56,11 +56,50 @@ The LIF Data Model utilizes a primitive JSON data type. Primitive data types inc
 **Reasoning:** The primitive JSON data type was selected for LIF because of the “no loss” principle in data acceptance. The team worried that using a more rigid data type might prevent data from fitting correctly. For instance, when a date is expected, it may include the full date with month, day, and year, or only the month and year, or just the year. By choosing a primitive JSON data type with most data stored as strings, we can ensure that, regardless of how the data is stored in the source system, it will be accurately captured in the LIF model.
 
 ### Naming Styles
-- **Entities:** Upper CamelCase, first letter capitalized.
-- **Properties:** standard CamelCase.
-- **Enums:** Upper CamelCase, first letter capitalized.
 
-**Reasoning:** The different naming styles were chosen to make the text not only easy to read, but also to help quickly identify whether you're looking at an entity or a property, since entities use UpperCamelCase and properties use standard camelCase.
+LIF distinguishes between **entities/objects** (containers of data) and **scalar attributes** (individual values) by case. Reading a LIF record, you should be able to tell at a glance which is which.
+
+| Kind | Case | Examples |
+|---|---|---|
+| **Entity / object / array properties** | PascalCase | `Name`, `Contact`, `Identifier`, `EmploymentLearningExperience`, `CredentialAward`, `Proficiency` |
+| **Scalar attributes** (the leaves) | camelCase | `firstName`, `lastName`, `identifier`, `identifierType`, `informationSourceId`, `startDate` |
+| **Enums** | PascalCase | matches entities, since enums *are* a kind of typed value |
+
+**Example structure:**
+
+```json
+{
+  "person": [{
+    "Name": [{
+      "firstName": "John",
+      "lastName": "Doe",
+      "informationSourceId": "Org1"
+    }],
+    "Identifier": [{
+      "identifier": "12345",
+      "identifierType": "SCHOOL_ASSIGNED_NUMBER"
+    }],
+    "EmploymentPreferences": [{
+      "organizationTypes": ["Public"]
+    }]
+  }]
+}
+```
+
+In this example, `Name`, `Identifier`, and `EmploymentPreferences` are arrays of objects (PascalCase); `firstName`, `identifier`, `organizationTypes` are scalar leaves (camelCase).
+
+**Reasoning:** The split between PascalCase and camelCase isn't decorative — it lets a reader (or a parser, or a GraphQL resolver) tell containers from values without checking the schema. Many parts of the codebase rely on this distinction: GraphQL filter inputs, fragment paths in configs, and case-insensitive lookups in the translator all assume it holds.
+
+**Files that must follow this convention:**
+
+| Location | What it contains |
+|---|---|
+| `projects/mongodb/sample_data/**/*.json` | Seed data |
+| `components/lif/data_source_adapters/**/*.graphql` | GraphQL queries |
+| `deployments/**/information_sources_config*.yml` | Config (fragment paths like `person.Name`) |
+| `test/**/*` | Test fixtures and assertions |
+
+If you add a new file in any of these locations, the linter and tests won't catch case-convention drift for you — the contract is enforced by readers, not by tooling. Look at a neighbor before naming new entities/attributes.
 
 ### Object Effective Date
 Object effective dates are set when the object is created. The date indicates not only when the date was added but also when any previous objects in the array became deprecated. The Object Effective Date is stored in a field named `dateEffective` in ISO 8601 standard format: `YYYY-MM-DD`.
