@@ -28,7 +28,8 @@ async def get_available_data_formats(request: Request):
     logger.info("Received request for available data formats as %s", request.state.principal)
 
     data_formats = TargetTransformationDataModelsDTO(
-        root=[
+        metadata={"total": 3},
+        dataFormats=[
             TargetTransformationDataModelDTO(
                 name="OpenBadges 3.0",
                 version="1.0.3",
@@ -44,6 +45,6 @@ async def get_available_data_formats(request: Request):
                 contributorOrganization="Community",
                 transformationVersions=["1.3.0"],
             ),
-        ]
+        ],
     )
     return data_formats

@@ -275,7 +275,10 @@ class TargetTransformationDataModelsDTO(BaseModel):
         data (LIFUpdatePersonPayload): Update person.
     """
 
-    root: list[TargetTransformationDataModelDTO] = Field(..., description="List of target transformation Data Models")
+    metadata: dict[str, Any] = Field(..., description="Metadata about the available data formats")
+    dataFormats: list[TargetTransformationDataModelDTO] = Field(
+        ..., description="List of target transformation Data Models"
+    )
 
 
 class HealthCheckResponse(BaseModel):
