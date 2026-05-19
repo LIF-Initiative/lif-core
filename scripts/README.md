@@ -58,6 +58,12 @@ Utility scripts for managing deployments, credentials, and data. All AWS scripts
 | `generate_sample_users.py` | Generate synthetic sample user JSON files across all three demo orgs. See [README_sample_users.md](README_sample_users.md) for details. |
 | `fix_sample_data_schema.py` | Validate and fix sample data files to conform to the current LIF schema. Adds missing required fields. Use `--dry-run` to preview. |
 
+## Self-Serve Operations
+
+| Script | Purpose |
+|--------|---------|
+| `export-cognito-registrations.py` | Export the self-serve User Pool's users (with `custom:organization`, `custom:role`, `custom:reason`, status, signup date, group membership) for outreach. Run via `uv run`; reads UserPoolId from the `{env}-lif-mdr-cognito` stack output. CSV by default; `--format json` for JSON, `--output <path>` to write to file. |
+
 ## Common Patterns
 
 Most AWS scripts follow the same conventions:
