@@ -227,7 +227,7 @@ class TestSelectWorkspace:
         set_cookie = resp.headers.get("set-cookie", "")
         assert "lif_workspace=" in set_cookie
         assert "HttpOnly" in set_cookie
-        assert "SameSite=lax" in set_cookie.lower().replace(" ", "") or "samesite=lax" in set_cookie.lower()
+        assert "samesite=lax" in set_cookie.lower()
 
     async def test_selecting_a_non_member_group_returns_404(self, client, monkeypatch):
         """User isn't in 'acme-univ' — refuse rather than trust the request body."""

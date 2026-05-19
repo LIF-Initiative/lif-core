@@ -259,18 +259,20 @@ class AuthMiddleware(BaseHTTPMiddleware):
             # honor it — but only if the cookie's group is actually one of
             # theirs. The Cognito JWT remains the ground truth for membership;
             # a stale or stolen cookie can't grant access to a group the user
-            # no longer belongs to. Service principals and HS256 callers
-            # (legacy local JWT path, no Cognito groups claim) have no
-            # cognito_groups, so find_workspace returns None and the
-            # default above stands.
-            if TENANT_ROUTING_ENABLED:
+            # no longer belongs to. Short-circuit when there are no
+            # cognito_groups (service principals + HS256 legacy callers): they
+            # can never match a workspace, so skip the HMAC verification and
+            # avoid log noise from any stray lif_workspace cookie a browser
+            # might forward on a service-to-service call.
+            cognito_groups = getattr(request.state, "cognito_groups", None)
+            if TENANT_ROUTING_ENABLED and cognito_groups:
                 cookie_value = request.cookies.get(COOKIE_NAME)
-                cookie = decode_workspace_cookie(cookie_value, secret=SECRET_KEY)
-                if cookie is not None:
-                    cognito_groups = getattr(request.state, "cognito_groups", None)
-                    selected = find_workspace(cognito_groups, cookie.group)
-                    if selected is not None:
-                        request.state.tenant_schema = selected.tenant_schema
+                if cookie_value:
+                    cookie = decode_workspace_cookie(cookie_value, secret=SECRET_KEY)
+                    if cookie is not None:
+                        selected = find_workspace(cognito_groups, cookie.group)
+                        if selected is not None:
+                            request.state.tenant_schema = selected.tenant_schema
         except HTTPException as e:
             logger.exception("Auth middleware HTTPException")
             body = {"detail": str(e.detail)}

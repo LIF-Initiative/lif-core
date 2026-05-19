@@ -94,21 +94,27 @@ def decode_workspace_cookie(value: str | None, secret: str, *, now: int | None =
         return None
     parts = value.split(_SEPARATOR)
     if len(parts) != 3:
-        logger.warning("Workspace cookie malformed: expected 3 dot-separated parts, got %d", len(parts))
+        # DEBUG, not WARNING: this branch runs on every request that carries a
+        # malformed cookie until it expires (30 days). The middleware can't
+        # currently clear the cookie from here, so a single bad cookie would
+        # spam the logs at WARNING.
+        logger.debug("Workspace cookie malformed: expected 3 dot-separated parts, got %d", len(parts))
         return None
     encoded_group, exp_str, sig = parts
     payload = f"{encoded_group}{_SEPARATOR}{exp_str}"
     expected_sig = _sign(payload, secret)
     if not hmac.compare_digest(sig, expected_sig):
-        # Don't log the signature itself — could be a stale cookie signed by a
-        # rotated secret, not necessarily an attack.
-        logger.warning("Workspace cookie signature mismatch (tampering, rotated secret, or stale cookie)")
+        # DEBUG, not WARNING: the common cause is a rotated JWT secret or a
+        # stale cookie predating a format change, both benign. Same per-request
+        # log-spam concern as the malformed branch above. Don't log the
+        # signature itself.
+        logger.debug("Workspace cookie signature mismatch (tampering, rotated secret, or stale cookie)")
         return None
     try:
         expires_at = int(exp_str)
         group = _b64url_decode(encoded_group)
     except (ValueError, UnicodeDecodeError) as e:
-        logger.warning("Workspace cookie payload decode failed: %s", e)
+        logger.debug("Workspace cookie payload decode failed: %s", e)
         return None
     current = now if now is not None else int(time.time())
     if expires_at <= current:

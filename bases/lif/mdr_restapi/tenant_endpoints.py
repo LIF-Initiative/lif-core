@@ -32,6 +32,44 @@ logger = get_logger(__name__)
 settings = get_settings()
 
 
+# --- Request/response models ---
+
+
+class ProvisionTenantRequest(BaseModel):
+    # 128 matches Cognito's own GroupName limit — anything longer than that
+    # couldn't have come from a real cognito:groups claim, so reject early.
+    group_name: str = Field(
+        ...,
+        min_length=1,
+        max_length=128,
+        description="Cognito group name (server sanitizes it into a tenant schema identifier)",
+    )
+
+
+class ProvisionTenantResponse(BaseModel):
+    tenant_schema: str
+    created: bool
+
+
+# ``WorkspaceItem`` (the per-workspace payload) lives in the workspace_service
+# component since it's a domain DTO; the envelopes below are endpoint-layer
+# wrappers.
+class ListMyWorkspacesResponse(BaseModel):
+    workspaces: list[WorkspaceItem]
+
+
+class SelectWorkspaceRequest(BaseModel):
+    group: str = Field(..., min_length=1, max_length=128, description="Cognito group name to switch to")
+
+
+class SelectWorkspaceResponse(BaseModel):
+    group: str
+    tenant_schema: str
+
+
+# --- Auth dependencies ---
+
+
 async def require_service_principal(request: Request) -> str:
     """Dependency: 403 unless the request authenticated via an X-API-Key service credential.
 
@@ -61,20 +99,7 @@ async def require_user_principal(request: Request) -> str:
     return principal
 
 
-class ProvisionTenantRequest(BaseModel):
-    # 128 matches Cognito's own GroupName limit — anything longer than that
-    # couldn't have come from a real cognito:groups claim, so reject early.
-    group_name: str = Field(
-        ...,
-        min_length=1,
-        max_length=128,
-        description="Cognito group name (server sanitizes it into a tenant schema identifier)",
-    )
-
-
-class ProvisionTenantResponse(BaseModel):
-    tenant_schema: str
-    created: bool
+# --- Endpoints ---
 
 
 @router.post(
@@ -112,27 +137,6 @@ async def provision_tenant_endpoint(
 
     logger.info("Provisioned tenant schema %s for group %r", tenant_schema, body.group_name)
     return ProvisionTenantResponse(tenant_schema=tenant_schema, created=True)
-
-
-# --- Workspace listing & selection (issue #884 Phase 3 PR 1) ---
-#
-# Request/response envelopes for the /tenants/mine and /tenants/select
-# endpoints. ``WorkspaceItem`` (the per-workspace payload) lives in the
-# workspace_service component since it's a domain DTO; the envelopes
-# below are endpoint-layer wrappers.
-
-
-class ListMyWorkspacesResponse(BaseModel):
-    workspaces: list[WorkspaceItem]
-
-
-class SelectWorkspaceRequest(BaseModel):
-    group: str = Field(..., min_length=1, max_length=128, description="Cognito group name to switch to")
-
-
-class SelectWorkspaceResponse(BaseModel):
-    group: str
-    tenant_schema: str
 
 
 @router.get(
