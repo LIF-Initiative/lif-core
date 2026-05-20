@@ -52,6 +52,13 @@ COOKIE_NAME = "lif_workspace"
 DEFAULT_MAX_AGE_SECONDS = 30 * 24 * 60 * 60  # 30 days
 _SEPARATOR = "."
 
+# Per-process suppression for decode-failure logs (see _log_decode_failure_once).
+# Stores sha256(value)[:16] for each cookie value we've already logged in this
+# process. Bounded; cleared in bulk when full — a crude eviction but cheaper
+# than maintaining LRU order, and we don't need strict recency semantics.
+_LOGGED_DECODE_FAILURES: set[str] = set()
+_LOGGED_DECODE_FAILURES_MAX = 256
+
 
 @dataclass(frozen=True)
 class WorkspaceCookie:
@@ -74,6 +81,27 @@ def _sign(payload: str, secret: str) -> str:
     return hmac.new(secret.encode("utf-8"), payload.encode("utf-8"), hashlib.sha256).hexdigest()
 
 
+def _log_decode_failure_once(value: str, message: str, *args: object) -> None:
+    """Log a cookie-decode failure at INFO, but only on first sighting per process.
+
+    The middleware sees the same bad cookie on every request until it expires
+    (up to 30 days), so a naive logger.info would flood production with the
+    same line for one stale cookie. Dedupe on a short hash of the cookie value
+    so adopters can still spot decode failures (rotated secret, tampering,
+    legitimate prod-support questions) without losing the signal in repeats.
+    """
+    digest = hashlib.sha256(value.encode("utf-8")).hexdigest()[:16]
+    if digest in _LOGGED_DECODE_FAILURES:
+        return
+    if len(_LOGGED_DECODE_FAILURES) >= _LOGGED_DECODE_FAILURES_MAX:
+        # Cap memory growth. Clearing in bulk is fine because the worst case
+        # is re-logging cookies we'd previously suppressed — still bounded by
+        # the number of distinct bad cookies the process sees.
+        _LOGGED_DECODE_FAILURES.clear()
+    _LOGGED_DECODE_FAILURES.add(digest)
+    logger.info(message, *args)
+
+
 def encode_workspace_cookie(group: str, secret: str, *, max_age_seconds: int = DEFAULT_MAX_AGE_SECONDS) -> str:
     """Build the cookie value for a workspace selection."""
     expires_at = int(time.time()) + max_age_seconds
@@ -94,30 +122,35 @@ def decode_workspace_cookie(value: str | None, secret: str, *, now: int | None =
         return None
     parts = value.split(_SEPARATOR)
     if len(parts) != 3:
-        # DEBUG, not WARNING: this branch runs on every request that carries a
-        # malformed cookie until it expires (30 days). The middleware can't
-        # currently clear the cookie from here, so a single bad cookie would
-        # spam the logs at WARNING.
-        logger.debug("Workspace cookie malformed: expected 3 dot-separated parts, got %d", len(parts))
+        # INFO with first-sight dedupe: adopters need to see *that* cookies are
+        # failing to decode (rotated secret, tampering, format drift), but the
+        # middleware sees the same bad cookie on every request — without
+        # dedupe one stale cookie would dominate the log stream.
+        _log_decode_failure_once(
+            value, "Workspace cookie malformed: expected 3 dot-separated parts, got %d", len(parts)
+        )
         return None
     encoded_group, exp_str, sig = parts
     payload = f"{encoded_group}{_SEPARATOR}{exp_str}"
     expected_sig = _sign(payload, secret)
     if not hmac.compare_digest(sig, expected_sig):
-        # DEBUG, not WARNING: the common cause is a rotated JWT secret or a
-        # stale cookie predating a format change, both benign. Same per-request
-        # log-spam concern as the malformed branch above. Don't log the
-        # signature itself.
-        logger.debug("Workspace cookie signature mismatch (tampering, rotated secret, or stale cookie)")
+        # Same INFO-with-dedupe pattern as the malformed branch. Don't log the
+        # signature itself — common benign cause is a rotated JWT secret.
+        _log_decode_failure_once(
+            value, "Workspace cookie signature mismatch (tampering, rotated secret, or stale cookie)"
+        )
         return None
     try:
         expires_at = int(exp_str)
         group = _b64url_decode(encoded_group)
     except (ValueError, UnicodeDecodeError) as e:
-        logger.debug("Workspace cookie payload decode failed: %s", e)
+        _log_decode_failure_once(value, "Workspace cookie payload decode failed: %s", e)
         return None
     current = now if now is not None else int(time.time())
     if expires_at <= current:
+        # Expired cookies are routine (30-day lifetime; users return after long
+        # gaps) and require no operator attention — stay at DEBUG and skip the
+        # dedupe table to avoid bloating it with normal traffic.
         logger.debug("Workspace cookie expired (exp=%d, now=%d)", expires_at, current)
         return None
     return WorkspaceCookie(group=group, expires_at=expires_at)
