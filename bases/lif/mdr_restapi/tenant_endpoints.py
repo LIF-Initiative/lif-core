@@ -122,7 +122,7 @@ async def require_user_principal(request: Request) -> str:
     """Dependency: 403 unless the request authenticated as a user (not a service).
 
     Workspace listing/selection is a per-user concept; service principals
-    don't have a "their" workspace — they always route to the configured
+    have no per-user workspace — they always route to the configured
     service schema. Reject them rather than returning a confusing empty
     response.
     """
@@ -197,7 +197,7 @@ async def provision_tenant_endpoint(
     response_model=ListMyWorkspacesResponse,
     responses={
         401: {"description": "Not authenticated"},
-        403: {"description": "Service principals can't list 'their' workspaces"},
+        403: {"description": "Service principals have no per-user workspaces"},
     },
 )
 async def list_my_workspaces(
@@ -249,6 +249,13 @@ async def select_workspace(
         )
 
     cookie_value = encode_workspace_cookie(workspace.group, secret=settings.mdr__auth__jwt_secret_key)
+    # SameSite=Lax (not Strict): the future invite-email flow needs the cookie
+    # to survive a top-level cross-site navigation when a recipient clicks an
+    # emailed invite URL. Strict would drop the cookie on that first GET and
+    # send the user back to the workspace re-select screen. Lax still blocks
+    # the cookie on cross-site POSTs and iframes, which is the threat that
+    # matters; CSRF on /tenants/select itself is mitigated separately by the
+    # Authorization Bearer JWT (cookies can't supply that).
     response.set_cookie(
         key=COOKIE_NAME,
         value=cookie_value,

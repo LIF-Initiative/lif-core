@@ -264,12 +264,16 @@ class AuthMiddleware(BaseHTTPMiddleware):
             # honor it — but only if the cookie's group is actually one of
             # theirs. The Cognito JWT remains the ground truth for membership;
             # a stale or stolen cookie can't grant access to a group the user
-            # no longer belongs to. Short-circuit when there are no
-            # cognito_groups (service principals + HS256 legacy callers): they
-            # can never match a workspace, so skip the HMAC verification and
-            # avoid log noise from any stray lif_workspace cookie a browser
-            # might forward on a service-to-service call.
+            # no longer belongs to.
             cognito_groups = getattr(request.state, "cognito_groups", None)
+
+            # Early exit for callers who can never match a workspace cookie:
+            # service principals (API-key auth) and HS256 legacy users both
+            # have empty cognito_groups, so find_workspace would always return
+            # None below. Skip the cookie read, HMAC verification, and any
+            # decode-failure logging entirely — keeps service-to-service
+            # traffic free of log noise from a stray lif_workspace cookie a
+            # browser might forward through a proxy.
             if TENANT_ROUTING_ENABLED and cognito_groups:
                 cookie_value = request.cookies.get(COOKIE_NAME)
                 if cookie_value:
