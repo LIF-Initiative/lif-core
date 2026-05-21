@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Box,
@@ -120,28 +120,63 @@ const Workspaces: React.FC = () => {
 
   const generateInvite = async () => {
     if (!inviteFor) return;
+    // Capture the group at call time. If the user closes the dialog or
+    // switches workspaces before the response lands, we drop the result
+    // instead of showing a token under the wrong dialog title.
+    const requestedFor = inviteFor;
     setInvitePending(true);
     setInviteError(null);
     try {
-      const result = await tenantsService.createInvite(inviteFor);
-      setInvite(result);
+      const result = await tenantsService.createInvite(requestedFor);
+      if (inviteForRef.current === requestedFor) {
+        setInvite(result);
+      }
     } catch (err) {
-      setInviteError(errorToString(err));
+      if (inviteForRef.current === requestedFor) {
+        setInviteError(errorToString(err));
+      }
     } finally {
-      setInvitePending(false);
+      if (inviteForRef.current === requestedFor) {
+        setInvitePending(false);
+      }
     }
   };
+
+  // Mirror inviteFor into a ref so the async generateInvite callback can
+  // see the *current* dialog target without re-rendering.
+  const inviteForRef = useRef<string | null>(inviteFor);
+  useEffect(() => {
+    inviteForRef.current = inviteFor;
+  }, [inviteFor]);
 
   const inviteUrl = invite
     ? `${window.location.origin}/invite/accept?token=${encodeURIComponent(invite.token)}`
     : "";
+
+  // Track the "copied" reset timeout so we can clear it on unmount or on a
+  // re-copy — React warns about setState on unmounted components otherwise.
+  const copyResetTimerRef = useRef<number | null>(null);
+  useEffect(
+    () => () => {
+      if (copyResetTimerRef.current !== null) {
+        window.clearTimeout(copyResetTimerRef.current);
+      }
+    },
+    [],
+  );
 
   const handleCopy = async () => {
     if (!inviteUrl) return;
     try {
       await navigator.clipboard.writeText(inviteUrl);
       setCopied(true);
-      window.setTimeout(() => setCopied(false), 2000);
+      if (copyResetTimerRef.current !== null) {
+        window.clearTimeout(copyResetTimerRef.current);
+      }
+      copyResetTimerRef.current = window.setTimeout(() => {
+        setCopied(false);
+        copyResetTimerRef.current = null;
+      }, 2000);
     } catch (err) {
       // Some browsers block clipboard outside HTTPS / user activation.
       // Log so we have a breadcrumb if a user reports "copy doesn't work" —

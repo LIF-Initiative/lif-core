@@ -4,6 +4,14 @@ import { isCognitoEnabled } from "../config/auth";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
+  // Send/accept cookies on cross-origin requests. The MDR API issues the
+  // `lif_workspace` selection cookie via Set-Cookie on /tenants/select;
+  // without `withCredentials` the browser won't persist or replay it when
+  // VITE_API_URL is a different origin (the common case — frontend on a
+  // dev server, backend on docker-compose). Requires the backend's CORS
+  // config to set Access-Control-Allow-Credentials: true and an explicit
+  // origin (not "*"), which the MDR API already does.
+  withCredentials: true,
 });
 
 // Add a response interceptor to handle token refresh
