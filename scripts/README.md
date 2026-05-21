@@ -62,7 +62,7 @@ Utility scripts for managing deployments, credentials, and data. All AWS scripts
 
 | Script | Purpose |
 |--------|---------|
-| `export-cognito-registrations.py` | Export the self-serve User Pool's users (with `custom:organization`, `custom:role`, `custom:reason`, status, signup date, group membership) for outreach. Run via `uv run`; reads UserPoolId from the `{env}-lif-mdr-cognito` stack output. CSV by default; `--format json` for JSON, `--output <path>` to write to file. |
+| `export_cognito_registrations.py` | Export the self-serve User Pool's users (with `custom:organization`, `custom:role`, `custom:reason`, status, signup date, group membership) for outreach. Run via `uv run`; reads UserPoolId from the `{env}-lif-mdr-cognito` stack output. CSV by default; `--format json` for JSON, `--output <path>` to write to file. |
 
 ## Common Patterns
 

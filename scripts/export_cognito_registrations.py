@@ -14,9 +14,9 @@ mutates state. Requires `AWS_PROFILE=lif` (or equivalent credentials with
 
 Usage
 -----
-  AWS_PROFILE=lif ./scripts/export-cognito-registrations.py dev
-  AWS_PROFILE=lif ./scripts/export-cognito-registrations.py demo --format json
-  AWS_PROFILE=lif ./scripts/export-cognito-registrations.py demo --output demo-registrations.csv
+  AWS_PROFILE=lif uv run scripts/export_cognito_registrations.py dev
+  AWS_PROFILE=lif uv run scripts/export_cognito_registrations.py demo --format json
+  AWS_PROFILE=lif uv run scripts/export_cognito_registrations.py demo --output demo-registrations.csv
 """
 
 from __future__ import annotations
@@ -160,8 +160,11 @@ def _parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument("--output", help="Write to this path instead of stdout.")
     parser.add_argument(
         "--region",
-        default=os.environ.get("AWS_REGION", "us-east-1"),
-        help="AWS region (default: $AWS_REGION or us-east-1).",
+        # Honor both env var conventions. AWS_REGION wins (matches boto3's own
+        # precedence); fall back to AWS_DEFAULT_REGION (used by other scripts
+        # in this repo, e.g. cfn-deploy.sh). Last-resort default: us-east-1.
+        default=os.environ.get("AWS_REGION") or os.environ.get("AWS_DEFAULT_REGION") or "us-east-1",
+        help="AWS region (default: $AWS_REGION, then $AWS_DEFAULT_REGION, else us-east-1).",
     )
     return parser.parse_args(argv)
 
@@ -176,6 +179,8 @@ def main(argv: list[str]) -> int:
     # All AWS calls happen inside this try. Anything boto raises gets turned
     # into a one-line operator-friendly message on stderr — no 30-line tracebacks
     # for the common case (wrong AWS_PROFILE, missing stack, IAM denial).
+    # RuntimeError covers our own _stack_user_pool_id check when the stack
+    # has no UserPoolId output (typo'd env, partially-deployed stack).
     try:
         user_pool_id = _stack_user_pool_id(cfn, args.env)
         registrations = _list_registrations(cognito, user_pool_id)
@@ -189,6 +194,9 @@ def main(argv: list[str]) -> int:
         return 1
     except BotoCoreError as e:
         print(f"error: AWS transport error: {e}", file=sys.stderr)
+        return 1
+    except RuntimeError as e:
+        print(f"error: {e}", file=sys.stderr)
         return 1
 
     writer = _write_csv if args.format == "csv" else _write_json
