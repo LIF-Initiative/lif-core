@@ -11,8 +11,10 @@
   token for a group the caller belongs to. User-auth only.
 - POST /tenants/invite/accept (#884 Phase 3 PR 2): adds the caller to the
   group named in a valid invite token via Cognito Admin API. User-auth only.
+- POST /tenants/reset         (#884 Phase 3 PR 3): drops + re-clones the
+  caller's tenant schema back to seed state ("Start Over"). User-auth only.
 
-Reset and admin endpoints live in later PRs of the #884 split.
+Admin endpoints live in later PRs of the #884 split.
 """
 
 import time
@@ -27,7 +29,12 @@ from lif.mdr_auth.cognito_admin import (
 )
 from lif.mdr_auth.invite_token import decode_invite_token, encode_invite_token
 from lif.mdr_auth.workspace_cookie import COOKIE_NAME, DEFAULT_MAX_AGE_SECONDS, encode_workspace_cookie
-from lif.mdr_services.tenant_service import InvalidGroupNameError, TenantAlreadyExistsError, provision_tenant
+from lif.mdr_services.tenant_service import (
+    InvalidGroupNameError,
+    TenantAlreadyExistsError,
+    provision_tenant,
+    reset_tenant,
+)
 from lif.mdr_services.workspace_service import (
     WorkspaceItem,
     find_workspace,
@@ -39,6 +46,7 @@ from lif.mdr_utils.config import get_settings
 from lif.mdr_utils.database_setup import get_session
 from lif.mdr_utils.logger_config import get_logger
 from pydantic import BaseModel, Field
+from sqlalchemy.exc import DBAPIError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 router = APIRouter()
@@ -102,6 +110,15 @@ class AcceptInviteResponse(BaseModel):
     group: str
     tenant_schema: str
     inviter_sub: str
+
+
+class ResetWorkspaceRequest(BaseModel):
+    group: str = Field(..., min_length=1, max_length=128, description="Cognito group whose workspace to reset")
+
+
+class ResetWorkspaceResponse(BaseModel):
+    group: str
+    tenant_schema: str
 
 
 # --- Auth dependencies ---
@@ -404,3 +421,66 @@ async def accept_invite(
         target_schema,
     )
     return AcceptInviteResponse(group=decoded.group, tenant_schema=target_schema, inviter_sub=decoded.inviter_sub)
+
+
+@router.post(
+    "/reset",
+    response_model=ResetWorkspaceResponse,
+    responses={
+        401: {"description": "Not authenticated"},
+        403: {"description": "User principal required"},
+        404: {"description": "Group is not in the user's Cognito groups"},
+        500: {"description": "Database error during DROP or clone; transaction rolled back"},
+    },
+)
+async def reset_workspace(
+    body: ResetWorkspaceRequest,
+    request: Request,
+    _principal: str = Depends(require_user_principal),
+    session: AsyncSession = Depends(get_session),
+) -> ResetWorkspaceResponse:
+    """Reset the caller's tenant schema back to seed state ("Start Over").
+
+    Drops every table in ``tenant_{group}`` and re-clones from public. All
+    data the user added (or other group members added) is irrecoverably
+    gone — the frontend is responsible for the "are you sure?" confirm.
+    Auth model mirrors /tenants/select: the request body names the group
+    and we re-check against the JWT's ``cognito:groups``; a 404 (not 403)
+    signals that, from the caller's perspective, the group isn't theirs
+    to operate on.
+
+    Idempotent on the missing-schema branch — if the user's schema was
+    never provisioned (or was already dropped) the helper just clones
+    fresh and returns success. Same outcome a fresh registration would
+    produce.
+    """
+    cognito_groups: list[str] = getattr(request.state, "cognito_groups", [])
+    workspace = find_workspace(cognito_groups, body.group)
+    if workspace is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail=f"Group {body.group!r} is not one of your workspaces"
+        )
+
+    try:
+        tenant_schema = await reset_tenant(session, workspace.group)
+    except InvalidGroupNameError:
+        # Shouldn't reach here — find_workspace already filtered groups whose
+        # names don't sanitize to a tenant schema. Belt-and-suspenders so a
+        # future regression in find_workspace doesn't 500 the user. Don't echo
+        # the exception message — it carries the raw group string we sanitized.
+        logger.exception("Unexpected InvalidGroupNameError on reset for group=%r", workspace.group)
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Could not reset workspace")
+    except DBAPIError:
+        # DROP or clone failed at the DB layer (transient PG outage, clone
+        # function bug, etc.). The surrounding transaction is rolled back by
+        # SQLAlchemy / asyncpg so prior tenant data is preserved; the user
+        # just sees a generic 500. Log full SQLSTATE detail server-side via
+        # logger.exception — don't echo the SDK exception to the client.
+        logger.exception("Database error while resetting workspace %r", workspace.group)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Could not reset workspace; please retry or contact support if this persists",
+        )
+
+    logger.info("User %r reset workspace %r -> %s", request.state.principal, workspace.group, tenant_schema)
+    return ResetWorkspaceResponse(group=workspace.group, tenant_schema=tenant_schema)
