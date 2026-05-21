@@ -58,3 +58,50 @@ async def provision_tenant(session: AsyncSession, group_name: str) -> str:
         raise
 
     return target
+
+
+async def reset_tenant(session: AsyncSession, group_name: str) -> str:
+    """Reset a tenant schema back to the LIF seed state.
+
+    Drops the existing schema (CASCADE — all tables, data, FKs go) and
+    re-clones from public in the same transaction. Idempotent: if the
+    schema doesn't exist, the DROP IF EXISTS is a no-op and the clone
+    just provisions it fresh.
+
+    The endpoint layer is responsible for authorizing the caller — this
+    helper assumes the caller has already been verified as a member of
+    the target group. By design this is irrecoverable; there is no
+    snapshot of the prior tenant state.
+
+    Returns the resulting tenant schema name.
+
+    Raises:
+      - InvalidGroupNameError if the group sanitizes to empty.
+      - sqlalchemy.exc.DBAPIError if the DROP or clone fails — the surrounding
+        transaction is rolled back, so the prior tenant data is preserved.
+    """
+    target = tenant_schema_for_group(group_name)
+    if target is None:
+        # Friendly message: this exception is wrapped into the endpoint's
+        # generic 400 today, but a future caller (CLI, other endpoint) may
+        # surface the message directly. Match the tone the endpoint uses
+        # for the same situation.
+        raise InvalidGroupNameError(f"Group {group_name!r} is not a valid workspace")
+
+    # CASCADE removes everything that depends on the schema (tables,
+    # constraints, sequences, FKs into the schema). Anything outside this
+    # schema is untouched. clone_lif_schema then rebuilds DDL + data from
+    # public. Both run in the session's open transaction; if the clone
+    # raises, the drop is rolled back and the tenant data is preserved.
+    # (Verified: both psycopg and asyncpg execute DDL inside the explicit
+    # transaction — no implicit commit between the two statements.)
+    #
+    # Identifiers can't be bound as parameters, so we interpolate `target`
+    # directly. Safety: `tenant_schema_for_group` enforces the
+    # `tenant_[a-z][a-z0-9_]*` shape, so there's no injection surface.
+    logger.info("Resetting tenant schema %s", target)
+    await session.execute(text(f'DROP SCHEMA IF EXISTS "{target}" CASCADE'))
+    await session.execute(text("SELECT public.clone_lif_schema(:target)"), {"target": target})
+    await session.commit()
+    logger.info("Reset of tenant schema %s complete", target)
+    return target
