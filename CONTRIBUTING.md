@@ -13,14 +13,21 @@ changes.
 1. **Fork** the repository and clone your fork:
 
    ```bash
-   git clone https://github.com/your-username/lif-main.git
-   cd lif-main
+   git clone https://github.com/your-username/lif-core.git
+   cd lif-core
    ```
 
 2. **Install dependencies and create virtual environment**:
 
    ```bash
    uv sync
+   ```
+
+3. **Install pre-commit hooks** (lint / format / type-check / tests / cspell / commitlint run on every commit):
+
+   ```bash
+   uv run pre-commit install
+   uv run pre-commit install --hook-type commit-msg
    ```
 
 ---
@@ -135,12 +142,26 @@ Write tests that earn their keep. Every test should verify something non-obvious
 
 ## Commit Guidelines
 
-Use clear, descriptive commit messages. Conventional commit style is encouraged:
+Commit messages must reference a tracking issue and follow the format enforced by `commitlint.config.mjs`:
+
+```
+Issue #XXX: Brief description
+```
+
+For changes touching multiple issues, list them comma-separated:
+
+```
+Issue #123, Issue #456: Brief description
+```
+
+Type prefixes are encouraged in the description for readability (not required by commitlint):
 
 - `feat:` for new features
 - `fix:` for bug fixes
 - `docs:` for documentation changes
 - `refactor:` for internal changes that don't affect behavior
+
+Example: `Issue #884: feat: Add invite-link endpoints`
 
 ---
 
@@ -159,5 +180,5 @@ When contributing, please ensure:
 
 We appreciate your contributions and interest in the project!
 
-If you're not sure where to start, check out [open issues](https://github.com/your-org/your-project/issues),
+If you're not sure where to start, check out [open issues](https://github.com/LIF-Initiative/lif-core/issues),
 especially those labeled `good first issue` or `help wanted`.

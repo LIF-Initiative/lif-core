@@ -602,6 +602,8 @@ const ModelTree: React.FC<ModelTreeProps> = ({
     else if (!n.hasAssocId) errMsg = `No association ID found for ${n.type}#${n.id} to edit.`;
     if (errMsg.length) { alertDialog("Edit Association Error", errMsg); return; }
 
+    const assocNoFieldsText = 'The item association selected does not support placements, so placement and relationship editing options are unavailable.';
+
     let newDialogOptions: any = { isEditMode: true, fields: [] };
     const capitalizedType = capitalize(n.type);
     const All_Assoc = n.type === "entity"
@@ -633,6 +635,7 @@ const ModelTree: React.FC<ModelTreeProps> = ({
         const resp: any = await updateEntityAttributeAssociation(id, params);
         if (resp?.Id) { await fetchData(); }
       };
+      newDialogOptions.message = assocNoFieldsText;
     } else {
       alertDialog("Edit Dialog Error", `Unhandled edit association item type '${n.type}#${n.id}'.`);
       return;
@@ -1165,6 +1168,7 @@ const ModelTree: React.FC<ModelTreeProps> = ({
         isOpen={isCrudDialogOpen}
         onOpenChange={handleDialogOpenChange}
         title={dialogOptions.title}
+        message={dialogOptions.message}
         fields={dialogOptions.fields || []}
         onCreate={dialogOptions.onCreate}
         isEditMode={!!dialogOptions.isEditMode}
