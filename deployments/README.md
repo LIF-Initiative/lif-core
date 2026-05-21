@@ -15,11 +15,13 @@ In a Polylith-based architecture, all core logic resides in modular components. 
 
 <pre lang="markdown"> <code> 
 deployments/  
-├── ai_chatbox_demo_aws/ # AWS-based deployment for the LIF Advisor demo  
-│ └── .keep # Placeholder for future deployment scripts/configs
+├── advisor-demo-docker/   # Local docker-compose deployment of the full LIF stack
+│ ├── docker-compose.yml
+│ ├── information_sources_config*.yml  # per-org orchestrator config
+│ └── volumes/                          # per-org query-planner state
 </code> </pre>
 
-More deployment targets — such as local Docker Compose environments, additional cloud providers, or future demos — will be added here.
+Today this directory ships one fleshed-out target (`advisor-demo-docker`). Additional deployment targets — alternative cloud providers, customer-specific layouts, or future demos — would go here as sibling directories. AWS deployments for the canonical demo currently live in [`../cloudformation/`](../cloudformation/) and [`../sam/`](../sam/) rather than under `deployments/`.
 
 
 ## Intended Use

@@ -64,7 +64,7 @@ Entities and attributes carry dot-path unique names (e.g., `person.contact.addre
 
 - **MDR API** — FastAPI service backed by PostgreSQL (Aurora in AWS deployments). Serves data models and mappings via REST; exports OpenAPI schemas for runtime consumption by other services.
 - **MDR Frontend** — React/TypeScript single-page app for visually defining entities, attributes, and mappings. Deployed to S3 + CloudFront in AWS environments.
-- **Authentication** — currently a small set of hardcoded demo users. Self-serve Cognito registration with per-tenant PostgreSQL schema isolation is in design (see `docs/proposals/mdr-self-serve-registration.md`).
+- **Authentication** — three principal types supported via the shared `AuthMiddleware`: internal service callers (`X-API-Key`), Cognito JWT (self-serve users), and legacy HS256 JWT (demo accounts). Self-serve registration provisions a per-tenant PostgreSQL schema on signup; tenant routing then sets `search_path` per request. See [`docs/design/cross-cutting/self-serve-tenant-auth.md`](../design/cross-cutting/self-serve-tenant-auth.md) for the implemented architecture.
 
 ## Try It
 
@@ -91,7 +91,7 @@ A suggested first walkthrough once you have access:
 - **LIF schema source of truth:** `schemas/lif-schema.json` in the repo
 - **Add a data source walkthrough:** [`docs/operations/guides/add-data-source.md`](../operations/guides/add-data-source.md) — step-by-step guide covering source schema creation, JSONata mappings, and pipeline wiring
 - **Data source adapter reference:** [`docs/operations/guides/creating-a-data-source-adapter.md`](../operations/guides/creating-a-data-source-adapter.md) — what an adapter is, how it consumes MDR schemas at runtime
-- **Self-serve registration proposal:** `docs/operations/proposals/mdr-self-serve-registration.md` — planned multi-tenant evolution with Cognito and per-tenant schema isolation *(currently untracked; will be relocated when committed)*
+- **Self-serve registration (as implemented):** [`docs/design/cross-cutting/self-serve-tenant-auth.md`](../design/cross-cutting/self-serve-tenant-auth.md) — narrative of the Cognito → schema-per-tenant → workspace selection → invite flow (issues #882/#883/#884)
 - **LIF services overview:** [`docs/overview/services-overview.md`](services-overview.md) — how MDR fits alongside the other LIF services
 
 ## Contact

@@ -4,7 +4,7 @@ Date: 2025-10-31
 
 ## Status
 
-Proposed
+Accepted — the unification described below shipped via `components/lif/mdr_auth` and `components/lif/api_key_auth`. The Cognito flow alluded to in the *Consequences* section was implemented as the self-serve onboarding work in issues #882, #883, #884 — see [`docs/design/cross-cutting/self-serve-tenant-auth.md`](../../cross-cutting/self-serve-tenant-auth.md) for the implemented architecture.
 
 ## Context
 
@@ -91,24 +91,24 @@ It will prepare the LIF ecosystem for additional auth flows to be introduced (Ad
 
 *Advisor API auth:*
 
-- https://github.com/LIF-Initiative/lif-main/blob/main/bases/lif/advisor_restapi/core.py
+- https://github.com/LIF-Initiative/lif-core/blob/main/bases/lif/advisor_restapi/core.py
 
 *Advisor App auth:*
 
-- https://github.com/LIF-Initiative/lif-main/blob/main/frontends/lif_advisor_app/src/components/LoginPanel.tsx
-- https://github.com/LIF-Initiative/lif-main/blob/main/frontends/lif_advisor_app/src/utils/axios.ts
-- https://github.com/LIF-Initiative/lif-main/blob/main/frontends/lif_advisor_app/src/App.tsx
+- https://github.com/LIF-Initiative/lif-core/blob/main/frontends/lif_advisor_app/src/components/LoginPanel.tsx
+- https://github.com/LIF-Initiative/lif-core/blob/main/frontends/lif_advisor_app/src/utils/axios.ts
+- https://github.com/LIF-Initiative/lif-core/blob/main/frontends/lif_advisor_app/src/App.tsx
 
 *Example Data Source API auth:*
 
-- https://github.com/LIF-Initiative/lif-main/blob/main/bases/lif/example_data_source_rest_api/core.py
+- https://github.com/LIF-Initiative/lif-core/blob/main/bases/lif/example_data_source_rest_api/core.py
 
 *MDR API auth:*
 
-- https://github.com/LIF-Initiative/lif-metadata-repository/blob/main/service/app/main.py
-- https://github.com/LIF-Initiative/lif-metadata-repository/blob/main/service/app/auth/core.py
+- https://github.com/LIF-Initiative/lif-core/blob/main/bases/lif/mdr_restapi/core.py
+- https://github.com/LIF-Initiative/lif-core/blob/main/components/lif/mdr_auth/core.py
 
 *MDR App auth:*
 
-- https://github.com/LIF-Initiative/lif-metadata-repository/blob/main/mdr-frontend/src/services/authService.ts
-- https://github.com/LIF-Initiative/lif-metadata-repository/blob/main/mdr-frontend/src/services/api.ts
+- https://github.com/LIF-Initiative/lif-core/blob/main/frontends/mdr-frontend/src/services/authService.ts
+- https://github.com/LIF-Initiative/lif-core/blob/main/frontends/mdr-frontend/src/services/api.ts
