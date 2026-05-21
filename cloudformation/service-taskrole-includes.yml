@@ -38,3 +38,18 @@ Policies:
         Resource:
           - Fn::Sub: 'arn:aws:s3:::${S3AppBucket}'
           - Fn::Sub: 'arn:aws:s3:::${S3AppBucket}/*'
+  # Cognito group management — needed by the MDR API to add users to a
+  # group when they accept an invite link (#884 Phase 3 PR 2). Same
+  # AdminAddUserToGroup action the post-confirmation Lambda already has
+  # in cognito-selfserve.yml. Other services that share this task role
+  # don't have a use case for it but the action+resource is tightly
+  # scoped to a user pool in the same account/region, so the blast
+  # radius is bounded.
+  - PolicyName: CognitoGroupManagement
+    PolicyDocument:
+      Statement:
+      - Effect: Allow
+        Action:
+          - 'cognito-idp:AdminAddUserToGroup'
+        Resource:
+          Fn::Sub: 'arn:aws:cognito-idp:${AWS::Region}:${AWS::AccountId}:userpool/*'

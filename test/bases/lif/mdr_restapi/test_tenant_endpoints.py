@@ -151,7 +151,9 @@ def _hs256_user_token(sub: str = "alice@example.com") -> str:
     return create_access_token({"sub": sub})
 
 
-def _stub_cognito_principal(monkeypatch, principal: str, groups: list[str]):
+def _stub_cognito_principal(
+    monkeypatch, principal: str, groups: list[str], *, cognito_sub: str | None = "cognito-sub-test"
+):
     """Replace the middleware's auth path so test requests get the desired
     principal + cognito_groups without needing a real Cognito JWT.
 
@@ -165,6 +167,7 @@ def _stub_cognito_principal(monkeypatch, principal: str, groups: list[str]):
     async def fake_dispatch(self, request, call_next):
         request.state.principal = principal
         request.state.cognito_groups = groups
+        request.state.cognito_sub = cognito_sub
         request.state.tenant_schema = None
         return await call_next(request)
 
@@ -240,3 +243,119 @@ class TestSelectWorkspace:
         _stub_cognito_principal(monkeypatch, "user@example.com", ["lif-team"])
         resp = await client.post("/tenants/select", json={"group": ""})
         assert resp.status_code == 422
+
+
+# --- Invite link endpoints (issue #884 Phase 3 PR 2) ---
+
+
+class TestCreateInvite:
+    async def test_no_auth_returns_401(self, client):
+        resp = await client.post("/tenants/invite", json={"group": "lif-team"})
+        assert resp.status_code == 401
+
+    async def test_service_principal_returns_403(self, client):
+        resp = await client.post(
+            "/tenants/invite", json={"group": "lif-team"}, headers={"X-API-Key": VALID_SERVICE_KEY}
+        )
+        assert resp.status_code == 403
+
+    async def test_creating_invite_for_user_group_returns_token(self, client, monkeypatch):
+        _stub_cognito_principal(monkeypatch, "user@example.com", ["lif-team", "acme-univ"])
+        resp = await client.post("/tenants/invite", json={"group": "acme-univ"})
+        assert resp.status_code == 200
+        body = resp.json()
+        assert body["group"] == "acme-univ"
+        assert "." in body["token"]
+        assert body["expires_at"] > 0
+
+    async def test_creating_invite_for_non_member_group_returns_404(self, client, monkeypatch):
+        """Can't invite to a group you don't belong to. Same 404 semantics as /select."""
+        _stub_cognito_principal(monkeypatch, "user@example.com", ["lif-team"])
+        resp = await client.post("/tenants/invite", json={"group": "acme-univ"})
+        assert resp.status_code == 404
+
+    async def test_creating_invite_without_cognito_sub_returns_400(self, client, monkeypatch):
+        """HS256 legacy users have no Cognito sub — can't be invite issuers."""
+        _stub_cognito_principal(monkeypatch, "demo-user", ["lif-team"], cognito_sub=None)
+        resp = await client.post("/tenants/invite", json={"group": "lif-team"})
+        assert resp.status_code == 400
+
+
+class TestAcceptInvite:
+    @pytest.fixture
+    def mock_cognito(self, monkeypatch):
+        """Patch the cognito Admin API at the endpoint's import site so we don't
+        need real AWS credentials to test the success/failure branches."""
+        from lif.mdr_restapi import tenant_endpoints
+
+        fake = mock.MagicMock()
+        monkeypatch.setattr(tenant_endpoints, "add_user_to_group", fake)
+        return fake
+
+    def _make_token(self, group: str = "acme-univ", inviter_sub: str = "inviter-sub", max_age: int = 3600) -> str:
+        from lif.mdr_auth.invite_token import encode_invite_token
+
+        # Match the default jwt secret used by the endpoint
+        return encode_invite_token(group, inviter_sub, secret="changeme4", max_age_seconds=max_age)
+
+    async def test_no_auth_returns_401(self, client, mock_cognito):
+        resp = await client.post("/tenants/invite/accept", json={"token": self._make_token()})
+        assert resp.status_code == 401
+        mock_cognito.assert_not_called()
+
+    async def test_service_principal_returns_403(self, client, mock_cognito):
+        resp = await client.post(
+            "/tenants/invite/accept", json={"token": self._make_token()}, headers={"X-API-Key": VALID_SERVICE_KEY}
+        )
+        assert resp.status_code == 403
+        mock_cognito.assert_not_called()
+
+    async def test_valid_token_adds_user_to_group(self, client, monkeypatch, mock_cognito):
+        _stub_cognito_principal(monkeypatch, "user@example.com", ["lif-team"], cognito_sub="acceptor-sub-1")
+        resp = await client.post("/tenants/invite/accept", json={"token": self._make_token(group="acme-univ")})
+        assert resp.status_code == 200
+        assert resp.json() == {"group": "acme-univ", "tenant_schema": "tenant_acme_univ", "inviter_sub": "inviter-sub"}
+        # Confirm we called Cognito with the acceptor's sub, not the inviter's
+        call = mock_cognito.call_args
+        assert call.kwargs["username"] == "acceptor-sub-1"
+        assert call.kwargs["group_name"] == "acme-univ"
+
+    async def test_malformed_token_returns_400(self, client, monkeypatch, mock_cognito):
+        _stub_cognito_principal(monkeypatch, "user@example.com", ["lif-team"])
+        resp = await client.post("/tenants/invite/accept", json={"token": "not-a-real-token"})
+        assert resp.status_code == 400
+        mock_cognito.assert_not_called()
+
+    async def test_expired_token_returns_410(self, client, monkeypatch, mock_cognito):
+        """Expired tokens get the dedicated 410 Gone status (not 400) so the
+        frontend can show 'ask for a fresh invite' instead of a generic error."""
+        _stub_cognito_principal(monkeypatch, "user@example.com", ["lif-team"])
+        token = self._make_token(max_age=-60)  # already expired
+        resp = await client.post("/tenants/invite/accept", json={"token": token})
+        assert resp.status_code == 410
+        mock_cognito.assert_not_called()
+
+    async def test_token_for_group_with_empty_sanitized_schema_returns_400(self, client, monkeypatch, mock_cognito):
+        """Forged or stale token naming a group that sanitizes to empty."""
+        _stub_cognito_principal(monkeypatch, "user@example.com", ["lif-team"])
+        bad_token = self._make_token(group="---")
+        resp = await client.post("/tenants/invite/accept", json={"token": bad_token})
+        assert resp.status_code == 400
+        mock_cognito.assert_not_called()
+
+    async def test_cognito_admin_failure_returns_500(self, client, monkeypatch, mock_cognito):
+        from lif.mdr_auth.cognito_admin import CognitoAdminError
+
+        mock_cognito.side_effect = CognitoAdminError("throttled")
+        _stub_cognito_principal(monkeypatch, "user@example.com", ["lif-team"], cognito_sub="acceptor-sub-1")
+        resp = await client.post("/tenants/invite/accept", json={"token": self._make_token()})
+        assert resp.status_code == 500
+
+    async def test_accept_without_cognito_sub_returns_400(self, client, monkeypatch, mock_cognito):
+        """HS256 legacy users have no Cognito sub — can't be invite acceptors
+        even when the token itself is valid. Must short-circuit before any
+        Cognito Admin API call."""
+        _stub_cognito_principal(monkeypatch, "demo-user", ["lif-team"], cognito_sub=None)
+        resp = await client.post("/tenants/invite/accept", json={"token": self._make_token()})
+        assert resp.status_code == 400
+        mock_cognito.assert_not_called()

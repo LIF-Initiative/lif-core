@@ -473,6 +473,7 @@ services:
       # Local compose runs over HTTP, so the workspace selection cookie must
       # not be marked Secure (browsers drop Secure cookies on plaintext).
       MDR__COOKIE__SECURE: ${MDR__COOKIE__SECURE:-false}
+      MDR__INVITE__TOKEN_MAX_AGE_SECONDS: ${MDR__INVITE__TOKEN_MAX_AGE_SECONDS:-604800}
       LIF_DEMO_USER_PASSWORD: ${LIF_DEMO_USER_PASSWORD:-changeme}
     ports:
       - "8012:8012"
