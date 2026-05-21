@@ -30,6 +30,7 @@ from dataclasses import asdict, dataclass
 from typing import Any
 
 import boto3
+from botocore.exceptions import BotoCoreError, ClientError, NoCredentialsError
 
 # CSV column order. Match the dataclass field order; if you reorder one,
 # reorder the other.
@@ -47,10 +48,10 @@ COLUMNS = [
     "groups",
 ]
 
-# Cognito custom attributes (see cloudformation/cognito-selfserve.yml).
-# Stored on the user as `custom:organization` etc. — strip the prefix when
-# projecting to flat columns.
-CUSTOM_ATTRIBUTES = ("organization", "role", "reason")
+# Cognito custom attributes — stored on the user as `custom:organization` etc.
+# (see cloudformation/cognito-selfserve.yml). Inlined at the read sites rather
+# than indexed positionally; reordering a constant tuple would silently scramble
+# columns without that field-name anchor.
 
 
 @dataclass
@@ -98,10 +99,12 @@ def _build_registration(user: dict[str, Any], groups: list[str]) -> Registration
     return Registration(
         sub=attrs.get("sub", ""),
         email=attrs.get("email", ""),
-        email_verified=attrs.get("email_verified", "false").lower() == "true",
-        organization=attrs.get(f"custom:{CUSTOM_ATTRIBUTES[0]}", ""),
-        role=attrs.get(f"custom:{CUSTOM_ATTRIBUTES[1]}", ""),
-        reason=attrs.get(f"custom:{CUSTOM_ATTRIBUTES[2]}", ""),
+        # Cognito returns email_verified as the literal string "true" / "false"
+        # when present; missing → not verified.
+        email_verified=attrs.get("email_verified") == "true",
+        organization=attrs.get("custom:organization", ""),
+        role=attrs.get("custom:role", ""),
+        reason=attrs.get("custom:reason", ""),
         status=user.get("UserStatus", ""),
         enabled=bool(user.get("Enabled", False)),
         # Cognito returns timezone-aware datetimes; isoformat is stable across
@@ -113,15 +116,19 @@ def _build_registration(user: dict[str, Any], groups: list[str]) -> Registration
 
 
 def _list_registrations(cognito_client, user_pool_id: str) -> list[Registration]:
+    """Fetch every user + group membership. N+1 calls (one per user); prints a
+    per-page count to stderr so the operator knows it's progressing — large
+    pools can take minutes."""
     registrations: list[Registration] = []
     paginator = cognito_client.get_paginator("list_users")
-    for page in paginator.paginate(UserPoolId=user_pool_id):
+    for page_num, page in enumerate(paginator.paginate(UserPoolId=user_pool_id), start=1):
         for user in page.get("Users", []):
             username = user.get("Username", "")
             if not username:
                 continue
             groups = _group_names(cognito_client, user_pool_id, username)
             registrations.append(_build_registration(user, groups))
+        print(f"  ...page {page_num}: {len(registrations)} users so far", file=sys.stderr)
     return registrations
 
 
@@ -166,8 +173,23 @@ def main(argv: list[str]) -> int:
     cfn = session.client("cloudformation")
     cognito = session.client("cognito-idp")
 
-    user_pool_id = _stack_user_pool_id(cfn, args.env)
-    registrations = _list_registrations(cognito, user_pool_id)
+    # All AWS calls happen inside this try. Anything boto raises gets turned
+    # into a one-line operator-friendly message on stderr — no 30-line tracebacks
+    # for the common case (wrong AWS_PROFILE, missing stack, IAM denial).
+    try:
+        user_pool_id = _stack_user_pool_id(cfn, args.env)
+        registrations = _list_registrations(cognito, user_pool_id)
+    except NoCredentialsError:
+        print("error: no AWS credentials. Set AWS_PROFILE (e.g. AWS_PROFILE=lif) and retry.", file=sys.stderr)
+        return 1
+    except ClientError as e:
+        code = e.response.get("Error", {}).get("Code", "Unknown")
+        msg = e.response.get("Error", {}).get("Message", str(e))
+        print(f"error: AWS API call failed ({code}): {msg}", file=sys.stderr)
+        return 1
+    except BotoCoreError as e:
+        print(f"error: AWS transport error: {e}", file=sys.stderr)
+        return 1
 
     writer = _write_csv if args.format == "csv" else _write_json
     if args.output:
