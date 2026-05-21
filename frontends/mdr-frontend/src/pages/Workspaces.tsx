@@ -26,6 +26,7 @@ import tenantsService, {
   CreateInviteResponse,
   WorkspaceItem,
 } from "../services/tenantsService";
+import { errorToString } from "../utils/errorUtils";
 
 const AUTO_SELECT_REDIRECT = "/explore";
 
@@ -67,20 +68,21 @@ const Workspaces: React.FC = () => {
             }
           } catch (err) {
             if (!cancelled) {
+              // Don't navigate on auto-select failure — the user would land on
+              // /explore with the error invisible. Surface the picker UI
+              // instead so they can see what happened and retry manually.
               setSelecting(null);
-              setSelectError(
-                err instanceof Error
-                  ? err.message
-                  : "Could not select your workspace automatically",
-              );
+              setSelectError(errorToString(err));
             }
           }
         }
+        // Known trade-off: a fast unmount during auto-select still completes
+        // the POST server-side (writing the workspace cookie); the `cancelled`
+        // flag only guards setState/navigate, not the in-flight request.
+        // Plumbing an AbortController through tenantsService is a follow-up.
       } catch (err) {
         if (!cancelled) {
-          setLoadError(
-            err instanceof Error ? err.message : "Failed to load workspaces",
-          );
+          setLoadError(errorToString(err));
         }
       }
     })();
@@ -98,9 +100,7 @@ const Workspaces: React.FC = () => {
       navigate(AUTO_SELECT_REDIRECT, { replace: true });
     } catch (err) {
       setSelecting(null);
-      setSelectError(
-        err instanceof Error ? err.message : "Failed to select workspace",
-      );
+      setSelectError(errorToString(err));
     }
   };
 
@@ -126,9 +126,7 @@ const Workspaces: React.FC = () => {
       const result = await tenantsService.createInvite(inviteFor);
       setInvite(result);
     } catch (err) {
-      setInviteError(
-        err instanceof Error ? err.message : "Failed to create invite",
-      );
+      setInviteError(errorToString(err));
     } finally {
       setInvitePending(false);
     }
@@ -144,9 +142,11 @@ const Workspaces: React.FC = () => {
       await navigator.clipboard.writeText(inviteUrl);
       setCopied(true);
       window.setTimeout(() => setCopied(false), 2000);
-    } catch {
+    } catch (err) {
       // Some browsers block clipboard outside HTTPS / user activation.
-      // Fall back: leave the field selectable; user can copy manually.
+      // Log so we have a breadcrumb if a user reports "copy doesn't work" —
+      // the field is still selectable as a manual fallback.
+      console.warn("Clipboard copy failed; user can select the URL manually", err);
       setCopied(false);
     }
   };
@@ -244,8 +244,8 @@ const Workspaces: React.FC = () => {
           <Dialog.Title>Invite someone to "{inviteFor}"</Dialog.Title>
           <Dialog.Description size="2" mb="4">
             Generate a URL to share with someone who already has a Cognito
-            account. The link expires after a few days; the recipient is added
-            to this workspace's group when they click it.
+            account. Each link has a fixed expiry shown below; the recipient is
+            added to this workspace's group when they click it.
           </Dialog.Description>
 
           {inviteError && (
@@ -275,7 +275,7 @@ const Workspaces: React.FC = () => {
               </Text>
               <Flex gap="2" align="center" mb="3">
                 <Box style={{ flex: 1 }}>
-                  <TextField.Root value={inviteUrl} readOnly />
+                  <TextField.Root value={inviteUrl} readOnly aria-label="Invite URL" />
                 </Box>
                 <IconButton onClick={handleCopy} variant="soft" aria-label="Copy invite URL">
                   {copied ? <CheckIcon /> : <CopyIcon />}

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import {
   Box,
   Button,
@@ -19,6 +19,7 @@ import {
 } from "@radix-ui/react-icons";
 import axios from "axios";
 
+import authService from "../services/authService";
 import tenantsService, {
   AcceptInviteResponse,
 } from "../services/tenantsService";
@@ -27,7 +28,6 @@ type Status = "idle" | "accepting" | "success" | "expired" | "invalid" | "error"
 
 const InviteAccept: React.FC = () => {
   const [params] = useSearchParams();
-  const navigate = useNavigate();
   const token = params.get("token") ?? "";
 
   const [status, setStatus] = useState<Status>("idle");
@@ -66,10 +66,13 @@ const InviteAccept: React.FC = () => {
   };
 
   // After a successful accept, the recipient's Cognito JWT is stale — the
-  // new group isn't reflected until they refresh tokens. Send them through
-  // a quick re-login so the next /tenants/mine call surfaces the new group.
-  const handleContinue = async () => {
-    navigate("/workspaces", { replace: true });
+  // new group isn't reflected until they refresh tokens. The simplest way to
+  // pick up the new group is to sign in again (forces a fresh ID token);
+  // sending them straight to /workspaces would show a stale list and confuse
+  // them. authService.logout() redirects to Cognito's logout endpoint, which
+  // bounces them back through login.
+  const handleSignInAgain = () => {
+    void authService.logout();
   };
 
   // No token in URL: misdirected click, expired browser tab, or someone
@@ -96,11 +99,12 @@ const InviteAccept: React.FC = () => {
           <CheckCircledIcon width={32} height={32} color="green" />
           <Heading size="5">You're in.</Heading>
           <Text size="2" color="gray" align="center">
-            You've joined <b>{accepted.group}</b>. The workspace will be
-            available the next time you sign in or refresh your session.
+            You've joined <b>{accepted.group}</b>. Sign in again to refresh
+            your session — the new workspace will appear in your list after
+            you reauthenticate.
           </Text>
-          <Button onClick={handleContinue} mt="2">
-            Continue to workspaces
+          <Button onClick={handleSignInAgain} mt="2">
+            Sign in again to refresh
           </Button>
         </Flex>
       </CenteredCard>
