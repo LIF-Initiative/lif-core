@@ -305,18 +305,19 @@ async def create_invite(
         )
 
     inviter_sub = _require_cognito_sub(request)
+    # Compute expires_at locally — same formula encode_invite_token uses
+    # internally, so we don't have to decode the just-produced token just to
+    # surface the timestamp. Avoids using `assert` as a runtime guard (which
+    # would be stripped under `python -O`) and drops a redundant HMAC round-trip.
+    expires_at = int(time.time()) + settings.mdr__invite__token_max_age_seconds
     token = encode_invite_token(
         body.group,
         inviter_sub,
         secret=settings.mdr__auth__jwt_secret_key,
         max_age_seconds=settings.mdr__invite__token_max_age_seconds,
     )
-    # Decoded for the response so the frontend can show "expires Friday"
-    # without re-parsing the token.
-    decoded = decode_invite_token(token, secret=settings.mdr__auth__jwt_secret_key)
-    assert decoded is not None  # we just made it; sanity check, not a runtime guard
-    logger.info("User %r created invite for group %r (expires %d)", inviter_sub, body.group, decoded.expires_at)
-    return CreateInviteResponse(token=token, group=body.group, expires_at=decoded.expires_at)
+    logger.info("User %r created invite for group %r (expires %d)", inviter_sub, body.group, expires_at)
+    return CreateInviteResponse(token=token, group=body.group, expires_at=expires_at)
 
 
 @router.post(
