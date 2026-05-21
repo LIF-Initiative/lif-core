@@ -10,10 +10,12 @@ const Home: React.FC = () => {
   };
 
   React.useEffect(() => {
-    // Until we get actual home page content, redirect to /explore directly
+    // Until we have a real home page, send a logged-in user landing on /
+    // to the workspace picker. The Workspaces page itself auto-forwards to
+    // /explore when the user has exactly one workspace, so this is mostly
+    // a brief loading screen for single-group users (the common case).
     if (window.location.pathname === "/") {
-      // console.log("redirecting from /");
-      navigate("/explore", { replace: true });
+      navigate("/workspaces", { replace: true });
     }
   }, [navigate]);
 
