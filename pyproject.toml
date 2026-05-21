@@ -5,6 +5,7 @@ description = "Monorepo for LIF Components"
 readme = "README.md"
 requires-python = ">=3.13,<3.14"
 dependencies = [
+    "boto3~=1.43",
     "dagster~=1.11",
     "dagster-graphql~=1.11",
     "deepdiff~=8.6",
