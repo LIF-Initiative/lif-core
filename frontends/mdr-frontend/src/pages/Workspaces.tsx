@@ -259,7 +259,11 @@ const Workspaces: React.FC = () => {
                   </Button>
                   <Button
                     onClick={() => handleSelect(ws.group)}
-                    disabled={selecting === ws.group}
+                    // Disable every Open button while any select is in flight —
+                    // not just the one being opened. Otherwise the user can
+                    // click Open on a different workspace mid-request and end
+                    // up with whichever response wins setting the cookie.
+                    disabled={selecting !== null}
                   >
                     <EnterIcon />
                     {selecting === ws.group ? "Opening…" : "Open"}

@@ -19,6 +19,7 @@ import {
 } from "@radix-ui/react-icons";
 import axios from "axios";
 
+import { isCognitoEnabled } from "../config/auth";
 import authService from "../services/authService";
 import tenantsService, {
   AcceptInviteResponse,
@@ -74,6 +75,27 @@ const InviteAccept: React.FC = () => {
   const handleSignInAgain = () => {
     void authService.logout();
   };
+
+  // Cognito-only feature: the backend `/tenants/invite/accept` endpoint
+  // requires `request.state.cognito_sub` and returns 400 for non-Cognito JWTs
+  // (legacy username/password mode has no `sub` claim). Short-circuit before
+  // the user clicks Accept so we never make a request that's guaranteed to
+  // fail with a generic 400 — surface the real reason instead.
+  if (!isCognitoEnabled) {
+    return (
+      <CenteredCard>
+        <Flex direction="column" gap="3" align="center">
+          <ExclamationTriangleIcon width={32} height={32} color="orange" />
+          <Heading size="5">Invites require Cognito sign-in</Heading>
+          <Text size="2" color="gray" align="center">
+            This deployment is configured for legacy username/password
+            authentication. Invite links can only be accepted by users signed
+            in via Cognito. Contact your administrator if this looks wrong.
+          </Text>
+        </Flex>
+      </CenteredCard>
+    );
+  }
 
   // No token in URL: misdirected click, expired browser tab, or someone
   // pasted the base URL without the query string.
