@@ -126,8 +126,8 @@ def _build_registration(user: dict[str, Any], groups: list[str]) -> Registration
 
 def _list_registrations(cognito_client, user_pool_id: str) -> list[Registration]:
     """Fetch every user + group membership. N+1 calls (one per user); prints a
-    per-page count to stderr so the operator knows it's progressing — large
-    pools can take minutes."""
+    cumulative running total to stderr after each page so the operator knows
+    it's progressing — large pools can take minutes."""
     registrations: list[Registration] = []
     paginator = cognito_client.get_paginator("list_users")
     for page_num, page in enumerate(paginator.paginate(UserPoolId=user_pool_id), start=1):
