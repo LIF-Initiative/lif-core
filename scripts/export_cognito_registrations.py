@@ -202,13 +202,24 @@ def main(argv: list[str]) -> int:
         return 1
 
     writer = _write_csv if args.format == "csv" else _write_json
-    if args.output:
-        with open(args.output, "w", encoding="utf-8", newline="") as stream:
-            writer(registrations, stream)
-        print(f"Wrote {len(registrations)} registration(s) from {user_pool_id} to {args.output}", file=sys.stderr)
-    else:
-        writer(registrations, sys.stdout)
-        print(f"Wrote {len(registrations)} registration(s) from {user_pool_id}", file=sys.stderr)
+    # Catch I/O errors around both the open() and the write itself.
+    # BrokenPipeError fires when the consumer (e.g. `... | head`) closes
+    # the pipe early — exit silently with 0, that's not an error condition.
+    # Other OSErrors (unwritable path, full disk, permission denied) get
+    # the same one-line treatment as the AWS errors above.
+    try:
+        if args.output:
+            with open(args.output, "w", encoding="utf-8", newline="") as stream:
+                writer(registrations, stream)
+            print(f"Wrote {len(registrations)} registration(s) from {user_pool_id} to {args.output}", file=sys.stderr)
+        else:
+            writer(registrations, sys.stdout)
+            print(f"Wrote {len(registrations)} registration(s) from {user_pool_id}", file=sys.stderr)
+    except BrokenPipeError:
+        return 0
+    except OSError as e:
+        print(f"error: failed to write output: {e}", file=sys.stderr)
+        return 1
 
     return 0
 

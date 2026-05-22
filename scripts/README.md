@@ -62,7 +62,7 @@ Utility scripts for managing deployments, credentials, and data. All AWS scripts
 
 | Script | Purpose |
 |--------|---------|
-| `export_cognito_registrations.py` | Export the self-serve User Pool's users (with `custom:organization`, `custom:role`, `custom:reason`, status, signup date, group membership) for outreach. Run via `uv run`; reads UserPoolId from the `{env}-lif-mdr-cognito` stack output. Flags: `--format csv\|json` (default `csv`), `--output <path>` to write to file (default stdout), `--region <r>` overrides AWS region (defaults to `$AWS_REGION`, then `$AWS_DEFAULT_REGION`, then `us-east-1`). |
+| `export_cognito_registrations.py` | Export the self-serve User Pool's users (with `custom:organization`, `custom:role`, `custom:reason`, status, signup date, group membership) for outreach. Read-only — no `--apply` needed. Run via `uv run`; reads UserPoolId from the `{env}-lif-mdr-cognito` stack output. Flags: `--format` (`csv` or `json`, default `csv`), `--output <path>` to write to file (default stdout), `--region <r>` overrides AWS region (defaults to `$AWS_REGION`, then `$AWS_DEFAULT_REGION`, then `us-east-1`). |
 
 ## Common Patterns
 
