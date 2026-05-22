@@ -172,16 +172,18 @@ def _parse_args(argv: list[str]) -> argparse.Namespace:
 def main(argv: list[str]) -> int:
     args = _parse_args(argv)
 
-    session = boto3.session.Session(region_name=args.region)
-    cfn = session.client("cloudformation")
-    cognito = session.client("cognito-idp")
-
-    # All AWS calls happen inside this try. Anything boto raises gets turned
-    # into a one-line operator-friendly message on stderr — no 30-line tracebacks
-    # for the common case (wrong AWS_PROFILE, missing stack, IAM denial).
+    # All AWS calls happen inside this try, including session / client
+    # construction. `boto3.session.Session(...)` can raise `ProfileNotFound`
+    # (a BotoCoreError subclass) if AWS_PROFILE points at a missing profile;
+    # `session.client(...)` can fail similarly. Keeping them inside the try
+    # turns those into the same one-line operator-friendly message on stderr
+    # instead of letting a traceback escape.
     # RuntimeError covers our own _stack_user_pool_id check when the stack
     # has no UserPoolId output (typo'd env, partially-deployed stack).
     try:
+        session = boto3.session.Session(region_name=args.region)
+        cfn = session.client("cloudformation")
+        cognito = session.client("cognito-idp")
         user_pool_id = _stack_user_pool_id(cfn, args.env)
         registrations = _list_registrations(cognito, user_pool_id)
     except NoCredentialsError:
