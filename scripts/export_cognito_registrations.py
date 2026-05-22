@@ -30,7 +30,16 @@ from dataclasses import asdict, dataclass
 from typing import Any
 
 import boto3
+from botocore.config import Config
 from botocore.exceptions import BotoCoreError, ClientError, NoCredentialsError
+
+# Adaptive retries with a generous attempt cap. The export does one
+# AdminListGroupsForUser call per user (N+1); on larger pools that can
+# brush against Cognito's per-account throttle. botocore's adaptive mode
+# adds client-side congestion control on top of standard exponential
+# backoff, which is exactly the shape we want for a "best-effort,
+# eventually-completes" bulk read.
+_RETRY_CONFIG = Config(retries={"mode": "adaptive", "max_attempts": 10})
 
 # CSV column order. Match the dataclass field order; if you reorder one,
 # reorder the other.
@@ -182,8 +191,8 @@ def main(argv: list[str]) -> int:
     # has no UserPoolId output (typo'd env, partially-deployed stack).
     try:
         session = boto3.session.Session(region_name=args.region)
-        cfn = session.client("cloudformation")
-        cognito = session.client("cognito-idp")
+        cfn = session.client("cloudformation", config=_RETRY_CONFIG)
+        cognito = session.client("cognito-idp", config=_RETRY_CONFIG)
         user_pool_id = _stack_user_pool_id(cfn, args.env)
         registrations = _list_registrations(cognito, user_pool_id)
     except NoCredentialsError:

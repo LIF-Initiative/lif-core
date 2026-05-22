@@ -42,14 +42,14 @@ We aim to keep our codebase clean, reviewable, and maintainable.
 - **Small and focused**: PRs should address **one issue or task**. Avoid
   combining unrelated changes (e.g., don't fix a bug and add a new feature in
   the same PR).
-- **Descriptive**: provide a clear summary of what the PR does and why,
+- **Descriptive**: Provide a clear summary of what the PR does and why,
   referencing the related issue number (e.g., `Closes #42`).
 - **Review protocol**:
   - PR authors **should not approve their own pull requests**, except for:
     - Trivial changes (e.g., typo fixes)
     - Documentation-only updates
   - All other PRs require review and approval from another contributor.
-- **Tests**: include or update tests as appropriate.
+- **Tests**: Include or update tests as appropriate.
 - **Checks must pass**: linting (`ruff`), type checking (`ty`), tests
   (`pytest`). Commands live in
   [CLAUDE.md → Development](CLAUDE.md#development).
