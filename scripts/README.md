@@ -1,6 +1,6 @@
 # Scripts
 
-Utility scripts for managing deployments, credentials, and data. All AWS scripts require `AWS_PROFILE=lif` and default to **dry-run** mode — pass `--apply` to make changes.
+Utility scripts for managing deployments, credentials, and data. AWS scripts require `AWS_PROFILE=lif`. Scripts that **mutate** state default to **dry-run** mode and require `--apply` to make changes; read-only scripts (e.g. `export_cognito_registrations.py`, `verify-demo-images.sh`) take no `--apply` and run directly.
 
 ## AWS Authentication
 
