@@ -88,6 +88,18 @@ Docker builds for Dagster use projects in `projects/dagster_*/`, NOT `orchestrat
 
 When adding new component dependencies (polylith bricks) needed by Dagster jobs, you must update the `[tool.polylith.bricks]` section in ALL THREE of these `pyproject.toml` files, not just the orchestrator.
 
+## Code Conventions
+
+### File layout (Python)
+
+In modules that combine Pydantic models, helper functions, and FastAPI endpoint handlers (typical shape of `bases/lif/*_restapi/core.py` and router modules), group each category contiguously:
+
+1. **Pydantic request/response models** at the top
+2. **Helper functions** in the middle
+3. **Endpoint handlers** at the bottom
+
+Don't interleave. Small modules with one model and one endpoint can skip this; the convention scales with file size. Also see [CONTRIBUTING.md → File layout](CONTRIBUTING.md#file-layout-python).
+
 ## Commit Convention
 
 Commits must follow this pattern:
