@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Button, DropdownMenu, Flex, Text } from "@radix-ui/themes";
-import { PersonIcon, ExitIcon } from "@radix-ui/react-icons";
+import { PersonIcon, ExitIcon, EnterIcon } from "@radix-ui/react-icons";
 import { useAuth } from "../../context/AuthContext";
 import authService from "../../services/authService";
 import "./Header.css";
@@ -50,6 +50,12 @@ const Header: React.FC = () => {
           >
             Explore
           </NavLink>
+          <NavLink
+            to="/workspaces"
+            className={({ isActive }) => (isActive ? "active" : "")}
+          >
+            Workspaces
+          </NavLink>
         </nav>
 
         {/* User Menu */}
@@ -71,6 +77,11 @@ const Header: React.FC = () => {
                   </>
                 )}
               </DropdownMenu.Label>
+              <DropdownMenu.Separator />
+              <DropdownMenu.Item onClick={() => navigate("/workspaces")}>
+                <EnterIcon />
+                Switch workspace
+              </DropdownMenu.Item>
               <DropdownMenu.Separator />
               <DropdownMenu.Item onClick={handleLogout}>
                 <ExitIcon />

@@ -33,8 +33,13 @@ const AuthCallback: React.FC = () => {
         const user = await authService.handleCallback(code);
         completeLogin(user);
         trackLogin("cognito");
-        const returnUrl = authService.getReturnUrl();
-        navigate(returnUrl, { replace: true });
+        // First-login default is /workspaces (lets the user pick which group
+        // to enter, or auto-redirects if they have exactly one). A stored
+        // returnUrl from a deep-link wins so /invite/accept?token=… etc. still
+        // lands where the user clicked.
+        const stored = authService.getReturnUrl();
+        const target = stored === "/" ? "/workspaces" : stored;
+        navigate(target, { replace: true });
       } catch (err) {
         trackLoginFailed("cognito");
         setError(err instanceof Error ? err.message : "Authentication failed");
