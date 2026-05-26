@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   Box,
   Button,
@@ -32,6 +32,15 @@ const AUTO_SELECT_REDIRECT = "/explore";
 
 const Workspaces: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  // Only auto-forward on implicit landings (AuthCallback + Home). Explicit
+  // navigation to /workspaces from the header nav or "Switch workspace"
+  // dropdown leaves this undefined, so a single-workspace user stays on the
+  // picker and can reach the Invite button. Read once at mount so a later
+  // history.replaceState doesn't change behavior mid-render.
+  const autoForwardIfSingle =
+    (location.state as { autoForwardIfSingle?: boolean } | null)
+      ?.autoForwardIfSingle === true;
 
   const [workspaces, setWorkspaces] = useState<WorkspaceItem[] | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -45,10 +54,11 @@ const Workspaces: React.FC = () => {
   const [inviteError, setInviteError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
-  // Load the list once. If the user has exactly one workspace, auto-select
-  // and forward to the app — this is the common case for a fresh registrant
-  // (post-confirmation lambda just provisioned their personal tenant) and
-  // we don't want to make them click a button to pick the only option.
+  // Load the list. On the implicit-landing path (autoForwardIfSingle), a
+  // single-workspace user is forwarded straight to /explore — the common
+  // case for a fresh registrant whose post-confirmation lambda just
+  // provisioned their one tenant. On explicit navigation we always show
+  // the picker so the user can reach the Invite button.
   useEffect(() => {
     let cancelled = false;
 
@@ -59,7 +69,7 @@ const Workspaces: React.FC = () => {
 
         setWorkspaces(items);
 
-        if (items.length === 1) {
+        if (autoForwardIfSingle && items.length === 1) {
           setSelecting(items[0].group);
           try {
             await tenantsService.select(items[0].group);
@@ -90,7 +100,7 @@ const Workspaces: React.FC = () => {
     return () => {
       cancelled = true;
     };
-  }, [navigate]);
+  }, [autoForwardIfSingle, navigate]);
 
   const handleSelect = async (group: string) => {
     setSelecting(group);

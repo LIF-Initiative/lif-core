@@ -34,12 +34,21 @@ const AuthCallback: React.FC = () => {
         completeLogin(user);
         trackLogin("cognito");
         // First-login default is /workspaces (lets the user pick which group
-        // to enter, or auto-redirects if they have exactly one). A stored
+        // to enter, or auto-forwards if they have exactly one). A stored
         // returnUrl from a deep-link wins so /invite/accept?token=… etc. still
         // lands where the user clicked.
+        //
+        // The `autoForwardIfSingle` state flag is only set on this implicit
+        // post-auth landing; clicking "Workspaces" in the nav later does not
+        // set it, so a single-workspace user can still reach the picker UI
+        // (to invite teammates) without being kicked to /explore.
         const stored = authService.getReturnUrl();
         const target = stored === "/" ? "/workspaces" : stored;
-        navigate(target, { replace: true });
+        const isWorkspaces = target === "/workspaces";
+        navigate(target, {
+          replace: true,
+          state: isWorkspaces ? { autoForwardIfSingle: true } : undefined,
+        });
       } catch (err) {
         trackLoginFailed("cognito");
         setError(err instanceof Error ? err.message : "Authentication failed");

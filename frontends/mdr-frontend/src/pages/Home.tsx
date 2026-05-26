@@ -11,11 +11,17 @@ const Home: React.FC = () => {
 
   React.useEffect(() => {
     // Until we have a real home page, send a logged-in user landing on /
-    // to the workspace picker. The Workspaces page itself auto-forwards to
-    // /explore when the user has exactly one workspace, so this is mostly
-    // a brief loading screen for single-group users (the common case).
+    // to the workspace picker. Like AuthCallback, this is an implicit
+    // landing (user just typed the bare root URL), so pass the
+    // `autoForwardIfSingle` flag — a single-workspace user gets forwarded
+    // straight to /explore instead of seeing a one-card picker. Explicit
+    // navigation to /workspaces from the nav does NOT pass the flag and
+    // will stay on the page.
     if (window.location.pathname === "/") {
-      navigate("/workspaces", { replace: true });
+      navigate("/workspaces", {
+        replace: true,
+        state: { autoForwardIfSingle: true },
+      });
     }
   }, [navigate]);
 
