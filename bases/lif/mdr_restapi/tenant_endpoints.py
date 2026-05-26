@@ -87,6 +87,10 @@ class SelectWorkspaceRequest(BaseModel):
 class SelectWorkspaceResponse(BaseModel):
     group: str
     tenant_schema: str
+    # display_name mirrors the friendly label from /tenants/mine so the
+    # frontend can update its workspace indicator immediately on select
+    # without a follow-up listing round-trip (issue #943).
+    display_name: str
 
 
 class CreateInviteRequest(BaseModel):
@@ -231,8 +235,12 @@ async def list_my_workspaces(
     receive an empty list.
     """
     cognito_groups: list[str] = getattr(request.state, "cognito_groups", [])
+    cognito_sub: str | None = getattr(request.state, "cognito_sub", None)
+    principal: str | None = getattr(request.state, "principal", None)
     workspaces = list_workspaces_for_groups(cognito_groups)
-    return ListMyWorkspacesResponse(workspaces=[to_workspace_item(w) for w in workspaces])
+    return ListMyWorkspacesResponse(
+        workspaces=[to_workspace_item(w, cognito_sub=cognito_sub, principal=principal) for w in workspaces]
+    )
 
 
 @router.post(
@@ -285,7 +293,10 @@ async def select_workspace(
         path="/",
     )
     logger.info("User %r selected workspace %r → %s", request.state.principal, workspace.group, workspace.tenant_schema)
-    return SelectWorkspaceResponse(group=workspace.group, tenant_schema=workspace.tenant_schema)
+    cognito_sub: str | None = getattr(request.state, "cognito_sub", None)
+    principal: str | None = getattr(request.state, "principal", None)
+    item = to_workspace_item(workspace, cognito_sub=cognito_sub, principal=principal)
+    return SelectWorkspaceResponse(group=item.group, tenant_schema=item.tenant_schema, display_name=item.display_name)
 
 
 @router.post(

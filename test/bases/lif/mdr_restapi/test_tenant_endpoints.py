@@ -190,8 +190,29 @@ class TestListMyWorkspaces:
         assert resp.status_code == 200
         assert resp.json() == {
             "workspaces": [
-                {"group": "lif-team", "tenant_schema": "tenant_lif_team"},
-                {"group": "acme-univ", "tenant_schema": "tenant_acme_univ"},
+                {"group": "lif-team", "tenant_schema": "tenant_lif_team", "display_name": "lif-team"},
+                {"group": "acme-univ", "tenant_schema": "tenant_acme_univ", "display_name": "acme-univ"},
+            ]
+        }
+
+    async def test_personal_tenant_display_name_is_email(self, client, monkeypatch):
+        """For a user's own auto-created eval-<sub> tenant the friendly
+        display_name should be their email, not the cryptic eval-<sub>
+        group label. Shared groups in the same list keep their group
+        name. (Issue #943.)"""
+        _stub_cognito_principal(
+            monkeypatch, "user@example.com", ["lif-team", "eval-cognito-sub-test"], cognito_sub="cognito-sub-test"
+        )
+        resp = await client.get("/tenants/mine")
+        assert resp.status_code == 200
+        assert resp.json() == {
+            "workspaces": [
+                {"group": "lif-team", "tenant_schema": "tenant_lif_team", "display_name": "lif-team"},
+                {
+                    "group": "eval-cognito-sub-test",
+                    "tenant_schema": "tenant_eval_cognito_sub_test",
+                    "display_name": "user@example.com",
+                },
             ]
         }
 
@@ -225,7 +246,7 @@ class TestSelectWorkspace:
         _stub_cognito_principal(monkeypatch, "user@example.com", ["lif-team", "acme-univ"])
         resp = await client.post("/tenants/select", json={"group": "acme-univ"})
         assert resp.status_code == 200
-        assert resp.json() == {"group": "acme-univ", "tenant_schema": "tenant_acme_univ"}
+        assert resp.json() == {"group": "acme-univ", "tenant_schema": "tenant_acme_univ", "display_name": "acme-univ"}
         # The Set-Cookie header carries the lif_workspace cookie
         set_cookie = resp.headers.get("set-cookie", "")
         assert "lif_workspace=" in set_cookie

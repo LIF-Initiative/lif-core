@@ -255,7 +255,10 @@ const Workspaces: React.FC = () => {
             <Card key={ws.group}>
               <Flex align="center" justify="between" gap="3">
                 <Box>
-                  <Heading size="4">{ws.group}</Heading>
+                  {/* display_name is the friendly label (email for personal
+                      tenants, group name for shared); fall back to group
+                      while the backend rolls out. Issue #943. */}
+                  <Heading size="4">{ws.display_name ?? ws.group}</Heading>
                   <Text size="1" color="gray">
                     Schema: {ws.tenant_schema}
                   </Text>

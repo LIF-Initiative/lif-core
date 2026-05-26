@@ -5,6 +5,14 @@ import api from "./api";
 export interface WorkspaceItem {
   group: string;
   tenant_schema: string;
+  /**
+   * Friendly human-readable label (issue #943). For a user's own auto-
+   * created personal tenant this is their email; for shared groups
+   * (lif-team, etc.) it's the group name. Optional on the wire because
+   * the backend rollout may lag the frontend — callers should fall back
+   * to `group` when this is missing.
+   */
+  display_name?: string;
 }
 
 interface ListMyWorkspacesResponse {
@@ -14,6 +22,7 @@ interface ListMyWorkspacesResponse {
 export interface SelectWorkspaceResponse {
   group: string;
   tenant_schema: string;
+  display_name?: string;
 }
 
 export interface CreateInviteResponse {
