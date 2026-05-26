@@ -50,7 +50,16 @@ async def get_session(request: Request) -> AsyncGenerator[AsyncSession, None]:
     tenant_schema = getattr(request.state, "tenant_schema", None)
     async with async_session() as session:
         if tenant_schema and _TENANT_SCHEMA_RE.match(tenant_schema):
-            await session.execute(text(f'SET search_path TO "{tenant_schema}"'))
+            # Include `public` as a fallback in the search_path so PG-level
+            # user-defined types (e.g. `elementtype`, `datamodelelementtype`
+            # enums defined in V1.1) resolve correctly. `clone_lif_schema`
+            # copies tables but NOT custom types, so a tenant-scoped query
+            # that casts a value to one of those enums (SQLAlchemy generates
+            # `'Entity'::elementtype` etc.) would otherwise fail with
+            # `UndefinedObjectError: type "elementtype" does not exist`.
+            # Tables are still resolved tenant-first; public fall-through
+            # only fires for objects the tenant schema doesn't contain.
+            await session.execute(text(f'SET search_path TO "{tenant_schema}", public'))
         elif tenant_schema:
             logger.error("Refusing to SET search_path to invalid tenant_schema %r", tenant_schema)
             raise HTTPException(
