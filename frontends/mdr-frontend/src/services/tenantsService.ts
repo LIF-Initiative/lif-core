@@ -8,11 +8,15 @@ export interface WorkspaceItem {
   /**
    * Friendly human-readable label (issue #943). For a user's own auto-
    * created personal tenant this is their email; for shared groups
-   * (lif-team, etc.) it's the group name. Optional on the wire because
-   * the backend rollout may lag the frontend — callers should fall back
-   * to `group` when this is missing.
+   * (lif-team, etc.) it's the group name. The backend guarantees this
+   * field is always present and non-empty — `compute_display_name`
+   * falls through to `tenant_schema` rather than ever returning an
+   * empty string. Consumers that still want to be defensive about
+   * runtime corruption (e.g. localStorage cookie mirror) should use
+   * `display_name || group` rather than `display_name ?? group` so an
+   * empty-string edge case doesn't render as a blank label.
    */
-  display_name?: string;
+  display_name: string;
 }
 
 interface ListMyWorkspacesResponse {
@@ -22,7 +26,7 @@ interface ListMyWorkspacesResponse {
 export interface SelectWorkspaceResponse {
   group: string;
   tenant_schema: string;
-  display_name?: string;
+  display_name: string;
 }
 
 export interface CreateInviteResponse {

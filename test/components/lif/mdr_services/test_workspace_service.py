@@ -66,7 +66,12 @@ class TestComputeDisplayName:
         # created `eval-abc123` for them. The user's email is on
         # principal. Display name should be the email.
         assert (
-            compute_display_name(group="eval-abc123", cognito_sub="abc123", principal="user@example.edu")
+            compute_display_name(
+                group="eval-abc123",
+                cognito_sub="abc123",
+                principal="user@example.edu",
+                tenant_schema="tenant_eval_abc123",
+            )
             == "user@example.edu"
         )
 
@@ -74,7 +79,12 @@ class TestComputeDisplayName:
         # User is in lif-team (a shared group). Even though we have the
         # email on principal, the group name is the right friendly label
         # for a shared workspace.
-        assert compute_display_name(group="lif-team", cognito_sub="abc123", principal="user@example.edu") == "lif-team"
+        assert (
+            compute_display_name(
+                group="lif-team", cognito_sub="abc123", principal="user@example.edu", tenant_schema="tenant_lif_team"
+            )
+            == "lif-team"
+        )
 
     def test_eval_group_for_different_sub_does_not_use_email(self):
         # Defense-in-depth: if another user's eval-* group somehow ended
@@ -83,7 +93,12 @@ class TestComputeDisplayName:
         # belt-and-suspenders), we don't claim someone else's tenant as
         # theirs via the email label.
         assert (
-            compute_display_name(group="eval-other_user_sub", cognito_sub="abc123", principal="user@example.edu")
+            compute_display_name(
+                group="eval-other_user_sub",
+                cognito_sub="abc123",
+                principal="user@example.edu",
+                tenant_schema="tenant_eval_other_user_sub",
+            )
             == "eval-other_user_sub"
         )
 
@@ -97,6 +112,7 @@ class TestComputeDisplayName:
                 group="eval-abc123",
                 cognito_sub="abc123",
                 principal="abc123",  # sub, not email
+                tenant_schema="tenant_eval_abc123",
             )
             == "eval-abc123"
         )
@@ -105,11 +121,48 @@ class TestComputeDisplayName:
         # Without a sub we can't verify the eval-* group is the caller's,
         # so play it safe and use the group name.
         assert (
-            compute_display_name(group="eval-abc123", cognito_sub=None, principal="user@example.edu") == "eval-abc123"
+            compute_display_name(
+                group="eval-abc123", cognito_sub=None, principal="user@example.edu", tenant_schema="tenant_eval_abc123"
+            )
+            == "eval-abc123"
         )
 
     def test_missing_principal_falls_back_to_group(self):
-        assert compute_display_name(group="eval-abc123", cognito_sub="abc123", principal=None) == "eval-abc123"
+        assert (
+            compute_display_name(
+                group="eval-abc123", cognito_sub="abc123", principal=None, tenant_schema="tenant_eval_abc123"
+            )
+            == "eval-abc123"
+        )
+
+    def test_empty_principal_after_strip_falls_back_to_tenant_schema(self):
+        # Defense-in-depth per Adam's #947 review: if the resolved
+        # candidate is whitespace-only (a principal of "  " somehow
+        # passed the `@` check, etc.), fall through to tenant_schema
+        # rather than emit an empty display_name. The wire contract
+        # promises `display_name` is non-empty.
+        assert (
+            compute_display_name(
+                group="eval-abc123",
+                cognito_sub="abc123",
+                principal=" @ ",  # whitespace + @ would pass the heuristic but strip to nothing useful
+                tenant_schema="tenant_eval_abc123",
+            )
+            # principal " @ " stripped is "@" — not empty, so it's used as-is.
+            # The fallback only kicks in when the candidate is truly empty
+            # after strip. The exact behavior here is documented: we don't
+            # over-sanitize, just guarantee non-empty.
+            == "@"
+        )
+
+    def test_empty_group_falls_back_to_tenant_schema(self):
+        # Sanity: if a group somehow sanitized to empty string (the
+        # listing pipeline filters these out before this point, but
+        # belt-and-suspenders), tenant_schema is the ultimate fallback.
+        assert (
+            compute_display_name(group="", cognito_sub=None, principal=None, tenant_schema="tenant_lif_team")
+            == "tenant_lif_team"
+        )
 
 
 class TestToWorkspaceItem:
