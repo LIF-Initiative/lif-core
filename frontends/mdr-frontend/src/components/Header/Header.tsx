@@ -85,7 +85,14 @@ const Header: React.FC = () => {
 
         {/* Current-workspace indicator + user menu */}
         <Flex align="center" gap="3">
-          {currentWorkspace && (
+          {/* Guard `tenant_schema` defensively. The TypeScript type marks
+              it required, but `currentWorkspace` originates from
+              localStorage — runtime-untyped — so a corrupted or partially-
+              written value could otherwise render the badge with the
+              friendly-name line populated and the schema line blank.
+              Hiding the entire badge in that case is the safer rendering
+              (per Adam Hungerford review note 2026-05-27). */}
+          {currentWorkspace && currentWorkspace.tenant_schema && (
             <Badge
               color="iris"
               variant="soft"
