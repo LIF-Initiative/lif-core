@@ -52,8 +52,6 @@ Resources:
           Enter this code on the registration page to complete sign-up. If
           you didn't request this account, no action is needed and the
           account will not be created.
-
-          (If you don't see this in your inbox, please check Spam / Junk.)
       Schema:
         - Name: email
           AttributeDataType: String
