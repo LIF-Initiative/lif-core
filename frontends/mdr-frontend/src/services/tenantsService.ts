@@ -38,6 +38,44 @@ export interface AcceptInviteResponse {
   inviter_sub: string;
 }
 
+// ---- Currently-selected workspace (client-side mirror) ----
+//
+// The backend writes the actual selection into the HttpOnly `lif_workspace`
+// cookie, which the frontend can't read. We mirror the selection into
+// localStorage so the header can show "you are operating against <X>" without
+// a round-trip to the backend.
+//
+// Trade-off accepted for v1: localStorage is per-browser. A user on a fresh
+// browser whose cookie is still valid (server-side) will see the indicator
+// as empty until their next /tenants/select call. Issue #936 tracks the
+// proper backend-driven `GET /tenants/current` follow-up.
+
+const WORKSPACE_STORAGE_KEY = "lif:currentWorkspace";
+const WORKSPACE_CHANGE_EVENT = "lif:workspace-changed";
+
+function readCurrentWorkspace(): WorkspaceItem | null {
+  try {
+    const raw = window.localStorage.getItem(WORKSPACE_STORAGE_KEY);
+    return raw ? (JSON.parse(raw) as WorkspaceItem) : null;
+  } catch {
+    return null;
+  }
+}
+
+function writeCurrentWorkspace(workspace: WorkspaceItem | null): void {
+  try {
+    if (workspace) {
+      window.localStorage.setItem(WORKSPACE_STORAGE_KEY, JSON.stringify(workspace));
+    } else {
+      window.localStorage.removeItem(WORKSPACE_STORAGE_KEY);
+    }
+    window.dispatchEvent(new CustomEvent(WORKSPACE_CHANGE_EVENT));
+  } catch {
+    // localStorage can throw in private-mode Safari etc. Indicator is
+    // best-effort; failing silently is preferable to blocking the select.
+  }
+}
+
 // ---- Service ----
 
 /**
@@ -53,6 +91,8 @@ class TenantsService {
 
   async select(group: string): Promise<SelectWorkspaceResponse> {
     const response = await api.post<SelectWorkspaceResponse>("/tenants/select", { group });
+    // Mirror into localStorage so the header indicator reflects the change.
+    writeCurrentWorkspace(response.data);
     return response.data;
   }
 
@@ -65,6 +105,15 @@ class TenantsService {
     const response = await api.post<AcceptInviteResponse>("/tenants/invite/accept", { token });
     return response.data;
   }
+
+  getCurrentWorkspace(): WorkspaceItem | null {
+    return readCurrentWorkspace();
+  }
+
+  clearCurrentWorkspace(): void {
+    writeCurrentWorkspace(null);
+  }
 }
 
+export { WORKSPACE_CHANGE_EVENT };
 export default new TenantsService();

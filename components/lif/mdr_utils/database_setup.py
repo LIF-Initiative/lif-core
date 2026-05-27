@@ -49,13 +49,36 @@ async def get_session(request: Request) -> AsyncGenerator[AsyncSession, None]:
     """
     tenant_schema = getattr(request.state, "tenant_schema", None)
     async with async_session() as session:
+        # `SET search_path` persists on the underlying pooled connection
+        # for its entire lifetime. We MUST issue an explicit SET on every
+        # request — including the no-tenant branch below — or a connection
+        # that was checked out for tenant A and returned to the pool would
+        # still have its search_path pointing at tenant A's schema when
+        # the next request (which might bypass tenant routing entirely)
+        # checks it back out. That's a cross-tenant data-leak risk, not
+        # just a correctness annoyance.
         if tenant_schema and _TENANT_SCHEMA_RE.match(tenant_schema):
-            await session.execute(text(f'SET search_path TO "{tenant_schema}"'))
+            # Include `public` as a fallback in the search_path so PG-level
+            # user-defined types (e.g. `elementtype`, `datamodelelementtype`
+            # enums defined in V1.1) resolve correctly. `clone_lif_schema`
+            # copies tables but NOT custom types, so a tenant-scoped query
+            # that casts a value to one of those enums (SQLAlchemy generates
+            # `'Entity'::elementtype` etc.) would otherwise fail with
+            # `UndefinedObjectError: type "elementtype" does not exist`.
+            # Tables are still resolved tenant-first; public fall-through
+            # only fires for objects the tenant schema doesn't contain.
+            await session.execute(text(f'SET search_path TO "{tenant_schema}", public'))
         elif tenant_schema:
             logger.error("Refusing to SET search_path to invalid tenant_schema %r", tenant_schema)
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Internal tenant routing error"
             )
+        else:
+            # No tenant routing for this request, but still neutralize any
+            # leftover search_path the pooled connection carried over from
+            # a prior tenant-scoped request. Reset to PG's default so this
+            # branch behaves as if it had a fresh connection.
+            await session.execute(text("SET search_path TO public"))
         yield session
 
 
