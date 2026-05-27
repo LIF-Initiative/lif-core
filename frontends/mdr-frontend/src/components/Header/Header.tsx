@@ -83,31 +83,11 @@ const Header: React.FC = () => {
           </NavLink>
         </nav>
 
-        {/* Current-workspace indicator + user menu */}
+        {/* User dropdown sits in its natural left-packed position right
+            after the nav; the workspace badge below is pulled out of this
+            Flex and pushed to the far-right edge of the header so it has
+            breathing room (PM ask 2026-05-27: don't crowd the user ID). */}
         <Flex align="center" gap="3">
-          {/* Guard `tenant_schema` defensively. The TypeScript type marks
-              it required, but `currentWorkspace` originates from
-              localStorage — runtime-untyped — so a corrupted or partially-
-              written value could otherwise render the badge with the
-              friendly-name line populated and the schema line blank.
-              Hiding the entire badge in that case is the safer rendering
-              (per Adam Hungerford review note 2026-05-27). */}
-          {currentWorkspace && currentWorkspace.tenant_schema && (
-            <Badge
-              color="iris"
-              variant="soft"
-              size="2"
-              title={`Schema: ${currentWorkspace.tenant_schema}`}
-            >
-              <LayersIcon />
-              <Flex direction="column" align="start" gap="0">
-                <Text size="2" weight="medium">{currentWorkspace.group}</Text>
-                <Text size="1" color="gray" style={{ fontFamily: "monospace" }}>
-                  {currentWorkspace.tenant_schema}
-                </Text>
-              </Flex>
-            </Badge>
-          )}
           <DropdownMenu.Root>
             <DropdownMenu.Trigger>
               <Button variant="ghost" size="2">
@@ -138,6 +118,46 @@ const Header: React.FC = () => {
             </DropdownMenu.Content>
           </DropdownMenu.Root>
         </Flex>
+
+        {/* Workspace badge: sibling of the user-area Flex, with auto
+            left margin so it pushes to the right edge of header-content
+            (which uses justify-content: flex-start + gap: 2rem). The
+            gap still applies as a minimum spacer between the dropdown
+            and the badge; the auto margin absorbs any remaining slack
+            so the badge always lands at the page's right edge.
+
+            Defensive guard on `tenant_schema`: the TypeScript type marks
+            it required, but `currentWorkspace` originates from
+            localStorage — runtime-untyped — so a corrupted or partially-
+            written value could otherwise render the badge with the
+            friendly-name line populated and the schema line blank.
+            Hiding the entire badge in that case is the safer rendering
+            (Adam Hungerford review note 2026-05-27). */}
+        {currentWorkspace && currentWorkspace.tenant_schema && (
+          <Badge
+            color="iris"
+            variant="soft"
+            size="2"
+            title={`Schema: ${currentWorkspace.tenant_schema}`}
+            style={{ marginLeft: "auto" }}
+          >
+            <LayersIcon />
+            <Flex direction="column" align="start" gap="0">
+              {/* `display_name` (#943) — email for personal tenants, group
+                  name for shared. Backend (#947) guarantees this is non-
+                  empty (compute_display_name falls through to
+                  tenant_schema rather than emit empty). `||` not `??` so
+                  a corrupted runtime value still falls back to `group`
+                  rather than rendering as a blank label. */}
+              <Text size="2" weight="medium">
+                {currentWorkspace.display_name || currentWorkspace.group}
+              </Text>
+              <Text size="1" color="gray" style={{ fontFamily: "monospace" }}>
+                {currentWorkspace.tenant_schema}
+              </Text>
+            </Flex>
+          </Badge>
+        )}
       </div>
     </header>
   );
