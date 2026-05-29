@@ -33,6 +33,7 @@
 - [`lif-query-cache.md`](design/components/lif-query-cache.md) — LIF Query Cache service: caching layer for resolved queries.
 - [`lif-query-planner.md`](design/components/lif-query-planner.md) — LIF Query Planner service: query routing and optimization.
 - [`mdr.md`](design/components/mdr.md) — MDR (Metadata Repository) service: schema registry and contract authority.
+- [`semantic-search.md`](design/components/semantic-search.md) — Semantic Search MCP server: FastMCP tools (`lif_query`/`lif_mutation`), HTTP endpoints, embeddings, startup schema load.
 - [`translator.md`](design/components/translator.md) — Translator service: source-data-to-LIF transformation engine.
 
 ### `docs/design/adr/` — Architectural Decision Records
@@ -58,9 +59,10 @@
 
 ### `docs/design/cross-cutting/` — Topics spanning services
 
+- [`schema-loading.md`](design/cross-cutting/schema-loading.md) — Schema loading pattern (MDR-at-startup, no silent file fallback), `SchemaStateManager`, PascalCase/camelCase convention, Strawberry GraphQL implementation details.
 - [`self-serve-tenant-auth.md`](design/cross-cutting/self-serve-tenant-auth.md) — Self-serve tenant onboarding narrative: Cognito sign-up → post-confirmation Lambda → schema-per-tenant provisioning → workspace selection cookie → invite tokens (#882/#883/#884).
 
-*Other planned topics: `auth.md` (all-service auth model), `schema-loading.md`, `polylith-conventions.md`.*
+*Other planned topics: `auth.md` (all-service auth model), `polylith-conventions.md`.*
 
 ---
 
@@ -74,7 +76,10 @@
 - [`adding-a-new-microservice.md`](operations/guides/adding-a-new-microservice.md) — Runbook for standing up a new HTTP microservice: Polylith brick layout, pyproject hygiene, Dockerfile2, AuthMiddleware wiring, docker-compose entry.
 - [`creating-a-data-source-adapter.md`](operations/guides/creating-a-data-source-adapter.md) — Reference for the data source adapter contract: what adapters are, what they receive, what they return.
 - [`demo-environment-update.md`](operations/guides/demo-environment-update.md) — End-to-end runbook for promoting dev images to demo.
+- [`deployment.md`](operations/guides/deployment.md) — Deployment scripts, env config (dev vs. demo), MDR schema migrations, Docker build dependency resolution, ECS/CloudWatch debugging, querying the MDR API.
+- [`graphql-api-keys.md`](operations/guides/graphql-api-keys.md) — GraphQL org1 API key authentication: SSM key storage, `X-API-Key` flow, `setup-graphql-api-keys.sh` service/workshop modes.
 - [`load-testing.md`](operations/guides/load-testing.md) — Load testing notes for LIF services.
+- [`testing.md`](operations/guides/testing.md) — Unit/integration test principles, sample data orgs, the 6 test users, service-layer testing order.
 
 ### `docs/operations/proposals/` — Proposed work
 
