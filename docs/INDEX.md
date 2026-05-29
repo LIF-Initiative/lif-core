@@ -70,11 +70,13 @@
 
 ### `docs/operations/guides/` — Runbooks
 
+- [`884-demo-promotion-cheatsheet.md`](operations/guides/884-demo-promotion-cheatsheet.md) — Tactical runbook layered on `demo-environment-update.md` for the #884 self-serve promotion: SSM keys, MDR API + Cognito + SAM Flyway, frontend, user cleanup.
 - [`add-data-source.md`](operations/guides/add-data-source.md) — Adding a new data source to a LIF deployment: source schema, JSONata mappings, pipeline wiring.
 - [`adding-a-new-microservice.md`](operations/guides/adding-a-new-microservice.md) — Runbook for standing up a new HTTP microservice: Polylith brick layout, pyproject hygiene, Dockerfile2, AuthMiddleware wiring, docker-compose entry.
 - [`creating-a-data-source-adapter.md`](operations/guides/creating-a-data-source-adapter.md) — Reference for the data source adapter contract: what adapters are, what they receive, what they return.
 - [`demo-environment-update.md`](operations/guides/demo-environment-update.md) — End-to-end runbook for promoting dev images to demo.
 - [`load-testing.md`](operations/guides/load-testing.md) — Load testing notes for LIF services.
+- [`self-serve-registration-walkthrough.md`](operations/guides/self-serve-registration-walkthrough.md) — End-to-end walkthrough of the #884 self-serve flow (register → workspace → invite → switch); tester checklist + admin/operator notes for verifying it on dev or demo.
 
 ### `docs/operations/proposals/` — Proposed work
 
