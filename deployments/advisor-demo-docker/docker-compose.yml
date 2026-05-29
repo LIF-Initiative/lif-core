@@ -498,6 +498,10 @@ services:
       MDR__AUTH__REFRESH_TOKEN_EXPIRE_DAYS: ${MDR__AUTH__REFRESH_TOKEN_EXPIRE_DAYS:-7}
       MDR__AUTH__PUBLIC_ALLOWLIST_EXACT: ${MDR__AUTH__PUBLIC_ALLOWLIST_EXACT:-/login,/refresh-token,/health-check}
       MDR__AUTH__PUBLIC_ALLOWLIST_STARTS_WITH: ${MDR__AUTH__PUBLIC_ALLOWLIST_STARTS_WITH:-/docs,/openapi.json}
+      # Local compose runs over HTTP, so the workspace selection cookie must
+      # not be marked Secure (browsers drop Secure cookies on plaintext).
+      MDR__COOKIE__SECURE: ${MDR__COOKIE__SECURE:-false}
+      MDR__INVITE__TOKEN_MAX_AGE_SECONDS: ${MDR__INVITE__TOKEN_MAX_AGE_SECONDS:-604800}
       LIF_DEMO_USER_PASSWORD: ${LIF_DEMO_USER_PASSWORD:-changeme}
     ports:
       - "8012:8012"

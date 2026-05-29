@@ -9,6 +9,9 @@ from typing import Any, Dict, Optional
 import jwt
 from fastapi import HTTPException, Request, status
 from fastapi.responses import JSONResponse
+from lif.mdr_auth.workspace_cookie import COOKIE_NAME, decode_workspace_cookie
+from lif.mdr_services.workspace_service import find_workspace
+from lif.tenant_routing import resolve_tenant_schema
 from lif.mdr_utils.collection_utils import convert_csv_to_set
 from lif.mdr_utils.config import get_settings
 from lif.mdr_utils.logger_config import get_logger
@@ -187,6 +190,7 @@ class AuthMiddleware(BaseHTTPMiddleware):
         """
         request.state.principal = None
         request.state.cognito_groups = []
+        request.state.cognito_sub = None
         request.state.tenant_schema = None
 
         if request.method not in METHODS_TO_REQUIRE_AUTH or _is_public_path(request.url.path):
@@ -227,9 +231,13 @@ class AuthMiddleware(BaseHTTPMiddleware):
                         logger.warning("Cognito token validation failed: %s", e)
                         return _build_unauthorized(detail="Could not validate credentials")
 
-                    # Extract principal from Cognito claims
+                    # Extract principal from Cognito claims. We surface the
+                    # raw sub separately so endpoints that need a stable
+                    # identity (e.g. Cognito Admin API calls) don't have to
+                    # guess whether principal is an email or a sub.
                     request.state.principal = payload.get("email") or payload.get("sub")
                     request.state.cognito_groups = payload.get("cognito:groups", [])
+                    request.state.cognito_sub = payload.get("sub")
                 else:
                     # Legacy HS256 token (no kid) — existing local JWT validation
                     payload = decode_jwt(credentials)
@@ -244,6 +252,8 @@ class AuthMiddleware(BaseHTTPMiddleware):
                     logger.warning("Auth token 'sub'/'email' is missing")
                     return _build_unauthorized(detail="Could not validate credentials")
 
+            # Default tenant from JWT groups (or service-schema fallback for
+            # API-key callers and group-less Cognito users).
             request.state.tenant_schema = resolve_tenant_schema(
                 enabled=TENANT_ROUTING_ENABLED,
                 is_service_principal=isinstance(request.state.principal, str)
@@ -251,6 +261,29 @@ class AuthMiddleware(BaseHTTPMiddleware):
                 cognito_groups=getattr(request.state, "cognito_groups", None),
                 service_schema=TENANT_SERVICE_SCHEMA,
             )
+
+            # If the user picked a specific workspace via POST /tenants/select,
+            # honor it — but only if the cookie's group is actually one of
+            # theirs. The Cognito JWT remains the ground truth for membership;
+            # a stale or stolen cookie can't grant access to a group the user
+            # no longer belongs to.
+            cognito_groups = getattr(request.state, "cognito_groups", None)
+
+            # Early exit for callers who can never match a workspace cookie:
+            # service principals (API-key auth) and HS256 legacy users both
+            # have empty cognito_groups, so find_workspace would always return
+            # None below. Skip the cookie read, HMAC verification, and any
+            # decode-failure logging entirely — keeps service-to-service
+            # traffic free of log noise from a stray lif_workspace cookie a
+            # browser might forward through a proxy.
+            if TENANT_ROUTING_ENABLED and cognito_groups:
+                cookie_value = request.cookies.get(COOKIE_NAME)
+                if cookie_value:
+                    cookie = decode_workspace_cookie(cookie_value, secret=SECRET_KEY)
+                    if cookie is not None:
+                        selected = find_workspace(cognito_groups, cookie.group)
+                        if selected is not None:
+                            request.state.tenant_schema = selected.tenant_schema
         except HTTPException as e:
             logger.exception("Auth middleware HTTPException")
             body = {"detail": str(e.detail)}

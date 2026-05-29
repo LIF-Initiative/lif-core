@@ -38,6 +38,12 @@ then
     flyway clean -X || error "failed to successfully execute 'flyway clean' command"
 fi
 flyway info -X || error "flyway info before migrate command"
+# Repair before migrate: aligns schema_history checksums + descriptions
+# with the current migration files, and clears records for failed migrations
+# so they can be retried. Repair does NOT touch user data — only the Flyway
+# bookkeeping table. Idempotent + a no-op when checksums already match, so
+# it's safe to leave in the steady-state path.
+flyway repair -X || error "failed to successfully execute 'flyway repair' command"
 flyway migrate -X || error "failed to successfully execute 'flyway migrate' command"
 flyway info -X || error "flyway info after migrate command"
 respond $REQUEST_ID

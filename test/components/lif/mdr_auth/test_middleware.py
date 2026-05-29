@@ -255,3 +255,81 @@ class TestMiddlewareTenantRouting:
         resp = await client.get("/health-check")
         assert resp.status_code == 200
         # /health-check doesn't echo request.state, so nothing to assert here beyond 200.
+
+
+class TestMiddlewareWorkspaceCookie:
+    """Workspace cookie selection (issue #884 Phase 3 PR 1) integration.
+
+    The cookie can override the default tenant resolution, but only when
+    the cookie's group is also in the user's cognito:groups (defense in
+    depth). The cookie helpers themselves are unit-tested in
+    test_workspace_cookie.py; here we confirm the middleware wiring.
+    """
+
+    @pytest.fixture
+    def routing_on(self, monkeypatch):
+        import lif.mdr_auth.core as auth_module
+
+        monkeypatch.setattr(auth_module, "TENANT_ROUTING_ENABLED", True)
+        monkeypatch.setattr(auth_module, "TENANT_SERVICE_SCHEMA", "tenant_lif_team")
+
+    def _cookie(self, group: str) -> str:
+        from lif.mdr_auth.core import SECRET_KEY
+        from lif.mdr_auth.workspace_cookie import encode_workspace_cookie
+
+        return encode_workspace_cookie(group, secret=SECRET_KEY)
+
+    async def test_cookie_overrides_default_when_group_in_user_groups(self, routing_on, client):
+        """User belongs to multiple groups; cookie picks a non-default one."""
+        token = _make_cognito_id_token(groups=["lif-team", "acme-univ"])
+        resp = await client.get(
+            "/protected",
+            headers={"Authorization": f"Bearer {token}"},
+            cookies={"lif_workspace": self._cookie("acme-univ")},
+        )
+        assert resp.status_code == 200
+        assert resp.json()["tenant_schema"] == "tenant_acme_univ"
+
+    async def test_cookie_for_group_not_in_user_groups_is_ignored(self, routing_on, client):
+        """Stolen/stale cookie naming a group the user doesn't belong to:
+        falls back to the default (cognito_groups[0]) rather than honoring
+        the cookie. The JWT is the ground truth for membership."""
+        token = _make_cognito_id_token(groups=["lif-team"])
+        resp = await client.get(
+            "/protected",
+            headers={"Authorization": f"Bearer {token}"},
+            cookies={"lif_workspace": self._cookie("acme-univ")},  # not in user's groups
+        )
+        assert resp.status_code == 200
+        assert resp.json()["tenant_schema"] == "tenant_lif_team"
+
+    async def test_tampered_cookie_is_ignored(self, routing_on, client):
+        """Forged cookie with bad signature: silently ignored, no 401."""
+        token = _make_cognito_id_token(groups=["lif-team"])
+        resp = await client.get(
+            "/protected",
+            headers={"Authorization": f"Bearer {token}"},
+            cookies={"lif_workspace": "forged.999999.deadbeef"},
+        )
+        assert resp.status_code == 200
+        assert resp.json()["tenant_schema"] == "tenant_lif_team"
+
+    async def test_cookie_ignored_for_api_key_caller(self, routing_on, client):
+        """Service principals always route to the service schema; cookie has no effect."""
+        resp = await client.get(
+            "/protected", headers={"X-API-Key": "changeme1"}, cookies={"lif_workspace": self._cookie("acme-univ")}
+        )
+        assert resp.status_code == 200
+        assert resp.json()["tenant_schema"] == "tenant_lif_team"
+
+    async def test_cookie_ignored_when_routing_flag_off(self, client):
+        """Flag-off short-circuits the cookie read entirely (parity with the
+        rest of tenant routing — the flag gates everything)."""
+        token = _make_cognito_id_token(groups=["lif-team", "acme-univ"])
+        resp = await client.get(
+            "/protected",
+            headers={"Authorization": f"Bearer {token}"},
+            cookies={"lif_workspace": self._cookie("acme-univ")},
+        )
+        assert resp.status_code == 200
+        assert resp.json()["tenant_schema"] is None

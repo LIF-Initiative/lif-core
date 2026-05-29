@@ -1,6 +1,6 @@
 # Scripts
 
-Utility scripts for managing deployments, credentials, and data. All AWS scripts require `AWS_PROFILE=lif` and default to **dry-run** mode — pass `--apply` to make changes.
+Utility scripts for managing deployments, credentials, and data. AWS scripts require `AWS_PROFILE=lif`. Scripts that **mutate** state default to **dry-run** mode and require `--apply` to make changes; read-only scripts (e.g. `export_cognito_registrations.py`, `verify-demo-images.sh`) take no `--apply` and run directly.
 
 ## AWS Authentication
 
@@ -57,6 +57,12 @@ Utility scripts for managing deployments, credentials, and data. All AWS scripts
 |--------|---------|
 | `generate_sample_users.py` | Generate synthetic sample user JSON files across all three demo orgs. See [README_sample_users.md](README_sample_users.md) for details. |
 | `fix_sample_data_schema.py` | Validate and fix sample data files to conform to the current LIF schema. Adds missing required fields. Use `--dry-run` to preview. |
+
+## Self-Serve Operations
+
+| Script | Purpose |
+|--------|---------|
+| `export_cognito_registrations.py` | Export the self-serve User Pool's users (with `custom:organization`, `custom:role`, `custom:reason`, status, signup date, group membership) for outreach. Read-only — no `--apply` needed. Run via `uv run`; reads UserPoolId from the `{env}-lif-mdr-cognito` stack output. Flags: `--format` (`csv` or `json`, default `csv`), `--output <path>` to write to file (default stdout), `--region <r>` overrides AWS region (defaults to `$AWS_REGION`, then `$AWS_DEFAULT_REGION`, then `us-east-1`). |
 
 ## Common Patterns
 

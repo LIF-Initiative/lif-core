@@ -30,12 +30,17 @@ const Login: React.FC = () => {
     setIsAuthenticated(authService.isAuthenticated());
   }, []);
 
-  if (isAuthenticated) {
-    const from = location.state?.from?.pathname || "/";
-    return <Navigate to={from} replace />;
-  }
+  // Reconstruct the full URL the user was trying to reach — pathname alone
+  // drops the query string and hash, which kills deep-link flows like
+  // /invite/accept?token=... (the token would disappear after login).
+  const fromLocation = location.state?.from;
+  const returnUrl = fromLocation
+    ? `${fromLocation.pathname}${fromLocation.search ?? ""}${fromLocation.hash ?? ""}`
+    : undefined;
 
-  const returnUrl = location.state?.from?.pathname;
+  if (isAuthenticated) {
+    return <Navigate to={returnUrl ?? "/"} replace />;
+  }
 
   const handleCognitoLogin = async () => {
     setIsLoading(true);
@@ -50,8 +55,7 @@ const Login: React.FC = () => {
     try {
       await authService.loginWithPassword({ username, password });
       trackLogin("password");
-      const from = location.state?.from?.pathname || "/";
-      window.location.href = from;
+      window.location.href = returnUrl ?? "/";
     } catch {
       trackLoginFailed("password");
       setError("Invalid username or password");

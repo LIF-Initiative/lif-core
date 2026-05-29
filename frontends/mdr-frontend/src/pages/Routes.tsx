@@ -7,6 +7,8 @@ import {
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import AuthCallback from "../pages/AuthCallback";
+import Workspaces from "../pages/Workspaces";
+import InviteAccept from "../pages/InviteAccept";
 import AuthGuard from "../components/AuthGuard";
 import LifModel from "./Explore/lif-model";
 import DataExtensions from "./Explore/data-extensions";
@@ -25,10 +27,24 @@ const routes: RouteObject[] = [
     element: <AuthCallback />,
   },
   {
+    // Standalone, focused-card layout (no header/footer chrome) — feels like a
+    // transactional step, similar to AuthCallback. Wrapped in AuthGuard so an
+    // unauthenticated click bounces through login first, then returns here.
+    path: "/invite/accept",
+    element: <AuthGuard><InviteAccept /></AuthGuard>,
+  },
+  {
     path: "/",
     element: <AuthGuard><Home /></AuthGuard>,
     handle: { name: "Dashboard" },
     children: [
+      {
+        // Workspace landing page. Lives inside the / parent so it renders
+        // through Layout's <Outlet/> with the standard header + footer chrome.
+        path: "workspaces",
+        element: <Workspaces />,
+        handle: { name: "Workspaces" },
+      },
       {
         path: "explore",
         element: <TabLayout />,

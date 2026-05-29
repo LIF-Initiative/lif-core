@@ -35,6 +35,25 @@ Resources:
         - email
       UsernameAttributes:
         - email
+      # Customize the verification email so recipients see a branded subject
+      # they recognize as "the thing they just signed up for" rather than
+      # Cognito's generic boilerplate, which Gmail/Outlook spam heuristics
+      # frequently flag. Sender is still Cognito's default
+      # (no-reply@verificationemail.com); migrating to SES requires AWS
+      # production-access approval and is deferred.
+      VerificationMessageTemplate:
+        DefaultEmailOption: CONFIRM_WITH_CODE
+        EmailSubject: !Sub "LIF Metadata Repository (${EnvironmentName}) — confirm your email"
+        EmailMessage: |
+          Welcome to the LIF Metadata Repository self-serve evaluator program.
+
+          Your 6-digit confirmation code is {####}.
+
+          Enter this code on the registration page to complete sign-up. If
+          you didn't request this account, no action is needed and the
+          account will not be created.
+
+          (If you don't see this in your inbox, please check Spam / Junk.)
       Schema:
         - Name: email
           AttributeDataType: String

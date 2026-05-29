@@ -247,7 +247,9 @@ async def update(lif_update: LIFUpdate) -> LIFRecord:
         # Return ONLY the full 'Person' array as { "Person": [ ... ] }
         doc = await collection.find_one(mongo_filter, {PERSON_KEY_PASCAL: 1, "_id": 0})
         if doc and PERSON_KEY_PASCAL in doc:
-            return LIFRecord(person=doc[PERSON_KEY_PASCAL])
+            # ty doesn't model pydantic's populate_by_name aliasing; `person` is the
+            # field name (alias "Person") and is valid at runtime.
+            return LIFRecord(person=doc[PERSON_KEY_PASCAL])  # ty: ignore[unknown-argument]
         raise ResourceNotFoundException(resource_id=None, message=f"No matching record after update: {filter_dict}")
 
     except Exception as e:
@@ -309,7 +311,11 @@ async def save(lif_query_filter: LIFQueryFilter, lif_fragments: List[LIFFragment
             Identifier=lif_query_filter.root.person.Identifier
         )
         lif_person: LIFPerson = LIFPerson(root=[person_identifiers.model_dump()])
-        lif_record = LIFRecord(**results[0]) if len(results) == 1 else LIFRecord(person=lif_person)
+        lif_record = (
+            LIFRecord(**results[0])
+            if len(results) == 1
+            else LIFRecord(person=lif_person)  # ty: ignore[unknown-argument]
+        )
 
         updated_lif_record = compose_with_fragment_list(lif_record, lif_fragments)
         mongo_update_response = await collection.update_one(

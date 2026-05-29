@@ -1,5 +1,6 @@
 from functools import cache
 
+from pydantic import Field
 from pydantic_settings import BaseSettings
 
 
@@ -36,6 +37,17 @@ class Settings(BaseSettings):
     # group. Stays "public" until the PR 3 cutover sets this to
     # "tenant_lif_team" in env params.
     mdr__tenant_routing__service_schema: str = "public"
+    # Workspace selection cookie (issue #884 Phase 3 PR 1). Set False for
+    # local HTTP dev so the browser will accept it; deployed envs run on
+    # HTTPS and should keep this True.
+    mdr__cookie__secure: bool = True
+    # Invite token max age in seconds (issue #884 Phase 3 PR 2). Default
+    # 7 days. Tokens are self-contained (no DB store), so this is the
+    # only knob bounding their lifetime; short enough to limit damage if
+    # one leaks, long enough to share via email. Must be positive — a
+    # 0/negative value would mint instant-expired tokens that trip the
+    # post-encode sanity check in create_invite.
+    mdr__invite__token_max_age_seconds: int = Field(default=7 * 24 * 60 * 60, gt=0)
 
 
 _settings = Settings()
