@@ -9,6 +9,7 @@ version = "0.1.0"
 requires-python = ">=3.13,<3.14"
 
 dependencies = [
+    "httpx~=0.28",
     "fastapi~=0.115",
     "pyjwt~=2.10",
     "pydantic-settings~=2.1",
@@ -28,4 +29,6 @@ packages = ["lif"]
 "../../components/lif/datatypes" = "lif/datatypes"
 "../../components/lif/mdr_utils" = "lif/mdr_utils"
 "../../components/lif/mdr_auth" = "lif/mdr_auth"
+"../../components/lif/lif_schema_config" = "lif/lif_schema_config"
+"../../components/lif/mdr_client" = "lif/mdr_client"
 "../../components/lif/tenant_routing" = "lif/tenant_routing"
