@@ -1,5 +1,4 @@
 import warnings
-from http import HTTPStatus
 from typing import Any, Dict, List
 
 from pydantic import BaseModel, ConfigDict, Field, RootModel, field_validator
@@ -258,13 +257,13 @@ class TargetTransformationDataModelDTO(BaseModel):
         name: Data Model name
         version: Data Model version
         contributorOrganization: Contributor organization for the Data Model
-        transformationVersions: List of transformation versions for the Data Model
+        TransformationVersions: List of transformation versions for the Data Model
     """
 
     name: str = Field(..., description="Data Model name")
     version: str = Field(..., description="Data Model version")
     contributorOrganization: str = Field(..., description="Contributor organization for the Data Model")
-    transformationVersions: list[str] = Field(..., description="List of transformation versions for the Data Model")
+    TransformationVersions: list[str] = Field(..., description="List of transformation versions for the Data Model")
 
 
 class TargetTransformationDataModelsDTO(BaseModel):
@@ -272,15 +271,11 @@ class TargetTransformationDataModelsDTO(BaseModel):
     Model for a list of target transformation Data Models.
 
     Attributes:
-        data (LIFUpdatePersonPayload): Update person.
+        metadata: Metadata about the available data formats
+        DataFormats: List of Data Models that are targets in Org LIF transformations
     """
 
     metadata: dict[str, Any] = Field(..., description="Metadata about the available data formats")
-    dataFormats: list[TargetTransformationDataModelDTO] = Field(
-        ..., description="List of target transformation Data Models"
+    DataFormats: list[TargetTransformationDataModelDTO] = Field(
+        ..., description="List of Data Models that are targets in Org LIF transformations"
     )
-
-
-class HealthCheckResponse(BaseModel):
-    status: HTTPStatus
-    message: str

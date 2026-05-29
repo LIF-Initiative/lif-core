@@ -8,7 +8,7 @@ router = APIRouter()
 logger = get_logger(__name__)
 
 
-@router.get("/export", response_model=Dict[str, Any])
+@router.get("/exports", response_model=Dict[str, Any])
 async def get_data(request: Request):
     """Endpoint to export learner data in a specified format.
 
@@ -29,21 +29,21 @@ async def get_available_data_formats(request: Request):
 
     data_formats = TargetTransformationDataModelsDTO(
         metadata={"total": 3},
-        dataFormats=[
+        DataFormats=[
             TargetTransformationDataModelDTO(
                 name="OpenBadges 3.0",
                 version="1.0.3",
                 contributorOrganization="OB",
-                transformationVersions=["1.0.0", "1.1.0"],
+                TransformationVersions=["1.0.0", "1.1.0"],
             ),
             TargetTransformationDataModelDTO(
-                name="CEDS", version="2.0.0", contributorOrganization="CEDS Org", transformationVersions=["2.0.0"]
+                name="CEDS", version="2.0.0", contributorOrganization="CEDS Org", TransformationVersions=["2.0.0"]
             ),
             TargetTransformationDataModelDTO(
                 name="ExampleDataSource",
                 version="1.0.1",
                 contributorOrganization="Community",
-                transformationVersions=["1.3.0"],
+                TransformationVersions=["1.3.0"],
             ),
         ],
     )

@@ -21,7 +21,7 @@ class Settings(BaseSettings):
     # Used by the Cognito post-confirmation Lambda to call POST /tenants/provision
     # when a new user registers (issue #883 PR 4b).
     mdr__auth__service_api_key__post_confirm: str = "changeme5"
-    mdr__auth__public_allowlist_exact: str = "/login,/refresh-token,/health-check"
+    mdr__auth__public_allowlist_exact: str = "/login,/refresh-token,/health-check,/health"
     mdr__auth__public_allowlist_starts_with: str = "/docs,/openapi.json"
     # Cognito configuration (empty user_pool_id = Cognito auth disabled)
     mdr__auth__cognito_user_pool_id: str = ""

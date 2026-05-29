@@ -36,7 +36,7 @@ uv build --out-dir ./dist
 ``` shell
 docker run --rm --name learner_data_export_api -p 8013:8013 \
     lif-learner-data-export-api
-````
+```
 
 The OpenAPI specification of this FastAPI app can now be accessed at http://localhost:8013/docs#
 

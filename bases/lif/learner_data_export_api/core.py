@@ -1,9 +1,5 @@
-from http import HTTPStatus
-from typing import Any, Dict
-
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from lif.datatypes.core import HealthCheckResponse
 from lif.learner_data_export_api import learner_data_export_endpoints
 from lif.logging import get_logger
 from lif.mdr_auth.core import AuthMiddleware
@@ -34,19 +30,12 @@ app.add_middleware(
 # --- API Endpoints ---
 
 
-@app.get("/health-check", response_model=HealthCheckResponse)
+@app.get("/health")
 async def health_check():
     """
     Health check endpoint to verify the API is running
     """
-    return HealthCheckResponse(status=HTTPStatus.OK, message="API is healthy")
-
-
-@app.get("/test/auth-info")
-async def get_auth_info(request: Request) -> Dict[str, Any]:
-    """Test what the user is logged in with"""
-    # Need to expand to JWT token
-    return {"authenticated_as": "service", "service-name": request.state.principal, "auth_type": "API token"}
+    return {"status": "ok"}
 
 
 app.include_router(learner_data_export_endpoints.router, prefix="")
