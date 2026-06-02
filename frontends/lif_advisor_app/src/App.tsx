@@ -27,9 +27,15 @@ function App() {
         if (!active) return;
         setUser(data);
         setIsLoggedIn(true);
-      } catch {
-        localStorage.removeItem('token');
-        localStorage.removeItem('refreshToken');
+      } catch (err) {
+        // Only drop the session on a confirmed auth failure. A transient error
+        // (network blip, 5xx) should leave tokens intact so the next load can
+        // retry rather than silently logging the user out.
+        const status = (err as { response?: { status?: number } })?.response?.status;
+        if (status === 401) {
+          localStorage.removeItem('token');
+          localStorage.removeItem('refreshToken');
+        }
       } finally {
         if (active) setIsRestoringSession(false);
       }

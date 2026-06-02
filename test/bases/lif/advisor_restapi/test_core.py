@@ -497,8 +497,9 @@ async def test_initial_message_rehydrates_session_after_state_loss():
             )
             access_token = login_response_json.get("access_token")
 
-            # Simulate loss of in-memory conversation state.
+            # Simulate loss of in-memory state (process restart / different task).
             core.conversation_states.clear()
+            core.refresh_tokens_store.clear()
 
             auth_headers = {"Authorization": f"Bearer {access_token}"}
             initial_message_response = await client.get("/initial-message", headers=auth_headers)
@@ -509,3 +510,28 @@ async def test_initial_message_rehydrates_session_after_state_loss():
             )
             # setup() ran twice: once on login, once to rebuild the lost session.
             assert setup_mock.await_count == 2
+
+
+@pytest.mark.asyncio
+async def test_logout_succeeds_when_session_state_already_cleared():
+    """Logout must succeed (and not invoke the agent) when no in-memory state
+    remains — e.g. a session restored after a process restart."""
+    mocked_ai_agent = MockAgent()
+
+    async with get_client() as client:
+        with patch.object(LIFAIAgent, "setup", new=AsyncMock(return_value=mocked_ai_agent)):
+            login_response_json = await login_user_to_lif_advisor(
+                client=client, username=USER_DETAILS_ALEX["username"], password=USER_DETAILS_ALEX["password"]
+            )
+            access_token = login_response_json.get("access_token")
+
+            # Simulate loss of in-memory state before logout.
+            core.conversation_states.clear()
+            core.refresh_tokens_store.clear()
+
+            auth_headers = {"Authorization": f"Bearer {access_token}"}
+            logout_response = await client.post("/logout", headers=auth_headers)
+
+            assert logout_response.status_code == 200, logout_response.text
+            assert logout_response.json() == {"success": True}
+            mocked_ai_agent.ask_agent.assert_not_awaited()
