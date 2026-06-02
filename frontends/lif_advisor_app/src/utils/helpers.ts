@@ -37,16 +37,26 @@ export const calculateCost = (tokens: number): number => {
  * Pull quick-reply options out of an assistant message.
  *
  * The agent marks suggested replies by wrapping each in double angle brackets,
- * e.g. `<<Yes>>` `<<Tell me more about credentials>>`. We render those as
- * clickable buttons and strip the markers from the displayed text. Returns the
- * cleaned text plus the de-duplicated options (in first-seen order).
+ * e.g. `<<Yes>>` `<<Tell me more about credentials>>`, and the prompts place
+ * them at the very end of the response. We only parse a *trailing run* of
+ * markers — so markers that appear mid-message (e.g. inside a code example) or
+ * a dangling marker left by a truncated response are left in the text untouched
+ * rather than corrupting it. Returns the cleaned text plus the de-duplicated
+ * options (first-seen order).
  */
 export const extractOptions = (content: string): { text: string; options: string[] } => {
+  // Drop a dangling, unclosed marker from a truncated response (e.g. "<<Tell me mo").
+  const cleaned = content.replace(/<<[^<>\n]*$/, '');
+
+  // Match the trailing run of complete markers (and the whitespace before it).
+  const trailing = cleaned.match(/(?:\s*<<[^<>\n]+?>>)+\s*$/);
+  if (!trailing) {
+    return { text: cleaned.trim(), options: [] };
+  }
+
   const options: string[] = [];
   const seen = new Set<string>();
-
-  const matches = content.matchAll(/<<\s*([^<>]+?)\s*>>/g);
-  for (const match of matches) {
+  for (const match of trailing[0].matchAll(/<<\s*([^<>\n]+?)\s*>>/g)) {
     const option = match[1].trim();
     const key = option.toLowerCase();
     if (option && !seen.has(key)) {
@@ -55,12 +65,5 @@ export const extractOptions = (content: string): { text: string; options: string
     }
   }
 
-  // Remove the markers, then collapse the whitespace/blank lines they leave behind.
-  const text = content
-    .replace(/<<\s*[^<>]+?\s*>>/g, '')
-    .replace(/[ \t]+\n/g, '\n')
-    .replace(/\n{3,}/g, '\n\n')
-    .trim();
-
-  return { text, options };
+  return { text: cleaned.slice(0, trailing.index).trim(), options };
 };

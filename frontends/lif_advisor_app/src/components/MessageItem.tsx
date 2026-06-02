@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Message } from '../types';
@@ -30,7 +30,12 @@ const markdownComponents = {
 
 const MessageItem: React.FC<MessageItemProps> = ({ message, isTyping = false, onOptionClick, disabled = false }) => {
   const isBot = message.sender === 'bot';
-  const { text: botText, options } = isBot ? extractOptions(message.content) : { text: message.content, options: [] };
+  // Strip the <<...>> markers from every bot message's displayed text (so history
+  // never shows raw markers); option buttons are gated to the active message below.
+  const { text: botText, options } = useMemo(
+    () => (isBot ? extractOptions(message.content) : { text: message.content, options: [] as string[] }),
+    [isBot, message.content]
+  );
 
   return (
     <div 
@@ -77,16 +82,17 @@ const MessageItem: React.FC<MessageItemProps> = ({ message, isTyping = false, on
             )}
             </div>
           )}
-          {isBot && !isTyping && options.length > 0 && (
+          {isBot && !isTyping && onOptionClick && options.length > 0 && (
             <div className="mt-3 flex flex-wrap gap-2" data-testid="message-options">
               {options.map((option) => (
                 <button
                   key={option}
                   type="button"
-                  onClick={() => onOptionClick?.(option)}
-                  disabled={disabled || !onOptionClick}
+                  onClick={() => onOptionClick(option)}
+                  disabled={disabled}
                   data-testid="message-option"
-                  className="rounded-full border border-blue-300 bg-white px-3 py-1 text-sm text-blue-700 transition-colors hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="max-w-full truncate rounded-full border border-blue-300 bg-white px-3 py-1 text-sm text-blue-700 transition-colors hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
+                  title={option}
                 >
                   {option}
                 </button>

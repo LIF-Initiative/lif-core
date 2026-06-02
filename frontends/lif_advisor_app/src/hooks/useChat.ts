@@ -96,7 +96,7 @@ export const useChat = () => {
   }, []);
 
   const sendMessage = useCallback(async (content: string) => {
-    if (!content.trim() || isInitializing) return;
+    if (!content.trim() || isInitializing || isTyping) return;
 
     const userMessage: Message = {
       id: generateId(),
@@ -156,7 +156,7 @@ export const useChat = () => {
     }
 
     return () => controller.abort();
-  }, [isInitializing]);
+  }, [isInitializing, isTyping]);
 
   const displayLoggingOutMessage = useCallback(() => {
     if (isInitializing || isTyping) return;

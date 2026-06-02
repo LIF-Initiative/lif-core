@@ -27,7 +27,7 @@ const MessageList: React.FC<MessageListProps> = ({ messages, isTyping, onOptionC
           key={message.id}
           message={message}
           isTyping={isTyping && index === messages.length - 1 && message.sender === 'bot'}
-          onOptionClick={onOptionClick}
+          onOptionClick={index === messages.length - 1 ? onOptionClick : undefined}
           disabled={optionsDisabled}
         />
       ))}
