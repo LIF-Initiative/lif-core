@@ -85,7 +85,7 @@
 
 ### `docs/operations/proposals/` — Proposed work
 
-*Currently no committed proposals. Several proposal drafts exist in working trees and will land via separate PRs.*
+- [`mdr-transformation-output-validation.md`](operations/proposals/mdr-transformation-output-validation.md) — Validate the MDR bulk-transform preview output against the target LIF schema (Ajv) at authoring time; uses the already-wired `targetSchema` prop (#973).
 
 ---
 
