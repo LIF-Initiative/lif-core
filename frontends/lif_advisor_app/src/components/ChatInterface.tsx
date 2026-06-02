@@ -62,7 +62,12 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onLogout, user }) => {
         </div>
       </div>
 
-      <MessageList messages={messages} isTyping={isTyping} />
+      <MessageList
+        messages={messages}
+        isTyping={isTyping}
+        onOptionClick={sendMessage}
+        optionsDisabled={isUserActionsDisabled}
+      />
 
       <MessageInput onSendMessage={sendMessage} disabled={isUserActionsDisabled} />
     </div>
