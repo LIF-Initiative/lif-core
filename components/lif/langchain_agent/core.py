@@ -10,7 +10,6 @@ Functions:
 
 Environment Variables:
     - TOOL_URL: URL for MCP tools
-    - GRAPHQL_URL: URL for GraphQL endpoint
     - LLM_MODEL_NAME: Name of the LLM model to use
 """
 
@@ -29,7 +28,6 @@ from lif.langchain_agent.memory import ChatState, create_summarization_node, mak
 
 
 LIF_SEMANTIC_SEARCH_MCP_SERVER_URL = os.environ.get("LIF_SEMANTIC_SEARCH_MCP_SERVER_URL")
-LIF_GRAPHQL_API_URL = os.environ.get("LIF_GRAPHQL_API_URL")
 LLM_MODEL_NAME = os.environ.get("LIF_ADVISOR_LLM_MODEL_NAME")
 LLM_TOKEN_COSTS = {
     "gpt-4o-mini": {"input": 1.1, "output": 4.4, "cached": 0.275},
