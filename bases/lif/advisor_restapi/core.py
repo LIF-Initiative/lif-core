@@ -125,6 +125,17 @@ class RefreshTokenResponse(BaseModel):
     access_token: str
 
 
+class AgentConfig(BaseModel):
+    """Typed config passed to ``LIFAIAgent.setup``. Serialized to a dict at the
+    component boundary (the agent component consumes a plain mapping)."""
+
+    user_greeting: str | None = None
+    user_identifier: str | None = None
+    user_identifier_type: str | None = None
+    user_identifier_type_enum: str | None = None
+    memory_config: Dict[str, Any]
+
+
 # --- Session Helpers ---
 
 
@@ -133,7 +144,7 @@ def _find_user(username: str) -> Dict[str, Any] | None:
     return next((user for user in users_db if user["username"] == username), None)
 
 
-def _user_details(user: Dict[str, Any]) -> UserDetails:
+def _build_user_details(user: Dict[str, Any]) -> UserDetails:
     """Build the public UserDetails payload from a user record."""
     return UserDetails(
         username=user["username"],
@@ -162,15 +173,15 @@ async def _build_user_session(user: Dict[str, Any]) -> Dict[str, Any]:
         "conversation_thread_id": uuid.uuid4().hex,  # Unique thread ID for each conversation
     }
 
-    config = {
-        "user_greeting": state["greeting"],
-        "user_identifier": state["identifier"],
-        "user_identifier_type": state["identifier_type"],
-        "user_identifier_type_enum": state["identifier_type_enum"],
-        "memory_config": {"configurable": {"thread_id": state["conversation_thread_id"]}},
-    }
+    agent_config = AgentConfig(
+        user_greeting=state["greeting"],
+        user_identifier=state["identifier"],
+        user_identifier_type=state["identifier_type"],
+        user_identifier_type_enum=state["identifier_type_enum"],
+        memory_config={"configurable": {"thread_id": state["conversation_thread_id"]}},
+    )
 
-    state["lif_ai_agent"] = await LIFAIAgent.setup(config)
+    state["lif_ai_agent"] = await LIFAIAgent.setup(agent_config.model_dump())
     conversation_states[user["username"]] = state
     return state
 
@@ -213,7 +224,7 @@ async def login(request: LoginRequest) -> LoginResponse:
         return LoginResponse(
             success=True,
             message="Login successful",
-            user=_user_details(user),
+            user=_build_user_details(user),
             access_token=access_token,
             refresh_token=refresh_token,
         )
@@ -252,7 +263,7 @@ async def get_me(username: str = Depends(get_current_user)) -> UserDetails:
     user = _find_user(username)
     if user is None:
         raise HTTPException(status_code=404, detail="User not found")
-    return _user_details(user)
+    return _build_user_details(user)
 
 
 @app.get("/initial-message", response_model=ChatMessage)
@@ -288,7 +299,7 @@ async def start_conversation(username: str = Depends(get_current_user)) -> ChatM
     agent = state.get("lif_ai_agent")
     task = "load_profile"
 
-    # TODO: Get this prompt from env variable
+    # TODO(#986): move this hard-coded query prompt to env/config
     query = "Load my most recent interaction. Load other profile details including academic progress, coursework, skills, competencies, and credentials. And generate an appropriate response"
 
     response = await agent.ask_agent(task, query)
@@ -331,7 +342,7 @@ async def logout(username: str = Depends(get_current_user)) -> LogoutResponse:
         agent = state["lif_ai_agent"]
         task = "save_interaction_summary"
 
-        # TODO: Get this prompt from env variable
+        # TODO(#986): move this hard-coded query prompt to env/config
         response = await agent.ask_agent(
             task, "Summarize our conversation extracting metadata about the conversation and then save it"
         )
