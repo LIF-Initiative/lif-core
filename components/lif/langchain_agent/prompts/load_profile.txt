@@ -24,6 +24,7 @@ Follow these steps carefully:
 - Generate your response in markdown format ensuring it's presentable in a chat message avoiding paragraphs and paragraphs heading.
 - Keep your response concise with maximum word count of 250.
 - Write in a clear, professional, and structured tone.
+- At the very end, offer 2 to 4 short suggested conversation starters the user can tap, each wrapped on its own in double angle brackets, e.g. `<<Explore career options>>` `<<Review my credentials>>`. Keep each to a few words and only suggest genuinely relevant next steps.
 
 Output:
 A well-structured initial response for student setting the context for the conversation

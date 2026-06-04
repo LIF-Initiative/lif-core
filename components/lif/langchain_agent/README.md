@@ -7,7 +7,6 @@ Wraps LangChain/LangGraph into a `LIFAIAgent` purpose-built for the Advisor's ch
 | File | Contents |
 |---|---|
 | `core.py` | `LIFAIAgent` — top-level interface (`setup`, `ask_agent`) |
-| `helpers.py` | Prompt + chain construction helpers |
 | `memory.py` | LangGraph memory wiring (`langmem`-backed) |
 | [`prompts/`](prompts/) | Text-file prompt templates loaded at runtime |
 
