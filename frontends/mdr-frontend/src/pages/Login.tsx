@@ -105,8 +105,7 @@ const Login: React.FC = () => {
                   the moment the user is about to bounce to Cognito to sign
                   up and is about to be waiting for that code — rather than
                   inside the email body itself, where it's redundant if they
-                  see the mail and useless if they don't. Issue #948 (@cbeach47
-                  review of #946). */}
+                  see the mail and useless if they don't. Issue #948. */}
               <Text size="1" color="gray" align="center" mt="1">
                 If you're registering, you'll receive a 6-digit code by email.
                 Check your Spam folder if it doesn't arrive within a minute.
