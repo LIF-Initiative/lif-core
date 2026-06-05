@@ -4,6 +4,7 @@ from importlib.resources import files
 from typing import TYPE_CHECKING, AsyncGenerator, Optional
 
 import httpx
+from lif.datatypes.core import MdrRetrieveDataModelsDTO
 from lif.exceptions.core import LIFException, ResourceNotFoundException
 from lif.logging import get_logger
 
@@ -194,6 +195,65 @@ def load_openapi_schema(config: "LIFSchemaConfig") -> tuple[dict, str]:
 
     # MDR is expected - fetch it (will raise on failure, no fallback)
     return fetch_schema_from_mdr(config), "mdr"
+
+
+def fetch_data_models_from_mdr(
+    config: "LIFSchemaConfig", name: str, version: str, contributor_organization: str
+) -> MdrRetrieveDataModelsDTO:
+    """
+    Fetch a list of data models from MDR matching the given criteria using configuration.
+
+    Args:
+        config: LIFSchemaConfig instance with MDR settings
+        name: The name of the data model to fetch
+        version: The version of the data model to fetch
+        contributor_organization: The contributor organization of the data model to fetch
+
+    Returns:
+        A list of matching data models
+
+    Raises:
+        MDRClientException: If MDR is unavailable or returns an error
+        MDRConfigurationError: If OPENAPI_DATA_MODEL_ID is not configured
+        ResourceNotFoundException: If the data model is not found
+    """
+    url = (
+        f"{config.mdr_api_url}/datamodels/"
+        f"?name={name}"
+        f"&version={version}"
+        f"&contributor_organization={contributor_organization}"
+        f"&pagination=false"
+    )
+
+    headers = _build_mdr_headers(config.mdr_api_auth_token)
+
+    logger.info(f"Fetching data models from MDR: {url}")
+
+    try:
+        with _create_sync_client(config.mdr_timeout_seconds) as client:
+            response = client.get(url, headers=headers)
+        response.raise_for_status()
+        logger.info("Successfully fetched data models from MDR")
+        return MdrRetrieveDataModelsDTO(**response.json())
+
+    except httpx.TimeoutException as e:
+        msg = f"MDR request timed out after {config.mdr_timeout_seconds}s: {e}"
+        logger.error(msg)
+        raise MDRClientException(msg)
+
+    except httpx.ConnectError as e:
+        msg = f"Failed to connect to MDR at {config.mdr_api_url}: {e}"
+        logger.error(msg)
+        raise MDRClientException(msg)
+
+    except httpx.HTTPStatusError as e:
+        logger.error(f"MDR HTTP error: {e.response.status_code} - {e.response.text}")
+        raise MDRClientException(f"MDR returned HTTP {e.response.status_code}: {e.response.text}")
+
+    except Exception as e:
+        msg = f"Unexpected error fetching from MDR: {e}"
+        logger.error(msg)
+        raise MDRClientException(msg)
 
 
 # =============================================================================

@@ -1,10 +1,9 @@
 from typing import Any, Dict
 
-import httpx
 from fastapi import APIRouter, Query, Request
 from lif.datatypes.core import TargetTransformationDataModelDTO, TargetTransformationDataModelsDTO
 from lif.lif_schema_config.core import LIFSchemaConfig
-from lif.mdr_client.core import load_openapi_schema
+from lif.mdr_client.core import fetch_data_models_from_mdr
 from lif.mdr_utils.logger_config import get_logger
 
 router = APIRouter()
@@ -52,16 +51,19 @@ async def get_data(
 
     # Retrieve Org LIF schema from MDR
 
-    openapi, source = load_openapi_schema(CONFIG)
-    logger.info(f"OpenAPI schema loaded from {source}: {str(openapi)}")
+    data_models = fetch_data_models_from_mdr(
+        CONFIG, data_model_name, data_model_version, data_model_contributor_organization
+    )
+
+    logger.info(f"Data models fetched from MDR: {data_models.total}")
 
     # Retrieve learner data from Query Planner
 
-    async with httpx.AsyncClient() as client:
-        response = await client.post(CONFIG.query_planner_query_url, json=openapi)
-        if response.status_code == 200:
-            response_json = response.json()
-            logger.info("Successfully retrieved learner data from Query Planner: %s", str(response_json))
+    # async with httpx.AsyncClient() as client:
+    #     response = await client.post(CONFIG.query_planner_query_url, json=openapi)
+    #     if response.status_code == 200:
+    #         response_json = response.json()
+    #         logger.info("Successfully retrieved learner data from Query Planner: %s", str(response_json))
 
     # Transform data with Translator
 

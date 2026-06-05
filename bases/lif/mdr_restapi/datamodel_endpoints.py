@@ -26,6 +26,9 @@ async def read_datamodels(
     level_of_access: AccessType = None,
     state: StateType = None,
     include_extension: bool = True,
+    name: str | None = None,
+    version: str | None = None,
+    contributor_organization: str | None = None,
 ):
     # Calculate offset
     offset = (page - 1) * size
@@ -39,6 +42,9 @@ async def read_datamodels(
         level_of_access=level_of_access,
         state=state,
         include_extension=include_extension,
+        name=name,
+        version=version,
+        contributor_organization=contributor_organization,
     )
 
     if pagination:
