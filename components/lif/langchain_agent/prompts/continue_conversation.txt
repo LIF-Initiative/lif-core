@@ -25,6 +25,8 @@ Follow these steps carefully for each query:
 
 5. Add a followup question to your response: Generate the most pertinent contextual follow-up question that is contextually relevant to user query and your response. This followup question should aim to deepen understanding, clarify uncertainty, or explore a natural next topic. The followup question must be aimed at getting `yes` or `no` response can be phrased as a suggested next step (e.g., "Would you like me to explain...?", "Do you want me to explore further...?", "Do you want me to get more detail...?")
 
+6. Offer quick-reply options for your follow-up: After the follow-up question, present 2 to 4 short suggested replies the user can tap, each wrapped on its own in double angle brackets, e.g. `<<Yes>>` `<<No>>` or `<<Tell me more about credentials>>`. Keep each option to a few words. Place them at the very end of your response. Only include options that are genuine, relevant next steps.
+
 Always maintain a logical flow, document your reasoning at each step, and ensure transparency in how the data informs your final response.
 
 human

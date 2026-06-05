@@ -4,6 +4,7 @@ import mysql.connector
 import os
 import re
 from typing import AsyncGenerator
+from urllib.parse import urlparse, urlunparse
 
 from fastapi import HTTPException, Request, status
 from lif.mdr_utils.logger_config import get_logger
@@ -15,8 +16,39 @@ from sqlalchemy.orm import sessionmaker
 logger = get_logger(__name__)
 
 
+def _redact_url(url: str) -> str:
+    """Mask the password in a SQLAlchemy connection URL for safe logging.
+
+    Returns the URL with the password replaced by ``***`` while preserving
+    scheme, username, host, port, and database. URLs without a password
+    are returned unchanged. Issue #938: the previous startup log emitted
+    the full URL including the credential, exposing the dev/demo DB
+    password to anyone with read access on the shared CloudWatch log
+    group.
+
+    Best-effort: this is only called for logging, so we never want it to
+    raise and take down MDR startup. Any parsing surprise (urlparse on
+    a malformed URL, ``parts.port`` raising on a non-integer port — which
+    happens when an env var was unset and the URL contains the literal
+    string ``None``) returns a sentinel so the log line still emits
+    something operator-readable.
+    """
+    try:
+        parts = urlparse(url)
+        if not parts.password:
+            return url
+        user = parts.username or ""
+        host = parts.hostname or ""
+        netloc = f"{user}:***@{host}"
+        if parts.port:
+            netloc += f":{parts.port}"
+        return urlunparse(parts._replace(netloc=netloc))
+    except ValueError:
+        return "<unparseable-url>"
+
+
 DATABASE_URL = f"postgresql+asyncpg://{os.getenv('POSTGRESQL_USER')}:{os.getenv('POSTGRESQL_PASSWORD')}@{os.getenv('POSTGRESQL_HOST')}:{os.getenv('POSTGRESQL_PORT')}/{os.getenv('POSTGRESQL_DB')}"
-logger.info(f"DATABASE_URL : {DATABASE_URL}")
+logger.info("DATABASE_URL : %s", _redact_url(DATABASE_URL))
 # Create an async engine
 engine = create_async_engine(DATABASE_URL, echo=True)
 

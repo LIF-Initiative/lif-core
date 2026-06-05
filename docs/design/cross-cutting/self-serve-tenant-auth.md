@@ -39,6 +39,8 @@ Each numbered step is described in detail below.
 
 **Flow:** Cognito hosts the sign-up UI and sends a confirmation email. The SPA frontend uses Authorization Code with PKCE (no client secret, no implicit grant). On successful confirmation, Cognito triggers a **post-confirmation Lambda**.
 
+**Pre-signup abuse controls (issue #917):** A **pre-signup Lambda** runs *before* Cognito creates the user. PR 1 rejects sign-ups from disposable / throwaway email domains. A Cognito pre-signup trigger blocks a registration by **raising** — Cognito relays the exception message to the Hosted UI; returning the event lets sign-up proceed (`autoConfirmUser` does *not* gate registration, so it isn't used to reject). The blocklist is a baseline list baked into the Lambda, optionally extended by an SSM parameter (`/<env>/<service>-pre-signup/DisposableDomains`, comma/whitespace-separated) so ops can add domains without a redeploy. The parameter is **not** managed by CloudFormation (so manual edits aren't clobbered on deploy); when it's absent or unreadable the Lambda fails open to the baseline list. Later PRs of #917 extend this same enforcement point with rolling daily / total caps (PG schema count) and an invite-code bypass.
+
 **What the Lambda does:** Hits the MDR's `POST /tenants/provision` endpoint (authenticated by a service API key, *not* the new user's JWT — they don't have one yet) with the user's Cognito group name. MDR responds idempotently:
 
 - `201 Created` if the schema was newly minted.
@@ -95,6 +97,7 @@ The recipient registers (or signs in) and presents the token to `POST /tenants/i
 | Concern | Path |
 |---|---|
 | Cognito stack | `cloudformation/*-cognito-selfserve*.yml` |
+| Pre-signup Lambda (disposable-email blocklist, #917) | `cloudformation/cognito-selfserve.yml` (inline) + `test/cloudformation/test_pre_signup_lambda.py` |
 | Post-confirmation Lambda | `cloudformation/*-cognito-selfserve*.yml` + Lambda source |
 | Schema cloning SQL | `projects/lif_mdr_database/migrations/V1.4__*.sql` |
 | `provision_tenant` service | `components/lif/mdr_services/tenant_service.py` |
