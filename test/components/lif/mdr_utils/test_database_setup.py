@@ -63,12 +63,17 @@ def _make_request(tenant_schema):
     return types.SimpleNamespace(state=types.SimpleNamespace(tenant_schema=tenant_schema))
 
 
-def _patch_session(monkeypatch):
+def _patch_session(monkeypatch, schema_exists=True):
     """Patch `async_session` so `get_session` runs without a real DB.
 
-    Returns the mock session whose `.execute` records the SQL it was handed.
+    `schema_exists` controls what the `information_schema.schemata` existence
+    probe returns (`.first()` → a row when True, else None). Returns the mock
+    session whose `.execute` records the SQL it was handed.
     """
     session = AsyncMock()
+    result = MagicMock()
+    result.first.return_value = (1,) if schema_exists else None
+    session.execute.return_value = result
     ctx = AsyncMock()
     ctx.__aenter__.return_value = session
     ctx.__aexit__.return_value = False
@@ -93,11 +98,25 @@ class TestGetSessionSearchPath:
     the sanitizer wouldn't emit, and always reset (pooled connections persist
     search_path across requests)."""
 
-    async def test_valid_tenant_routes_tenant_first_then_public(self, monkeypatch):
-        session = _patch_session(monkeypatch)
+    async def test_valid_existing_tenant_routes_tenant_first_then_public(self, monkeypatch):
+        session = _patch_session(monkeypatch, schema_exists=True)
         await _drive(_make_request("tenant_acme"))
-        # public is last so PG-level types resolve, but tables resolve tenant-first.
-        assert _executed_sql(session) == ['SET search_path TO "tenant_acme", public']
+        sql = _executed_sql(session)
+        # Existence is verified first, then routed tenant-first (public last so
+        # PG-level types still resolve).
+        assert any("information_schema.schemata" in s for s in sql)
+        assert sql[-1] == 'SET search_path TO "tenant_acme", public'
+
+    async def test_resolved_but_missing_schema_fails_closed(self, monkeypatch):
+        # #961 part 2: a valid-format schema that isn't provisioned must DENY,
+        # not silently fall through to `public`. The existence probe runs, but
+        # search_path is never pointed at the missing schema.
+        session = _patch_session(monkeypatch, schema_exists=False)
+        agen = get_session(_make_request("tenant_ghost"))
+        with pytest.raises(HTTPException) as exc_info:
+            await agen.__anext__()
+        assert exc_info.value.status_code == 500
+        assert not any("SET search_path" in s for s in _executed_sql(session))
 
     async def test_no_tenant_resets_to_public(self, monkeypatch):
         # A non-tenant request MUST still issue a SET — otherwise a pooled
