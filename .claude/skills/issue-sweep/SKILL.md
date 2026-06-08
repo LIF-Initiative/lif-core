@@ -23,9 +23,11 @@ gh pr list --state merged --limit 60 --json number,title,mergedAt,closingIssuesR
 ```
 Surface the count and the **stalest** issues (oldest `updatedAt`) — those are the richest closure source. Note this repo's convention: merged PRs and `Tracker:`-prefixed commits often reference the resolving issue (`#NNN → PR #MMM`), so resolution evidence usually lives in a merged PR body, a commit `--grep`, or the presence of the named code.
 
+> **Scope deliberately — this sweep is expensive.** Each issue costs ~75K tokens (two judges, each running ~30 `gh`/`git`/`grep` calls). A full open-issue sweep of a large repo (lif-core has 300+ open) is ~20M+ tokens. **Default to a label filter or the stalest ~10–20 issues**, not all-open, unless the user explicitly asks for the whole backlog. Always report the scope you swept (Phase 3) so "nothing else to close" isn't read as "swept everything."
+
 ## Phase 2 — Fan out + arbitrate (Workflow)
 
-Run a Workflow that judges each open issue independently and arbitrates only where the cheap judges disagree. Pass the Phase-1 issue list via `args`. (Invoking this skill is explicit opt-in to the Workflow tool; if Workflow is unavailable, fall back to spawning the Phase-2 agents directly with the Agent tool.)
+Run a Workflow that judges each open issue independently and arbitrates only where the cheap judges disagree. **Inline the Phase-1 issue list directly into the script** as a `const` (see below) — do *not* pass it through the Workflow `args` field; that path has proven unreliable here (the array arrives undefined and `pipeline()` throws). (Invoking this skill is explicit opt-in to the Workflow tool; if Workflow is unavailable, fall back to spawning the Phase-2 agents directly with the Agent tool.)
 
 ```javascript
 export const meta = {
@@ -34,7 +36,11 @@ export const meta = {
   phases: [{ title: 'Judge' }, { title: 'Arbitrate' }],
 }
 
-const issues = args.issues   // [{number, title, labels}], from Phase 1
+// Inline the Phase-1 issue list here (do NOT use args.issues — see note above).
+const issues = [
+  // { number: 75, title: "Add Async support to Advisor API", labels: ["LIF Advisor API"] },
+  // …one entry per issue in scope…
+]
 
 const VERDICT = {
   type: 'object',
