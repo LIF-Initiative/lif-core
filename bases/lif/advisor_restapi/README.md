@@ -5,6 +5,7 @@ FastAPI base for the LIF Advisor: a conversational interface that lets a user qu
 ## Endpoints
 - `POST /login` — demo auth against an in-memory user list; returns access + refresh JWTs
 - `POST /refresh-token` — exchange refresh token for a new access token
+- `GET  /me` — authenticated user's profile; used by the frontend to restore a session on page refresh
 - `GET  /initial-message` — greeting message for a freshly-logged-in user
 - `POST /start-conversation` — kicks off the conversation by loading the user's profile via the agent
 - `POST /continue-conversation` — sends a user message, returns the agent's reply

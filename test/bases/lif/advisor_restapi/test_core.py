@@ -417,3 +417,121 @@ async def test_logout():
             refresh_token_expected_response = {"detail": "Refresh token invalid or revoked"}
             refresh_token_diff = DeepDiff(refresh_token_expected_response, refresh_token_response_json)
             assert not refresh_token_diff, refresh_token_diff  # prints out the differences if any
+
+
+@pytest.mark.asyncio
+async def test_get_me_returns_current_user():
+    """/me returns the authenticated user's profile so the frontend can restore a session."""
+    mocked_ai_agent = MockAgent()
+
+    async with get_client() as client:
+        with patch.object(LIFAIAgent, "setup", new=AsyncMock(return_value=mocked_ai_agent)):
+            login_response_json = await login_user_to_lif_advisor(
+                client=client, username=USER_DETAILS_ALEX["username"], password=USER_DETAILS_ALEX["password"]
+            )
+            access_token = login_response_json.get("access_token")
+
+            auth_headers = {"Authorization": f"Bearer {access_token}"}
+            me_response = await client.get("/me", headers=auth_headers)
+
+            assert me_response.status_code == 200, me_response.text
+            expected_response = {
+                "username": "atsatrian_lifdemo@stateu.edu",
+                "firstname": "Alan",
+                "lastname": "Tsatrian",
+                "identifier": "100001",
+                "identifier_type": "SCHOOL_ASSIGNED_NUMBER",
+                "identifier_type_enum": "SCHOOL_ASSIGNED_NUMBER",
+            }
+            diff = DeepDiff(expected_response, me_response.json())
+            assert not diff, diff  # prints out the differences if any
+
+
+@pytest.mark.asyncio
+async def test_get_me_requires_authentication():
+    """/me must reject unauthenticated requests (HTTPBearer -> 403)."""
+    async with get_client() as client:
+        response = await client.get("/me")
+        assert response.status_code == 403, response.text
+
+
+@pytest.mark.asyncio
+async def test_start_conversation_is_idempotent_when_already_started():
+    """A page refresh re-runs start-conversation; an already-started conversation
+    should welcome the user back without erroring or re-invoking the agent."""
+    mocked_ai_agent = MockAgent()
+
+    async with get_client() as client:
+        with patch.object(LIFAIAgent, "setup", new=AsyncMock(return_value=mocked_ai_agent)):
+            login_response_json = await login_user_to_lif_advisor(
+                client=client, username=USER_DETAILS_ALEX["username"], password=USER_DETAILS_ALEX["password"]
+            )
+            access_token = login_response_json.get("access_token")
+            auth_headers = {"Authorization": f"Bearer {access_token}"}
+
+            initial_message_response = await client.get("/initial-message", headers=auth_headers)
+            assert initial_message_response.status_code == 200, initial_message_response.text
+
+            first_start = await client.post("/start-conversation", headers=auth_headers)
+            assert first_start.status_code == 200, first_start.text
+            assert first_start.json()["content"] == "This is mocked content"
+            assert mocked_ai_agent.ask_agent.await_count == 1
+
+            # Simulates the refresh: conversation already started -> no error, no re-run.
+            second_start = await client.post("/start-conversation", headers=auth_headers)
+            assert second_start.status_code == 200, second_start.text
+            assert second_start.json()["content"] == "Welcome back! We can pick up right where we left off."
+            assert mocked_ai_agent.ask_agent.await_count == 1
+
+
+@pytest.mark.asyncio
+async def test_initial_message_rehydrates_session_after_state_loss():
+    """A still-valid token whose in-memory state was lost (process restart / a
+    different task instance) should rebuild the session instead of failing."""
+    mocked_ai_agent = MockAgent()
+
+    async with get_client() as client:
+        with patch.object(LIFAIAgent, "setup", new=AsyncMock(return_value=mocked_ai_agent)) as setup_mock:
+            login_response_json = await login_user_to_lif_advisor(
+                client=client, username=USER_DETAILS_ALEX["username"], password=USER_DETAILS_ALEX["password"]
+            )
+            access_token = login_response_json.get("access_token")
+
+            # Simulate loss of in-memory state (process restart / different task).
+            core.conversation_states.clear()
+            core.refresh_tokens_store.clear()
+
+            auth_headers = {"Authorization": f"Bearer {access_token}"}
+            initial_message_response = await client.get("/initial-message", headers=auth_headers)
+
+            assert initial_message_response.status_code == 200, initial_message_response.text
+            assert initial_message_response.json()["content"] == (
+                "Hello Alan! Hang on for a second while I familiarize myself with your background."
+            )
+            # setup() ran twice: once on login, once to rebuild the lost session.
+            assert setup_mock.await_count == 2
+
+
+@pytest.mark.asyncio
+async def test_logout_succeeds_when_session_state_already_cleared():
+    """Logout must succeed (and not invoke the agent) when no in-memory state
+    remains — e.g. a session restored after a process restart."""
+    mocked_ai_agent = MockAgent()
+
+    async with get_client() as client:
+        with patch.object(LIFAIAgent, "setup", new=AsyncMock(return_value=mocked_ai_agent)):
+            login_response_json = await login_user_to_lif_advisor(
+                client=client, username=USER_DETAILS_ALEX["username"], password=USER_DETAILS_ALEX["password"]
+            )
+            access_token = login_response_json.get("access_token")
+
+            # Simulate loss of in-memory state before logout.
+            core.conversation_states.clear()
+            core.refresh_tokens_store.clear()
+
+            auth_headers = {"Authorization": f"Bearer {access_token}"}
+            logout_response = await client.post("/logout", headers=auth_headers)
+
+            assert logout_response.status_code == 200, logout_response.text
+            assert logout_response.json() == {"success": True}
+            mocked_ai_agent.ask_agent.assert_not_awaited()
