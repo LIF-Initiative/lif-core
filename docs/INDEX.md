@@ -85,7 +85,7 @@
 
 ### `docs/operations/proposals/` — Proposed work
 
-- [`advisor-streaming.md`](operations/proposals/advisor-streaming.md) — End-to-end token streaming for the Advisor (NDJSON over `astream_events` + `StreamingResponse` + a fetch reader), incl. the single-worker reframe concurrency fix, ALB idle-timeout risk, rollout, and PR sequencing (#970).
+- [`advisor-streaming.md`](operations/proposals/advisor-streaming.md) — End-to-end token streaming for the Advisor (NDJSON over `astream_events` + `StreamingResponse` + a fetch reader), including the single-worker reframe concurrency fix, ALB idle-timeout risk, rollout, and PR sequencing (#970).
 
 ---
 

@@ -49,8 +49,8 @@ async def ask_agent_stream(self, task: str, message: str) -> AsyncIterator[dict]
     {"type":"final","content":full,"tokens":N,"cost":C} (or {"type":"error",...})."""
 ```
 
-- Build the model with `streaming=True, stream_usage=True` (`create_agent_with_memory`); consume `agent.astream_events(..., version="v2")`.
-- Surface only the user-facing turn: filter `event["event"] == "on_chat_model_stream"` **and** guarded `(event.get("metadata") or {}).get("langgraph_node") == "agent"` — this excludes the `pre_model_hook` summarization stream and tool-planning tokens. The `langgraph_node == "agent"` filter is load-bearing.
+- Build the model with `streaming=True, stream_usage=True` (`create_agent_with_memory`); consume `agent.astream_events(..., version="v2")`. The two flags are independent: `streaming=True` turns on token-by-token emission, while `stream_usage=True` attaches token-usage metadata to those streamed chunks — needed so the token/cost tally (below) can be built from the stream itself rather than a separate accounting call.
+- Surface only the user-facing turn. Under `astream_events` the graph emits token-stream events from *several* internal LLM calls — the `pre_model_hook` summarization, tool-planning, and the actual answer — all interleaved. We forward only the answer's tokens by keeping events that are **both** `event["event"] == "on_chat_model_stream"` **and** (guarded) `(event.get("metadata") or {}).get("langgraph_node") == "agent"`. The `langgraph_node == "agent"` check is load-bearing: without it, summarization and tool-planning tokens leak into the user's visible stream.
 - **Reframe** stays a separate, non-streamed call that runs first (its tokens/cost fold into the final tally) — but is made **non-blocking** (see risk #2). It adds the dominant time-to-first-token latency.
 - **Token/cost:** aggregate the agent-node `on_chat_model_end` messages and run them through the existing `calculate_tokens_and_cost` + `LLM_TOKEN_COSTS` (`core.py:236-264`). Do **not** use a provider-locked `get_openai_callback`.
 - `pre_model_hook`/summarization and `InMemorySaver` checkpointing still fire under `astream_events` (same graph execution). Only assign `self.messages` on success; always terminate the generator with a `final` or `error` chunk (never raise out of it) so the API layer can close the stream cleanly.
@@ -68,6 +68,8 @@ Convert `/start-conversation` and `/continue-conversation` to `fastapi.responses
 
 New `src/utils/streaming.ts`: a `fetch().body.getReader()` + `TextDecoder` async generator with correct partial-line buffering (keep the trailing incomplete line; flush the remainder at end), **guarded** per-line `JSON.parse` (a malformed line is dropped, not fatal), and `reader.cancel()` in a `finally` so abort/early-exit releases the connection.
 
+> **On dropping a malformed line:** it loses only that one mid-stream `token` *delta*, not the answer. The terminal `final` chunk carries the full assembled `final.content` (per the contract above), so the complete text still renders at end-of-stream — the display self-heals rather than staying permanently short a chunk. The only content-losing case is a malformed `final`/`error` line itself, which surfaces as a stream error (the generator never sees a terminal chunk), not as silently-missing text.
+
 Rework `src/hooks/useChat.ts` to consume it: append `token` deltas into the existing typing-placeholder bot message, capture `tokens`/`cost` from `final`, render `error` gracefully.
 
 - **Abort:** thread an `AbortController` `signal` into the `fetch` (the load-bearing line); store the controller in a `useRef` and abort on a new send / unmount.
@@ -76,13 +78,13 @@ Rework `src/hooks/useChat.ts` to consume it: append `token` deltas into the exis
 
 ## Rollout: content negotiation, not twin flags
 
-The frontend Vite flag is **build-time only** (baked at `npm run build`), so coordinated must-match flags are painful. Instead:
+The frontend Vite flag is **build-time only** — Vite reads `VITE_*` env vars during `npm run build` and compiles each value into the static JS bundle as a literal constant, so it can't be changed after the build without rebuilding the bundle. That makes a frontend flag which must stay in lockstep with a backend flag painful to operate. Instead:
 
-- Backend `LIF_ADVISOR_STREAMING` env (default off, **runtime-flippable** via ECS task-def update — no rebuild).
+- Backend `LIF_ADVISOR_STREAMING` env (default off). Toggling it is a **config change, not an image rebuild**: edit the value in the ECS task definition and redeploy. That is a new task-def revision plus a rolling task restart — a brief rollout, *not* zero-downtime — but with no image rebuild and no code change, which is the win over the build-time frontend flag.
 - The frontend sends `Accept: application/x-ndjson`; the reader branches on the response `Content-Type`. An old frontend + new backend stays safe automatically; an old backend + new frontend falls back to the buffered path.
 - The backend streams only when `LIF_ADVISOR_STREAMING=true` **and** the `Accept` header is present; otherwise it returns today's `ChatMessage` JSON.
 
-Rollback = flip the backend env off (instant, no rebuild). Keep the legacy axios path in `useChat.ts` until streaming is proven in demo. Verify on `*.dev.lif.unicon.net` with a multi-minute conversation (to exercise the 30s ALB window) before promoting pinned tags to demo.
+Rollback = flip the backend env off (no image rebuild — the same task-def-revision + rolling-restart as above, on the order of a normal ECS redeploy). Keep the legacy axios path in `useChat.ts` until streaming is proven in demo. Verify on `*.dev.lif.unicon.net` with a multi-minute conversation (to exercise the 30s ALB window) before promoting pinned tags to demo.
 
 ## Deployment changes
 
@@ -113,10 +115,10 @@ Log per stream: **time-to-first-token** (the early-warning for the ALB-idle prob
 
 1. **ALB idle timeout** — raise the shared knob to ~120s (recommended) vs. rely solely on the immediate `start`-chunk keepalive.
 2. **Reframe fix scope** — fix the blocking `llm.invoke` inside #970 (recommended) vs. split as a standalone precursor PR (it's an independently shippable latent bug).
-3. **Final-usage source** — aggregate `on_chat_model_end` agent-node messages (recommended, no extra round-trip) vs. `aget_state` to mirror `ask_agent` exactly.
+3. **Final-usage source** — aggregate `on_chat_model_end` agent-node messages (recommended, no extra round-trip) vs. LangGraph's `aget_state` (the async `get_state`) to read the final assembled messages, mirroring how `ask_agent` reads `ainvoke`'s result.
 
 ## Out of scope / related
 
-- httpOnly-cookie auth migration ([#977](https://github.com/LIF-Initiative/lif-core/issues/977)) — if adopted, the fetch auth approach above changes (cookies ride automatically).
+- httpOnly - cookie auth migration ([#977](https://github.com/LIF-Initiative/lif-core/issues/977)) — if adopted, the fetch auth approach above changes (cookies ride automatically).
 - `<<...>>` marker hygiene in saved summaries ([#983](https://github.com/LIF-Initiative/lif-core/issues/983)).
 - Multi-instance scaling — blocked by the in-memory `conversation_states` / `InMemorySaver`; demo is `MinCount=1`. Out of scope here.
