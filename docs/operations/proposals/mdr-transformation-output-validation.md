@@ -23,7 +23,7 @@ The runtime translator already validates against the schema (`components/lif/tra
 
 ## Approach
 
-1. **Add `ajv` (+ `ajv-formats`)** to `frontends/mdr-frontend` dependencies.
+1. **Add `ajv` (+ `ajv-formats`)** to `frontends/mdr-frontend` dependencies. Both are **MIT-licensed** (the same permissive license as the `jsonata` dependency already in `mdr-frontend`), so they're clear for open-source use.
 2. **New pure util** `validateOutputAgainstSchema(output, schema) → { valid: boolean; errors: { path: string; message: string }[] }` (e.g. in `src/utils/schemaValidation.ts`):
    - Compile with `new Ajv({ allErrors: true, strict: false })` + `ajv-formats` so unknown/format keywords don't throw; **memoize the compiled validator per schema reference** (compiling is the expensive step).
    - Map Ajv errors to friendly rows: `instancePath` (or `/` for root) + `message` (+ the offending keyword, e.g. `required`, `type`, `additionalProperties`).
@@ -33,9 +33,9 @@ The runtime translator already validates against the schema (`components/lif/tra
 
 ## Design considerations
 
-- **`additionalProperties` noise.** If the target schema sets `additionalProperties: false`, a stray output key (often a casing mistake) flags as an error — which is exactly the value (catches PascalCase/camelCase slips at authoring time). But it can be noisy; consider grouping "unexpected property" separately from "missing required / wrong type," or a toggle to mute extra-property findings. Decide during implementation against a real generated schema.
+- **`additionalProperties` noise.** If the target schema sets `additionalProperties: false`, a stray output key (often a casing mistake) flags as an error. That error **is the feature working as intended**: surfacing a PascalCase/camelCase slip at authoring time — rather than letting it through to fail at runtime in the translator — is precisely the value this check adds. But it can be noisy; consider grouping "unexpected property" separately from "missing required / wrong type," or a toggle to mute extra-property findings. Decide during implementation against a real generated schema.
 - **Casing convention.** Ajv validates structure; the generated target schema already encodes the LIF PascalCase-entity / camelCase-scalar convention, so a casing error manifests as `additionalProperties` (wrong key) + `required` (missing correct key) — exactly the feedback we want.
-- **Performance.** Compile once per schema (`useMemo` on the schema reference); validation itself is fast and runs inside the existing debounced recompute effect.
+- **Performance.** Compile once per schema (`useMemo` on the schema reference); validation itself is fast and runs inside the existing **debounced recompute effect** — the `useEffect` in `BulkTransformationsBody` that already rebuilds `combinedOutput` a short delay *after* the author stops editing (so it fires once per edit-pause, not on every keystroke). Schema validation piggybacks on that same effect, adding no new render path.
 - **Non-blocking.** This is authoring feedback only — it does **not** block saving transformations. It mirrors, and front-runs, the translator's runtime validation.
 
 ## Testing
