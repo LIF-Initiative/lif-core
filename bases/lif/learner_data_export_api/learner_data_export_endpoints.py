@@ -1,7 +1,10 @@
+from http import HTTPStatus
 from typing import Any, Dict
 
-from fastapi import APIRouter, Query, Request
+import httpx
+from fastapi import APIRouter, HTTPException, Query, Request
 from lif.datatypes.core import TargetTransformationDataModelDTO, TargetTransformationDataModelsDTO
+from lif.datatypes.mdr_consumer import MdrRetrieveDataModelsDTO
 from lif.lif_schema_config.core import LIFSchemaConfig
 from lif.mdr_client.core import fetch_data_models_from_mdr
 from lif.mdr_utils.logger_config import get_logger
@@ -51,23 +54,65 @@ async def get_data(
 
     # Retrieve Org LIF schema from MDR
 
-    data_models = fetch_data_models_from_mdr(
+    data_models_raw = fetch_data_models_from_mdr(
         CONFIG, data_model_name, data_model_version, data_model_contributor_organization
     )
+    data_models = MdrRetrieveDataModelsDTO(**data_models_raw)
 
-    logger.info(f"Data models fetched from MDR: {data_models.total}")
+    if data_models.total > 1:
+        error_msg = "Found multiple target data models from query parameters"
+        logger.error("%s - %s", error_msg, data_models.total)
+        raise HTTPException(status_code=HTTPStatus.BAD_REQUEST, detail=error_msg)
+
+    if data_models.total == 0:
+        raise HTTPException(
+            status_code=HTTPStatus.BAD_REQUEST, detail="Unable to determine target data model from query parameters"
+        )
+
+    logger.info(f"Data model fetched from MDR: {data_models.data[0].Id}")
 
     # Retrieve learner data from Query Planner
 
-    # async with httpx.AsyncClient() as client:
-    #     response = await client.post(CONFIG.query_planner_query_url, json=openapi)
-    #     if response.status_code == 200:
-    #         response_json = response.json()
-    #         logger.info("Successfully retrieved learner data from Query Planner: %s", str(response_json))
+    # TODO: Is there a way to enumerate the selected_fields without hardcoding them?
+    lif_query = {
+        "filter": {"Person": {"Identifier": [{"identifier": learner_id, "identifierType": "SCHOOL_ASSIGNED_NUMBER"}]}},
+        "selected_fields": [
+            "Person.Name",
+            "Person.Contact",
+            "Person.Identifier",
+            "Person.EmploymentLearningExperience",
+            "Person.PositionPreferences",
+            "Person.CredentialAward",
+            "Person.CourseLearningExperience",
+            "Person.Proficiency",
+            "Person.EmploymentPreferences",
+        ],
+    }
+    async with httpx.AsyncClient() as client:
+        response = await client.post(CONFIG.query_planner_query_url, json=lif_query)
+        if response.status_code == 200:
+            lif_learner_data = response.json()
+        # TODO: Need to gracefully fail.
+
+    logger.info(f"LIF learner data returned from Query Planner: {lif_learner_data}")
 
     # Transform data with Translator
 
-    return {"total": "data"}
+    translator_url = CONFIG.translator_translate_url(
+        source_schema_id=CONFIG.openapi_data_model_id, target_schema_id=str(data_models.data[0].Id)
+    )
+    async with httpx.AsyncClient() as client:
+        # TODO: Should the data passed to the translator be handled better than lif_learner_data[0] ?
+        translator_response = await client.post(translator_url, json=lif_learner_data[0])
+        if translator_response.status_code == 200:
+            translated_data = translator_response.json()
+            logger.info("Successfully translated learner data: %s", str(translated_data))
+        else:
+            error_msg = "Unable to translate the learner data from the LIF model into the target model"
+            logger.error("%s - %s - %s", error_msg, translator_response.status_code, translator_response.json())
+            raise HTTPException(status_code=HTTPStatus.BAD_REQUEST, detail=error_msg)
+
+    return translated_data
 
 
 @router.get("/available-data-formats", response_model=TargetTransformationDataModelsDTO)

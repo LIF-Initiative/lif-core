@@ -1,10 +1,9 @@
 import json
 import os
 from importlib.resources import files
-from typing import TYPE_CHECKING, AsyncGenerator, Optional
+from typing import TYPE_CHECKING, Any, AsyncGenerator, Optional
 
 import httpx
-from lif.datatypes.core import MdrRetrieveDataModelsDTO
 from lif.exceptions.core import LIFException, ResourceNotFoundException
 from lif.logging import get_logger
 
@@ -199,7 +198,7 @@ def load_openapi_schema(config: "LIFSchemaConfig") -> tuple[dict, str]:
 
 def fetch_data_models_from_mdr(
     config: "LIFSchemaConfig", name: str, version: str, contributor_organization: str
-) -> MdrRetrieveDataModelsDTO:
+) -> dict[str, Any]:
     """
     Fetch a list of data models from MDR matching the given criteria using configuration.
 
@@ -210,7 +209,7 @@ def fetch_data_models_from_mdr(
         contributor_organization: The contributor organization of the data model to fetch
 
     Returns:
-        A list of matching data models
+        A list of matching data models in JSON
 
     Raises:
         MDRClientException: If MDR is unavailable or returns an error
@@ -234,7 +233,9 @@ def fetch_data_models_from_mdr(
             response = client.get(url, headers=headers)
         response.raise_for_status()
         logger.info("Successfully fetched data models from MDR")
-        return MdrRetrieveDataModelsDTO(**response.json())
+        # Future work - return the validated pydantic model. This will require
+        # project updates across several of the BE apps.
+        return response.json()
 
     except httpx.TimeoutException as e:
         msg = f"MDR request timed out after {config.mdr_timeout_seconds}s: {e}"

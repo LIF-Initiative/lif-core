@@ -1,3 +1,5 @@
+from unittest import mock
+
 from deepdiff import DeepDiff
 from httpx import ASGITransport, AsyncClient
 from lif.learner_data_export_api import core
@@ -69,10 +71,62 @@ async def test_export_401():
 
 
 async def test_export_default_token():
-    async with get_client() as client:
-        response = await client.get("/exports", headers={"X-API-Key": DEFAULT_API_KEY})
-        assert response.status_code == 200
-        response_json = response.json()
-        expected_response = {"total": "data"}
-        diff = DeepDiff(expected_response, response_json)
-        assert not diff, diff  # prints out the differences if any
+    mdr_response = {
+        "total": 1,
+        "data": [
+            {
+                "Id": 42,
+                "Name": "OpenBadges",
+                "Type": "SourceSchema",
+                "Description": None,
+                "UseConsiderations": None,
+                "BaseDataModelId": None,
+                "Notes": None,
+                "DataModelVersion": "3.0",
+                "CreationDate": None,
+                "ActivationDate": None,
+                "DeprecationDate": None,
+                "Contributor": None,
+                "ContributorOrganization": "OB",
+                "State": None,
+            }
+        ],
+    }
+
+    qp_mock_response = mock.Mock()
+    qp_mock_response.status_code = 200
+    qp_mock_response.json.return_value = [{"Person": {"firstName": "John"}}]
+
+    translator_mock_response = mock.Mock()
+    translator_mock_response.status_code = 200
+    translator_mock_response.json.return_value = {"name": "John Doe"}
+
+    mock_http_client = mock.AsyncMock()
+    mock_http_client.post.side_effect = [qp_mock_response, translator_mock_response]
+
+    mock_http_cls = mock.MagicMock()
+    mock_http_cls.return_value.__aenter__ = mock.AsyncMock(return_value=mock_http_client)
+    mock_http_cls.return_value.__aexit__ = mock.AsyncMock(return_value=False)
+
+    params = {
+        "learnerId": "learner-123",
+        "dataModelName": "OpenBadges",
+        "dataModelVersion": "3.0",
+        "dataModelContributorOrganization": "OB",
+        "transformationId": "transform-1",
+    }
+
+    with mock.patch(
+        "lif.learner_data_export_api.learner_data_export_endpoints.fetch_data_models_from_mdr",
+        return_value=mdr_response,
+    ), mock.patch(
+        "lif.learner_data_export_api.learner_data_export_endpoints.httpx.AsyncClient",
+        mock_http_cls,
+    ):
+        async with get_client() as client:
+            response = await client.get("/exports", headers={"X-API-Key": DEFAULT_API_KEY}, params=params)
+
+    assert response.status_code == 200, response.text
+    expected_response = {"name": "John Doe"}
+    diff = DeepDiff(expected_response, response.json())
+    assert not diff, diff
