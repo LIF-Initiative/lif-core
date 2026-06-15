@@ -2,6 +2,9 @@
     "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
     "flagWords": [],
     "words": [
+        "elementtype",
+        "datamodelelementtype",
+        "unparseable",
         "abstra",
         "adrs",
         "argsort",

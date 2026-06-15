@@ -90,6 +90,21 @@ async def get_session(request: Request) -> AsyncGenerator[AsyncSession, None]:
         # checks it back out. That's a cross-tenant data-leak risk, not
         # just a correctness annoyance.
         if tenant_schema and _TENANT_SCHEMA_RE.match(tenant_schema):
+            # Fail closed if the resolved tenant schema doesn't exist (#961).
+            # PG does NOT error on a missing schema in `SET search_path` — it
+            # silently skips it and resolves everything against the `public`
+            # fallback below, which would serve wrong/empty data instead of
+            # surfacing a provisioning failure (cf. the 2026-05-26 silent
+            # provision-failure). Verify existence first and deny otherwise.
+            # Parameterized — never interpolate the schema into this query.
+            schema_exists = await session.execute(
+                text("SELECT 1 FROM information_schema.schemata WHERE schema_name = :schema"), {"schema": tenant_schema}
+            )
+            if schema_exists.first() is None:
+                logger.error("Resolved tenant schema %r is not provisioned; denying request", tenant_schema)
+                raise HTTPException(
+                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Tenant schema not provisioned"
+                )
             # Include `public` as a fallback in the search_path so PG-level
             # user-defined types (e.g. `elementtype`, `datamodelelementtype`
             # enums defined in V1.1) resolve correctly. `clone_lif_schema`
@@ -99,6 +114,10 @@ async def get_session(request: Request) -> AsyncGenerator[AsyncSession, None]:
             # `UndefinedObjectError: type "elementtype" does not exist`.
             # Tables are still resolved tenant-first; public fall-through
             # only fires for objects the tenant schema doesn't contain.
+            # NOTE: this means a tenant schema that EXISTS but is missing a
+            # given table still falls through to public for that table — the
+            # clean fix (copy PG types into tenant schemas, then drop the
+            # `public` fallback) is tracked as a follow-up under #949/#961.
             await session.execute(text(f'SET search_path TO "{tenant_schema}", public'))
         elif tenant_schema:
             logger.error("Refusing to SET search_path to invalid tenant_schema %r", tenant_schema)
