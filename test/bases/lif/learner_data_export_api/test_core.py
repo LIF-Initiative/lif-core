@@ -3,6 +3,7 @@ from unittest import mock
 from deepdiff import DeepDiff
 from httpx import ASGITransport, AsyncClient
 from lif.learner_data_export_api import core
+import lif.learner_data_export_api.learner_data_export_endpoints as _ep
 
 DEFAULT_API_KEY = "changeme6"
 
@@ -116,12 +117,13 @@ async def test_export_default_token():
         "transformationId": "transform-1",
     }
 
-    with mock.patch(
-        "lif.learner_data_export_api.learner_data_export_endpoints.fetch_data_models_from_mdr",
-        return_value=mdr_response,
-    ), mock.patch(
-        "lif.learner_data_export_api.learner_data_export_endpoints.httpx.AsyncClient",
-        mock_http_cls,
+    with (
+        mock.patch(
+            "lif.learner_data_export_api.learner_data_export_endpoints.fetch_data_models_from_mdr",
+            return_value=mdr_response,
+        ),
+        mock.patch("lif.learner_data_export_api.learner_data_export_endpoints.httpx.AsyncClient", mock_http_cls),
+        mock.patch.object(_ep.CONFIG, "openapi_data_model_id", "17"),
     ):
         async with get_client() as client:
             response = await client.get("/exports", headers={"X-API-Key": DEFAULT_API_KEY}, params=params)

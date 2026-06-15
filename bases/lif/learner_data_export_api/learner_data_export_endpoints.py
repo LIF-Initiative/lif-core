@@ -50,12 +50,14 @@ async def get_data(
         transformation_id,
     )
 
+    tenant_schema = CONFIG.tenant_schema
+
     # Confirm transform target is valid for user
 
     # Retrieve Org LIF schema from MDR
 
     data_models_raw = fetch_data_models_from_mdr(
-        CONFIG, data_model_name, data_model_version, data_model_contributor_organization
+        CONFIG, data_model_name, data_model_version, data_model_contributor_organization, tenant_schema=tenant_schema
     )
     data_models = MdrRetrieveDataModelsDTO(**data_models_raw)
 
@@ -98,12 +100,19 @@ async def get_data(
 
     # Transform data with Translator
 
+    source_schema_id = CONFIG.openapi_data_model_id
+    if source_schema_id is None:
+        raise HTTPException(
+            status_code=HTTPStatus.INTERNAL_SERVER_ERROR, detail="OPENAPI_DATA_MODEL_ID is not configured"
+        )
+
     translator_url = CONFIG.translator_translate_url(
-        source_schema_id=CONFIG.openapi_data_model_id, target_schema_id=str(data_models.data[0].Id)
+        source_schema_id=source_schema_id, target_schema_id=str(data_models.data[0].Id)
     )
+    translator_headers = {"X-API-Tenant-Schema": tenant_schema} if tenant_schema else {}
     async with httpx.AsyncClient() as client:
         # TODO: Should the data passed to the translator be handled better than lif_learner_data[0] ?
-        translator_response = await client.post(translator_url, json=lif_learner_data[0])
+        translator_response = await client.post(translator_url, json=lif_learner_data[0], headers=translator_headers)
         if translator_response.status_code == 200:
             translated_data = translator_response.json()
             logger.info("Successfully translated learner data: %s", str(translated_data))

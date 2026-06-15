@@ -45,10 +45,13 @@ def _get_use_openapi_from_file() -> bool:
     return os.getenv("USE_OPENAPI_DATA_MODEL_FROM_FILE", "false").lower() == "true"
 
 
-def _build_mdr_headers(auth_token: Optional[str] = None) -> dict:
+def _build_mdr_headers(auth_token: Optional[str] = None, tenant_schema: Optional[str] = None) -> dict:
     if auth_token is None:
         auth_token = _get_mdr_api_auth_token()
-    return {"X-API-Key": auth_token}
+    headers: dict = {"X-API-Key": auth_token}
+    if tenant_schema:
+        headers["X-API-Tenant-Schema"] = tenant_schema
+    return headers
 
 
 # =============================================================================
@@ -197,7 +200,11 @@ def load_openapi_schema(config: "LIFSchemaConfig") -> tuple[dict, str]:
 
 
 def fetch_data_models_from_mdr(
-    config: "LIFSchemaConfig", name: str, version: str, contributor_organization: str
+    config: "LIFSchemaConfig",
+    name: str,
+    version: str,
+    contributor_organization: str,
+    tenant_schema: Optional[str] = None,
 ) -> dict[str, Any]:
     """
     Fetch a list of data models from MDR matching the given criteria using configuration.
@@ -224,7 +231,7 @@ def fetch_data_models_from_mdr(
         f"&pagination=false"
     )
 
-    headers = _build_mdr_headers(config.mdr_api_auth_token)
+    headers = _build_mdr_headers(config.mdr_api_auth_token, tenant_schema=tenant_schema)
 
     logger.info(f"Fetching data models from MDR: {url}")
 
@@ -389,13 +396,16 @@ async def get_openapi_lif_data_model() -> dict | None:
 
 
 async def get_data_model_schema(
-    data_model_id: str, include_attr_md: bool = False, include_entity_md: bool = False
+    data_model_id: str,
+    include_attr_md: bool = False,
+    include_entity_md: bool = False,
+    tenant_schema: Optional[str] = None,
 ) -> dict:
     mdr_api_url = _get_mdr_api_url()
     url: str = f"{mdr_api_url}/datamodels/open_api_schema/{data_model_id}?include_attr_md={str(include_attr_md).lower()}&include_entity_md={str(include_entity_md).lower()}"
     try:
         async for client in _get_mdr_client():
-            response = await client.get(url, headers=_build_mdr_headers())
+            response = await client.get(url, headers=_build_mdr_headers(tenant_schema=tenant_schema))
         response.raise_for_status()
         response_json = response.json()
         return response_json
@@ -413,12 +423,14 @@ async def get_data_model_schema(
         raise MDRClientException(msg)
 
 
-async def get_data_model_transformation(source_data_model_id: str, target_data_model_id: str) -> dict:
+async def get_data_model_transformation(
+    source_data_model_id: str, target_data_model_id: str, tenant_schema: Optional[str] = None
+) -> dict:
     mdr_api_url = _get_mdr_api_url()
     url: str = f"{mdr_api_url}/transformation_groups/transformations_for_data_models/?source_data_model_id={source_data_model_id}&target_data_model_id={target_data_model_id}&size=1000"
     try:
         async for client in _get_mdr_client():
-            response = await client.get(url, headers=_build_mdr_headers())
+            response = await client.get(url, headers=_build_mdr_headers(tenant_schema=tenant_schema))
         response.raise_for_status()
         response_json = response.json()
         logger.info(f"Transformation size fetched from MDR: {response_json['total']}")
