@@ -1,9 +1,10 @@
 from unittest import mock
 
+import lif.learner_data_export_api.learner_data_export_endpoints as _ep
+import pytest
 from deepdiff import DeepDiff
 from httpx import ASGITransport, AsyncClient
 from lif.learner_data_export_api import core
-import lif.learner_data_export_api.learner_data_export_endpoints as _ep
 
 DEFAULT_API_KEY = "changeme6"
 
@@ -132,3 +133,64 @@ async def test_export_default_token():
     expected_response = {"name": "John Doe"}
     diff = DeepDiff(expected_response, response.json())
     assert not diff, diff
+
+
+_MDR_RESPONSE = {
+    "total": 1,
+    "data": [
+        {
+            "Id": 42,
+            "Name": "OpenBadges",
+            "Type": "SourceSchema",
+            "Description": None,
+            "UseConsiderations": None,
+            "BaseDataModelId": None,
+            "Notes": None,
+            "DataModelVersion": "3.0",
+            "CreationDate": None,
+            "ActivationDate": None,
+            "DeprecationDate": None,
+            "Contributor": None,
+            "ContributorOrganization": "OB",
+            "State": None,
+        }
+    ],
+}
+
+_EXPORT_PARAMS = {
+    "learnerId": "learner-123",
+    "dataModelName": "OpenBadges",
+    "dataModelVersion": "3.0",
+    "dataModelContributorOrganization": "OB",
+    "transformationId": "transform-1",
+}
+
+
+@pytest.mark.parametrize("qp_status", [400, 404, 500, 503])
+async def test_export_query_planner_non_200_returns_500(qp_status):
+    """Any non-200 from the Query Planner should return 500 with a clear message."""
+    qp_mock_response = mock.Mock()
+    qp_mock_response.status_code = qp_status
+    qp_mock_response.text = "error from query planner - internal message"
+
+    mock_http_client = mock.AsyncMock()
+    mock_http_client.post.return_value = qp_mock_response
+
+    mock_http_cls = mock.MagicMock()
+    mock_http_cls.return_value.__aenter__ = mock.AsyncMock(return_value=mock_http_client)
+    mock_http_cls.return_value.__aexit__ = mock.AsyncMock(return_value=False)
+
+    with (
+        mock.patch(
+            "lif.learner_data_export_api.learner_data_export_endpoints.fetch_data_models_from_mdr",
+            return_value=_MDR_RESPONSE,
+        ),
+        mock.patch("lif.learner_data_export_api.learner_data_export_endpoints.httpx.AsyncClient", mock_http_cls),
+        mock.patch.object(_ep.CONFIG, "openapi_data_model_id", "17"),
+    ):
+        async with get_client() as client:
+            response = await client.get("/exports", headers={"X-API-Key": DEFAULT_API_KEY}, params=_EXPORT_PARAMS)
+
+    assert response.status_code == 500
+    assert "Query Planner" in response.json()["detail"]
+    assert "internal" not in response.json()["detail"]
