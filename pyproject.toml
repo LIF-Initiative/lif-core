@@ -117,6 +117,7 @@ asyncio_mode = "auto"
 "components/lif/translator" = "lif/translator"
 "components/lif/mdr_utils" = "lif/mdr_utils"
 "components/lif/mdr_dto" = "lif/mdr_dto"
+"components/lif/query_planner_client" = "lif/query_planner_client"
 
 [tool.ruff]
 line-length = 120

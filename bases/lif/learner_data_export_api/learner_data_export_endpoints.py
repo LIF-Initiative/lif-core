@@ -8,6 +8,7 @@ from lif.datatypes.mdr_consumer import MdrRetrieveDataModelsDTO
 from lif.lif_schema_config.core import LIFSchemaConfig
 from lif.mdr_client.core import fetch_data_models_from_mdr
 from lif.mdr_utils.logger_config import get_logger
+from lif.query_planner_client import QueryPlannerException, fetch_query_from_query_planner
 
 router = APIRouter()
 logger = get_logger(__name__)
@@ -90,13 +91,12 @@ async def get_data(
             "Person.EmploymentPreferences",
         ],
     }
-    async with httpx.AsyncClient() as client:
-        response = await client.post(CONFIG.query_planner_query_url, json=lif_query)
-        if response.status_code != 200:
-            error_msg = "Unable to retrieve learner data from Query Planner"
-            logger.error("%s - %s - %s", error_msg, response.status_code, response.text)
-            raise HTTPException(status_code=HTTPStatus.INTERNAL_SERVER_ERROR, detail=error_msg)
-        lif_learner_data = response.json()
+    try:
+        lif_learner_data = await fetch_query_from_query_planner(CONFIG.query_planner_base_url, lif_query)
+    except QueryPlannerException as e:
+        raise HTTPException(
+            status_code=HTTPStatus.INTERNAL_SERVER_ERROR, detail="Unable to retrieve learner data from Query Planner"
+        ) from e
 
     logger.info(f"LIF learner data returned from Query Planner: {lif_learner_data}")
 
