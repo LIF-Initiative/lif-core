@@ -100,6 +100,18 @@ async def get_data(
 
     logger.info(f"LIF learner data returned from Query Planner: {lif_learner_data}")
 
+    if not lif_learner_data:
+        raise HTTPException(
+            status_code=HTTPStatus.NOT_FOUND,
+            detail=f"Query Planner did not find any results for learnerId: {learner_id}",
+        )
+
+    if len(lif_learner_data) > 1:
+        raise HTTPException(
+            status_code=HTTPStatus.INTERNAL_SERVER_ERROR,
+            detail=f"Query Planner returned multiple results for learnerId: {learner_id}",
+        )
+
     # Transform data with Translator
 
     source_schema_id = CONFIG.openapi_data_model_id

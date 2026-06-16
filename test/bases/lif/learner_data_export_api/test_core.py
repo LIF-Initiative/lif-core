@@ -167,6 +167,46 @@ _EXPORT_PARAMS = {
 }
 
 
+async def test_export_empty_query_planner_result_returns_404():
+    """A 200 with an empty list from the Query Planner means learner not found."""
+    with (
+        mock.patch(
+            "lif.learner_data_export_api.learner_data_export_endpoints.fetch_data_models_from_mdr",
+            return_value=_MDR_RESPONSE,
+        ),
+        mock.patch(
+            "lif.learner_data_export_api.learner_data_export_endpoints.fetch_query_from_query_planner",
+            new=mock.AsyncMock(return_value=[]),
+        ),
+        mock.patch.object(_ep.CONFIG, "openapi_data_model_id", "17"),
+    ):
+        async with get_client() as client:
+            response = await client.get("/exports", headers={"X-API-Key": DEFAULT_API_KEY}, params=_EXPORT_PARAMS)
+
+    assert response.status_code == 404
+    assert response.json()["detail"] == "Query Planner did not find any results for learnerId: learner-123"
+
+
+async def test_export_multiple_query_planner_results_returns_500():
+    """Multiple results from the Query Planner is an unexpected internal state."""
+    with (
+        mock.patch(
+            "lif.learner_data_export_api.learner_data_export_endpoints.fetch_data_models_from_mdr",
+            return_value=_MDR_RESPONSE,
+        ),
+        mock.patch(
+            "lif.learner_data_export_api.learner_data_export_endpoints.fetch_query_from_query_planner",
+            new=mock.AsyncMock(return_value=[{"Person": {"firstName": "John"}}, {"Person": {"firstName": "Jane"}}]),
+        ),
+        mock.patch.object(_ep.CONFIG, "openapi_data_model_id", "17"),
+    ):
+        async with get_client() as client:
+            response = await client.get("/exports", headers={"X-API-Key": DEFAULT_API_KEY}, params=_EXPORT_PARAMS)
+
+    assert response.status_code == 500
+    assert response.json()["detail"] == "Query Planner returned multiple results for learnerId: learner-123"
+
+
 @pytest.mark.parametrize("exc_msg", ["HTTP 500", "HTTP 503", "HTTP 404", "request timed out", "Failed to connect"])
 async def test_export_query_planner_failure_returns_500(exc_msg):
     """Any QueryPlannerException should return 500 without leaking the internal message."""
