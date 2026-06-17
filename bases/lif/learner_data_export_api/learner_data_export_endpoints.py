@@ -1,7 +1,6 @@
 from http import HTTPStatus
 from typing import Any, Dict
 
-import httpx
 from fastapi import APIRouter, HTTPException, Query, Request
 from lif.datatypes.core import TargetTransformationDataModelDTO, TargetTransformationDataModelsDTO
 from lif.datatypes.mdr_consumer import MdrRetrieveDataModelsDTO
@@ -9,6 +8,7 @@ from lif.lif_schema_config.core import LIFSchemaConfig
 from lif.mdr_client.core import fetch_data_models_from_mdr
 from lif.mdr_utils.logger_config import get_logger
 from lif.query_planner_client import QueryPlannerException, fetch_query_from_query_planner
+from lif.translator_client import TranslatorException, translate_learner_data
 
 router = APIRouter()
 logger = get_logger(__name__)
@@ -120,21 +120,22 @@ async def get_data(
             status_code=HTTPStatus.INTERNAL_SERVER_ERROR, detail="OPENAPI_DATA_MODEL_ID is not configured"
         )
 
-    translator_url = CONFIG.translator_translate_url(
-        source_schema_id=source_schema_id, target_schema_id=str(data_models.data[0].Id)
-    )
-    translator_headers = {"X-API-Tenant-Schema": tenant_schema} if tenant_schema else {}
-    async with httpx.AsyncClient() as client:
+    try:
         # TODO: Should the data passed to the translator be handled better than lif_learner_data[0] ?
-        translator_response = await client.post(translator_url, json=lif_learner_data[0], headers=translator_headers)
-        if translator_response.status_code == 200:
-            translated_data = translator_response.json()
-            logger.info("Successfully translated learner data: %s", str(translated_data))
-        else:
-            error_msg = "Unable to translate the learner data from the LIF model into the target model"
-            logger.error("%s - %s - %s", error_msg, translator_response.status_code, translator_response.json())
-            raise HTTPException(status_code=HTTPStatus.BAD_REQUEST, detail=error_msg)
+        translated_data = await translate_learner_data(
+            CONFIG.translator_base_url,
+            source_schema_id=source_schema_id,
+            target_schema_id=str(data_models.data[0].Id),
+            learner_data=lif_learner_data[0],
+            tenant_schema=tenant_schema,
+        )
+    except TranslatorException as e:
+        raise HTTPException(
+            status_code=HTTPStatus.BAD_REQUEST,
+            detail="Unable to translate the learner data from the LIF model into the target model",
+        ) from e
 
+    logger.info("Successfully translated learner data: %s", str(translated_data))
     return translated_data
 
 

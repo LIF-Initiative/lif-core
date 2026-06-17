@@ -40,4 +40,5 @@ packages = ["lif"]
 "../../components/lif/lif_schema_config" = "lif/lif_schema_config"
 "../../components/lif/mdr_client" = "lif/mdr_client"
 "../../components/lif/query_planner_client" = "lif/query_planner_client"
+"../../components/lif/translator_client" = "lif/translator_client"
 "../../components/lif/tenant_routing" = "lif/tenant_routing"

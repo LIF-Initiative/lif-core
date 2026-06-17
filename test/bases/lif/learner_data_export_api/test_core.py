@@ -6,6 +6,7 @@ from deepdiff import DeepDiff
 from httpx import ASGITransport, AsyncClient
 from lif.learner_data_export_api import core
 from lif.query_planner_client import QueryPlannerException
+from lif.translator_client import TranslatorException
 
 DEFAULT_API_KEY = "changeme6"
 
@@ -96,17 +97,6 @@ async def test_export_default_token():
         ],
     }
 
-    translator_mock_response = mock.Mock()
-    translator_mock_response.status_code = 200
-    translator_mock_response.json.return_value = {"name": "John Doe"}
-
-    mock_http_client = mock.AsyncMock()
-    mock_http_client.post.return_value = translator_mock_response
-
-    mock_http_cls = mock.MagicMock()
-    mock_http_cls.return_value.__aenter__ = mock.AsyncMock(return_value=mock_http_client)
-    mock_http_cls.return_value.__aexit__ = mock.AsyncMock(return_value=False)
-
     params = {
         "learnerId": "learner-123",
         "dataModelName": "OpenBadges",
@@ -124,7 +114,10 @@ async def test_export_default_token():
             "lif.learner_data_export_api.learner_data_export_endpoints.fetch_query_from_query_planner",
             new=mock.AsyncMock(return_value=[{"Person": {"firstName": "John"}}]),
         ),
-        mock.patch("lif.learner_data_export_api.learner_data_export_endpoints.httpx.AsyncClient", mock_http_cls),
+        mock.patch(
+            "lif.learner_data_export_api.learner_data_export_endpoints.translate_learner_data",
+            new=mock.AsyncMock(return_value={"name": "John Doe"}),
+        ),
         mock.patch.object(_ep.CONFIG, "openapi_data_model_id", "17"),
     ):
         async with get_client() as client:
@@ -227,3 +220,28 @@ async def test_export_query_planner_failure_returns_500(exc_msg):
     assert response.status_code == 500
     assert "Query Planner" in response.json()["detail"]
     assert exc_msg not in response.json()["detail"]
+
+
+@pytest.mark.parametrize("exc_msg", ["HTTP 422", "HTTP 503", "request timed out", "Failed to connect"])
+async def test_export_translator_failure_returns_400(exc_msg):
+    """Any TranslatorException should return 400 without leaking the internal message."""
+    with (
+        mock.patch(
+            "lif.learner_data_export_api.learner_data_export_endpoints.fetch_data_models_from_mdr",
+            return_value=_MDR_RESPONSE,
+        ),
+        mock.patch(
+            "lif.learner_data_export_api.learner_data_export_endpoints.fetch_query_from_query_planner",
+            new=mock.AsyncMock(return_value=[{"Person": {"firstName": "John"}}]),
+        ),
+        mock.patch(
+            "lif.learner_data_export_api.learner_data_export_endpoints.translate_learner_data",
+            new=mock.AsyncMock(side_effect=TranslatorException(exc_msg)),
+        ),
+        mock.patch.object(_ep.CONFIG, "openapi_data_model_id", "17"),
+    ):
+        async with get_client() as client:
+            response = await client.get("/exports", headers={"X-API-Key": DEFAULT_API_KEY}, params=_EXPORT_PARAMS)
+
+    assert response.status_code == 400
+    assert response.json()["detail"] == "Unable to translate the learner data from the LIF model into the target model"
