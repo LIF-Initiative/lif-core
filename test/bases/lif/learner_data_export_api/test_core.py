@@ -102,7 +102,6 @@ async def test_export_default_token():
         "dataModelName": "OpenBadges",
         "dataModelVersion": "3.0",
         "dataModelContributorOrganization": "OB",
-        "transformationId": "transform-1",
     }
 
     with (
@@ -156,7 +155,6 @@ _EXPORT_PARAMS = {
     "dataModelName": "OpenBadges",
     "dataModelVersion": "3.0",
     "dataModelContributorOrganization": "OB",
-    "transformationId": "transform-1",
 }
 
 

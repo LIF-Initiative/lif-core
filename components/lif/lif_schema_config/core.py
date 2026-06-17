@@ -98,10 +98,6 @@ class LIFSchemaConfig:
     # Translator URL
     translator_base_url: str = "http://localhost:8007"
 
-    # Tenant routing - temporary config until user-level api-tokens
-    # that are keyed to a tenant_schema are in place.
-    tenant_schema: Optional[str] = None
-
     # MDR Configuration
     mdr_api_url: str = "http://localhost:8012"
     mdr_api_auth_token: str = "no_auth_token_set"
@@ -162,7 +158,6 @@ class LIFSchemaConfig:
             LIF_QUERY_PLANNER_URL: Query planner base URL
             LIF_QUERY_TIMEOUT_SECONDS: Query timeout in seconds
             LIF_TRANSLATOR_BASE_URL: Translator base URL
-            LIF_TENANT_SCHEMA: Tenant schema to send as X-API-Tenant-Schema on outbound service calls
             LIF_MDR_API_URL: MDR API URL
             LIF_MDR_API_AUTH_TOKEN: MDR authentication token
             MDR_TIMEOUT_SECONDS: Timeout for MDR API calls (default: 30)
@@ -197,8 +192,6 @@ class LIFSchemaConfig:
             query_timeout_seconds=int(os.getenv("LIF_QUERY_TIMEOUT_SECONDS", "20")),
             # Translator
             translator_base_url=os.getenv("LIF_TRANSLATOR_BASE_URL", "http://localhost:8007"),
-            # Tenant routing
-            tenant_schema=os.getenv("LIF_TENANT_SCHEMA"),
             # MDR
             mdr_api_url=os.getenv("LIF_MDR_API_URL", "http://localhost:8012"),
             mdr_api_auth_token=os.getenv("LIF_MDR_API_AUTH_TOKEN", "no_auth_token_set"),

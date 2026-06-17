@@ -29,7 +29,6 @@ async def get_data(
     data_model_name: str = Query(..., alias="dataModelName"),
     data_model_version: str = Query(..., alias="dataModelVersion"),
     data_model_contributor_organization: str = Query(..., alias="dataModelContributorOrganization"),
-    transformation_id: str = Query(..., alias="transformationId"),
 ):
     """Endpoint to export learner data in a specified format.
 
@@ -41,24 +40,27 @@ async def get_data(
         (
             "Received request for learner data export as %s - learnerId: %s, "
             "dataModelName: %s, dataModelVersion: %s, "
-            "dataModelContributorOrganization: %s, transformationId: %s"
+            "dataModelContributorOrganization: %s"
         ),
         request.state.principal,
         learner_id,
         data_model_name,
         data_model_version,
         data_model_contributor_organization,
-        transformation_id,
     )
 
-    tenant_schema = CONFIG.tenant_schema
+    source_schema_id = CONFIG.openapi_data_model_id
+    if source_schema_id is None:
+        raise HTTPException(
+            status_code=HTTPStatus.INTERNAL_SERVER_ERROR, detail="OPENAPI_DATA_MODEL_ID is not configured"
+        )
 
     # Confirm transform target is valid for user
 
     # Retrieve Org LIF schema from MDR
 
     data_models_raw = fetch_data_models_from_mdr(
-        CONFIG, data_model_name, data_model_version, data_model_contributor_organization, tenant_schema=tenant_schema
+        CONFIG, data_model_name, data_model_version, data_model_contributor_organization
     )
     data_models = MdrRetrieveDataModelsDTO(**data_models_raw)
 
@@ -114,20 +116,12 @@ async def get_data(
 
     # Transform data with Translator
 
-    source_schema_id = CONFIG.openapi_data_model_id
-    if source_schema_id is None:
-        raise HTTPException(
-            status_code=HTTPStatus.INTERNAL_SERVER_ERROR, detail="OPENAPI_DATA_MODEL_ID is not configured"
-        )
-
     try:
-        # TODO: Should the data passed to the translator be handled better than lif_learner_data[0] ?
         translated_data = await translate_learner_data(
             CONFIG.translator_base_url,
             source_schema_id=source_schema_id,
             target_schema_id=str(data_models.data[0].Id),
             learner_data=lif_learner_data[0],
-            tenant_schema=tenant_schema,
         )
     except TranslatorException as e:
         raise HTTPException(
@@ -135,7 +129,7 @@ async def get_data(
             detail="Unable to translate the learner data from the LIF model into the target model",
         ) from e
 
-    logger.info("Successfully translated learner data: %s", str(translated_data))
+    logger.info("Successfully translated learner data from data model %s into data model %s", str(translated_data))
     return translated_data
 
 
