@@ -5,6 +5,7 @@ import pytest
 from deepdiff import DeepDiff
 from httpx import ASGITransport, AsyncClient
 from lif.learner_data_export_api import core
+from lif.mdr_client import MDRClientException
 from lif.query_planner_client import QueryPlannerException
 from lif.translator_client import TranslatorException
 
@@ -218,6 +219,83 @@ async def test_export_query_planner_failure_returns_500(exc_msg):
     assert response.status_code == 500
     assert "Query Planner" in response.json()["detail"]
     assert exc_msg not in response.json()["detail"]
+
+
+async def test_export_missing_openapi_data_model_id_returns_500():
+    """A missing OPENAPI_DATA_MODEL_ID should return 500 before any service calls are made."""
+    with mock.patch.object(_ep.CONFIG, "openapi_data_model_id", None):
+        async with get_client() as client:
+            response = await client.get("/exports", headers={"X-API-Key": DEFAULT_API_KEY}, params=_EXPORT_PARAMS)
+
+    assert response.status_code == 500
+    assert response.json()["detail"] == "OPENAPI_DATA_MODEL_ID is not configured"
+
+
+@pytest.mark.parametrize("exc_msg", ["HTTP 500", "HTTP 503", "request timed out", "Failed to connect"])
+async def test_export_mdr_failure_returns_500(exc_msg):
+    """Any MDRClientException should return 500 without leaking the internal message."""
+    with (
+        mock.patch(
+            "lif.learner_data_export_api.learner_data_export_endpoints.fetch_data_models_from_mdr",
+            side_effect=MDRClientException(exc_msg),
+        ),
+        mock.patch.object(_ep.CONFIG, "openapi_data_model_id", "17"),
+    ):
+        async with get_client() as client:
+            response = await client.get("/exports", headers={"X-API-Key": DEFAULT_API_KEY}, params=_EXPORT_PARAMS)
+
+    assert response.status_code == 500
+    assert response.json()["detail"] == "Unable to retrieve data models from MDR"
+
+
+async def test_export_no_mdr_data_models_returns_400():
+    """No matching data models in MDR should return 400."""
+    mdr_empty = {"total": 0, "data": []}
+    with (
+        mock.patch(
+            "lif.learner_data_export_api.learner_data_export_endpoints.fetch_data_models_from_mdr",
+            return_value=mdr_empty,
+        ),
+        mock.patch.object(_ep.CONFIG, "openapi_data_model_id", "17"),
+    ):
+        async with get_client() as client:
+            response = await client.get("/exports", headers={"X-API-Key": DEFAULT_API_KEY}, params=_EXPORT_PARAMS)
+
+    assert response.status_code == 400
+    assert response.json()["detail"] == "Unable to determine target data model from query parameters"
+
+
+async def test_export_multiple_mdr_data_models_returns_400():
+    """Ambiguous MDR results (total > 1) should return 400."""
+    _data_model = {
+        "Id": 42,
+        "Name": "OpenBadges",
+        "Type": "SourceSchema",
+        "Description": None,
+        "UseConsiderations": None,
+        "BaseDataModelId": None,
+        "Notes": None,
+        "DataModelVersion": "3.0",
+        "CreationDate": None,
+        "ActivationDate": None,
+        "DeprecationDate": None,
+        "Contributor": None,
+        "ContributorOrganization": "OB",
+        "State": None,
+    }
+    mdr_multi = {"total": 2, "data": [_data_model, {**_data_model, "Id": 43}]}
+    with (
+        mock.patch(
+            "lif.learner_data_export_api.learner_data_export_endpoints.fetch_data_models_from_mdr",
+            return_value=mdr_multi,
+        ),
+        mock.patch.object(_ep.CONFIG, "openapi_data_model_id", "17"),
+    ):
+        async with get_client() as client:
+            response = await client.get("/exports", headers={"X-API-Key": DEFAULT_API_KEY}, params=_EXPORT_PARAMS)
+
+    assert response.status_code == 400
+    assert response.json()["detail"] == "Found multiple target data models from query parameters"
 
 
 @pytest.mark.parametrize("exc_msg", ["HTTP 422", "HTTP 503", "request timed out", "Failed to connect"])

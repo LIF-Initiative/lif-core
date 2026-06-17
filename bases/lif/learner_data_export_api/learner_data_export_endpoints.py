@@ -5,7 +5,7 @@ from fastapi import APIRouter, HTTPException, Query, Request
 from lif.datatypes.core import TargetTransformationDataModelDTO, TargetTransformationDataModelsDTO
 from lif.datatypes.mdr_consumer import MdrRetrieveDataModelsDTO
 from lif.lif_schema_config.core import LIFSchemaConfig
-from lif.mdr_client.core import fetch_data_models_from_mdr
+from lif.mdr_client.core import MDRClientException, fetch_data_models_from_mdr
 from lif.mdr_utils.logger_config import get_logger
 from lif.query_planner_client import QueryPlannerException, fetch_query_from_query_planner
 from lif.translator_client import TranslatorException, translate_learner_data
@@ -18,7 +18,7 @@ logger = get_logger(__name__)
 CONFIG = LIFSchemaConfig.from_environment()
 
 logger.info(f"LIF_QUERY_PLANNER_URL: {CONFIG.query_planner_base_url}")
-logger.info(f"LIF_GRAPHQL_ROOT_TYPE_NAME: {CONFIG.root_type_name}")
+logger.info(f"LIF_TRANSLATOR_BASE_URL: {CONFIG.translator_base_url}")
 logger.info(f"LIF_MDR_API_URL: {CONFIG.mdr_api_url}")
 
 
@@ -55,13 +55,14 @@ async def get_data(
             status_code=HTTPStatus.INTERNAL_SERVER_ERROR, detail="OPENAPI_DATA_MODEL_ID is not configured"
         )
 
-    # Confirm transform target is valid for user
-
-    # Retrieve Org LIF schema from MDR
-
-    data_models_raw = fetch_data_models_from_mdr(
-        CONFIG, data_model_name, data_model_version, data_model_contributor_organization
-    )
+    try:
+        data_models_raw = fetch_data_models_from_mdr(
+            CONFIG, data_model_name, data_model_version, data_model_contributor_organization
+        )
+    except MDRClientException as e:
+        raise HTTPException(
+            status_code=HTTPStatus.INTERNAL_SERVER_ERROR, detail="Unable to retrieve data models from MDR"
+        ) from e
     data_models = MdrRetrieveDataModelsDTO(**data_models_raw)
 
     if data_models.total > 1:
@@ -78,7 +79,7 @@ async def get_data(
 
     # Retrieve learner data from Query Planner
 
-    # TODO: Is there a way to enumerate the selected_fields without hardcoding them?
+    # FUTURE WORK: externalize this list
     lif_query = {
         "filter": {"Person": {"Identifier": [{"identifier": learner_id, "identifierType": "SCHOOL_ASSIGNED_NUMBER"}]}},
         "selected_fields": [
