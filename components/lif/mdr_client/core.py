@@ -223,21 +223,21 @@ def fetch_data_models_from_mdr(
         MDRConfigurationError: If OPENAPI_DATA_MODEL_ID is not configured
         ResourceNotFoundException: If the data model is not found
     """
-    url = (
-        f"{config.mdr_api_url}/datamodels/"
-        f"?name={name}"
-        f"&version={version}"
-        f"&contributor_organization={contributor_organization}"
-        f"&pagination=false"
-    )
+    url = f"{config.mdr_api_url}/datamodels/"
+    params: dict[str, str | bool] = {
+        "name": name,
+        "version": version,
+        "contributor_organization": contributor_organization,
+        "pagination": False,
+    }
 
     headers = _build_mdr_headers(config.mdr_api_auth_token, tenant_schema=tenant_schema)
 
-    logger.info(f"Fetching data models from MDR: {url}")
+    logger.info("Fetching data models from MDR: %s params=%s", url, params)
 
     try:
         with _create_sync_client(config.mdr_timeout_seconds) as client:
-            response = client.get(url, headers=headers)
+            response = client.get(url, headers=headers, params=params)
         response.raise_for_status()
         logger.info("Successfully fetched data models from MDR")
         # Future work - return the validated pydantic model. This will require

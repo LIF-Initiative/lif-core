@@ -64,22 +64,30 @@ async def get_data(
             status_code=HTTPStatus.INTERNAL_SERVER_ERROR, detail="Unable to retrieve data models from MDR"
         ) from e
     data_models = MdrRetrieveDataModelsDTO(**data_models_raw)
+    data_models_count = len(data_models.data)
 
-    if data_models.total > 1:
+    if data_models_count > 1:
         error_msg = "Found multiple target data models from query parameters"
-        logger.error("%s - %s", error_msg, data_models.total)
+        logger.error("%s - %s", error_msg, data_models_count)
         raise HTTPException(status_code=HTTPStatus.BAD_REQUEST, detail=error_msg)
 
-    if data_models.total == 0:
+    if data_models_count == 0:
         raise HTTPException(
             status_code=HTTPStatus.BAD_REQUEST, detail="Unable to determine target data model from query parameters"
         )
 
-    logger.info(f"Data model fetched from MDR: {data_models.data[0].Id}")
+    target_schema_id = data_models.data[0].Id
+    if target_schema_id is None:
+        raise HTTPException(
+            status_code=HTTPStatus.INTERNAL_SERVER_ERROR, detail="Data model returned from MDR has no Id"
+        )
+
+    logger.info(f"Data model fetched from MDR: {target_schema_id}")
 
     # Retrieve learner data from Query Planner
 
-    # FUTURE WORK: externalize this list
+    # FUTURE WORK: identifierType and selected_fields are hardcoded; both should be
+    # derived from the caller's context or the target data model's requirements.
     lif_query = {
         "filter": {"Person": {"Identifier": [{"identifier": learner_id, "identifierType": "SCHOOL_ASSIGNED_NUMBER"}]}},
         "selected_fields": [
@@ -101,7 +109,7 @@ async def get_data(
             status_code=HTTPStatus.INTERNAL_SERVER_ERROR, detail="Unable to retrieve learner data from Query Planner"
         ) from e
 
-    logger.info(f"LIF learner data returned from Query Planner: {lif_learner_data}")
+    logger.debug(f"LIF learner data returned from Query Planner: {lif_learner_data}")
 
     if not lif_learner_data:
         raise HTTPException(
@@ -121,16 +129,18 @@ async def get_data(
         translated_data = await translate_learner_data(
             CONFIG.translator_base_url,
             source_schema_id=source_schema_id,
-            target_schema_id=str(data_models.data[0].Id),
+            target_schema_id=str(target_schema_id),
             learner_data=lif_learner_data[0],
         )
     except TranslatorException as e:
         raise HTTPException(
-            status_code=HTTPStatus.BAD_REQUEST,
+            status_code=HTTPStatus.INTERNAL_SERVER_ERROR,
             detail="Unable to translate the learner data from the LIF model into the target model",
         ) from e
 
-    logger.info("Successfully translated learner data from data model %s into data model %s", str(translated_data))
+    logger.info(
+        "Successfully translated learner data from data model %s into data model %s", source_schema_id, target_schema_id
+    )
     return translated_data
 
 

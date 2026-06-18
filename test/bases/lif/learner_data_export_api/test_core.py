@@ -319,5 +319,5 @@ async def test_export_translator_failure_returns_400(exc_msg):
         async with get_client() as client:
             response = await client.get("/exports", headers={"X-API-Key": DEFAULT_API_KEY}, params=_EXPORT_PARAMS)
 
-    assert response.status_code == 400
+    assert response.status_code == 500
     assert response.json()["detail"] == "Unable to translate the learner data from the LIF model into the target model"
