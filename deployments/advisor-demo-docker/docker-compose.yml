@@ -326,8 +326,17 @@ services:
       MDR__AUTH__METHODS_TO_REQUIRE_AUTH: ${MDR__AUTH__METHODS_TO_REQUIRE_AUTH:-GET,POST,PUT,DELETE}
       MDR__AUTH__PUBLIC_ALLOWLIST_EXACT: ${MDR__AUTH__PUBLIC_ALLOWLIST_EXACT:-/health}
       MDR__AUTH__PUBLIC_ALLOWLIST_STARTS_WITH: ${MDR__AUTH__PUBLIC_ALLOWLIST_STARTS_WITH:-/docs,/openapi.json}
+      LIF_MDR_API_URL: ${LDE__LIF_MDR_API_URL:-http://lif-mdr-api:8012}
+      LIF_MDR_API_AUTH_TOKEN: ${LDE__LIF_MDR_API_AUTH_TOKEN:-changeme3}
+      LIF_QUERY_PLANNER_URL: ${LDE__LIF_QUERY_PLANNER_URL:-http://lif-query-planner-org1:8002}
+      LIF_TRANSLATOR_BASE_URL: ${LDE__LIF_TRANSLATOR_BASE_URL:-http://lif-translator-org1:8007}
+      OPENAPI_DATA_MODEL_ID: ${LDE__OPENAPI_DATA_MODEL_ID:-17}
     ports:
       - "8013:8013"
+    depends_on:
+      - lif-mdr-api
+      - lif-query-planner-org1
+      - lif-translator-org1
     networks:
       - lif-net-org1
       - lif-net-org2
