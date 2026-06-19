@@ -299,8 +299,8 @@ async def test_export_multiple_mdr_data_models_returns_400():
 
 
 @pytest.mark.parametrize("exc_msg", ["HTTP 422", "HTTP 503", "request timed out", "Failed to connect"])
-async def test_export_translator_failure_returns_400(exc_msg):
-    """Any TranslatorException should return 400 without leaking the internal message."""
+async def test_export_translator_failure_returns_500(exc_msg):
+    """Any TranslatorException should return 500 without leaking the internal message."""
     with (
         mock.patch(
             "lif.learner_data_export_api.learner_data_export_endpoints.fetch_data_models_from_mdr",
