@@ -256,7 +256,7 @@ def fetch_data_models_from_mdr(
 
     except httpx.HTTPStatusError as e:
         logger.error(f"MDR HTTP error: {e.response.status_code} - {e.response.text}")
-        raise MDRClientException(f"MDR returned HTTP {e.response.status_code}: {e.response.text}")
+        raise MDRClientException(f"MDR returned HTTP {e.response.status_code}") from e
 
     except Exception as e:
         msg = f"Unexpected error fetching from MDR: {e}"
