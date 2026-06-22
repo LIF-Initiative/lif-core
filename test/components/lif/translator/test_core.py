@@ -123,7 +123,7 @@ async def test_translator_run_with_employment_preferences(monkeypatch):
         }
     }
 
-    # Expected LIF output matching schemas/lif-schema.json EmploymentPreferences requirements
+    # Expected LIF output matching reference_data/schemas/lif-schema.json EmploymentPreferences requirements
     expected = {
         "Person": [
             {

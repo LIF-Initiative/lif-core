@@ -25,7 +25,7 @@ Other directories you'll see:
 | `deployments/` | Docker Compose environments |
 | `cloudformation/` | AWS infrastructure-as-code |
 | `sam/` | Database stacks (Flyway-managed Postgres) |
-| `schemas/` | Source-of-truth LIF schema JSON |
+| `reference_data/schemas/` | Source-of-truth LIF schema JSON |
 | `docs/` | Design docs, guides, proposals |
 | `scripts/` | Operational scripts (releases, key management, etc.) |
 | `test/` | Unit/integration tests, mirroring source structure |
