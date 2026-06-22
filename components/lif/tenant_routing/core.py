@@ -56,7 +56,12 @@ def tenant_schema_for_group(group: str) -> str | None:
 
 
 def resolve_tenant_schema(
-    *, enabled: bool, is_service_principal: bool, cognito_groups: list[str] | None, service_schema: str
+    *,
+    enabled: bool,
+    is_service_principal: bool,
+    cognito_groups: list[str] | None,
+    service_schema: str,
+    service_schema_override: str | None = None,
 ) -> str | None:
     """Resolve which PG schema a request should run against.
 
@@ -68,6 +73,10 @@ def resolve_tenant_schema(
         service_schema: The schema API-key callers (and Cognito users with no
             resolvable group) route to. Configured per-env; "public" until
             the PR 3 cutover renames it to "tenant_lif_team".
+        service_schema_override: When set and the caller is a service principal,
+            use this schema instead of ``service_schema``. Sourced from the
+            ``X-API-Tenant-Schema`` request header; ignored for non-service
+            principals so a regular user cannot escalate via the header.
 
     Returns:
         The schema name to set via ``SET search_path``, or None to leave the
@@ -79,7 +88,7 @@ def resolve_tenant_schema(
         return None
 
     if is_service_principal:
-        return service_schema
+        return service_schema_override if service_schema_override else service_schema
 
     if cognito_groups:
         schema = tenant_schema_for_group(cognito_groups[0])

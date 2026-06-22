@@ -1,4 +1,5 @@
 from typing import List, Optional
+
 from fastapi import HTTPException
 from lif.datatypes.mdr_sql_model import (
     AccessType,
@@ -31,10 +32,9 @@ from lif.mdr_services.transformation_service import get_transformations_by_data_
 from lif.mdr_services.value_set_values_service import get_list_of_values_for_value_set, soft_delete_value_set_value
 from lif.mdr_services.valueset_service import get_value_sets_by_data_model_id_and_attributes, soft_delete_value_set
 from lif.mdr_utils.logger_config import get_logger
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlmodel import select, func
 from sqlalchemy import or_
-
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlmodel import func, select
 
 logger = get_logger(__name__)
 
@@ -52,10 +52,21 @@ async def get_paginated_datamodels(
     level_of_access: AccessType = None,
     state: StateType = None,
     include_extension: bool = True,
+    name: str | None = None,
+    version: str | None = None,
+    contributor_organization: str | None = None,
 ):
     # Query to count total records
     total_query = select(func.count(DataModel.Id)).where(
-        DataModel.Deleted == False, (DataModel.State == state if state else True)
+        DataModel.Deleted == False,
+        (DataModel.State == state if state else True),
+        (DataModel.Name == name if name is not None else True),
+        (DataModel.DataModelVersion == version if version is not None else True),
+        (
+            DataModel.ContributorOrganization == contributor_organization
+            if contributor_organization is not None
+            else True
+        ),
     )
     total_result = await session.execute(total_query)
     total_count = total_result.scalar()
@@ -64,7 +75,17 @@ async def get_paginated_datamodels(
     if pagination:
         query = (
             select(DataModel)
-            .where(DataModel.Deleted == False, (DataModel.State == state if state else True))
+            .where(
+                DataModel.Deleted == False,
+                (DataModel.State == state if state else True),
+                (DataModel.Name == name if name is not None else True),
+                (DataModel.DataModelVersion == version if version is not None else True),
+                (
+                    DataModel.ContributorOrganization == contributor_organization
+                    if contributor_organization is not None
+                    else True
+                ),
+            )
             .order_by(DataModel.Id)
             .offset(offset)
             .limit(limit)
@@ -72,7 +93,17 @@ async def get_paginated_datamodels(
     else:
         query = (
             select(DataModel)
-            .where(DataModel.Deleted == False, (DataModel.State == state if state else True))
+            .where(
+                DataModel.Deleted == False,
+                (DataModel.State == state if state else True),
+                (DataModel.Name == name if name is not None else True),
+                (DataModel.DataModelVersion == version if version is not None else True),
+                (
+                    DataModel.ContributorOrganization == contributor_organization
+                    if contributor_organization is not None
+                    else True
+                ),
+            )
             .order_by(DataModel.Id)
         )
     result = await session.execute(query)

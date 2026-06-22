@@ -326,8 +326,17 @@ services:
       MDR__AUTH__METHODS_TO_REQUIRE_AUTH: ${MDR__AUTH__METHODS_TO_REQUIRE_AUTH:-GET,POST,PUT,DELETE}
       MDR__AUTH__PUBLIC_ALLOWLIST_EXACT: ${MDR__AUTH__PUBLIC_ALLOWLIST_EXACT:-/health}
       MDR__AUTH__PUBLIC_ALLOWLIST_STARTS_WITH: ${MDR__AUTH__PUBLIC_ALLOWLIST_STARTS_WITH:-/docs,/openapi.json}
+      LIF_MDR_API_URL: ${LDE__LIF_MDR_API_URL:-http://lif-mdr-api:8012}
+      LIF_MDR_API_AUTH_TOKEN: ${LDE__LIF_MDR_API_AUTH_TOKEN:-changeme3}
+      LIF_QUERY_PLANNER_URL: ${LDE__LIF_QUERY_PLANNER_URL:-http://lif-query-planner-org1:8002}
+      LIF_TRANSLATOR_BASE_URL: ${LDE__LIF_TRANSLATOR_BASE_URL:-http://lif-translator-org1:8007}
+      OPENAPI_DATA_MODEL_ID: ${LDE__OPENAPI_DATA_MODEL_ID:-17}
     ports:
       - "8013:8013"
+    depends_on:
+      - lif-mdr-api
+      - lif-query-planner-org1
+      - lif-translator-org1
     networks:
       - lif-net-org1
       - lif-net-org2
@@ -401,45 +410,45 @@ services:
       start_period: 10s
 
 
-  lif-advisor-api:
-    build:
-      context: ../../
-      dockerfile: projects/lif_advisor_api/Dockerfile2
-    container_name: lif-advisor-api
-    environment:
-      LIF_SEMANTIC_SEARCH_MCP_SERVER_URL: ${LIF_SEMANTIC_SEARCH_MCP_SERVER_URL:-http://lif-semantic-search-mcp-server:8003/mcp}
-      LIF_GRAPHQL_API_URL: ${LIF_GRAPHQL_API_URL:-http://lif-graphql-api-org1:8000/graphql}
-      LIF_ADVISOR_AGENT_TASKS: ${LIF_ADVISOR_AGENT_TASKS:-load_profile,continue_conversation,save_interaction_summary}
-      LIF_ADVISOR_LLM_MODEL_NAME: ${LANGCHAIN_LLM_MODEL_NAME:-gpt-4.1-mini}
-      LIF_ADVISOR_MESSAGES_TO_KEEP: ${LIF_ADVISOR_MESSAGES_TO_KEEP:-4}
-      LIF_ADVISOR_TRIMMED_MESSAGES_SIZE: ${LIF_ADVISOR_TRIMMED_MESSAGES_SIZE:-384}
-      LIF_ADVISOR_MAX_CONVERSATION_SIZE: ${LIF_ADVISOR_MAX_CONVERSATION_SIZE:-2048}
-      LIF_ADVISOR_MAX_SUMMARY_SIZE: ${LIF_ADVISOR_MAX_SUMMARY_SIZE:-1024}
-      OPENAI_API_KEY: ${OPENAI_API_KEY}
-      LIF_DEMO_USER_PASSWORD: ${LIF_DEMO_USER_PASSWORD:-changeme}
-      CONFIG_KEY_STORE: ${CONFIG_KEY_STORE:-/etc/keys}
-    ports:
-      - "8004:8004"
-    networks:
-      - lif-net-org1
-    depends_on:
-      lif-graphql-api-org1:
-        condition: service_started
-      lif-semantic-search-mcp-server:
-        condition: service_healthy
+  # lif-advisor-api:
+  #   build:
+  #     context: ../../
+  #     dockerfile: projects/lif_advisor_api/Dockerfile2
+  #   container_name: lif-advisor-api
+  #   environment:
+  #     LIF_SEMANTIC_SEARCH_MCP_SERVER_URL: ${LIF_SEMANTIC_SEARCH_MCP_SERVER_URL:-http://lif-semantic-search-mcp-server:8003/mcp}
+  #     LIF_GRAPHQL_API_URL: ${LIF_GRAPHQL_API_URL:-http://lif-graphql-api-org1:8000/graphql}
+  #     LIF_ADVISOR_AGENT_TASKS: ${LIF_ADVISOR_AGENT_TASKS:-load_profile,continue_conversation,save_interaction_summary}
+  #     LIF_ADVISOR_LLM_MODEL_NAME: ${LANGCHAIN_LLM_MODEL_NAME:-gpt-4.1-mini}
+  #     LIF_ADVISOR_MESSAGES_TO_KEEP: ${LIF_ADVISOR_MESSAGES_TO_KEEP:-4}
+  #     LIF_ADVISOR_TRIMMED_MESSAGES_SIZE: ${LIF_ADVISOR_TRIMMED_MESSAGES_SIZE:-384}
+  #     LIF_ADVISOR_MAX_CONVERSATION_SIZE: ${LIF_ADVISOR_MAX_CONVERSATION_SIZE:-2048}
+  #     LIF_ADVISOR_MAX_SUMMARY_SIZE: ${LIF_ADVISOR_MAX_SUMMARY_SIZE:-1024}
+  #     OPENAI_API_KEY: ${OPENAI_API_KEY}
+  #     LIF_DEMO_USER_PASSWORD: ${LIF_DEMO_USER_PASSWORD:-changeme}
+  #     CONFIG_KEY_STORE: ${CONFIG_KEY_STORE:-/etc/keys}
+  #   ports:
+  #     - "8004:8004"
+  #   networks:
+  #     - lif-net-org1
+  #   depends_on:
+  #     lif-graphql-api-org1:
+  #       condition: service_started
+  #     lif-semantic-search-mcp-server:
+  #       condition: service_healthy
 
-  lif-advisor-app:
-    build:
-      context: ../../frontends/lif_advisor_app
-      args:
-        LIF_ADVISOR_API_URL: ${LIF_ADVISOR_API_URL:-http://localhost:8004} # Web client needs to access the API outside the container
-    container_name: lif-advisor-app
-    ports:
-      - "5174:80"
-    networks:
-      - lif-net-org1
-    depends_on:
-      - lif-advisor-api
+  # lif-advisor-app:
+  #   build:
+  #     context: ../../frontends/lif_advisor_app
+  #     args:
+  #       LIF_ADVISOR_API_URL: ${LIF_ADVISOR_API_URL:-http://localhost:8004} # Web client needs to access the API outside the container
+  #   container_name: lif-advisor-app
+  #   ports:
+  #     - "5174:80"
+  #   networks:
+  #     - lif-net-org1
+  #   depends_on:
+  #     - lif-advisor-api
 
   lif-mdr-database:
     image: postgres

@@ -133,3 +133,68 @@ class TestResolveTenantSchema:
             )
             == "tenant_lif_team"
         )
+
+    def test_service_schema_override_used_for_service_principal(self):
+        """X-API-Tenant-Schema lets a service principal target a specific tenant schema."""
+        assert (
+            resolve_tenant_schema(
+                enabled=True,
+                is_service_principal=True,
+                cognito_groups=None,
+                service_schema="tenant_lif_team",
+                service_schema_override="tenant_acme_univ",
+            )
+            == "tenant_acme_univ"
+        )
+
+    def test_service_schema_override_ignored_for_non_service_principal(self):
+        """A regular Cognito user cannot use the override — it must be silently ignored."""
+        assert (
+            resolve_tenant_schema(
+                enabled=True,
+                is_service_principal=False,
+                cognito_groups=["lif-team"],
+                service_schema="tenant_lif_team",
+                service_schema_override="tenant_acme_univ",
+            )
+            == "tenant_lif_team"
+        )
+
+    def test_service_schema_override_empty_string_falls_back_to_service_schema(self):
+        """An empty override should not shadow the service schema."""
+        assert (
+            resolve_tenant_schema(
+                enabled=True,
+                is_service_principal=True,
+                cognito_groups=None,
+                service_schema="tenant_lif_team",
+                service_schema_override="",
+            )
+            == "tenant_lif_team"
+        )
+
+    def test_service_schema_override_none_falls_back_to_service_schema(self):
+        """Explicitly passing None behaves the same as omitting the parameter."""
+        assert (
+            resolve_tenant_schema(
+                enabled=True,
+                is_service_principal=True,
+                cognito_groups=None,
+                service_schema="tenant_lif_team",
+                service_schema_override=None,
+            )
+            == "tenant_lif_team"
+        )
+
+    def test_service_schema_override_ignored_when_flag_off(self):
+        """The feature flag short-circuit must win over any override."""
+        assert (
+            resolve_tenant_schema(
+                enabled=False,
+                is_service_principal=True,
+                cognito_groups=None,
+                service_schema="tenant_lif_team",
+                service_schema_override="tenant_acme_univ",
+            )
+            is None
+        )
