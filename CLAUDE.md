@@ -139,7 +139,7 @@ All enforced automatically on commit:
 
 ## LIF Schema & Data Model
 
-- **Source of truth**: `schemas/lif-schema.json` → captured dynamically by MDR → seed data, components, and GraphQL queries all honor the MDR schema.
+- **Source of truth**: `reference_data/schemas/lif-schema.json` → captured dynamically by MDR → seed data, components, and GraphQL queries all honor the MDR schema.
 - **Loaded from MDR at startup** via `LIFSchemaConfig.from_environment()` and the `SchemaStateManager` component. **No silent fallback to bundled file** — if MDR is configured but unavailable, the service fails loudly. `USE_OPENAPI_DATA_MODEL_FROM_FILE=true` forces the bundled file (dev only).
 - **Capitalization convention**: entity/object/array properties are **PascalCase** (`Name`, `Identifier`, `EmploymentPreferences`); scalar attributes are **camelCase** (`firstName`, `identifierType`). Applies to seed data, `.graphql` queries, `information_sources_config*.yml` fragment paths, and test fixtures.
 

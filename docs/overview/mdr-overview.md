@@ -88,7 +88,7 @@ A suggested first walkthrough once you have access:
 
 - **Source code:** [LIF-Initiative/lif-core](https://github.com/LIF-Initiative/lif-core). MDR lives under `bases/lif/mdr_restapi/` (API) and `frontends/mdr-frontend/` (UI).
 - **MDR design document:** [`docs/design/components/mdr.md`](../design/components/mdr.md)
-- **LIF schema source of truth:** `schemas/lif-schema.json` in the repo
+- **LIF schema source of truth:** `reference_data/schemas/lif-schema.json` in the repo
 - **Add a data source walkthrough:** [`docs/operations/guides/add-data-source.md`](../operations/guides/add-data-source.md) — step-by-step guide covering source schema creation, JSONata mappings, and pipeline wiring
 - **Data source adapter reference:** [`docs/operations/guides/creating-a-data-source-adapter.md`](../operations/guides/creating-a-data-source-adapter.md) — what an adapter is, how it consumes MDR schemas at runtime
 - **Self-serve registration (as implemented):** [`docs/design/cross-cutting/self-serve-tenant-auth.md`](../design/cross-cutting/self-serve-tenant-auth.md) — narrative of the Cognito → schema-per-tenant → workspace selection → invite flow (issues #882/#883/#884)
