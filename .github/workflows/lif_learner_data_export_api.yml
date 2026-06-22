@@ -1,0 +1,73 @@
+name: Deploy LIF Learner Data Export API to Amazon ECS
+
+env:
+  AWS_REGION: us-east-1
+  GHA_ROLE: "arn:aws:iam::381492161417:role/lif-github-actions-dev"
+  ECS_CLUSTER: dev
+  ECS_SERVICE_ORG1: learner-data-export-api-FARGATE
+
+permissions:
+      id-token: write
+      contents: read
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "main" ]
+    paths:
+      - .github/workflows/lif_learner_data_export_api.yml
+      - bases/lif/learner_data_export_api/**
+      - cloudformation/dev-lif-learner-data-export-api.params
+      - cloudformation/lif-learner-data-export-api-taskdef-includes.yml
+      - components/lif/datatypes/**
+      - components/lif/exceptions/**
+      - components/lif/lif_schema_config/**
+      - components/lif/logging/**
+      - components/lif/mdr_auth/**
+      - components/lif/mdr_client/**
+      - components/lif/mdr_dto/**
+      - components/lif/mdr_services/**
+      - components/lif/mdr_utils/**
+      - components/lif/query_planner_client/**
+      - components/lif/tenant_routing/**
+      - components/lif/translator_client/**
+      - projects/lif_learner_data_export_api/**
+
+jobs:
+
+  lif-learner-data-export-api:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    env:
+      WORKING_DIR: ./projects/lif_learner_data_export_api
+      ECR_REPOSITORY: lif/dev/lif_learner_data_export_api
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Build the project
+      shell: bash
+      working-directory: ${{ env.WORKING_DIR }}
+      run: |
+        curl -LsSf https://astral.sh/uv/0.7.15/install.sh | sh
+        ./build.sh
+
+    - name: Build and push docker image
+      uses: ./.github/actions/build-and-push
+      with:
+        working-dir: ${{ env.WORKING_DIR }}
+        github-actions-role: ${{ env.GHA_ROLE }}
+        role-session-name: learner-data-export-api-build
+        aws-region: ${{ env.AWS_REGION }}
+        ecr-repository: ${{ env.ECR_REPOSITORY }}
+
+    - name: Update the lif-learner-data-export-api ECS Service
+      uses: ./.github/actions/update-cluster
+      with:
+        github-actions-role: ${{ env.GHA_ROLE }}
+        role-session-name: learner-data-export-api-ecs
+        aws-region: ${{ env.AWS_REGION }}
+        ecs-cluster: ${{ env.ECS_CLUSTER }}
+        ecs-service: ${{ env.ECS_SERVICE_ORG1 }}
