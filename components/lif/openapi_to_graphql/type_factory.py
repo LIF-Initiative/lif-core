@@ -33,7 +33,13 @@ from lif.lif_schema_config import (
     resolve_ref as schema_resolve_ref,
 )
 from lif.logging import get_logger
-from lif.string_utils import convert_dates_to_strings, dict_keys_to_snake, safe_identifier, to_pascal_case
+from lif.string_utils import (
+    convert_dates_to_strings,
+    dict_keys_to_snake,
+    safe_graphql_name,
+    safe_identifier,
+    to_pascal_case,
+)
 
 
 logger = get_logger(__name__)
@@ -97,6 +103,7 @@ def create_enum_type(enum_name: str, values: List[Any], created_types: Dict[str,
     Returns:
         Type[Enum]: The created Strawberry Enum type.
     """
+    enum_name = safe_graphql_name(enum_name)  # #1011: keep the enum type name a valid GraphQL name
     if enum_name in created_types:
         return created_types[enum_name]
     enum_dict = {}
@@ -257,6 +264,9 @@ def create_type(
     Returns:
         type: The created Strawberry/Python type.
     """
+    # Ensure a valid GraphQL type name (also used as the cache key) — a source-schema name with
+    # an illegal character would otherwise crash the whole schema build (#1011).
+    name = safe_graphql_name(name)
     if name in created_types:
         return created_types[name]
 
@@ -314,8 +324,11 @@ def create_type(
                 field_type_class = Optional[field_type_class]
             annotations[safe_field_name] = field_type_class
 
-            # Always set the GraphQL field name to preserve original schema case (e.g., Identifier, not identifier)
-            class_fields[safe_field_name] = strawberry.field(name=field_name, description=field_def.get("Description"))
+            # Preserve original schema case (e.g., Identifier, not identifier), but sanitize to a
+            # valid GraphQL name so an illegal character (e.g. a hyphen) can't crash schema build (#1011).
+            class_fields[safe_field_name] = strawberry.field(
+                name=safe_graphql_name(field_name), description=field_def.get("Description")
+            )
 
         placeholder.__annotations__ = annotations
         for field in annotations:
@@ -355,6 +368,7 @@ def create_mutable_input_type(
     Returns:
         Optional[Type[Any]]: The generated Strawberry input type class if any mutable fields are found, otherwise None.
     """
+    type_name = safe_graphql_name(type_name)  # #1011: keep the input type name a valid GraphQL name
     cache_key = f"{type_name}Mutable"
     if cache_key in input_type_cache:
         return input_type_cache[cache_key]
@@ -380,7 +394,7 @@ def create_mutable_input_type(
             )
             if nested_input_type is not None:
                 input_annotations[safe_field_name] = Optional[nested_input_type]
-                input_class_fields[safe_field_name] = strawberry.field(default=None, name=field_name)
+                input_class_fields[safe_field_name] = strawberry.field(default=None, name=safe_graphql_name(field_name))
         elif field_def.get("type") == "array" and "properties" in field_def:
             nested_type_name = f"{type_name}_{safe_field_name}MutableItemInput"
             nested_input_type = create_mutable_input_type(
@@ -388,16 +402,16 @@ def create_mutable_input_type(
             )
             if nested_input_type is not None:
                 input_annotations[safe_field_name] = Optional[List[nested_input_type]]
-                input_class_fields[safe_field_name] = strawberry.field(default=None, name=field_name)
+                input_class_fields[safe_field_name] = strawberry.field(default=None, name=safe_graphql_name(field_name))
         elif "enum" in field_def and field_def.get("x-mutable", False):
             enum_type_name = to_pascal_case(type_name, field_name, "Enum")
             enum_type = create_enum_type(enum_type_name, field_def["enum"], created_types)
             input_annotations[safe_field_name] = Optional[enum_type]
-            input_class_fields[safe_field_name] = strawberry.field(default=None, name=field_name)
+            input_class_fields[safe_field_name] = strawberry.field(default=None, name=safe_graphql_name(field_name))
         else:
             py_type = map_datatype(field_def)
             input_annotations[safe_field_name] = Optional[py_type]
-            input_class_fields[safe_field_name] = strawberry.field(default=None, name=field_name)
+            input_class_fields[safe_field_name] = strawberry.field(default=None, name=safe_graphql_name(field_name))
 
     if not input_class_fields:
         input_type_cache[cache_key] = None
@@ -633,6 +647,7 @@ def create_nested_input_type(
     Returns:
         Optional[type]: Strawberry input type class, or None if no queryable fields exist.
     """
+    type_name = safe_graphql_name(type_name)  # #1011: keep the filter input type name a valid GraphQL name
     if type_name in input_type_cache:
         return input_type_cache[type_name]
 
@@ -657,7 +672,7 @@ def create_nested_input_type(
             )
             if nested_input_type is not None:
                 input_annotations[safe_field_name] = Optional[nested_input_type]
-                input_class_fields[safe_field_name] = strawberry.field(default=None, name=field_name)
+                input_class_fields[safe_field_name] = strawberry.field(default=None, name=safe_graphql_name(field_name))
         elif field_def.get("type") == "array" and "properties" in field_def:
             nested_type_name = f"{type_name}_{safe_field_name}ItemInput"
             nested_input_type = create_nested_input_type(
@@ -665,16 +680,16 @@ def create_nested_input_type(
             )
             if nested_input_type is not None:
                 input_annotations[safe_field_name] = Optional[List[nested_input_type]]
-                input_class_fields[safe_field_name] = strawberry.field(default=None, name=field_name)
+                input_class_fields[safe_field_name] = strawberry.field(default=None, name=safe_graphql_name(field_name))
         elif "enum" in field_def and field_def.get("x-queryable", False):
             enum_type_name = to_pascal_case(type_name, field_name, "Enum")
             enum_type = create_enum_type(enum_type_name, field_def["enum"], created_types)
             input_annotations[safe_field_name] = Optional[enum_type]
-            input_class_fields[safe_field_name] = strawberry.field(default=None, name=field_name)
+            input_class_fields[safe_field_name] = strawberry.field(default=None, name=safe_graphql_name(field_name))
         else:
             py_type = map_datatype(field_def)
             input_annotations[safe_field_name] = Optional[py_type]
-            input_class_fields[safe_field_name] = strawberry.field(default=None, name=field_name)
+            input_class_fields[safe_field_name] = strawberry.field(default=None, name=safe_graphql_name(field_name))
 
     if not input_class_fields:
         input_type_cache[type_name] = None
@@ -808,12 +823,7 @@ def build_root_query_type(
         is_nested_list: bool = type_class._name == "List"
         return_type = type_class if is_nested_list else List[type_class]
         # Add type annotations for Strawberry's introspection
-        resolver.__annotations__ = {
-            "self": Any,
-            "info": Info,
-            "filter": Optional[input_class],
-            "return": return_type,
-        }
+        resolver.__annotations__ = {"self": Any, "info": Info, "filter": Optional[input_class], "return": return_type}
         # Register the resolver with Strawberry
         strawberry_resolver = strawberry.field(resolver)
         query_fields = {field_name: strawberry_resolver}

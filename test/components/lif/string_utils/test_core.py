@@ -2,6 +2,7 @@ from datetime import date, datetime
 
 from lif.string_utils import (
     safe_identifier,
+    safe_graphql_name,
     to_pascal_case,
     to_snake_case,
     to_camel_case,
@@ -10,6 +11,25 @@ from lif.string_utils import (
     convert_dates_to_strings,
     to_value_enum_name,
 )
+
+
+class TestSafeGraphqlName:
+    def test_invalid_chars_replaced_case_preserved(self):
+        # The bug behind #1011: a hyphen makes an invalid GraphQL name.
+        assert safe_graphql_name("iSO639-2LangCode") == "iSO639_2LangCode"
+
+    def test_leading_digit_prefixed(self):
+        assert safe_graphql_name("2legitToQuit") == "_2legitToQuit"
+
+    def test_valid_names_unchanged(self):
+        # Unlike safe_identifier, this must NOT snake_case or lowercase valid names.
+        assert safe_graphql_name("firstName") == "firstName"
+        assert safe_graphql_name("Identifier") == "Identifier"
+        assert safe_graphql_name("Person_Name") == "Person_Name"
+
+    def test_other_specials_and_empty(self):
+        assert safe_graphql_name("a.b c") == "a_b_c"
+        assert safe_graphql_name("") == ""
 
 
 class TestSafeIdentifier:
