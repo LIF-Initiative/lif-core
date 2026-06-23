@@ -51,6 +51,9 @@ Secrets:
   - Name: MDR__AUTH__SERVICE_API_KEY__TRANSLATOR
     ValueFrom:
       Fn::Sub: "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${EnvironmentName}/${ServiceName}/MdrAuthServiceApiKeyTranslator"
+  - Name: MDR__AUTH__SERVICE_API_KEY__LEARNER_DATA_EXPORT
+    ValueFrom:
+      Fn::Sub: "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${EnvironmentName}/${ServiceName}/MdrAuthServiceApiKeyLearnerDataExport"
   - Name: MDR__AUTH__SERVICE_API_KEY__POST_CONFIRM
     ValueFrom:
       Fn::Sub: "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${EnvironmentName}/${ServiceName}/MdrAuthServiceApiKeyPostConfirm"

@@ -188,6 +188,14 @@ main() {
         "/${ENV_NAME}/mdr-api/MdrAuthServiceApiKeyTranslator" \
         "/${ENV_NAME}/translator-org1/MdrApiKey"
 
+    # Learner Data Export key (issue #997/#998). Server-side under /mdr-api/
+    # matches the MDR API task def ValueFrom; client-side under
+    # /learner-data-export-api/ is what the LDE task reads as LIF_MDR_API_AUTH_TOKEN.
+    setup_key_group \
+        "Learner Data Export service key" \
+        "/${ENV_NAME}/mdr-api/MdrAuthServiceApiKeyLearnerDataExport" \
+        "/${ENV_NAME}/learner-data-export-api/MdrApiKey"
+
     # Post-confirmation Lambda key (issue #883 PR 4b). Server-side entry is
     # under /mdr-api/ to match the MDR API task def ValueFrom path; client-side
     # key lives under /mdr-post-confirm/ where the Lambda's IAM policy reads it.

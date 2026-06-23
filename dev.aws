@@ -47,6 +47,9 @@ STACKS['dev-lif-mdr-cognito']='cognito-selfserve'
 STACKS['dev-lif-mdr-frontend']='s3-hosted-stackset'
 STACKS['dev-lif-mdr-api']='service'
 
+# Learner Data Export (externally accessible; depends on MDR + query-planner-org1 + translator-org1)
+STACKS['dev-lif-learner-data-export-api']='service'
+
 # Dagster OSE
 STACKS['dev-lif-dagster-code-location']='service'
 STACKS['dev-lif-dagster-webserver']='service'
@@ -94,6 +97,7 @@ STACK_ORDER=(
   dev-lif-mdr-cognito
   dev-lif-mdr-frontend
   dev-lif-mdr-api
+  dev-lif-learner-data-export-api
 
   # Dagster OSE
   dev-lif-dagster-code-location
