@@ -43,6 +43,7 @@
 - [`ai_architecture/0001-ai-architecture-overview.md`](design/adr/ai_architecture/0001-ai-architecture-overview.md) — AI architecture overview.
 - [`composer/0001-implement-as-module-component.md`](design/adr/composer/0001-implement-as-module-component.md) — Composer: implement as module component.
 - [`composer/0002-use-hierarchical-dot-path-for-fragment-paths.md`](design/adr/composer/0002-use-hierarchical-dot-path-for-fragment-paths.md) — Composer: hierarchical dot-path for fragment paths.
+- [`data_model/0001-field-naming-and-source-standard-normalization.md`](design/adr/data_model/0001-field-naming-and-source-standard-normalization.md) — Data model: field naming & source-standard normalization (Proposed).
 - [`general/auth.md`](design/adr/general/auth.md) — ADR 0001: API and User Auth (Proposed).
 - [`metadata_repository/0001-base-lif-automation.md`](design/adr/metadata_repository/0001-base-lif-automation.md) — MDR: base LIF automation.
 - [`metadata_repository/0002-no-partner-management.md`](design/adr/metadata_repository/0002-no-partner-management.md) — MDR: no partner management in scope.
@@ -55,7 +56,7 @@
 - [`orchestrator/0001-orchestrator-for-demo.md`](design/adr/orchestrator/0001-orchestrator-for-demo.md) — Orchestrator: design for demo deployment.
 - [`translator/0001-initialization-vs-mdr-dependency.md`](design/adr/translator/0001-initialization-vs-mdr-dependency.md) — Translator: initialization vs MDR dependency.
 - [`translator/0002-query-translation.md`](design/adr/translator/0002-query-translation.md) — Translator: query translation approach.
-- *Subdirectories `api/`, `data_model/`, `query_cache/`, `query_mapper/` currently hold only `_template.md` placeholders.*
+- *Subdirectories `api/`, `query_cache/`, `query_mapper/` currently hold only `_template.md` placeholders.*
 
 ### `docs/design/cross-cutting/` — Topics spanning services
 
