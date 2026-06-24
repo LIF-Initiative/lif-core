@@ -30,20 +30,28 @@ At the MDR entry point, field/entity names come from external standards (CEDS, I
    are PascalCase, scalar leaves are camelCase, enums are PascalCase — so a reader can tell
    containers from values at a glance.
 3. **Technology constraints of the consumers** — and the same illegal name fails *differently* in
-   each, because each consumer sanitizes differently (or not at all). An audit found the one bad
-   name threatens at least five components:
+   each, because each consumer sanitizes differently (or not at all). An audit (code-verified where
+   noted) found one bad name threatens multiple components:
    - **GraphQL** identifiers must match `/[_A-Za-z][_0-9A-Za-z]*/` — no hyphen, no leading digit, and
      `__` is reserved. A single illegal name fails the *entire* schema build (#1011; hardened in
-     #1012).
+     #1012). *Verified.*
    - **Semantic-search / MCP** builds Pydantic filter/mutation models from the **raw** schema names
      with no sanitization → an invalid identifier crashes the MCP server at startup (#1016).
+     *Verified* (`semantic_search_service/core.py:129,134`).
+   - **MongoDB** — update/insert keys are built from field names (`build_mongo_update_ops`,
+     `query_cache_service/core.py:96-110`; `insert_one(model_dump(by_alias=True))`). A name starting
+     with `$` is rejected by Mongo; a name containing `.` is misread as nesting → wrong/failed write.
+     *Verified.*
+   - **Composer / fragment paths** split path strings on `.` (`composer/core.py:60`; see ADR
+     `composer/0002`) — a name that itself contains a `.` splits into spurious keys and the fragment
+     is silently dropped. *Verified.*
    - **Python / Strawberry** attributes are snake_cased (`safe_identifier`).
    - **Query Planner** receives the GraphQL field names as `selected_fields` and matches them against
      the data-source keys — so a name sanitized in GraphQL but not in storage silently won't match.
-   - **MongoDB** rejects field names that start with `$` or contain `.`.
-   - **Composer / fragment paths** split on `.` (see ADR `composer/0002`) — a name that itself
-     contains a `.` mis-nests the record.
-   - **Translator / JSONata** treats an unquoted hyphenated/spaced name as an operator expression.
+   - **Translator / JSONata** — mapping expressions are **author-supplied** (`Transformation.Expression`),
+     not auto-generated from names, so this is an *authoring hazard* rather than an automatic code
+     failure: an unquoted hyphenated/spaced name parses as an operator expression. Mitigation belongs
+     at the MDR boundary too — validate that a mapping expression compiles on write (see *Decision*).
 
 The convention is documented but, per `data-model-rules.md`, "enforced by readers, not tooling."
 That gap let `iSO639-2LangCode` reach the MDR and **crash GraphQL schema generation in both dev and
@@ -80,7 +88,9 @@ naming is guaranteed, rather than relying on every downstream consumer to cope w
    storage key.
 3. **Enforce at write time.** The MDR API validates names on create/update and rejects (or
    auto-normalizes with a warning) anything that violates the convention, so the model cannot drift
-   into an unrepresentable state again.
+   into an unrepresentable state again. Mappings get the same treatment: a transformation expression
+   is validated to **compile** (and to reference known elements) on write, so a malformed JSONata
+   mapping is caught at authoring time rather than failing silently during translation.
 4. **Keep codegen sanitization (#1012) as defense-in-depth** — a backstop so a bad name degrades a
    single field instead of taking down the whole service, never the primary guarantee.
 
