@@ -22,7 +22,7 @@ class TransformationGroupDTO(BaseModel):
     SourceDataModel: Optional[DataModelRefDTO] = None
     TargetDataModel: Optional[DataModelRefDTO] = None
     Name: Optional[str] = None
-    GroupVersion: str
+    GroupVersion: Optional[str] = None
     Description: Optional[str] = None
     Notes: Optional[str] = None
     CreationDate: Optional[datetime] = None  # New column

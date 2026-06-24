@@ -152,6 +152,46 @@ async def test_available_data_formats_empty():
     assert response.json() == {"metadata": {"total": 0}, "DataFormats": []}
 
 
+async def test_available_data_formats_versions_sorted_numerically():
+    # "1.10.0" must sort after "1.9.0" (numeric, not lexical). Single numeric segments
+    # ("423") sort among the numeric-first-segment versions, while versions whose first
+    # segment is non-numeric ("1.a"/"1.c" share a numeric first segment, but "B.23.1",
+    # "E.43", "One" do not) fall back to lexical ordering after the numeric ones.
+    mdr_transformation_groups = {
+        "total": 9,
+        "data": [
+            {
+                "TargetDataModelId": 1,
+                "GroupVersion": gv,
+                "TargetDataModel": {"name": "Model", "version": "1.0", "contributorOrganization": "Org"},
+            }
+            for gv in ("B.23.1", "1.10.0", "One", "1.c", "1.a", "423", "1.2.0", "E.43", "1.9.0")
+        ],
+    }
+
+    with (
+        mock.patch(
+            "lif.mdr_client.core._get_mdr_client", new=_fake_get_mdr_client(json_payload=mdr_transformation_groups)
+        ),
+        mock.patch.object(_ep.CONFIG, "openapi_data_model_id", "17"),
+    ):
+        async with get_client() as client:
+            response = await client.get("/available-data-formats", headers={"X-API-Key": DEFAULT_API_KEY})
+
+    assert response.status_code == 200, response.text
+    assert response.json()["DataFormats"][0]["TransformationVersions"] == [
+        "1.2.0",
+        "1.9.0",
+        "1.10.0",
+        "1.a",
+        "1.c",
+        "423",
+        "B.23.1",
+        "E.43",
+        "One",
+    ]
+
+
 async def test_available_data_formats_mdr_error_returns_500():
     with (
         mock.patch(

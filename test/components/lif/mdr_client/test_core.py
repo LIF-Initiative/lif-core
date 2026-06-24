@@ -234,24 +234,30 @@ def test_get_data_model_transformation_not_found(mock_get):
 
 @patch("httpx.AsyncClient.get")
 async def test_get_transformation_groups_from_mdr_success(mock_get):
-    config = types.SimpleNamespace(mdr_api_url="http://api.example.com")
-    expected_url = (
-        "http://api.example.com/transformation_groups/"
-        "?exportable=True&pagination=False&size=100&source_data_model_id=17"
-    )
+    config = types.SimpleNamespace(mdr_api_url="http://api.example.com", mdr_api_auth_token="secret-token")
+    url = "http://api.example.com/transformation_groups/"
     payload = {"total": 1, "data": [{"TargetDataModelId": 2, "GroupVersion": "1.0"}]}
-    mock_get.return_value = _create_mock_response(200, payload, expected_url)
+    mock_get.return_value = _create_mock_response(200, payload, url)
 
     result = await core.get_transformation_groups_from_mdr(config=config, source_data_model_id="17")
 
     assert result == payload
     mock_get.assert_called_once()
-    assert mock_get.call_args[0][0] == expected_url
+    # URL is the bare path; query args are passed via params (httpx encodes them).
+    assert mock_get.call_args.args[0] == url
+    assert mock_get.call_args.kwargs["params"] == {
+        "source_data_model_id": "17",
+        "exportable": True,
+        "pagination": False,
+        "size": 100,
+    }
+    # Auth token is sourced from config, not the environment.
+    assert mock_get.call_args.kwargs["headers"]["X-API-Key"] == "secret-token"
 
 
 @patch("httpx.AsyncClient.get")
 async def test_get_transformation_groups_from_mdr_raises_on_http_error(mock_get):
-    config = types.SimpleNamespace(mdr_api_url="http://api.example.com")
+    config = types.SimpleNamespace(mdr_api_url="http://api.example.com", mdr_api_auth_token="secret-token")
     mock_get.return_value = _create_mock_response(
         500, {"detail": "boom"}, "http://api.example.com/transformation_groups/"
     )

@@ -265,18 +265,55 @@ def fetch_data_models_from_mdr(
 
 
 async def get_transformation_groups_from_mdr(*, config: "LIFSchemaConfig", source_data_model_id: str) -> dict:
-    url: str = f"{config.mdr_api_url}/transformation_groups/?exportable=True&pagination=False&size=100&source_data_model_id={source_data_model_id}"
-    logger.info("Calling the MDR URL: %s with a timeout of %s", url, _get_mdr_timeout_seconds())
+    """
+    Fetch the (exportable) transformation groups for a source data model from MDR.
+
+    Args:
+        config: LIFSchemaConfig instance with MDR settings
+        source_data_model_id: The ID of the source data model whose groups to fetch
+
+    Returns:
+        The MDR listing response as JSON ({"total": int, "data": [...]})
+
+    Raises:
+        MDRClientException: If MDR is unavailable or returns an error
+    """
+    url = f"{config.mdr_api_url}/transformation_groups/"
+    params: dict[str, str | bool | int] = {
+        "source_data_model_id": source_data_model_id,
+        "exportable": True,
+        "pagination": False,
+        "size": 100,
+    }
+    headers = _build_mdr_headers(config.mdr_api_auth_token)
+
+    logger.info("Fetching transformation groups from MDR: %s params=%s", url, params)
+
     try:
         async for client in _get_mdr_client():
-            response = await client.get(url, headers=_build_mdr_headers())
+            response = await client.get(url, headers=headers, params=params)
         response.raise_for_status()
         response_json = response.json()
-        logger.info(f"Number of transformation group versions for the source model from MDR: {response_json['total']}")
+        logger.info("Number of transformation group versions for the source model from MDR: %s", response_json["total"])
         return response_json
+
+    except httpx.TimeoutException as e:
+        msg = f"MDR request timed out: {e}"
+        logger.error(msg)
+        raise MDRClientException(msg) from e
+
+    except httpx.ConnectError as e:
+        msg = f"Failed to connect to MDR at {config.mdr_api_url}: {e}"
+        logger.error(msg)
+        raise MDRClientException(msg) from e
+
+    except httpx.HTTPStatusError as e:
+        logger.error(f"MDR HTTP error: {e.response.status_code} - {e.response.text}")
+        raise MDRClientException(f"MDR returned HTTP {e.response.status_code}") from e
+
     except Exception as e:
-        msg = "MDR Client error"
-        logger.exception(msg)
+        msg = f"Unexpected error fetching transformation groups from MDR: {e}"
+        logger.error(msg)
         raise MDRClientException(msg) from e
 
 

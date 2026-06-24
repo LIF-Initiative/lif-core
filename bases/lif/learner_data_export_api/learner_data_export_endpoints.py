@@ -144,6 +144,13 @@ async def get_data(
     return translated_data
 
 
+def _version_sort_key(version: str) -> list[tuple[int, object]]:
+    # Sort dotted versions numerically (so "1.9.0" < "1.10.0"), falling back to
+    # lexical ordering for non-numeric segments. Each segment is tagged so numeric
+    # and non-numeric parts never compare against each other.
+    return [(0, int(part)) if part.isdigit() else (1, part) for part in version.split(".")]
+
+
 @router.get("/available-data-formats", response_model=TargetTransformationDataModelsDTO)
 async def get_available_data_formats(request: Request):
     source_schema_id = CONFIG.openapi_data_model_id
@@ -193,7 +200,7 @@ async def get_available_data_formats(request: Request):
             data_model.TransformationVersions.append(group_version)
 
     for data_model in data_models_by_id.values():
-        data_model.TransformationVersions.sort()
+        data_model.TransformationVersions.sort(key=_version_sort_key)
 
     data_formats = TargetTransformationDataModelsDTO(
         metadata={"total": len(data_models_by_id)},

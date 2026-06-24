@@ -1018,7 +1018,7 @@ async def get_paginated_transformations_groups(
         transformation_group_dto.SourceDataModelName = source_data_model.Name
         transformation_group_dto.TargetDataModelName = target_data_model.Name
         if exportable:
-            # Add non-portable IDs with (name, version, org) refs for export.
+            # Add portable (name, version, org) refs alongside the non-portable IDs.
             transformation_group_dto.SourceDataModel = DataModelRefDTO(
                 name=source_data_model.Name,
                 version=source_data_model.DataModelVersion,
