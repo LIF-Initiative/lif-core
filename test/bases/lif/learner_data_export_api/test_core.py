@@ -116,6 +116,130 @@ async def test_available_data_formats_default_token():
     assert not diff, diff  # prints out the differences if any
 
 
+def _fake_get_mdr_client(*, json_payload=None, get_side_effect=None):
+    """Build a replacement for mdr_client._get_mdr_client that yields a mock client.
+
+    Pass json_payload for a 200 response, or get_side_effect to make client.get raise.
+    """
+    mock_response = mock.Mock()
+    mock_response.status_code = 200
+    mock_response.raise_for_status = mock.Mock()
+    mock_response.json = mock.Mock(return_value=json_payload)
+
+    mock_mdr_client = mock.Mock()
+    if get_side_effect is not None:
+        mock_mdr_client.get = mock.AsyncMock(side_effect=get_side_effect)
+    else:
+        mock_mdr_client.get = mock.AsyncMock(return_value=mock_response)
+
+    async def fake_get_mdr_client():
+        yield mock_mdr_client
+
+    return fake_get_mdr_client
+
+
+async def test_available_data_formats_empty():
+    with (
+        mock.patch(
+            "lif.mdr_client.core._get_mdr_client", new=_fake_get_mdr_client(json_payload={"total": 0, "data": []})
+        ),
+        mock.patch.object(_ep.CONFIG, "openapi_data_model_id", "17"),
+    ):
+        async with get_client() as client:
+            response = await client.get("/available-data-formats", headers={"X-API-Key": DEFAULT_API_KEY})
+
+    assert response.status_code == 200, response.text
+    assert response.json() == {"metadata": {"total": 0}, "DataFormats": []}
+
+
+async def test_available_data_formats_mdr_error_returns_500():
+    with (
+        mock.patch(
+            "lif.mdr_client.core._get_mdr_client", new=_fake_get_mdr_client(get_side_effect=RuntimeError("boom"))
+        ),
+        mock.patch.object(_ep.CONFIG, "openapi_data_model_id", "17"),
+    ):
+        async with get_client() as client:
+            response = await client.get("/available-data-formats", headers={"X-API-Key": DEFAULT_API_KEY})
+
+    assert response.status_code == 500
+    assert response.json() == {"detail": "Unable to retrieve available data formats"}
+
+
+async def test_available_data_formats_skips_deduplicated_and_defaults():
+    # Exercises the grouping branches: a group with no TargetDataModelId is skipped,
+    # repeated GroupVersions for one target are deduped, and a missing TargetDataModel
+    # object falls back to empty-string name/version/org.
+    mdr_transformation_groups = {
+        "total": 5,
+        "data": [
+            {
+                "TargetDataModelId": 1,
+                "GroupVersion": "2.0",
+                "TargetDataModel": {"name": "Zeta", "version": "9.9", "contributorOrganization": "Z Org"},
+            },
+            {
+                "TargetDataModelId": 1,
+                "GroupVersion": "1.0",
+                "TargetDataModel": {"name": "Zeta", "version": "9.9", "contributorOrganization": "Z Org"},
+            },
+            {
+                # Duplicate version for target 1 -> deduped.
+                "TargetDataModelId": 1,
+                "GroupVersion": "1.0",
+                "TargetDataModel": {"name": "Zeta", "version": "9.9", "contributorOrganization": "Z Org"},
+            },
+            {
+                # No TargetDataModelId -> skipped entirely.
+                "GroupVersion": "5.0",
+                "TargetDataModel": {"name": "Ignored", "version": "1.0", "contributorOrganization": "X"},
+            },
+            {
+                # No TargetDataModel object -> name/version/org default to "".
+                "TargetDataModelId": 2,
+                "GroupVersion": "1.0",
+            },
+        ],
+    }
+
+    with (
+        mock.patch(
+            "lif.mdr_client.core._get_mdr_client", new=_fake_get_mdr_client(json_payload=mdr_transformation_groups)
+        ),
+        mock.patch.object(_ep.CONFIG, "openapi_data_model_id", "17"),
+    ):
+        async with get_client() as client:
+            response = await client.get("/available-data-formats", headers={"X-API-Key": DEFAULT_API_KEY})
+
+    assert response.status_code == 200, response.text
+    # Two distinct targets; sorted by name asc puts the empty-name target first.
+    expected_response = {
+        "metadata": {"total": 2},
+        "DataFormats": [
+            {"name": "", "version": "", "contributorOrganization": "", "TransformationVersions": ["1.0"]},
+            {
+                "name": "Zeta",
+                "version": "9.9",
+                "contributorOrganization": "Z Org",
+                "TransformationVersions": ["1.0", "2.0"],
+            },
+        ],
+    }
+    diff = DeepDiff(expected_response, response.json())
+    assert not diff, diff
+
+
+async def test_available_data_formats_missing_config_returns_500():
+    with mock.patch.object(_ep.CONFIG, "openapi_data_model_id", None):
+        async with get_client() as client:
+            response = await client.get("/available-data-formats", headers={"X-API-Key": DEFAULT_API_KEY})
+
+    assert response.status_code == 500
+    assert response.json() == {
+        "detail": "OPENAPI_DATA_MODEL_ID is not configured. Unable to retrieve available data formats"
+    }
+
+
 async def test_export_401():
     async with get_client() as client:
         response = await client.get("/exports")
