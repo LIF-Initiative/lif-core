@@ -369,6 +369,8 @@ async def test_transforms_with_embeddings(async_client_mdr, async_client_transla
         "TargetDataModelId": target_data_model_id,
         "SourceDataModelName": f"{test_case_name}_source",
         "TargetDataModelName": f"{test_case_name}_target",
+        "SourceDataModel": None,
+        "TargetDataModel": None,
         "Name": f"{test_case_name}_transform_group",
         "GroupVersion": "1.0",
         "Description": group_description,

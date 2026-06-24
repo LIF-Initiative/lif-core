@@ -264,6 +264,22 @@ def fetch_data_models_from_mdr(
         raise MDRClientException(msg)
 
 
+async def get_transformation_groups_from_mdr(*, config: "LIFSchemaConfig", source_data_model_id: str) -> dict:
+    url: str = f"{config.mdr_api_url}/transformation_groups/?exportable=True&pagination=False&size=100&source_data_model_id={source_data_model_id}"
+    logger.info("Calling the MDR URL: %s with a timeout of %s", url, _get_mdr_timeout_seconds())
+    try:
+        async for client in _get_mdr_client():
+            response = await client.get(url, headers=_build_mdr_headers())
+        response.raise_for_status()
+        response_json = response.json()
+        logger.info(f"Number of transformation group versions for the source model from MDR: {response_json['total']}")
+        return response_json
+    except Exception as e:
+        msg = "MDR Client error"
+        logger.exception(msg)
+        raise MDRClientException(msg) from e
+
+
 # =============================================================================
 # Legacy sync functions (kept for backward compatibility)
 # =============================================================================

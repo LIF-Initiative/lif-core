@@ -22,6 +22,7 @@ from lif.mdr_dto.transformation_dto import (
 )
 from lif.mdr_dto.transformation_group_dto import (
     CreateTransformationGroupDTO,
+    DataModelRefDTO,
     TransformationGroupDTO,
     UpdateTransformationGroupDTO,
 )
@@ -964,6 +965,7 @@ async def get_paginated_transformations_groups(
     pagination: bool = True,
     source_data_model_id: int = None,
     target_data_model_id: int = None,
+    exportable: bool = False,
 ):
     transformations_group_dtos: list[TransformationGroupDTO] = []
     # Query to count total transformations for pagination
@@ -1015,6 +1017,18 @@ async def get_paginated_transformations_groups(
         target_data_model = await check_datamodel_by_id(session=session, id=transformation_group_dto.TargetDataModelId)
         transformation_group_dto.SourceDataModelName = source_data_model.Name
         transformation_group_dto.TargetDataModelName = target_data_model.Name
+        if exportable:
+            # Add non-portable IDs with (name, version, org) refs for export.
+            transformation_group_dto.SourceDataModel = DataModelRefDTO(
+                name=source_data_model.Name,
+                version=source_data_model.DataModelVersion,
+                contributorOrganization=source_data_model.ContributorOrganization,
+            )
+            transformation_group_dto.TargetDataModel = DataModelRefDTO(
+                name=target_data_model.Name,
+                version=target_data_model.DataModelVersion,
+                contributorOrganization=target_data_model.ContributorOrganization,
+            )
         transformations_group_dtos.append(transformation_group_dto)
 
     return total_count, transformations_group_dtos

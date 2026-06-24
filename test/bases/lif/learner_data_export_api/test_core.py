@@ -35,35 +35,85 @@ async def test_available_data_formats_401():
 
 
 async def test_available_data_formats_default_token():
-    async with get_client() as client:
-        response = await client.get("/available-data-formats", headers={"X-API-Key": DEFAULT_API_KEY})
-        assert response.status_code == 200
-        response_json = response.json()
-        expected_response = {
-            "metadata": {"total": 3},
-            "DataFormats": [
-                {
-                    "name": "OpenBadges 3.0",
-                    "version": "1.0.3",
-                    "contributorOrganization": "OB",
-                    "TransformationVersions": ["1.0.0", "1.1.0"],
-                },
-                {
-                    "name": "CEDS",
-                    "version": "2.0.0",
-                    "contributorOrganization": "CEDS Org",
-                    "TransformationVersions": ["2.0.0"],
-                },
-                {
+    # Transformation groups as returned by MDR (exportable=true). OpenBadges appears
+    # in two groups (same target id) with versions out of order, and the rows are not
+    # name-sorted, to exercise the endpoint's grouping + sorting.
+    mdr_transformation_groups = {
+        "total": 4,
+        "data": [
+            {
+                "TargetDataModelId": 1,
+                "GroupVersion": "1.1.0",
+                "TargetDataModel": {"name": "OpenBadges 3.0", "version": "1.0.3", "contributorOrganization": "OB"},
+            },
+            {
+                "TargetDataModelId": 1,
+                "GroupVersion": "1.0.0",
+                "TargetDataModel": {"name": "OpenBadges 3.0", "version": "1.0.3", "contributorOrganization": "OB"},
+            },
+            {
+                "TargetDataModelId": 2,
+                "GroupVersion": "2.0.0",
+                "TargetDataModel": {"name": "CEDS", "version": "2.0.0", "contributorOrganization": "CEDS Org"},
+            },
+            {
+                "TargetDataModelId": 3,
+                "GroupVersion": "1.3.0",
+                "TargetDataModel": {
                     "name": "ExampleDataSource",
                     "version": "1.0.1",
                     "contributorOrganization": "Community",
-                    "TransformationVersions": ["1.3.0"],
                 },
-            ],
-        }
-        diff = DeepDiff(expected_response, response_json)
-        assert not diff, diff  # prints out the differences if any
+            },
+        ],
+    }
+
+    mock_response = mock.Mock()
+    mock_response.status_code = 200
+    mock_response.raise_for_status = mock.Mock()
+    mock_response.json = mock.Mock(return_value=mdr_transformation_groups)
+
+    mock_mdr_client = mock.Mock()
+    mock_mdr_client.get = mock.AsyncMock(return_value=mock_response)
+
+    async def fake_get_mdr_client():
+        yield mock_mdr_client
+
+    with (
+        mock.patch("lif.mdr_client.core._get_mdr_client", new=fake_get_mdr_client),
+        mock.patch.object(_ep.CONFIG, "openapi_data_model_id", "17"),
+    ):
+        async with get_client() as client:
+            response = await client.get("/available-data-formats", headers={"X-API-Key": DEFAULT_API_KEY})
+
+    assert response.status_code == 200, response.text
+    response_json = response.json()
+    # DataFormats sorted by name asc; OpenBadges TransformationVersions sorted asc.
+    expected_response = {
+        "metadata": {"total": 3},
+        "DataFormats": [
+            {
+                "name": "CEDS",
+                "version": "2.0.0",
+                "contributorOrganization": "CEDS Org",
+                "TransformationVersions": ["2.0.0"],
+            },
+            {
+                "name": "ExampleDataSource",
+                "version": "1.0.1",
+                "contributorOrganization": "Community",
+                "TransformationVersions": ["1.3.0"],
+            },
+            {
+                "name": "OpenBadges 3.0",
+                "version": "1.0.3",
+                "contributorOrganization": "OB",
+                "TransformationVersions": ["1.0.0", "1.1.0"],
+            },
+        ],
+    }
+    diff = DeepDiff(expected_response, response_json)
+    assert not diff, diff  # prints out the differences if any
 
 
 async def test_export_401():
