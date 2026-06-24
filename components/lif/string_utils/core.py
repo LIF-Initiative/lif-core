@@ -29,8 +29,10 @@ def safe_graphql_name(name: str) -> str:
     GraphQL names must match /[_A-Za-z][_0-9A-Za-z]*/ — only ``[_0-9A-Za-z]`` and not
     leading with a digit. Unlike :func:`safe_identifier` (which snake_cases for Python
     attributes), this keeps the original casing so the exposed GraphQL field/type name stays
-    as close to the source schema as possible; it only replaces invalid characters with ``_``
-    and prefixes ``_`` when the name would start with a digit.
+    as close to the source schema as possible; it only replaces invalid characters with ``_``,
+    prefixes ``_`` when the name would start with a digit, and collapses a leading run of
+    underscores to a single ``_`` (GraphQL reserves names beginning with ``__`` for
+    introspection, so a sanitized name must not start with two underscores).
 
     Without this, a single source-schema name containing an illegal character (e.g. a hyphen,
     ``iSO639-2LangCode``) makes the entire GraphQL schema build raise ``GraphQLError`` and
@@ -41,6 +43,8 @@ def safe_graphql_name(name: str) -> str:
     safe = re.sub(r"[^_0-9A-Za-z]", "_", name)
     if safe[0].isdigit():
         safe = f"_{safe}"
+    # GraphQL reserves names that begin with "__"; collapse a leading underscore run to one.
+    safe = re.sub(r"^_{2,}", "_", safe)
     return safe
 
 

@@ -288,6 +288,8 @@ def create_type(
         annotations: Dict[str, Type[Any]] = {}
         class_fields: Dict[str, Any] = {}
         required_fields = schema.get("required", [])
+        used_attr_names: Set[str] = set()
+        used_graphql_names: Set[str] = set()
 
         for field_name, field_def in properties.items():
             safe_field_name = safe_identifier(field_name)
@@ -322,12 +324,30 @@ def create_type(
 
             if field_name not in required_fields:
                 field_type_class = Optional[field_type_class]
-            annotations[safe_field_name] = field_type_class
 
-            # Preserve original schema case (e.g., Identifier, not identifier), but sanitize to a
-            # valid GraphQL name so an illegal character (e.g. a hyphen) can't crash schema build (#1011).
+            # Preserve original schema case (e.g., Identifier, not identifier) but sanitize to a valid
+            # GraphQL name so an illegal character can't crash schema build (#1011). De-dup when two
+            # source names collapse to the same identifier: a duplicate GraphQL field crashes the build,
+            # and a duplicate Python attr would silently overwrite the earlier field.
+            graphql_name = safe_graphql_name(field_name)
+            if safe_field_name in used_attr_names or graphql_name in used_graphql_names:
+                suffix = 2
+                while (
+                    f"{safe_field_name}_{suffix}" in used_attr_names or f"{graphql_name}_{suffix}" in used_graphql_names
+                ):
+                    suffix += 1
+                logger.warning(
+                    f"create_type({name!r}): field-name collision after sanitization "
+                    f"(attr={safe_field_name!r}, graphql={graphql_name!r}); suffixing _{suffix}"
+                )
+                safe_field_name = f"{safe_field_name}_{suffix}"
+                graphql_name = f"{graphql_name}_{suffix}"
+            used_attr_names.add(safe_field_name)
+            used_graphql_names.add(graphql_name)
+
+            annotations[safe_field_name] = field_type_class
             class_fields[safe_field_name] = strawberry.field(
-                name=safe_graphql_name(field_name), description=field_def.get("Description")
+                name=graphql_name, description=field_def.get("Description")
             )
 
         placeholder.__annotations__ = annotations

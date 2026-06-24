@@ -163,6 +163,34 @@ class TestInvalidGraphqlNameHardening:
         assert "iSO639-2LangCode" not in sdl
         assert "firstName" in sdl  # valid names pass through unchanged (case preserved)
 
+    async def test_names_colliding_after_sanitization_are_deduped(self):
+        """Two distinct source names that sanitize to the same identifier must not crash the build
+        (duplicate GraphQL field) — they are de-duped instead (#1011 follow-up)."""
+        openapi = _empty_openapi(
+            {
+                "Person": {
+                    "type": "array",
+                    "properties": {
+                        # both sanitize to "iSO639_2LangCode"
+                        "iSO639-2LangCode": _make_scalar_field(queryable=True),
+                        "iSO639_2LangCode": _make_scalar_field(queryable=True),
+                    },
+                }
+            }
+        )
+
+        schema = await generate_graphql_schema(
+            openapi=openapi,
+            root_type_name="Person",
+            query_planner_query_url="http://localhost:9999/query",
+            query_planner_update_url="http://localhost:9999/update",
+        )
+        sdl = schema.as_str()
+
+        # Both fields survive with distinct names; neither the build nor a field is lost.
+        assert "iSO639_2LangCode" in sdl
+        assert "iSO639_2LangCode_2" in sdl
+
 
 # === Test: create_type — object with no properties ===
 

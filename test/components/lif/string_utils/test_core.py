@@ -31,6 +31,14 @@ class TestSafeGraphqlName:
         assert safe_graphql_name("a.b c") == "a_b_c"
         assert safe_graphql_name("") == ""
 
+    def test_leading_double_underscore_collapsed(self):
+        # GraphQL reserves names beginning with "__" (introspection) — must not be produced.
+        assert safe_graphql_name("__proto") == "_proto"
+        assert safe_graphql_name("--x") == "_x"  # specials -> "__x" -> "_x"
+        assert safe_graphql_name("___typename") == "_typename"
+        # a single leading underscore is valid and must be preserved
+        assert safe_graphql_name("_ok") == "_ok"
+
 
 class TestSafeIdentifier:
     def test_special_chars_replaced(self):
