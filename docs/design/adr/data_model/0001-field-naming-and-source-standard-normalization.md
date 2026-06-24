@@ -11,9 +11,17 @@ Proposed
 
 ## Context
 
-LIF ingests field names from external standards and source systems (CEDS, IMS, SIS/LMS exports, …)
-into the MDR, which is the runtime source of truth for the data model. Three naming pressures
-collide, and there is **no recorded decision reconciling them**:
+LIF has **two entry points** for outside input, with very different control points:
+
+- **The MDR** — where schemas and mappings (transformations) are *defined*. This is authored and
+  curated, so it *can* be guarded: the MDR can warn or refuse to accept a definition that downstream
+  components cannot represent. **This ADR is about this entry point.**
+- **The data** — learner records flowing through ingestion. We cannot dictate the shape of source
+  data; the most we can do is validate it against its **assigned schema** and apply sanity checks.
+  That data-vs-declared-type concern is a sibling problem (see *Scope* below and #1017).
+
+At the MDR entry point, field/entity names come from external standards (CEDS, IMS, SIS/LMS exports,
+…), and three pressures collide with **no recorded decision reconciling them**:
 
 1. **Source standards / schema designers.** External standards deliver names verbatim — e.g. CEDS
    contributes `iSO639-2LangCode`, `iSO639-3LangCode`, `iSO639-5LangFamily` under `Person.Language`
@@ -21,13 +29,21 @@ collide, and there is **no recorded decision reconciling them**:
 2. **LIF naming convention** (`docs/specs/data-model-rules.md` → *Naming Styles*): entities/objects
    are PascalCase, scalar leaves are camelCase, enums are PascalCase — so a reader can tell
    containers from values at a glance.
-3. **Technology constraints of the consumers:**
-   - **GraphQL** identifiers must match `/[_A-Za-z][_0-9A-Za-z]*/` — no hyphens, no leading digit.
-     A single illegal name fails the *entire* schema build.
+3. **Technology constraints of the consumers** — and the same illegal name fails *differently* in
+   each, because each consumer sanitizes differently (or not at all). An audit found the one bad
+   name threatens at least five components:
+   - **GraphQL** identifiers must match `/[_A-Za-z][_0-9A-Za-z]*/` — no hyphen, no leading digit, and
+     `__` is reserved. A single illegal name fails the *entire* schema build (#1011; hardened in
+     #1012).
+   - **Semantic-search / MCP** builds Pydantic filter/mutation models from the **raw** schema names
+     with no sanitization → an invalid identifier crashes the MCP server at startup (#1016).
    - **Python / Strawberry** attributes are snake_cased (`safe_identifier`).
-   - **Query Planner** receives the GraphQL field names as `selected_fields` and matches them
-     against the data source's keys.
-   - **JSON / MongoDB** store names verbatim; the **translator** relies on case-insensitive lookups.
+   - **Query Planner** receives the GraphQL field names as `selected_fields` and matches them against
+     the data-source keys — so a name sanitized in GraphQL but not in storage silently won't match.
+   - **MongoDB** rejects field names that start with `$` or contain `.`.
+   - **Composer / fragment paths** split on `.` (see ADR `composer/0002`) — a name that itself
+     contains a `.` mis-nests the record.
+   - **Translator / JSONata** treats an unquoted hyphenated/spaced name as an operator expression.
 
 The convention is documented but, per `data-model-rules.md`, "enforced by readers, not tooling."
 That gap let `iSO639-2LangCode` reach the MDR and **crash GraphQL schema generation in both dev and
@@ -40,6 +56,14 @@ it never round-trips data. So sanitization alone does not make such a field usab
 This is the same class of conflict teams hit elsewhere (e.g. Clojure's kebab-case idiom vs. JSON /
 DynamoDB expectations): a **domain/source naming idiom vs. technology/serialization idioms**, with no
 single representation that satisfies everyone.
+
+**Scope.** This ADR covers the **MDR entry point** — the names and structure of *schema and mapping
+definitions*, where the MDR can warn/restrict before a bad definition propagates. The related **data
+entry point** — data that doesn't conform to its assigned type (e.g. a string for a field typed
+`boolean`/`integer`/`date`, which the GraphQL resolver currently turns into a silent `null`) — is a
+sibling concern tracked in #1017; the lever there is schema-conformance validation plus sanity checks
+at ingestion, not name normalization. Both share the root theme (permissive input vs. strict
+consumers), but they have different control points and warrant separate (if coordinated) decisions.
 
 ## Decision
 
@@ -88,11 +112,19 @@ checked-in convention files (`reference_data/schemas/lif-schema.json`, seed SQL,
 - Provenance is preserved (source name retained as metadata), satisfying "no loss."
 - New work: MDR write-time validation/normalization, lint for the convention files, and the
   non-technical guide. Some short-term effort; large long-term reduction in naming-drift incidents.
-- #1012 remains as a safety net regardless of which option is ratified.
+- Validating at the MDR boundary makes the per-consumer crash guards redundant safety nets rather
+  than the primary defense: the GraphQL hardening (#1012) and the still-needed semantic-search guard
+  (#1016) stop being load-bearing once a bad name can't enter the model in the first place.
+- Until the boundary check exists, **every** consumer that derives identifiers from schema names
+  needs its own guard, and they will drift apart — exactly the inconsistency this decision removes.
 
 ## References
 - Tracking issue: #1014 (this ADR + non-technical guide + enforcement)
-- #1011 (GraphQL schema-build crash on `iSO639-2LangCode`), #1012 (codegen name hardening)
+- #1011 (GraphQL schema-build crash on `iSO639-2LangCode`), #1012 (codegen name hardening, incl. the
+  `__`/collision edge cases)
 - #1013 (rename the three `iSO639-*` CEDS language fields — first application of this policy)
+- #1016 (semantic-search/MCP: same invalid-name crash, a different consumer — evidence this is not
+  GraphQL-specific)
+- #1017 (sibling: data-vs-declared-type conformance — the *data* entry point)
 - `docs/specs/data-model-rules.md` → *Naming Styles*
 - Nygard, ["Documenting Architecture Decisions"](https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions)
