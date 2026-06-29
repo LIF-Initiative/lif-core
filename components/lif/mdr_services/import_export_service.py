@@ -29,7 +29,10 @@ from lif.mdr_dto.import_export_dto import (
 from lif.mdr_dto.value_set_values_dto import CreateValuesWithValueSetDTO
 from lif.mdr_dto.valueset_dto import CreateValueSetDTO, CreateValueSetWithValuesDTO
 from lif.mdr_services.attribute_service import create_attribute, get_list_of_attributes_for_data_model
-from lif.mdr_services.datamodel_constraints_service import get_data_model_constraints_by_data_model_id
+from lif.mdr_services.datamodel_constraints_service import (
+    create_data_model_constraint,
+    get_data_model_constraints_by_data_model_id,
+)
 from lif.mdr_services.datamodel_service import (
     check_unique_data_model_exists,
     create_datamodel,
@@ -40,7 +43,10 @@ from lif.mdr_services.entity_association_service import (
     create_entity_association,
     get_entity_associations_by_data_model_id,
 )
-from lif.mdr_services.entity_attribute_association_service import get_entity_attribute_associations_by_data_model_id
+from lif.mdr_services.entity_attribute_association_service import (
+    create_entity_attribute_association,
+    get_entity_attribute_associations_by_data_model_id,
+)
 from lif.mdr_services.entity_service import create_entity, get_list_of_entities_for_data_model
 from lif.mdr_services.transformation_service import get_transformations_by_data_model_id
 from lif.mdr_services.value_set_values_service import get_list_of_values_for_value_set
@@ -232,7 +238,7 @@ async def import_datamodel(session: AsyncSession, data: ImportDataModelDTO):
             value_set_id = None
         attribute_dto = CreateAttributeDTO(**attribute.dict(), ValueSetId=value_set_id)
         created_attribute = await create_attribute(session=session, data=attribute_dto)
-        attribute_name_id[attribute.Name] = create_attribute.Id
+        attribute_name_id[attribute.Name] = created_attribute.Id
         if attribute.EntityName:
             entity_id = entity_name_id[attribute.EntityName]
             association = CreateEntityAttributeAssociationDTO(
@@ -241,10 +247,7 @@ async def import_datamodel(session: AsyncSession, data: ImportDataModelDTO):
                 Contributor=attribute.Contributor,
                 ContributorOrganization=attribute.ContributorOrganization,
             )
-            # TODO: this will throw an error. https://linear.app/lif/issue/LIF-578/mdr-api-import-service-method-not-found
-            create_entity_attribute_association = await create_entity_attribute_association(  # noqa: F821
-                session=session, data=association
-            )
+            await create_entity_attribute_association(session=session, data=association)
 
     # Create Entity Association
     for entity_association in data.EntityAssociation:
@@ -260,16 +263,32 @@ async def import_datamodel(session: AsyncSession, data: ImportDataModelDTO):
     # Creating constraints
     for constraint in data.DataModelConstraints:
         if constraint.ElementType == DatamodelElementType.Attribute:
-            element_id = attribute_name_id[constraint.ElementName]
-        if constraint.ElementType == DatamodelElementType.Entity:
-            element_id = entity_name_id[constraint.ElementName]
-        if constraint.ElementType == DatamodelElementType.ValueSet:
-            element_id = value_set_name_id[constraint.ElementName]
+            element_id = attribute_name_id.get(constraint.ElementName)
+        elif constraint.ElementType == DatamodelElementType.Entity:
+            element_id = entity_name_id.get(constraint.ElementName)
+        elif constraint.ElementType == DatamodelElementType.ValueSet:
+            element_id = value_set_name_id.get(constraint.ElementName)
         else:
             element_id = None
 
         if element_id:
-            constraint_dto = CreateDataModelConstraintsDTO(**constraint.dict(), ElementId=element_id)
+            # ElementName is the portable (name-based) reference; the create DTO wants the
+            # resolved DB ElementId. ForDataModelId from the export is a source-DB artifact, so
+            # remap it to the model we just created.
+            constraint_dto = CreateDataModelConstraintsDTO(
+                **constraint.dict(exclude={"ElementName", "ForDataModelId"}),
+                ForDataModelId=data_model.Id,
+                ElementId=element_id,
+            )
+            await create_data_model_constraint(session=session, data=constraint_dto)
+        else:
+            # Don't drop a constraint silently — a malformed/incomplete export (element name not
+            # found among the imported attributes/entities/value sets) should be visible.
+            logger.warning(
+                "Skipping constraint: %s element %r not found in the imported model",
+                constraint.ElementType,
+                constraint.ElementName,
+            )
 
     return {"ok": True}
 
