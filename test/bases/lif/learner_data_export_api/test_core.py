@@ -9,7 +9,8 @@ from lif.mdr_client import MDRClientException
 from lif.query_planner_client import QueryPlannerException
 from lif.translator_client import TranslatorException
 
-DEFAULT_API_KEY = "changeme6"
+# Matches the key configured in conftest.py (LDE_AUTH__API_KEYS).
+DEFAULT_API_KEY = "test-lde-key"
 
 
 def get_client() -> AsyncClient:
@@ -30,8 +31,15 @@ async def test_available_data_formats_401():
         response = await client.get("/available-data-formats")
         assert response.status_code == 401
         response_json = response.json()
-        expected_response = {"detail": "Authentication required: Provide either Bearer token or API key"}
+        expected_response = {"detail": "Missing API key. Provide X-API-Key header."}
         assert response_json == expected_response
+
+
+async def test_available_data_formats_invalid_key_401():
+    async with get_client() as client:
+        response = await client.get("/available-data-formats", headers={"X-API-Key": "not-a-valid-key"})
+        assert response.status_code == 401
+        assert response.json() == {"detail": "Invalid API key."}
 
 
 async def test_available_data_formats_default_token():
@@ -285,7 +293,7 @@ async def test_export_401():
         response = await client.get("/exports")
         assert response.status_code == 401
         response_json = response.json()
-        expected_response = {"detail": "Authentication required: Provide either Bearer token or API key"}
+        expected_response = {"detail": "Missing API key. Provide X-API-Key header."}
         assert response_json == expected_response
 
 
