@@ -146,8 +146,10 @@ async def create_reference_associations_for_children(
                 if child_name is None:
                     # $ref path: derive the relationship from the property-name prefix, e.g.
                     # "issuedByOrganization" -> "issuedBy" for referenced entity "Organization".
+                    # idx > 0 means there is a non-empty prefix before the entity name; idx == 0
+                    # (no prefix) or idx == -1 (name not in the key) both mean no relationship.
                     idx = prop_name.find(referenced_entity.Name)
-                    relationship = prop_name[:idx] or None if idx > 0 else None
+                    relationship = prop_name[:idx] if idx > 0 else None
                 logger.info(f"Reference {prop_name!r} -> entity {referenced_unique_name!r} (rel={relationship!r})")
                 await create_reference_entity_association_if_needed(
                     session, referenced_entity, parent_entity.Id, relationship, data_model_id
