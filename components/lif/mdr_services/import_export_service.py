@@ -281,6 +281,14 @@ async def import_datamodel(session: AsyncSession, data: ImportDataModelDTO):
                 ElementId=element_id,
             )
             await create_data_model_constraint(session=session, data=constraint_dto)
+        else:
+            # Don't drop a constraint silently — a malformed/incomplete export (element name not
+            # found among the imported attributes/entities/value sets) should be visible.
+            logger.warning(
+                "Skipping constraint: %s element %r not found in the imported model",
+                constraint.ElementType,
+                constraint.ElementName,
+            )
 
     return {"ok": True}
 

@@ -91,3 +91,28 @@ async def test_import_persists_constraint_with_remapped_ids(patched_services):
     assert constraint.ElementType == DatamodelElementType.Entity
     assert constraint.ElementId == ENTITY_ID  # name resolved against the freshly created entity
     assert constraint.ForDataModelId == NEW_DATA_MODEL_ID  # remapped off the source-DB artifact (999)
+
+
+async def test_import_skips_constraint_with_unresolvable_element(patched_services):
+    # A constraint whose ElementName isn't among the imported elements must be skipped
+    # (logged, not persisted) rather than crashing or silently being lost.
+    payload = ImportDataModelDTO(
+        DataModel=CreateDataModelDTO(Name="TestDM", Type=DataModelType.SourceSchema, DataModelVersion="1.0"),
+        Entities=[ImportEntityDTO(Name="Person", UniqueName="Person")],
+        Attributes=[],
+        ValueSets=[],
+        EntityAssociation=[],
+        DataModelConstraints=[
+            ImportDataModelConstraintsDTO(
+                ForDataModelId=SOURCE_DATA_MODEL_ID,
+                ElementType=DatamodelElementType.Entity,
+                ElementName="NoSuchEntity",
+                Contributor="tester",
+                ContributorOrganization="UniconQA",
+            )
+        ],
+    )
+
+    await svc.import_datamodel(session=AsyncMock(), data=payload)
+
+    patched_services["create_data_model_constraint"].assert_not_awaited()
