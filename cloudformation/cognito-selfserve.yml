@@ -52,8 +52,6 @@ Resources:
           Enter this code on the registration page to complete sign-up. If
           you didn't request this account, no action is needed and the
           account will not be created.
-
-          (If you don't see this in your inbox, please check Spam / Junk.)
       Schema:
         - Name: email
           AttributeDataType: String
@@ -90,6 +88,7 @@ Resources:
           - Name: verified_email
             Priority: 1
       LambdaConfig:
+        PreSignUp: !GetAtt PreSignUpLambda.Arn
         PostConfirmation: !GetAtt PostConfirmationLambda.Arn
 
   # ---------------------------------------------------------------------------
@@ -313,6 +312,198 @@ Resources:
     Type: AWS::Lambda::Permission
     Properties:
       FunctionName: !Ref PostConfirmationLambda
+      Action: lambda:InvokeFunction
+      Principal: cognito-idp.amazonaws.com
+      SourceArn: !GetAtt UserPool.Arn
+
+  # ---------------------------------------------------------------------------
+  # Pre-Signup Lambda — registration abuse controls (issue #917)
+  #
+  # PR 1 of #917: reject sign-ups from disposable / throwaway email domains.
+  # This is the enforcement-point + config pattern that later PRs extend with
+  # daily/total caps (PG schema count) and an invite-code bypass.
+  #
+  # A Cognito PreSignUp trigger blocks a registration by RAISING — Cognito
+  # surfaces the exception message to the Hosted UI. Returning the event lets
+  # the sign-up proceed. (autoConfirmUser does NOT gate registration; it only
+  # controls auto-confirmation, so it is not used to reject here.)
+  #
+  # The blocklist is a baseline list baked into the function, optionally
+  # extended by an SSM StringList/String parameter so ops can add domains
+  # without a redeploy (issue #917 design decision 4: config adjustable via
+  # SSM). The parameter is intentionally NOT managed by this template so that
+  # manual edits aren't clobbered on the next deploy; the Lambda falls back to
+  # the baseline list when the parameter is absent.
+  # ---------------------------------------------------------------------------
+  PreSignUpLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub ${EnvironmentName}-${ServiceName}-pre-signup
+      Description: >
+        Cognito pre-signup trigger: rejects registrations from disposable
+        email domains (issue #917 PR 1). Baseline blocklist extendable via the
+        /${EnvironmentName}/${ServiceName}-pre-signup/DisposableDomains SSM
+        parameter (optional; falls back to baseline when absent).
+      Runtime: python3.12
+      Handler: index.handler
+      Timeout: 10
+      ReservedConcurrentExecutions: 5
+      Role: !GetAtt PreSignUpLambdaRole.Arn
+      Environment:
+        Variables:
+          DISPOSABLE_DOMAINS_SSM_PARAM: !Sub /${EnvironmentName}/${ServiceName}-pre-signup/DisposableDomains
+      Code:
+        ZipFile: |
+          import logging
+          import os
+          import re
+          import time
+
+          import boto3
+
+          logger = logging.getLogger()
+          logger.setLevel(logging.INFO)
+
+          ssm = boto3.client("ssm")
+
+          DISPOSABLE_DOMAINS_SSM_PARAM = os.environ.get("DISPOSABLE_DOMAINS_SSM_PARAM", "")
+
+          # Baseline blocklist — common disposable / throwaway providers. Kept
+          # deliberately short and obvious; the SSM parameter is the place to
+          # grow it without a redeploy. Domains are compared lowercased.
+          _BASELINE_DISPOSABLE_DOMAINS = frozenset({
+              "mailinator.com",
+              "guerrillamail.com",
+              "guerrillamailblock.com",
+              "sharklasers.com",
+              "10minutemail.com",
+              "temp-mail.org",
+              "tempmail.com",
+              "throwawaymail.com",
+              "yopmail.com",
+              "trashmail.com",
+              "getnada.com",
+              "dispostable.com",
+              "maildrop.cc",
+              "fakeinbox.com",
+              "mailnesia.com",
+              "mohmal.com",
+              "spam4.me",
+              "tempinbox.com",
+              "emailondeck.com",
+              "moakt.com",
+          })
+
+          # Cache the merged set across warm invocations, refreshed every
+          # _CACHE_TTL seconds so an operator's SSM edit is picked up without a
+          # redeploy or waiting for containers to recycle.
+          _CACHE_TTL = 300
+          _disposable_domains = None
+          _cache_loaded_at = 0.0
+
+
+          def _load_disposable_domains():
+              """Baseline blocklist merged with the optional SSM parameter.
+
+              Cached for _CACHE_TTL seconds. Fails open: a missing parameter or
+              an SSM read error never blocks a legitimate sign-up — the baseline
+              list still applies.
+              """
+              global _disposable_domains, _cache_loaded_at
+              now = time.monotonic()
+              if _disposable_domains is not None and now - _cache_loaded_at < _CACHE_TTL:
+                  return _disposable_domains
+
+              domains = set(_BASELINE_DISPOSABLE_DOMAINS)
+              if DISPOSABLE_DOMAINS_SSM_PARAM:
+                  try:
+                      resp = ssm.get_parameter(Name=DISPOSABLE_DOMAINS_SSM_PARAM)
+                      raw = resp["Parameter"]["Value"]
+                      domains.update(
+                          d.strip().lower() for d in re.split(r"[,\s]+", raw) if d.strip()
+                      )
+                  except ssm.exceptions.ParameterNotFound:
+                      logger.info(
+                          "Disposable-domains param %s not set; using baseline list",
+                          DISPOSABLE_DOMAINS_SSM_PARAM,
+                      )
+                  except Exception as e:  # noqa: BLE001 — fail open on config read
+                      logger.warning(
+                          "Could not read disposable-domains param %s: %s; using baseline",
+                          DISPOSABLE_DOMAINS_SSM_PARAM, e,
+                      )
+
+              _disposable_domains = frozenset(domains)
+              _cache_loaded_at = now
+              return _disposable_domains
+
+
+          def _is_disposable(domain, blocked):
+              """True if the domain or any of its parent domains is blocked.
+
+              A bare blocklist entry (mailinator.com) also matches its
+              subdomains (x.mailinator.com) so the obvious wildcard-subdomain
+              bypass is closed. The public suffix alone (e.g. "com") is never
+              matched because the loop stops before the final label.
+              """
+              if domain in blocked:
+                  return True
+              parts = domain.split(".")
+              for i in range(1, len(parts) - 1):
+                  if ".".join(parts[i:]) in blocked:
+                      return True
+              return False
+
+
+          def handler(event, context):
+              """Cognito PreSignUp trigger.
+
+              Raises (blocking the sign-up) when the email's domain is on the
+              disposable blocklist; Cognito relays the message to the Hosted UI.
+              Returns the event unchanged to allow the sign-up.
+              """
+              attributes = event.get("request", {}).get("userAttributes", {})
+              email = (attributes.get("email") or "").strip().lower()
+              # rstrip(".") normalizes the RFC-1034 trailing-dot FQDN form.
+              domain = email.rpartition("@")[2].rstrip(".")
+
+              if domain and _is_disposable(domain, _load_disposable_domains()):
+                  logger.info("Rejecting sign-up from disposable email domain: %s", domain)
+                  raise Exception(
+                      "Registrations from disposable or temporary email domains are "
+                      "not accepted. Please register with a permanent email address."
+                  )
+
+              return event
+
+  PreSignUpLambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub ${EnvironmentName}-${ServiceName}-pre-signup-role
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: ReadDisposableDomains
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              # Plain String parameter (not a secret) — no kms:Decrypt needed.
+              - Effect: Allow
+                Action:
+                  - ssm:GetParameter
+                Resource: !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${EnvironmentName}/${ServiceName}-pre-signup/DisposableDomains
+
+  PreSignUpLambdaPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref PreSignUpLambda
       Action: lambda:InvokeFunction
       Principal: cognito-idp.amazonaws.com
       SourceArn: !GetAtt UserPool.Arn

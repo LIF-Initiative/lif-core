@@ -123,7 +123,7 @@ async def test_translator_run_with_employment_preferences(monkeypatch):
         }
     }
 
-    # Expected LIF output matching schemas/lif-schema.json EmploymentPreferences requirements
+    # Expected LIF output matching reference_data/schemas/lif-schema.json EmploymentPreferences requirements
     expected = {
         "Person": [
             {
@@ -228,11 +228,13 @@ async def test_translator_run_with_employment_preferences(monkeypatch):
     }
 
     # Monkeypatch Translator to return permissive schemas (accept anything)
-    async def fake_fetch_schema(self, schema_id: str) -> dict:
+    async def fake_fetch_schema(self, schema_id: str, tenant_schema: str | None = None) -> dict:
         return {}
 
     # Monkeypatch Translator to return the MDR transformation payload above
-    async def fake_fetch_transformation(self, source_schema_id: str, target_schema_id: str) -> dict:
+    async def fake_fetch_transformation(
+        self, source_schema_id: str, target_schema_id: str, tenant_schema: str | None = None
+    ) -> dict:
         return transformation_payload
 
     monkeypatch.setattr(core.Translator, "_fetch_schema", fake_fetch_schema, raising=False)
@@ -250,7 +252,9 @@ async def test_translator_run_with_employment_preferences(monkeypatch):
 @pytest.mark.asyncio
 async def test_translator_fetch_schema_calls_client(monkeypatch):
     # Arrange
-    async def fake_get_schema(schema_id: str, include_attr_md: bool, include_entity_md: bool):
+    async def fake_get_schema(
+        schema_id: str, include_attr_md: bool, include_entity_md: bool, tenant_schema: str | None = None
+    ):
         return {"id": schema_id, "ok": True}
 
     monkeypatch.setattr(core, "get_data_model_schema", fake_get_schema, raising=True)
@@ -266,7 +270,7 @@ async def test_translator_fetch_schema_calls_client(monkeypatch):
 
 @pytest.mark.asyncio
 async def test_translator_fetch_transformation_calls_client(monkeypatch):
-    async def fake_get_xform(source_schema_id: str, target_schema_id: str):
+    async def fake_get_xform(source_schema_id: str, target_schema_id: str, tenant_schema: str | None = None):
         return {"pair": [source_schema_id, target_schema_id]}
 
     monkeypatch.setattr(core, "get_data_model_transformation", fake_get_xform, raising=True)
@@ -555,10 +559,12 @@ async def test_translator_run_with_openbadgecredential(monkeypatch):
     }
 
     # Monkeypatch schema and transformation fetchers
-    async def fake_fetch_schema(self, schema_id: str) -> dict:
+    async def fake_fetch_schema(self, schema_id: str, tenant_schema: str | None = None) -> dict:
         return {}
 
-    async def fake_fetch_transformation(self, source_schema_id: str, target_schema_id: str) -> dict:
+    async def fake_fetch_transformation(
+        self, source_schema_id: str, target_schema_id: str, tenant_schema: str | None = None
+    ) -> dict:
         return transformation_payload
 
     monkeypatch.setattr(core.Translator, "_fetch_schema", fake_fetch_schema, raising=False)

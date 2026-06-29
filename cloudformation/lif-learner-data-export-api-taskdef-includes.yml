@@ -1,0 +1,24 @@
+Environment:
+  - Name: LIF_MDR_API_URL
+    Value:
+      Fn::Sub: "https://mdr-api.${PublicHostedZoneName}"
+  - Name: OPENAPI_DATA_MODEL_ID
+    Value: "17"
+  - Name: OPENAPI_JSON_FILENAME
+    Value: "openapi_constrained_with_interactions.json"
+  - Name: USE_OPENAPI_DATA_MODEL_FROM_FILE
+    Value: "false"
+  - Name: LIF_QUERY_PLANNER_URL
+    Value:
+      Fn::Sub: "http://query-planner-org1.lif.${EnvironmentName}.aws:8002"
+  - Name: LIF_TRANSLATOR_BASE_URL
+    Value:
+      Fn::Sub: "http://translator-org1.lif.${EnvironmentName}.aws:8007"
+  - Name: QUERY_PLANNER_CLIENT_TIMEOUT_SECONDS
+    Value: "30"
+  - Name: TRANSLATOR_CLIENT_TIMEOUT_SECONDS
+    Value: "30"
+Secrets:
+  - Name: LIF_MDR_API_AUTH_TOKEN
+    ValueFrom:
+      Fn::Sub: "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${EnvironmentName}/${ServiceName}/MdrApiKey"

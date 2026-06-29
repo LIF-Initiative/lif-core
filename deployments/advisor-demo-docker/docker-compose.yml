@@ -312,6 +312,43 @@ services:
       - lif-net-org1 # For org1 to org3 orchestrator communication
 
 
+  lif-learner-data-export-api:
+    build:
+      context: ../../
+      dockerfile: projects/lif_learner_data_export_api/Dockerfile2
+    container_name: lif-learner-data-export-api
+    environment:
+      CORS_ALLOW_ORIGINS: ${CORS_ALLOW_ORIGINS:-http://localhost:3000,http://localhost:5173,http://localhost:8080,https://lde.lif.unicon.net,https://lde.demo.lif.unicon.net}
+      CORS_ALLOW_CREDENTIALS: ${CORS_ALLOW_CREDENTIALS:-true}
+      CORS_ALLOW_METHODS: ${CORS_ALLOW_METHODS:-GET,POST,PUT,DELETE,OPTIONS,PATCH}
+      CORS_ALLOW_HEADERS: ${CORS_ALLOW_HEADERS:-*}
+      MDR__AUTH__SERVICE_API_KEY__LEARNER_DATA_EXPORT: ${MDR__AUTH__SERVICE_API_KEY__LEARNER_DATA_EXPORT:-changeme6}
+      MDR__AUTH__METHODS_TO_REQUIRE_AUTH: ${MDR__AUTH__METHODS_TO_REQUIRE_AUTH:-GET,POST,PUT,DELETE}
+      MDR__AUTH__PUBLIC_ALLOWLIST_EXACT: ${MDR__AUTH__PUBLIC_ALLOWLIST_EXACT:-/health}
+      MDR__AUTH__PUBLIC_ALLOWLIST_STARTS_WITH: ${MDR__AUTH__PUBLIC_ALLOWLIST_STARTS_WITH:-/docs,/openapi.json}
+      LIF_MDR_API_URL: ${LDE__LIF_MDR_API_URL:-http://lif-mdr-api:8012}
+      LIF_MDR_API_AUTH_TOKEN: ${LDE__LIF_MDR_API_AUTH_TOKEN:-changeme3}
+      LIF_QUERY_PLANNER_URL: ${LDE__LIF_QUERY_PLANNER_URL:-http://lif-query-planner-org1:8002}
+      LIF_TRANSLATOR_BASE_URL: ${LDE__LIF_TRANSLATOR_BASE_URL:-http://lif-translator-org1:8007}
+      OPENAPI_DATA_MODEL_ID: ${LDE__OPENAPI_DATA_MODEL_ID:-17}
+    ports:
+      - "8013:8013"
+    depends_on:
+      - lif-mdr-api
+      - lif-query-planner-org1
+      - lif-translator-org1
+    networks:
+      - lif-net-org1
+      - lif-net-org2
+      - lif-net-org3
+    healthcheck:
+      test: ["CMD", "python", "-c", "import sys,urllib.request; sys.exit(0) if urllib.request.urlopen('http://localhost:8013/health').status==200 else sys.exit(1)"]
+      interval: 15s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+
 # ----------- ORG 1 Only Services -----------
 
   lif-example-data-source-rest-api:

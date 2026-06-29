@@ -1,7 +1,7 @@
 import json
 import os
 from importlib.resources import files
-from typing import TYPE_CHECKING, AsyncGenerator, Optional
+from typing import TYPE_CHECKING, Any, AsyncGenerator, Optional
 
 import httpx
 from lif.exceptions.core import LIFException, ResourceNotFoundException
@@ -45,10 +45,13 @@ def _get_use_openapi_from_file() -> bool:
     return os.getenv("USE_OPENAPI_DATA_MODEL_FROM_FILE", "false").lower() == "true"
 
 
-def _build_mdr_headers(auth_token: Optional[str] = None) -> dict:
+def _build_mdr_headers(auth_token: Optional[str] = None, tenant_schema: Optional[str] = None) -> dict:
     if auth_token is None:
         auth_token = _get_mdr_api_auth_token()
-    return {"X-API-Key": auth_token}
+    headers: dict = {"X-API-Key": auth_token}
+    if tenant_schema:
+        headers["X-API-Tenant-Schema"] = tenant_schema
+    return headers
 
 
 # =============================================================================
@@ -196,6 +199,124 @@ def load_openapi_schema(config: "LIFSchemaConfig") -> tuple[dict, str]:
     return fetch_schema_from_mdr(config), "mdr"
 
 
+def fetch_data_models_from_mdr(
+    config: "LIFSchemaConfig",
+    name: str,
+    version: str,
+    contributor_organization: str,
+    tenant_schema: Optional[str] = None,
+) -> dict[str, Any]:
+    """
+    Fetch a list of data models from MDR matching the given criteria using configuration.
+
+    Args:
+        config: LIFSchemaConfig instance with MDR settings
+        name: The name of the data model to fetch
+        version: The version of the data model to fetch
+        contributor_organization: The contributor organization of the data model to fetch
+
+    Returns:
+        A list of matching data models in JSON
+
+    Raises:
+        MDRClientException: If MDR is unavailable or returns an error
+        MDRConfigurationError: If OPENAPI_DATA_MODEL_ID is not configured
+        ResourceNotFoundException: If the data model is not found
+    """
+    url = f"{config.mdr_api_url}/datamodels/"
+    params: dict[str, str | bool] = {
+        "name": name,
+        "version": version,
+        "contributor_organization": contributor_organization,
+        "pagination": False,
+    }
+
+    headers = _build_mdr_headers(config.mdr_api_auth_token, tenant_schema=tenant_schema)
+
+    logger.info("Fetching data models from MDR: %s params=%s", url, params)
+
+    try:
+        with _create_sync_client(config.mdr_timeout_seconds) as client:
+            response = client.get(url, headers=headers, params=params)
+        response.raise_for_status()
+        logger.info("Successfully fetched data models from MDR")
+        # Future work - return the validated pydantic model. This will require
+        # project updates across several of the BE apps.
+        return response.json()
+
+    except httpx.TimeoutException as e:
+        msg = f"MDR request timed out after {config.mdr_timeout_seconds}s: {e}"
+        logger.error(msg)
+        raise MDRClientException(msg)
+
+    except httpx.ConnectError as e:
+        msg = f"Failed to connect to MDR at {config.mdr_api_url}: {e}"
+        logger.error(msg)
+        raise MDRClientException(msg)
+
+    except httpx.HTTPStatusError as e:
+        logger.error(f"MDR HTTP error: {e.response.status_code} - {e.response.text}")
+        raise MDRClientException(f"MDR returned HTTP {e.response.status_code}") from e
+
+    except Exception as e:
+        msg = f"Unexpected error fetching from MDR: {e}"
+        logger.error(msg)
+        raise MDRClientException(msg)
+
+
+async def get_transformation_groups_from_mdr(*, config: "LIFSchemaConfig", source_data_model_id: str) -> dict:
+    """
+    Fetch the (exportable) transformation groups for a source data model from MDR.
+
+    Args:
+        config: LIFSchemaConfig instance with MDR settings
+        source_data_model_id: The ID of the source data model whose groups to fetch
+
+    Returns:
+        The MDR listing response as JSON ({"total": int, "data": [...]})
+
+    Raises:
+        MDRClientException: If MDR is unavailable or returns an error
+    """
+    url = f"{config.mdr_api_url}/transformation_groups/"
+    params: dict[str, str | bool | int] = {
+        "source_data_model_id": source_data_model_id,
+        "exportable": True,
+        "pagination": False,
+        "size": 100,
+    }
+    headers = _build_mdr_headers(config.mdr_api_auth_token)
+
+    logger.info("Fetching transformation groups from MDR: %s params=%s", url, params)
+
+    try:
+        async for client in _get_mdr_client():
+            response = await client.get(url, headers=headers, params=params)
+        response.raise_for_status()
+        response_json = response.json()
+        logger.info("Number of transformation group versions for the source model from MDR: %s", response_json["total"])
+        return response_json
+
+    except httpx.TimeoutException as e:
+        msg = f"MDR request timed out: {e}"
+        logger.error(msg)
+        raise MDRClientException(msg) from e
+
+    except httpx.ConnectError as e:
+        msg = f"Failed to connect to MDR at {config.mdr_api_url}: {e}"
+        logger.error(msg)
+        raise MDRClientException(msg) from e
+
+    except httpx.HTTPStatusError as e:
+        logger.error(f"MDR HTTP error: {e.response.status_code} - {e.response.text}")
+        raise MDRClientException(f"MDR returned HTTP {e.response.status_code}") from e
+
+    except Exception as e:
+        msg = f"Unexpected error fetching transformation groups from MDR: {e}"
+        logger.error(msg)
+        raise MDRClientException(msg) from e
+
+
 # =============================================================================
 # Legacy sync functions (kept for backward compatibility)
 # =============================================================================
@@ -328,13 +449,16 @@ async def get_openapi_lif_data_model() -> dict | None:
 
 
 async def get_data_model_schema(
-    data_model_id: str, include_attr_md: bool = False, include_entity_md: bool = False
+    data_model_id: str,
+    include_attr_md: bool = False,
+    include_entity_md: bool = False,
+    tenant_schema: Optional[str] = None,
 ) -> dict:
     mdr_api_url = _get_mdr_api_url()
     url: str = f"{mdr_api_url}/datamodels/open_api_schema/{data_model_id}?include_attr_md={str(include_attr_md).lower()}&include_entity_md={str(include_entity_md).lower()}"
     try:
         async for client in _get_mdr_client():
-            response = await client.get(url, headers=_build_mdr_headers())
+            response = await client.get(url, headers=_build_mdr_headers(tenant_schema=tenant_schema))
         response.raise_for_status()
         response_json = response.json()
         return response_json
@@ -352,12 +476,14 @@ async def get_data_model_schema(
         raise MDRClientException(msg)
 
 
-async def get_data_model_transformation(source_data_model_id: str, target_data_model_id: str) -> dict:
+async def get_data_model_transformation(
+    source_data_model_id: str, target_data_model_id: str, tenant_schema: Optional[str] = None
+) -> dict:
     mdr_api_url = _get_mdr_api_url()
     url: str = f"{mdr_api_url}/transformation_groups/transformations_for_data_models/?source_data_model_id={source_data_model_id}&target_data_model_id={target_data_model_id}&size=1000"
     try:
         async for client in _get_mdr_client():
-            response = await client.get(url, headers=_build_mdr_headers())
+            response = await client.get(url, headers=_build_mdr_headers(tenant_schema=tenant_schema))
         response.raise_for_status()
         response_json = response.json()
         logger.info(f"Transformation size fetched from MDR: {response_json['total']}")

@@ -36,6 +36,13 @@ Resources:
       ImageScanningConfiguration:
         ScanOnPush: true
 
+  LearnerDataExportApiRepo:
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: !Sub lif/${EnvironmentName}/lif_learner_data_export_api
+      ImageScanningConfiguration:
+        ScanOnPush: true
+
   QueryCacheApiRepo:
     Type: AWS::ECR::Repository
     Properties:

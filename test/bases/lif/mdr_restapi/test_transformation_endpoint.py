@@ -369,6 +369,8 @@ async def test_transforms_with_embeddings(async_client_mdr, async_client_transla
         "TargetDataModelId": target_data_model_id,
         "SourceDataModelName": f"{test_case_name}_source",
         "TargetDataModelName": f"{test_case_name}_target",
+        "SourceDataModel": None,
+        "TargetDataModel": None,
         "Name": f"{test_case_name}_transform_group",
         "GroupVersion": "1.0",
         "Description": group_description,
@@ -761,3 +763,53 @@ async def test_update_transform_only_expression(async_client_mdr, async_client_t
         headers=mdr_api_headers,
     )
     assert translated_json == {"User": {"Skills": {"Genre": {"Grade": "K"}}}}
+
+
+@pytest.mark.asyncio
+async def test_get_transformation_groups_exportable(async_client_mdr, mdr_api_headers):
+    """
+    The transformation-groups listing carries portable (name, version, org) refs for
+    source/target only when exportable=true; otherwise those fields stay null.
+    """
+
+    test_case_name = inspect.currentframe().f_code.co_name
+
+    dataset = await DatasetTransformDeepLiteralAttribute.prepare(
+        async_client_mdr=async_client_mdr,
+        source_data_model_name=f"{test_case_name}_source",
+        target_data_model_name=f"{test_case_name}_target",
+        transformation_group_name=f"{test_case_name}_transform_group",
+    )
+
+    # exportable=true -> each group includes the portable source/target refs.
+    response = await async_client_mdr.get(
+        "/transformation_groups/",
+        headers=mdr_api_headers,
+        params={"source_data_model_id": dataset.source_data_model_id, "exportable": "true", "pagination": "false"},
+    )
+    assert response.status_code == 200, response.text
+    groups = response.json()["data"]
+    group = next(g for g in groups if g["Id"] == dataset.transformation_group_id)
+
+    # Data models created via upload use version "1.0" with no contributor organization.
+    assert group["SourceDataModel"] == {
+        "name": f"{test_case_name}_source",
+        "version": "1.0",
+        "contributorOrganization": None,
+    }
+    assert group["TargetDataModel"] == {
+        "name": f"{test_case_name}_target",
+        "version": "1.0",
+        "contributorOrganization": None,
+    }
+
+    # Default (exportable not set) -> portable refs are null.
+    response = await async_client_mdr.get(
+        "/transformation_groups/",
+        headers=mdr_api_headers,
+        params={"source_data_model_id": dataset.source_data_model_id, "pagination": "false"},
+    )
+    assert response.status_code == 200, response.text
+    group = next(g for g in response.json()["data"] if g["Id"] == dataset.transformation_group_id)
+    assert group["SourceDataModel"] is None
+    assert group["TargetDataModel"] is None

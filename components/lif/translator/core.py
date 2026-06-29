@@ -82,11 +82,13 @@ class Translator:
         self.source_schema_id = config.source_schema_id
         self.target_schema_id = config.target_schema_id
 
-    async def run(self, input: dict) -> dict:
-        source_schema = await self._fetch_schema(self.source_schema_id)
-        target_schema = await self._fetch_schema(self.target_schema_id)
+    async def run(self, input: dict, tenant_schema: str | None = None) -> dict:
+        source_schema = await self._fetch_schema(self.source_schema_id, tenant_schema=tenant_schema)
+        target_schema = await self._fetch_schema(self.target_schema_id, tenant_schema=tenant_schema)
 
-        transformation = await self._fetch_transformation(self.source_schema_id, self.target_schema_id)
+        transformation = await self._fetch_transformation(
+            self.source_schema_id, self.target_schema_id, tenant_schema=tenant_schema
+        )
         logger.info("Transformation: %s", transformation)
         mappings = convert_transformation_to_mappings(transformation)
 
@@ -98,8 +100,12 @@ class Translator:
 
         return result
 
-    async def _fetch_schema(self, schema_id: str) -> dict:
-        return await get_data_model_schema(schema_id, include_attr_md=True, include_entity_md=False)
+    async def _fetch_schema(self, schema_id: str, tenant_schema: str | None = None) -> dict:
+        return await get_data_model_schema(
+            schema_id, include_attr_md=True, include_entity_md=False, tenant_schema=tenant_schema
+        )
 
-    async def _fetch_transformation(self, source_schema_id: str, target_schema_id: str) -> dict:
-        return await get_data_model_transformation(source_schema_id, target_schema_id)
+    async def _fetch_transformation(
+        self, source_schema_id: str, target_schema_id: str, tenant_schema: str | None = None
+    ) -> dict:
+        return await get_data_model_transformation(source_schema_id, target_schema_id, tenant_schema=tenant_schema)

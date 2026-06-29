@@ -297,8 +297,8 @@ def main():
     parser.add_argument(
         "--schema-path",
         type=Path,
-        default=Path(__file__).resolve().parent.parent / "schemas" / "lif-schema.json",
-        help="Path to the LIF schema JSON file (default: schemas/lif-schema.json)",
+        default=Path(__file__).resolve().parent.parent / "reference_data" / "schemas" / "lif-schema.json",
+        help="Path to the LIF schema JSON file (default: reference_data/schemas/lif-schema.json)",
     )
     parser.add_argument(
         "--sample-dir",
@@ -315,7 +315,7 @@ def main():
     # Load schema
     if not args.schema_path.exists():
         print(f"Error: Schema file not found: {args.schema_path}")
-        print("Expected at: schemas/lif-schema.json (relative to repo root)")
+        print("Expected at: reference_data/schemas/lif-schema.json (relative to repo root)")
         sys.exit(1)
 
     print(f"Loading schema from: {args.schema_path}")

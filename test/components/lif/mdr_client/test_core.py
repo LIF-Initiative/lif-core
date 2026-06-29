@@ -1,6 +1,7 @@
 import asyncio
 import httpx
 import os
+import types
 import pytest
 from unittest import mock
 from unittest.mock import patch, MagicMock
@@ -229,6 +230,40 @@ def test_get_data_model_transformation_not_found(mock_get):
     with pytest.raises(ResourceNotFoundException) as exc_info:
         asyncio.run(run_test())
     assert "Transformation from 25 to 17 not found in MDR." in str(exc_info.value)
+
+
+@patch("httpx.AsyncClient.get")
+async def test_get_transformation_groups_from_mdr_success(mock_get):
+    config = types.SimpleNamespace(mdr_api_url="http://api.example.com", mdr_api_auth_token="secret-token")
+    url = "http://api.example.com/transformation_groups/"
+    payload = {"total": 1, "data": [{"TargetDataModelId": 2, "GroupVersion": "1.0"}]}
+    mock_get.return_value = _create_mock_response(200, payload, url)
+
+    result = await core.get_transformation_groups_from_mdr(config=config, source_data_model_id="17")
+
+    assert result == payload
+    mock_get.assert_called_once()
+    # URL is the bare path; query args are passed via params (httpx encodes them).
+    assert mock_get.call_args.args[0] == url
+    assert mock_get.call_args.kwargs["params"] == {
+        "source_data_model_id": "17",
+        "exportable": True,
+        "pagination": False,
+        "size": 100,
+    }
+    # Auth token is sourced from config, not the environment.
+    assert mock_get.call_args.kwargs["headers"]["X-API-Key"] == "secret-token"
+
+
+@patch("httpx.AsyncClient.get")
+async def test_get_transformation_groups_from_mdr_raises_on_http_error(mock_get):
+    config = types.SimpleNamespace(mdr_api_url="http://api.example.com", mdr_api_auth_token="secret-token")
+    mock_get.return_value = _create_mock_response(
+        500, {"detail": "boom"}, "http://api.example.com/transformation_groups/"
+    )
+
+    with pytest.raises(core.MDRClientException):
+        await core.get_transformation_groups_from_mdr(config=config, source_data_model_id="17")
 
 
 def _create_mock_response(status_code: int, json_data, uri: str):

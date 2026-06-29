@@ -49,7 +49,7 @@
   },
   {
     "ParameterKey": "ImageUrl",
-    "ParameterValue": "381492161417.dkr.ecr.us-east-1.amazonaws.com/lif/dev/lif_semantic_search_mcp_server:2026-03-12-18-29-20-1fcb0df"
+    "ParameterValue": "381492161417.dkr.ecr.us-east-1.amazonaws.com/lif/dev/lif_semantic_search_mcp_server:2026-06-24-19-52-52-328d493"
   },
   {
     "ParameterKey": "TaskDefIncludesFile",

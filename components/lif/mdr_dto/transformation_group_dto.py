@@ -1,8 +1,15 @@
-from pydantic import BaseModel
-from typing import List, Optional
 from datetime import datetime
+from typing import List, Optional
 
 from lif.mdr_dto.transformation_dto import CreateTransformationDTO, TransformationDTO, UpdateTransformationDTO
+from pydantic import BaseModel
+
+
+class DataModelRefDTO(BaseModel):
+    # Data-portable identity of a data model, independent of its primary key.
+    name: str
+    version: Optional[str] = None
+    contributorOrganization: Optional[str] = None
 
 
 class TransformationGroupDTO(BaseModel):
@@ -11,8 +18,11 @@ class TransformationGroupDTO(BaseModel):
     TargetDataModelId: int
     SourceDataModelName: Optional[str] = None
     TargetDataModelName: Optional[str] = None
+    # Populated only when exportable=True: portable (name, version, org) refs.
+    SourceDataModel: Optional[DataModelRefDTO] = None
+    TargetDataModel: Optional[DataModelRefDTO] = None
     Name: Optional[str] = None
-    GroupVersion: str = None
+    GroupVersion: Optional[str] = None
     Description: Optional[str] = None
     Notes: Optional[str] = None
     CreationDate: Optional[datetime] = None  # New column

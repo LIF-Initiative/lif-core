@@ -1,0 +1,49 @@
+# Stage 1: Builder stage
+FROM python:3.13-slim AS builder
+
+# Build arguments for project configuration
+ARG PROJECT_NAME=lif_learner_data_export_api
+
+# Install uv
+RUN pip install --no-cache-dir uv
+
+# Set UV environment variables for optimal caching and behavior
+ENV UV_COMPILE_BYTECODE=1 \
+    UV_LINK_MODE=copy
+
+# Set working directory in the container
+WORKDIR /code
+
+# Copy the entire monorepo structure needed for polylith
+COPY projects/${PROJECT_NAME}/ /code/projects/${PROJECT_NAME}/
+COPY bases/ /code/bases/
+COPY components/ /code/components/
+
+# Change to the specific project directory
+WORKDIR /code/projects/${PROJECT_NAME}
+
+# Sync dependencies and build the project wheel
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv sync --no-dev && \
+    uv build --wheel
+
+# Stage 2: Final runtime image
+FROM python:3.13-slim AS runtime
+
+# Inherit build arguments in runtime stage
+ARG PROJECT_NAME=lif_learner_data_export_api
+
+# Install uv in runtime for faster package installation
+RUN pip install --no-cache-dir uv
+
+# Copy the built wheel from the builder stage
+COPY --from=builder /code/projects/${PROJECT_NAME}/dist/*.whl /tmp/
+
+# Install the wheel in the final image
+RUN uv pip install --system /tmp/*.whl && rm /tmp/*.whl
+
+# Set working directory
+WORKDIR /code
+
+# Use uvicorn to run the FastAPI application
+CMD ["uvicorn", "lif.learner_data_export_api.core:app", "--host", "0.0.0.0", "--port", "8013"]

@@ -247,3 +247,35 @@ class LIFQueryPlan(RootModel[List[LIFQueryPlanPart]]):
 
     def __len__(self):
         return len(self.root)
+
+
+class TargetTransformationDataModelDTO(BaseModel):
+    """
+    Model for a target transformation Data Model.
+
+    Attributes:
+        name: Data Model name
+        version: Data Model version
+        contributorOrganization: Contributor organization for the Data Model
+        TransformationVersions: List of transformation versions for the Data Model
+    """
+
+    name: str = Field(..., description="Data Model name")
+    version: str = Field(..., description="Data Model version")
+    contributorOrganization: str = Field(..., description="Contributor organization for the Data Model")
+    TransformationVersions: list[str] = Field(..., description="List of transformation versions for the Data Model")
+
+
+class TargetTransformationDataModelsDTO(BaseModel):
+    """
+    Model for a list of target transformation Data Models.
+
+    Attributes:
+        metadata: Metadata about the available data formats
+        DataFormats: List of Data Models that are targets in Org LIF transformations
+    """
+
+    metadata: dict[str, Any] = Field(..., description="Metadata about the available data formats")
+    DataFormats: list[TargetTransformationDataModelDTO] = Field(
+        ..., description="List of Data Models that are targets in Org LIF transformations"
+    )

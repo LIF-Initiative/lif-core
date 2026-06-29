@@ -194,6 +194,7 @@ async def get_all_transformation_groups(
     size: int = Query(10, ge=1),  # Default to size 10
     session: AsyncSession = Depends(get_session),
     pagination: bool = True,
+    exportable: bool = False,
 ):
     # Calculate offset for pagination
     offset = (page - 1) * size
@@ -205,6 +206,7 @@ async def get_all_transformation_groups(
         source_data_model_id=source_data_model_id,
         target_data_model_id=target_data_model_id,
         pagination=pagination,
+        exportable=exportable,
     )
 
     if pagination:

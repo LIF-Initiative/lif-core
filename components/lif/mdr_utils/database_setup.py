@@ -4,6 +4,7 @@ import mysql.connector
 import os
 import re
 from typing import AsyncGenerator
+from urllib.parse import urlparse, urlunparse
 
 from fastapi import HTTPException, Request, status
 from lif.mdr_utils.logger_config import get_logger
@@ -15,8 +16,39 @@ from sqlalchemy.orm import sessionmaker
 logger = get_logger(__name__)
 
 
+def _redact_url(url: str) -> str:
+    """Mask the password in a SQLAlchemy connection URL for safe logging.
+
+    Returns the URL with the password replaced by ``***`` while preserving
+    scheme, username, host, port, and database. URLs without a password
+    are returned unchanged. Issue #938: the previous startup log emitted
+    the full URL including the credential, exposing the dev/demo DB
+    password to anyone with read access on the shared CloudWatch log
+    group.
+
+    Best-effort: this is only called for logging, so we never want it to
+    raise and take down MDR startup. Any parsing surprise (urlparse on
+    a malformed URL, ``parts.port`` raising on a non-integer port — which
+    happens when an env var was unset and the URL contains the literal
+    string ``None``) returns a sentinel so the log line still emits
+    something operator-readable.
+    """
+    try:
+        parts = urlparse(url)
+        if not parts.password:
+            return url
+        user = parts.username or ""
+        host = parts.hostname or ""
+        netloc = f"{user}:***@{host}"
+        if parts.port:
+            netloc += f":{parts.port}"
+        return urlunparse(parts._replace(netloc=netloc))
+    except ValueError:
+        return "<unparseable-url>"
+
+
 DATABASE_URL = f"postgresql+asyncpg://{os.getenv('POSTGRESQL_USER')}:{os.getenv('POSTGRESQL_PASSWORD')}@{os.getenv('POSTGRESQL_HOST')}:{os.getenv('POSTGRESQL_PORT')}/{os.getenv('POSTGRESQL_DB')}"
-logger.info(f"DATABASE_URL : {DATABASE_URL}")
+logger.info("DATABASE_URL : %s", _redact_url(DATABASE_URL))
 # Create an async engine
 engine = create_async_engine(DATABASE_URL, echo=True)
 
@@ -58,6 +90,21 @@ async def get_session(request: Request) -> AsyncGenerator[AsyncSession, None]:
         # checks it back out. That's a cross-tenant data-leak risk, not
         # just a correctness annoyance.
         if tenant_schema and _TENANT_SCHEMA_RE.match(tenant_schema):
+            # Fail closed if the resolved tenant schema doesn't exist (#961).
+            # PG does NOT error on a missing schema in `SET search_path` — it
+            # silently skips it and resolves everything against the `public`
+            # fallback below, which would serve wrong/empty data instead of
+            # surfacing a provisioning failure (cf. the 2026-05-26 silent
+            # provision-failure). Verify existence first and deny otherwise.
+            # Parameterized — never interpolate the schema into this query.
+            schema_exists = await session.execute(
+                text("SELECT 1 FROM information_schema.schemata WHERE schema_name = :schema"), {"schema": tenant_schema}
+            )
+            if schema_exists.first() is None:
+                logger.error("Resolved tenant schema %r is not provisioned; denying request", tenant_schema)
+                raise HTTPException(
+                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Tenant schema not provisioned"
+                )
             # Include `public` as a fallback in the search_path so PG-level
             # user-defined types (e.g. `elementtype`, `datamodelelementtype`
             # enums defined in V1.1) resolve correctly. `clone_lif_schema`
@@ -67,6 +114,10 @@ async def get_session(request: Request) -> AsyncGenerator[AsyncSession, None]:
             # `UndefinedObjectError: type "elementtype" does not exist`.
             # Tables are still resolved tenant-first; public fall-through
             # only fires for objects the tenant schema doesn't contain.
+            # NOTE: this means a tenant schema that EXISTS but is missing a
+            # given table still falls through to public for that table — the
+            # clean fix (copy PG types into tenant schemas, then drop the
+            # `public` fallback) is tracked as a follow-up under #949/#961.
             await session.execute(text(f'SET search_path TO "{tenant_schema}", public'))
         elif tenant_schema:
             logger.error("Refusing to SET search_path to invalid tenant_schema %r", tenant_schema)

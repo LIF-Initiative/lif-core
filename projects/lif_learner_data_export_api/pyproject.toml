@@ -1,0 +1,44 @@
+[build-system]
+requires = ["hatchling", "hatch-polylith-bricks"]
+build-backend = "hatchling.build"
+
+[project]
+name = "lif_learner_data_export_api"
+version = "0.1.0"
+
+requires-python = ">=3.13,<3.14"
+
+# sqlalchemy and sqlmodel are still required: datatypes.mdr_sql_model (imported via
+# mdr_dto → datatypes) uses both at module load time. Remove only once that chain
+# no longer pulls in mdr_sql_model.
+dependencies = [
+    "httpx~=0.28",
+    "fastapi~=0.115",
+    "pyjwt~=2.10",
+    "pydantic-settings~=2.1",
+    "sqlalchemy~=2.0",
+    "sqlmodel~=0.0",
+    "uvicorn~=0.34",
+]
+
+# This section is needed for the Hatchling build backend, to activate the polylith build hook.
+[tool.hatch.build.hooks.polylith-bricks]
+
+# This section is needed for building
+[tool.hatch.build.targets.wheel]
+packages = ["lif"]
+
+[tool.polylith.bricks]
+"../../bases/lif/learner_data_export_api" = "lif/learner_data_export_api"
+"../../components/lif/exceptions" = "lif/exceptions"           # via query_planner_client
+"../../components/lif/logging" = "lif/logging"                 # direct use
+"../../components/lif/datatypes" = "lif/datatypes"             # direct use
+"../../components/lif/mdr_utils" = "lif/mdr_utils"             # direct use
+"../../components/lif/mdr_auth" = "lif/mdr_auth"               # direct use (AuthMiddleware)
+"../../components/lif/mdr_dto" = "lif/mdr_dto"                 # via datatypes.mdr_consumer
+"../../components/lif/mdr_services" = "lif/mdr_services"       # via mdr_auth → workspace_service
+"../../components/lif/lif_schema_config" = "lif/lif_schema_config" # direct use
+"../../components/lif/mdr_client" = "lif/mdr_client"           # direct use
+"../../components/lif/query_planner_client" = "lif/query_planner_client" # direct use
+"../../components/lif/translator_client" = "lif/translator_client"      # direct use
+"../../components/lif/tenant_routing" = "lif/tenant_routing"   # via mdr_auth

@@ -89,14 +89,28 @@ const Login: React.FC = () => {
           )}
 
           {isCognitoEnabled ? (
-            <Button
-              size="3"
-              className="w-full"
-              disabled={isLoading}
-              onClick={handleCognitoLogin}
-            >
-              {isLoading ? "Redirecting..." : "Sign In / Register"}
-            </Button>
+            <>
+              <Button
+                size="3"
+                className="w-full"
+                disabled={isLoading}
+                onClick={handleCognitoLogin}
+              >
+                {isLoading ? "Redirecting..." : "Sign In / Register"}
+              </Button>
+              {/* The Cognito hosted UI sign-up flow emails a 6-digit code,
+                  and Cognito's default sender domain
+                  (no-reply@verificationemail.com) often hits Gmail / Outlook
+                  spam filters. Surface the spam-folder reminder *here* — at
+                  the moment the user is about to bounce to Cognito to sign
+                  up and is about to be waiting for that code — rather than
+                  inside the email body itself, where it's redundant if they
+                  see the mail and useless if they don't. Issue #948. */}
+              <Text size="1" color="gray" align="center" mt="1">
+                If you're registering, you'll receive a 6-digit code by email.
+                Check your Spam folder if it doesn't arrive within a minute.
+              </Text>
+            </>
           ) : (
             <form onSubmit={handleLegacySubmit}>
               <Flex direction="column" gap="3">

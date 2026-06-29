@@ -10,7 +10,6 @@ Functions:
 
 Environment Variables:
     - TOOL_URL: URL for MCP tools
-    - GRAPHQL_URL: URL for GraphQL endpoint
     - LLM_MODEL_NAME: Name of the LLM model to use
 """
 
@@ -29,7 +28,6 @@ from lif.langchain_agent.memory import ChatState, create_summarization_node, mak
 
 
 LIF_SEMANTIC_SEARCH_MCP_SERVER_URL = os.environ.get("LIF_SEMANTIC_SEARCH_MCP_SERVER_URL")
-LIF_GRAPHQL_API_URL = os.environ.get("LIF_GRAPHQL_API_URL")
 LLM_MODEL_NAME = os.environ.get("LIF_ADVISOR_LLM_MODEL_NAME")
 LLM_TOKEN_COSTS = {
     "gpt-4o-mini": {"input": 1.1, "output": 4.4, "cached": 0.275},
@@ -206,32 +204,6 @@ class LIFAIAgent:
         response = {"content": final_response, "tokens": total_tokens, "cost": total_cost}
         logger.info(f"Response: {response}")
         return response
-
-    async def summarize_conversation(self, config: dict) -> dict:
-        """Ask the LLM to summarize the conversation and return the summary.
-
-        Args:
-            config (dict): Configuration for the agent invocation.
-
-        Returns:
-            dict: Agent response containing content, tokens, and cost.
-        """
-        if not self.agent:
-            raise RuntimeError("Agent not initialized! Call setup() first.")
-
-        result = await self.agent.ainvoke(
-            {"messages": [{"role": "user", "content": "Summarize the conversation so far."}]}, config=config
-        )
-        messages = result.get("messages", [])
-        final_message = messages[-1] if messages else None
-
-        if not final_message:
-            logger.error("No response from agent.")
-            return {"content": "", "tokens": 0, "cost": 0.0}
-
-        final_response = final_message.content
-
-        return final_response
 
     def calculate_tokens_and_cost(self, messages: list) -> tuple:
         """

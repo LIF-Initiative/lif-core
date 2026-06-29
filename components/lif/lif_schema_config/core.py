@@ -95,6 +95,9 @@ class LIFSchemaConfig:
     query_planner_base_url: str = "http://localhost:8002"
     query_timeout_seconds: int = 20
 
+    # Translator URL
+    translator_base_url: str = "http://localhost:8007"
+
     # MDR Configuration
     mdr_api_url: str = "http://localhost:8012"
     mdr_api_auth_token: str = "no_auth_token_set"
@@ -154,6 +157,7 @@ class LIFSchemaConfig:
             LIF_GRAPHQL_ROOT_NODES: Comma-separated additional root types (these are reference data)
             LIF_QUERY_PLANNER_URL: Query planner base URL
             LIF_QUERY_TIMEOUT_SECONDS: Query timeout in seconds
+            LIF_TRANSLATOR_BASE_URL: Translator base URL
             LIF_MDR_API_URL: MDR API URL
             LIF_MDR_API_AUTH_TOKEN: MDR authentication token
             MDR_TIMEOUT_SECONDS: Timeout for MDR API calls (default: 30)
@@ -186,6 +190,8 @@ class LIFSchemaConfig:
             # Query planner
             query_planner_base_url=os.getenv("LIF_QUERY_PLANNER_URL", "http://localhost:8002"),
             query_timeout_seconds=int(os.getenv("LIF_QUERY_TIMEOUT_SECONDS", "20")),
+            # Translator
+            translator_base_url=os.getenv("LIF_TRANSLATOR_BASE_URL", "http://localhost:8007"),
             # MDR
             mdr_api_url=os.getenv("LIF_MDR_API_URL", "http://localhost:8012"),
             mdr_api_auth_token=os.getenv("LIF_MDR_API_AUTH_TOKEN", "no_auth_token_set"),
@@ -218,6 +224,11 @@ class LIFSchemaConfig:
     def query_planner_query_url(self) -> str:
         """Full URL for query planner query endpoint."""
         return self.query_planner_base_url.rstrip("/") + "/query"
+
+    def translator_translate_url(self, source_schema_id: str, target_schema_id: str) -> str:
+        """Full URL for translator translate endpoint."""
+        base = self.translator_base_url.rstrip("/")
+        return f"{base}/translate/source/{source_schema_id}/target/{target_schema_id}"
 
     @property
     def query_planner_update_url(self) -> str:

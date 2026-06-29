@@ -250,6 +250,22 @@ class TestMiddlewareTenantRouting:
         assert resp.status_code == 200
         assert resp.json()["tenant_schema"] == "tenant_lif_team"
 
+    async def test_valid_schema_override_used_for_service_principal(self, routing_on, client):
+        """A clean X-API-Tenant-Schema header (already sanitized) is accepted and routed to."""
+        resp = await client.get(
+            "/protected", headers={"X-API-Key": "changeme1", "X-API-Tenant-Schema": "tenant_acme_univ"}
+        )
+        assert resp.status_code == 200
+        assert resp.json()["tenant_schema"] == "tenant_acme_univ"
+
+    async def test_invalid_schema_override_returns_400(self, routing_on, client):
+        """Header value that would be mutated by sanitize_group_name is rejected with 400."""
+        resp = await client.get(
+            "/protected", headers={"X-API-Key": "changeme1", "X-API-Tenant-Schema": "tenant_Acme-Univ"}
+        )
+        assert resp.status_code == 400
+        assert "invalid" in resp.json()["detail"].lower()
+
     async def test_public_path_does_not_set_tenant_schema(self, routing_on, client):
         """Unauthenticated endpoints skip the auth block; tenant_schema stays None."""
         resp = await client.get("/health-check")

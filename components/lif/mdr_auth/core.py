@@ -11,10 +11,10 @@ from fastapi import HTTPException, Request, status
 from fastapi.responses import JSONResponse
 from lif.mdr_auth.workspace_cookie import COOKIE_NAME, decode_workspace_cookie
 from lif.mdr_services.workspace_service import find_workspace
-from lif.tenant_routing import resolve_tenant_schema
 from lif.mdr_utils.collection_utils import convert_csv_to_set
 from lif.mdr_utils.config import get_settings
 from lif.mdr_utils.logger_config import get_logger
+from lif.tenant_routing import resolve_tenant_schema, sanitize_group_name
 from starlette.middleware.base import BaseHTTPMiddleware
 
 logger = get_logger(__name__)
@@ -32,6 +32,7 @@ API_KEYS = {
     settings.mdr__auth__service_api_key__semantic_search: "semantic-search-service",
     settings.mdr__auth__service_api_key__translator: "translator-service",
     settings.mdr__auth__service_api_key__post_confirm: "post-confirm-service",
+    settings.mdr__auth__service_api_key__learner_data_export: "learner-data-export-service",
 }
 
 # Cognito configuration
@@ -252,12 +253,25 @@ class AuthMiddleware(BaseHTTPMiddleware):
 
             # Default tenant from JWT groups (or service-schema fallback for
             # API-key callers and group-less Cognito users).
+            is_service_principal = isinstance(request.state.principal, str) and request.state.principal.startswith(
+                "service:"
+            )
+            service_schema_override = None
+            if is_service_principal:
+                raw_override = request.headers.get("X-API-Tenant-Schema")
+                if raw_override is not None:
+                    if sanitize_group_name(raw_override) != raw_override:
+                        return JSONResponse(
+                            status_code=status.HTTP_400_BAD_REQUEST,
+                            content={"detail": "Invalid X-API-Tenant-Schema value"},
+                        )
+                    service_schema_override = raw_override
             request.state.tenant_schema = resolve_tenant_schema(
                 enabled=TENANT_ROUTING_ENABLED,
-                is_service_principal=isinstance(request.state.principal, str)
-                and request.state.principal.startswith("service:"),
+                is_service_principal=is_service_principal,
                 cognito_groups=getattr(request.state, "cognito_groups", None),
                 service_schema=TENANT_SERVICE_SCHEMA,
+                service_schema_override=service_schema_override,
             )
 
             # If the user picked a specific workspace via POST /tenants/select,

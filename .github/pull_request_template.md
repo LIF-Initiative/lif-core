@@ -44,7 +44,7 @@ Closes # [[add Github issue number]]
 - [ ] frontends/
 - [ ] deployments/
 - [ ] cloudformation/ or sam/ templates
-- [ ] schemas/
+- [ ] reference_data/
 - [ ] scripts/
 - [ ] test/ or e2e/
 - [ ] Database schema (migrations)

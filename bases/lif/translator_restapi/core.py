@@ -16,10 +16,11 @@ async def health_check() -> dict:
 
 
 @app.post("/translate/source/{source_schema_id}/target/{target_schema_id}")
-async def translate(source_schema_id: str, target_schema_id: str, input_data: dict) -> dict:
+async def translate(request: Request, source_schema_id: str, target_schema_id: str, input_data: dict) -> dict:
     translator_config = TranslatorConfig(source_schema_id=source_schema_id, target_schema_id=target_schema_id)
     translator = Translator(translator_config)
-    result = await translator.run(input_data)
+    tenant_schema = request.headers.get("X-API-Tenant-Schema")
+    result = await translator.run(input_data, tenant_schema=tenant_schema)
     return result
 
 
