@@ -80,6 +80,7 @@
 - [`deploying-lif-at-your-institution.md`](operations/guides/deploying-lif-at-your-institution.md) — Adopter-facing hub guide for standing up your own LIF instance: deployment shapes, stack bring-up, data model in MDR, source wiring, auth/tenancy, ops; links the detailed spokes and flags self-host gaps (#1004).
 - [`deployment.md`](operations/guides/deployment.md) — Deployment scripts, env config (dev vs. demo), MDR schema migrations, Docker build dependency resolution, ECS/CloudWatch debugging, querying the MDR API.
 - [`graphql-api-keys.md`](operations/guides/graphql-api-keys.md) — GraphQL org1 API key authentication: SSM key storage, `X-API-Key` flow, `setup-graphql-api-keys.sh` service/workshop modes.
+- [`lde-api-keys.md`](operations/guides/lde-api-keys.md) — Learner Data Export API key authentication: shared `api_key_auth` middleware, `LDE_AUTH__API_KEYS` SSM flow, `setup-api-keys.sh` generation, deploy-ordering gotcha.
 - [`load-testing.md`](operations/guides/load-testing.md) — Load testing notes for LIF services.
 - [`self-serve-registration-walkthrough.md`](operations/guides/self-serve-registration-walkthrough.md) — End-to-end walkthrough of the #884 self-serve flow (register → workspace → invite → switch); tester checklist + admin/operator notes for verifying it on dev or demo.
 - [`testing.md`](operations/guides/testing.md) — Unit/integration test principles, sample data orgs, the 6 test users, service-layer testing order.
