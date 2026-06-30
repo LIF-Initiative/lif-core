@@ -11,6 +11,7 @@ from lif.openapi_to_graphql.type_factory import (
     build_root_mutation_type,
     build_root_query_type,
     create_enum_type,
+    create_nested_input_type,
     create_type,
 )
 
@@ -190,6 +191,23 @@ class TestInvalidGraphqlNameHardening:
         # Both fields survive with distinct names; neither the build nor a field is lost.
         assert "iSO639_2LangCode" in sdl
         assert "iSO639_2LangCode_2" in sdl
+
+    def test_filter_input_dedups_colliding_field_names(self):
+        """The de-dup must also apply to the input/filter builders, not just create_type. Two
+        queryable source names that sanitize to the same identifier used to collapse to one in the
+        filter input via dict-key overwrite (silent field loss / potential duplicate-field crash)."""
+        schema = {
+            "type": "object",
+            "properties": {
+                # both sanitize to attr "iso639_2_lang_code" / graphql "iSO639_2LangCode"
+                "iSO639-2LangCode": _make_scalar_field(queryable=True),
+                "iSO639_2LangCode": _make_scalar_field(queryable=True),
+            },
+        }
+        input_type = create_nested_input_type("PersonFilter", schema, _empty_openapi({}), {}, {})
+        assert input_type is not None
+        # Both fields present (de-duped) — not collapsed to one.
+        assert len(input_type.__annotations__) == 2
 
 
 # === Test: create_type — object with no properties ===
