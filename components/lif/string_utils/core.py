@@ -26,8 +26,9 @@ def safe_identifier(name: str) -> str:
 def safe_graphql_name(name: str) -> str:
     """Sanitize a string into a valid GraphQL name, preserving its original casing.
 
-    GraphQL names must match /[_A-Za-z][_0-9A-Za-z]*/ — only ``[_0-9A-Za-z]`` and not
-    leading with a digit. Unlike :func:`safe_identifier` (which snake_cases for Python
+    GraphQL names must be at least 1 character long, start with ``_A-Za-z``, and otherwise
+    contain only ``_0-9A-Za-z`` (i.e. match ``/[_A-Za-z][_0-9A-Za-z]*/``). Unlike
+    :func:`safe_identifier` (which snake_cases for Python
     attributes), this keeps the original casing so the exposed GraphQL field/type name stays
     as close to the source schema as possible; it only replaces invalid characters with ``_``,
     prefixes ``_`` when the name would start with a digit, and collapses a leading run of
