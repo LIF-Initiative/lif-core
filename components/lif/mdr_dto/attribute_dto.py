@@ -53,7 +53,9 @@ class CreateAttributeDTO(BaseModel):
     ExtensionNotes: Optional[str] = None
     Example: Optional[str] = None
     Common: Optional[bool] = None
-    # EntityId: int
+    # When set, the attribute and its association to this entity are created in a single
+    # transaction (see create_attribute) so a dropped response can't orphan the attribute (#1028).
+    EntityId: Optional[int] = None
 
 
 class UpdateAttributeDTO(BaseModel):

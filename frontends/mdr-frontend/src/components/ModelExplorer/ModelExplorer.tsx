@@ -407,21 +407,20 @@ const ModelTree: React.FC<ModelTreeProps> = ({
     const useEAA = parentNode?.type === 'entity';
       /** ^ Always want an association, but should also be under an Entity */
     const inclusionParams: any = useInclusion ? tmplCreateInclusion(model.Id, 0, 'Attribute') : {};
-    const eAAParams: any = useEAA ? tmplCreateEntityAttributeAssociation(parentNode.id, model) : {};
 
     const createdIds: any = {};
     try {
-      const newAttribute: any = await createAttribute({ ...params, DataModelId: model.Id });
+      // When adding under an Entity, pass EntityId so the API creates the attribute AND its
+      // entity association in a single transaction (#1028). This replaces the old two-request
+      // flow (create attribute, then create association), which orphaned the attribute if the
+      // first response was lost — persisted-but-unassociated: invisible + blocking re-create.
+      const newAttribute: any = await createAttribute({
+        ...params,
+        DataModelId: model.Id,
+        ...(useEAA ? { EntityId: parentNode.id } : {}),
+      });
       createdIds.Attribute = newAttribute?.Id;
       debugLog(">> Created Attribute:", newAttribute?.Id, newAttribute);
-      if (newAttribute?.Id && useEAA) {
-        eAAParams.AttributeId = newAttribute?.Id;
-        eAAParams.Contributor = params.Contributor;
-        eAAParams.ContributorOrganization = params.ContributorOrganization;
-        const newEAA: any = await createEntityAttributeAssociation(eAAParams);
-        createdIds.EntityAttributeAssociation = newEAA?.Id;
-        debugLog(">> Created Entity Attribute Association:", newEAA?.Id, newEAA);
-      }
       if (newAttribute?.Id && useInclusion) {
         inclusionParams.IncludedElementId = newAttribute?.Id;
         inclusionParams.Contributor = params.Contributor;
