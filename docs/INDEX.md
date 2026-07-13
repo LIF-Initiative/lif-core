@@ -44,6 +44,7 @@
 - [`composer/0001-implement-as-module-component.md`](design/adr/composer/0001-implement-as-module-component.md) — Composer: implement as module component.
 - [`composer/0002-use-hierarchical-dot-path-for-fragment-paths.md`](design/adr/composer/0002-use-hierarchical-dot-path-for-fragment-paths.md) — Composer: hierarchical dot-path for fragment paths.
 - [`general/auth.md`](design/adr/general/auth.md) — ADR 0001: API and User Auth (Proposed).
+- [`general/0002-lif-control-plane-vs-mdr-host.md`](design/adr/general/0002-lif-control-plane-vs-mdr-host.md) — ADR 0002 (Proposed): identity + developer-key control plane belongs in a dedicated LIF service, not MDR; MDR is the interim host via portable bricks + signed-token offline validation (#1000/#1041).
 - [`metadata_repository/0001-base-lif-automation.md`](design/adr/metadata_repository/0001-base-lif-automation.md) — MDR: base LIF automation.
 - [`metadata_repository/0002-no-partner-management.md`](design/adr/metadata_repository/0002-no-partner-management.md) — MDR: no partner management in scope.
 - [`metadata_repository/0003-not-required-deprecation-advance-notice.md`](design/adr/metadata_repository/0003-not-required-deprecation-advance-notice.md) — MDR: deprecation advance-notice not required.
