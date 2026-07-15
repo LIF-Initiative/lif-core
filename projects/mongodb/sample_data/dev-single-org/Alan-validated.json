@@ -6,7 +6,7 @@
           "lastName": "Tsatrian",
           "firstName": "Alan ",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "name-alan -tsatrian-single-org-001"
         }
       ],
@@ -20,10 +20,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-innovation-single-org-001"
         },
         {
@@ -35,10 +36,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-business-intelligence-single-org-002"
         },
         {
@@ -50,10 +52,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-biological-systems-single-org-003"
         },
         {
@@ -65,10 +68,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-business-ethics-single-org-004"
         },
         {
@@ -80,10 +84,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-strategic-management-single-org-005"
         },
         {
@@ -95,10 +100,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-customer-service-single-org-006"
         },
         {
@@ -110,10 +116,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-compliance-training-single-org-007"
         },
         {
@@ -125,10 +132,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-conflict-resolution-single-org-008"
         },
         {
@@ -140,10 +148,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-critical-thinking-single-org-009"
         },
         {
@@ -155,10 +164,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-cultural-diversity-single-org-010"
         },
         {
@@ -170,10 +180,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-data-presentation-single-org-011"
         },
         {
@@ -185,10 +196,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-emotional-intelligence-single-org-012"
         },
         {
@@ -200,10 +212,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-performance-management-single-org-013"
         },
         {
@@ -214,10 +227,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-ethical-codes-single-org-014"
         },
         {
@@ -229,10 +243,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-leadership-single-org-015"
         },
         {
@@ -244,10 +259,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-human-capital-single-org-016"
         },
         {
@@ -259,10 +275,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-information-security-managemen-single-org-017"
         },
         {
@@ -274,10 +291,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-international-business-single-org-018"
         },
         {
@@ -289,10 +307,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-multimedia-single-org-019"
         },
         {
@@ -304,10 +323,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-performance-tuning-single-org-020"
         },
         {
@@ -319,10 +339,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-quality-management-single-org-021"
         },
         {
@@ -334,10 +355,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-regulatory-requirements-single-org-022"
         },
         {
@@ -349,10 +371,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-social-media-single-org-023"
         },
         {
@@ -364,10 +387,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-stakeholder-management-single-org-024"
         },
         {
@@ -379,10 +403,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-time-management-single-org-025"
         },
         {
@@ -394,10 +419,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-presentations-single-org-026"
         },
         {
@@ -409,10 +435,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-policy-development-single-org-027"
         },
         {
@@ -424,10 +451,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-quality-control-single-org-028"
         },
         {
@@ -439,10 +467,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-risk-management-single-org-029"
         },
         {
@@ -454,10 +483,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-medical-ethics-single-org-030"
         },
         {
@@ -468,10 +498,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-written-communication-single-org-031"
         },
         {
@@ -483,10 +514,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-strategic-planning-single-org-032"
         },
         {
@@ -498,10 +530,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-workforce-management-single-org-033"
         },
         {
@@ -513,10 +546,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-online-communication-single-org-034"
         },
         {
@@ -528,10 +562,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-communications-single-org-035"
         },
         {
@@ -543,10 +578,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-coordinating-single-org-036"
         },
         {
@@ -558,10 +594,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-negotiation-single-org-037"
         },
         {
@@ -573,10 +610,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-training-and-development-single-org-038"
         },
         {
@@ -588,10 +626,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-research-single-org-039"
         },
         {
@@ -603,10 +642,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-relationship-building-single-org-040"
         },
         {
@@ -618,10 +658,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-planning-single-org-041"
         },
         {
@@ -633,10 +674,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-teamwork-single-org-042"
         },
         {
@@ -648,10 +690,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-persuasive-communication-single-org-043"
         },
         {
@@ -663,10 +706,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-management-single-org-044"
         },
         {
@@ -678,10 +722,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-team-leadership-single-org-045"
         },
         {
@@ -693,10 +738,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-professionalism-single-org-046"
         },
         {
@@ -708,10 +754,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-change-management-single-org-047"
         },
         {
@@ -722,10 +769,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-ethical-responsibility-single-org-048"
         },
         {
@@ -737,10 +785,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-analytical-techniques-single-org-049"
         },
         {
@@ -752,10 +801,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-auditing-single-org-050"
         },
         {
@@ -767,10 +817,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-business-operations-single-org-051"
         },
         {
@@ -782,10 +833,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-empathy-single-org-052"
         },
         {
@@ -797,10 +849,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-operations-single-org-053"
         },
         {
@@ -812,10 +865,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-stress-management-single-org-054"
         },
         {
@@ -826,10 +880,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-responsibility-to-others-single-org-055"
         },
         {
@@ -841,10 +896,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-business-acumen-single-org-056"
         },
         {
@@ -855,10 +911,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-communication-and-interaction-single-org-057"
         },
         {
@@ -870,10 +927,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-human-resource-management-single-org-058"
         },
         {
@@ -885,10 +943,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-labor-relations-single-org-059"
         },
         {
@@ -899,10 +958,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-leadership-and-navigation-single-org-060"
         },
         {
@@ -914,10 +974,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-organizational-ethics-single-org-061"
         },
         {
@@ -929,10 +990,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-organizational-leadership-single-org-062"
         },
         {
@@ -944,10 +1006,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-talent-sourcing-single-org-063"
         },
         {
@@ -959,10 +1022,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-occupational-safety-and-health-single-org-064"
         },
         {
@@ -973,10 +1037,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-policy-research-and-analysis-single-org-065"
         },
         {
@@ -988,10 +1053,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-internal-controls-single-org-066"
         },
         {
@@ -1003,10 +1069,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-program-development-single-org-067"
         },
         {
@@ -1018,10 +1085,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-legislation-single-org-068"
         },
         {
@@ -1032,10 +1100,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-critical-evaluation-single-org-069"
         },
         {
@@ -1046,10 +1115,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-human-resource--hr--strategic--single-org-070"
         },
         {
@@ -1060,10 +1130,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-total-rewards-single-org-071"
         },
         {
@@ -1074,10 +1145,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-u-s--employment-law-and-regula-single-org-072"
         }
       ],
@@ -1088,12 +1160,26 @@
               "emailAddress": [
                 "atsatrian_lifdemo@stateu.edu "
               ],
-              "informationSourceId": "Single-Org"
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University",
+              "identifier": "email-alan-tsatrian-single-org-001"
             }
           ],
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
-          "identifier": "contact-single-org-001"
+          "informationSourceOrganization": "State University",
+          "identifier": "contact-single-org-001",
+          "Address": [
+            {
+              "informationSourceId": "Single-Org",
+              "addressStreet": "250 State Street",
+              "addressCity": "Salt Lake City",
+              "addressState": "Utah",
+              "addressPostalCode": "84111",
+              "countryCode": "US",
+              "informationSourceOrganization": "State University",
+              "identifier": "address-alan-tsatrian-single-org-001"
+            }
+          ]
         }
       ],
       "Identifier": [
@@ -1101,7 +1187,7 @@
           "identifier": "100001",
           "identifierType": "SCHOOL_ASSIGNED_NUMBER",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University"
+          "informationSourceOrganization": "State University"
         }
       ],
       "CredentialAward": [
@@ -1109,156 +1195,192 @@
           "awardStatus": "InProgress",
           "InstanceOfRefCredential": {
             "id": "84d6de55-974c-47e5-92bf-889addac75ae",
-            "informationSourceId": "Single-Org"
+            "informationSourceId": "Single-Org",
+            "name": "Master of Science (MS): Management and Leadership",
+            "informationSourceOrganization": "State University",
+            "identifier": "credential-master-of-science--ms---manage-single-org-001"
           },
           "id": "b3d95585-fc3f-4450-a127-9074d41c9ee8",
           "awardIssueDate": "2021-02-09",
           "credentialAwardee": "Alan  Tsatrian",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
-          "identifier": "credentialaward-b3d95585-fc3f-4450-a127-9074d4-single-org-001"
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialaward-b3d95585-fc3f-4450-a127-9074d4-single-org-001",
+          "name": "Master of Science (MS): Management and Leadership"
         },
         {
           "awardStatus": "Completed",
           "InstanceOfRefCredential": {
             "id": "84d6de55-974c-47e5-92bf-889addac75ae",
-            "informationSourceId": "Single-Org"
+            "informationSourceId": "Single-Org",
+            "name": "Master of Science (MS): Management and Leadership",
+            "informationSourceOrganization": "State University",
+            "identifier": "credential-master-of-science--ms---manage-single-org-001"
           },
           "id": "84c4eeef-8403-4cd1-a73c-5cc887c53b5a",
           "awardIssueDate": "2020-09-26T14:42:24Z",
           "credentialAwardee": "Alan  Tsatrian",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
-          "identifier": "credentialaward-84c4eeef-8403-4cd1-a73c-5cc887-single-org-002"
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialaward-84c4eeef-8403-4cd1-a73c-5cc887-single-org-002",
+          "name": "Master of Science (MS): Management and Leadership"
         },
         {
           "awardStatus": "Completed",
           "InstanceOfRefCredential": {
             "id": "84d6de55-974c-47e5-92bf-889addac75ae",
-            "informationSourceId": "Single-Org"
+            "informationSourceId": "Single-Org",
+            "name": "Master of Science (MS): Management and Leadership",
+            "informationSourceOrganization": "State University",
+            "identifier": "credential-master-of-science--ms---manage-single-org-001"
           },
           "id": "7a74204a-ae64-4c68-a346-de2b2649c507",
           "awardIssueDate": "2022-10-24T07:30:44Z",
           "credentialAwardee": "Alan  Tsatrian",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
-          "identifier": "credentialaward-7a74204a-ae64-4c68-a346-de2b26-single-org-003"
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialaward-7a74204a-ae64-4c68-a346-de2b26-single-org-003",
+          "name": "Master of Science (MS): Management and Leadership"
         },
         {
           "awardStatus": "Completed",
           "InstanceOfRefCredential": {
             "id": "84d6de55-974c-47e5-92bf-889addac75ae",
-            "informationSourceId": "Single-Org"
+            "informationSourceId": "Single-Org",
+            "name": "Master of Science (MS): Management and Leadership",
+            "informationSourceOrganization": "State University",
+            "identifier": "credential-master-of-science--ms---manage-single-org-001"
           },
           "id": "83db97a5-1255-422f-8ee1-ddfac6ea42e3",
           "awardIssueDate": "2023-07-21",
           "credentialAwardee": "Alan  Tsatrian",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
-          "identifier": "credentialaward-83db97a5-1255-422f-8ee1-ddfac6-single-org-004"
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialaward-83db97a5-1255-422f-8ee1-ddfac6-single-org-004",
+          "name": "Master of Science (MS): Management and Leadership"
         },
         {
           "awardStatus": "Completed",
           "InstanceOfRefCredential": {
             "id": "84d6de55-974c-47e5-92bf-889addac75ae",
-            "informationSourceId": "Single-Org"
+            "informationSourceId": "Single-Org",
+            "name": "Master of Science (MS): Management and Leadership",
+            "informationSourceOrganization": "State University",
+            "identifier": "credential-master-of-science--ms---manage-single-org-001"
           },
           "id": "a0115c53-e394-4378-9529-47d68902107b",
           "awardIssueDate": "2020-01-27",
           "credentialAwardee": "Alan  Tsatrian",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
-          "identifier": "credentialaward-a0115c53-e394-4378-9529-47d689-single-org-005"
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialaward-a0115c53-e394-4378-9529-47d689-single-org-005",
+          "name": "Master of Science (MS): Management and Leadership"
         },
         {
           "awardStatus": "Completed",
           "InstanceOfRefCredential": {
             "id": "84d6de55-974c-47e5-92bf-889addac75ae",
-            "informationSourceId": "Single-Org"
+            "informationSourceId": "Single-Org",
+            "name": "Master of Science (MS): Management and Leadership",
+            "informationSourceOrganization": "State University",
+            "identifier": "credential-master-of-science--ms---manage-single-org-001"
           },
           "id": "c9b5ddd5-ef89-4aff-8526-5095b457684d",
           "awardIssueDate": "2024-03-29",
           "credentialAwardee": "Alan  Tsatrian",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
-          "identifier": "credentialaward-c9b5ddd5-ef89-4aff-8526-5095b4-single-org-006"
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialaward-c9b5ddd5-ef89-4aff-8526-5095b4-single-org-006",
+          "name": "Master of Science (MS): Management and Leadership"
         },
         {
           "awardStatus": "Completed",
           "InstanceOfRefCredential": {
             "id": "84d6de55-974c-47e5-92bf-889addac75ae",
-            "informationSourceId": "Single-Org"
+            "informationSourceId": "Single-Org",
+            "name": "Master of Science (MS): Management and Leadership",
+            "informationSourceOrganization": "State University",
+            "identifier": "credential-master-of-science--ms---manage-single-org-001"
           },
           "id": "8e1852af-4c4b-49a2-87e5-b3705d30c5ca",
           "awardIssueDate": "2021-05-04T22:52:52Z",
           "credentialAwardee": "Alan  Tsatrian",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
-          "identifier": "credentialaward-8e1852af-4c4b-49a2-87e5-b3705d-single-org-007"
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialaward-8e1852af-4c4b-49a2-87e5-b3705d-single-org-007",
+          "name": "Master of Science (MS): Management and Leadership"
         },
         {
           "id": "cred-proficiency-certificate-001",
           "awardIssueDate": "2024-12-15T10:00:00Z",
           "credentialAwardee": "Alan  Tsatrian",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
-          "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-008"
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-008",
+          "name": "State University Credential"
         },
         {
           "id": "4bafb983-20b2-419d-9cd5-2e7c10eda9dc",
           "awardIssueDate": "2023-05-25",
           "credentialAwardee": "Alan  Tsatrian",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
-          "identifier": "credentialaward-4bafb983-20b2-419d-9cd5-2e7c10-single-org-009"
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialaward-4bafb983-20b2-419d-9cd5-2e7c10-single-org-009",
+          "name": "State University Credential"
         },
         {
           "id": "2cc45e68-86f1-47f8-aa56-f12991633aa1",
           "awardIssueDate": "2024-09-20",
           "credentialAwardee": "Alan  Tsatrian",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
-          "identifier": "credentialaward-2cc45e68-86f1-47f8-aa56-f12991-single-org-010"
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialaward-2cc45e68-86f1-47f8-aa56-f12991-single-org-010",
+          "name": "State University Credential"
         },
         {
           "id": "e7e9b17a-369c-49c9-9c22-7c9f393de896",
           "awardIssueDate": "2022-07-04T22:53:31Z",
           "credentialAwardee": "Alan  Tsatrian",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
-          "identifier": "credentialaward-e7e9b17a-369c-49c9-9c22-7c9f39-single-org-011"
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialaward-e7e9b17a-369c-49c9-9c22-7c9f39-single-org-011",
+          "name": "State University Credential"
         },
         {
           "id": "cb05b5fe-c17d-4256-b02f-3702888869fc",
           "awardIssueDate": "2024-08-06T13:03:24Z",
           "credentialAwardee": "Alan  Tsatrian",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
-          "identifier": "credentialaward-cb05b5fe-c17d-4256-b02f-370288-single-org-012"
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialaward-cb05b5fe-c17d-4256-b02f-370288-single-org-012",
+          "name": "State University Credential"
         },
         {
           "id": "ac209245-1c44-46f7-9562-bfb97113128b",
           "awardIssueDate": "2024-10-26",
           "credentialAwardee": "Alan  Tsatrian",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
-          "identifier": "credentialaward-ac209245-1c44-46f7-9562-bfb971-single-org-013"
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialaward-ac209245-1c44-46f7-9562-bfb971-single-org-013",
+          "name": "State University Credential"
         },
         {
           "id": "e3945c91-5eec-4280-8258-bf7f15afd4b4",
           "awardIssueDate": "2020-07-11T04:04:01Z",
           "credentialAwardee": "Alan  Tsatrian",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
-          "identifier": "credentialaward-e3945c91-5eec-4280-8258-bf7f15-single-org-014"
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialaward-e3945c91-5eec-4280-8258-bf7f15-single-org-014",
+          "name": "State University Credential"
         },
         {
           "id": "cred-employment-certificate-001",
           "awardIssueDate": "2024-12-15T10:00:00Z",
           "credentialAwardee": "Alan  Tsatrian",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
-          "identifier": "credentialaward-cred-employment-certificate-00-single-org-015"
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialaward-cred-employment-certificate-00-single-org-015",
+          "name": "State University Credential"
         }
       ],
       "CourseLearningExperience": [
@@ -1268,7 +1390,7 @@
             "identificationSystem": "State University SIS",
             "organizationType": [],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-state-university-single-org-001"
           },
           "RefCourse": {
@@ -1280,11 +1402,13 @@
                   "Academic Records"
                 ],
                 "informationSourceId": "Single-Org",
-                "informationSourceOrganization": "Demo University"
+                "informationSourceOrganization": "State University"
               }
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University"
+            "informationSourceOrganization": "State University",
+            "name": "Course CS651",
+            "identifier": "course-cs651-single-org-legacy-001"
           },
           "OfferedByRefOrganization": {
             "identificationSystem": "stateu-state-university-id",
@@ -1293,7 +1417,7 @@
               "University"
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-state-university-single-org-001"
           },
           "informationSourceId": "Single-Org",
@@ -1302,11 +1426,13 @@
             "awardIssueDate": "2023-05-25",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-4bafb983-20b2-419d-9cd5-2e7c10-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-4bafb983-20b2-419d-9cd5-2e7c10-single-org-001",
+            "name": "Course CS651 Credential Award"
           },
-          "informationSourceOrganization": "Demo University",
-          "identifier": "courselearningexperience-single-org-001"
+          "informationSourceOrganization": "State University",
+          "identifier": "courselearningexperience-single-org-001",
+          "name": "Course CS651"
         },
         {
           "AssertedByRefOrganization": {
@@ -1314,7 +1440,7 @@
             "identificationSystem": "State University SIS",
             "organizationType": [],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-state-university-single-org-001"
           },
           "RefCourse": {
@@ -1326,11 +1452,13 @@
                   "Academic Records"
                 ],
                 "informationSourceId": "Single-Org",
-                "informationSourceOrganization": "Demo University"
+                "informationSourceOrganization": "State University"
               }
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University"
+            "informationSourceOrganization": "State University",
+            "name": "Course CS651",
+            "identifier": "course-cs651-single-org-legacy-001"
           },
           "OfferedByRefOrganization": {
             "identificationSystem": "stateu-state-university-id",
@@ -1339,7 +1467,7 @@
               "University"
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-state-university-single-org-001"
           },
           "informationSourceId": "Single-Org",
@@ -1348,11 +1476,13 @@
             "awardIssueDate": "2024-09-20",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-2cc45e68-86f1-47f8-aa56-f12991-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-2cc45e68-86f1-47f8-aa56-f12991-single-org-001",
+            "name": "Course CS651 Credential Award"
           },
-          "informationSourceOrganization": "Demo University",
-          "identifier": "courselearningexperience-single-org-002"
+          "informationSourceOrganization": "State University",
+          "identifier": "courselearningexperience-single-org-002",
+          "name": "Course CS651"
         },
         {
           "AssertedByRefOrganization": {
@@ -1360,7 +1490,7 @@
             "identificationSystem": "State University SIS",
             "organizationType": [],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-state-university-single-org-001"
           },
           "RefCourse": {
@@ -1372,11 +1502,13 @@
                   "Academic Records"
                 ],
                 "informationSourceId": "Single-Org",
-                "informationSourceOrganization": "Demo University"
+                "informationSourceOrganization": "State University"
               }
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University"
+            "informationSourceOrganization": "State University",
+            "name": "Course CS651",
+            "identifier": "course-cs651-single-org-legacy-001"
           },
           "OfferedByRefOrganization": {
             "identificationSystem": "stateu-state-university-id",
@@ -1385,7 +1517,7 @@
               "University"
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-state-university-single-org-001"
           },
           "informationSourceId": "Single-Org",
@@ -1394,11 +1526,13 @@
             "awardIssueDate": "2022-07-04T22:53:31Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-e7e9b17a-369c-49c9-9c22-7c9f39-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-e7e9b17a-369c-49c9-9c22-7c9f39-single-org-001",
+            "name": "Course CS651 Credential Award"
           },
-          "informationSourceOrganization": "Demo University",
-          "identifier": "courselearningexperience-single-org-003"
+          "informationSourceOrganization": "State University",
+          "identifier": "courselearningexperience-single-org-003",
+          "name": "Course CS651"
         },
         {
           "AssertedByRefOrganization": {
@@ -1406,7 +1540,7 @@
             "identificationSystem": "State University SIS",
             "organizationType": [],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-state-university-single-org-001"
           },
           "RefCourse": {
@@ -1418,11 +1552,13 @@
                   "Academic Records"
                 ],
                 "informationSourceId": "Single-Org",
-                "informationSourceOrganization": "Demo University"
+                "informationSourceOrganization": "State University"
               }
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University"
+            "informationSourceOrganization": "State University",
+            "name": "Course CS651",
+            "identifier": "course-cs651-single-org-legacy-001"
           },
           "OfferedByRefOrganization": {
             "identificationSystem": "stateu-state-university-id",
@@ -1431,7 +1567,7 @@
               "University"
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-state-university-single-org-001"
           },
           "informationSourceId": "Single-Org",
@@ -1440,11 +1576,13 @@
             "awardIssueDate": "2024-08-06T13:03:24Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cb05b5fe-c17d-4256-b02f-370288-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cb05b5fe-c17d-4256-b02f-370288-single-org-001",
+            "name": "Course CS651 Credential Award"
           },
-          "informationSourceOrganization": "Demo University",
-          "identifier": "courselearningexperience-single-org-004"
+          "informationSourceOrganization": "State University",
+          "identifier": "courselearningexperience-single-org-004",
+          "name": "Course CS651"
         },
         {
           "AssertedByRefOrganization": {
@@ -1452,7 +1590,7 @@
             "identificationSystem": "State University SIS",
             "organizationType": [],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-state-university-single-org-001"
           },
           "RefCourse": {
@@ -1464,11 +1602,13 @@
                   "Academic Records"
                 ],
                 "informationSourceId": "Single-Org",
-                "informationSourceOrganization": "Demo University"
+                "informationSourceOrganization": "State University"
               }
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University"
+            "informationSourceOrganization": "State University",
+            "name": "Course CS651",
+            "identifier": "course-cs651-single-org-legacy-001"
           },
           "OfferedByRefOrganization": {
             "identificationSystem": "stateu-state-university-id",
@@ -1477,7 +1617,7 @@
               "University"
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-state-university-single-org-001"
           },
           "informationSourceId": "Single-Org",
@@ -1486,11 +1626,13 @@
             "awardIssueDate": "2024-10-26",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-ac209245-1c44-46f7-9562-bfb971-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-ac209245-1c44-46f7-9562-bfb971-single-org-001",
+            "name": "Course CS651 Credential Award"
           },
-          "informationSourceOrganization": "Demo University",
-          "identifier": "courselearningexperience-single-org-005"
+          "informationSourceOrganization": "State University",
+          "identifier": "courselearningexperience-single-org-005",
+          "name": "Course CS651"
         },
         {
           "AssertedByRefOrganization": {
@@ -1498,7 +1640,7 @@
             "identificationSystem": "State University SIS",
             "organizationType": [],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-state-university-single-org-001"
           },
           "RefCourse": {
@@ -1510,11 +1652,13 @@
                   "Academic Records"
                 ],
                 "informationSourceId": "Single-Org",
-                "informationSourceOrganization": "Demo University"
+                "informationSourceOrganization": "State University"
               }
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University"
+            "informationSourceOrganization": "State University",
+            "name": "Course CS651",
+            "identifier": "course-cs651-single-org-legacy-001"
           },
           "OfferedByRefOrganization": {
             "identificationSystem": "stateu-state-university-id",
@@ -1523,7 +1667,7 @@
               "University"
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-state-university-single-org-001"
           },
           "informationSourceId": "Single-Org",
@@ -1532,11 +1676,161 @@
             "awardIssueDate": "2020-07-11T04:04:01Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-e3945c91-5eec-4280-8258-bf7f15-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-e3945c91-5eec-4280-8258-bf7f15-single-org-001",
+            "name": "Course CS651 Credential Award"
           },
-          "informationSourceOrganization": "Demo University",
-          "identifier": "courselearningexperience-single-org-006"
+          "informationSourceOrganization": "State University",
+          "identifier": "courselearningexperience-single-org-006",
+          "name": "Course CS651"
+        },
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "courselearningexperience-c200-single-org-101",
+          "name": "Managing Organizations and Leading People",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2015-01-05",
+          "endDate": "2015-02-20",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "Competent",
+          "courseTotal": "3",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "C200-01",
+          "institution": "State University",
+          "department": "College of Business",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Managing Organizations and Leading People",
+            "identifier": "course-c200-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-005",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-005",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "courselearningexperience-c201-single-org-102",
+          "name": "Business Acumen",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2015-02-21",
+          "endDate": "2015-04-10",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "Competent",
+          "courseTotal": "3",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "C201-01",
+          "institution": "State University",
+          "department": "College of Business",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Business Acumen",
+            "identifier": "course-c201-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-005",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-005",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "courselearningexperience-c203-single-org-103",
+          "name": "Becoming an Effective Leader",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2015-04-11",
+          "endDate": "2015-05-30",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "Competent",
+          "courseTotal": "3",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "C203-01",
+          "institution": "State University",
+          "department": "College of Business",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Becoming an Effective Leader",
+            "identifier": "course-c203-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-005",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-005",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "courselearningexperience-c206-single-org-104",
+          "name": "Ethical Leadership",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2015-06-01",
+          "endDate": "2015-07-15",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "Competent",
+          "courseTotal": "3",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "C206-01",
+          "institution": "State University",
+          "department": "College of Business",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Ethical Leadership",
+            "identifier": "course-c206-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-005",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-005",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
         }
       ],
       "EmploymentLearningExperience": [
@@ -1548,11 +1842,11 @@
               "OfferedByRefOrganization": {
                 "name": "Three Trees Compliance",
                 "informationSourceId": "Single-Org",
-                "informationSourceOrganization": "Demo University",
+                "informationSourceOrganization": "State University",
                 "identifier": "organization-three-trees-compliance-single-org-001"
               },
               "informationSourceId": "Single-Org",
-              "informationSourceOrganization": "Demo University",
+              "informationSourceOrganization": "State University",
               "identifier": "position-single-org-001"
             }
           ],
@@ -1564,7 +1858,7 @@
               "Company"
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-employing-organization-single-org-001"
           },
           "OfferedByRefOrganization": {
@@ -1574,7 +1868,7 @@
               "Training Organization"
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-training-provider-single-org-001"
           },
           "ApprovedByRefOrganization": [
@@ -1585,7 +1879,7 @@
                 "Regulatory Body"
               ],
               "informationSourceId": "Single-Org",
-              "informationSourceOrganization": "Demo University",
+              "informationSourceOrganization": "State University",
               "identifier": "organization-approving-authority-single-org-001"
             }
           ],
@@ -1595,10 +1889,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-employment-certificate-00-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-employment-certificate-00-single-org-001",
+            "name": "Employment Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "employmentlearningexperience-compliance-manager--single-org-001"
         },
         {
@@ -1609,12 +1904,12 @@
               "OfferedByRefOrganization": {
                 "name": "McBradshaw Brothers",
                 "informationSourceId": "Single-Org",
-                "informationSourceOrganization": "Demo University",
+                "informationSourceOrganization": "State University",
                 "identifier": "organization-mcbradshaw-brothers-single-org-001"
               },
               "informationSourceId": "Single-Org",
               "name": "Referenced Employment Experience",
-              "informationSourceOrganization": "Demo University",
+              "informationSourceOrganization": "State University",
               "identifier": "position-referenced-employment-experien-single-org-001"
             }
           ],
@@ -1626,7 +1921,7 @@
               "Company"
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-employing-organization-single-org-001"
           },
           "OfferedByRefOrganization": {
@@ -1636,7 +1931,7 @@
               "Training Organization"
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-training-provider-single-org-001"
           },
           "ApprovedByRefOrganization": [
@@ -1647,7 +1942,7 @@
                 "Regulatory Body"
               ],
               "informationSourceId": "Single-Org",
-              "informationSourceOrganization": "Demo University",
+              "informationSourceOrganization": "State University",
               "identifier": "organization-approving-authority-single-org-001"
             }
           ],
@@ -1657,10 +1952,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-employment-certificate-00-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-employment-certificate-00-single-org-001",
+            "name": "Employment Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "employmentlearningexperience-compliance-specialist--single-org-002"
         }
       ],
@@ -1744,7 +2040,188 @@
           "informationSourceId": "Single-Org"
         }
       ],
-      "informationSourceId": "Single-Org"
+      "informationSourceId": "Single-Org",
+      "ProgramLearningExperience": [
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "programlearningexperience-ms-management-leadership-single-org-001",
+          "name": "Master of Science (MS): Management and Leadership",
+          "type": "Graduate degree program",
+          "participationStatus": "Completed",
+          "startDate": "2014-09-01",
+          "endDate": "2016-05-15",
+          "RefProgram": {
+            "name": "Master of Science (MS): Management and Leadership",
+            "identifier": "program-ms-management-leadership-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-005",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-005",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "programlearningexperience-crcm-prep-single-org-002",
+          "name": "Certified Regulatory Compliance Manager (CRCM) Preparation",
+          "type": "Professional certificate program",
+          "participationStatus": "In Progress",
+          "startDate": "2025-02-01",
+          "RefProgram": {
+            "name": "Certified Regulatory Compliance Manager (CRCM) Preparation",
+            "identifier": "program-crcm-prep-single-org-002",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "Society of Corporate Compliance and Ethics (SCCE)",
+            "identifier": "organization-scce-single-org-012",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "Society of Corporate Compliance and Ethics (SCCE)",
+            "identifier": "organization-scce-single-org-012",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        }
+      ],
+      "AssessmentLearningExperience": [
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "assessmentlearningexperience-ccep-single-org-001",
+          "name": "Certified Compliance & Ethics Professional (CCEP) Exam",
+          "type": "Professional certification assessment",
+          "startDate": "2018-10-12",
+          "endDate": "2018-10-12",
+          "offeredBy": "Society of Corporate Compliance and Ethics (SCCE)",
+          "scoreValue": "412",
+          "scoreType": "Scaled score (200-500)",
+          "resultDataType": "xsd:integer",
+          "gradeStatus": "Final",
+          "completionStatus": "Completed",
+          "timeAssessed": "2018-10-12",
+          "RefAssessment": {
+            "identifier": "assessment-ccep-single-org-001",
+            "name": "Certified Compliance & Ethics Professional (CCEP) Exam",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "RefProficiency": {
+            "name": "Regulatory Requirements",
+            "identifier": "proficiency-regulatory-requirements-single-org-022",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "Society of Corporate Compliance and Ethics (SCCE)",
+            "identifier": "organization-scce-single-org-012",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "assessmentlearningexperience-wgu-c206-single-org-002",
+          "name": "Objective Assessment: C206 Ethical Leadership",
+          "type": "Competency-based assessment",
+          "startDate": "2015-07-10",
+          "endDate": "2015-07-10",
+          "offeredBy": "State University",
+          "scoreValue": "Competent",
+          "scoreType": "Competent / Not Competent",
+          "resultDataType": "xsd:string",
+          "gradeStatus": "Final",
+          "completionStatus": "Completed",
+          "RefAssessment": {
+            "identifier": "assessment-wgu-c206-single-org-002",
+            "name": "Objective Assessment: C206 Ethical Leadership",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "RefProficiency": {
+            "name": "Ethical Codes",
+            "identifier": "proficiency-ethical-codes-single-org-014",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-005",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        }
+      ],
+      "Birth": [
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "birth-single-org-001",
+          "birthDate": "1980-05-14",
+          "cityOfBirth": "Salt Lake City",
+          "stateOfBirth": "Utah"
+        }
+      ],
+      "SexAndGender": [
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "sexandgender-single-org-001",
+          "sex": "Male",
+          "gender": "Male",
+          "pronouns": "he/him"
+        }
+      ],
+      "Residency": [
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "residency-single-org-001",
+          "localType": "In-State",
+          "countyFIPSCode": "49035",
+          "dateEffective": "2010-01-01",
+          "doNotPublishIndicator": "false"
+        }
+      ],
+      "Language": [
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "language-english-single-org-001",
+          "name": "English",
+          "iSO639_2LangCode": "eng",
+          "iSO639_3LangCode": "eng",
+          "languageType": "Primary"
+        }
+      ],
+      "Demographics": [
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "demographics-single-org-001",
+          "highestLevelEducation": "Master'sDegree(E.g.M.A.M.S.M. Eng.M.Ed.M.S.W.M.B.A.M.L.S.)",
+          "usCitizenship": "true",
+          "economicDisadvantage": "false",
+          "homeless": "false",
+          "militaryActiveStatus": "false",
+          "militaryVeteranStatus": "false"
+        }
+      ]
     }
   ],
   "Course": [
@@ -1757,11 +2234,81 @@
             "Academic Records"
           ],
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University"
+          "informationSourceOrganization": "State University"
         }
       ],
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University"
+      "informationSourceOrganization": "State University",
+      "name": "Course CS651",
+      "identifier": "course-cs651-single-org-legacy-001"
+    },
+    {
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "name": "Managing Organizations and Leading People",
+      "identifier": "course-c200-single-org-001",
+      "Identifier": [
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "C200",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ]
+        }
+      ]
+    },
+    {
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "name": "Business Acumen",
+      "identifier": "course-c201-single-org-001",
+      "Identifier": [
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "C201",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ]
+        }
+      ]
+    },
+    {
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "name": "Becoming an Effective Leader",
+      "identifier": "course-c203-single-org-001",
+      "Identifier": [
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "C203",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ]
+        }
+      ]
+    },
+    {
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "name": "Ethical Leadership",
+      "identifier": "course-c206-single-org-001",
+      "Identifier": [
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "C206",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ]
+        }
+      ]
     }
   ],
   "Organization": [
@@ -1777,7 +2324,9 @@
               "addressState": "Texas",
               "addressStreet": "632 East Hwy 3",
               "addressPostalCode": "75001",
-              "informationSourceId": "Single-Org"
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University",
+              "identifier": "address-state-university-single-org-001"
             }
           ],
           "Email": [
@@ -1785,7 +2334,9 @@
               "emailAddress": [
                 "credentials@stateu.edu"
               ],
-              "informationSourceId": "Single-Org"
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University",
+              "identifier": "email-state-university-single-org-001"
             }
           ],
           "websiteAddress": "https://www.stateu.edu/",
@@ -1794,11 +2345,13 @@
               "telephoneNumber": [
                 "111-222-3333"
               ],
-              "informationSourceId": "Single-Org"
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University",
+              "identifier": "telephone-state-university-single-org-001"
             }
           ],
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "contact-single-org-001"
         }
       ],
@@ -1808,25 +2361,26 @@
           "identifier": "833333326",
           "identifierType": "Federal employer identification number",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University"
+          "informationSourceOrganization": "State University"
         },
         {
           "identifier": "23323331",
           "identifierType": "Dun and Bradstreet number",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University"
+          "informationSourceOrganization": "State University"
         },
         {
           "identifier": "https://credentialfinder.org/organization/000/State_University",
           "identifierType": "credentialfinder.org",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University"
+          "informationSourceOrganization": "State University"
         }
       ],
       "identificationSystem": "State University SIS",
       "organizationType": [],
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University"
+      "informationSourceOrganization": "State University",
+      "identifier": "organization-state-university-single-org-001"
     },
     {
       "identificationSystem": "stateu-employing-organization-id",
@@ -1835,7 +2389,7 @@
         "Company"
       ],
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University",
+      "informationSourceOrganization": "State University",
       "identifier": "organization-corporate-partner-single-org-002"
     },
     {
@@ -1845,7 +2399,7 @@
         "Company"
       ],
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University",
+      "informationSourceOrganization": "State University",
       "identifier": "organization-employing-organization-single-org-003"
     },
     {
@@ -1853,7 +2407,7 @@
       "identificationSystem": "State University SIS",
       "organizationType": [],
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University",
+      "informationSourceOrganization": "State University",
       "identifier": "organization-state-university-single-org-004"
     },
     {
@@ -1863,13 +2417,13 @@
         "University"
       ],
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University",
+      "informationSourceOrganization": "State University",
       "identifier": "organization-state-university-single-org-005"
     },
     {
       "name": "Three Trees Compliance",
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University",
+      "informationSourceOrganization": "State University",
       "identifier": "organization-three-trees-compliance-single-org-006"
     },
     {
@@ -1879,13 +2433,13 @@
         "Training Organization"
       ],
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University",
+      "informationSourceOrganization": "State University",
       "identifier": "organization-training-provider-single-org-007"
     },
     {
       "name": "McBradshaw Brothers",
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University",
+      "informationSourceOrganization": "State University",
       "identifier": "organization-mcbradshaw-brothers-single-org-008"
     },
     {
@@ -1893,7 +2447,7 @@
       "identificationSystem": "Workday",
       "organizationType": [],
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University",
+      "informationSourceOrganization": "State University",
       "identifier": "organization-three-trees-compliance-single-org-009"
     },
     {
@@ -1901,7 +2455,7 @@
       "identificationSystem": "Workday",
       "organizationType": [],
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University",
+      "informationSourceOrganization": "State University",
       "identifier": "organization-ria-compliance-consultants-single-org-010"
     },
     {
@@ -1909,8 +2463,16 @@
       "identificationSystem": "Workday",
       "organizationType": [],
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University",
+      "informationSourceOrganization": "State University",
       "identifier": "organization-utah-iso-consultants-single-org-011"
+    },
+    {
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "name": "Society of Corporate Compliance and Ethics (SCCE)",
+      "description": "Professional association that issues corporate compliance and ethics certifications such as the CCEP.",
+      "identificationSystem": "scce-org-id",
+      "identifier": "organization-scce-single-org-012"
     }
   ],
   "Credential": [
@@ -1960,7 +2522,7 @@
                 }
               ],
               "informationSourceId": "Single-Org",
-              "informationSourceOrganization": "Demo University",
+              "informationSourceOrganization": "State University",
               "identifier": "contact-single-org-001"
             }
           ],
@@ -1970,25 +2532,25 @@
               "identifier": "833333326",
               "identifierType": "Federal employer identification number",
               "informationSourceId": "Single-Org",
-              "informationSourceOrganization": "Demo University"
+              "informationSourceOrganization": "State University"
             },
             {
               "identifier": "23323331",
               "identifierType": "Dun and Bradstreet number",
               "informationSourceId": "Single-Org",
-              "informationSourceOrganization": "Demo University"
+              "informationSourceOrganization": "State University"
             },
             {
               "identifier": "https://credentialfinder.org/organization/000/State_University",
               "identifierType": "credentialfinder.org",
               "informationSourceId": "Single-Org",
-              "informationSourceOrganization": "Demo University"
+              "informationSourceOrganization": "State University"
             }
           ],
           "identificationSystem": "State University SIS",
           "organizationType": [],
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University"
+          "informationSourceOrganization": "State University"
         }
       ],
       "Accreditation": [
@@ -1997,11 +2559,13 @@
           "accreditingAgency": "Higher Learning Commission",
           "accreditationType": "Institutional",
           "dateAccredited": "2020-01-01",
-          "accreditationStatus": "Active"
+          "accreditationStatus": "Active",
+          "informationSourceOrganization": "State University",
+          "identifier": "accreditation-higher-learning-commission-single-org-001"
         }
       ],
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University",
+      "informationSourceOrganization": "State University",
       "identifier": "credential-master-of-science--ms---manage-single-org-001"
     },
     {
@@ -2016,11 +2580,13 @@
           "accreditingAgency": "Higher Learning Commission",
           "accreditationType": "Institutional",
           "dateAccredited": "2020-01-01",
-          "accreditationStatus": "Active"
+          "accreditationStatus": "Active",
+          "informationSourceOrganization": "State University",
+          "identifier": "accreditation-higher-learning-commission-single-org-002"
         }
       ],
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University",
+      "informationSourceOrganization": "State University",
       "identifier": "credential-c200---managing-organizations--single-org-002"
     },
     {
@@ -2035,11 +2601,13 @@
           "accreditingAgency": "Higher Learning Commission",
           "accreditationType": "Institutional",
           "dateAccredited": "2020-01-01",
-          "accreditationStatus": "Active"
+          "accreditationStatus": "Active",
+          "informationSourceOrganization": "State University",
+          "identifier": "accreditation-higher-learning-commission-single-org-003"
         }
       ],
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University",
+      "informationSourceOrganization": "State University",
       "identifier": "credential-c201---business-acumen-single-org-003"
     },
     {
@@ -2054,11 +2622,13 @@
           "accreditingAgency": "Higher Learning Commission",
           "accreditationType": "Institutional",
           "dateAccredited": "2020-01-01",
-          "accreditationStatus": "Active"
+          "accreditationStatus": "Active",
+          "informationSourceOrganization": "State University",
+          "identifier": "accreditation-higher-learning-commission-single-org-004"
         }
       ],
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University",
+      "informationSourceOrganization": "State University",
       "identifier": "credential-c202---managing-human-capital-single-org-004"
     },
     {
@@ -2073,11 +2643,13 @@
           "accreditingAgency": "Higher Learning Commission",
           "accreditationType": "Institutional",
           "dateAccredited": "2020-01-01",
-          "accreditationStatus": "Active"
+          "accreditationStatus": "Active",
+          "informationSourceOrganization": "State University",
+          "identifier": "accreditation-higher-learning-commission-single-org-005"
         }
       ],
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University",
+      "informationSourceOrganization": "State University",
       "identifier": "credential-c203---becoming-an-effective-l-single-org-005"
     },
     {
@@ -2092,11 +2664,13 @@
           "accreditingAgency": "Higher Learning Commission",
           "accreditationType": "Institutional",
           "dateAccredited": "2020-01-01",
-          "accreditationStatus": "Active"
+          "accreditationStatus": "Active",
+          "informationSourceOrganization": "State University",
+          "identifier": "accreditation-higher-learning-commission-single-org-006"
         }
       ],
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University",
+      "informationSourceOrganization": "State University",
       "identifier": "credential-c204---management-communicatio-single-org-006"
     },
     {
@@ -2111,19 +2685,251 @@
           "accreditingAgency": "Higher Learning Commission",
           "accreditationType": "Institutional",
           "dateAccredited": "2020-01-01",
-          "accreditationStatus": "Active"
+          "accreditationStatus": "Active",
+          "informationSourceOrganization": "State University",
+          "identifier": "accreditation-higher-learning-commission-single-org-007"
         }
       ],
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University",
+      "informationSourceOrganization": "State University",
       "identifier": "credential-c206---ethical-leadership-single-org-007"
     },
     {
       "id": "84d6de55-974c-47e5-92bf-889addac75ae",
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University",
-      "identifier": "credential-84d6de55-974c-47e5-92bf-889add-single-org-008"
+      "informationSourceOrganization": "State University",
+      "identifier": "credential-84d6de55-974c-47e5-92bf-889add-single-org-008",
+      "name": "Master of Science (MS): Management and Leadership"
     }
   ],
-  "informationSourceId": "Single-Org"
+  "informationSourceId": "Single-Org",
+  "Assessment": [
+    {
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "identifier": "assessment-ccep-single-org-001",
+      "name": "Certified Compliance & Ethics Professional (CCEP) Exam",
+      "shortName": "CCEP",
+      "provider": "Society of Corporate Compliance and Ethics (SCCE)",
+      "type": "Professional certification examination",
+      "description": "Certification exam validating knowledge of compliance program management and ethics.",
+      "purpose": "Professional certification",
+      "assessmentLevel": "AudLevel:PostSecondaryLevel",
+      "scoreMetricType": "Scaled score (200-500)",
+      "deliveryType": "Online proctored / test center",
+      "methodType": "Multiple choice",
+      "AssessmentPerformanceLevel": [
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "assessmentperformancelevel-ccep-pass-single-org-001",
+          "label": "Pass",
+          "performanceLowerLevel": "300",
+          "performanceUpperLevel": "500",
+          "descriptiveFeedback": "A scaled score of 300 or higher earns the certification."
+        }
+      ],
+      "demonstratesRefCompetency": {
+        "name": "Regulatory Compliance",
+        "identifier": "competency-regulatory-compliance-single-org-001",
+        "informationSourceId": "Single-Org",
+        "informationSourceOrganization": "State University"
+      },
+      "awardedByRefOrganization": {
+        "name": "Society of Corporate Compliance and Ethics (SCCE)",
+        "identifier": "organization-scce-single-org-012",
+        "informationSourceId": "Single-Org",
+        "informationSourceOrganization": "State University"
+      },
+      "offeredByRefOrganization": {
+        "name": "Society of Corporate Compliance and Ethics (SCCE)",
+        "identifier": "organization-scce-single-org-012",
+        "informationSourceId": "Single-Org",
+        "informationSourceOrganization": "State University"
+      }
+    },
+    {
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "identifier": "assessment-wgu-c206-single-org-002",
+      "name": "Objective Assessment: C206 Ethical Leadership",
+      "shortName": "C206 OA",
+      "provider": "State University",
+      "type": "Competency-based objective assessment",
+      "description": "Proctored competency-based assessment verifying ethical leadership competence for the MS program.",
+      "purpose": "Competency verification for course credit",
+      "assessmentLevel": "AudLevel:PostSecondaryLevel",
+      "scoreMetricType": "Competent / Not Competent",
+      "deliveryType": "Online proctored",
+      "methodType": "Objective assessment",
+      "AssessmentPerformanceLevel": [
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "assessmentperformancelevel-c206-competent-single-org-002",
+          "label": "Competent",
+          "descriptiveFeedback": "Demonstrates competency in ethical leadership sufficient to earn course credit."
+        }
+      ],
+      "demonstratesRefCompetency": {
+        "name": "Ethics and Integrity",
+        "identifier": "competency-ethics-integrity-single-org-003",
+        "informationSourceId": "Single-Org",
+        "informationSourceOrganization": "State University"
+      },
+      "offeredByRefOrganization": {
+        "name": "State University",
+        "identifier": "organization-state-university-single-org-005",
+        "informationSourceId": "Single-Org",
+        "informationSourceOrganization": "State University"
+      }
+    }
+  ],
+  "CompetencyFramework": [
+    {
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "name": "Regulatory Compliance & Ethics Competency Framework",
+      "description": "Competency framework for corporate compliance, ethics, and risk-management roles, aligned to O*NET Compliance Officers.",
+      "uri": "https://stateu.edu/frameworks/compliance-ethics/v1",
+      "publisher": "State University",
+      "creator": "State University",
+      "publicationStatus": "Published",
+      "publicationDate": "2022-03-01",
+      "version": "1.0",
+      "identifier": "competencyframework-compliance-ethics-single-org-001",
+      "Competency": [
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "name": "Regulatory Compliance",
+          "code": "COMP-01",
+          "statement": "Interprets applicable laws and regulations and operates controls that keep the organization in compliance.",
+          "identifier": "competency-regulatory-compliance-single-org-001",
+          "CompetencyAlignments": [
+            {
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University",
+              "identifier": "competencyalignment-onet-compliance-single-org-001",
+              "alignmentType": "majorAlignment",
+              "alignsToUri": "https://www.onetonline.org/link/summary/13-1041.00",
+              "alignsToText": "Compliance Officers",
+              "alignsToType": "O*NET-SOC Occupation"
+            }
+          ]
+        },
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "name": "Risk Management",
+          "code": "COMP-02",
+          "statement": "Identifies, assesses, and mitigates compliance and operational risk.",
+          "identifier": "competency-risk-management-single-org-002"
+        },
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "name": "Ethics and Integrity",
+          "code": "COMP-03",
+          "statement": "Applies ethical principles and codes of conduct to organizational decision-making.",
+          "identifier": "competency-ethics-integrity-single-org-003"
+        },
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "name": "Audit and Monitoring",
+          "code": "COMP-04",
+          "statement": "Plans and conducts audits and ongoing monitoring to detect and correct non-compliance.",
+          "identifier": "competency-audit-monitoring-single-org-004"
+        },
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "name": "Policy Development",
+          "code": "COMP-05",
+          "statement": "Drafts, implements, and maintains policies and procedures that operationalize regulatory requirements.",
+          "identifier": "competency-policy-development-single-org-005"
+        }
+      ],
+      "Association": [
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "association-risk-child-of-compliance-single-org-001",
+          "competencyAssociationType": "isChildOf",
+          "competencyAssociationOriginName": "Risk Management",
+          "competencyAssociationOriginUri": "urn:lif:competency:competency-risk-management-single-org-002",
+          "competencyAssociationDestinationName": "Regulatory Compliance",
+          "competencyAssociationDestinationUri": "urn:lif:competency:competency-regulatory-compliance-single-org-001"
+        },
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "association-policy-related-compliance-single-org-002",
+          "competencyAssociationType": "isRelatedTo",
+          "competencyAssociationOriginName": "Policy Development",
+          "competencyAssociationOriginUri": "urn:lif:competency:competency-policy-development-single-org-005",
+          "competencyAssociationDestinationName": "Regulatory Compliance",
+          "competencyAssociationDestinationUri": "urn:lif:competency:competency-regulatory-compliance-single-org-001"
+        }
+      ]
+    }
+  ],
+  "Program": [
+    {
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "name": "Master of Science (MS): Management and Leadership",
+      "description": "Competency-based graduate degree in management and leadership.",
+      "identifier": "program-ms-management-leadership-single-org-001",
+      "programIdentifierSystem": "State University SIS",
+      "instructionalProgramCode": "52.0201",
+      "instructionalProgramUse": "CIP 2020",
+      "creditsRequired": "30",
+      "creditUnitTypeDescription": "Competency units",
+      "postSecondaryProgramLevel": "Master's Degree",
+      "normalTimeCompletion": "18",
+      "normalTimeCompletionUnits": "Years",
+      "deliveryType": "Online, competency-based",
+      "distanceEducationProgram": "true",
+      "demonstratesRefCompetency": {
+        "name": "Ethics and Integrity",
+        "identifier": "competency-ethics-integrity-single-org-003",
+        "informationSourceId": "Single-Org",
+        "informationSourceOrganization": "State University"
+      },
+      "offeredByRefOrganization": {
+        "name": "State University",
+        "identifier": "organization-state-university-single-org-005",
+        "informationSourceId": "Single-Org",
+        "informationSourceOrganization": "State University"
+      }
+    },
+    {
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "name": "Certified Regulatory Compliance Manager (CRCM) Preparation",
+      "description": "Professional preparation program for the CRCM certification in regulatory compliance management.",
+      "identifier": "program-crcm-prep-single-org-002",
+      "programIdentifierSystem": "training-provider-program-id",
+      "creditsRequired": "6",
+      "creditUnitTypeDescription": "Continuing education units",
+      "postSecondaryProgramLevel": "Professional Certificate",
+      "workBasedLearningOpportunityType": "Work-based learning",
+      "programSponsorType": "Professional association",
+      "deliveryType": "Online",
+      "demonstratesRefCompetency": {
+        "name": "Regulatory Compliance",
+        "identifier": "competency-regulatory-compliance-single-org-001",
+        "informationSourceId": "Single-Org",
+        "informationSourceOrganization": "State University"
+      },
+      "offeredByRefOrganization": {
+        "name": "Society of Corporate Compliance and Ethics (SCCE)",
+        "identifier": "organization-scce-single-org-012",
+        "informationSourceId": "Single-Org",
+        "informationSourceOrganization": "State University"
+      }
+    }
+  ]
 }

@@ -6,7 +6,7 @@
           "lastName": "Marin",
           "firstName": "Sarah",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "name-sarah-marin-single-org-001"
         }
       ],
@@ -20,10 +20,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-research-skills-single-org-001"
         },
         {
@@ -35,10 +36,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-adaptability-single-org-002"
         },
         {
@@ -50,10 +52,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-data-analysis-single-org-003"
         },
         {
@@ -65,10 +68,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-chemistry-single-org-004"
         },
         {
@@ -80,10 +84,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-teaching-single-org-005"
         },
         {
@@ -95,10 +100,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-elementary-mathematics-single-org-006"
         },
         {
@@ -110,10 +116,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-biology-single-org-007"
         },
         {
@@ -125,10 +132,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-biological-systems-single-org-008"
         },
         {
@@ -140,10 +148,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-educational-technologies-single-org-009"
         },
         {
@@ -155,10 +164,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-community-health-single-org-010"
         },
         {
@@ -170,10 +180,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-debating-single-org-011"
         },
         {
@@ -185,10 +196,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-computer-literacy-single-org-012"
         },
         {
@@ -200,10 +212,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-conflict-resolution-single-org-013"
         },
         {
@@ -215,10 +228,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-course-evaluations-single-org-014"
         },
         {
@@ -230,10 +244,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-critical-thinking-single-org-015"
         },
         {
@@ -245,10 +260,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-data-presentation-single-org-016"
         },
         {
@@ -260,10 +276,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-digital-storytelling-single-org-017"
         },
         {
@@ -274,10 +291,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-ethical-codes-single-org-018"
         },
         {
@@ -288,10 +306,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-general-administrative-support-single-org-019"
         },
         {
@@ -303,10 +322,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-health-education-single-org-020"
         },
         {
@@ -318,10 +338,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-interpersonal-communications-single-org-021"
         },
         {
@@ -333,10 +354,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-problem-solving-single-org-022"
         },
         {
@@ -348,10 +370,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-planning-of-lessons-single-org-023"
         },
         {
@@ -362,10 +385,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-knowledge-of-mathematics-single-org-024"
         },
         {
@@ -377,10 +401,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-mathematics-education-single-org-025"
         },
         {
@@ -392,10 +417,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-nursing-single-org-026"
         },
         {
@@ -407,10 +433,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-professional-communication-single-org-027"
         },
         {
@@ -422,10 +449,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-elearning-single-org-028"
         },
         {
@@ -437,10 +465,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-assisting-teachers-single-org-029"
         },
         {
@@ -452,10 +481,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-risk-analysis-single-org-030"
         },
         {
@@ -467,10 +497,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-scientific-reasoning-single-org-031"
         },
         {
@@ -482,10 +513,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-strategic-thinking-single-org-032"
         },
         {
@@ -497,10 +529,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-student-engagement-single-org-033"
         },
         {
@@ -512,10 +545,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-systems-thinking-single-org-034"
         },
         {
@@ -527,10 +561,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-teacher-education-single-org-035"
         },
         {
@@ -541,10 +576,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-passionate-single-org-036"
         },
         {
@@ -556,10 +592,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-administrative-operations-single-org-037"
         },
         {
@@ -571,10 +608,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-private-tutoring-single-org-038"
         },
         {
@@ -586,10 +624,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-classroom-management-single-org-039"
         },
         {
@@ -601,10 +640,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-preventive-health-screening-single-org-040"
         },
         {
@@ -616,10 +656,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-thought-leadership-single-org-041"
         },
         {
@@ -630,10 +671,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-written-communication-single-org-042"
         },
         {
@@ -644,10 +686,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-teaching-others-single-org-043"
         },
         {
@@ -659,10 +702,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-online-communication-single-org-044"
         },
         {
@@ -674,10 +718,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-communications-single-org-045"
         },
         {
@@ -689,10 +734,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-cultural-sensitivity-single-org-046"
         },
         {
@@ -703,10 +749,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-cross-cultural-fluency-single-org-047"
         },
         {
@@ -718,10 +765,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-influencing-skills-single-org-048"
         },
         {
@@ -732,10 +780,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-goal-oriented-single-org-049"
         },
         {
@@ -747,10 +796,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-research-single-org-050"
         },
         {
@@ -762,10 +812,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-detail-oriented-single-org-051"
         },
         {
@@ -776,10 +827,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-mathematics-single-org-052"
         },
         {
@@ -790,10 +842,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-academic-tenacity-single-org-053"
         },
         {
@@ -805,10 +858,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-relationship-building-single-org-054"
         },
         {
@@ -820,10 +874,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-teamwork-single-org-055"
         },
         {
@@ -835,10 +890,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-lesson-planning-single-org-056"
         },
         {
@@ -850,10 +906,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-persuasive-communication-single-org-057"
         },
         {
@@ -865,10 +922,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-professionalism-single-org-058"
         },
         {
@@ -880,10 +938,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-advocacy-single-org-059"
         },
         {
@@ -895,10 +954,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-academic-advising-single-org-060"
         },
         {
@@ -910,10 +970,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-analytical-techniques-single-org-061"
         },
         {
@@ -925,10 +986,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-cardiopulmonary-resuscitation--single-org-062"
         },
         {
@@ -940,10 +1002,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-first-aid-single-org-063"
         },
         {
@@ -955,10 +1018,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-applied-ethics-single-org-064"
         },
         {
@@ -970,10 +1034,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-civic-engagement-single-org-065"
         },
         {
@@ -984,10 +1049,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-communication-and-interaction-single-org-066"
         },
         {
@@ -999,10 +1065,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-digital-literacy-single-org-067"
         },
         {
@@ -1014,10 +1081,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-empirical-analysis-single-org-068"
         },
         {
@@ -1028,10 +1096,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-formal-analysis-single-org-069"
         },
         {
@@ -1043,10 +1112,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-instruction-delivery-single-org-070"
         },
         {
@@ -1057,10 +1127,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-novel-and-adaptive-thinking-single-org-071"
         },
         {
@@ -1072,10 +1143,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-sensemaking-single-org-072"
         },
         {
@@ -1087,10 +1159,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-behavioral-science-single-org-073"
         },
         {
@@ -1102,10 +1175,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-instructing-single-org-074"
         },
         {
@@ -1116,10 +1190,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-technology-ethics-single-org-075"
         },
         {
@@ -1131,10 +1206,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-physical-science-single-org-076"
         },
         {
@@ -1146,10 +1222,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-needs-assessment-single-org-077"
         },
         {
@@ -1160,10 +1237,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-technological-literacy-single-org-078"
         },
         {
@@ -1175,10 +1253,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-writing-single-org-079"
         },
         {
@@ -1190,10 +1269,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-learning-strategies-single-org-080"
         },
         {
@@ -1205,10 +1285,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-organizational-strategy-single-org-081"
         }
       ],
@@ -1219,7 +1300,9 @@
               "emailAddress": [
                 "smarin_lifdemo@stateu.edu"
               ],
-              "informationSourceId": "Single-Org"
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University",
+              "identifier": "email-sarah-marin-single-org-001"
             }
           ],
           "Address": [
@@ -1228,7 +1311,10 @@
               "countryCode": "US",
               "addressState": "Colorado",
               "addressPostalCode": "80014",
-              "informationSourceId": "Single-Org"
+              "informationSourceId": "Single-Org",
+              "addressStreet": "5000 S Federal Blvd",
+              "informationSourceOrganization": "State University",
+              "identifier": "address-sarah-marin-single-org-001"
             }
           ],
           "Telephone": [
@@ -1236,11 +1322,13 @@
               "telephoneNumber": [
                 "+16661234567"
               ],
-              "informationSourceId": "Single-Org"
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University",
+              "identifier": "telephone-sarah-marin-single-org-001"
             }
           ],
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "contact-single-org-001"
         }
       ],
@@ -1249,13 +1337,13 @@
           "identifier": "sha256$de620a3b2b4ba794513008a7d918a429351144c47b697f4c3976387138f33e43",
           "identifierType": "INSTITUTION_ASSIGNED_NUMBER",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University"
+          "informationSourceOrganization": "State University"
         },
         {
           "identifier": "100003",
           "identifierType": "SCHOOL_ASSIGNED_NUMBER",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University"
+          "informationSourceOrganization": "State University"
         }
       ],
       "CredentialAward": [
@@ -1265,7 +1353,7 @@
             {
               "id": "https://api.badgr.io/public/assertions/_ALUdGrKRdWfBES1XgIr4g/image",
               "informationSourceId": "Single-Org",
-              "informationSourceOrganization": "Demo University",
+              "informationSourceOrganization": "State University",
               "identifier": "image-https://api.badgr.io/public/as-single-org-001"
             }
           ],
@@ -1282,25 +1370,33 @@
           "verificationType": "HostedBadge",
           "InstanceOfRefCredential": {
             "id": "c6bd80f8-f5af-4d62-ae5d-896e4bf60295",
-            "informationSourceId": "Single-Org"
+            "informationSourceId": "Single-Org",
+            "name": "State University Credential c6bd80f8",
+            "informationSourceOrganization": "State University",
+            "identifier": "credential-c6bd80f8-f5af-4d62-ae5d-896e4b-single-org-001"
           },
           "id": "903f07f0-f556-4051-9dd2-b3ed97230bb3",
           "credentialAwardee": "Sarah Marin",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
-          "identifier": "credentialaward-903f07f0-f556-4051-9dd2-b3ed97-single-org-001"
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialaward-903f07f0-f556-4051-9dd2-b3ed97-single-org-001",
+          "name": "State University Credential c6bd80f8"
         },
         {
           "InstanceOfRefCredential": {
             "id": "https://api.badgr.io/public/badges/jTvfWDxrQPmJ7o0aR1FL1w",
-            "informationSourceId": "Single-Org"
+            "informationSourceId": "Single-Org",
+            "name": "StateU Certificate: Transformative Technology for Inclusive P-12 Classrooms",
+            "informationSourceOrganization": "State University",
+            "identifier": "credential-stateu-certificate--transforma-single-org-002"
           },
           "id": "e6552ee4-2582-4574-97ed-a81eb14932fa",
           "awardIssueDate": "2021-01-20",
           "credentialAwardee": "Sarah Marin",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
-          "identifier": "credentialaward-e6552ee4-2582-4574-97ed-a81eb1-single-org-002"
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialaward-e6552ee4-2582-4574-97ed-a81eb1-single-org-002",
+          "name": "StateU Certificate: Transformative Technology for Inclusive P-12 Classrooms"
         },
         {
           "uri": "https://api.badgr.io/public/assertions/mu9eco_mSb-RKnpLhhpbvA",
@@ -1308,7 +1404,7 @@
             {
               "id": "https://api.badgr.io/public/assertions/mu9eco_mSb-RKnpLhhpbvA/image",
               "informationSourceId": "Single-Org",
-              "informationSourceOrganization": "Demo University",
+              "informationSourceOrganization": "State University",
               "identifier": "image-https://api.badgr.io/public/as-single-org-001"
             }
           ],
@@ -1325,153 +1421,177 @@
           "verificationType": "HostedBadge",
           "InstanceOfRefCredential": {
             "id": "94599d33-de74-42ea-bd51-fc66415d77c8",
-            "informationSourceId": "Single-Org"
+            "informationSourceId": "Single-Org",
+            "name": "State University Credential 94599d33",
+            "informationSourceOrganization": "State University",
+            "identifier": "credential-94599d33-de74-42ea-bd51-fc6641-single-org-003"
           },
           "id": "e0d76ed3-5a7c-4bb1-a712-2c7a41462a7b",
           "credentialAwardee": "Sarah Marin",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
-          "identifier": "credentialaward-e0d76ed3-5a7c-4bb1-a712-2c7a41-single-org-003"
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialaward-e0d76ed3-5a7c-4bb1-a712-2c7a41-single-org-003",
+          "name": "State University Credential 94599d33"
         },
         {
           "InstanceOfRefCredential": {
             "id": "https://api.badgr.io/public/badges/6KseIB0VTcaLHE0lx6V72w",
-            "informationSourceId": "Single-Org"
+            "informationSourceId": "Single-Org",
+            "name": "StateU Certificate: Innovative Technology for Inclusive P-12 Classrooms",
+            "informationSourceOrganization": "State University",
+            "identifier": "credential-stateu-certificate--innovative-single-org-004"
           },
           "id": "1466972b-729b-4955-9f98-dcc8f61c5727",
           "awardIssueDate": "2022-04-24T14:21:24Z",
           "credentialAwardee": "Sarah Marin",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
-          "identifier": "credentialaward-1466972b-729b-4955-9f98-dcc8f6-single-org-004"
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialaward-1466972b-729b-4955-9f98-dcc8f6-single-org-004",
+          "name": "StateU Certificate: Innovative Technology for Inclusive P-12 Classrooms"
         },
         {
           "id": "cred-proficiency-certificate-001",
           "awardIssueDate": "2024-12-15T10:00:00Z",
           "credentialAwardee": "Sarah Marin",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
-          "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-005"
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-005",
+          "name": "State University Credential"
         },
         {
           "id": "130a3761-50ab-4c49-bd6f-313ba79f6eea",
           "awardIssueDate": "2020-07-11T20:31:19Z",
           "credentialAwardee": "Sarah Marin",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
-          "identifier": "credentialaward-130a3761-50ab-4c49-bd6f-313ba7-single-org-006"
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialaward-130a3761-50ab-4c49-bd6f-313ba7-single-org-006",
+          "name": "State University Credential"
         },
         {
           "id": "f48dfff2-7609-43b9-b560-35cdd16704ab",
           "awardIssueDate": "2024-09-02",
           "credentialAwardee": "Sarah Marin",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
-          "identifier": "credentialaward-f48dfff2-7609-43b9-b560-35cdd1-single-org-007"
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialaward-f48dfff2-7609-43b9-b560-35cdd1-single-org-007",
+          "name": "State University Credential"
         },
         {
           "id": "eccd068f-3d2f-420b-93b2-19c4c6dca840",
           "awardIssueDate": "2020-04-27",
           "credentialAwardee": "Sarah Marin",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
-          "identifier": "credentialaward-eccd068f-3d2f-420b-93b2-19c4c6-single-org-008"
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialaward-eccd068f-3d2f-420b-93b2-19c4c6-single-org-008",
+          "name": "State University Credential"
         },
         {
           "id": "3a9e810f-7a11-480c-b307-e3265302abe5",
           "awardIssueDate": "2022-08-08T19:16:57Z",
           "credentialAwardee": "Sarah Marin",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
-          "identifier": "credentialaward-3a9e810f-7a11-480c-b307-e32653-single-org-009"
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialaward-3a9e810f-7a11-480c-b307-e32653-single-org-009",
+          "name": "State University Credential"
         },
         {
           "id": "c5bf2107-5958-49fa-9b7f-ddb13813b202",
           "awardIssueDate": "2021-05-28",
           "credentialAwardee": "Sarah Marin",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
-          "identifier": "credentialaward-c5bf2107-5958-49fa-9b7f-ddb138-single-org-010"
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialaward-c5bf2107-5958-49fa-9b7f-ddb138-single-org-010",
+          "name": "State University Credential"
         },
         {
           "id": "d57eecc2-a4b0-4ce4-bdf8-3d77e02c4aaa",
           "awardIssueDate": "2023-12-18T17:39:40Z",
           "credentialAwardee": "Sarah Marin",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
-          "identifier": "credentialaward-d57eecc2-a4b0-4ce4-bdf8-3d77e0-single-org-011"
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialaward-d57eecc2-a4b0-4ce4-bdf8-3d77e0-single-org-011",
+          "name": "State University Credential"
         },
         {
           "id": "370058dd-e828-43cc-ac98-086434f1b38c",
           "awardIssueDate": "2022-10-09",
           "credentialAwardee": "Sarah Marin",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
-          "identifier": "credentialaward-370058dd-e828-43cc-ac98-086434-single-org-012"
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialaward-370058dd-e828-43cc-ac98-086434-single-org-012",
+          "name": "State University Credential"
         },
         {
           "id": "01950177-6b33-49ff-9f9a-d1390a413cfa",
           "awardIssueDate": "2023-11-11",
           "credentialAwardee": "Sarah Marin",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
-          "identifier": "credentialaward-01950177-6b33-49ff-9f9a-d1390a-single-org-013"
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialaward-01950177-6b33-49ff-9f9a-d1390a-single-org-013",
+          "name": "State University Credential"
         },
         {
           "id": "aec18ede-0b80-49a2-b590-bf6f516758b5",
           "awardIssueDate": "2021-04-22",
           "credentialAwardee": "Sarah Marin",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
-          "identifier": "credentialaward-aec18ede-0b80-49a2-b590-bf6f51-single-org-014"
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialaward-aec18ede-0b80-49a2-b590-bf6f51-single-org-014",
+          "name": "State University Credential"
         },
         {
           "id": "9bee6e56-c9c3-459c-a37d-f52e0aefc7be",
           "awardIssueDate": "2024-01-24T01:50:31Z",
           "credentialAwardee": "Sarah Marin",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
-          "identifier": "credentialaward-9bee6e56-c9c3-459c-a37d-f52e0a-single-org-015"
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialaward-9bee6e56-c9c3-459c-a37d-f52e0a-single-org-015",
+          "name": "State University Credential"
         },
         {
           "id": "7b850764-05d6-422d-8644-c9e51889d133",
           "awardIssueDate": "2020-04-30T19:41:10Z",
           "credentialAwardee": "Sarah Marin",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
-          "identifier": "credentialaward-7b850764-05d6-422d-8644-c9e518-single-org-016"
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialaward-7b850764-05d6-422d-8644-c9e518-single-org-016",
+          "name": "State University Credential"
         },
         {
           "id": "f25971e7-e108-44be-91a5-7e645f261ac3",
           "awardIssueDate": "2023-10-30T19:06:42Z",
           "credentialAwardee": "Sarah Marin",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
-          "identifier": "credentialaward-f25971e7-e108-44be-91a5-7e645f-single-org-017"
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialaward-f25971e7-e108-44be-91a5-7e645f-single-org-017",
+          "name": "State University Credential"
         },
         {
           "id": "fd53a38c-738b-4a12-a150-2ad7cfce0046",
           "awardIssueDate": "2022-09-05T07:00:49Z",
           "credentialAwardee": "Sarah Marin",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
-          "identifier": "credentialaward-fd53a38c-738b-4a12-a150-2ad7cf-single-org-018"
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialaward-fd53a38c-738b-4a12-a150-2ad7cf-single-org-018",
+          "name": "State University Credential"
         },
         {
           "id": "4fd33e74-01bc-45d7-97b3-7d5d74a71b06",
           "awardIssueDate": "2023-06-29T20:58:24Z",
           "credentialAwardee": "Sarah Marin",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
-          "identifier": "credentialaward-4fd33e74-01bc-45d7-97b3-7d5d74-single-org-019"
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialaward-4fd33e74-01bc-45d7-97b3-7d5d74-single-org-019",
+          "name": "State University Credential"
         },
         {
           "id": "cred-employment-certificate-001",
           "awardIssueDate": "2024-12-15T10:00:00Z",
           "credentialAwardee": "Sarah Marin",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
-          "identifier": "credentialaward-cred-employment-certificate-00-single-org-020"
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialaward-cred-employment-certificate-00-single-org-020",
+          "name": "State University Credential"
         }
       ],
       "CourseLearningExperience": [
@@ -1481,7 +1601,7 @@
             "identificationSystem": "State University SIS",
             "organizationType": [],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-state-university-single-org-001"
           },
           "RefCourse": {
@@ -1493,11 +1613,13 @@
                   "Academic Records"
                 ],
                 "informationSourceId": "Single-Org",
-                "informationSourceOrganization": "Demo University"
+                "informationSourceOrganization": "State University"
               }
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University"
+            "informationSourceOrganization": "State University",
+            "name": "Course CS651",
+            "identifier": "course-cs651-single-org-legacy-001"
           },
           "OfferedByRefOrganization": {
             "identificationSystem": "stateu-state-university-id",
@@ -1506,7 +1628,7 @@
               "University"
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-state-university-single-org-001"
           },
           "informationSourceId": "Single-Org",
@@ -1515,11 +1637,13 @@
             "awardIssueDate": "2020-07-11T20:31:19Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-130a3761-50ab-4c49-bd6f-313ba7-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-130a3761-50ab-4c49-bd6f-313ba7-single-org-001",
+            "name": "Course CS651 Credential Award"
           },
-          "informationSourceOrganization": "Demo University",
-          "identifier": "courselearningexperience-single-org-001"
+          "informationSourceOrganization": "State University",
+          "identifier": "courselearningexperience-single-org-001",
+          "name": "Course CS651"
         },
         {
           "AssertedByRefOrganization": {
@@ -1527,7 +1651,7 @@
             "identificationSystem": "State University SIS",
             "organizationType": [],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-state-university-single-org-001"
           },
           "RefCourse": {
@@ -1539,11 +1663,13 @@
                   "Academic Records"
                 ],
                 "informationSourceId": "Single-Org",
-                "informationSourceOrganization": "Demo University"
+                "informationSourceOrganization": "State University"
               }
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University"
+            "informationSourceOrganization": "State University",
+            "name": "Course CS651",
+            "identifier": "course-cs651-single-org-legacy-001"
           },
           "OfferedByRefOrganization": {
             "identificationSystem": "stateu-state-university-id",
@@ -1552,7 +1678,7 @@
               "University"
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-state-university-single-org-001"
           },
           "informationSourceId": "Single-Org",
@@ -1561,11 +1687,13 @@
             "awardIssueDate": "2024-09-02",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-f48dfff2-7609-43b9-b560-35cdd1-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-f48dfff2-7609-43b9-b560-35cdd1-single-org-001",
+            "name": "Course CS651 Credential Award"
           },
-          "informationSourceOrganization": "Demo University",
-          "identifier": "courselearningexperience-single-org-002"
+          "informationSourceOrganization": "State University",
+          "identifier": "courselearningexperience-single-org-002",
+          "name": "Course CS651"
         },
         {
           "AssertedByRefOrganization": {
@@ -1573,7 +1701,7 @@
             "identificationSystem": "State University SIS",
             "organizationType": [],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-state-university-single-org-001"
           },
           "RefCourse": {
@@ -1585,11 +1713,13 @@
                   "Academic Records"
                 ],
                 "informationSourceId": "Single-Org",
-                "informationSourceOrganization": "Demo University"
+                "informationSourceOrganization": "State University"
               }
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University"
+            "informationSourceOrganization": "State University",
+            "name": "Course CS651",
+            "identifier": "course-cs651-single-org-legacy-001"
           },
           "OfferedByRefOrganization": {
             "identificationSystem": "stateu-state-university-id",
@@ -1598,7 +1728,7 @@
               "University"
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-state-university-single-org-001"
           },
           "informationSourceId": "Single-Org",
@@ -1607,11 +1737,13 @@
             "awardIssueDate": "2020-04-27",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-eccd068f-3d2f-420b-93b2-19c4c6-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-eccd068f-3d2f-420b-93b2-19c4c6-single-org-001",
+            "name": "Course CS651 Credential Award"
           },
-          "informationSourceOrganization": "Demo University",
-          "identifier": "courselearningexperience-single-org-003"
+          "informationSourceOrganization": "State University",
+          "identifier": "courselearningexperience-single-org-003",
+          "name": "Course CS651"
         },
         {
           "AssertedByRefOrganization": {
@@ -1619,7 +1751,7 @@
             "identificationSystem": "State University SIS",
             "organizationType": [],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-state-university-single-org-001"
           },
           "RefCourse": {
@@ -1631,11 +1763,13 @@
                   "Academic Records"
                 ],
                 "informationSourceId": "Single-Org",
-                "informationSourceOrganization": "Demo University"
+                "informationSourceOrganization": "State University"
               }
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University"
+            "informationSourceOrganization": "State University",
+            "name": "Course CS651",
+            "identifier": "course-cs651-single-org-legacy-001"
           },
           "OfferedByRefOrganization": {
             "identificationSystem": "stateu-state-university-id",
@@ -1644,7 +1778,7 @@
               "University"
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-state-university-single-org-001"
           },
           "informationSourceId": "Single-Org",
@@ -1653,11 +1787,13 @@
             "awardIssueDate": "2022-08-08T19:16:57Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-3a9e810f-7a11-480c-b307-e32653-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-3a9e810f-7a11-480c-b307-e32653-single-org-001",
+            "name": "Course CS651 Credential Award"
           },
-          "informationSourceOrganization": "Demo University",
-          "identifier": "courselearningexperience-single-org-004"
+          "informationSourceOrganization": "State University",
+          "identifier": "courselearningexperience-single-org-004",
+          "name": "Course CS651"
         },
         {
           "AssertedByRefOrganization": {
@@ -1665,7 +1801,7 @@
             "identificationSystem": "State University SIS",
             "organizationType": [],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-state-university-single-org-001"
           },
           "RefCourse": {
@@ -1677,11 +1813,13 @@
                   "Academic Records"
                 ],
                 "informationSourceId": "Single-Org",
-                "informationSourceOrganization": "Demo University"
+                "informationSourceOrganization": "State University"
               }
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University"
+            "informationSourceOrganization": "State University",
+            "name": "Course CS651",
+            "identifier": "course-cs651-single-org-legacy-001"
           },
           "OfferedByRefOrganization": {
             "identificationSystem": "stateu-state-university-id",
@@ -1690,7 +1828,7 @@
               "University"
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-state-university-single-org-001"
           },
           "informationSourceId": "Single-Org",
@@ -1699,11 +1837,13 @@
             "awardIssueDate": "2021-05-28",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-c5bf2107-5958-49fa-9b7f-ddb138-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-c5bf2107-5958-49fa-9b7f-ddb138-single-org-001",
+            "name": "Course CS651 Credential Award"
           },
-          "informationSourceOrganization": "Demo University",
-          "identifier": "courselearningexperience-single-org-005"
+          "informationSourceOrganization": "State University",
+          "identifier": "courselearningexperience-single-org-005",
+          "name": "Course CS651"
         },
         {
           "AssertedByRefOrganization": {
@@ -1711,7 +1851,7 @@
             "identificationSystem": "State University SIS",
             "organizationType": [],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-state-university-single-org-001"
           },
           "RefCourse": {
@@ -1723,11 +1863,13 @@
                   "Academic Records"
                 ],
                 "informationSourceId": "Single-Org",
-                "informationSourceOrganization": "Demo University"
+                "informationSourceOrganization": "State University"
               }
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University"
+            "informationSourceOrganization": "State University",
+            "name": "Course CS651",
+            "identifier": "course-cs651-single-org-legacy-001"
           },
           "OfferedByRefOrganization": {
             "identificationSystem": "stateu-state-university-id",
@@ -1736,7 +1878,7 @@
               "University"
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-state-university-single-org-001"
           },
           "informationSourceId": "Single-Org",
@@ -1745,11 +1887,13 @@
             "awardIssueDate": "2023-12-18T17:39:40Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-d57eecc2-a4b0-4ce4-bdf8-3d77e0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-d57eecc2-a4b0-4ce4-bdf8-3d77e0-single-org-001",
+            "name": "Course CS651 Credential Award"
           },
-          "informationSourceOrganization": "Demo University",
-          "identifier": "courselearningexperience-single-org-006"
+          "informationSourceOrganization": "State University",
+          "identifier": "courselearningexperience-single-org-006",
+          "name": "Course CS651"
         },
         {
           "AssertedByRefOrganization": {
@@ -1757,7 +1901,7 @@
             "identificationSystem": "State University SIS",
             "organizationType": [],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-state-university-single-org-001"
           },
           "RefCourse": {
@@ -1769,11 +1913,13 @@
                   "Academic Records"
                 ],
                 "informationSourceId": "Single-Org",
-                "informationSourceOrganization": "Demo University"
+                "informationSourceOrganization": "State University"
               }
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University"
+            "informationSourceOrganization": "State University",
+            "name": "Course CS651",
+            "identifier": "course-cs651-single-org-legacy-001"
           },
           "OfferedByRefOrganization": {
             "identificationSystem": "stateu-state-university-id",
@@ -1782,7 +1928,7 @@
               "University"
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-state-university-single-org-001"
           },
           "informationSourceId": "Single-Org",
@@ -1791,11 +1937,13 @@
             "awardIssueDate": "2022-10-09",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-370058dd-e828-43cc-ac98-086434-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-370058dd-e828-43cc-ac98-086434-single-org-001",
+            "name": "Course CS651 Credential Award"
           },
-          "informationSourceOrganization": "Demo University",
-          "identifier": "courselearningexperience-single-org-007"
+          "informationSourceOrganization": "State University",
+          "identifier": "courselearningexperience-single-org-007",
+          "name": "Course CS651"
         },
         {
           "OfferedByRefOrganization": {
@@ -1805,7 +1953,7 @@
               "University"
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-state-university-single-org-001"
           },
           "informationSourceId": "Single-Org",
@@ -1814,11 +1962,13 @@
             "awardIssueDate": "2023-11-11",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-01950177-6b33-49ff-9f9a-d1390a-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-01950177-6b33-49ff-9f9a-d1390a-single-org-001",
+            "name": "State University Course Credential Award"
           },
-          "informationSourceOrganization": "Demo University",
-          "identifier": "courselearningexperience-single-org-008"
+          "informationSourceOrganization": "State University",
+          "identifier": "courselearningexperience-single-org-008",
+          "name": "State University Course"
         },
         {
           "OfferedByRefOrganization": {
@@ -1828,7 +1978,7 @@
               "University"
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-state-university-single-org-001"
           },
           "informationSourceId": "Single-Org",
@@ -1837,11 +1987,13 @@
             "awardIssueDate": "2021-04-22",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-aec18ede-0b80-49a2-b590-bf6f51-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-aec18ede-0b80-49a2-b590-bf6f51-single-org-001",
+            "name": "State University Course Credential Award"
           },
-          "informationSourceOrganization": "Demo University",
-          "identifier": "courselearningexperience-single-org-009"
+          "informationSourceOrganization": "State University",
+          "identifier": "courselearningexperience-single-org-009",
+          "name": "State University Course"
         },
         {
           "OfferedByRefOrganization": {
@@ -1851,7 +2003,7 @@
               "University"
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-state-university-single-org-001"
           },
           "informationSourceId": "Single-Org",
@@ -1860,11 +2012,13 @@
             "awardIssueDate": "2024-01-24T01:50:31Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-9bee6e56-c9c3-459c-a37d-f52e0a-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-9bee6e56-c9c3-459c-a37d-f52e0a-single-org-001",
+            "name": "State University Course Credential Award"
           },
-          "informationSourceOrganization": "Demo University",
-          "identifier": "courselearningexperience-single-org-010"
+          "informationSourceOrganization": "State University",
+          "identifier": "courselearningexperience-single-org-010",
+          "name": "State University Course"
         },
         {
           "OfferedByRefOrganization": {
@@ -1874,7 +2028,7 @@
               "University"
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-state-university-single-org-001"
           },
           "informationSourceId": "Single-Org",
@@ -1883,11 +2037,13 @@
             "awardIssueDate": "2020-04-30T19:41:10Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-7b850764-05d6-422d-8644-c9e518-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-7b850764-05d6-422d-8644-c9e518-single-org-001",
+            "name": "State University Course Credential Award"
           },
-          "informationSourceOrganization": "Demo University",
-          "identifier": "courselearningexperience-single-org-011"
+          "informationSourceOrganization": "State University",
+          "identifier": "courselearningexperience-single-org-011",
+          "name": "State University Course"
         },
         {
           "OfferedByRefOrganization": {
@@ -1897,7 +2053,7 @@
               "University"
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-state-university-single-org-001"
           },
           "informationSourceId": "Single-Org",
@@ -1906,11 +2062,13 @@
             "awardIssueDate": "2023-10-30T19:06:42Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-f25971e7-e108-44be-91a5-7e645f-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-f25971e7-e108-44be-91a5-7e645f-single-org-001",
+            "name": "State University Course Credential Award"
           },
-          "informationSourceOrganization": "Demo University",
-          "identifier": "courselearningexperience-single-org-012"
+          "informationSourceOrganization": "State University",
+          "identifier": "courselearningexperience-single-org-012",
+          "name": "State University Course"
         },
         {
           "OfferedByRefOrganization": {
@@ -1920,7 +2078,7 @@
               "University"
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-state-university-single-org-001"
           },
           "informationSourceId": "Single-Org",
@@ -1929,11 +2087,13 @@
             "awardIssueDate": "2022-09-05T07:00:49Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-fd53a38c-738b-4a12-a150-2ad7cf-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-fd53a38c-738b-4a12-a150-2ad7cf-single-org-001",
+            "name": "State University Course Credential Award"
           },
-          "informationSourceOrganization": "Demo University",
-          "identifier": "courselearningexperience-single-org-013"
+          "informationSourceOrganization": "State University",
+          "identifier": "courselearningexperience-single-org-013",
+          "name": "State University Course"
         },
         {
           "OfferedByRefOrganization": {
@@ -1943,7 +2103,7 @@
               "University"
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-state-university-single-org-001"
           },
           "informationSourceId": "Single-Org",
@@ -1952,11 +2112,157 @@
             "awardIssueDate": "2023-06-29T20:58:24Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-4fd33e74-01bc-45d7-97b3-7d5d74-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-4fd33e74-01bc-45d7-97b3-7d5d74-single-org-001",
+            "name": "State University Course Credential Award"
           },
-          "informationSourceOrganization": "Demo University",
-          "identifier": "courselearningexperience-single-org-014"
+          "informationSourceOrganization": "State University",
+          "identifier": "courselearningexperience-single-org-014",
+          "name": "State University Course"
+        },
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "courselearningexperience-d091-single-org-101",
+          "name": "Introduction to Curriculum, Instruction, and Assessment",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2023-09-05",
+          "enrollmentStatusType": "Completed",
+          "courseTotal": "3",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "D091-01",
+          "institution": "State University",
+          "department": "Teachers College",
+          "currentlyAttendingIndicator": "false",
+          "RefCourse": {
+            "name": "Introduction to Curriculum, Instruction, and Assessment",
+            "identifier": "course-d091-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-005",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-005",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "endDate": "2023-10-25",
+          "experienceGrade": "Competent",
+          "goodStandingIndicator": "true",
+          "courseGradeStatusCode": "Final"
+        },
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "courselearningexperience-d168-single-org-102",
+          "name": "Fundamentals of Diverse Learners",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2023-10-26",
+          "enrollmentStatusType": "Completed",
+          "courseTotal": "3",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "D168-01",
+          "institution": "State University",
+          "department": "Teachers College",
+          "currentlyAttendingIndicator": "false",
+          "RefCourse": {
+            "name": "Fundamentals of Diverse Learners",
+            "identifier": "course-d168-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-005",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-005",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "endDate": "2023-12-15",
+          "experienceGrade": "Competent",
+          "goodStandingIndicator": "true",
+          "courseGradeStatusCode": "Final"
+        },
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "courselearningexperience-d307-single-org-103",
+          "name": "Technology-Enhanced Learning",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2024-01-08",
+          "enrollmentStatusType": "Completed",
+          "courseTotal": "3",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "D307-01",
+          "institution": "State University",
+          "department": "Teachers College",
+          "currentlyAttendingIndicator": "false",
+          "RefCourse": {
+            "name": "Technology-Enhanced Learning",
+            "identifier": "course-d307-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-005",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-005",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "endDate": "2024-02-28",
+          "experienceGrade": "Competent",
+          "goodStandingIndicator": "true",
+          "courseGradeStatusCode": "Final"
+        },
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "courselearningexperience-demo1-single-org-104",
+          "name": "Demonstration Teaching (Student Teaching)",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2025-01-13",
+          "enrollmentStatusType": "In Progress",
+          "courseTotal": "3",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "DEMO1-01",
+          "institution": "State University",
+          "department": "Teachers College",
+          "currentlyAttendingIndicator": "true",
+          "RefCourse": {
+            "name": "Demonstration Teaching (Student Teaching)",
+            "identifier": "course-demo1-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-005",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-005",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
         }
       ],
       "EmploymentLearningExperience": [
@@ -1965,8 +2271,9 @@
           "endDate": "2018-03",
           "RefPosition": {
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "position-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "position-single-org-001",
+            "name": "Volunteer Nursing Assistant"
           },
           "startDate": "2017-02",
           "AssertedByRefOrganization": {
@@ -1976,7 +2283,7 @@
               "Company"
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-employing-organization-single-org-001"
           },
           "OfferedByRefOrganization": {
@@ -1986,7 +2293,7 @@
               "Training Organization"
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-training-provider-single-org-001"
           },
           "ApprovedByRefOrganization": {
@@ -1996,7 +2303,7 @@
               "Regulatory Body"
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-approving-authority-single-org-001"
           },
           "informationSourceId": "Single-Org",
@@ -2005,18 +2312,20 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-employment-certificate-00-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-employment-certificate-00-single-org-001",
+            "name": "Employment Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "employmentlearningexperience-volunteer-nursing-assistant-single-org-001"
         },
         {
           "name": "Teaching Aide",
           "RefPosition": {
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "position-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "position-single-org-001",
+            "name": "Teaching Aide"
           },
           "startDate": "2008-09",
           "AssertedByRefOrganization": {
@@ -2026,7 +2335,7 @@
               "Company"
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-employing-organization-single-org-001"
           },
           "OfferedByRefOrganization": {
@@ -2036,7 +2345,7 @@
               "Training Organization"
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-training-provider-single-org-001"
           },
           "ApprovedByRefOrganization": {
@@ -2046,7 +2355,7 @@
               "Regulatory Body"
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-approving-authority-single-org-001"
           },
           "informationSourceId": "Single-Org",
@@ -2055,14 +2364,196 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-employment-certificate-00-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-employment-certificate-00-single-org-001",
+            "name": "Employment Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "employmentlearningexperience-teaching-aide-single-org-002"
         }
       ],
-      "informationSourceId": "Single-Org"
+      "informationSourceId": "Single-Org",
+      "ProgramLearningExperience": [
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "programlearningexperience-ba-elementary-education-single-org-001",
+          "name": "Bachelor of Arts in Elementary Education",
+          "type": "Undergraduate degree program",
+          "participationStatus": "In Progress",
+          "startDate": "2022-09-01",
+          "RefProgram": {
+            "name": "Bachelor of Arts in Elementary Education",
+            "identifier": "program-ba-elementary-education-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-005",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-005",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "programlearningexperience-edtech-inclusive-cert-single-org-002",
+          "name": "Educational Technology for Inclusive Classrooms Certificate",
+          "type": "Certificate program",
+          "participationStatus": "Completed",
+          "startDate": "2021-01-11",
+          "endDate": "2021-08-20",
+          "RefProgram": {
+            "name": "Educational Technology for Inclusive Classrooms Certificate",
+            "identifier": "program-edtech-inclusive-cert-single-org-002",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-005",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-005",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        }
+      ],
+      "AssessmentLearningExperience": [
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "assessmentlearningexperience-praxis-elem-single-org-001",
+          "name": "Praxis Elementary Education: Multiple Subjects (5001)",
+          "type": "Educator licensure assessment",
+          "startDate": "2024-11-09",
+          "endDate": "2024-11-09",
+          "offeredBy": "Educational Testing Service (ETS)",
+          "scoreValue": "168",
+          "scoreType": "Scaled score (100-200)",
+          "resultDataType": "xsd:integer",
+          "gradeStatus": "Final",
+          "completionStatus": "Completed",
+          "timeAssessed": "2024-11-09",
+          "RefAssessment": {
+            "identifier": "assessment-praxis-elem-single-org-001",
+            "name": "Praxis Elementary Education: Multiple Subjects (5001)",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "RefProficiency": {
+            "name": "Teaching",
+            "identifier": "proficiency-teaching-single-org-005",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "Educational Testing Service (ETS)",
+            "identifier": "organization-ets-single-org-011",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "assessmentlearningexperience-wgu-d307-single-org-002",
+          "name": "Objective Assessment: D307 Technology-Enhanced Learning",
+          "type": "Competency-based assessment",
+          "startDate": "2024-02-20",
+          "endDate": "2024-02-20",
+          "offeredBy": "State University",
+          "scoreValue": "Competent",
+          "scoreType": "Competent / Not Competent",
+          "resultDataType": "xsd:string",
+          "gradeStatus": "Final",
+          "completionStatus": "Completed",
+          "RefAssessment": {
+            "identifier": "assessment-wgu-d307-single-org-002",
+            "name": "Objective Assessment: D307 Technology-Enhanced Learning",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "RefProficiency": {
+            "name": "Educational Technologies",
+            "identifier": "proficiency-educational-technologies-single-org-009",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-005",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        }
+      ],
+      "Birth": [
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "birth-single-org-001",
+          "birthDate": "1986-09-30",
+          "cityOfBirth": "Denver",
+          "stateOfBirth": "Colorado"
+        }
+      ],
+      "SexAndGender": [
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "sexandgender-single-org-001",
+          "sex": "Female",
+          "gender": "Female",
+          "pronouns": "she/her"
+        }
+      ],
+      "Residency": [
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "residency-single-org-001",
+          "localType": "In-State",
+          "countyFIPSCode": "08005",
+          "dateEffective": "2010-01-01",
+          "doNotPublishIndicator": "false"
+        }
+      ],
+      "Language": [
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "language-english-single-org-001",
+          "name": "English",
+          "iSO639_2LangCode": "eng",
+          "iSO639_3LangCode": "eng",
+          "languageType": "Primary"
+        }
+      ],
+      "Demographics": [
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "demographics-single-org-001",
+          "highestLevelEducation": "SomeCollegeButNoDegree",
+          "usCitizenship": "true",
+          "economicDisadvantage": "false",
+          "homeless": "false",
+          "militaryActiveStatus": "false",
+          "militaryVeteranStatus": "false"
+        }
+      ]
     }
   ],
   "Course": [
@@ -2075,11 +2566,81 @@
             "Academic Records"
           ],
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University"
+          "informationSourceOrganization": "State University"
         }
       ],
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University"
+      "informationSourceOrganization": "State University",
+      "name": "Course CS651",
+      "identifier": "course-cs651-single-org-legacy-001"
+    },
+    {
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "name": "Introduction to Curriculum, Instruction, and Assessment",
+      "identifier": "course-d091-single-org-001",
+      "Identifier": [
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "D091",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ]
+        }
+      ]
+    },
+    {
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "name": "Fundamentals of Diverse Learners",
+      "identifier": "course-d168-single-org-001",
+      "Identifier": [
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "D168",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ]
+        }
+      ]
+    },
+    {
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "name": "Technology-Enhanced Learning",
+      "identifier": "course-d307-single-org-001",
+      "Identifier": [
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "D307",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ]
+        }
+      ]
+    },
+    {
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "name": "Demonstration Teaching (Student Teaching)",
+      "identifier": "course-demo1-single-org-001",
+      "Identifier": [
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "DEMO1",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ]
+        }
+      ]
     }
   ],
   "Organization": [
@@ -2095,7 +2656,9 @@
               "addressState": "Texas",
               "addressStreet": "632 East Hwy 3",
               "addressPostalCode": "75001",
-              "informationSourceId": "Single-Org"
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University",
+              "identifier": "address-state-university-single-org-001"
             }
           ],
           "Email": [
@@ -2103,7 +2666,9 @@
               "emailAddress": [
                 "credentials@stateu.edu"
               ],
-              "informationSourceId": "Single-Org"
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University",
+              "identifier": "email-state-university-single-org-001"
             }
           ],
           "websiteAddress": "https://www.stateu.edu/",
@@ -2112,11 +2677,13 @@
               "telephoneNumber": [
                 "111-222-3333"
               ],
-              "informationSourceId": "Single-Org"
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University",
+              "identifier": "telephone-state-university-single-org-001"
             }
           ],
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "contact-single-org-001"
         }
       ],
@@ -2126,25 +2693,26 @@
           "identifier": "833333326",
           "identifierType": "Federal employer identification number",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University"
+          "informationSourceOrganization": "State University"
         },
         {
           "identifier": "23323331",
           "identifierType": "Dun and Bradstreet number",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University"
+          "informationSourceOrganization": "State University"
         },
         {
           "identifier": "https://credentialfinder.org/organization/000/State_University",
           "identifierType": "credentialfinder.org",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University"
+          "informationSourceOrganization": "State University"
         }
       ],
       "identificationSystem": "State University SIS",
       "organizationType": [],
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University"
+      "informationSourceOrganization": "State University",
+      "identifier": "organization-state-university-single-org-001"
     },
     {
       "identificationSystem": "stateu-employing-organization-id",
@@ -2153,7 +2721,7 @@
         "Company"
       ],
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University",
+      "informationSourceOrganization": "State University",
       "identifier": "organization-corporate-partner-single-org-002"
     },
     {
@@ -2163,7 +2731,7 @@
         "Company"
       ],
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University",
+      "informationSourceOrganization": "State University",
       "identifier": "organization-employing-organization-single-org-003"
     },
     {
@@ -2171,7 +2739,7 @@
       "identificationSystem": "State University SIS",
       "organizationType": [],
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University",
+      "informationSourceOrganization": "State University",
       "identifier": "organization-state-university-single-org-004"
     },
     {
@@ -2181,13 +2749,13 @@
         "University"
       ],
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University",
+      "informationSourceOrganization": "State University",
       "identifier": "organization-state-university-single-org-005"
     },
     {
       "name": "UI Health",
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University",
+      "informationSourceOrganization": "State University",
       "identifier": "organization-ui-health-single-org-006"
     },
     {
@@ -2197,13 +2765,13 @@
         "Training Organization"
       ],
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University",
+      "informationSourceOrganization": "State University",
       "identifier": "organization-training-provider-single-org-007"
     },
     {
       "name": "Steele Elementary School",
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University",
+      "informationSourceOrganization": "State University",
       "identifier": "organization-steele-elementary-school-single-org-008"
     },
     {
@@ -2213,7 +2781,7 @@
         "Regulatory Body"
       ],
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University",
+      "informationSourceOrganization": "State University",
       "identifier": "organization-approving-authority-single-org-009"
     },
     {
@@ -2221,8 +2789,16 @@
       "identificationSystem": "stateu-state-university-id",
       "organizationType": [],
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University",
+      "informationSourceOrganization": "State University",
       "identifier": "organization-state-university-single-org-010"
+    },
+    {
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "name": "Educational Testing Service (ETS)",
+      "description": "Administers the Praxis series of educator licensure examinations.",
+      "identificationSystem": "ets-org-id",
+      "identifier": "organization-ets-single-org-011"
     }
   ],
   "Credential": [
@@ -2232,7 +2808,7 @@
         "identificationSystem": "stateu-state-university-id",
         "organizationType": [],
         "informationSourceId": "Single-Org",
-        "informationSourceOrganization": "Demo University",
+        "informationSourceOrganization": "State University",
         "identifier": "organization-state-university-single-org-001"
       },
       "format": [
@@ -2245,12 +2821,15 @@
           "accreditingAgency": "Higher Learning Commission",
           "accreditationType": "Institutional",
           "dateAccredited": "2020-01-01",
-          "accreditationStatus": "Active"
+          "accreditationStatus": "Active",
+          "informationSourceOrganization": "State University",
+          "identifier": "accreditation-higher-learning-commission-single-org-001"
         }
       ],
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University",
-      "identifier": "credential-c6bd80f8-f5af-4d62-ae5d-896e4b-single-org-001"
+      "informationSourceOrganization": "State University",
+      "identifier": "credential-c6bd80f8-f5af-4d62-ae5d-896e4b-single-org-001",
+      "name": "State University Credential c6bd80f8"
     },
     {
       "id": "https://api.badgr.io/public/badges/jTvfWDxrQPmJ7o0aR1FL1w",
@@ -2259,7 +2838,7 @@
         {
           "id": "https://api.badgr.io/public/badges/jTvfWDxrQPmJ7o0aR1FL1w/image",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "image-https://api.badgr.io/public/ba-single-org-001"
         }
       ],
@@ -2274,7 +2853,7 @@
           "framework": "O*Net Online",
           "description": "Teach academic and social skills to students at the elementary school level.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-elementary-school-teachers--ex-single-org-001"
         },
         {
@@ -2284,7 +2863,7 @@
           "framework": "O*Net Online",
           "description": "Teach academic and social skills to kindergarten students.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-kindergarten-teachers--except--single-org-002"
         },
         {
@@ -2294,7 +2873,7 @@
           "framework": "O*Net Online",
           "description": "Teach academic, social, and life skills to middle school students with learning, emotional, or physical disabilities. Includes teachers who specialize and work with students who are blind or have visual impairments; students who are deaf or have hearing impairments; and students with intellectual disabilities",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-special-education-teachers--mi-single-org-003"
         },
         {
@@ -2304,7 +2883,7 @@
           "framework": "O*Net Online",
           "description": "Teach academic, social, and life skills to secondary school students with learning, emotional, or physical disabilities. Includes teachers who specialize and work with students who are blind or have visual impairments; students who are deaf or have hearing impairments; and students with intellectual disabilities.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-special-education-teachers--se-single-org-004"
         },
         {
@@ -2314,7 +2893,7 @@
           "framework": "O*Net Online",
           "description": "",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-special-education-teachers--al-single-org-005"
         },
         {
@@ -2324,7 +2903,7 @@
           "framework": "O*Net Online",
           "description": "Teach one or more subjects to students at the secondary school level.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-secondary-school-teachers--exc-single-org-006"
         },
         {
@@ -2334,7 +2913,7 @@
           "framework": "O*Net Online",
           "description": "Teach one or more subjects to students at the middle, intermediate, or junior high school level.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-middle-school-teachers--except-single-org-007"
         },
         {
@@ -2344,7 +2923,7 @@
           "framework": "O*Net Online",
           "description": "Teach academic, social, and life skills to kindergarten students with learning, emotional, or physical disabilities. Includes teachers who specialize and work with students who are blind or have visual impairments; students who are deaf or have hearing impairments; and students with intellectual disabilities.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-special-education-teachers--ki-single-org-008"
         },
         {
@@ -2354,7 +2933,7 @@
           "framework": "O*Net Online",
           "description": "Teach academic, social, and life skills to elementary school students with learning, emotional, or physical disabilities. Includes teachers who specialize and work with students who are blind or have visual impairments; students who are deaf or have hearing impairments; and students with intellectual disabilities.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-special-education-teachers--el-single-org-009"
         },
         {
@@ -2364,7 +2943,7 @@
           "framework": "OSMT",
           "description": "Analyze the ethical implications of new technologies.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-analyze-ethical-implications-o-single-org-010"
         },
         {
@@ -2374,7 +2953,7 @@
           "framework": "OSMT",
           "description": "Apply ethical concepts to complex situations.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-apply-ethical-concepts-single-org-011"
         },
         {
@@ -2384,7 +2963,7 @@
           "framework": "OSMT",
           "description": "Articulate complex ideas, opinions, and information, pointing out connections and relationships.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-articulate-complex-ideas-single-org-012"
         },
         {
@@ -2394,7 +2973,7 @@
           "framework": "OSMT",
           "description": "Describe how different types of human behavior affect society.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-behavior-societal-impact-single-org-013"
         },
         {
@@ -2404,7 +2983,7 @@
           "framework": "OSMT",
           "description": "Implement technological resources in the classroom that align with the school, district, and state policies.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-classroom-technological-resour-single-org-014"
         },
         {
@@ -2414,7 +2993,7 @@
           "framework": "OSMT",
           "description": "Convey ideas using written communication techniques.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-convey-ideas-in-writing-single-org-015"
         },
         {
@@ -2424,7 +3003,7 @@
           "framework": "OSMT",
           "description": "Identify technologies that facilitate the delivery of educational instruction.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-educational-technology-identif-single-org-016"
         },
         {
@@ -2434,7 +3013,7 @@
           "framework": "OSMT",
           "description": "Communicate with others regarding ethical issues affecting patient care.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-ethical-issue-communication-single-org-017"
         },
         {
@@ -2444,7 +3023,7 @@
           "framework": "OSMT",
           "description": "Identify potential risks in a given situation.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-identify-potential-risks-single-org-018"
         },
         {
@@ -2454,7 +3033,7 @@
           "framework": "OSMT",
           "description": "Analyze relevant information to make sound, pragmatic decisions.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-information-analysis-single-org-019"
         },
         {
@@ -2464,7 +3043,7 @@
           "framework": "OSMT",
           "description": "Integrate technology into lesson plans to support instruction and assessment for learners.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-integrating-technology-in-less-single-org-020"
         },
         {
@@ -2474,7 +3053,7 @@
           "framework": "OSMT",
           "description": "Promote student engagement through active learning.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-promote-student-engagement-single-org-021"
         },
         {
@@ -2484,7 +3063,7 @@
           "framework": "OSMT",
           "description": "Select technologies that align with learning goals.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-technology-alignment-selection-single-org-022"
         },
         {
@@ -2494,7 +3073,7 @@
           "framework": "OSMT",
           "description": "Develop a lesson that engages students in a range of learning skills and technology tools in which the student will access, interpret, and apply knowledge.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-technology-tool-lesson-develop-single-org-023"
         },
         {
@@ -2504,7 +3083,7 @@
           "framework": "OSMT",
           "description": "Integrate technology tools that support learner interaction with content in online learning environments.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-tools-for-learner-content-inte-single-org-024"
         },
         {
@@ -2514,7 +3093,7 @@
           "framework": "OSMT",
           "description": "Use technology to improve productivity and efficiency.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-use-technology-to-improve-prod-single-org-025"
         },
         {
@@ -2524,7 +3103,7 @@
           "framework": "OSMT",
           "description": "Communicate insights based on analysis.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-analysis-insight-communication-single-org-026"
         },
         {
@@ -2534,7 +3113,7 @@
           "framework": "OSMT",
           "description": "Interpret information through independent and unconstrained analysis.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-information-interpretation-single-org-027"
         },
         {
@@ -2544,7 +3123,7 @@
           "framework": "OSMT",
           "description": "Adjust instructional plans in relation to short- and long-range goals.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-instructional-plan-adjustment-single-org-028"
         },
         {
@@ -2554,7 +3133,7 @@
           "framework": "OSMT",
           "description": "Adjust lesson plans based on needs in the learning environment.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-lesson-plan-adjustment-single-org-029"
         },
         {
@@ -2564,7 +3143,7 @@
           "framework": "OSMT",
           "description": "Select appropriate technology applications to meet specific needs.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-select-appropriate-technology--single-org-030"
         },
         {
@@ -2574,20 +3153,24 @@
           "framework": "OSMT",
           "description": "Support learner-to-learner interaction in online learning environments through the use of strategies or tools.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-learner-to-learner-interaction-single-org-031"
         }
       ],
       "description": "Recipients of the Transformative Technology for Inclusive P-12 Classrooms certificate from State University demonstrated competency in the use of technology to support online, blended, and in-person learning, enhance teacher productivity, and create digital learning experiences while applying and analyzing ethical theories and frameworks to address technology and privacy issues.",
-      "Requirements": {
-        "criteria": [
-          {
-            "narrative": "## Credential Detail\nRecipients of StateU's Transformative Technology for Inclusive P-12 Classrooms Certificate have demonstrated competence in the following areas via rigorous assessment activities completed through State University:\n\n### Technology for Instruction and Online Pedagogy\n- The learner plans instruction focused on building students' digital literacy skills.\n- The learner applies instructional technologies to facilitate mastery of standards and objectives for all learners.\n- The learner implements technology solutions to support teacher productivity.\n- The learner applies online pedagogy to facilitate student learning experiences.\n- The learner adapts instruction to meet student needs in a blended environment. \n\n\n### Technology and Ethics: A Look at Emerging Trends and Society\n- The learner describes ethical decision-making frameworks as applied to technology.\n- The learner applies ethical concepts to emerging technology as it relates to society.\n- The learner analyzes privacy ethics and identity as related to emerging technologies.\n- The learner evaluates a contemporary technological case study using multiple ethical theories and frameworks to provide an ethical analysis.\n\n## Competency Demonstration Highlights\nRecipients of this credential complete the following tasks and deliverables as part of their assessment activities:\n- Plan a lesson on digital literacy skills for in-person and online educational settings. \n- Implement solutions that address teacher productivity challenges.\n- Adapt instructional activities, materials, and technologies for a blended learning environment.\n- Research theories for informed decisions about ethical technology use.\n- Evaluate technologies for ethical implications, such as privacy.\n- Propose strategies for ethical technology use.",
-            "informationSourceId": "Single-Org"
-          }
-        ],
-        "informationSourceId": "Single-Org"
-      },
+      "Requirements": [
+        {
+          "criteria": [
+            {
+              "narrative": "## Credential Detail\nRecipients of StateU's Transformative Technology for Inclusive P-12 Classrooms Certificate have demonstrated competence in the following areas via rigorous assessment activities completed through State University:\n\n### Technology for Instruction and Online Pedagogy\n- The learner plans instruction focused on building students' digital literacy skills.\n- The learner applies instructional technologies to facilitate mastery of standards and objectives for all learners.\n- The learner implements technology solutions to support teacher productivity.\n- The learner applies online pedagogy to facilitate student learning experiences.\n- The learner adapts instruction to meet student needs in a blended environment. \n\n\n### Technology and Ethics: A Look at Emerging Trends and Society\n- The learner describes ethical decision-making frameworks as applied to technology.\n- The learner applies ethical concepts to emerging technology as it relates to society.\n- The learner analyzes privacy ethics and identity as related to emerging technologies.\n- The learner evaluates a contemporary technological case study using multiple ethical theories and frameworks to provide an ethical analysis.\n\n## Competency Demonstration Highlights\nRecipients of this credential complete the following tasks and deliverables as part of their assessment activities:\n- Plan a lesson on digital literacy skills for in-person and online educational settings. \n- Implement solutions that address teacher productivity challenges.\n- Adapt instructional activities, materials, and technologies for a blended learning environment.\n- Research theories for informed decisions about ethical technology use.\n- Evaluate technologies for ethical implications, such as privacy.\n- Propose strategies for ethical technology use.",
+              "informationSourceId": "Single-Org"
+            }
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "credential-stateu-certificate--transforma-single-org-002-requirements-01"
+        }
+      ],
       "achievementType": [
         "Certificate"
       ],
@@ -2596,7 +3179,7 @@
         "identificationSystem": "stateu-state-university-id",
         "organizationType": [],
         "informationSourceId": "Single-Org",
-        "informationSourceOrganization": "Demo University",
+        "informationSourceOrganization": "State University",
         "identifier": "organization-state-university-single-org-001"
       },
       "Accreditation": [
@@ -2605,11 +3188,13 @@
           "accreditingAgency": "Higher Learning Commission",
           "accreditationType": "Institutional",
           "dateAccredited": "2020-01-01",
-          "accreditationStatus": "Active"
+          "accreditationStatus": "Active",
+          "informationSourceOrganization": "State University",
+          "identifier": "accreditation-higher-learning-commission-single-org-002"
         }
       ],
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University",
+      "informationSourceOrganization": "State University",
       "identifier": "credential-stateu-certificate--transforma-single-org-002"
     },
     {
@@ -2623,12 +3208,15 @@
           "accreditingAgency": "Higher Learning Commission",
           "accreditationType": "Institutional",
           "dateAccredited": "2020-01-01",
-          "accreditationStatus": "Active"
+          "accreditationStatus": "Active",
+          "informationSourceOrganization": "State University",
+          "identifier": "accreditation-higher-learning-commission-single-org-003"
         }
       ],
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University",
-      "identifier": "credential-94599d33-de74-42ea-bd51-fc6641-single-org-003"
+      "informationSourceOrganization": "State University",
+      "identifier": "credential-94599d33-de74-42ea-bd51-fc6641-single-org-003",
+      "name": "State University Credential 94599d33"
     },
     {
       "id": "https://api.badgr.io/public/badges/6KseIB0VTcaLHE0lx6V72w",
@@ -2637,7 +3225,7 @@
         {
           "id": "https://api.badgr.io/public/badges/6KseIB0VTcaLHE0lx6V72w/image",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "image-https://api.badgr.io/public/ba-single-org-001"
         }
       ],
@@ -2652,7 +3240,7 @@
           "framework": "O*Net Online",
           "description": "Teach academic and social skills to kindergarten students.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-kindergarten-teachers--except--single-org-001"
         },
         {
@@ -2662,7 +3250,7 @@
           "framework": "O*Net Online",
           "description": "Teach academic and social skills to students at the elementary school level.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-elementary-school-teachers--ex-single-org-002"
         },
         {
@@ -2672,7 +3260,7 @@
           "framework": "O*Net Online",
           "description": "Teach one or more subjects to students at the middle, intermediate, or junior high school level.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-middle-school-teachers--except-single-org-003"
         },
         {
@@ -2682,7 +3270,7 @@
           "framework": "O*Net Online",
           "description": "Teach one or more subjects to students at the secondary school level.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-secondary-school-teachers--exc-single-org-004"
         },
         {
@@ -2692,7 +3280,7 @@
           "framework": "O*Net Online",
           "description": "Teach academic, social, and life skills to kindergarten students with learning, emotional, or physical disabilities. Includes teachers who specialize and work with students who are blind or have visual impairments; students who are deaf or have hearing impairments; and students with intellectual disabilities.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-special-education-teachers--ki-single-org-005"
         },
         {
@@ -2702,7 +3290,7 @@
           "framework": "O*Net Online",
           "description": "Teach academic, social, and life skills to middle school students with learning, emotional, or physical disabilities. Includes teachers who specialize and work with students who are blind or have visual impairments; students who are deaf or have hearing impairments; and students with intellectual disabilities.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-special-education-teachers--mi-single-org-006"
         },
         {
@@ -2712,7 +3300,7 @@
           "framework": "O*Net Online",
           "description": "Teach academic, social, and life skills to elementary school students with learning, emotional, or physical disabilities. Includes teachers who specialize and work with students who are blind or have visual impairments; students who are deaf or have hearing impairments; and students with intellectual disabilities.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-special-education-teachers--el-single-org-007"
         },
         {
@@ -2722,7 +3310,7 @@
           "framework": "O*Net Online",
           "description": "Teach academic, social, and life skills to secondary school students with learning, emotional, or physical disabilities. Includes teachers who specialize and work with students who are blind or have visual impairments; students who are deaf or have hearing impairments; and students with intellectual disabilities.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-special-education-teachers--se-single-org-008"
         },
         {
@@ -2732,7 +3320,7 @@
           "framework": "O*Net Online",
           "description": "",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-special-education-teachers--al-single-org-009"
         },
         {
@@ -2742,7 +3330,7 @@
           "framework": "OSMT",
           "description": "Analyze the ethical implications of new technologies.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-analyze-ethical-implications-o-single-org-010"
         },
         {
@@ -2752,7 +3340,7 @@
           "framework": "OSMT",
           "description": "Apply ethical concepts to complex situations.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-apply-ethical-concepts-single-org-011"
         },
         {
@@ -2762,7 +3350,7 @@
           "framework": "OSMT",
           "description": "Articulate complex ideas, opinions, and information, pointing out connections and relationships.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-articulate-complex-ideas-single-org-012"
         },
         {
@@ -2772,7 +3360,7 @@
           "framework": "OSMT",
           "description": "Describe how different types of human behavior affect society.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-behavior-societal-impact-single-org-013"
         },
         {
@@ -2782,7 +3370,7 @@
           "framework": "OSMT",
           "description": "Implement technological resources in the classroom that align with the school, district, and state policies.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-classroom-technological-resour-single-org-014"
         },
         {
@@ -2792,7 +3380,7 @@
           "framework": "OSMT",
           "description": "Convey ideas using written communication techniques.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-convey-ideas-in-writing-single-org-015"
         },
         {
@@ -2802,7 +3390,7 @@
           "framework": "OSMT",
           "description": "Communicate with others regarding ethical issues affecting patient care.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-ethical-issue-communication-single-org-016"
         },
         {
@@ -2812,7 +3400,7 @@
           "framework": "OSMT",
           "description": "Identify potential risks in a given situation.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-identify-potential-risks-single-org-017"
         },
         {
@@ -2822,7 +3410,7 @@
           "framework": "OSMT",
           "description": "Analyze relevant information to make sound, pragmatic decisions.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-information-analysis-single-org-018"
         },
         {
@@ -2832,7 +3420,7 @@
           "framework": "OSMT",
           "description": "Integrate technology into lesson plans to support instruction and assessment for learners.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-integrating-technology-in-less-single-org-019"
         },
         {
@@ -2842,7 +3430,7 @@
           "framework": "OSMT",
           "description": "Promote student engagement through active learning.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-promote-student-engagement-single-org-020"
         },
         {
@@ -2852,7 +3440,7 @@
           "framework": "OSMT",
           "description": "Select technologies that align with learning goals.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-technology-alignment-selection-single-org-021"
         },
         {
@@ -2862,7 +3450,7 @@
           "framework": "OSMT",
           "description": "Develop a lesson that engages students in a range of learning skills and technology tools in which the student will access, interpret, and apply knowledge.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-technology-tool-lesson-develop-single-org-022"
         },
         {
@@ -2872,7 +3460,7 @@
           "framework": "OSMT",
           "description": "Integrate technology tools that support learner interaction with content in online learning environments.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-tools-for-learner-content-inte-single-org-023"
         },
         {
@@ -2882,7 +3470,7 @@
           "framework": "OSMT",
           "description": "Use technology to improve productivity and efficiency.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-use-technology-to-improve-prod-single-org-024"
         },
         {
@@ -2892,7 +3480,7 @@
           "framework": "OSMT",
           "description": "Apply technologies in appropriate, safe, legal, ethical, and effective ways.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-educational-technology-applica-single-org-025"
         },
         {
@@ -2902,7 +3490,7 @@
           "framework": "OSMT",
           "description": "Select appropriate technology applications to meet specific needs.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-select-appropriate-technology--single-org-026"
         },
         {
@@ -2912,20 +3500,24 @@
           "framework": "OSMT",
           "description": "Support learner-to-learner interaction in online learning environments through the use of strategies or tools.",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "credentialalignments-learner-to-learner-interaction-single-org-027"
         }
       ],
       "description": "Recipients of the Innovative Technology for Inclusive P-12 Classrooms certificate from State University demonstrated competency in the use of technology to support online and in-person learning, enhance teacher productivity, and create digital learning experiences while applying ethical frameworks to address technology and privacy issues.",
-      "Requirements": {
-        "criteria": [
-          {
-            "narrative": "## Credential Detail\nRecipients of StateU's Innovative Technology for Inclusive P-12 Classrooms Certificate have demonstrated competence in the following areas via rigorous assessment activities completed through State University:\n\n### Instructional Technology and Online Pedagogy\n- The learner plans instruction focused on building students' digital literacy skills.\n- The learner applies instructional technologies to facilitate mastery of standards and objectives for all learners.\n- The learner implements technology solutions to support teacher productivity.\n- The learner applies online pedagogy to facilitate student learning experiences.\n\n### Technology and Ethics: Emerging Trends and Society \n- The learner describes ethical decision-making frameworks as applied to technology.\n- The learner applies ethical concepts to emerging technology as it relates to society.\n- The learner analyzes privacy ethics and identity as related to emerging technologies.\n\n## Competency Demonstration Highlights\nRecipients of this credential complete the following tasks and deliverables as part of their assessment activities:\n- Plan a lesson on digital literacy skills for in-person and online educational settings. \n- Implement solutions that address teacher productivity challenges.\n- Evaluate technologies for ethical implications, such as privacy.\n- Propose strategies for ethical technology use.",
-            "informationSourceId": "Single-Org"
-          }
-        ],
-        "informationSourceId": "Single-Org"
-      },
+      "Requirements": [
+        {
+          "criteria": [
+            {
+              "narrative": "## Credential Detail\nRecipients of StateU's Innovative Technology for Inclusive P-12 Classrooms Certificate have demonstrated competence in the following areas via rigorous assessment activities completed through State University:\n\n### Instructional Technology and Online Pedagogy\n- The learner plans instruction focused on building students' digital literacy skills.\n- The learner applies instructional technologies to facilitate mastery of standards and objectives for all learners.\n- The learner implements technology solutions to support teacher productivity.\n- The learner applies online pedagogy to facilitate student learning experiences.\n\n### Technology and Ethics: Emerging Trends and Society \n- The learner describes ethical decision-making frameworks as applied to technology.\n- The learner applies ethical concepts to emerging technology as it relates to society.\n- The learner analyzes privacy ethics and identity as related to emerging technologies.\n\n## Competency Demonstration Highlights\nRecipients of this credential complete the following tasks and deliverables as part of their assessment activities:\n- Plan a lesson on digital literacy skills for in-person and online educational settings. \n- Implement solutions that address teacher productivity challenges.\n- Evaluate technologies for ethical implications, such as privacy.\n- Propose strategies for ethical technology use.",
+              "informationSourceId": "Single-Org"
+            }
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "credential-stateu-certificate--innovative-single-org-004-requirements-01"
+        }
+      ],
       "achievementType": [
         "Certificate"
       ],
@@ -2934,7 +3526,7 @@
         "identificationSystem": "stateu-state-university-id",
         "organizationType": [],
         "informationSourceId": "Single-Org",
-        "informationSourceOrganization": "Demo University",
+        "informationSourceOrganization": "State University",
         "identifier": "organization-state-university-single-org-001"
       },
       "Accreditation": [
@@ -2943,37 +3535,279 @@
           "accreditingAgency": "Higher Learning Commission",
           "accreditationType": "Institutional",
           "dateAccredited": "2020-01-01",
-          "accreditationStatus": "Active"
+          "accreditationStatus": "Active",
+          "informationSourceOrganization": "State University",
+          "identifier": "accreditation-higher-learning-commission-single-org-004"
         }
       ],
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University",
+      "informationSourceOrganization": "State University",
       "identifier": "credential-stateu-certificate--innovative-single-org-004"
     },
     {
       "id": "c6bd80f8-f5af-4d62-ae5d-896e4bf60295",
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University",
-      "identifier": "credential-c6bd80f8-f5af-4d62-ae5d-896e4b-single-org-005"
+      "informationSourceOrganization": "State University",
+      "identifier": "credential-c6bd80f8-f5af-4d62-ae5d-896e4b-single-org-005",
+      "name": "State University Credential c6bd80f8"
     },
     {
       "id": "https://api.badgr.io/public/badges/jTvfWDxrQPmJ7o0aR1FL1w",
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University",
-      "identifier": "credential-https://api.badgr.io/public/ba-single-org-006"
+      "informationSourceOrganization": "State University",
+      "identifier": "credential-https://api.badgr.io/public/ba-single-org-006",
+      "name": "StateU Certificate: Transformative Technology for Inclusive P-12 Classrooms"
     },
     {
       "id": "94599d33-de74-42ea-bd51-fc66415d77c8",
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University",
-      "identifier": "credential-94599d33-de74-42ea-bd51-fc6641-single-org-007"
+      "informationSourceOrganization": "State University",
+      "identifier": "credential-94599d33-de74-42ea-bd51-fc6641-single-org-007",
+      "name": "State University Credential 94599d33"
     },
     {
       "id": "https://api.badgr.io/public/badges/6KseIB0VTcaLHE0lx6V72w",
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University",
-      "identifier": "credential-https://api.badgr.io/public/ba-single-org-008"
+      "informationSourceOrganization": "State University",
+      "identifier": "credential-https://api.badgr.io/public/ba-single-org-008",
+      "name": "StateU Certificate: Innovative Technology for Inclusive P-12 Classrooms"
     }
   ],
-  "informationSourceId": "Single-Org"
+  "informationSourceId": "Single-Org",
+  "Assessment": [
+    {
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "identifier": "assessment-praxis-elem-single-org-001",
+      "name": "Praxis Elementary Education: Multiple Subjects (5001)",
+      "shortName": "Praxis 5001",
+      "provider": "Educational Testing Service (ETS)",
+      "type": "Educator licensure examination",
+      "description": "Multi-subject licensure exam covering reading, mathematics, science, and social studies for elementary teacher candidates.",
+      "purpose": "Teacher licensure",
+      "assessmentLevel": "AudLevel:PostSecondaryLevel",
+      "scoreMetricType": "Scaled score (100-200) per subtest",
+      "deliveryType": "Online proctored / test center",
+      "methodType": "Multiple choice",
+      "AssessmentPerformanceLevel": [
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "assessmentperformancelevel-praxis-pass-single-org-001",
+          "label": "Pass (Colorado)",
+          "performanceLowerLevel": "155",
+          "performanceUpperLevel": "200",
+          "descriptiveFeedback": "Meets Colorado's passing score for elementary educator licensure."
+        }
+      ],
+      "demonstratesRefCompetency": {
+        "name": "Lesson Planning and Instruction",
+        "identifier": "competency-lesson-planning-single-org-001",
+        "informationSourceId": "Single-Org",
+        "informationSourceOrganization": "State University"
+      },
+      "awardedByRefOrganization": {
+        "name": "Educational Testing Service (ETS)",
+        "identifier": "organization-ets-single-org-011",
+        "informationSourceId": "Single-Org",
+        "informationSourceOrganization": "State University"
+      },
+      "offeredByRefOrganization": {
+        "name": "Educational Testing Service (ETS)",
+        "identifier": "organization-ets-single-org-011",
+        "informationSourceId": "Single-Org",
+        "informationSourceOrganization": "State University"
+      }
+    },
+    {
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "identifier": "assessment-wgu-d307-single-org-002",
+      "name": "Objective Assessment: D307 Technology-Enhanced Learning",
+      "shortName": "D307 OA",
+      "provider": "State University",
+      "type": "Competency-based objective assessment",
+      "description": "Proctored competency-based assessment verifying technology-enhanced instruction competence.",
+      "purpose": "Competency verification for course credit",
+      "assessmentLevel": "AudLevel:PostSecondaryLevel",
+      "scoreMetricType": "Competent / Not Competent",
+      "deliveryType": "Online proctored",
+      "methodType": "Objective assessment",
+      "AssessmentPerformanceLevel": [
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "assessmentperformancelevel-d307-competent-single-org-002",
+          "label": "Competent",
+          "descriptiveFeedback": "Demonstrates competency in technology-enhanced learning sufficient to earn course credit."
+        }
+      ],
+      "demonstratesRefCompetency": {
+        "name": "Educational Technology",
+        "identifier": "competency-educational-technology-single-org-004",
+        "informationSourceId": "Single-Org",
+        "informationSourceOrganization": "State University"
+      },
+      "offeredByRefOrganization": {
+        "name": "State University",
+        "identifier": "organization-state-university-single-org-005",
+        "informationSourceId": "Single-Org",
+        "informationSourceOrganization": "State University"
+      }
+    }
+  ],
+  "CompetencyFramework": [
+    {
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "name": "P-12 Teaching & Learning Competency Framework",
+      "description": "Competency framework for P-12 educators, aligned to O*NET Elementary School Teachers and the InTASC Model Core Teaching Standards.",
+      "uri": "https://stateu.edu/frameworks/p12-teaching-learning/v1",
+      "publisher": "State University",
+      "creator": "State University",
+      "publicationStatus": "Published",
+      "publicationDate": "2022-07-01",
+      "version": "1.0",
+      "identifier": "competencyframework-p12-teaching-learning-single-org-001",
+      "Competency": [
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "name": "Lesson Planning and Instruction",
+          "code": "EDU-01",
+          "statement": "Designs and delivers standards-aligned lessons that advance student learning.",
+          "identifier": "competency-lesson-planning-single-org-001",
+          "CompetencyAlignments": [
+            {
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University",
+              "identifier": "competencyalignment-onet-teacher-single-org-001",
+              "alignmentType": "majorAlignment",
+              "alignsToUri": "https://www.onetonline.org/link/summary/25-2021.00",
+              "alignsToText": "Elementary School Teachers, Except Special Education",
+              "alignsToType": "O*NET-SOC Occupation"
+            },
+            {
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University",
+              "identifier": "competencyalignment-intasc-single-org-002",
+              "alignmentType": "majorAlignment",
+              "alignsToUri": "https://ccsso.org/intasc",
+              "alignsToText": "InTASC Standard 7 — Planning for Instruction",
+              "alignsToType": "InTASC Model Core Teaching Standards"
+            }
+          ]
+        },
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "name": "Classroom Management",
+          "code": "EDU-02",
+          "statement": "Establishes a safe, inclusive, and well-managed learning environment.",
+          "identifier": "competency-classroom-management-single-org-002"
+        },
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "name": "Student Assessment",
+          "code": "EDU-03",
+          "statement": "Uses formative and summative assessment to monitor and support student progress.",
+          "identifier": "competency-student-assessment-single-org-003"
+        },
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "name": "Educational Technology",
+          "code": "EDU-04",
+          "statement": "Integrates technology to enhance instruction and accessibility in P-12 classrooms.",
+          "identifier": "competency-educational-technology-single-org-004"
+        },
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "name": "Inclusive Education",
+          "code": "EDU-05",
+          "statement": "Differentiates instruction to meet the needs of diverse and exceptional learners.",
+          "identifier": "competency-inclusive-education-single-org-005"
+        }
+      ],
+      "Association": [
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "association-edtech-child-of-instruction-single-org-001",
+          "competencyAssociationType": "isChildOf",
+          "competencyAssociationOriginName": "Educational Technology",
+          "competencyAssociationOriginUri": "urn:lif:competency:competency-educational-technology-single-org-004",
+          "competencyAssociationDestinationName": "Lesson Planning and Instruction",
+          "competencyAssociationDestinationUri": "urn:lif:competency:competency-lesson-planning-single-org-001"
+        },
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "association-inclusive-related-management-single-org-002",
+          "competencyAssociationType": "isRelatedTo",
+          "competencyAssociationOriginName": "Inclusive Education",
+          "competencyAssociationOriginUri": "urn:lif:competency:competency-inclusive-education-single-org-005",
+          "competencyAssociationDestinationName": "Classroom Management",
+          "competencyAssociationDestinationUri": "urn:lif:competency:competency-classroom-management-single-org-002"
+        }
+      ]
+    }
+  ],
+  "Program": [
+    {
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "name": "Bachelor of Arts in Elementary Education",
+      "description": "Competency-based teacher-preparation degree leading to elementary (K-6) teacher licensure.",
+      "identifier": "program-ba-elementary-education-single-org-001",
+      "programIdentifierSystem": "State University SIS",
+      "instructionalProgramCode": "13.1202",
+      "instructionalProgramUse": "CIP 2020",
+      "creditsRequired": "120",
+      "creditUnitTypeDescription": "Competency units",
+      "postSecondaryProgramLevel": "Bachelor's Degree",
+      "normalTimeCompletion": "4",
+      "normalTimeCompletionUnits": "Years",
+      "deliveryType": "Online, competency-based",
+      "distanceEducationProgram": "true",
+      "demonstratesRefCompetency": {
+        "name": "Lesson Planning and Instruction",
+        "identifier": "competency-lesson-planning-single-org-001",
+        "informationSourceId": "Single-Org",
+        "informationSourceOrganization": "State University"
+      },
+      "offeredByRefOrganization": {
+        "name": "State University",
+        "identifier": "organization-state-university-single-org-005",
+        "informationSourceId": "Single-Org",
+        "informationSourceOrganization": "State University"
+      }
+    },
+    {
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "name": "Educational Technology for Inclusive Classrooms Certificate",
+      "description": "Professional certificate in integrating technology to support inclusive P-12 instruction.",
+      "identifier": "program-edtech-inclusive-cert-single-org-002",
+      "programIdentifierSystem": "State University SIS",
+      "creditsRequired": "12",
+      "creditUnitTypeDescription": "Competency units",
+      "postSecondaryProgramLevel": "Postsecondary Certificate",
+      "deliveryType": "Online, competency-based",
+      "demonstratesRefCompetency": {
+        "name": "Educational Technology",
+        "identifier": "competency-educational-technology-single-org-004",
+        "informationSourceId": "Single-Org",
+        "informationSourceOrganization": "State University"
+      },
+      "offeredByRefOrganization": {
+        "name": "State University",
+        "identifier": "organization-state-university-single-org-005",
+        "informationSourceId": "Single-Org",
+        "informationSourceOrganization": "State University"
+      }
+    }
+  ]
 }

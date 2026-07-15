@@ -6,7 +6,7 @@
           "lastName": "Diaz",
           "firstName": "Jenna",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "name-jenna-diaz-single-org-001"
         }
       ],
@@ -20,10 +20,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-research-skills-single-org-001"
         },
         {
@@ -35,10 +36,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-advanced-cardiovascular-life-s-single-org-002"
         },
         {
@@ -50,10 +52,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-data-analysis-single-org-003"
         },
         {
@@ -65,10 +68,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-chemistry-single-org-004"
         },
         {
@@ -80,10 +84,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-molecular-biology-single-org-005"
         },
         {
@@ -95,10 +100,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-biology-single-org-006"
         },
         {
@@ -110,10 +116,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-business-process-improvement-single-org-007"
         },
         {
@@ -125,10 +132,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-computer-literacy-single-org-008"
         },
         {
@@ -140,10 +148,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-conflict-resolution-single-org-009"
         },
         {
@@ -155,10 +164,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-critical-thinking-single-org-010"
         },
         {
@@ -170,10 +180,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-data-presentation-single-org-011"
         },
         {
@@ -185,10 +196,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-digital-storytelling-single-org-012"
         },
         {
@@ -200,10 +212,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-leadership-single-org-013"
         },
         {
@@ -215,10 +228,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-health-care-single-org-014"
         },
         {
@@ -230,10 +244,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-medical-software-single-org-015"
         },
         {
@@ -245,10 +260,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-knowledge-of-hygiene-single-org-016"
         },
         {
@@ -260,10 +276,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-interpersonal-communications-single-org-017"
         },
         {
@@ -275,10 +292,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-problem-solving-single-org-018"
         },
         {
@@ -290,10 +308,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-life-support-single-org-019"
         },
         {
@@ -305,10 +324,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-long-term-care-single-org-020"
         },
         {
@@ -320,10 +340,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-nursing-single-org-021"
         },
         {
@@ -335,10 +356,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-physics-single-org-022"
         },
         {
@@ -350,10 +372,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-professional-communication-single-org-023"
         },
         {
@@ -365,10 +388,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-scientific-reasoning-single-org-024"
         },
         {
@@ -380,10 +404,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-nursing-home-care-single-org-025"
         },
         {
@@ -395,10 +420,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-systems-thinking-single-org-026"
         },
         {
@@ -410,10 +436,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-time-management-single-org-027"
         },
         {
@@ -425,10 +452,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-wound-care-single-org-028"
         },
         {
@@ -439,10 +467,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-patient-assessment-single-org-029"
         },
         {
@@ -454,10 +483,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-carrying-out-assessments-single-org-030"
         },
         {
@@ -468,10 +498,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-mentoring-single-org-031"
         },
         {
@@ -483,10 +514,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-thought-leadership-single-org-032"
         },
         {
@@ -498,10 +530,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-receptivity-single-org-033"
         },
         {
@@ -513,10 +546,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-certified-nursing-assistant-single-org-034"
         },
         {
@@ -527,10 +561,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-certified-nurse-practitioner-single-org-035"
         },
         {
@@ -541,10 +576,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-written-communication-single-org-036"
         },
         {
@@ -556,10 +592,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-communications-single-org-037"
         },
         {
@@ -571,10 +608,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-cultural-sensitivity-single-org-038"
         },
         {
@@ -586,10 +624,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-mentorship-single-org-039"
         },
         {
@@ -601,10 +640,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-influencing-skills-single-org-040"
         },
         {
@@ -615,10 +655,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-goal-oriented-single-org-041"
         },
         {
@@ -630,10 +671,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-research-single-org-042"
         },
         {
@@ -645,10 +687,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-detail-oriented-single-org-043"
         },
         {
@@ -659,10 +702,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-academic-tenacity-single-org-044"
         },
         {
@@ -674,10 +718,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-teamwork-single-org-045"
         },
         {
@@ -689,10 +734,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-persuasive-communication-single-org-046"
         },
         {
@@ -704,10 +750,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-professionalism-single-org-047"
         },
         {
@@ -718,10 +765,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-acceptance-single-org-048"
         },
         {
@@ -733,10 +781,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-mental-agility-single-org-049"
         },
         {
@@ -747,10 +796,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-communication-and-interaction-single-org-050"
         },
         {
@@ -762,10 +812,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-empirical-analysis-single-org-051"
         },
         {
@@ -776,10 +827,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-formal-analysis-single-org-052"
         },
         {
@@ -790,10 +842,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-novel-and-adaptive-thinking-single-org-053"
         },
         {
@@ -805,10 +858,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-sensemaking-single-org-054"
         },
         {
@@ -819,10 +873,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-digital-fluency-single-org-055"
         },
         {
@@ -834,10 +889,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-physical-science-single-org-056"
         },
         {
@@ -848,10 +904,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-human-literacy-single-org-057"
         },
         {
@@ -863,10 +920,11 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-001",
+            "name": "Proficiency Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "proficiency-writing-single-org-058"
         }
       ],
@@ -877,12 +935,26 @@
               "emailAddress": [
                 "jdiaz_lifdemo@stateu.edu"
               ],
-              "informationSourceId": "Single-Org"
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University",
+              "identifier": "email-jenna-diaz-single-org-001"
             }
           ],
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
-          "identifier": "contact-single-org-001"
+          "informationSourceOrganization": "State University",
+          "identifier": "contact-single-org-001",
+          "Address": [
+            {
+              "informationSourceId": "Single-Org",
+              "addressStreet": "455 N 3rd Street",
+              "addressCity": "Phoenix",
+              "addressState": "Arizona",
+              "addressPostalCode": "85004",
+              "countryCode": "US",
+              "informationSourceOrganization": "State University",
+              "identifier": "address-jenna-diaz-single-org-001"
+            }
+          ]
         }
       ],
       "Identifier": [
@@ -890,7 +962,7 @@
           "identifier": "100002",
           "identifierType": "SCHOOL_ASSIGNED_NUMBER",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University"
+          "informationSourceOrganization": "State University"
         }
       ],
       "CourseLearningExperience": [
@@ -900,7 +972,7 @@
             "identificationSystem": "State University SIS",
             "organizationType": [],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-state-university-single-org-001"
           },
           "RefCourse": {
@@ -912,11 +984,13 @@
                   "Academic Records"
                 ],
                 "informationSourceId": "Single-Org",
-                "informationSourceOrganization": "Demo University"
+                "informationSourceOrganization": "State University"
               }
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University"
+            "informationSourceOrganization": "State University",
+            "name": "Course CS651",
+            "identifier": "course-cs651-single-org-legacy-001"
           },
           "OfferedByRefOrganization": {
             "identificationSystem": "stateu-state-university-id",
@@ -925,7 +999,7 @@
               "University"
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-state-university-single-org-001"
           },
           "informationSourceId": "Single-Org",
@@ -934,11 +1008,13 @@
             "awardIssueDate": "2021-10-11T09:24:23Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-7b214972-2eb2-4320-b645-72518b-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-7b214972-2eb2-4320-b645-72518b-single-org-001",
+            "name": "Course CS651 Credential Award"
           },
-          "informationSourceOrganization": "Demo University",
-          "identifier": "courselearningexperience-single-org-001"
+          "informationSourceOrganization": "State University",
+          "identifier": "courselearningexperience-single-org-001",
+          "name": "Course CS651"
         },
         {
           "AssertedByRefOrganization": {
@@ -946,7 +1022,7 @@
             "identificationSystem": "State University SIS",
             "organizationType": [],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-state-university-single-org-001"
           },
           "RefCourse": {
@@ -958,11 +1034,13 @@
                   "Academic Records"
                 ],
                 "informationSourceId": "Single-Org",
-                "informationSourceOrganization": "Demo University"
+                "informationSourceOrganization": "State University"
               }
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University"
+            "informationSourceOrganization": "State University",
+            "name": "Course CS651",
+            "identifier": "course-cs651-single-org-legacy-001"
           },
           "OfferedByRefOrganization": {
             "identificationSystem": "stateu-state-university-id",
@@ -971,7 +1049,7 @@
               "University"
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-state-university-single-org-001"
           },
           "informationSourceId": "Single-Org",
@@ -980,11 +1058,13 @@
             "awardIssueDate": "2022-02-10",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-3433e0e2-456d-4359-932c-f972a3-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-3433e0e2-456d-4359-932c-f972a3-single-org-001",
+            "name": "Course CS651 Credential Award"
           },
-          "informationSourceOrganization": "Demo University",
-          "identifier": "courselearningexperience-single-org-002"
+          "informationSourceOrganization": "State University",
+          "identifier": "courselearningexperience-single-org-002",
+          "name": "Course CS651"
         },
         {
           "AssertedByRefOrganization": {
@@ -992,7 +1072,7 @@
             "identificationSystem": "State University SIS",
             "organizationType": [],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-state-university-single-org-001"
           },
           "RefCourse": {
@@ -1004,11 +1084,13 @@
                   "Academic Records"
                 ],
                 "informationSourceId": "Single-Org",
-                "informationSourceOrganization": "Demo University"
+                "informationSourceOrganization": "State University"
               }
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University"
+            "informationSourceOrganization": "State University",
+            "name": "Course CS651",
+            "identifier": "course-cs651-single-org-legacy-001"
           },
           "OfferedByRefOrganization": {
             "identificationSystem": "stateu-state-university-id",
@@ -1017,7 +1099,7 @@
               "University"
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-state-university-single-org-001"
           },
           "informationSourceId": "Single-Org",
@@ -1026,11 +1108,13 @@
             "awardIssueDate": "2021-11-24T07:25:02Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-efa65065-c6bf-4d35-a88a-5d1a07-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-efa65065-c6bf-4d35-a88a-5d1a07-single-org-001",
+            "name": "Course CS651 Credential Award"
           },
-          "informationSourceOrganization": "Demo University",
-          "identifier": "courselearningexperience-single-org-003"
+          "informationSourceOrganization": "State University",
+          "identifier": "courselearningexperience-single-org-003",
+          "name": "Course CS651"
         },
         {
           "AssertedByRefOrganization": {
@@ -1038,7 +1122,7 @@
             "identificationSystem": "State University SIS",
             "organizationType": [],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-state-university-single-org-001"
           },
           "RefCourse": {
@@ -1050,11 +1134,13 @@
                   "Academic Records"
                 ],
                 "informationSourceId": "Single-Org",
-                "informationSourceOrganization": "Demo University"
+                "informationSourceOrganization": "State University"
               }
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University"
+            "informationSourceOrganization": "State University",
+            "name": "Course CS651",
+            "identifier": "course-cs651-single-org-legacy-001"
           },
           "OfferedByRefOrganization": {
             "identificationSystem": "stateu-state-university-id",
@@ -1063,7 +1149,7 @@
               "University"
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-state-university-single-org-001"
           },
           "informationSourceId": "Single-Org",
@@ -1072,11 +1158,13 @@
             "awardIssueDate": "2023-06-10",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-fd606e09-f7b6-4700-be4e-9a11fa-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-fd606e09-f7b6-4700-be4e-9a11fa-single-org-001",
+            "name": "Course CS651 Credential Award"
           },
-          "informationSourceOrganization": "Demo University",
-          "identifier": "courselearningexperience-single-org-004"
+          "informationSourceOrganization": "State University",
+          "identifier": "courselearningexperience-single-org-004",
+          "name": "Course CS651"
         },
         {
           "AssertedByRefOrganization": {
@@ -1084,7 +1172,7 @@
             "identificationSystem": "State University SIS",
             "organizationType": [],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-state-university-single-org-001"
           },
           "RefCourse": {
@@ -1096,11 +1184,13 @@
                   "Academic Records"
                 ],
                 "informationSourceId": "Single-Org",
-                "informationSourceOrganization": "Demo University"
+                "informationSourceOrganization": "State University"
               }
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University"
+            "informationSourceOrganization": "State University",
+            "name": "Course CS651",
+            "identifier": "course-cs651-single-org-legacy-001"
           },
           "OfferedByRefOrganization": {
             "identificationSystem": "stateu-state-university-id",
@@ -1109,7 +1199,7 @@
               "University"
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-state-university-single-org-001"
           },
           "informationSourceId": "Single-Org",
@@ -1118,11 +1208,157 @@
             "awardIssueDate": "2020-02-08",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-314ae65e-0581-4f3b-988b-9ecd98-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-314ae65e-0581-4f3b-988b-9ecd98-single-org-001",
+            "name": "Course CS651 Credential Award"
           },
-          "informationSourceOrganization": "Demo University",
-          "identifier": "courselearningexperience-single-org-005"
+          "informationSourceOrganization": "State University",
+          "identifier": "courselearningexperience-single-org-005",
+          "name": "Course CS651"
+        },
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "courselearningexperience-c165-single-org-101",
+          "name": "Integrated Physical Sciences",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2023-01-09",
+          "enrollmentStatusType": "Completed",
+          "courseTotal": "3",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "C165-01",
+          "institution": "State University",
+          "department": "College of Health Professions",
+          "currentlyAttendingIndicator": "false",
+          "RefCourse": {
+            "name": "Integrated Physical Sciences",
+            "identifier": "course-c165-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-005",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-005",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "endDate": "2023-03-05",
+          "experienceGrade": "Competent",
+          "goodStandingIndicator": "true",
+          "courseGradeStatusCode": "Final"
+        },
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "courselearningexperience-d265-single-org-102",
+          "name": "Critical Thinking: Reason and Evidence",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2023-03-06",
+          "enrollmentStatusType": "Completed",
+          "courseTotal": "3",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "D265-01",
+          "institution": "State University",
+          "department": "College of Health Professions",
+          "currentlyAttendingIndicator": "false",
+          "RefCourse": {
+            "name": "Critical Thinking: Reason and Evidence",
+            "identifier": "course-d265-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-005",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-005",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "endDate": "2023-04-20",
+          "experienceGrade": "Competent",
+          "goodStandingIndicator": "true",
+          "courseGradeStatusCode": "Final"
+        },
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "courselearningexperience-d269-single-org-103",
+          "name": "Composition: Writing with a Strategy",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2023-04-21",
+          "enrollmentStatusType": "Completed",
+          "courseTotal": "3",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "D269-01",
+          "institution": "State University",
+          "department": "College of Health Professions",
+          "currentlyAttendingIndicator": "false",
+          "RefCourse": {
+            "name": "Composition: Writing with a Strategy",
+            "identifier": "course-d269-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-005",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-005",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "endDate": "2023-06-10",
+          "experienceGrade": "Competent",
+          "goodStandingIndicator": "true",
+          "courseGradeStatusCode": "Final"
+        },
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "courselearningexperience-nura-single-org-104",
+          "name": "Fundamentals of Nursing",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2025-05-01",
+          "enrollmentStatusType": "In Progress",
+          "courseTotal": "3",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "NURA-01",
+          "institution": "State University",
+          "department": "College of Health Professions",
+          "currentlyAttendingIndicator": "true",
+          "RefCourse": {
+            "name": "Fundamentals of Nursing",
+            "identifier": "course-nura-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-005",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-005",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
         }
       ],
       "CredentialAward": [
@@ -1130,122 +1366,149 @@
           "awardStatus": "Completed",
           "InstanceOfRefCredential": {
             "id": "249cdd22-6fb1-47c1-aea0-4cd77947e226",
-            "informationSourceId": "Single-Org"
+            "informationSourceId": "Single-Org",
+            "name": "C165 - Integrated Physical Sciences",
+            "informationSourceOrganization": "State University",
+            "identifier": "credential-c165---integrated-physical-sci-single-org-001"
           },
           "id": "cde063e8-63bb-479e-ac09-2bf016db9500",
           "awardIssueDate": "2022-12-09",
           "credentialAwardee": "Jenna Diaz",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
-          "identifier": "credentialaward-cde063e8-63bb-479e-ac09-2bf016-single-org-001"
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialaward-cde063e8-63bb-479e-ac09-2bf016-single-org-001",
+          "name": "C165 - Integrated Physical Sciences"
         },
         {
           "awardStatus": "Completed",
           "InstanceOfRefCredential": {
             "id": "249cdd22-6fb1-47c1-aea0-4cd77947e226",
-            "informationSourceId": "Single-Org"
+            "informationSourceId": "Single-Org",
+            "name": "C165 - Integrated Physical Sciences",
+            "informationSourceOrganization": "State University",
+            "identifier": "credential-c165---integrated-physical-sci-single-org-001"
           },
           "id": "e86d5e3b-793c-443e-8e2c-218423d6178c",
           "awardIssueDate": "2020-12-19",
           "credentialAwardee": "Jenna Diaz",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
-          "identifier": "credentialaward-e86d5e3b-793c-443e-8e2c-218423-single-org-002"
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialaward-e86d5e3b-793c-443e-8e2c-218423-single-org-002",
+          "name": "C165 - Integrated Physical Sciences"
         },
         {
           "awardStatus": "Completed",
           "InstanceOfRefCredential": {
             "id": "249cdd22-6fb1-47c1-aea0-4cd77947e226",
-            "informationSourceId": "Single-Org"
+            "informationSourceId": "Single-Org",
+            "name": "C165 - Integrated Physical Sciences",
+            "informationSourceOrganization": "State University",
+            "identifier": "credential-c165---integrated-physical-sci-single-org-001"
           },
           "id": "6c364507-a0a3-4afb-ac74-4cc3b5938a49",
           "awardIssueDate": "2021-12-22",
           "credentialAwardee": "Jenna Diaz",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
-          "identifier": "credentialaward-6c364507-a0a3-4afb-ac74-4cc3b5-single-org-003"
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialaward-6c364507-a0a3-4afb-ac74-4cc3b5-single-org-003",
+          "name": "C165 - Integrated Physical Sciences"
         },
         {
           "awardStatus": "Completed",
           "InstanceOfRefCredential": {
             "id": "249cdd22-6fb1-47c1-aea0-4cd77947e226",
-            "informationSourceId": "Single-Org"
+            "informationSourceId": "Single-Org",
+            "name": "C165 - Integrated Physical Sciences",
+            "informationSourceOrganization": "State University",
+            "identifier": "credential-c165---integrated-physical-sci-single-org-001"
           },
           "id": "01dd6b6d-ad9c-4df8-a110-7989c6a772a4",
           "awardIssueDate": "2021-03-29T15:17:25Z",
           "credentialAwardee": "Jenna Diaz",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
-          "identifier": "credentialaward-01dd6b6d-ad9c-4df8-a110-7989c6-single-org-004"
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialaward-01dd6b6d-ad9c-4df8-a110-7989c6-single-org-004",
+          "name": "C165 - Integrated Physical Sciences"
         },
         {
           "awardStatus": "Completed",
           "InstanceOfRefCredential": {
             "id": "249cdd22-6fb1-47c1-aea0-4cd77947e226",
-            "informationSourceId": "Single-Org"
+            "informationSourceId": "Single-Org",
+            "name": "C165 - Integrated Physical Sciences",
+            "informationSourceOrganization": "State University",
+            "identifier": "credential-c165---integrated-physical-sci-single-org-001"
           },
           "id": "c7e9cf5e-8399-4ca5-8735-f8c1368e8428",
           "awardIssueDate": "2021-03-18T00:02:09Z",
           "credentialAwardee": "Jenna Diaz",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
-          "identifier": "credentialaward-c7e9cf5e-8399-4ca5-8735-f8c136-single-org-005"
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialaward-c7e9cf5e-8399-4ca5-8735-f8c136-single-org-005",
+          "name": "C165 - Integrated Physical Sciences"
         },
         {
           "id": "cred-proficiency-certificate-001",
           "awardIssueDate": "2024-12-15T10:00:00Z",
           "credentialAwardee": "Jenna Diaz",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
-          "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-006"
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialaward-cred-proficiency-certificate-0-single-org-006",
+          "name": "State University Credential"
         },
         {
           "id": "7b214972-2eb2-4320-b645-72518b7b2f83",
           "awardIssueDate": "2021-10-11T09:24:23Z",
           "credentialAwardee": "Jenna Diaz",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
-          "identifier": "credentialaward-7b214972-2eb2-4320-b645-72518b-single-org-007"
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialaward-7b214972-2eb2-4320-b645-72518b-single-org-007",
+          "name": "State University Credential"
         },
         {
           "id": "3433e0e2-456d-4359-932c-f972a3e0c12b",
           "awardIssueDate": "2022-02-10",
           "credentialAwardee": "Jenna Diaz",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
-          "identifier": "credentialaward-3433e0e2-456d-4359-932c-f972a3-single-org-008"
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialaward-3433e0e2-456d-4359-932c-f972a3-single-org-008",
+          "name": "State University Credential"
         },
         {
           "id": "efa65065-c6bf-4d35-a88a-5d1a07cd8cbf",
           "awardIssueDate": "2021-11-24T07:25:02Z",
           "credentialAwardee": "Jenna Diaz",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
-          "identifier": "credentialaward-efa65065-c6bf-4d35-a88a-5d1a07-single-org-009"
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialaward-efa65065-c6bf-4d35-a88a-5d1a07-single-org-009",
+          "name": "State University Credential"
         },
         {
           "id": "fd606e09-f7b6-4700-be4e-9a11fa2d3b6a",
           "awardIssueDate": "2023-06-10",
           "credentialAwardee": "Jenna Diaz",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
-          "identifier": "credentialaward-fd606e09-f7b6-4700-be4e-9a11fa-single-org-010"
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialaward-fd606e09-f7b6-4700-be4e-9a11fa-single-org-010",
+          "name": "State University Credential"
         },
         {
           "id": "314ae65e-0581-4f3b-988b-9ecd98ba91fc",
           "awardIssueDate": "2020-02-08",
           "credentialAwardee": "Jenna Diaz",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
-          "identifier": "credentialaward-314ae65e-0581-4f3b-988b-9ecd98-single-org-011"
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialaward-314ae65e-0581-4f3b-988b-9ecd98-single-org-011",
+          "name": "State University Credential"
         },
         {
           "id": "cred-employment-certificate-001",
           "awardIssueDate": "2024-12-15T10:00:00Z",
           "credentialAwardee": "Jenna Diaz",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
-          "identifier": "credentialaward-cred-employment-certificate-00-single-org-012"
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialaward-cred-employment-certificate-00-single-org-012",
+          "name": "State University Credential"
         }
       ],
       "EmploymentLearningExperience": [
@@ -1253,8 +1516,9 @@
           "name": "Certified Nursing Assistant CNA",
           "RefPosition": {
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "position-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "position-single-org-001",
+            "name": "Certified Nursing Assistant CNA"
           },
           "startDate": "2018-03",
           "AssertedByRefOrganization": {
@@ -1264,7 +1528,7 @@
               "Company"
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-employing-organization-single-org-001"
           },
           "OfferedByRefOrganization": {
@@ -1274,7 +1538,7 @@
               "Training Organization"
             ],
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
+            "informationSourceOrganization": "State University",
             "identifier": "organization-training-provider-single-org-001"
           },
           "ApprovedByRefOrganization": [
@@ -1285,7 +1549,7 @@
                 "Regulatory Body"
               ],
               "informationSourceId": "Single-Org",
-              "informationSourceOrganization": "Demo University",
+              "informationSourceOrganization": "State University",
               "identifier": "organization-approving-authority-single-org-001"
             }
           ],
@@ -1295,14 +1559,196 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Single-Org",
-            "informationSourceOrganization": "Demo University",
-            "identifier": "credentialaward-cred-employment-certificate-00-single-org-001"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-employment-certificate-00-single-org-001",
+            "name": "Employment Certificate"
           },
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "employmentlearningexperience-certified-nursing-assistant-cn-single-org-001"
         }
       ],
-      "informationSourceId": "Single-Org"
+      "informationSourceId": "Single-Org",
+      "ProgramLearningExperience": [
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "programlearningexperience-bsn-single-org-001",
+          "name": "Bachelor of Science in Nursing (BSN)",
+          "type": "Undergraduate degree program",
+          "participationStatus": "In Progress",
+          "startDate": "2022-09-01",
+          "RefProgram": {
+            "name": "Bachelor of Science in Nursing (BSN)",
+            "identifier": "program-bsn-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-005",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-005",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "programlearningexperience-cna-single-org-002",
+          "name": "Certified Nursing Assistant (CNA) Program",
+          "type": "Certificate program",
+          "participationStatus": "Completed",
+          "startDate": "2017-09-05",
+          "endDate": "2018-02-16",
+          "RefProgram": {
+            "name": "Certified Nursing Assistant (CNA) Program",
+            "identifier": "program-cna-single-org-002",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "Training Provider",
+            "identifier": "organization-training-provider-single-org-007",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "Training Provider",
+            "identifier": "organization-training-provider-single-org-007",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        }
+      ],
+      "AssessmentLearningExperience": [
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "assessmentlearningexperience-nnaap-cna-single-org-001",
+          "name": "NNAAP Nurse Aide Certification Examination",
+          "type": "State certification assessment",
+          "startDate": "2018-02-20",
+          "endDate": "2018-02-20",
+          "offeredBy": "National Nurse Aide Assessment Program (NNAAP)",
+          "scoreValue": "92",
+          "scoreType": "Scaled score (0-100)",
+          "resultDataType": "xsd:integer",
+          "gradeStatus": "Final",
+          "completionStatus": "Completed",
+          "timeAssessed": "2018-02-20",
+          "RefAssessment": {
+            "identifier": "assessment-nnaap-cna-single-org-001",
+            "name": "NNAAP Nurse Aide Certification Examination",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "RefProficiency": {
+            "name": "Patient Assessment",
+            "identifier": "proficiency-patient-assessment-single-org-029",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "National Nurse Aide Assessment Program (NNAAP)",
+            "identifier": "organization-nnaap-single-org-008",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "assessmentlearningexperience-wgu-c165-single-org-002",
+          "name": "Objective Assessment: C165 Integrated Physical Sciences",
+          "type": "Competency-based assessment",
+          "startDate": "2023-03-01",
+          "endDate": "2023-03-01",
+          "offeredBy": "State University",
+          "scoreValue": "Competent",
+          "scoreType": "Competent / Not Competent",
+          "resultDataType": "xsd:string",
+          "gradeStatus": "Final",
+          "completionStatus": "Completed",
+          "RefAssessment": {
+            "identifier": "assessment-wgu-c165-single-org-002",
+            "name": "Objective Assessment: C165 Integrated Physical Sciences",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "RefProficiency": {
+            "name": "Scientific Reasoning",
+            "identifier": "proficiency-scientific-reasoning-single-org-024",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-005",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        }
+      ],
+      "Birth": [
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "birth-single-org-001",
+          "birthDate": "1991-07-22",
+          "cityOfBirth": "Phoenix",
+          "stateOfBirth": "Arizona"
+        }
+      ],
+      "SexAndGender": [
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "sexandgender-single-org-001",
+          "sex": "Female",
+          "gender": "Female",
+          "pronouns": "she/her"
+        }
+      ],
+      "Residency": [
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "residency-single-org-001",
+          "localType": "In-State",
+          "countyFIPSCode": "04013",
+          "dateEffective": "2016-01-01",
+          "doNotPublishIndicator": "false"
+        }
+      ],
+      "Language": [
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "language-english-single-org-001",
+          "name": "English",
+          "iSO639_2LangCode": "eng",
+          "iSO639_3LangCode": "eng",
+          "languageType": "Primary"
+        }
+      ],
+      "Demographics": [
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "demographics-single-org-001",
+          "highestLevelEducation": "SomeCollegeButNoDegree",
+          "usCitizenship": "true",
+          "economicDisadvantage": "false",
+          "homeless": "false",
+          "militaryActiveStatus": "false",
+          "militaryVeteranStatus": "false"
+        }
+      ]
     }
   ],
   "Course": [
@@ -1315,11 +1761,81 @@
             "Academic Records"
           ],
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University"
+          "informationSourceOrganization": "State University"
         }
       ],
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University"
+      "informationSourceOrganization": "State University",
+      "name": "Course CS651",
+      "identifier": "course-cs651-single-org-legacy-001"
+    },
+    {
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "name": "Integrated Physical Sciences",
+      "identifier": "course-c165-single-org-001",
+      "Identifier": [
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "C165",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ]
+        }
+      ]
+    },
+    {
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "name": "Critical Thinking: Reason and Evidence",
+      "identifier": "course-d265-single-org-001",
+      "Identifier": [
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "D265",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ]
+        }
+      ]
+    },
+    {
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "name": "Composition: Writing with a Strategy",
+      "identifier": "course-d269-single-org-001",
+      "Identifier": [
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "D269",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ]
+        }
+      ]
+    },
+    {
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "name": "Fundamentals of Nursing",
+      "identifier": "course-nura-single-org-001",
+      "Identifier": [
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "NURA",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ]
+        }
+      ]
     }
   ],
   "Organization": [
@@ -1335,7 +1851,9 @@
               "addressState": "Texas",
               "addressStreet": "632 East Hwy 3",
               "addressPostalCode": "75001",
-              "informationSourceId": "Single-Org"
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University",
+              "identifier": "address-state-university-single-org-001"
             }
           ],
           "Email": [
@@ -1343,7 +1861,9 @@
               "emailAddress": [
                 "credentials@stateu.edu"
               ],
-              "informationSourceId": "Single-Org"
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University",
+              "identifier": "email-state-university-single-org-001"
             }
           ],
           "websiteAddress": "https://www.stateu.edu/",
@@ -1352,11 +1872,13 @@
               "telephoneNumber": [
                 "111-222-3333"
               ],
-              "informationSourceId": "Single-Org"
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University",
+              "identifier": "telephone-state-university-single-org-001"
             }
           ],
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University",
+          "informationSourceOrganization": "State University",
           "identifier": "contact-single-org-001"
         }
       ],
@@ -1366,25 +1888,26 @@
           "identifier": "833333326",
           "identifierType": "Federal employer identification number",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University"
+          "informationSourceOrganization": "State University"
         },
         {
           "identifier": "23323331",
           "identifierType": "Dun and Bradstreet number",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University"
+          "informationSourceOrganization": "State University"
         },
         {
           "identifier": "https://credentialfinder.org/organization/000/State_University",
           "identifierType": "credentialfinder.org",
           "informationSourceId": "Single-Org",
-          "informationSourceOrganization": "Demo University"
+          "informationSourceOrganization": "State University"
         }
       ],
       "identificationSystem": "State University SIS",
       "organizationType": [],
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University"
+      "informationSourceOrganization": "State University",
+      "identifier": "organization-state-university-single-org-001"
     },
     {
       "identificationSystem": "stateu-employing-organization-id",
@@ -1393,7 +1916,7 @@
         "Company"
       ],
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University",
+      "informationSourceOrganization": "State University",
       "identifier": "organization-corporate-partner-single-org-002"
     },
     {
@@ -1403,7 +1926,7 @@
         "Company"
       ],
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University",
+      "informationSourceOrganization": "State University",
       "identifier": "organization-employing-organization-single-org-003"
     },
     {
@@ -1411,7 +1934,7 @@
       "identificationSystem": "State University SIS",
       "organizationType": [],
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University",
+      "informationSourceOrganization": "State University",
       "identifier": "organization-state-university-single-org-004"
     },
     {
@@ -1421,13 +1944,13 @@
         "University"
       ],
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University",
+      "informationSourceOrganization": "State University",
       "identifier": "organization-state-university-single-org-005"
     },
     {
       "name": "Brookdale Senior Living",
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University",
+      "informationSourceOrganization": "State University",
       "identifier": "organization-brookdale-senior-living-single-org-006"
     },
     {
@@ -1437,8 +1960,16 @@
         "Training Organization"
       ],
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University",
+      "informationSourceOrganization": "State University",
       "identifier": "organization-training-provider-single-org-007"
+    },
+    {
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "name": "National Nurse Aide Assessment Program (NNAAP)",
+      "description": "Administers the standardized nurse aide competency examination used for state CNA certification.",
+      "identificationSystem": "nnaap-org-id",
+      "identifier": "organization-nnaap-single-org-008"
     }
   ],
   "Credential": [
@@ -1454,11 +1985,13 @@
           "accreditingAgency": "Higher Learning Commission",
           "accreditationType": "Institutional",
           "dateAccredited": "2020-01-01",
-          "accreditationStatus": "Active"
+          "accreditationStatus": "Active",
+          "informationSourceOrganization": "State University",
+          "identifier": "accreditation-higher-learning-commission-single-org-001"
         }
       ],
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University",
+      "informationSourceOrganization": "State University",
       "identifier": "credential-c165---integrated-physical-sci-single-org-001"
     },
     {
@@ -1473,11 +2006,13 @@
           "accreditingAgency": "Higher Learning Commission",
           "accreditationType": "Institutional",
           "dateAccredited": "2020-01-01",
-          "accreditationStatus": "Active"
+          "accreditationStatus": "Active",
+          "informationSourceOrganization": "State University",
+          "identifier": "accreditation-higher-learning-commission-single-org-002"
         }
       ],
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University",
+      "informationSourceOrganization": "State University",
       "identifier": "credential-d198---global-arts-and-humanit-single-org-002"
     },
     {
@@ -1492,11 +2027,13 @@
           "accreditingAgency": "Higher Learning Commission",
           "accreditationType": "Institutional",
           "dateAccredited": "2020-01-01",
-          "accreditationStatus": "Active"
+          "accreditationStatus": "Active",
+          "informationSourceOrganization": "State University",
+          "identifier": "accreditation-higher-learning-commission-single-org-003"
         }
       ],
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University",
+      "informationSourceOrganization": "State University",
       "identifier": "credential-d265---critical-thinking--reas-single-org-003"
     },
     {
@@ -1511,11 +2048,13 @@
           "accreditingAgency": "Higher Learning Commission",
           "accreditationType": "Institutional",
           "dateAccredited": "2020-01-01",
-          "accreditationStatus": "Active"
+          "accreditationStatus": "Active",
+          "informationSourceOrganization": "State University",
+          "identifier": "accreditation-higher-learning-commission-single-org-004"
         }
       ],
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University",
+      "informationSourceOrganization": "State University",
       "identifier": "credential-d268---introduction-to-communi-single-org-004"
     },
     {
@@ -1530,19 +2069,262 @@
           "accreditingAgency": "Higher Learning Commission",
           "accreditationType": "Institutional",
           "dateAccredited": "2020-01-01",
-          "accreditationStatus": "Active"
+          "accreditationStatus": "Active",
+          "informationSourceOrganization": "State University",
+          "identifier": "accreditation-higher-learning-commission-single-org-005"
         }
       ],
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University",
+      "informationSourceOrganization": "State University",
       "identifier": "credential-d269---composition--writing-wi-single-org-005"
     },
     {
       "id": "249cdd22-6fb1-47c1-aea0-4cd77947e226",
       "informationSourceId": "Single-Org",
-      "informationSourceOrganization": "Demo University",
-      "identifier": "credential-249cdd22-6fb1-47c1-aea0-4cd779-single-org-006"
+      "informationSourceOrganization": "State University",
+      "identifier": "credential-249cdd22-6fb1-47c1-aea0-4cd779-single-org-006",
+      "name": "C165 - Integrated Physical Sciences"
     }
   ],
-  "informationSourceId": "Single-Org"
+  "informationSourceId": "Single-Org",
+  "Assessment": [
+    {
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "identifier": "assessment-nnaap-cna-single-org-001",
+      "name": "NNAAP Nurse Aide Certification Examination",
+      "shortName": "NNAAP CNA",
+      "provider": "National Nurse Aide Assessment Program (NNAAP)",
+      "type": "State certification examination",
+      "description": "Standardized written and skills examination for state certification as a nurse aide (CNA).",
+      "purpose": "State CNA certification",
+      "assessmentLevel": "AudLevel:PostSecondaryLevel",
+      "scoreMetricType": "Scaled score (0-100)",
+      "deliveryType": "In-person written plus skills demonstration",
+      "methodType": "Multiple choice and performance-based skills",
+      "AssessmentPerformanceLevel": [
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "assessmentperformancelevel-nnaap-pass-single-org-001",
+          "label": "Pass",
+          "performanceLowerLevel": "70",
+          "performanceUpperLevel": "100",
+          "descriptiveFeedback": "A score of 70 or higher on both the written and skills sections earns certification."
+        }
+      ],
+      "demonstratesRefCompetency": {
+        "name": "Clinical Care and Safety",
+        "identifier": "competency-clinical-care-safety-single-org-002",
+        "informationSourceId": "Single-Org",
+        "informationSourceOrganization": "State University"
+      },
+      "awardedByRefOrganization": {
+        "name": "National Nurse Aide Assessment Program (NNAAP)",
+        "identifier": "organization-nnaap-single-org-008",
+        "informationSourceId": "Single-Org",
+        "informationSourceOrganization": "State University"
+      },
+      "offeredByRefOrganization": {
+        "name": "National Nurse Aide Assessment Program (NNAAP)",
+        "identifier": "organization-nnaap-single-org-008",
+        "informationSourceId": "Single-Org",
+        "informationSourceOrganization": "State University"
+      }
+    },
+    {
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "identifier": "assessment-wgu-c165-single-org-002",
+      "name": "Objective Assessment: C165 Integrated Physical Sciences",
+      "shortName": "C165 OA",
+      "provider": "State University",
+      "type": "Competency-based objective assessment",
+      "description": "Proctored competency-based assessment verifying physical science competence for the nursing program prerequisites.",
+      "purpose": "Competency verification for course credit",
+      "assessmentLevel": "AudLevel:PostSecondaryLevel",
+      "scoreMetricType": "Competent / Not Competent",
+      "deliveryType": "Online proctored",
+      "methodType": "Objective assessment",
+      "AssessmentPerformanceLevel": [
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "assessmentperformancelevel-c165-competent-single-org-002",
+          "label": "Competent",
+          "descriptiveFeedback": "Demonstrates competency in integrated physical sciences sufficient to earn course credit."
+        }
+      ],
+      "demonstratesRefCompetency": {
+        "name": "Patient Assessment",
+        "identifier": "competency-patient-assessment-single-org-001",
+        "informationSourceId": "Single-Org",
+        "informationSourceOrganization": "State University"
+      },
+      "offeredByRefOrganization": {
+        "name": "State University",
+        "identifier": "organization-state-university-single-org-005",
+        "informationSourceId": "Single-Org",
+        "informationSourceOrganization": "State University"
+      }
+    }
+  ],
+  "CompetencyFramework": [
+    {
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "name": "Nursing & Patient Care Competency Framework",
+      "description": "Competency framework for nursing and patient-care roles, aligned to O*NET Registered Nurses and Nursing Assistants.",
+      "uri": "https://stateu.edu/frameworks/nursing-patient-care/v1",
+      "publisher": "State University",
+      "creator": "State University",
+      "publicationStatus": "Published",
+      "publicationDate": "2022-05-01",
+      "version": "1.0",
+      "identifier": "competencyframework-nursing-patient-care-single-org-001",
+      "Competency": [
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "name": "Patient Assessment",
+          "code": "NUR-01",
+          "statement": "Gathers and interprets patient data to inform care planning and identify changes in condition.",
+          "identifier": "competency-patient-assessment-single-org-001",
+          "CompetencyAlignments": [
+            {
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University",
+              "identifier": "competencyalignment-onet-rn-single-org-001",
+              "alignmentType": "majorAlignment",
+              "alignsToUri": "https://www.onetonline.org/link/summary/29-1141.00",
+              "alignsToText": "Registered Nurses",
+              "alignsToType": "O*NET-SOC Occupation"
+            }
+          ]
+        },
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "name": "Clinical Care and Safety",
+          "code": "NUR-02",
+          "statement": "Delivers safe, evidence-based bedside care and follows infection-control and safety protocols.",
+          "identifier": "competency-clinical-care-safety-single-org-002",
+          "CompetencyAlignments": [
+            {
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University",
+              "identifier": "competencyalignment-onet-cna-single-org-002",
+              "alignmentType": "minorAlignment",
+              "alignsToUri": "https://www.onetonline.org/link/summary/31-1131.00",
+              "alignsToText": "Nursing Assistants",
+              "alignsToType": "O*NET-SOC Occupation"
+            }
+          ]
+        },
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "name": "Wound Care",
+          "code": "NUR-03",
+          "statement": "Assesses and manages wounds and supports skin integrity.",
+          "identifier": "competency-wound-care-single-org-003"
+        },
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "name": "Life Support",
+          "code": "NUR-04",
+          "statement": "Performs basic and advanced life-support interventions (BLS/ACLS) in emergencies.",
+          "identifier": "competency-life-support-single-org-004"
+        },
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "name": "Health Communication",
+          "code": "NUR-05",
+          "statement": "Communicates clearly and compassionately with patients, families, and care teams.",
+          "identifier": "competency-health-communication-single-org-005"
+        }
+      ],
+      "Association": [
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "association-wound-child-of-clinical-single-org-001",
+          "competencyAssociationType": "isChildOf",
+          "competencyAssociationOriginName": "Wound Care",
+          "competencyAssociationOriginUri": "urn:lif:competency:competency-wound-care-single-org-003",
+          "competencyAssociationDestinationName": "Clinical Care and Safety",
+          "competencyAssociationDestinationUri": "urn:lif:competency:competency-clinical-care-safety-single-org-002"
+        },
+        {
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "association-lifesupport-related-clinical-single-org-002",
+          "competencyAssociationType": "isRelatedTo",
+          "competencyAssociationOriginName": "Life Support",
+          "competencyAssociationOriginUri": "urn:lif:competency:competency-life-support-single-org-004",
+          "competencyAssociationDestinationName": "Clinical Care and Safety",
+          "competencyAssociationDestinationUri": "urn:lif:competency:competency-clinical-care-safety-single-org-002"
+        }
+      ]
+    }
+  ],
+  "Program": [
+    {
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "name": "Bachelor of Science in Nursing (BSN)",
+      "description": "Pre-licensure baccalaureate nursing program preparing graduates for RN licensure (NCLEX-RN).",
+      "identifier": "program-bsn-single-org-001",
+      "programIdentifierSystem": "State University SIS",
+      "instructionalProgramCode": "51.3801",
+      "instructionalProgramUse": "CIP 2020",
+      "creditsRequired": "120",
+      "creditUnitTypeDescription": "Competency units",
+      "postSecondaryProgramLevel": "Bachelor's Degree",
+      "normalTimeCompletion": "4",
+      "normalTimeCompletionUnits": "Years",
+      "deliveryType": "Online, competency-based",
+      "distanceEducationProgram": "true",
+      "demonstratesRefCompetency": {
+        "name": "Patient Assessment",
+        "identifier": "competency-patient-assessment-single-org-001",
+        "informationSourceId": "Single-Org",
+        "informationSourceOrganization": "State University"
+      },
+      "offeredByRefOrganization": {
+        "name": "State University",
+        "identifier": "organization-state-university-single-org-005",
+        "informationSourceId": "Single-Org",
+        "informationSourceOrganization": "State University"
+      }
+    },
+    {
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "name": "Certified Nursing Assistant (CNA) Program",
+      "description": "State-approved nurse aide training program preparing students for CNA certification.",
+      "identifier": "program-cna-single-org-002",
+      "programIdentifierSystem": "training-provider-program-id",
+      "creditsRequired": "120",
+      "creditUnitTypeDescription": "Clock hours",
+      "postSecondaryProgramLevel": "Postsecondary Certificate (less than 1 year)",
+      "workBasedLearningOpportunityType": "Clinical placement",
+      "programSponsorType": "Training provider",
+      "deliveryType": "In-person with clinical",
+      "demonstratesRefCompetency": {
+        "name": "Clinical Care and Safety",
+        "identifier": "competency-clinical-care-safety-single-org-002",
+        "informationSourceId": "Single-Org",
+        "informationSourceOrganization": "State University"
+      },
+      "offeredByRefOrganization": {
+        "name": "Training Provider",
+        "identifier": "organization-training-provider-single-org-007",
+        "informationSourceId": "Single-Org",
+        "informationSourceOrganization": "State University"
+      }
+    }
+  ]
 }
