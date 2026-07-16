@@ -68,6 +68,15 @@ Parameters:
       - internet-facing
       - internal
 
+  LoadBalancerIdleTimeoutSeconds:
+    Type: String
+    Description: >-
+      ALB idle timeout (seconds). Must exceed the slowest synchronous response
+      served through this load balancer. The advisor's load_profile call runs
+      ~45s (LLM + MCP + GraphQL), so the previous 30s caused ALB 504s on demo
+      (surfaced in the browser as a CORS error). See issue #1050.
+    Default: '150'
+
   DnsZone:
     Description: Route53 hosted zone to use for the database's DNS record (<prefix>.<zone>)
     Type: 'AWS::SSM::Parameter::Value<String>'
@@ -336,7 +345,7 @@ Resources:
       Scheme: !Ref LoadBalancerScheme
       LoadBalancerAttributes:
       - Key: idle_timeout.timeout_seconds
-        Value: '30'
+        Value: !Ref LoadBalancerIdleTimeoutSeconds
       - Key: access_logs.s3.enabled
         Value: 'true'
       - Key: access_logs.s3.bucket
