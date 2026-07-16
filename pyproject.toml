@@ -119,6 +119,7 @@ asyncio_mode = "auto"
 "components/lif/mdr_dto" = "lif/mdr_dto"
 "components/lif/query_planner_client" = "lif/query_planner_client"
 "components/lif/translator_client" = "lif/translator_client"
+"components/lif/cognito_auth" = "lif/cognito_auth"
 
 [tool.ruff]
 line-length = 120
