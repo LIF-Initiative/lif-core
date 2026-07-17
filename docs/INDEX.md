@@ -45,6 +45,7 @@
 - [`composer/0002-use-hierarchical-dot-path-for-fragment-paths.md`](design/adr/composer/0002-use-hierarchical-dot-path-for-fragment-paths.md) — Composer: hierarchical dot-path for fragment paths.
 - [`data_model/0001-field-naming-and-source-standard-normalization.md`](design/adr/data_model/0001-field-naming-and-source-standard-normalization.md) — Data model: field naming & source-standard normalization (Proposed).
 - [`general/auth.md`](design/adr/general/auth.md) — ADR 0001: API and User Auth (Proposed).
+- [`general/0005-product-surfaces-and-component-tiers.md`](design/adr/general/0005-product-surfaces-and-component-tiers.md) — ADR 0005: Product surfaces (MDR / demo app / control plane) + product-tier vs demo-tier components (Proposed).
 - [`metadata_repository/0001-base-lif-automation.md`](design/adr/metadata_repository/0001-base-lif-automation.md) — MDR: base LIF automation.
 - [`metadata_repository/0002-no-partner-management.md`](design/adr/metadata_repository/0002-no-partner-management.md) — MDR: no partner management in scope.
 - [`metadata_repository/0003-not-required-deprecation-advance-notice.md`](design/adr/metadata_repository/0003-not-required-deprecation-advance-notice.md) — MDR: deprecation advance-notice not required.
