@@ -283,7 +283,6 @@ async def get_transformation_groups_from_mdr(*, config: "LIFSchemaConfig", sourc
         "source_data_model_id": source_data_model_id,
         "exportable": True,
         "pagination": False,
-        "size": 100,
     }
     headers = _build_mdr_headers(config.mdr_api_auth_token)
 
