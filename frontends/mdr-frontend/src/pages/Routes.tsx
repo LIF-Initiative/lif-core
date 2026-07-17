@@ -9,6 +9,7 @@ import Login from "../pages/Login";
 import AuthCallback from "../pages/AuthCallback";
 import Workspaces from "../pages/Workspaces";
 import ApiKeys from "../pages/ApiKeys";
+import ExportPlayground from "../pages/ExportPlayground";
 import InviteAccept from "../pages/InviteAccept";
 import AuthGuard from "../components/AuthGuard";
 import LifModel from "./Explore/lif-model";
@@ -51,6 +52,12 @@ const routes: RouteObject[] = [
         path: "api-keys",
         element: <ApiKeys />,
         handle: { name: "API Keys" },
+      },
+      {
+        // Interactive LDE /exports playground: pick a test learner + format (#1036).
+        path: "export-playground",
+        element: <ExportPlayground />,
+        handle: { name: "Export Playground" },
       },
       {
         path: "explore",
