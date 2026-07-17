@@ -1,19 +1,14 @@
 """Regression tests for import_datamodel (Issue #668).
 
-These exercise the real import_datamodel logic end-to-end with the I/O service
-calls mocked out, guarding the three bugs fixed alongside #668:
-
-1. attribute name->id map used the `create_attribute` function object instead of
-   the created row (`created_attribute.Id`), corrupting later reference resolution.
-2. `create_entity_attribute_association` was never imported, so any attribute with
-   an EntityName raised NameError mid-import (the #668 report).
-3. the constraints loop clobbered Attribute/Entity element ids to None via a stray
-   `else`, never persisted the built DTO, and forwarded the source-DB ForDataModelId.
+These exercise the real import_datamodel logic end-to-end with the create_* I/O
+calls mocked out. Each test guards a specific #668 regression — see the docstring
+on each test rather than a running list here (which would drift as tests are added).
 """
 
 import types
-import pytest
 from unittest.mock import AsyncMock
+
+import pytest
 
 from lif.datatypes.mdr_sql_model import DataModelType, DatamodelElementType
 from lif.mdr_dto.datamodel_dto import CreateDataModelDTO
@@ -24,9 +19,9 @@ from lif.mdr_dto.import_export_dto import (
     ImportEntityDTO,
 )
 
-pytestmark = pytest.mark.asyncio
-
-svc = pytest.importorskip("lif.mdr_services.import_export_service")
+# Hard import (not importorskip): the premise of this suite is that the module used
+# to blow up at import/call time, so a future import regression must FAIL, not skip.
+from lif.mdr_services import import_export_service as svc
 
 NEW_DATA_MODEL_ID = 42
 ENTITY_ID = 100
@@ -71,6 +66,9 @@ def _import_payload():
 
 
 async def test_import_creates_entity_attribute_association_with_resolved_ids(patched_services):
+    """Guards #668 bugs 1 & 2: the attribute name->id map used the create_attribute
+    function object instead of created_attribute.Id, and create_entity_attribute_association
+    was never imported (NameError mid-import for any attribute with an EntityName)."""
     # Before the fix this raised (NameError on the unimported function / AttributeError on the
     # function object's .Id) before ever reaching this assertion.
     await svc.import_datamodel(session=AsyncMock(), data=_import_payload())
@@ -83,6 +81,8 @@ async def test_import_creates_entity_attribute_association_with_resolved_ids(pat
 
 
 async def test_import_persists_constraint_with_remapped_ids(patched_services):
+    """Guards #668 bug 3: the constraints loop clobbered element ids to None, never
+    persisted the built DTO, and forwarded the source-DB ForDataModelId."""
     await svc.import_datamodel(session=AsyncMock(), data=_import_payload())
 
     create_constraint = patched_services["create_data_model_constraint"]
@@ -94,8 +94,8 @@ async def test_import_persists_constraint_with_remapped_ids(patched_services):
 
 
 async def test_import_skips_constraint_with_unresolvable_element(patched_services):
-    # A constraint whose ElementName isn't among the imported elements must be skipped
-    # (logged, not persisted) rather than crashing or silently being lost.
+    """An unresolvable constraint element is skipped (logged + reported in the
+    response), not crashed or silently dropped (#668)."""
     payload = ImportDataModelDTO(
         DataModel=CreateDataModelDTO(Name="TestDM", Type=DataModelType.SourceSchema, DataModelVersion="1.0"),
         Entities=[ImportEntityDTO(Name="Person", UniqueName="Person")],
@@ -113,6 +113,10 @@ async def test_import_skips_constraint_with_unresolvable_element(patched_service
         ],
     )
 
-    await svc.import_datamodel(session=AsyncMock(), data=payload)
+    result = await svc.import_datamodel(session=AsyncMock(), data=payload)
 
     patched_services["create_data_model_constraint"].assert_not_awaited()
+    # the skip is reported back to the caller, not just logged (cbeach47 review)
+    assert result["skipped_constraints"] == [
+        {"element_type": str(DatamodelElementType.Entity), "element_name": "NoSuchEntity"}
+    ]

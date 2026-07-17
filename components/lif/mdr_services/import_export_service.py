@@ -261,6 +261,7 @@ async def import_datamodel(session: AsyncSession, data: ImportDataModelDTO):
         created_association = await create_entity_association(session=session, data=entity_association_dto)
 
     # Creating constraints
+    skipped_constraints: list[dict] = []
     for constraint in data.DataModelConstraints:
         if constraint.ElementType == DatamodelElementType.Attribute:
             element_id = attribute_name_id.get(constraint.ElementName)
@@ -271,7 +272,8 @@ async def import_datamodel(session: AsyncSession, data: ImportDataModelDTO):
         else:
             element_id = None
 
-        if element_id:
+        # `is not None`, not truthiness: a resolved ElementId of 0 is a valid id, not "not found".
+        if element_id is not None:
             # ElementName is the portable (name-based) reference; the create DTO wants the
             # resolved DB ElementId. ForDataModelId from the export is a source-DB artifact, so
             # remap it to the model we just created.
@@ -283,14 +285,18 @@ async def import_datamodel(session: AsyncSession, data: ImportDataModelDTO):
             await create_data_model_constraint(session=session, data=constraint_dto)
         else:
             # Don't drop a constraint silently — a malformed/incomplete export (element name not
-            # found among the imported attributes/entities/value sets) should be visible.
+            # found among the imported attributes/entities/value sets) should be visible, both in
+            # the logs and in the response so the caller knows what didn't come across.
             logger.warning(
                 "Skipping constraint: %s element %r not found in the imported model",
                 constraint.ElementType,
                 constraint.ElementName,
             )
+            skipped_constraints.append(
+                {"element_type": str(constraint.ElementType), "element_name": constraint.ElementName}
+            )
 
-    return {"ok": True}
+    return {"ok": True, "skipped_constraints": skipped_constraints}
 
 
 async def clone_datamodel(session: AsyncSession, data: CreateCloneDTO):
