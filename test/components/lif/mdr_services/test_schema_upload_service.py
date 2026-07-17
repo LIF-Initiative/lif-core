@@ -27,6 +27,24 @@ def test_parse_reference_key_with_relationship():
     assert svc.parse_reference_key("issuedByRefOrganization") == ("issuedBy", "Organization")
 
 
+def test_parse_reference_key_relationship_containing_ref():
+    # A relationship name can itself contain "Ref" (isReferencedBy, refersTo). rpartition splits
+    # on the LAST "Ref", so the child entity name stays intact; splitting on the first would yield
+    # ("is", "erencedByRefOrganization") whose lowercase child fails the PascalCase guard and the
+    # reference would be silently dropped (cbeach47 #1007 review).
+    assert svc.parse_reference_key("isReferencedByRefOrganization") == ("isReferencedBy", "Organization")
+    assert svc.is_inlined_reference("isReferencedByRefOrganization", {"type": "object"}) is True
+
+
+def test_parse_reference_key_has_relevant_relationship_name_is_lost():
+    # KNOWN, generator-side loss (tracked in #1062): the generator encodes has*/relevant*
+    # relationships WITHOUT the name (schema_generation_service.py:802 -> "Ref" + child), so
+    # e.g. hasManager exports as "RefEmployee". The reader can't recover a name that was never
+    # emitted, so it round-trips to relationship=None. Asserted here so the loss is documented,
+    # not hidden (the round-trip test only uses issuedBy, which survives).
+    assert svc.parse_reference_key("RefEmployee") == (None, "Employee")
+
+
 @pytest.mark.parametrize(
     "prop_name,prop,expected",
     [

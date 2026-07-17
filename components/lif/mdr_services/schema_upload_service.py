@@ -62,10 +62,19 @@ REFERENCE_KEY_MARKER = "Ref"
 def parse_reference_key(prop_name: str) -> tuple[Optional[str], str]:
     """Split an inlined-reference key into (relationship, child_entity_name).
 
-    "RefOrganization"         -> (None, "Organization")
-    "issuedByRefOrganization" -> ("issuedBy", "Organization")
+    "RefOrganization"               -> (None, "Organization")
+    "issuedByRefOrganization"       -> ("issuedBy", "Organization")
+    "isReferencedByRefOrganization" -> ("isReferencedBy", "Organization")
+
+    Split on the LAST "Ref" (``rpartition``), not the first: a relationship name can itself
+    contain "Ref" (e.g. ``isReferencedBy``, ``refersTo``). Splitting on the first occurrence
+    would mis-parse ``isReferencedByRefOrganization`` as ("is", "erencedByRefOrganization"),
+    whose lowercase child then fails the PascalCase guard in ``is_inlined_reference`` and the
+    reference gets silently dropped. Splitting on the last "Ref" keeps the child entity name
+    (the trailing PascalCase token) intact. (A child entity legitimately named ``Ref...`` is the
+    residual ambiguity the module NOTE's two-sided marker fix would resolve.)
     """
-    relationship, _, child_name = prop_name.partition(REFERENCE_KEY_MARKER)
+    relationship, _, child_name = prop_name.rpartition(REFERENCE_KEY_MARKER)
     return (relationship or None), child_name
 
 
