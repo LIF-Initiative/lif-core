@@ -2,6 +2,13 @@
     "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
     "flagWords": [],
     "words": [
+        "aget",
+        "aiter",
+        "astream",
+        "cheatsheet",
+        "flippable",
+        "keepalive",
+        "threadpool",
         "elementtype",
         "datamodelelementtype",
         "unparseable",

@@ -1,8 +1,10 @@
+import os
 from unittest import mock
 
 import httpx
 import pytest
 from lif.translator_client import TranslatorException, translate_learner_data
+from lif.translator_client.core import DEFAULT_TRANSLATOR_CLIENT_TIMEOUT_SECONDS, _get_translator_timeout_seconds
 
 _BASE_URL = "http://localhost:8007"
 _SOURCE_ID = "17"
@@ -78,3 +80,29 @@ async def test_connect_error_raises_translator_exception():
         mock_cls.return_value.__aexit__ = mock.AsyncMock(return_value=False)
         with pytest.raises(TranslatorException, match="connection refused"):
             await translate_learner_data(_BASE_URL, _SOURCE_ID, _TARGET_ID, _LEARNER_DATA)
+
+
+def test_timeout_defaults_when_env_var_absent():
+    with mock.patch.dict(os.environ, {}, clear=True):
+        assert _get_translator_timeout_seconds() == DEFAULT_TRANSLATOR_CLIENT_TIMEOUT_SECONDS
+
+
+def test_timeout_reads_from_env_var():
+    with mock.patch.dict(os.environ, {"TRANSLATOR_CLIENT_TIMEOUT_SECONDS": "5"}):
+        assert _get_translator_timeout_seconds() == 5
+
+
+async def test_default_timeout_passed_to_async_client():
+    mock_cls, _ = _make_http_mock(200, {})
+    with mock.patch.dict(os.environ, {}, clear=True):
+        with mock.patch("lif.translator_client.core.httpx.AsyncClient", mock_cls):
+            await translate_learner_data(_BASE_URL, _SOURCE_ID, _TARGET_ID, _LEARNER_DATA)
+    assert mock_cls.call_args.kwargs["timeout"] == DEFAULT_TRANSLATOR_CLIENT_TIMEOUT_SECONDS
+
+
+async def test_configured_timeout_passed_to_async_client():
+    mock_cls, _ = _make_http_mock(200, {})
+    with mock.patch.dict(os.environ, {"TRANSLATOR_CLIENT_TIMEOUT_SECONDS": "7"}):
+        with mock.patch("lif.translator_client.core.httpx.AsyncClient", mock_cls):
+            await translate_learner_data(_BASE_URL, _SOURCE_ID, _TARGET_ID, _LEARNER_DATA)
+    assert mock_cls.call_args.kwargs["timeout"] == 7

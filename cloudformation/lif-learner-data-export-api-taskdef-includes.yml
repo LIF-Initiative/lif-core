@@ -14,7 +14,21 @@ Environment:
   - Name: LIF_TRANSLATOR_BASE_URL
     Value:
       Fn::Sub: "http://translator-org1.lif.${EnvironmentName}.aws:8007"
+  - Name: QUERY_PLANNER_CLIENT_TIMEOUT_SECONDS
+    Value: "30"
+  - Name: TRANSLATOR_CLIENT_TIMEOUT_SECONDS
+    Value: "30"
+  # API Key Auth configuration (public paths that don't require auth)
+  - Name: LDE_AUTH__PUBLIC_PATHS
+    Value: "/health,/health-check"
+  - Name: LDE_AUTH__PUBLIC_PATH_PREFIXES
+    Value: "/docs,/openapi.json"
 Secrets:
   - Name: LIF_MDR_API_AUTH_TOKEN
     ValueFrom:
       Fn::Sub: "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${EnvironmentName}/${ServiceName}/MdrApiKey"
+  # API keys for external/downstream access (key:label CSV; auth disabled if unset).
+  # Provision via scripts/setup-api-keys.sh learner-data-export-api <env> --temporary <n> --apply
+  - Name: LDE_AUTH__API_KEYS
+    ValueFrom:
+      Fn::Sub: "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${EnvironmentName}/${ServiceName}/ApiKeys"

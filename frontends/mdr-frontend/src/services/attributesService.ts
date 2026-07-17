@@ -25,6 +25,9 @@ export interface AttributeParams {
   ContributorOrganization?: string | null;
   Extension?: boolean;
   ExtensionNotes?: string | null;
+  // When set, the API creates the attribute AND its association to this entity in one
+  // transaction, so a dropped response can't orphan the attribute (#1028).
+  EntityId?: number;
 }
 
 export interface AttributeDTO {

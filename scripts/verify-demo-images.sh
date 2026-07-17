@@ -98,10 +98,10 @@ main() {
             continue
         fi
 
-        # Key by ECR repo path (strip registry and tag)
-        local repo="${image%%:*}"
-        repo="${repo#*/}"
-        ecs_images["$repo"]="$image"
+        # Key by ECS service name. Multiple services can share one ECR repo (e.g.
+        # query-planner-org{1,2,3} all use lif_query_planner_api), so keying by repo would
+        # collapse them and compare every variant against one arbitrary org's image.
+        ecs_images["$svc_name"]="$image"
     done
 
     log_info "Found ${#ecs_images[@]} running services"
@@ -124,17 +124,20 @@ main() {
             continue
         fi
 
-        # Extract repo path from param file image URL
-        local param_repo="${param_image%%:*}"
-        param_repo="${param_repo#*/}"
         local param_tag="${param_image##*:}"
 
         local base_name
         base_name=$(basename "$file")
 
-        # Look up running image by repo
-        if [[ -n "${ecs_images[$param_repo]+_}" ]]; then
-            local running_image="${ecs_images[$param_repo]}"
+        # Map the param/stack file to its ECS service:
+        #   cloudformation/demo-lif-<svc>.params -> <svc>-FARGATE
+        # Keying per service (not per ECR repo) compares per-org services individually.
+        local svc_name
+        svc_name="$(basename "$file" .params | sed 's/^demo-lif-//')-FARGATE"
+
+        # Look up running image by service name
+        if [[ -n "${ecs_images[$svc_name]+_}" ]]; then
+            local running_image="${ecs_images[$svc_name]}"
             local running_tag="${running_image##*:}"
 
             if [[ "$param_tag" == "$running_tag" ]]; then

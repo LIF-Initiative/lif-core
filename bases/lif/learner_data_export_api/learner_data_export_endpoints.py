@@ -5,7 +5,7 @@ from fastapi import APIRouter, HTTPException, Query, Request
 from lif.datatypes.core import TargetTransformationDataModelDTO, TargetTransformationDataModelsDTO
 from lif.datatypes.mdr_consumer import MdrRetrieveDataModelsDTO
 from lif.lif_schema_config.core import LIFSchemaConfig
-from lif.mdr_client.core import MDRClientException, fetch_data_models_from_mdr
+from lif.mdr_client.core import MDRClientException, fetch_data_models_from_mdr, get_transformation_groups_from_mdr
 from lif.mdr_utils.logger_config import get_logger
 from lif.query_planner_client import QueryPlannerException, fetch_query_from_query_planner
 from lif.translator_client import TranslatorException, translate_learner_data
@@ -42,7 +42,7 @@ async def get_data(
             "dataModelName: %s, dataModelVersion: %s, "
             "dataModelContributorOrganization: %s"
         ),
-        request.state.principal,
+        getattr(request.state, "api_client", "unknown"),
         learner_id,
         data_model_name,
         data_model_version,
@@ -144,29 +144,66 @@ async def get_data(
     return translated_data
 
 
+def _version_sort_key(version: str) -> list[tuple[int, object]]:
+    # Sort dotted versions numerically (so "1.9.0" < "1.10.0"), falling back to
+    # lexical ordering for non-numeric segments. Each segment is tagged so numeric
+    # and non-numeric parts never compare against each other.
+    return [(0, int(part)) if part.isdigit() else (1, part) for part in version.split(".")]
+
+
 @router.get("/available-data-formats", response_model=TargetTransformationDataModelsDTO)
 async def get_available_data_formats(request: Request):
-    # TODO: Build this out.
-    logger.info("Received request for available data formats as %s", request.state.principal)
+    source_schema_id = CONFIG.openapi_data_model_id
+    if source_schema_id is None:
+        raise HTTPException(
+            status_code=HTTPStatus.INTERNAL_SERVER_ERROR,
+            detail="OPENAPI_DATA_MODEL_ID is not configured. Unable to retrieve available data formats",
+        )
+
+    logger.info(
+        "Received request for available data formats as %s, source model id = %s",
+        getattr(request.state, "api_client", "unknown"),
+        source_schema_id,
+    )
+
+    try:
+        transformation_groups_json = await get_transformation_groups_from_mdr(
+            config=CONFIG, source_data_model_id=source_schema_id
+        )
+    except MDRClientException as e:
+        raise HTTPException(
+            status_code=HTTPStatus.INTERNAL_SERVER_ERROR, detail="Unable to retrieve available data formats"
+        ) from e
+
+    # Each transformation group yields one target data model + the group's version.
+    # Collapse groups that share a target (keyed by target data model id) into a
+    # single data format whose TransformationVersions lists every group version.
+    data_models_by_id: dict[int, TargetTransformationDataModelDTO] = {}
+    for group in transformation_groups_json.get("data", []):
+        target_id = group.get("TargetDataModelId")
+        if target_id is None:
+            continue
+
+        data_model = data_models_by_id.get(target_id)
+        if data_model is None:
+            target = group.get("TargetDataModel") or {}
+            data_model = TargetTransformationDataModelDTO(
+                name=target.get("name") or "",
+                version=target.get("version") or "",
+                contributorOrganization=target.get("contributorOrganization") or "",
+                TransformationVersions=[],
+            )
+            data_models_by_id[target_id] = data_model
+
+        group_version = group.get("GroupVersion")
+        if group_version and group_version not in data_model.TransformationVersions:
+            data_model.TransformationVersions.append(group_version)
+
+    for data_model in data_models_by_id.values():
+        data_model.TransformationVersions.sort(key=_version_sort_key)
 
     data_formats = TargetTransformationDataModelsDTO(
-        metadata={"total": 3},
-        DataFormats=[
-            TargetTransformationDataModelDTO(
-                name="OpenBadges 3.0",
-                version="1.0.3",
-                contributorOrganization="OB",
-                TransformationVersions=["1.0.0", "1.1.0"],
-            ),
-            TargetTransformationDataModelDTO(
-                name="CEDS", version="2.0.0", contributorOrganization="CEDS Org", TransformationVersions=["2.0.0"]
-            ),
-            TargetTransformationDataModelDTO(
-                name="ExampleDataSource",
-                version="1.0.1",
-                contributorOrganization="Community",
-                TransformationVersions=["1.3.0"],
-            ),
-        ],
+        metadata={"total": len(data_models_by_id)},
+        DataFormats=sorted(data_models_by_id.values(), key=lambda dm: dm.name),
     )
     return data_formats

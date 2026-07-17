@@ -43,6 +43,7 @@
 - [`ai_architecture/0001-ai-architecture-overview.md`](design/adr/ai_architecture/0001-ai-architecture-overview.md) — AI architecture overview.
 - [`composer/0001-implement-as-module-component.md`](design/adr/composer/0001-implement-as-module-component.md) — Composer: implement as module component.
 - [`composer/0002-use-hierarchical-dot-path-for-fragment-paths.md`](design/adr/composer/0002-use-hierarchical-dot-path-for-fragment-paths.md) — Composer: hierarchical dot-path for fragment paths.
+- [`data_model/0001-field-naming-and-source-standard-normalization.md`](design/adr/data_model/0001-field-naming-and-source-standard-normalization.md) — Data model: field naming & source-standard normalization (Proposed).
 - [`general/auth.md`](design/adr/general/auth.md) — ADR 0001: API and User Auth (Proposed).
 - [`metadata_repository/0001-base-lif-automation.md`](design/adr/metadata_repository/0001-base-lif-automation.md) — MDR: base LIF automation.
 - [`metadata_repository/0002-no-partner-management.md`](design/adr/metadata_repository/0002-no-partner-management.md) — MDR: no partner management in scope.
@@ -55,7 +56,7 @@
 - [`orchestrator/0001-orchestrator-for-demo.md`](design/adr/orchestrator/0001-orchestrator-for-demo.md) — Orchestrator: design for demo deployment.
 - [`translator/0001-initialization-vs-mdr-dependency.md`](design/adr/translator/0001-initialization-vs-mdr-dependency.md) — Translator: initialization vs MDR dependency.
 - [`translator/0002-query-translation.md`](design/adr/translator/0002-query-translation.md) — Translator: query translation approach.
-- *Subdirectories `api/`, `data_model/`, `query_cache/`, `query_mapper/` currently hold only `_template.md` placeholders.*
+- *Subdirectories `api/`, `query_cache/`, `query_mapper/` currently hold only `_template.md` placeholders.*
 
 ### `docs/design/cross-cutting/` — Topics spanning services
 
@@ -77,15 +78,19 @@
 - [`adding-a-new-microservice.md`](operations/guides/adding-a-new-microservice.md) — Runbook for standing up a new HTTP microservice: Polylith brick layout, pyproject hygiene, Dockerfile2, AuthMiddleware wiring, docker-compose entry.
 - [`creating-a-data-source-adapter.md`](operations/guides/creating-a-data-source-adapter.md) — Reference for the data source adapter contract: what adapters are, what they receive, what they return.
 - [`demo-environment-update.md`](operations/guides/demo-environment-update.md) — End-to-end runbook for promoting dev images to demo.
+- [`deploying-lif-at-your-institution.md`](operations/guides/deploying-lif-at-your-institution.md) — Adopter-facing hub guide for standing up your own LIF instance: deployment shapes, stack bring-up, data model in MDR, source wiring, auth/tenancy, ops; links the detailed spokes and flags self-host gaps (#1004).
 - [`deployment.md`](operations/guides/deployment.md) — Deployment scripts, env config (dev vs. demo), MDR schema migrations, Docker build dependency resolution, ECS/CloudWatch debugging, querying the MDR API.
 - [`graphql-api-keys.md`](operations/guides/graphql-api-keys.md) — GraphQL org1 API key authentication: SSM key storage, `X-API-Key` flow, `setup-graphql-api-keys.sh` service/workshop modes.
+- [`lde-api-keys.md`](operations/guides/lde-api-keys.md) — Learner Data Export API key authentication: shared `api_key_auth` middleware, `LDE_AUTH__API_KEYS` SSM flow, `setup-api-keys.sh` generation, deploy-ordering gotcha.
 - [`load-testing.md`](operations/guides/load-testing.md) — Load testing notes for LIF services.
+- [`mdr-ui-e2e-playwright.md`](operations/guides/mdr-ui-e2e-playwright.md) — Driving the MDR UI end-to-end with Playwright: scratchpad setup, Cognito hosted-UI login automation + the duplicate-responsive-input gotcha, persisting login state, when to prefer the API instead.
 - [`self-serve-registration-walkthrough.md`](operations/guides/self-serve-registration-walkthrough.md) — End-to-end walkthrough of the #884 self-serve flow (register → workspace → invite → switch); tester checklist + admin/operator notes for verifying it on dev or demo.
 - [`testing.md`](operations/guides/testing.md) — Unit/integration test principles, sample data orgs, the 6 test users, service-layer testing order.
 
 ### `docs/operations/proposals/` — Proposed work
 
-*Currently no committed proposals. Several proposal drafts exist in working trees and will land via separate PRs.*
+- [`advisor-streaming.md`](operations/proposals/advisor-streaming.md) — End-to-end token streaming for the Advisor (NDJSON over `astream_events` + `StreamingResponse` + a fetch reader), including the single-worker reframe concurrency fix, ALB idle-timeout risk, rollout, and PR sequencing (#970).
+- [`mdr-transformation-output-validation.md`](operations/proposals/mdr-transformation-output-validation.md) — Validate the MDR bulk-transform preview output against the target LIF schema (Ajv) at authoring time; uses the already-wired `targetSchema` prop (#973).
 
 ---
 

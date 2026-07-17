@@ -12,6 +12,10 @@ const api = axios.create({
   // config to set Access-Control-Allow-Credentials: true and an explicit
   // origin (not "*"), which the MDR API already does.
   withCredentials: true,
+  // Fail a stalled request instead of hanging indefinitely. Without a timeout, a request
+  // whose response is lost hangs until the browser/OS gives up, surfacing as an ambiguous
+  // "Network error" — the trigger for the orphaned-attribute class of bugs (#1028).
+  timeout: 30000,
 });
 
 // Add a response interceptor to handle token refresh

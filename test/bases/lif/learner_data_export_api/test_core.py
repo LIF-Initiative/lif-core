@@ -9,7 +9,8 @@ from lif.mdr_client import MDRClientException
 from lif.query_planner_client import QueryPlannerException
 from lif.translator_client import TranslatorException
 
-DEFAULT_API_KEY = "changeme6"
+# Matches the key configured in conftest.py (LDE_AUTH__API_KEYS).
+DEFAULT_API_KEY = "test-lde-key"
 
 
 def get_client() -> AsyncClient:
@@ -30,40 +31,261 @@ async def test_available_data_formats_401():
         response = await client.get("/available-data-formats")
         assert response.status_code == 401
         response_json = response.json()
-        expected_response = {"detail": "Authentication required: Provide either Bearer token or API key"}
+        expected_response = {"detail": "Missing API key. Provide X-API-Key header."}
         assert response_json == expected_response
 
 
-async def test_available_data_formats_default_token():
+async def test_available_data_formats_invalid_key_401():
     async with get_client() as client:
-        response = await client.get("/available-data-formats", headers={"X-API-Key": DEFAULT_API_KEY})
-        assert response.status_code == 200
-        response_json = response.json()
-        expected_response = {
-            "metadata": {"total": 3},
-            "DataFormats": [
-                {
-                    "name": "OpenBadges 3.0",
-                    "version": "1.0.3",
-                    "contributorOrganization": "OB",
-                    "TransformationVersions": ["1.0.0", "1.1.0"],
-                },
-                {
-                    "name": "CEDS",
-                    "version": "2.0.0",
-                    "contributorOrganization": "CEDS Org",
-                    "TransformationVersions": ["2.0.0"],
-                },
-                {
+        response = await client.get("/available-data-formats", headers={"X-API-Key": "not-a-valid-key"})
+        assert response.status_code == 401
+        assert response.json() == {"detail": "Invalid API key."}
+
+
+async def test_available_data_formats_default_token():
+    # Transformation groups as returned by MDR (exportable=true). OpenBadges appears
+    # in two groups (same target id) with versions out of order, and the rows are not
+    # name-sorted, to exercise the endpoint's grouping + sorting.
+    mdr_transformation_groups = {
+        "total": 4,
+        "data": [
+            {
+                "TargetDataModelId": 1,
+                "GroupVersion": "1.1.0",
+                "TargetDataModel": {"name": "OpenBadges 3.0", "version": "1.0.3", "contributorOrganization": "OB"},
+            },
+            {
+                "TargetDataModelId": 1,
+                "GroupVersion": "1.0.0",
+                "TargetDataModel": {"name": "OpenBadges 3.0", "version": "1.0.3", "contributorOrganization": "OB"},
+            },
+            {
+                "TargetDataModelId": 2,
+                "GroupVersion": "2.0.0",
+                "TargetDataModel": {"name": "CEDS", "version": "2.0.0", "contributorOrganization": "CEDS Org"},
+            },
+            {
+                "TargetDataModelId": 3,
+                "GroupVersion": "1.3.0",
+                "TargetDataModel": {
                     "name": "ExampleDataSource",
                     "version": "1.0.1",
                     "contributorOrganization": "Community",
-                    "TransformationVersions": ["1.3.0"],
                 },
-            ],
-        }
-        diff = DeepDiff(expected_response, response_json)
-        assert not diff, diff  # prints out the differences if any
+            },
+        ],
+    }
+
+    mock_response = mock.Mock()
+    mock_response.status_code = 200
+    mock_response.raise_for_status = mock.Mock()
+    mock_response.json = mock.Mock(return_value=mdr_transformation_groups)
+
+    mock_mdr_client = mock.Mock()
+    mock_mdr_client.get = mock.AsyncMock(return_value=mock_response)
+
+    async def fake_get_mdr_client():
+        yield mock_mdr_client
+
+    with (
+        mock.patch("lif.mdr_client.core._get_mdr_client", new=fake_get_mdr_client),
+        mock.patch.object(_ep.CONFIG, "openapi_data_model_id", "17"),
+    ):
+        async with get_client() as client:
+            response = await client.get("/available-data-formats", headers={"X-API-Key": DEFAULT_API_KEY})
+
+    assert response.status_code == 200, response.text
+    response_json = response.json()
+    # DataFormats sorted by name asc; OpenBadges TransformationVersions sorted asc.
+    expected_response = {
+        "metadata": {"total": 3},
+        "DataFormats": [
+            {
+                "name": "CEDS",
+                "version": "2.0.0",
+                "contributorOrganization": "CEDS Org",
+                "TransformationVersions": ["2.0.0"],
+            },
+            {
+                "name": "ExampleDataSource",
+                "version": "1.0.1",
+                "contributorOrganization": "Community",
+                "TransformationVersions": ["1.3.0"],
+            },
+            {
+                "name": "OpenBadges 3.0",
+                "version": "1.0.3",
+                "contributorOrganization": "OB",
+                "TransformationVersions": ["1.0.0", "1.1.0"],
+            },
+        ],
+    }
+    diff = DeepDiff(expected_response, response_json)
+    assert not diff, diff  # prints out the differences if any
+
+
+def _fake_get_mdr_client(*, json_payload=None, get_side_effect=None):
+    """Build a replacement for mdr_client._get_mdr_client that yields a mock client.
+
+    Pass json_payload for a 200 response, or get_side_effect to make client.get raise.
+    """
+    mock_response = mock.Mock()
+    mock_response.status_code = 200
+    mock_response.raise_for_status = mock.Mock()
+    mock_response.json = mock.Mock(return_value=json_payload)
+
+    mock_mdr_client = mock.Mock()
+    if get_side_effect is not None:
+        mock_mdr_client.get = mock.AsyncMock(side_effect=get_side_effect)
+    else:
+        mock_mdr_client.get = mock.AsyncMock(return_value=mock_response)
+
+    async def fake_get_mdr_client():
+        yield mock_mdr_client
+
+    return fake_get_mdr_client
+
+
+async def test_available_data_formats_empty():
+    with (
+        mock.patch(
+            "lif.mdr_client.core._get_mdr_client", new=_fake_get_mdr_client(json_payload={"total": 0, "data": []})
+        ),
+        mock.patch.object(_ep.CONFIG, "openapi_data_model_id", "17"),
+    ):
+        async with get_client() as client:
+            response = await client.get("/available-data-formats", headers={"X-API-Key": DEFAULT_API_KEY})
+
+    assert response.status_code == 200, response.text
+    assert response.json() == {"metadata": {"total": 0}, "DataFormats": []}
+
+
+async def test_available_data_formats_versions_sorted_numerically():
+    # "1.10.0" must sort after "1.9.0" (numeric, not lexical). Single numeric segments
+    # ("423") sort among the numeric-first-segment versions, while versions whose first
+    # segment is non-numeric ("1.a"/"1.c" share a numeric first segment, but "B.23.1",
+    # "E.43", "One" do not) fall back to lexical ordering after the numeric ones.
+    mdr_transformation_groups = {
+        "total": 9,
+        "data": [
+            {
+                "TargetDataModelId": 1,
+                "GroupVersion": gv,
+                "TargetDataModel": {"name": "Model", "version": "1.0", "contributorOrganization": "Org"},
+            }
+            for gv in ("B.23.1", "1.10.0", "One", "1.c", "1.a", "423", "1.2.0", "E.43", "1.9.0")
+        ],
+    }
+
+    with (
+        mock.patch(
+            "lif.mdr_client.core._get_mdr_client", new=_fake_get_mdr_client(json_payload=mdr_transformation_groups)
+        ),
+        mock.patch.object(_ep.CONFIG, "openapi_data_model_id", "17"),
+    ):
+        async with get_client() as client:
+            response = await client.get("/available-data-formats", headers={"X-API-Key": DEFAULT_API_KEY})
+
+    assert response.status_code == 200, response.text
+    assert response.json()["DataFormats"][0]["TransformationVersions"] == [
+        "1.2.0",
+        "1.9.0",
+        "1.10.0",
+        "1.a",
+        "1.c",
+        "423",
+        "B.23.1",
+        "E.43",
+        "One",
+    ]
+
+
+async def test_available_data_formats_mdr_error_returns_500():
+    with (
+        mock.patch(
+            "lif.mdr_client.core._get_mdr_client", new=_fake_get_mdr_client(get_side_effect=RuntimeError("boom"))
+        ),
+        mock.patch.object(_ep.CONFIG, "openapi_data_model_id", "17"),
+    ):
+        async with get_client() as client:
+            response = await client.get("/available-data-formats", headers={"X-API-Key": DEFAULT_API_KEY})
+
+    assert response.status_code == 500
+    assert response.json() == {"detail": "Unable to retrieve available data formats"}
+
+
+async def test_available_data_formats_skips_deduplicated_and_defaults():
+    # Exercises the grouping branches: a group with no TargetDataModelId is skipped,
+    # repeated GroupVersions for one target are deduped, and a missing TargetDataModel
+    # object falls back to empty-string name/version/org.
+    mdr_transformation_groups = {
+        "total": 5,
+        "data": [
+            {
+                "TargetDataModelId": 1,
+                "GroupVersion": "2.0",
+                "TargetDataModel": {"name": "Zeta", "version": "9.9", "contributorOrganization": "Z Org"},
+            },
+            {
+                "TargetDataModelId": 1,
+                "GroupVersion": "1.0",
+                "TargetDataModel": {"name": "Zeta", "version": "9.9", "contributorOrganization": "Z Org"},
+            },
+            {
+                # Duplicate version for target 1 -> deduped.
+                "TargetDataModelId": 1,
+                "GroupVersion": "1.0",
+                "TargetDataModel": {"name": "Zeta", "version": "9.9", "contributorOrganization": "Z Org"},
+            },
+            {
+                # No TargetDataModelId -> skipped entirely.
+                "GroupVersion": "5.0",
+                "TargetDataModel": {"name": "Ignored", "version": "1.0", "contributorOrganization": "X"},
+            },
+            {
+                # No TargetDataModel object -> name/version/org default to "".
+                "TargetDataModelId": 2,
+                "GroupVersion": "1.0",
+            },
+        ],
+    }
+
+    with (
+        mock.patch(
+            "lif.mdr_client.core._get_mdr_client", new=_fake_get_mdr_client(json_payload=mdr_transformation_groups)
+        ),
+        mock.patch.object(_ep.CONFIG, "openapi_data_model_id", "17"),
+    ):
+        async with get_client() as client:
+            response = await client.get("/available-data-formats", headers={"X-API-Key": DEFAULT_API_KEY})
+
+    assert response.status_code == 200, response.text
+    # Two distinct targets; sorted by name asc puts the empty-name target first.
+    expected_response = {
+        "metadata": {"total": 2},
+        "DataFormats": [
+            {"name": "", "version": "", "contributorOrganization": "", "TransformationVersions": ["1.0"]},
+            {
+                "name": "Zeta",
+                "version": "9.9",
+                "contributorOrganization": "Z Org",
+                "TransformationVersions": ["1.0", "2.0"],
+            },
+        ],
+    }
+    diff = DeepDiff(expected_response, response.json())
+    assert not diff, diff
+
+
+async def test_available_data_formats_missing_config_returns_500():
+    with mock.patch.object(_ep.CONFIG, "openapi_data_model_id", None):
+        async with get_client() as client:
+            response = await client.get("/available-data-formats", headers={"X-API-Key": DEFAULT_API_KEY})
+
+    assert response.status_code == 500
+    assert response.json() == {
+        "detail": "OPENAPI_DATA_MODEL_ID is not configured. Unable to retrieve available data formats"
+    }
 
 
 async def test_export_401():
@@ -71,7 +293,7 @@ async def test_export_401():
         response = await client.get("/exports")
         assert response.status_code == 401
         response_json = response.json()
-        expected_response = {"detail": "Authentication required: Provide either Bearer token or API key"}
+        expected_response = {"detail": "Missing API key. Provide X-API-Key header."}
         assert response_json == expected_response
 
 
