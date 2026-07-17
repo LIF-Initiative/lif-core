@@ -345,8 +345,9 @@ async def create_attribute_if_needed(
             )
             session.add(inclusion)
 
-    # If needed, create EntityAttributeAssociation
-    if parent_entity_id:
+    # If needed, create EntityAttributeAssociation. `is not None`, not truthiness: a parent
+    # entity id of 0 is a valid PK, not "no parent" (same class as the #1006 ElementId fix).
+    if parent_entity_id is not None:
         # Check if an EntityAttributeAssociation already exists
         association = await check_existing_association(session, parent_entity_id, attribute.Id, data_model_id)
         if not association:  # If the EntityAttributeAssociation does not exist, create it
