@@ -1492,7 +1492,9 @@ async def get_transformations_by_path_ids(
         .where(TransformationAttribute.EntityIdPath == entity_id_path)
     )
 
-    if attribute_id:
+    # `is not None`, not truthiness: an AttributeId of 0 is a valid filter value; `if attribute_id:`
+    # would drop the filter and return transformations for ALL attributes (cf. #1006 ElementId fix).
+    if attribute_id is not None:
         query = query.where(TransformationAttribute.AttributeId == attribute_id)
 
     result = await session.execute(query)

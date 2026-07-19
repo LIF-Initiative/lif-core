@@ -1,0 +1,31 @@
+.json-highlight {
+  margin: 0;
+  padding: var(--space-3);
+  overflow-x: auto;
+  max-height: 60vh;
+  overflow-y: auto;
+  background: var(--gray-2);
+  border: 1px solid var(--gray-5);
+  border-radius: var(--radius-3);
+  font-family: var(--code-font-family, ui-monospace, SFMono-Regular, Menlo, monospace);
+  font-size: 13px;
+  line-height: 1.5;
+  white-space: pre;
+  tab-size: 2;
+}
+
+.json-highlight .tok-key {
+  color: var(--accent-11);
+}
+.json-highlight .tok-str {
+  color: var(--green-11);
+}
+.json-highlight .tok-num {
+  color: var(--blue-11);
+}
+.json-highlight .tok-bool {
+  color: var(--purple-11);
+}
+.json-highlight .tok-null {
+  color: var(--gray-10);
+}

@@ -73,6 +73,19 @@ async def create_reference_associations_for_children(
 ):
     entity_properties = entity_md.get("properties", {})
     for prop_name, prop in entity_properties.items():
+        # KNOWN BUG (#756): this only detects genuine OpenAPI "$ref" properties, but MDR's own
+        # schema generator (schema_generation_service.add_ref) INLINES references rather than
+        # emitting "$ref", and marks them with a "Ref" infix in the property key
+        # ("Ref<Child>" / "<relationship>Ref<Child>", see schema_generation_service.py:802-805).
+        # So re-uploading an MDR-exported schema silently drops every reference here.
+        #
+        # Tactical fix: also treat a "Ref"-keyed inlined object as a reference (the inlined object
+        # IS the referenced schema, so read its UniqueName/DataModelId directly) and parse the
+        # relationship as prop_name.split("Ref", 1)[0].
+        # Preferred fix (more robust, two-sided): have the generator stamp an explicit marker on
+        # the inlined object on export — e.g. "x-reference-to": "<UniqueName>" — and key off that
+        # here instead of string-sniffing "Ref" out of property names (which mis-parses any entity
+        # legitimately named with "Ref" in it).
         if "$ref" in prop:  # This is a reference to another entity
             ref_path = prop[
                 "$ref"
