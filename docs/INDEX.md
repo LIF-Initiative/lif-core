@@ -46,6 +46,7 @@
 - [`data_model/0001-field-naming-and-source-standard-normalization.md`](design/adr/data_model/0001-field-naming-and-source-standard-normalization.md) — Data model: field naming & source-standard normalization (Proposed).
 - [`general/auth.md`](design/adr/general/auth.md) — ADR 0001: API and User Auth (Proposed).
 - [`general/0002-lif-control-plane-vs-mdr-host.md`](design/adr/general/0002-lif-control-plane-vs-mdr-host.md) — ADR 0002 (Proposed): identity + developer-key control plane belongs in a dedicated LIF service, not MDR; MDR is the interim host via portable bricks + signed-token offline validation (#1000/#1041).
+- [`general/0003-advisor-queries-query-planner-directly.md`](design/adr/general/0003-advisor-queries-query-planner-directly.md) — ADR 0003: Advisor/MCP retrieval talks to the Query Planner directly; GraphQL is an external query facade, not an internal waypoint (Proposed).
 - [`metadata_repository/0001-base-lif-automation.md`](design/adr/metadata_repository/0001-base-lif-automation.md) — MDR: base LIF automation.
 - [`metadata_repository/0002-no-partner-management.md`](design/adr/metadata_repository/0002-no-partner-management.md) — MDR: no partner management in scope.
 - [`metadata_repository/0003-not-required-deprecation-advance-notice.md`](design/adr/metadata_repository/0003-not-required-deprecation-advance-notice.md) — MDR: deprecation advance-notice not required.
