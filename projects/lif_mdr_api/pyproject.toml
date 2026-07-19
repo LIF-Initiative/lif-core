@@ -41,6 +41,7 @@ packages = ["lif"]
 [tool.polylith.bricks]
 "../../bases/lif/mdr_restapi" = "lif/mdr_restapi"
 "../../components/lif/datatypes" = "lif/datatypes"
+"../../components/lif/demo_personas" = "lif/demo_personas"
 "../../components/lif/mdr_auth" = "lif/mdr_auth"
 "../../components/lif/mdr_dto" = "lif/mdr_dto"
 "../../components/lif/mdr_services" = "lif/mdr_services"

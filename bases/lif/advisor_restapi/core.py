@@ -8,6 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from lif.auth.core import create_access_token, create_refresh_token, decode_jwt, get_current_user
+from lif.demo_personas import get_demo_personas_as_dicts
 from lif.langchain_agent import LIFAIAgent
 from lif.logging import get_logger
 
@@ -16,56 +17,9 @@ logger = get_logger(__name__)
 DEMO_USER_PASSWORD = os.environ.get("LIF_DEMO_USER_PASSWORD", "changeme")
 
 # --- Mock Database and State ---
-users_db: List[Dict[str, Any]] = [
-    {
-        "username": "atsatrian_lifdemo@stateu.edu",
-        "firstname": "Alan",
-        "lastname": "Tsatrian",  # cspell:disable-line
-        "identifier": "100001",
-        "identifier_type": "SCHOOL_ASSIGNED_NUMBER",
-        "identifier_type_enum": "SCHOOL_ASSIGNED_NUMBER",
-    },
-    {
-        "username": "jdiaz_lifdemo@stateu.edu",
-        "firstname": "Jenna",
-        "lastname": "Diaz",  # cspell:disable-line
-        "identifier": "100002",
-        "identifier_type": "SCHOOL_ASSIGNED_NUMBER",
-        "identifier_type_enum": "SCHOOL_ASSIGNED_NUMBER",
-    },
-    {
-        "username": "smarin_lifdemo@stateu.edu",
-        "firstname": "Sarah",
-        "lastname": "Marin",
-        "identifier": "100003",
-        "identifier_type": "SCHOOL_ASSIGNED_NUMBER",
-        "identifier_type_enum": "SCHOOL_ASSIGNED_NUMBER",
-    },
-    {
-        "username": "Rgreen11Fdemo@stateu.edu",
-        "firstname": "Renee",
-        "lastname": "Green",
-        "identifier": "100004",
-        "identifier_type": "SCHOOL_ASSIGNED_NUMBER",
-        "identifier_type_enum": "SCHOOL_ASSIGNED_NUMBER",
-    },
-    {
-        "username": "tthatcher_lifdemo@stateu.edu",
-        "firstname": "Tracy",
-        "lastname": "Thatcher",
-        "identifier": "100006",
-        "identifier_type": "SCHOOL_ASSIGNED_NUMBER",
-        "identifier_type_enum": "SCHOOL_ASSIGNED_NUMBER",
-    },
-    {
-        "username": "mhanson_lifdemo@stateu.edu",
-        "firstname": "Matt",
-        "lastname": "Hanson",
-        "identifier": "100005",
-        "identifier_type": "SCHOOL_ASSIGNED_NUMBER",
-        "identifier_type_enum": "SCHOOL_ASSIGNED_NUMBER",
-    },
-]
+# Demo login accounts come from the shared demo-persona source (#1055) so the
+# Advisor and the LDE test/export playground (#1036) stay in sync.
+users_db: List[Dict[str, Any]] = get_demo_personas_as_dicts()
 
 conversation_states: Dict[str, Dict[str, Any]] = {}
 
