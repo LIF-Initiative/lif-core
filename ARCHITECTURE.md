@@ -16,6 +16,8 @@ LIF Core follows the [Polylith](https://polylith.gitbook.io/) architecture. Thre
 - **`bases/lif/`** — Deployment wrappers (FastAPI apps, MCP servers, etc.) that compose components into runnable shapes.
 - **`projects/`** — Executable applications. Each project's `pyproject.toml` lists the bases + components it composes; ships a Docker image.
 
+**How to reuse LIF:** the **component is the unit of reuse** — bare capability you can adopt on its own. Deployment and demo concerns (auth, fixtures, infrastructure) are composed at the base/project layer, never baked into components, so you can run only the pieces you need against your own infrastructure. See [ADR 0004](docs/design/adr/general/0004-components-are-the-unit-of-reuse.md).
+
 Other directories you'll see:
 
 | Path | What lives there |
