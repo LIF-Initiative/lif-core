@@ -26,7 +26,9 @@ async def resolve_entity_id(
         query = query.where(DataModel.DataModelVersion == data_model_version)
     dm_result = await session.execute(query)
     data_model_id = dm_result.scalar_one_or_none()
-    if not data_model_id:
+    # `is None`, not truthiness: scalar_one_or_none() returns None only when no row exists;
+    # a real DataModel with PK 0 must not be reported as "not found" (cf. #1006 ElementId fix).
+    if data_model_id is None:
         raise HTTPException(status_code=404, detail=f"Data model '{data_model_name}' not found")
 
     # Get EntityId based on the name and DataModelId
@@ -36,7 +38,7 @@ async def resolve_entity_id(
     entity_result = await session.execute(entity_query)
     entity_id = entity_result.scalar_one_or_none()
 
-    if not entity_id:
+    if entity_id is None:
         raise HTTPException(
             status_code=404, detail=f"Entity '{entity_name}' not found in data model '{data_model_name}'"
         )

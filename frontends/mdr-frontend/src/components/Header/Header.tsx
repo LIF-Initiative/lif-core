@@ -81,6 +81,18 @@ const Header: React.FC = () => {
           >
             Workspaces
           </NavLink>
+          <NavLink
+            to="/api-keys"
+            className={({ isActive }) => (isActive ? "active" : "")}
+          >
+            API Keys
+          </NavLink>
+          <NavLink
+            to="/export-playground"
+            className={({ isActive }) => (isActive ? "active" : "")}
+          >
+            Export Playground
+          </NavLink>
         </nav>
 
         {/* User dropdown sits in its natural left-packed position right
