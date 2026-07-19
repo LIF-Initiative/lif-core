@@ -1,3 +1,10 @@
+# NOTE: LIF_ADVISOR_API_URL below is INERT for the advisor-app container.
+# The app is a Vite SPA served as static files by nginx; its API base URL is
+# baked into the JS bundle at BUILD time (VITE_LIF_ADVISOR_API_URL — see
+# frontends/lif_advisor_app/Dockerfile and build-push.sh), NOT read from this
+# runtime env var. It is kept only so the task definition Environment block is
+# non-empty. To change the API URL the browser calls, rebuild the image with
+# the correct --build-arg for the target environment. See issue #1047.
 Environment:
   - Name: LIF_ADVISOR_API_URL
     Value:

@@ -1,5 +1,9 @@
 # Stage 1: build the vite application
-FROM node:20-alpine AS build
+# Build on the native builder arch ($BUILDPLATFORM). The Vite output (dist/) is
+# static files and architecture-independent, so cross-compiling to a different
+# target platform never runs esbuild under emulation (which crashes with
+# "The service was stopped" when amd64 is emulated on arm64 builders).
+FROM --platform=$BUILDPLATFORM node:20-alpine AS build
 
 # Accept build-time arguments
 ARG LIF_ADVISOR_API_URL

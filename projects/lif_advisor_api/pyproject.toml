@@ -34,3 +34,4 @@ packages = ["lif"]
 "../../components/lif/langchain_agent" = "lif/langchain_agent"
 "../../components/lif/logging" = "lif/logging"
 "../../components/lif/auth" = "lif/auth"
+"../../components/lif/demo_personas" = "lif/demo_personas"
