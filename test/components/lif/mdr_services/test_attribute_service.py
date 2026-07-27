@@ -141,21 +141,79 @@ async def test_create_attribute_ok(fake_session, monkeypatch):
             self.DataModelId = 1
             self.Extension = False
             self.ValueSetId = None
+            self.EntityId = None  # no association on this path
 
-        def dict(self):
-            return {
+        def dict(self, exclude=None):
+            data = {
                 "UniqueName": self.UniqueName,
                 "Name": self.Name,
                 "DataModelId": self.DataModelId,
                 "Extension": self.Extension,
                 "ValueSetId": self.ValueSetId,
+                "EntityId": self.EntityId,
             }
+            for key in exclude or set():
+                data.pop(key, None)
+            return data
 
     out = await svc.create_attribute(fake_session, _CreateDTO())
     fake_session.commit.assert_awaited()
     fake_session.refresh.assert_awaited()
+    # EntityId is None → attribute only, no association row
+    assert fake_session.add.call_count == 1
     assert out.UniqueName == "dm.height"
     assert out.DataModelId == 1
+
+
+async def test_create_attribute_with_entity_association(fake_session, monkeypatch):
+    # #1028: when EntityId is supplied, create_attribute persists the attribute AND its entity
+    # association in a single transaction (one commit) so a dropped response can never orphan.
+    dm = types.SimpleNamespace(Id=1, BaseDataModelId=None)
+    monkeypatch.setattr(svc, "check_datamodel_by_id", AsyncMock(return_value=dm))
+    monkeypatch.setattr(svc, "check_attribute_exists", AsyncMock(return_value=None))
+    monkeypatch.setattr(svc, "check_value_set_exists_by_id", AsyncMock())
+    check_entity = AsyncMock()
+    monkeypatch.setattr(svc, "check_entity_by_id", check_entity)
+    # attribute.Id is assigned by flush() in real code; emulate with an Id-bearing stand-in.
+    monkeypatch.setattr(svc, "Attribute", lambda **kw: types.SimpleNamespace(Id=42, **kw))
+    monkeypatch.setattr(svc, "EntityAttributeAssociation", lambda **kw: types.SimpleNamespace(**kw))
+    fake_session.flush = AsyncMock()
+
+    class _CreateDTO:
+        def __init__(self):
+            self.UniqueName = "dm.weight"
+            self.Name = "weight"
+            self.DataModelId = 1
+            self.Extension = False
+            self.ValueSetId = None
+            self.EntityId = 7
+            self.Contributor = "MDRUser"
+            self.ContributorOrganization = None
+
+        def dict(self, exclude=None):
+            data = {
+                "UniqueName": self.UniqueName,
+                "Name": self.Name,
+                "DataModelId": self.DataModelId,
+                "Extension": self.Extension,
+                "ValueSetId": self.ValueSetId,
+                "EntityId": self.EntityId,
+            }
+            for key in exclude or set():
+                data.pop(key, None)
+            return data
+
+    out = await svc.create_attribute(fake_session, _CreateDTO())
+
+    check_entity.assert_awaited_once_with(session=fake_session, id=7)
+    fake_session.flush.assert_awaited()  # Id assigned before building the association
+    fake_session.commit.assert_awaited_once()  # single transaction spans both rows
+    assert fake_session.add.call_count == 2  # attribute + association
+    association = fake_session.add.call_args_list[1].args[0]
+    assert association.EntityId == 7
+    assert association.AttributeId == 42
+    assert association.ExtendedByDataModelId is None  # non-extension model
+    assert out.UniqueName == "dm.weight"
 
 
 async def test_create_attribute_duplicate_raises_400(fake_session, monkeypatch):
