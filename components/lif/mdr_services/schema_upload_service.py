@@ -82,6 +82,12 @@ def is_inlined_reference(prop_name: str, prop) -> bool:
     """True if `prop` is an MDR inlined entity reference rather than an embedded child or attribute."""
     if not isinstance(prop, dict) or "$ref" in prop or "ValueSetId" in prop:
         return False
+    # The "Ref" marker must actually be present in the key. rpartition() returns the whole string
+    # as child_name when the separator is absent, so without this guard EVERY PascalCase embedded
+    # child entity (e.g. "Courses") is misread as a reference and dropped on re-upload (#756/#1007
+    # regression — LIF entity keys are PascalCase, so this silently emptied nested `properties`).
+    if REFERENCE_KEY_MARKER not in prop_name:
+        return False
     _, child_name = parse_reference_key(prop_name)
     # The marker must be followed by a PascalCase entity name; this keeps an embedded child whose
     # own name merely contains "Ref" (e.g. "Reference") from being misread as a reference.
