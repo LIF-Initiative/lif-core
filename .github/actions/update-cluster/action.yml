@@ -16,6 +16,10 @@ inputs:
   ecs-service:
     description: The target ECS Service
     required: true
+  verify-steady-state:
+    description: Wait for the forced deployment to reach ECS steady state and fail if it doesn't (#1070).
+    required: false
+    default: "true"
 
 runs:
   using: composite
@@ -35,7 +39,7 @@ runs:
         verbose: false
         arch: amd64
 
-    - name: Force ECS service deployment
+    - name: Force ECS service deployment and verify steady state
       id: vars
       shell: bash
       run: |
@@ -60,3 +64,34 @@ runs:
             --cluster  ${{ inputs.ecs-cluster }} \
             --service ${{ inputs.ecs-service }} \
             --force-new-deployment
+
+        # --- Post-deploy verification (#1070) ---------------------------------------------
+        # Without this the action returns as soon as the deployment is *requested*; a bad image
+        # (crash loop / failing health checks) would deploy silently and run degraded. Wait for
+        # the service to reach steady state and fail the pipeline if it doesn't.
+        if [ "${{ inputs.verify-steady-state }}" != "true" ]; then
+          echo "verify-steady-state disabled; skipping post-deploy stability check"
+          exit 0
+        fi
+
+        echo "Waiting for \"${{ inputs.ecs-service }}\" to reach steady state (aws ecs wait services-stable, ~10 min max)..."
+        if ! aws ecs wait services-stable \
+            --cluster ${{ inputs.ecs-cluster }} \
+            --service ${{ inputs.ecs-service }}; then
+          echo "::error::\"${{ inputs.ecs-service }}\" did not reach steady state — the new deployment failed to stabilize (bad image, failing health checks, or insufficient capacity)."
+          aws ecs describe-services --cluster ${{ inputs.ecs-cluster }} --service ${{ inputs.ecs-service }} \
+            --query 'services[0].deployments[].{status:status,rollout:rolloutState,desired:desiredCount,running:runningCount,failed:failedTasks}' --output table || true
+          aws ecs describe-services --cluster ${{ inputs.ecs-cluster }} --service ${{ inputs.ecs-service }} \
+            --query 'services[0].events[:8].message' --output table || true
+          exit 1
+        fi
+
+        # A service with the deployment circuit breaker can reach steady state by ROLLING BACK to
+        # the previous task definition; that is a failed deploy, not a success — catch it.
+        rollout=$(aws ecs describe-services --cluster ${{ inputs.ecs-cluster }} --service ${{ inputs.ecs-service }} \
+          --query 'services[0].deployments[?status==`PRIMARY`].rolloutState | [0]' --output text)
+        if [ "$rollout" = "FAILED" ]; then
+          echo "::error::deployment rolled back (rolloutState=FAILED) — the new image never became healthy."
+          exit 1
+        fi
+        echo "✅ \"${{ inputs.ecs-service }}\" reached steady state (rolloutState=$rollout)"
