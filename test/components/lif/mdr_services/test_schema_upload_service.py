@@ -58,6 +58,10 @@ def test_parse_reference_key_has_relevant_relationship_name_is_lost():
         ("someAttr", {"ValueSetId": 1}, False),
         # no marker at all
         ("hasOrganization", {"type": "object", "properties": {}}, False),
+        # PascalCase embedded child with no "Ref" marker must NOT be read as a reference — every
+        # LIF entity key is PascalCase, so misreading this dropped all nested entities on re-upload
+        # (#1007 regression). The camelCase case above didn't catch it (it fails the PascalCase guard).
+        ("Courses", {"type": "object", "properties": {}}, False),
     ],
 )
 def test_is_inlined_reference(prop_name, prop, expected):
