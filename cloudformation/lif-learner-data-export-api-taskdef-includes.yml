@@ -23,6 +23,34 @@ Environment:
     Value: "/health,/health-check"
   - Name: LDE_AUTH__PUBLIC_PATH_PREFIXES
     Value: "/docs,/openapi.json"
+  # --- #1034/#1076: composite inbound auth. `composite` accepts a Cognito JWT
+  # (humans on the MDR-UI export playground) OR a signed developer key (downstream
+  # apps; still stubbed pending #1038). Pool + SPA client mirror the MDR self-serve
+  # Cognito, so the JWT minted by the MDR UI validates here. Same SSM keys mdr-api reads.
+  - Name: LDE_AUTH__MODE
+    Value: composite
+  - Name: LDE_AUTH__USER_POOL_ID
+    Value:
+      Fn::Sub: "{{resolve:ssm:/${EnvironmentName}/mdr/CognitoUserPoolId}}"
+  - Name: LDE_AUTH__CLIENT_ID
+    Value:
+      Fn::Sub: "{{resolve:ssm:/${EnvironmentName}/mdr/CognitoSpaClientId}}"
+  - Name: LDE_AUTH__REGION
+    Value:
+      Fn::Sub: "${AWS::Region}"
+  # --- #1076: CORS for the MDR-UI origin (mirrors mdr-api). Credentialed, so
+  # origins must be explicit — browsers reject `*` with credentials, and Starlette
+  # `allow_origins` is exact-match (no subdomain wildcards). The playground is served
+  # from the MDR UI, so `https://mdr.${PublicHostedZoneName}` is the only prod origin.
+  - Name: CORS_ALLOW_ORIGINS
+    Value:
+      Fn::Sub: "http://localhost:3000,http://localhost:5173,http://localhost:8080,https://mdr.${PublicHostedZoneName}"
+  - Name: CORS_ALLOW_CREDENTIALS
+    Value: true
+  - Name: CORS_ALLOW_METHODS
+    Value: GET,POST,PUT,DELETE,OPTIONS,PATCH
+  - Name: CORS_ALLOW_HEADERS
+    Value: "*"
 Secrets:
   - Name: LIF_MDR_API_AUTH_TOKEN
     ValueFrom:
