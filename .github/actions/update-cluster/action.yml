@@ -30,7 +30,7 @@ runs:
         audience: sts.amazonaws.com
         role-to-assume: ${{ inputs.github-actions-role }}
         role-session-name: ${{ inputs.role-session-name }}
-        aws-region: ${{ env.AWS_REGION }}
+        aws-region: ${{ inputs.aws-region }}
 
     - id: install-aws-cli
       uses: unfor19/install-aws-cli-action@v1
