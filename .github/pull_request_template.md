@@ -17,9 +17,11 @@ Include:
 -->
 
 ##### Related Issues
-<!-- Link to related issues using #issue_number -->
+<!-- Auto-close the issue this PR resolves. The number must come directly after `#` (no space, no brackets)
+     or GitHub will NOT auto-close on merge — e.g. `Closes #123`. Use `Refs #123` for related-but-not-closed
+     issues. Delete this line if the PR closes nothing. -->
 
-Closes # [[add Github issue number]]
+Closes #
 
 
 ##### Type of Change

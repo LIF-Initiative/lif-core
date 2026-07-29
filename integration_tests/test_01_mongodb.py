@@ -121,7 +121,7 @@ class TestMongoDBDataIntegrity:
                     results.append(result)
                 else:
                     # Create a failure result for missing person
-                    from utils.comparison import ComparisonResult, Difference
+                    from utils.comparison import Difference
 
                     results.append(
                         ComparisonResult(

@@ -92,7 +92,7 @@ def _compare_values(
         return
 
     # Type mismatch
-    if type(expected) != type(actual):
+    if type(expected) is not type(actual):
         # Allow int/float comparison
         if isinstance(expected, (int, float)) and isinstance(actual, (int, float)):
             if expected != actual:
