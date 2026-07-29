@@ -86,11 +86,13 @@ class TestDecodeRejection:
         from base64 import urlsafe_b64encode
         from lif.mdr_auth.invite_token import _sign
 
-        for raw in (b'[1,2,3]', b'"just a string"', b'42', b'null'):
+        for raw in (b"[1,2,3]", b'"just a string"', b"42", b"null"):
             encoded = urlsafe_b64encode(raw).decode().rstrip("=")
             sig = _sign(encoded, SECRET)
             token = f"{encoded}.{sig}"
-            assert decode_invite_token(token, secret=SECRET) is None, f"non-object payload {raw!r} should decode to None"
+            assert decode_invite_token(token, secret=SECRET) is None, (
+                f"non-object payload {raw!r} should decode to None"
+            )
 
 
 class TestExpiryRecovery:

@@ -15,7 +15,7 @@ logger = get_logger(__name__)
 class LIFToLIFAdapter(LIFDataSourceAdapter):
     """Adapter that converts LIF data to LIF data (no-op)."""
 
-    adapter_id: str = "lif-to-lif"
+    adapter_id = "lif-to-lif"
     adapter_type = LIFAdapterType.LIF_TO_LIF
     credential_keys = ["host", "scheme", "token"]
 

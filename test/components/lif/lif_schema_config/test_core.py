@@ -142,17 +142,17 @@ class TestTypeMappings:
     """Tests for XSD type mappings."""
 
     def test_xsd_to_python_mappings(self):
-        assert XSD_TO_PYTHON["xsd:string"] == str
-        assert XSD_TO_PYTHON["xsd:integer"] == int
-        assert XSD_TO_PYTHON["xsd:boolean"] == bool
-        assert XSD_TO_PYTHON["xsd:date"] == date
-        assert XSD_TO_PYTHON["xsd:dateTime"] == datetime
+        assert XSD_TO_PYTHON["xsd:string"] is str
+        assert XSD_TO_PYTHON["xsd:integer"] is int
+        assert XSD_TO_PYTHON["xsd:boolean"] is bool
+        assert XSD_TO_PYTHON["xsd:date"] is date
+        assert XSD_TO_PYTHON["xsd:dateTime"] is datetime
 
     def test_python_type_for_xsd(self):
-        assert python_type_for_xsd("xsd:string") == str
-        assert python_type_for_xsd("xsd:integer") == int
-        assert python_type_for_xsd("unknown_type") == str  # default
-        assert python_type_for_xsd("unknown_type", default=int) == int
+        assert python_type_for_xsd("xsd:string") is str
+        assert python_type_for_xsd("xsd:integer") is int
+        assert python_type_for_xsd("unknown_type") is str  # default
+        assert python_type_for_xsd("unknown_type", default=int) is int
 
     def test_xsd_type_for_python(self):
         assert xsd_type_for_python(str) == "xsd:string"

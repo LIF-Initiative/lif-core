@@ -11,7 +11,7 @@ logger = get_logger(__name__)
 class ExampleDataSourceRestAPIToLIFAdapter(LIFDataSourceAdapter):
     """Adapter that gathers data from the Example Data Source REST API for LIF to use (no translation in the adapter)."""
 
-    adapter_id: str = "example-data-source-rest-api-to-lif"
+    adapter_id = "example-data-source-rest-api-to-lif"
     adapter_type = LIFAdapterType.PIPELINE_INTEGRATED
     credential_keys = ["host", "scheme", "token"]
 
