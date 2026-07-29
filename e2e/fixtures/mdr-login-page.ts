@@ -1,4 +1,5 @@
 import { Locator, Page } from "@playwright/test";
+import { fillVisible, clickVisible } from "./cognito-helpers";
 
 export class MdrLoginPage {
   readonly page: Page;
@@ -28,5 +29,25 @@ export class MdrLoginPage {
     await this.usernameField.fill(username);
     await this.passwordField.fill(password);
     await this.legacySubmitButton.click();
+  }
+
+  /**
+   * Cognito Hosted UI login (Authorization Code + PKCE) — the deployed dev/demo flow.
+   * Clicking Sign In redirects to the hosted UI; fill the visible (not the hidden
+   * responsive-duplicate) inputs, submit, and wait for the SPA callback to land back.
+   */
+  async loginWithCognito(username: string, password: string) {
+    const appHost = new URL(this.page.url()).host;
+    await this.signInButton.first().click();
+    await this.page.waitForSelector('input[name="password"], input[type="password"]', {
+      state: 'attached',
+      timeout: 30_000,
+    });
+    await this.page.waitForTimeout(1200);
+    await fillVisible(this.page, 'input[name="username"], input[type="email"], input[id*="signInFormUsername"]', username);
+    await fillVisible(this.page, 'input[type="password"], input[name="password"]', password);
+    await clickVisible(this.page, 'input[name="signInSubmitButton"], button[type="submit"], input[type="submit"]');
+    await this.page.waitForURL((url) => url.host === appHost, { timeout: 45_000 });
+    await this.page.waitForTimeout(2500);
   }
 }

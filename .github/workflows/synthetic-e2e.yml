@@ -1,0 +1,85 @@
+name: Synthetic E2E monitor (demo)
+
+# Periodic happy-path checks through both UIs against demo, so an outage is caught here
+# instead of waiting for someone to report it. Runs the committed e2e/ Playwright suite:
+#   - Advisor: login → chat → assistant responds (exercises advisor → MCP → GraphQL → QP)
+#   - MDR:     Cognito login → Export Playground → run export (exercises MDR + LDE + composite auth)
+# A failed run turns the workflow red (the alert). Uses the dedicated e2e accounts; passwords
+# are read from SSM at run time via the demo OIDC role (never stored in the repo).
+
+on:
+  schedule:
+    - cron: "17 */4 * * *" # every 4 hours (offset off the top of the hour)
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AWS_REGION: us-east-1
+  GHA_ROLE: arn:aws:iam::381492161417:role/lif-github-actions-demo
+
+jobs:
+  monitor:
+    name: Happy-path monitor (demo)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: e2e
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: e2e/package-lock.json
+
+      - name: Install dependencies + Chromium
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          audience: sts.amazonaws.com
+          role-to-assume: ${{ env.GHA_ROLE }}
+          role-session-name: synthetic-e2e
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Load e2e credentials from SSM (masked)
+        run: |
+          adv=$(aws ssm get-parameter --name /demo/advisor-api/DemoUserPassword --with-decryption --query Parameter.Value --output text)
+          mdr=$(aws ssm get-parameter --name /demo/e2e/mdr-playwright-pw --with-decryption --query Parameter.Value --output text)
+          echo "::add-mask::$adv"
+          echo "::add-mask::$mdr"
+          echo "ADVISOR_PASSWORD=$adv" >> "$GITHUB_ENV"
+          echo "MDR_PASSWORD=$mdr" >> "$GITHUB_ENV"
+
+      - name: Advisor happy path
+        env:
+          BASE_URL: https://advisor.demo.lif.unicon.net/
+          E2E_USERNAME: atsatrian_lifdemo@stateu.edu
+          E2E_PASSWORD: ${{ env.ADVISOR_PASSWORD }}
+        run: npx playwright test --grep @chat
+
+      - name: MDR happy path
+        if: always() # run even if the advisor check failed, so we see the status of both
+        env:
+          BASE_URL: https://mdr.demo.lif.unicon.net/
+          MDR_USERNAME: lif-e2e-test@unicon.net
+          MDR_PASSWORD: ${{ env.MDR_PASSWORD }}
+        run: npx playwright test --grep @happy-path
+
+      - name: Upload Playwright report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: e2e/playwright-report/
+          retention-days: 7
