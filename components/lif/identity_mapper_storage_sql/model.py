@@ -28,7 +28,9 @@ class IdentityMappingModel(Base):
     )
 
     def from_identity_mapping(self, identity_mapping: IdentityMapping):
-        self.mapping_id = identity_mapping.mapping_id
+        # mapping_id is Optional on the DTO; when unset, let the column default (uuid4) generate it.
+        if identity_mapping.mapping_id is not None:
+            self.mapping_id = identity_mapping.mapping_id
         self.lif_organization_id = identity_mapping.lif_organization_id
         self.lif_organization_person_id = identity_mapping.lif_organization_person_id
         self.target_system_id = identity_mapping.target_system_id
