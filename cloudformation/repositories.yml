@@ -226,6 +226,9 @@ Resources:
         - Effect: Allow
           Action:
             - 'ecs:UpdateService'
+            # DescribeServices is required by the post-deploy `aws ecs wait services-stable`
+            # steady-state check (#1070) in the update-cluster action.
+            - 'ecs:DescribeServices'
           Resource:
             - !Sub 'arn:aws:ecs:${AWS::Region}:${AWS::AccountId}:service/${EnvironmentName}*'
         - Effect: Allow
