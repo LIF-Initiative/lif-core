@@ -3,9 +3,9 @@
     {
       "Name": [
         {
-          "informationSourceId": "Org2",
           "lastName": "Diaz",
           "firstName": "Jenna",
+          "informationSourceId": "Org2",
           "informationSourceOrganization": "Community College",
           "identifier": "name-jenna-diaz-org2-001"
         }
@@ -14,37 +14,49 @@
         {
           "Email": [
             {
-              "informationSourceId": "Org2",
               "emailAddress": [
                 "jdiaz_lifdemo@stateu.edu"
-              ]
+              ],
+              "informationSourceId": "Org2",
+              "informationSourceOrganization": "Community College",
+              "identifier": "email-jenna-diaz-org2-001"
             }
           ],
           "informationSourceId": "Org2",
           "informationSourceOrganization": "Community College",
-          "identifier": "contact-org2-001"
+          "identifier": "contact-org2-001",
+          "Address": [
+            {
+              "informationSourceId": "Org2",
+              "addressStreet": "455 N 3rd Street",
+              "addressCity": "Phoenix",
+              "addressState": "Arizona",
+              "addressPostalCode": "85004",
+              "countryCode": "US",
+              "informationSourceOrganization": "Community College",
+              "identifier": "address-jenna-diaz-org2-001"
+            }
+          ]
         }
       ],
       "Identifier": [
         {
-          "informationSourceId": "Org2",
           "identifier": "100002",
           "identifierType": "SCHOOL_ASSIGNED_NUMBER",
+          "informationSourceId": "Org2",
           "informationSourceOrganization": "Community College"
         }
       ],
       "EmploymentLearningExperience": [
         {
-          "informationSourceId": "Org2",
           "name": "Certified Nursing Assistant CNA",
           "RefPosition": {
             "informationSourceId": "Org2",
-            "name": "Certified Nursing Assistant Position",
             "informationSourceOrganization": "Community College",
-            "identifier": "position-org2-001"
+            "identifier": "position-org2-001",
+            "name": "Certified Nursing Assistant CNA"
           },
           "startDate": "2018-03",
-          "endDate": "2024-11",
           "AssertedByRefOrganization": {
             "identificationSystem": "stateu-employing-organization-id",
             "name": "Employing Organization",
@@ -65,23 +77,27 @@
             "informationSourceOrganization": "Community College",
             "identifier": "organization-training-provider-org2-001"
           },
-          "ApprovedByRefOrganization": {
-            "identificationSystem": "stateu-approving-authority-id",
-            "name": "Approving Authority",
-            "organizationType": [
-              "Regulatory Body"
-            ],
-            "informationSourceId": "Org2",
-            "informationSourceOrganization": "Community College",
-            "identifier": "organization-approving-authority-org2-001"
-          },
+          "ApprovedByRefOrganization": [
+            {
+              "identificationSystem": "stateu-approving-authority-id",
+              "name": "Approving Authority",
+              "organizationType": [
+                "Regulatory Body"
+              ],
+              "informationSourceId": "Org2",
+              "informationSourceOrganization": "Community College",
+              "identifier": "organization-approving-authority-org2-001"
+            }
+          ],
+          "informationSourceId": "Org2",
           "RefCredentialAward": {
-            "identifier": "cred-employment-certificate-001",
-            "name": "Employment Certificate",
+            "id": "cred-employment-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Org2",
-            "informationSourceOrganization": "Org2"
+            "informationSourceOrganization": "Community College",
+            "identifier": "credentialaward-cred-employment-certificate-00-org2-001",
+            "name": "Employment Certificate"
           },
           "informationSourceOrganization": "Community College",
           "identifier": "employmentlearningexperience-certified-nursing-assistant-cn-org2-001"
@@ -161,13 +177,14 @@
           "awardIssueDate": "2024-12-15T10:00:00Z",
           "credentialAwardee": "Jenna Diaz",
           "informationSourceId": "Org2",
-          "informationSourceOrganization": "Org2",
+          "informationSourceOrganization": "Community College",
           "InstanceOfRefCredential": {
             "informationSourceId": "Org2",
-            "informationSourceOrganization": "Org2",
+            "informationSourceOrganization": "Community College",
             "identifier": "cred-employment-certificate-001",
             "name": "Employment Certificate"
-          }
+          },
+          "name": "Employment Certificate"
         }
       ],
       "CourseLearningExperience": [
@@ -220,7 +237,8 @@
             "name": "Course Completion Certificate",
             "awardIssueDate": "2020-05-20T10:00:00Z",
             "credentialAwardee": "Jenna Diaz"
-          }
+          },
+          "name": "Introduction to Business"
         },
         {
           "informationSourceId": "Org2",
@@ -271,7 +289,63 @@
             "name": "Course Completion Certificate",
             "awardIssueDate": "2020-12-20T10:00:00Z",
             "credentialAwardee": "Jenna Diaz"
-          }
+          },
+          "name": "Business Communications"
+        }
+      ],
+      "Birth": [
+        {
+          "informationSourceId": "Org2",
+          "informationSourceOrganization": "Community College",
+          "identifier": "birth-org2-001",
+          "birthDate": "1991-07-22",
+          "cityOfBirth": "Phoenix",
+          "stateOfBirth": "Arizona"
+        }
+      ],
+      "SexAndGender": [
+        {
+          "informationSourceId": "Org2",
+          "informationSourceOrganization": "Community College",
+          "identifier": "sexandgender-org2-001",
+          "sex": "Female",
+          "gender": "Female",
+          "pronouns": "she/her"
+        }
+      ],
+      "Residency": [
+        {
+          "informationSourceId": "Org2",
+          "informationSourceOrganization": "Community College",
+          "identifier": "residency-org2-001",
+          "localType": "In-State",
+          "countyFIPSCode": "04013",
+          "dateEffective": "2016-01-01",
+          "doNotPublishIndicator": "false"
+        }
+      ],
+      "Language": [
+        {
+          "informationSourceId": "Org2",
+          "informationSourceOrganization": "Community College",
+          "identifier": "language-english-org2-001",
+          "name": "English",
+          "iSO639_2LangCode": "eng",
+          "iSO639_3LangCode": "eng",
+          "languageType": "Primary"
+        }
+      ],
+      "Demographics": [
+        {
+          "informationSourceId": "Org2",
+          "informationSourceOrganization": "Community College",
+          "identifier": "demographics-org2-001",
+          "highestLevelEducation": "SomeCollegeButNoDegree",
+          "usCitizenship": "true",
+          "economicDisadvantage": "false",
+          "homeless": "false",
+          "militaryActiveStatus": "false",
+          "militaryVeteranStatus": "false"
         }
       ]
     }
