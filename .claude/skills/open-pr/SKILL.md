@@ -9,7 +9,7 @@ Open a pull request that passes review on the first read. The whole point of thi
 
 ## Arguments
 
-- `[issue number]` — the issue this PR closes (becomes `Closes #N`). If omitted, infer from the branch name / commits and confirm with the user.
+- `[issue number]` — the leaf issue this PR fully resolves (becomes `Closes #N`; an epic gets `Refs #N` instead — see Related Issues in Step 3). If omitted, infer from the branch name / commits and confirm with the user.
 
 ## Step 1 — Read the conventions (do not skip)
 
@@ -35,7 +35,7 @@ Read all three now:
 Compose the body from the template — fill every section, **remove checklist items that don't apply** (the template says so):
 
 - **Description of Change** — what problem it solves, the solution, side effects/limitations, and **how reviewers should test it**. (The relay synthesis from `self-review-relay`, if you ran it, is good source material.)
-- **Related Issues** — `Closes #<n>` (this is what auto-closes the issue on merge).
+- **Related Issues** — `Closes #<leaf>` for the issue this PR **fully resolves**: merging auto-closes it *and* auto-moves its card to Done on Project #6. For an **epic / umbrella** issue, use `Refs #<epic>` (never `Closes` — it must stay open so its sub-issue rollup tracks progress). So a PR implementing one item of an epic reads `Closes #<leaf>` / `Refs #<epic>`. Using `Refs` on the leaf leaves the issue open and stranded mid-board after merge.
 - **Type of Change** — check the one(s) that apply (bug fix / feature / breaking / docs / infra / perf / refactor).
 - **Project Area(s) Affected** — check by the actual diff (`git diff main...HEAD --name-only` → map to `bases/`, `components/`, `frontends/`, `cloudformation/`, migrations, etc.).
 - **Checklist** — check the items truly done (lint/format/type/pre-commit; tests included; docs updated; migration + CHANGELOG if schema changed; MIGRATION.md if breaking). Remove the rest.
