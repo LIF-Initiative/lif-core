@@ -1,19 +1,9 @@
 name: Deploy LIF Semantic Search MCP Server to Amazon ECS
 
-env:
-  AWS_REGION: us-east-1
-  GHA_ROLE: "arn:aws:iam::381492161417:role/lif-github-actions-dev"
-  ECS_CLUSTER: dev
-  ECS_SERVICE: semantic-search-FARGATE
-
-permissions:
-      id-token: write
-      contents: read
-
 on:
   workflow_dispatch:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
     paths:
       - .github/workflows/lif_semantic_search_mcp_server.yml
       - bases/lif/semantic_search_mcp_server/**
@@ -26,66 +16,18 @@ on:
       - components/lif/string_utils/**
       - components/lif/mdr_client/**
       - projects/lif_semantic_search_mcp_server/**
+      - .github/workflows/_deploy-service.yml
+
+permissions:
+  id-token: write
+  contents: read
 
 jobs:
-
-  lif-semantic-search-mcp-server:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-    env:
-      WORKING_DIR: ./projects/lif_semantic_search_mcp_server
-      ECR_REPOSITORY: lif/dev/lif_semantic_search_mcp_server
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-
-    - name: Remove unused tooling to free up disk space
-      run: |
-        df -h
-        
-        # Remove Java (JDKs)
-        sudo rm -rf /usr/lib/jvm
-
-        # Remove .NET SDKs
-        sudo rm -rf /usr/share/dotnet
-
-        # Remove Android SDKs
-        sudo rm -rf /usr/local/lib/android
-
-        # Remove Chromium
-        sudo rm -rf /usr/local/share/chromium
-
-        # Remove Microsoft/Edge and Google Chrome builds
-        sudo rm -rf /opt/microsoft /opt/google
-
-        docker system prune -af || true
-        
-        df -h
-
-    - name: Build the project
-      shell: bash
-      working-directory: ${{ env.WORKING_DIR }}
-      run: |
-        curl -LsSf https://astral.sh/uv/0.7.15/install.sh | sh
-        ./build.sh
-
-    - name: Build and push docker image
-      uses: ./.github/actions/build-and-push
-      with:
-        working-dir: ${{ env.WORKING_DIR }}
-        github-actions-role: ${{ env.GHA_ROLE }}
-        role-session-name: semantic-search-mcp-build
-        aws-region: ${{ env.AWS_REGION }}
-        ecr-repository: ${{ env.ECR_REPOSITORY }}
-
-    - name: Update the lif-semantic-search-mcp-server ECS Service
-      uses: ./.github/actions/update-cluster
-      with:
-        github-actions-role: ${{ env.GHA_ROLE }}
-        role-session-name: semantic-search-mcp-ecs
-        aws-region: ${{ env.AWS_REGION }}
-        ecs-cluster: ${{ env.ECS_CLUSTER }}
-        ecs-service: ${{ env.ECS_SERVICE }}
-
+  deploy:
+    uses: ./.github/workflows/_deploy-service.yml
+    with:
+      service_name: semantic-search-mcp
+      working_dir: ./projects/lif_semantic_search_mcp_server
+      ecr_repository: lif/dev/lif_semantic_search_mcp_server
+      ecs_services: '["semantic-search-FARGATE"]'
+      free_disk_space: true
