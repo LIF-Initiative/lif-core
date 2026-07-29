@@ -14,7 +14,7 @@ requires-python = ">=3.13,<3.14"
 dependencies = [
     "httpx~=0.28",
     "fastapi~=0.115",
-    "pyjwt~=2.10",
+    "pyjwt[crypto]~=2.10",
     "pydantic-settings~=2.1",
     "sqlalchemy~=2.0",
     "sqlmodel~=0.0",
