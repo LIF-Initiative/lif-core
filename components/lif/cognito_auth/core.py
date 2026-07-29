@@ -17,19 +17,39 @@ Public surface:
 
 from __future__ import annotations
 
+import logging
 import os
 from dataclasses import dataclass, field
 from typing import Any, Optional
 
 import jwt
+import jwt.algorithms  # ensure the submodule is imported for `jwt.algorithms.has_crypto`
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 from starlette.responses import JSONResponse
+
+logger = logging.getLogger(__name__)
 
 _BEARER_PREFIX = "Bearer "
 
 # Cache PyJWKClient per (region, pool) so JWKS keys are fetched once per process.
 _jwk_clients: dict[tuple[str, str], jwt.PyJWKClient] = {}
+
+
+def _require_crypto() -> None:
+    """Fail loudly at startup if pyjwt lacks the crypto backend for RS256 (see #1093).
+
+    Cognito tokens are RS256; without `cryptography` (the ``pyjwt[crypto]`` extra) every
+    ``jwt.decode`` raises ``PyJWTError``, which ``authenticate_request`` swallows → every
+    token silently 401s. Any service composing this brick MUST depend on ``pyjwt[crypto]``;
+    this converts that footgun into an obvious boot-time error instead of a silent reject.
+    """
+    if not jwt.algorithms.has_crypto:
+        raise RuntimeError(
+            "cognito_auth requires the 'cryptography' package for RS256 JWT verification. "
+            "Depend on `pyjwt[crypto]` (plain `pyjwt` ships without it and silently rejects "
+            "every Cognito token). See #1093."
+        )
 
 
 @dataclass
@@ -63,11 +83,14 @@ class CognitoAuthConfig:
         ``api_key_auth`` "no keys → disabled" pattern), so a bare deployment
         runs without Cognito.
         """
-        return cls(
+        config = cls(
             user_pool_id=os.environ.get(f"{prefix}__USER_POOL_ID", ""),
             region=os.environ.get(f"{prefix}__REGION", "us-east-1"),
             client_id=os.environ.get(f"{prefix}__CLIENT_ID", ""),
         )
+        if config.is_enabled:
+            _require_crypto()
+        return config
 
 
 def _get_jwk_client(config: CognitoAuthConfig) -> jwt.PyJWKClient:
@@ -121,7 +144,8 @@ def authenticate_request(request: Request, config: CognitoAuthConfig) -> Optiona
         return None
     try:
         return decode_cognito_jwt(token, config)
-    except jwt.PyJWTError:
+    except jwt.PyJWTError as exc:
+        logger.warning("Cognito JWT rejected: %s", exc)
         return None
 
 
@@ -134,6 +158,8 @@ class CognitoAuthMiddleware(BaseHTTPMiddleware):
 
     def __init__(self, app, config: CognitoAuthConfig) -> None:
         super().__init__(app)
+        if config.is_enabled:
+            _require_crypto()
         self.config = config
 
     def _is_public(self, path: str) -> bool:

@@ -1,5 +1,6 @@
 # cspell:disable
 import jwt
+import pytest
 from starlette.requests import Request
 
 import lif.cognito_auth.core as core
@@ -49,3 +50,19 @@ def test_authenticate_returns_none_for_invalid_token(monkeypatch):
 
     monkeypatch.setattr(core, "decode_cognito_jwt", boom)
     assert authenticate_request(_req("Bearer bad.token"), cfg) is None
+
+
+def test_enabled_config_requires_crypto(monkeypatch):
+    # A service enabling Cognito without pyjwt[crypto] must fail LOUDLY at startup,
+    # not silently 401 every token (the #1093 footgun).
+    monkeypatch.setenv("LDE_AUTH__USER_POOL_ID", "us-east-1_ABC123")
+    monkeypatch.setattr(jwt.algorithms, "has_crypto", False)
+    with pytest.raises(RuntimeError, match=r"pyjwt\[crypto\]"):
+        CognitoAuthConfig.from_environment(prefix="LDE_AUTH")
+
+
+def test_crypto_not_required_when_disabled(monkeypatch):
+    # A bare deployment (no pool) never verifies a Cognito token, so the guard must not fire.
+    monkeypatch.delenv("LDE_AUTH__USER_POOL_ID", raising=False)
+    monkeypatch.setattr(jwt.algorithms, "has_crypto", False)
+    assert not CognitoAuthConfig.from_environment(prefix="LDE_AUTH").is_enabled

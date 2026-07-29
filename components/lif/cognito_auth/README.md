@@ -31,3 +31,11 @@ enabled, the LDE base composes a *composite* inbound middleware that accepts a
 the JWT strategy and the developer-key validator (signed-token offline verify,
 #1033/#1038, ADR 0002) as the other. The composite lives at the base (composition
 is a base concern); this brick just provides the Cognito strategy.
+
+## Requirements
+
+**Consumers MUST depend on `pyjwt[crypto]`, not plain `pyjwt`.** Cognito tokens are
+RS256, which needs the `cryptography` backend. With plain `pyjwt`, verification raises
+`PyJWTError` that `authenticate_request` swallows → every token silently 401s (this was
+#1093 on LDE). The brick now guards against it: enabling Cognito (`is_enabled`) without
+`cryptography` raises a `RuntimeError` at startup instead of failing silently.
