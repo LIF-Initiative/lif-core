@@ -71,8 +71,8 @@ Today: poll-over-in-memory. For Regime B a consumer needs to learn a pending fra
 
 Extract the "semantic filter + ranked field paths → `LIFQuery`" mapping into a **shared brick** that both consumers use:
 
-- semantic-search already computes the two ingredients — a pydantic filter and a set of dotted field paths (`semantic_search_service/core.py:411-422`) — so it can emit a `LIFQuery` **directly**, skipping the GraphQL-string step entirely.
-- The GraphQL resolver already builds the same `{filter, selected_fields}` shape (`type_factory.py:807-809`); refactor it to assemble the `LIFQuery` through the shared brick too, so there is exactly one construction path (ADR-0003 cost #1).
+- semantic-search already has the two ingredients — a **dynamically-built** Pydantic filter (`build_dynamic_filter_model`, `semantic_search_service/core.py:84`) plus a set of dotted field paths — but today it serializes them to a GraphQL *string* (`to_graphql_literal`, `core.py:411-422`). **The shapes differ:** that dynamic filter is **not** the QP's fixed `LIFQueryFilter` (`RootModel[LIFQueryPersonFilter]`, `datatypes/core.py:88`), so the brick must **translate** the dynamic filter into the QP's filter model — that translation is the real work here, not a mechanical "emit a `LIFQuery`."
+- The GraphQL resolver already builds the QP's `{filter, selected_fields}` shape (`type_factory.py:807-809`); refactor it to assemble the `LIFQuery` through the shared brick too, so there is exactly one construction path (ADR-0003 cost #1).
 
 ### 5. semantic-search rewire + Advisor Regime B (findings 6–7)
 
@@ -81,13 +81,19 @@ Extract the "semantic filter + ranked field paths → `LIFQuery`" mapping into a
 
 ### 6. Auth/trust for direct QP consumption (finding 4)
 
-Direct consumption removes GraphQL's `X-API-Key` gate. Add **inbound auth to the QP** — mirror `ApiKeyAuthMiddleware` (as GraphQL/mdr-api do) or the composite `cognito_auth` brick — and issue an internal QP key that semantic-search holds (exactly as it holds `LIF_GRAPHQL_API_KEY` today). Validate the orchestrator's already-sent bearer token while here.
+Direct consumption removes GraphQL's `X-API-Key` gate. Add **inbound auth to the QP** and issue an internal key that semantic-search holds (exactly as it holds `LIF_GRAPHQL_API_KEY` today). **Recommended mechanism: a service API key** mirroring `ApiKeyAuthMiddleware` (as GraphQL/mdr-api do), not the full `cognito_auth` brick — the QP is internal-only (CloudMap), so a service key is the right weight; Cognito is for user-facing surfaces.
+
+**This is a breaking change for the *existing* GraphQL→QP path, not just an addition.** The GraphQL resolver POSTs to the QP with **no auth today** (`type_factory.py:814`: `client.post(query_planner_query_url, json=query)`), so the moment the QP enforces auth that call `401`s and GraphQL breaks. This work must therefore **also update the GraphQL resolver's QP client** to send the key, and roll out **accept-then-enforce** (accept the key while still allowing unauthenticated → cut both consumers over → then enforce) to avoid an outage window. Validate the orchestrator's already-sent bearer token while here.
 
 ## Dependencies
 
 - **Reframe concurrency fix** (#970 risk #2) — shared precursor for either regime; likely lands inside #970.
 - **Durable `JOB_STORE`** and **QP horizontal-scale** (in-memory state) — precursors for partial results.
 - **Advisor cross-turn durability** (in-memory `conversation_states`) — precursor for Regime B re-engagement.
+
+## Validation
+
+The **synthetic monitor** (`.github/workflows/synthetic-e2e.yml`, #1095) exercises the full advisor → retrieval chain against demo every 2h and is the natural end-to-end regression guard for this work — on 2026-07-30 it caught a retrieval-chain outage (a Dagster adapter failure that blocked advisor retrieval) before anyone reported it. Every issue that touches the retrieval path (C, E, G, H) should be verified green against it after deploy, and the QP-contract/auth changes (B, C) must keep the **existing GraphQL path** green too (not just the new semantic-search path).
 
 ## Follow-up issues (proposed breakdown)
 
@@ -97,8 +103,8 @@ Sequenced; sizes per [`t-shirt-sizing.md`](../t-shirt-sizing.md). Suggested epic
 |---|-----------|:----:|-----------|
 | A | **Reframe concurrency fix** — make `reframe` non-blocking (`run_in_threadpool`/async); note single-worker + in-memory-state scaling limits | S | — (may fold into #970) |
 | B | **Graduate the QP async contract** — canonical async path, `status` enum, sync `/query` as deprecated shim, fix the 300s/60s inconsistency | M | — |
-| C | **QP inbound auth** — add API-key (or cognito) middleware; issue an internal QP key; validate the orchestrator token | M | — |
-| D | **Shared query-construction brick** — extract "filter + selected paths → `LIFQuery`"; refactor GraphQL resolver + semantic-search to both build through it | M | B |
+| C | **QP inbound auth** — add a service-API-key middleware; issue an internal QP key; **also update the GraphQL resolver's QP client to send it** and roll out accept-then-enforce (enforcing auth is a breaking change for the current unauthenticated GraphQL→QP call); validate the orchestrator token | L | — |
+| D | **Shared query-construction brick** — extract "filter + selected paths → `LIFQuery`", **including translating semantic-search's dynamic filter model into the QP's `LIFQueryFilter`**; refactor GraphQL resolver + semantic-search to both build through it | L | B |
 | E | **semantic-search → QP direct** — inject `LIF_QUERY_PLANNER_URL`, replace `graphql_client` with a QP async client via brick D; keep GraphQL demoable | L | B, C, D |
 | F | **Durable QP job store** — move `JOB_STORE` off the in-memory dict to a shared store; unblock multi-instance QP | M | B |
 | G | **QP partial-result model** — `PARTIAL` status + pending-fragment descriptors; per-part orchestration completion (orchestrator + QP) | XL | B, F |
@@ -110,7 +116,7 @@ Regime A (#970 / `advisor-streaming.md`) is **not** in this list — it ships on
 ## Recommendation: Regime-A-first
 
 1. **Ship Regime A now** (#970) — independent, no data-layer change, immediate UX win. Do item **A** (reframe fix) as part of it.
-2. **Land the rewire foundation** (B → C → D → E): the Advisor retrieves from the QP directly, GraphQL becomes a peer consumer. Valuable and shippable **without** partial results (semantic-search just waits on the async job like the sync path does today). This realizes ADR-0003's topology.
+2. **Land the rewire foundation** (B → C → D → E): the Advisor retrieves from the QP directly, GraphQL becomes a peer consumer. Valuable and shippable **without** partial results (semantic-search just waits on the async job like the sync path does today). This realizes ADR-0003's topology — **but it does *not* fix the slow-query hang**: semantic-search still blocks on a cold/slow refresh, the exact UX behind the 2026-07-30 advisor-hang incident. That relief comes only with partial results (G) + Regime B (I).
 3. **Build the QP net-new capability** (F → G → H): durable store, partial results, completion propagation.
 4. **Deliver Regime B** (I) on top.
 
