@@ -22,5 +22,9 @@
   {
     "ParameterKey": "AlertSmsNumber",
     "ParameterValue": "none"
+  },
+  {
+    "ParameterKey": "AlertAdditionalEmails",
+    "ParameterValue": "thelmick@unicon.net,khoyland@unicon.net,bgonzalez@unicon.net"
   }
 ]
