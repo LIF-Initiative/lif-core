@@ -35,6 +35,7 @@ packages = ["lif"]
 "../../components/lif/datatypes" = "lif/datatypes"             # direct use
 "../../components/lif/mdr_utils" = "lif/mdr_utils"             # direct use
 "../../components/lif/api_key_auth" = "lif/api_key_auth"       # direct use (ApiKeyAuthMiddleware)
+"../../components/lif/cognito_auth" = "lif/cognito_auth"       # direct use (composite auth scaffold, #1034)
 "../../components/lif/mdr_dto" = "lif/mdr_dto"                 # via datatypes.mdr_consumer
 "../../components/lif/lif_schema_config" = "lif/lif_schema_config" # direct use
 "../../components/lif/mdr_client" = "lif/mdr_client"           # direct use

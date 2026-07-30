@@ -52,6 +52,7 @@ jobs:
         echo "VITE_GA_MEASUREMENT_ID=G-VZ515ZL70E" >> .env
         echo "VITE_COGNITO_DOMAIN=${cognito_domain}" >> .env
         echo "VITE_COGNITO_CLIENT_ID=${cognito_client_id}" >> .env
+        echo "VITE_LDE_API_URL=https://lde.${{ env.ENV_NAME }}.${{ env.DOMAIN }}" >> .env
         npm run build
 
     - name: Sync to S3

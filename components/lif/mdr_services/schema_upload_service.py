@@ -40,12 +40,57 @@ def parse_dt(val):
     raise TypeError(f"Unsupported date value: {val!r}")
 
 
+# --- Entity-reference detection (#756) ---------------------------------------------------
+# MDR's schema generator (schema_generation_service.add_ref) encodes a reference to another
+# entity as an INLINED object — NOT an OpenAPI "$ref" — stored under a property key carrying a
+# "Ref" infix: "Ref<Child>" for a plain reference, or "<relationship>Ref<Child>" when the
+# association has a relationship (see schema_generation_service.py:802-805). The inlined object
+# is a deep copy of the referenced entity's schema narrowed to its required fields, so when the
+# schema was generated with entity metadata it still carries the child's UniqueName/DataModelId.
+#
+# Before #756 this reader only looked for "$ref" and silently dropped every reference in an
+# MDR-exported schema (and, worse, the create pass then materialized each reference as a bogus
+# child entity — see create_entity_and_children_if_needed).
+#
+# NOTE — preferred long-term fix: keying off the "Ref" infix is inherently ambiguous (an entity
+# legitimately named "Ref<Something>" would mis-parse). The robust fix is two-sided: have add_ref
+# stamp an explicit marker on the inlined object (e.g. "x-lif-reference-to": "<UniqueName>") and
+# key off that here instead of string-parsing the property name.
+REFERENCE_KEY_MARKER = "Ref"
+
+
+def parse_reference_key(prop_name: str) -> tuple[Optional[str], str]:
+    """Split an inlined-reference key into (relationship, child_entity_name).
+
+    "RefOrganization"               -> (None, "Organization")
+    "issuedByRefOrganization"       -> ("issuedBy", "Organization")
+    "isReferencedByRefOrganization" -> ("isReferencedBy", "Organization")
+
+    Split on the LAST "Ref" (``rpartition``), not the first: a relationship name can itself
+    contain "Ref" (e.g. ``isReferencedBy``, ``refersTo``). Splitting on the first occurrence
+    would mis-parse ``isReferencedByRefOrganization`` as ("is", "erencedByRefOrganization"),
+    whose lowercase child then fails the PascalCase guard in ``is_inlined_reference`` and the
+    reference gets silently dropped. Splitting on the last "Ref" keeps the child entity name
+    (the trailing PascalCase token) intact. (A child entity legitimately named ``Ref...`` is the
+    residual ambiguity the module NOTE's two-sided marker fix would resolve.)
+    """
+    relationship, _, child_name = prop_name.rpartition(REFERENCE_KEY_MARKER)
+    return (relationship or None), child_name
+
+
+def is_inlined_reference(prop_name: str, prop) -> bool:
+    """True if `prop` is an MDR inlined entity reference rather than an embedded child or attribute."""
+    if not isinstance(prop, dict) or "$ref" in prop or "ValueSetId" in prop:
+        return False
+    _, child_name = parse_reference_key(prop_name)
+    # The marker must be followed by a PascalCase entity name; this keeps an embedded child whose
+    # own name merely contains "Ref" (e.g. "Reference") from being misread as a reference.
+    return bool(child_name) and child_name[0].isupper()
+
+
 async def create_reference_entity_association_if_needed(
-    session: AsyncSession, ref_name, referenced_entity, parent_entity_id, data_model_id
+    session: AsyncSession, referenced_entity, parent_entity_id, relationship, data_model_id
 ):
-    # relationship = the text prepended on ref_name that is not part of the referenced entity name
-    # e.g. for "issuedByOrganization" if referenced_entity.Name is "Organization", relationship is "issuedBy"
-    relationship = ref_name[: ref_name.index(referenced_entity.Name)]
     # Check if an EntityAssociation already exists
     entity_association = await get_entity_association_by_parent_child_relationship(
         session, parent_entity_id, referenced_entity.Id, relationship, data_model_id
@@ -69,39 +114,64 @@ async def create_reference_entity_association_if_needed(
 
 
 async def create_reference_associations_for_children(
-    session: AsyncSession, entity_md: Dict, data_model_id: int, openapi_schema: Dict, data_model_type: str
+    session: AsyncSession,
+    entity_name: str,
+    entity_md: Dict,
+    data_model_id: int,
+    openapi_schema: Dict,
+    data_model_type: str,
 ):
     entity_properties = entity_md.get("properties", {})
     for prop_name, prop in entity_properties.items():
-        if "$ref" in prop:  # This is a reference to another entity
-            ref_path = prop[
-                "$ref"
-            ]  # Assume path is always in format like #/components/schemas/EntityName or #/components/schemas/ParentEntityName/properties/ChildEntityName (this could continue for deeper nesting)
-            # 1. Find where it is in the openapi_schema
-            referenced_entity_md = resolve_ref(openapi_schema, ref_path)
-            # 2. Determine its Entity Id
+        if not isinstance(prop, dict):
+            continue
+
+        referenced_entity_md = None
+        relationship = None
+        child_name = None
+        if "$ref" in prop:  # externally-authored OpenAPI reference
+            # Path is in a format like #/components/schemas/EntityName (possibly nested deeper).
+            referenced_entity_md = resolve_ref(openapi_schema, prop["$ref"])
+        elif is_inlined_reference(prop_name, prop):  # MDR-exported inlined reference (#756)
+            referenced_entity_md = prop
+            relationship, child_name = parse_reference_key(prop_name)
+
+        if referenced_entity_md is not None:
+            # Resolve the referenced entity. Prefer UniqueName from embedded metadata; otherwise
+            # fall back to the child name parsed from the key (entities created in the first pass
+            # default their UniqueName to their schema-key name).
+            referenced_unique_name = referenced_entity_md.get("UniqueName") or child_name
             referenced_entity = await get_unique_entity(
+                session, referenced_unique_name, data_model_id, referenced_entity_md.get("DataModelId"), data_model_type
+            )
+            parent_entity = await get_unique_entity(
                 session,
-                referenced_entity_md.get("UniqueName"),
+                entity_md.get("UniqueName") or entity_name,
                 data_model_id,
-                referenced_entity_md.get("DataModelId"),
+                entity_md.get("DataModelId"),
                 data_model_type,
             )
-            logger.info(f"Referenced entity unique name: {referenced_entity_md.get('UniqueName')}")
-            # Determine parent entity id
-            logger.info(f"Parent entity: {entity_md}")
-            parent_entity = await get_unique_entity(
-                session, entity_md.get("UniqueName"), data_model_id, entity_md.get("DataModelId"), data_model_type
-            )
-            parent_entity_id = parent_entity.Id
-            # 3. Create an EntityAssociation if needed
-            await create_reference_entity_association_if_needed(
-                session, prop_name, referenced_entity, parent_entity_id, data_model_id
-            )
-        # Go through this process recursively
+            if referenced_entity and parent_entity:
+                if child_name is None:
+                    # $ref path: derive the relationship from the property-name prefix, e.g.
+                    # "issuedByOrganization" -> "issuedBy" for referenced entity "Organization".
+                    # idx > 0 means there is a non-empty prefix before the entity name; idx == 0
+                    # (no prefix) or idx == -1 (name not in the key) both mean no relationship.
+                    idx = prop_name.find(referenced_entity.Name)
+                    relationship = prop_name[:idx] if idx > 0 else None
+                logger.info(f"Reference {prop_name!r} -> entity {referenced_unique_name!r} (rel={relationship!r})")
+                await create_reference_entity_association_if_needed(
+                    session, referenced_entity, parent_entity.Id, relationship, data_model_id
+                )
+            else:
+                logger.warning(f"Could not resolve reference {prop_name!r} on entity {entity_name!r}")
+            # An inlined reference is a leaf (narrowed required fields); do not recurse into it.
+            continue
+
+        # Recurse into genuine child entities.
         if "properties" in prop:
             await create_reference_associations_for_children(
-                session, prop, data_model_id, openapi_schema, data_model_type
+                session, prop_name, prop, data_model_id, openapi_schema, data_model_type
             )
 
 
@@ -275,8 +345,9 @@ async def create_attribute_if_needed(
             )
             session.add(inclusion)
 
-    # If needed, create EntityAttributeAssociation
-    if parent_entity_id:
+    # If needed, create EntityAttributeAssociation. `is not None`, not truthiness: a parent
+    # entity id of 0 is a valid PK, not "no parent" (same class as the #1006 ElementId fix).
+    if parent_entity_id is not None:
         # Check if an EntityAttributeAssociation already exists
         association = await check_existing_association(session, parent_entity_id, attribute.Id, data_model_id)
         if not association:  # If the EntityAttributeAssociation does not exist, create it
@@ -457,8 +528,11 @@ async def create_entity_and_children_if_needed(
     # Process child entities if any
     entity_properties = entity_md.get("properties", {})
     for prop_name, prop in entity_properties.items():
-        if "$ref" in prop:
-            continue  # Skip $ref properties for now; we need to make sure all entities are created to reference to first.
+        if "$ref" in prop or is_inlined_reference(prop_name, prop):
+            # References (OpenAPI "$ref" or MDR inlined "Ref<Child>") point at entities created
+            # elsewhere; they are wired up in the post-pass (create_reference_associations_for_children),
+            # not materialized as embedded child entities here. (#756)
+            continue
         if "ValueSetId" not in prop:  # It's a child entity
             child_entity = await create_entity_and_children_if_needed(
                 session, prop_name, prop, data_model_id, contributor, contributor_organization, data_model_type
@@ -594,7 +668,7 @@ async def create_data_model_from_openapi_schema(
     ## After everything has been created, process references
     for schema_name, schema in schemas.items():
         await create_reference_associations_for_children(
-            session, schema, new_data_model.Id, openapi_schema, data_model_type
+            session, schema_name, schema, new_data_model.Id, openapi_schema, data_model_type
         )
 
     await session.commit()

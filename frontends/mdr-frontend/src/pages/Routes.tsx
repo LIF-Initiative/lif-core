@@ -8,6 +8,8 @@ import Home from "../pages/Home";
 import Login from "../pages/Login";
 import AuthCallback from "../pages/AuthCallback";
 import Workspaces from "../pages/Workspaces";
+import ApiKeys from "../pages/ApiKeys";
+import ExportPlayground from "../pages/ExportPlayground";
 import InviteAccept from "../pages/InviteAccept";
 import AuthGuard from "../components/AuthGuard";
 import LifModel from "./Explore/lif-model";
@@ -44,6 +46,18 @@ const routes: RouteObject[] = [
         path: "workspaces",
         element: <Workspaces />,
         handle: { name: "Workspaces" },
+      },
+      {
+        // Per-user developer API keys for the Learner Data Export API (#1035).
+        path: "api-keys",
+        element: <ApiKeys />,
+        handle: { name: "API Keys" },
+      },
+      {
+        // Interactive LDE /exports playground: pick a test learner + format (#1036).
+        path: "export-playground",
+        element: <ExportPlayground />,
+        handle: { name: "Export Playground" },
       },
       {
         path: "explore",

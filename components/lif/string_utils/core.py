@@ -23,6 +23,32 @@ def safe_identifier(name: str) -> str:
     return safe.lower()
 
 
+def safe_graphql_name(name: str) -> str:
+    """Sanitize a string into a valid GraphQL name, preserving its original casing.
+
+    GraphQL names must be at least 1 character long, start with ``_A-Za-z``, and otherwise
+    contain only ``_0-9A-Za-z`` (i.e. match ``/[_A-Za-z][_0-9A-Za-z]*/``). Unlike
+    :func:`safe_identifier` (which snake_cases for Python
+    attributes), this keeps the original casing so the exposed GraphQL field/type name stays
+    as close to the source schema as possible; it only replaces invalid characters with ``_``,
+    prefixes ``_`` when the name would start with a digit, and collapses a leading run of
+    underscores to a single ``_`` (GraphQL reserves names beginning with ``__`` for
+    introspection, so a sanitized name must not start with two underscores).
+
+    Without this, a single source-schema name containing an illegal character (e.g. a hyphen,
+    ``iSO639-2LangCode``) makes the entire GraphQL schema build raise ``GraphQLError`` and
+    crashes the service (see issue #1011).
+    """
+    if not name:
+        return name
+    safe = re.sub(r"[^_0-9A-Za-z]", "_", name)
+    if safe[0].isdigit():
+        safe = f"_{safe}"
+    # GraphQL reserves names that begin with "__"; collapse a leading underscore run to one.
+    safe = re.sub(r"^_{2,}", "_", safe)
+    return safe
+
+
 def to_pascal_case(*parts: str) -> str:
     """Convert strings or parts to PascalCase.
 

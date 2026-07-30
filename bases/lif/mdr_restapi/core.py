@@ -8,6 +8,8 @@ from lif.mdr_restapi import (
     attribute_endpoints,
     datamodel_constraints_endpoints,
     datamodel_endpoints,
+    demo_endpoints,
+    developer_api_key_endpoints,
     entity_association_endpoints,
     entity_attribute_association_endpoints,
     entity_endpoints,
@@ -479,6 +481,13 @@ app.include_router(generate_jinja_endpoint.router, prefix="/generate_jinja")
 app.include_router(datamodel_constraints_endpoints.router, prefix="/datamodel_constraints")
 
 app.include_router(tenant_endpoints.router, prefix="/tenants")
+app.include_router(developer_api_key_endpoints.router, prefix="/api-keys")
+
+# Demo-only endpoints (ADR 0004): a base-level demo decoration serving the shared
+# demo personas (#1055) for demo UIs like the LDE playground (#1036). Mounted
+# unless explicitly disabled, so a bare adopter can exclude the demo surface.
+if os.environ.get("MDR__DEMO_ENDPOINTS_ENABLED", "true").lower() in ("true", "1", "yes"):
+    app.include_router(demo_endpoints.router, prefix="/demo")
 
 
 # API Key Management Endpoints

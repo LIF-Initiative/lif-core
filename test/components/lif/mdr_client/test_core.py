@@ -249,7 +249,6 @@ async def test_get_transformation_groups_from_mdr_success(mock_get):
         "source_data_model_id": "17",
         "exportable": True,
         "pagination": False,
-        "size": 100,
     }
     # Auth token is sourced from config, not the environment.
     assert mock_get.call_args.kwargs["headers"]["X-API-Key"] == "secret-token"

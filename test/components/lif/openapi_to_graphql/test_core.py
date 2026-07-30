@@ -2,7 +2,7 @@
 
 import json
 from pathlib import Path
-from typing import List, Optional
+from typing import Optional
 
 import strawberry
 
@@ -11,6 +11,7 @@ from lif.openapi_to_graphql.type_factory import (
     build_root_mutation_type,
     build_root_query_type,
     create_enum_type,
+    create_nested_input_type,
     create_type,
 )
 
@@ -41,10 +42,7 @@ class TestCreateTypeBasicObject:
     def test_returns_strawberry_type_with_scalar_properties(self):
         schema = {
             "type": "object",
-            "properties": {
-                "firstName": _make_scalar_field(),
-                "age": _make_scalar_field("xsd:integer"),
-            },
+            "properties": {"firstName": _make_scalar_field(), "age": _make_scalar_field("xsd:integer")},
         }
         openapi = _empty_openapi({})
         created_types = {}
@@ -60,10 +58,7 @@ class TestCreateTypeBasicObject:
         schema = {
             "type": "object",
             "required": ["firstName"],
-            "properties": {
-                "firstName": _make_scalar_field(),
-                "lastName": _make_scalar_field(),
-            },
+            "properties": {"firstName": _make_scalar_field(), "lastName": _make_scalar_field()},
         }
         created_types = {}
 
@@ -71,7 +66,7 @@ class TestCreateTypeBasicObject:
 
         annotations = result.__annotations__
         # Required field should NOT be Optional
-        assert annotations["first_name"] is str or annotations["first_name"] == str
+        assert annotations["first_name"] is str
         # Optional field SHOULD be Optional
         last_name_ann = annotations["last_name"]
         assert last_name_ann == Optional[str]
@@ -90,10 +85,7 @@ class TestCreateTypeRecursiveRef:
         schemas = {
             "TreeNode": {
                 "type": "object",
-                "properties": {
-                    "name": _make_scalar_field(),
-                    "child": {"$ref": "#/components/schemas/TreeNode"},
-                },
+                "properties": {"name": _make_scalar_field(), "child": {"$ref": "#/components/schemas/TreeNode"}},
             }
         }
         openapi = _empty_openapi(schemas)
@@ -117,17 +109,11 @@ class TestCreateTypeMutualRef:
         schemas = {
             "Department": {
                 "type": "object",
-                "properties": {
-                    "name": _make_scalar_field(),
-                    "manager": {"$ref": "#/components/schemas/Employee"},
-                },
+                "properties": {"name": _make_scalar_field(), "manager": {"$ref": "#/components/schemas/Employee"}},
             },
             "Employee": {
                 "type": "object",
-                "properties": {
-                    "name": _make_scalar_field(),
-                    "department": {"$ref": "#/components/schemas/Department"},
-                },
+                "properties": {"name": _make_scalar_field(), "department": {"$ref": "#/components/schemas/Department"}},
             },
         }
         openapi = _empty_openapi(schemas)
@@ -140,6 +126,88 @@ class TestCreateTypeMutualRef:
         assert _is_strawberry_type(emp_type), f"Employee should be Strawberry type, got {emp_type}"
         assert _is_strawberry_type(created_types["Department"])
         assert _is_strawberry_type(created_types["Employee"])
+
+
+# === Test: invalid GraphQL field name is sanitized, not fatal (#1011) ===
+
+
+class TestInvalidGraphqlNameHardening:
+    async def test_hyphenated_field_name_builds_valid_schema(self):
+        """A source field name with an illegal GraphQL char (hyphen) must not crash schema build.
+
+        Pre-fix, ``generate_graphql_schema`` raised
+        ``GraphQLError: Names must only contain [_a-zA-Z0-9] but 'iSO639-2LangCode' does not``
+        and took the whole service down (#1011).
+        """
+        openapi = _empty_openapi(
+            {
+                "Person": {
+                    "type": "array",
+                    "properties": {
+                        "iSO639-2LangCode": _make_scalar_field(queryable=True),
+                        "firstName": _make_scalar_field(queryable=True),
+                    },
+                }
+            }
+        )
+
+        # This call is exactly where the invalid name used to raise.
+        schema = await generate_graphql_schema(
+            openapi=openapi,
+            root_type_name="Person",
+            query_planner_query_url="http://localhost:9999/query",
+            query_planner_update_url="http://localhost:9999/update",
+        )
+        sdl = schema.as_str()
+
+        assert "iSO639_2LangCode" in sdl  # hyphen sanitized to underscore
+        assert "iSO639-2LangCode" not in sdl
+        assert "firstName" in sdl  # valid names pass through unchanged (case preserved)
+
+    async def test_names_colliding_after_sanitization_are_deduped(self):
+        """Two distinct source names that sanitize to the same identifier must not crash the build
+        (duplicate GraphQL field) — they are de-duped instead (#1011 follow-up)."""
+        openapi = _empty_openapi(
+            {
+                "Person": {
+                    "type": "array",
+                    "properties": {
+                        # both sanitize to "iSO639_2LangCode"
+                        "iSO639-2LangCode": _make_scalar_field(queryable=True),
+                        "iSO639_2LangCode": _make_scalar_field(queryable=True),
+                    },
+                }
+            }
+        )
+
+        schema = await generate_graphql_schema(
+            openapi=openapi,
+            root_type_name="Person",
+            query_planner_query_url="http://localhost:9999/query",
+            query_planner_update_url="http://localhost:9999/update",
+        )
+        sdl = schema.as_str()
+
+        # Both fields survive with distinct names; neither the build nor a field is lost.
+        assert "iSO639_2LangCode" in sdl
+        assert "iSO639_2LangCode_2" in sdl
+
+    def test_filter_input_dedups_colliding_field_names(self):
+        """The de-dup must also apply to the input/filter builders, not just create_type. Two
+        queryable source names that sanitize to the same identifier used to collapse to one in the
+        filter input via dict-key overwrite (silent field loss / potential duplicate-field crash)."""
+        schema = {
+            "type": "object",
+            "properties": {
+                # both sanitize to attr "iso639_2_lang_code" / graphql "iSO639_2LangCode"
+                "iSO639-2LangCode": _make_scalar_field(queryable=True),
+                "iSO639_2LangCode": _make_scalar_field(queryable=True),
+            },
+        }
+        input_type = create_nested_input_type("PersonFilter", schema, _empty_openapi({}), {}, {})
+        assert input_type is not None
+        # Both fields present (de-duped) — not collapsed to one.
+        assert len(input_type.__annotations__) == 2
 
 
 # === Test: create_type — object with no properties ===
@@ -160,12 +228,7 @@ class TestCreateTypeEmptyProperties:
 
 class TestCreateTypeArrayWithObject:
     def test_returns_list_of_strawberry_type(self):
-        schema = {
-            "type": "array",
-            "properties": {
-                "value": _make_scalar_field(),
-            },
-        }
+        schema = {"type": "array", "properties": {"value": _make_scalar_field()}}
         created_types = {}
 
         result = create_type("Scores", schema, _empty_openapi({}), created_types, {})
@@ -184,12 +247,7 @@ class TestCreateTypeWithEnum:
     def test_creates_enum_for_enum_field(self):
         schema = {
             "type": "object",
-            "properties": {
-                "status": {
-                    "enum": ["ACTIVE", "INACTIVE", "PENDING"],
-                    "x-queryable": True,
-                },
-            },
+            "properties": {"status": {"enum": ["ACTIVE", "INACTIVE", "PENDING"], "x-queryable": True}},
         }
         created_types = {}
 
@@ -265,12 +323,7 @@ class TestBuildRootMutationTypeNoneInputs:
     def test_builds_mutation_when_mutable_input_missing(self):
         """When mutable_input_types doesn't have the root type, mutation should still build."""
         # First create a minimal type to use as root
-        schema = {
-            "type": "object",
-            "properties": {
-                "name": _make_scalar_field(),
-            },
-        }
+        schema = {"type": "object", "properties": {"name": _make_scalar_field()}}
         created_types = {}
         create_type("Thing", schema, _empty_openapi({}), created_types, {})
 
@@ -287,12 +340,7 @@ class TestBuildRootMutationTypeNoneInputs:
 
     def test_builds_mutation_with_none_input_types_arg(self):
         """When input_types is passed as None."""
-        schema = {
-            "type": "object",
-            "properties": {
-                "name": _make_scalar_field(),
-            },
-        }
+        schema = {"type": "object", "properties": {"name": _make_scalar_field()}}
         created_types = {}
         create_type("Widget", schema, _empty_openapi({}), created_types, {})
 
@@ -312,12 +360,7 @@ class TestBuildRootMutationTypeNoneInputs:
 
 class TestBuildRootQueryType:
     def test_builds_query_without_filter(self):
-        schema = {
-            "type": "object",
-            "properties": {
-                "name": _make_scalar_field(),
-            },
-        }
+        schema = {"type": "object", "properties": {"name": _make_scalar_field()}}
         created_types = {}
         create_type("Item", schema, _empty_openapi({}), created_types, {})
 

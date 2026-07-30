@@ -10,6 +10,8 @@ ARG COGNITO_DOMAIN
 ENV COGNITO_DOMAIN=${COGNITO_DOMAIN}
 ARG COGNITO_CLIENT_ID
 ENV COGNITO_CLIENT_ID=${COGNITO_CLIENT_ID}
+ARG LDE_API_URL
+ENV LDE_API_URL=${LDE_API_URL}
 
 # Set working directory
 WORKDIR /app
@@ -26,6 +28,7 @@ RUN echo "VITE_API_URL=${LIF_MDR_API_URL}" > .env && \
     echo "VITE_GA_MEASUREMENT_ID=${GA_MEASUREMENT_ID}" >> .env && \
     echo "VITE_COGNITO_DOMAIN=${COGNITO_DOMAIN}" >> .env && \
     echo "VITE_COGNITO_CLIENT_ID=${COGNITO_CLIENT_ID}" >> .env && \
+    echo "VITE_LDE_API_URL=${LDE_API_URL}" >> .env && \
     npm run build
 
 # Stage 2: serve the built app with nginx
