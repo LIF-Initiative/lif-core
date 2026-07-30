@@ -83,3 +83,16 @@ jobs:
           name: playwright-report
           path: e2e/playwright-report/
           retention-days: 7
+
+      # Notify the team (email + SMS) when a happy-path check fails — this is the
+      # "alert" half of #1089. Topic + subscriptions live in repositories.yml; the
+      # demo OIDC role already assumed above has sns:Publish on the topic.
+      - name: Alert on failure (SNS)
+        if: failure()
+        working-directory: ${{ github.workspace }}
+        run: |
+          topic=$(aws ssm get-parameter --name /demo/alerts/TopicArn --query Parameter.Value --output text)
+          run_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+          aws sns publish --topic-arn "$topic" \
+            --subject "LIF demo synthetic monitor FAILED" \
+            --message "The demo happy-path monitor failed (advisor and/or MDR/LDE). Investigate: ${run_url}"

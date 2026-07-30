@@ -21,11 +21,27 @@ Parameters:
     Type: String
     Default: 'none'
 
+  AlertEmail:
+    Description: Email address subscribed to the ${EnvironmentName}-lif-alerts SNS topic (e.g. synthetic-monitor failures). Empty disables the email subscription.
+    Type: String
+    Default: ''
+
+  AlertSmsNumber:
+    Description: E.164 phone number subscribed to the alerts topic for SMS (e.g. +13135551234). 'none' disables SMS.
+    Type: String
+    Default: 'none'
+
 Conditions:
 
   CreateProvider: !Equals
     - !Ref ExistingProviderArn
     - 'none'
+
+  HasAlertEmail: !Not
+    - !Equals [!Ref AlertEmail, '']
+
+  HasAlertSms: !Not
+    - !Equals [!Ref AlertSmsNumber, 'none']
 
 Resources:
 
@@ -232,6 +248,13 @@ Resources:
           Resource:
             - !Sub 'arn:aws:ecs:${AWS::Region}:${AWS::AccountId}:service/${EnvironmentName}*'
         - Effect: Allow
+          # Lets the synthetic-e2e monitor (#1095) publish an alert to the alerts
+          # topic when a demo happy-path check fails (#1089).
+          Action:
+            - 'sns:Publish'
+          Resource:
+            - !Ref AlertsTopic
+        - Effect: Allow
           Action:
             - ecr:GetAuthorizationToken
             - 'ecs:List*'
@@ -260,7 +283,43 @@ Resources:
         - Key: Name
           Value: !Sub lif-github-actions-${EnvironmentName}
 
+  # Operational alerts (e.g. synthetic-monitor failures, #1089). No Slack yet, so
+  # notifications go out over email + SMS. The topic ARN is published to SSM so
+  # workflows can look it up rather than hardcoding it.
+  AlertsTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: !Sub ${EnvironmentName}-lif-alerts
+      DisplayName: LIFalerts
+
+  AlertsTopicArnParam:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: !Sub /${EnvironmentName}/alerts/TopicArn
+      Type: String
+      Value: !Ref AlertsTopic
+
+  AlertsEmailSubscription:
+    Type: AWS::SNS::Subscription
+    Condition: HasAlertEmail
+    Properties:
+      TopicArn: !Ref AlertsTopic
+      Protocol: email
+      Endpoint: !Ref AlertEmail
+
+  AlertsSmsSubscription:
+    Type: AWS::SNS::Subscription
+    Condition: HasAlertSms
+    Properties:
+      TopicArn: !Ref AlertsTopic
+      Protocol: sms
+      Endpoint: !Ref AlertSmsNumber
+
 Outputs:
 
   GitHubOIDCProvider:
     Value: !If [CreateProvider, !Ref GitHubOIDCProvider, !Ref ExistingProviderArn]
+
+  AlertsTopicArn:
+    Description: ARN of the operational alerts SNS topic
+    Value: !Ref AlertsTopic
