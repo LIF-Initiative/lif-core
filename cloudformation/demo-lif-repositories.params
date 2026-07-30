@@ -14,5 +14,17 @@
   {
     "ParameterKey": "ExistingProviderArn",
     "ParameterValue": "arn:aws:iam::381492161417:oidc-provider/token.actions.githubusercontent.com"
+  },
+  {
+    "ParameterKey": "AlertEmail",
+    "ParameterValue": "bgonzalez@flex.unicon.net"
+  },
+  {
+    "ParameterKey": "AlertSmsNumber",
+    "ParameterValue": "none"
+  },
+  {
+    "ParameterKey": "AlertAdditionalEmails",
+    "ParameterValue": "thelmick@unicon.net,khoyland@unicon.net,bgonzalez@unicon.net"
   }
 ]

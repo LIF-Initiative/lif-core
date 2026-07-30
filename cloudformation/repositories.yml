@@ -21,11 +21,44 @@ Parameters:
     Type: String
     Default: 'none'
 
+  AlertEmail:
+    Description: Email address subscribed to the ${EnvironmentName}-lif-alerts SNS topic (e.g. synthetic-monitor failures). Empty disables the email subscription.
+    Type: String
+    Default: ''
+
+  AlertSmsNumber:
+    Description: E.164 phone number subscribed to the alerts topic for SMS (e.g. +13135551234). 'none' disables SMS.
+    Type: String
+    Default: 'none'
+
+  AlertAdditionalEmails:
+    Description: Comma-separated additional email addresses to subscribe to the alerts topic (up to 6), e.g. the rest of the dev team. Empty adds none.
+    Type: String
+    Default: ''
+
 Conditions:
 
   CreateProvider: !Equals
     - !Ref ExistingProviderArn
     - 'none'
+
+  HasAlertEmail: !Not
+    - !Equals [!Ref AlertEmail, '']
+
+  HasAlertSms: !Not
+    - !Equals [!Ref AlertSmsNumber, 'none']
+
+  # AlertAdditionalEmails is padded with trailing commas so !Select never runs
+  # off the end; a slot is subscribed only if its position holds a non-empty value.
+  # 8 slots — plenty of headroom to add more of the team over time.
+  HasAddlEmail0: !Not [!Equals [!Select [0, !Split [",", !Sub "${AlertAdditionalEmails},,,,,,,"]], '']]
+  HasAddlEmail1: !Not [!Equals [!Select [1, !Split [",", !Sub "${AlertAdditionalEmails},,,,,,,"]], '']]
+  HasAddlEmail2: !Not [!Equals [!Select [2, !Split [",", !Sub "${AlertAdditionalEmails},,,,,,,"]], '']]
+  HasAddlEmail3: !Not [!Equals [!Select [3, !Split [",", !Sub "${AlertAdditionalEmails},,,,,,,"]], '']]
+  HasAddlEmail4: !Not [!Equals [!Select [4, !Split [",", !Sub "${AlertAdditionalEmails},,,,,,,"]], '']]
+  HasAddlEmail5: !Not [!Equals [!Select [5, !Split [",", !Sub "${AlertAdditionalEmails},,,,,,,"]], '']]
+  HasAddlEmail6: !Not [!Equals [!Select [6, !Split [",", !Sub "${AlertAdditionalEmails},,,,,,,"]], '']]
+  HasAddlEmail7: !Not [!Equals [!Select [7, !Split [",", !Sub "${AlertAdditionalEmails},,,,,,,"]], '']]
 
 Resources:
 
@@ -226,8 +259,18 @@ Resources:
         - Effect: Allow
           Action:
             - 'ecs:UpdateService'
+            # DescribeServices is required by the post-deploy `aws ecs wait services-stable`
+            # steady-state check (#1070) in the update-cluster action.
+            - 'ecs:DescribeServices'
           Resource:
             - !Sub 'arn:aws:ecs:${AWS::Region}:${AWS::AccountId}:service/${EnvironmentName}*'
+        - Effect: Allow
+          # Lets the synthetic-e2e monitor (#1095) publish an alert to the alerts
+          # topic when a demo happy-path check fails (#1089).
+          Action:
+            - 'sns:Publish'
+          Resource:
+            - !Ref AlertsTopic
         - Effect: Allow
           Action:
             - ecr:GetAuthorizationToken
@@ -257,7 +300,108 @@ Resources:
         - Key: Name
           Value: !Sub lif-github-actions-${EnvironmentName}
 
+  # Operational alerts (e.g. synthetic-monitor failures, #1089). No Slack yet, so
+  # notifications go out over email + SMS. The topic ARN is published to SSM so
+  # workflows can look it up rather than hardcoding it.
+  AlertsTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: !Sub ${EnvironmentName}-lif-alerts
+      DisplayName: LIFalerts
+
+  AlertsTopicArnParam:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: !Sub /${EnvironmentName}/alerts/TopicArn
+      Type: String
+      Value: !Ref AlertsTopic
+
+  AlertsEmailSubscription:
+    Type: AWS::SNS::Subscription
+    Condition: HasAlertEmail
+    Properties:
+      TopicArn: !Ref AlertsTopic
+      Protocol: email
+      Endpoint: !Ref AlertEmail
+
+  AlertsSmsSubscription:
+    Type: AWS::SNS::Subscription
+    Condition: HasAlertSms
+    Properties:
+      TopicArn: !Ref AlertsTopic
+      Protocol: sms
+      Endpoint: !Ref AlertSmsNumber
+
+  # Additional team email subscriptions, one per non-empty slot in AlertAdditionalEmails.
+  AddlEmailSub0:
+    Type: AWS::SNS::Subscription
+    Condition: HasAddlEmail0
+    Properties:
+      TopicArn: !Ref AlertsTopic
+      Protocol: email
+      Endpoint: !Select [0, !Split [",", !Sub "${AlertAdditionalEmails},,,,,,,"]]
+
+  AddlEmailSub1:
+    Type: AWS::SNS::Subscription
+    Condition: HasAddlEmail1
+    Properties:
+      TopicArn: !Ref AlertsTopic
+      Protocol: email
+      Endpoint: !Select [1, !Split [",", !Sub "${AlertAdditionalEmails},,,,,,,"]]
+
+  AddlEmailSub2:
+    Type: AWS::SNS::Subscription
+    Condition: HasAddlEmail2
+    Properties:
+      TopicArn: !Ref AlertsTopic
+      Protocol: email
+      Endpoint: !Select [2, !Split [",", !Sub "${AlertAdditionalEmails},,,,,,,"]]
+
+  AddlEmailSub3:
+    Type: AWS::SNS::Subscription
+    Condition: HasAddlEmail3
+    Properties:
+      TopicArn: !Ref AlertsTopic
+      Protocol: email
+      Endpoint: !Select [3, !Split [",", !Sub "${AlertAdditionalEmails},,,,,,,"]]
+
+  AddlEmailSub4:
+    Type: AWS::SNS::Subscription
+    Condition: HasAddlEmail4
+    Properties:
+      TopicArn: !Ref AlertsTopic
+      Protocol: email
+      Endpoint: !Select [4, !Split [",", !Sub "${AlertAdditionalEmails},,,,,,,"]]
+
+  AddlEmailSub5:
+    Type: AWS::SNS::Subscription
+    Condition: HasAddlEmail5
+    Properties:
+      TopicArn: !Ref AlertsTopic
+      Protocol: email
+      Endpoint: !Select [5, !Split [",", !Sub "${AlertAdditionalEmails},,,,,,,"]]
+
+  AddlEmailSub6:
+    Type: AWS::SNS::Subscription
+    Condition: HasAddlEmail6
+    Properties:
+      TopicArn: !Ref AlertsTopic
+      Protocol: email
+      Endpoint: !Select [6, !Split [",", !Sub "${AlertAdditionalEmails},,,,,,,"]]
+
+  AddlEmailSub7:
+    Type: AWS::SNS::Subscription
+    Condition: HasAddlEmail7
+    Properties:
+      TopicArn: !Ref AlertsTopic
+      Protocol: email
+      Endpoint: !Select [7, !Split [",", !Sub "${AlertAdditionalEmails},,,,,,,"]]
+
 Outputs:
 
   GitHubOIDCProvider:
     Value: !If [CreateProvider, !Ref GitHubOIDCProvider, !Ref ExistingProviderArn]
+
+  AlertsTopicArn:
+    Description: ARN of the operational alerts SNS topic
+    Value: !Ref AlertsTopic

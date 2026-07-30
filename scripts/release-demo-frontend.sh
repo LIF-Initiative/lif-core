@@ -18,6 +18,7 @@ AWS_REGION=us-east-1
 S3_BUCKET=""  # Resolved after AWS credentials are verified
 SSM_DISTRIBUTION_ID="/${ENV_NAME}/${SERVICE_NAME}/DistributionId"
 VITE_API_URL="https://mdr-api.${ENV_NAME}.lif.unicon.net"
+VITE_LDE_API_URL="https://lde.${ENV_NAME}.lif.unicon.net"
 GA_MEASUREMENT_ID="G-VZ515ZL70E"
 FRONTEND_DIR="frontends/mdr-frontend"
 
@@ -97,6 +98,7 @@ main() {
     echo -e "  ${BLUE}Git ref:${NC}     $GIT_REF"
     echo -e "  ${BLUE}Commit:${NC}      $resolved_sha"
     echo -e "  ${BLUE}API URL:${NC}     $VITE_API_URL"
+    echo -e "  ${BLUE}LDE URL:${NC}     $VITE_LDE_API_URL"
     echo -e "  ${BLUE}S3 bucket:${NC}   s3://$S3_BUCKET"
     echo -e "  ${BLUE}Source dir:${NC}  $FRONTEND_DIR"
 
@@ -244,6 +246,7 @@ build_frontend() {
     log_info "Building with VITE_API_URL=$VITE_API_URL..."
     {
         echo "VITE_API_URL=$VITE_API_URL"
+        echo "VITE_LDE_API_URL=$VITE_LDE_API_URL"
         echo "VITE_GA_MEASUREMENT_ID=$GA_MEASUREMENT_ID"
         echo "VITE_COGNITO_DOMAIN=$cognito_domain"
         echo "VITE_COGNITO_CLIENT_ID=$cognito_client_id"

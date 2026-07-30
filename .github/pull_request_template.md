@@ -17,9 +17,14 @@ Include:
 -->
 
 ##### Related Issues
-<!-- Auto-close the issue this PR resolves. The number must come directly after `#` (no space, no brackets)
-     or GitHub will NOT auto-close on merge — e.g. `Closes #123`. Use `Refs #123` for related-but-not-closed
-     issues. Delete this line if the PR closes nothing. -->
+<!-- Link the issue(s) this PR relates to. The number must come directly after `#` — no space, no
+     brackets — or GitHub won't parse it (e.g. `Closes #123`, not `Closes # 123`).
+       - `Closes #123` — a leaf issue this PR FULLY resolves. Merging auto-closes it AND moves its
+                         card to Done on the project board. Use one per issue you actually finished.
+       - `Refs #123`   — a related issue this PR does NOT fully resolve, OR an epic / umbrella issue
+                         (which must stay open — its sub-issue rollup tracks progress, so never `Closes` it).
+     Example for a PR implementing one item of an epic:  `Closes #123`  /  `Refs #120` (the epic).
+     Delete these lines if the PR closes nothing. -->
 
 Closes #
 
