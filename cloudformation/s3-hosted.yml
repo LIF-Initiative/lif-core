@@ -91,6 +91,10 @@ Resources:
         ViewerCertificate:
           AcmCertificateArn: !Ref SSLCertificate
           SslSupportMethod: sni-only
+          # Pin TLS 1.2+ for viewers. Without this, a custom-cert distribution
+          # defaults to MinimumProtocolVersion TLSv1, which permits TLS 1.0/1.1
+          # (encryption-policy violation flagged by cyber insurance, 2026-08).
+          MinimumProtocolVersion: TLSv1.2_2021
       Tags:
         - Key: Name
           Value: !Sub '${EnvironmentName}-${ServiceName}-cloudfront'
