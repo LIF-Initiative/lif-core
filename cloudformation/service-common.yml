@@ -488,9 +488,13 @@ Resources:
                 <a rel="home" title="404 Home" class="active" href="https://www.unicon.net/"><img class="logo" id="logo" alt="Unicon logo" title="Home" src="https://www.unicon.net/hs-fs/hubfs/raw_assets/public/Unicon_October2020/images/logo.png?width=600&name=logo.png"></a>		    
               </div>
       LoadBalancerArn: !Ref LoadBalancer
-      Port: 443 
+      Port: 443
       Protocol: HTTPS
-      Certificates: 
+      # Pin TLS 1.2+1.3 only. Without an explicit policy the listener defaults to
+      # ELBSecurityPolicy-2016-08, which still permits TLS 1.0/1.1 (encryption-policy
+      # violation flagged by cyber insurance, 2026-08).
+      SslPolicy: ELBSecurityPolicy-TLS13-1-2-2021-06
+      Certificates:
         - CertificateArn: !Ref SSLCertificate
 
   SSLCertificate:
