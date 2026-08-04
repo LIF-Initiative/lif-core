@@ -26,9 +26,24 @@ Parameters:
     Description: S3 key for the s3-hosted.yml template
     Default: cloudformation/s3-hosted.yml
 
+  CreateStackSetRoles:
+    Type: String
+    AllowedValues: ['true', 'false']
+    Default: 'true'
+    Description: >
+      Whether to create the account-global self-managed StackSet IAM roles
+      (AWSCloudFormationStackSet{Administration,Execution}Role). These names are
+      shared per-account, so exactly one env's frontend stack should create them
+      (true); every other env must reference the existing roles (false), or the
+      second stack fails with "...Role already exists".
+
+Conditions:
+  ShouldCreateStackSetRoles: !Equals [!Ref CreateStackSetRoles, 'true']
+
 Resources:
   StackSetAdministrationRole:
     Type: AWS::IAM::Role
+    Condition: ShouldCreateStackSetRoles
     Properties:
       RoleName: AWSCloudFormationStackSetAdministrationRole
       AssumeRolePolicyDocument:
@@ -49,6 +64,7 @@ Resources:
 
   StackSetExecutionRole:
     Type: AWS::IAM::Role
+    Condition: ShouldCreateStackSetRoles
     Properties:
       RoleName: AWSCloudFormationStackSetExecutionRole
       AssumeRolePolicyDocument:
@@ -78,13 +94,15 @@ Resources:
 
   S3HostedStackSet:
     Type: AWS::CloudFormation::StackSet
-    DependsOn:
-      - StackSetAdministrationRole
-      - StackSetExecutionRole
+    # No explicit DependsOn: when the roles are created here, the !GetAtt in
+    # AdministrationRoleARN is an implicit dependency; when reused, they already exist.
     Properties:
       StackSetName: !Sub '${EnvironmentName}-${ServiceName}-s3-hosted-stackset'
       Description: StackSet for S3 website hosting with CloudFront
-      AdministrationRoleARN: !GetAtt StackSetAdministrationRole.Arn
+      AdministrationRoleARN: !If
+        - ShouldCreateStackSetRoles
+        - !GetAtt StackSetAdministrationRole.Arn
+        - !Sub 'arn:aws:iam::${AWS::AccountId}:role/AWSCloudFormationStackSetAdministrationRole'
       ExecutionRoleName: AWSCloudFormationStackSetExecutionRole
       Capabilities:
         - CAPABILITY_NAMED_IAM
@@ -112,9 +130,11 @@ Outputs:
     Value: !Ref S3HostedStackSet
   
   StackSetAdministrationRoleArn:
+    Condition: ShouldCreateStackSetRoles
     Description: ARN of the StackSet administration role
     Value: !GetAtt StackSetAdministrationRole.Arn
-  
+
   StackSetExecutionRoleArn:
+    Condition: ShouldCreateStackSetRoles
     Description: ARN of the StackSet execution role
     Value: !GetAtt StackSetExecutionRole.Arn
