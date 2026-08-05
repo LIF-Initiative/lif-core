@@ -55,7 +55,12 @@ def get_credentials_for_adapter(adapter_id: str, information_source_id: str) -> 
         env_var_name = f"{prefix}__{cred_key.upper()}"
         value = os.getenv(env_var_name)
         if value:
-            credentials[cred_key] = value
+            # Strip surrounding whitespace/newlines. Secrets sourced from SSM (or a
+            # file) commonly carry a trailing newline; passed verbatim into an HTTP
+            # header (e.g. the example-data-source adapter's "x-key": token) that
+            # newline is an illegal header value and requests/urllib3 raises
+            # InvalidHeader, failing the pipeline for that information source.
+            credentials[cred_key] = value.strip()
         else:
             warnings.warn(
                 f"Missing expected credential key '{cred_key}' for adapter '{adapter_id}' and source '{information_source_id}'"

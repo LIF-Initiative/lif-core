@@ -40,11 +40,17 @@ async def create_developer_api_key(
     raw, key_prefix, key_hash = _generate_key()
     key = DeveloperApiKey(OwnerSub=owner_sub, Label=data.Label, KeyPrefix=key_prefix, KeyHash=key_hash)
     session.add(key)
-    await session.commit()
-    await session.refresh(key)
-    return CreatedDeveloperApiKeyDTO(
+    # Flush (INSERT ... RETURNING) populates Id/CreationDate while the request's
+    # tenant search_path is still active, and read them BEFORE commit. A refresh()
+    # after commit runs in a fresh transaction that has lost the tenant search_path,
+    # so it looks in `public`, can't find the tenant-schema row, and raises
+    # "Could not refresh instance".
+    await session.flush()
+    created = CreatedDeveloperApiKeyDTO(
         Id=key.Id, Label=key.Label, KeyPrefix=key.KeyPrefix, CreationDate=key.CreationDate, Key=raw
     )
+    await session.commit()
+    return created
 
 
 async def list_developer_api_keys(session: AsyncSession, owner_sub: str) -> List[DeveloperApiKeyDTO]:
