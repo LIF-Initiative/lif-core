@@ -1,14 +1,10 @@
 {
-  "Id": 50,
   "SourceDataModelId": 17,
   "TargetDataModelId": 3,
-  "SourceDataModelName": "StateU LIF",
-  "TargetDataModelName": "CLR v2 / Open Badges v3",
   "Name": "StateU-LIF_CLR-v2-Open-Badges-v3__v1.0",
   "GroupVersion": "1.0",
   "Description": null,
   "Notes": null,
-  "CreationDate": null,
   "ActivationDate": "2026-06-18T00:00:00Z",
   "DeprecationDate": null,
   "Contributor": null,
@@ -1286,6 +1282,38 @@
         "ContributorOrganization": null,
         "EntityIdPath": "3:AchievementCredential,3:~AchievementCredential.awardedDate (or issuanceDate)"
       }
+    },
+    {
+      "Id": 1671,
+      "TransformationGroupId": 50,
+      "Name": "AchievementSubject.activityStartDate",
+      "Expression": "{ \"AchievementSubject\": Person. { \"activityStartDate\": Name.firstName } }",
+      "ExpressionLanguage": "JSONata",
+      "Notes": null,
+      "Alignment": null,
+      "CreationDate": null,
+      "ActivationDate": null,
+      "DeprecationDate": null,
+      "Contributor": null,
+      "ContributorOrganization": null,
+      "SourceAttributes": [],
+      "TargetAttribute": null
+    },
+    {
+      "Id": 1672,
+      "TransformationGroupId": 50,
+      "Name": "AchievementSubject.result",
+      "Expression": "{ \"AchievementSubject\": Person. { \"result\": Name.firstName } }",
+      "ExpressionLanguage": "JSONata",
+      "Notes": null,
+      "Alignment": null,
+      "CreationDate": null,
+      "ActivationDate": null,
+      "DeprecationDate": null,
+      "Contributor": null,
+      "ContributorOrganization": null,
+      "SourceAttributes": [],
+      "TargetAttribute": null
     }
   ],
   "Tags": null

@@ -1,14 +1,10 @@
 {
-  "Id": 49,
   "SourceDataModelId": 17,
   "TargetDataModelId": 6,
-  "SourceDataModelName": "StateU LIF",
-  "TargetDataModelName": "Ed-Fi v5",
   "Name": "StateU LIF_Ed-Fi_v5_v1.0",
   "GroupVersion": "1.0",
   "Description": null,
   "Notes": null,
-  "CreationDate": null,
   "ActivationDate": "2026-06-18T00:00:00Z",
   "DeprecationDate": null,
   "Contributor": null,
@@ -1889,7 +1885,7 @@
       "Id": 1640,
       "TransformationGroupId": 49,
       "Name": "Student.Name",
-      "Expression": "{ \"Student\": Person. { \"Name\": Name.firstName } }",
+      "Expression": "{\n  \"Student\": Person.{\n    \"Name\": Name.firstName & Name.lastName\n  }\n}",
       "ExpressionLanguage": "JSONata",
       "Notes": null,
       "Alignment": null,
@@ -1899,19 +1895,6 @@
       "Contributor": null,
       "ContributorOrganization": null,
       "SourceAttributes": [
-        {
-          "AttributeId": 1285,
-          "EntityId": 237,
-          "AttributeName": "lastName",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Person.Name,1:~Person.Name.lastName"
-        },
         {
           "AttributeId": 1284,
           "EntityId": 237,
