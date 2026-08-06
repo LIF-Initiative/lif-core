@@ -2,6 +2,7 @@ from typing import Dict, List
 
 from fastapi import HTTPException
 from lif.datatypes.mdr_sql_model import (
+    AttributeType,
     DataModel,
     DatamodelElementType,
     DataModelType,
@@ -12,6 +13,7 @@ from lif.datatypes.mdr_sql_model import (
     TransformationGroup,
 )
 from lif.mdr_dto.transformation_dto import (
+    CreateTransformationAttributeDTO,
     CreateTransformationDTO,
     CreateTransformationWithTransformationGroupDTO,
     GetALLTransformationsDTO,
@@ -23,12 +25,17 @@ from lif.mdr_dto.transformation_dto import (
 from lif.mdr_dto.transformation_group_dto import (
     CreateTransformationGroupDTO,
     DataModelRefDTO,
+    ImportTransformationAttributeDTO,
+    ImportTransformationGroupRequestDTO,
+    ImportTransformationGroupResultDTO,
     TransformationGroupDTO,
+    TransformationImportNonMatchDTO,
     UpdateTransformationGroupDTO,
 )
-from lif.mdr_services.attribute_service import get_attribute_dto_by_id
+from lif.mdr_services.attribute_service import get_attribute_dto_by_id, get_unique_attribute
 from lif.mdr_services.entity_association_service import retrieve_all_entity_associations
 from lif.mdr_services.entity_attribute_association_service import retrieve_all_entity_attribute_associations
+from lif.mdr_services.entity_service import get_unique_entity
 from lif.mdr_services.helper_service import check_attribute_by_id, check_datamodel_by_id, check_entity_by_id
 from lif.mdr_services.inclusions_service import check_existing_inclusion
 from lif.mdr_utils.logger_config import get_logger
@@ -263,7 +270,9 @@ async def check_transformation_attribute(session: AsyncSession, anchor_data_mode
         previous_id = raw_node_id
 
 
-async def create_transformation(session: AsyncSession, data: CreateTransformationDTO):
+async def create_transformation(session: AsyncSession, data: CreateTransformationDTO, commit: bool = True):
+    # When commit=False the caller owns the transaction boundary (used by the group import so the
+    # whole import is one atomic transaction); we flush to obtain generated IDs but never commit.
     # Checking if transformation group exists
     transformation_group = await get_transformation_group_by_id(session=session, id=data.TransformationGroupId)
     source_data_model = await check_datamodel_by_id(session=session, id=transformation_group.SourceDataModelId)
@@ -295,7 +304,9 @@ async def create_transformation(session: AsyncSession, data: CreateTransformatio
         ContributorOrganization=data.ContributorOrganization,
     )
     session.add(transformation)
-    await session.commit()
+    # Flush (not commit) so the generated transformation.Id is available for the attributes below
+    # without ending the transaction; the commit/flush decision is made once at the end.
+    await session.flush()
     await session.refresh(transformation)
 
     # Step 2: Create TransformationAttributes (Source and Target)
@@ -332,7 +343,10 @@ async def create_transformation(session: AsyncSession, data: CreateTransformatio
     )
 
     session.add(target_attribute)
-    await session.commit()
+    if commit:
+        await session.commit()
+    else:
+        await session.flush()
 
     # Step 3: Return the newly created TransformationDTO
     return TransformationDTO(
@@ -1223,18 +1237,24 @@ async def get_transformation_group_for_source_and_target(
     return transformation_group_dtos
 
 
-async def create_transformation_group(session: AsyncSession, data: CreateTransformationGroupDTO):
+async def create_transformation_group(session: AsyncSession, data: CreateTransformationGroupDTO, commit: bool = True):
+    # When commit=False the caller owns the transaction boundary (used by the group import so the
+    # whole import is one atomic transaction); we flush to obtain the generated ID but never commit.
     # Checking if data models exist or not
     await check_datamodel_by_id(session=session, id=data.SourceDataModelId)
     await check_datamodel_by_id(session=session, id=data.TargetDataModelId)
 
-    # Check if transformation group exists
+    # Check if transformation group exists. Use `IS NOT TRUE` (not `== False`) so a legacy row with
+    # Deleted = NULL counts as active — matching the partial unique index
+    # ux_transformationsgroup_model_id_version_active (WHERE "Deleted" IS NOT TRUE). Otherwise this
+    # check would miss a NULL-deleted duplicate that the index still rejects, surfacing as a
+    # confusing IntegrityError instead of this clear 400.
     existing_group = await session.execute(
         select(TransformationGroup).where(
             TransformationGroup.SourceDataModelId == data.SourceDataModelId,
             TransformationGroup.TargetDataModelId == data.TargetDataModelId,
             TransformationGroup.GroupVersion == data.GroupVersion,
-            TransformationGroup.Deleted == False,
+            TransformationGroup.Deleted.isnot(True),
         )
     )
     if existing_group.scalars().first():
@@ -1257,7 +1277,10 @@ async def create_transformation_group(session: AsyncSession, data: CreateTransfo
         ContributorOrganization=data.ContributorOrganization,
     )
     session.add(transformation_group)
-    await session.commit()
+    if commit:
+        await session.commit()
+    else:
+        await session.flush()
     await session.refresh(transformation_group)
     transformation_group_dto = TransformationGroupDTO.from_orm(transformation_group)
 
@@ -1279,7 +1302,10 @@ async def find_transformation_group_by_triplet(
         )
     )
     if not include_deleted:
-        query = query.where(TransformationGroup.Deleted == False)
+        # `IS NOT TRUE` (not `== False`) so a Deleted = NULL row counts as active, matching the
+        # partial unique index ux_transformationsgroup_model_id_version_active. This keeps the import
+        # flow's edit-vs-create decision consistent with what the DB will actually enforce.
+        query = query.where(TransformationGroup.Deleted.isnot(True))
     result = await session.execute(query)
     return result.scalars().first()
 
@@ -1506,3 +1532,370 @@ async def get_transformations_by_path_ids(
         transformations.append(transformation)
 
     return transformations
+
+
+# Transformation Group Import (#772)
+#
+# Import is the reverse of the export (#771). The export turns a numeric ``EntityIdPath``
+# ("5,-12") into portable segments "{DataModelId}:{~}{UniqueName}" via
+# ``_resolve_entity_id_path_to_named_path``. Import resolves those UniqueNames back to LOCAL
+# entity/attribute IDs, honoring data portability: the numeric "{DataModelId}:" prefix in each
+# segment is the originating model ID from whatever instance authored the file and is IGNORED —
+# the only ID matched against this database is the transformation-group ID on the route, from
+# which the source and target data models (the resolution anchors) are derived.
+
+
+class UnmatchedPathError(Exception):
+    """A portable path could not be resolved to a valid local numeric path during import."""
+
+    def __init__(self, reason: str):
+        self.reason = reason
+        super().__init__(reason)
+
+
+async def resolve_named_path(session: AsyncSession, named_path: str, anchor_data_model: DataModel) -> List[int]:
+    """Resolve a portable named path to a list of signed local IDs (entities positive, terminal
+    attribute negative) — the inverse of ``_resolve_entity_id_path_to_named_path``.
+
+    Each segment is ``"{DataModelId}:{~}{UniqueName}"``. The ``{DataModelId}:`` prefix is stripped
+    and ignored (portability); the ``UniqueName`` is resolved within the anchor data model (and its
+    base model, for Org/Partner LIF) via ``get_unique_entity`` / ``get_unique_attribute``.
+
+    Raises ``UnmatchedPathError`` if the path is empty, a segment is malformed, an attribute
+    segment is not last, or a ``UniqueName`` does not resolve in this database.
+    """
+    if not named_path:
+        raise UnmatchedPathError("path is empty")
+
+    segments = named_path.split(",")
+    resolved_ids: List[int] = []
+    for index, segment in enumerate(segments):
+        is_last = index == len(segments) - 1
+        # Strip and ignore the originating "{DataModelId}:" prefix — it is not a local ID.
+        _prefix, separator, remainder = segment.partition(":")
+        if not separator or not remainder:
+            raise UnmatchedPathError(f"malformed path segment '{segment}' (expected '<id>:<UniqueName>')")
+
+        is_attribute = remainder.startswith("~")
+        unique_name = remainder[1:] if is_attribute else remainder
+        if not unique_name:
+            raise UnmatchedPathError(f"malformed path segment '{segment}' (missing UniqueName)")
+        if is_attribute and not is_last:
+            raise UnmatchedPathError(f"attribute segment '{segment}' must be the last segment in the path")
+
+        if is_attribute:
+            record = await get_unique_attribute(
+                session=session,
+                unique_name=unique_name,
+                data_model_id=anchor_data_model.Id,
+                base_data_model_id=anchor_data_model.BaseDataModelId,
+                data_model_type=anchor_data_model.Type,
+            )
+        else:
+            record = await get_unique_entity(
+                session=session,
+                unique_name=unique_name,
+                data_model_id=anchor_data_model.Id,
+                base_data_model_id=anchor_data_model.BaseDataModelId,
+                data_model_type=anchor_data_model.Type,
+            )
+
+        if not record:
+            kind = "attribute" if is_attribute else "entity"
+            raise UnmatchedPathError(
+                f"no {kind} named '{unique_name}' found in data model {anchor_data_model.Name} ({anchor_data_model.Id}) (or its base model)"
+            )
+
+        resolved_ids.append(-record.Id if is_attribute else record.Id)
+
+    return resolved_ids
+
+
+async def _resolve_and_validate_import_path(
+    session: AsyncSession, named_path: str | None, anchor_data_model: DataModel
+) -> tuple[dict | None, str]:
+    """Resolve + validate one import path.
+
+    Returns ``(resolved, "")`` on success, where ``resolved`` carries the numeric ``id_path`` plus
+    the terminal ``attribute_id`` and owning ``entity_id`` (``TransformationAttributes.AttributeId``
+    is NOT NULL, so it must be repopulated on import). Returns ``(None, reason)`` for any non-match:
+    an unresolvable name, a path not ending in an attribute, or a name-resolvable path that is not a
+    valid chain in the anchor data model (per decision, folded into the same non-match list).
+    """
+    if not named_path:
+        return None, "missing entity path"
+    try:
+        ids = await resolve_named_path(session=session, named_path=named_path, anchor_data_model=anchor_data_model)
+    except UnmatchedPathError as error:
+        return None, error.reason
+
+    if ids[-1] >= 0:
+        return None, "portable path must end in an attribute"
+
+    id_path = ",".join(str(node_id) for node_id in ids)
+    try:
+        # Reuse the #843 chain validator against the freshly resolved LOCAL numeric path.
+        await check_transformation_attribute(session=session, anchor_data_model=anchor_data_model, id_path=id_path)
+    except HTTPException as error:
+        return None, f"resolved by name but is not a valid chain in this data model: {error.detail}"
+
+    return {"id_path": id_path, "attribute_id": abs(ids[-1]), "entity_id": ids[-2] if len(ids) >= 2 else None}, ""
+
+
+def _build_import_attribute(
+    file_attribute: ImportTransformationAttributeDTO, attribute_type: AttributeType, resolved: dict
+) -> CreateTransformationAttributeDTO:
+    return CreateTransformationAttributeDTO(
+        AttributeType=attribute_type,
+        AttributeId=resolved["attribute_id"],
+        EntityId=resolved["entity_id"],
+        EntityIdPath=resolved["id_path"],
+        Notes=file_attribute.Notes,
+        CreationDate=file_attribute.CreationDate,
+        ActivationDate=file_attribute.ActivationDate,
+        DeprecationDate=file_attribute.DeprecationDate,
+        Contributor=file_attribute.Contributor,
+        ContributorOrganization=file_attribute.ContributorOrganization,
+    )
+
+
+async def _next_major_group_version(session: AsyncSession, source_data_model_id: int, target_data_model_id: int) -> str:
+    """Return the next major group version ("{max_major + 1}.0") across non-deleted groups for this
+    (source, target) pair. Non-numeric leading majors are ignored."""
+    # `IS NOT TRUE` (not `== False`) so a Deleted = NULL row still counts as occupying its version,
+    # matching the partial unique index ux_transformationsgroup_model_id_version_active — otherwise the
+    # computed next-major could collide with a NULL-deleted group and trip an IntegrityError.
+    query = select(TransformationGroup.GroupVersion).where(
+        TransformationGroup.SourceDataModelId == source_data_model_id,
+        TransformationGroup.TargetDataModelId == target_data_model_id,
+        TransformationGroup.Deleted.isnot(True),
+    )
+    result = await session.execute(query)
+    max_major = 0
+    for version in result.scalars().all():
+        if not version:
+            continue
+        try:
+            max_major = max(max_major, int(str(version).split(".")[0]))
+        except ValueError:
+            continue
+    return f"{max_major + 1}.0"
+
+
+async def import_transformation_group(
+    session: AsyncSession,
+    transformation_group_id: int,
+    data: ImportTransformationGroupRequestDTO,
+    version: str | None,
+    allow_missing_paths: bool,
+) -> ImportTransformationGroupResultDTO:
+    """Import a portable transformation-group file (#772).
+
+    Runs as a single transaction (see ``create_transformation``/``create_transformation_group``'s
+    ``commit=False``): every transformation is validated and staged as we go, then a single commit
+    (or a rollback, when there are non-matches and ``allow_missing_paths`` is False) is issued at the
+    end. This gives atomicity ("make no changes on failure") without a separate check/apply phase
+    that could straddle commits.
+
+    Version semantics: blank -> clone into the next major version; a version that already exists for
+    this (source, target) -> edit (Layer 2, not yet implemented); a new, specified version -> clone
+    into that version.
+    """
+    # The ONLY database ID matched from the request; source/target models are derived from it.
+    reference_group = await get_transformation_group_by_id(session=session, id=transformation_group_id)
+    source_data_model = await check_datamodel_by_id(session=session, id=reference_group.SourceDataModelId)
+    target_data_model = await check_datamodel_by_id(session=session, id=reference_group.TargetDataModelId)
+
+    normalized_version = (version or "").strip()
+    if normalized_version:
+        existing_group = await find_transformation_group_by_triplet(
+            session=session,
+            source_id=reference_group.SourceDataModelId,
+            target_id=reference_group.TargetDataModelId,
+            group_version=normalized_version,
+            include_deleted=False,
+        )
+        if existing_group:
+            logger.warning(
+                "Import transformation group failed - there is already a transformation group with the same source, target, and version of (%s, %s, %s)",
+                source_data_model.Id,
+                target_data_model.Id,
+                normalized_version,
+            )
+            raise HTTPException(
+                status_code=501,
+                detail=(
+                    f"A transformation group already exists at version '{normalized_version}'. Editing an "
+                    "existing version via import is not yet supported; omit the version to clone into the "
+                    "next major version, or specify a new version."
+                ),
+            )
+        resolved_version = normalized_version
+    else:
+        resolved_version = await _next_major_group_version(
+            session, reference_group.SourceDataModelId, reference_group.TargetDataModelId
+        )
+
+    # Clone the group (metadata only, per the ticket). File-supplied metadata wins, falling back to
+    # the referenced group. Source/target/version are authoritative (derived / from the parameter).
+    new_group = await create_transformation_group(
+        session=session,
+        data=CreateTransformationGroupDTO(
+            SourceDataModelId=reference_group.SourceDataModelId,
+            TargetDataModelId=reference_group.TargetDataModelId,
+            GroupVersion=resolved_version,
+            Name=data.Name or reference_group.Name,
+            Description=data.Description if data.Description is not None else reference_group.Description,
+            Notes=data.Notes if data.Notes is not None else reference_group.Notes,
+            CreationDate=data.CreationDate,
+            ActivationDate=data.ActivationDate,
+            DeprecationDate=data.DeprecationDate,
+            Contributor=data.Contributor if data.Contributor is not None else reference_group.Contributor,
+            ContributorOrganization=(
+                data.ContributorOrganization
+                if data.ContributorOrganization is not None
+                else reference_group.ContributorOrganization
+            ),
+        ),
+        commit=False,
+    )
+
+    non_matches: List[TransformationImportNonMatchDTO] = []
+    imported_count = 0
+    skipped_count = 0
+
+    for transformation in data.Transformations or []:
+        # Out of scope for portable import: silently-ignored on export, warned-and-skipped here.
+        if transformation.ExpressionLanguage != ExpressionLanguageType.JSONata:
+            logger.warning(
+                f"Import: skipping transformation '{transformation.Name}' — non-JSONata expression language "
+                f"'{transformation.ExpressionLanguage}' is out of scope for portable import."
+            )
+            continue
+        if not transformation.Expression:
+            logger.warning(f"Import: skipping transformation '{transformation.Name}' — it has no expression.")
+            continue
+
+        transformation_non_matches: List[TransformationImportNonMatchDTO] = []
+        source_attributes: List[CreateTransformationAttributeDTO] = []
+
+        file_source_attributes = transformation.SourceAttributes or []
+        if not file_source_attributes:
+            transformation_non_matches.append(
+                TransformationImportNonMatchDTO(
+                    TransformationName=transformation.Name,
+                    AttributeType=AttributeType.Source,
+                    NamedPath=None,
+                    Reason="transformation has no source attributes",
+                )
+            )
+        for source_attribute in file_source_attributes:
+            resolved, reason = await _resolve_and_validate_import_path(
+                session, source_attribute.EntityIdPath, source_data_model
+            )
+            if resolved is None:
+                transformation_non_matches.append(
+                    TransformationImportNonMatchDTO(
+                        TransformationName=transformation.Name,
+                        AttributeType=AttributeType.Source,
+                        NamedPath=source_attribute.EntityIdPath,
+                        Reason=reason,
+                    )
+                )
+            else:
+                source_attributes.append(_build_import_attribute(source_attribute, AttributeType.Source, resolved))
+
+        target_attribute: CreateTransformationAttributeDTO | None = None
+        if transformation.TargetAttribute is None:
+            transformation_non_matches.append(
+                TransformationImportNonMatchDTO(
+                    TransformationName=transformation.Name,
+                    AttributeType=AttributeType.Target,
+                    NamedPath=None,
+                    Reason="transformation has no target attribute",
+                )
+            )
+        else:
+            resolved, reason = await _resolve_and_validate_import_path(
+                session, transformation.TargetAttribute.EntityIdPath, target_data_model
+            )
+            if resolved is None:
+                transformation_non_matches.append(
+                    TransformationImportNonMatchDTO(
+                        TransformationName=transformation.Name,
+                        AttributeType=AttributeType.Target,
+                        NamedPath=transformation.TargetAttribute.EntityIdPath,
+                        Reason=reason,
+                    )
+                )
+            else:
+                target_attribute = _build_import_attribute(
+                    transformation.TargetAttribute, AttributeType.Target, resolved
+                )
+
+        # Skip the WHOLE transformation if any of its paths did not resolve/validate.
+        if transformation_non_matches:
+            non_matches.extend(transformation_non_matches)
+            skipped_count += 1
+            continue
+
+        # An empty non-match list guarantees the target resolved; this guard is unreachable in
+        # practice but lets the type checker narrow target_attribute to non-None without an assert.
+        if target_attribute is None:
+            continue
+
+        await create_transformation(
+            session=session,
+            data=CreateTransformationDTO(
+                TransformationGroupId=new_group.Id,
+                Name=transformation.Name,
+                Expression=transformation.Expression,
+                ExpressionLanguage=transformation.ExpressionLanguage,
+                Notes=transformation.Notes,
+                Alignment=transformation.Alignment,
+                CreationDate=transformation.CreationDate,
+                ActivationDate=transformation.ActivationDate,
+                DeprecationDate=transformation.DeprecationDate,
+                Contributor=transformation.Contributor,
+                ContributorOrganization=transformation.ContributorOrganization,
+                SourceAttributes=source_attributes,
+                TargetAttribute=target_attribute,
+            ),
+            commit=False,
+        )
+        imported_count += 1
+
+    if non_matches and not allow_missing_paths:
+        # Fail the call and do NOT make any changes.
+        await session.rollback()
+        return ImportTransformationGroupResultDTO(
+            Success=False,
+            TransformationGroupId=None,
+            ImportedTransformationCount=0,
+            SkippedTransformationCount=skipped_count,
+            MissingPaths=non_matches,
+        )
+
+    if imported_count == 0:
+        # Importing a transformation group with no transformations is not allowed (mirrors the export
+        # side, which refuses to emit an empty group). Reached when the file has no JSONata
+        # transformations or when every transformation was skipped for missing paths under
+        # allowMissingPaths=true.
+        await session.rollback()
+        raise HTTPException(
+            status_code=400,
+            detail=(
+                "No transformations were imported, so no transformation group was created. A "
+                "transformation group must contain at least one JSONata transformation whose "
+                "attribute paths all resolve in this database."
+            ),
+        )
+
+    await session.commit()
+    return ImportTransformationGroupResultDTO(
+        Success=True,
+        TransformationGroupId=new_group.Id,
+        ImportedTransformationCount=imported_count,
+        SkippedTransformationCount=skipped_count,
+        MissingPaths=non_matches,
+    )

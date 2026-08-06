@@ -1,4 +1,5 @@
 from typing import List
+
 from fastapi import HTTPException
 from lif.datatypes.mdr_sql_model import (
     Attribute,
@@ -20,8 +21,7 @@ from lif.mdr_services.helper_service import check_datamodel_by_id, check_entity_
 from lif.mdr_services.value_set_values_service import check_value_set_exists_by_id
 from lif.mdr_utils.logger_config import get_logger
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlmodel import or_, select, func
-
+from sqlmodel import func, or_, select
 
 logger = get_logger(__name__)
 
@@ -139,6 +139,30 @@ async def check_attribute_exists(session, unique_name, data_model_id):
     query = select(Attribute).where(
         Attribute.UniqueName == unique_name, Attribute.DataModelId == data_model_id, Attribute.Deleted == False
     )
+    result = await session.execute(query)
+    return result.scalars().first()
+
+
+async def get_unique_attribute(
+    session: AsyncSession, unique_name: str, data_model_id: int, base_data_model_id: int, data_model_type: str
+):
+    """Resolve an attribute by its (data-model-scoped) UniqueName.
+
+    Mirror of ``entity_service.get_unique_entity``: for Org/Partner LIF anchors the attribute may
+    originate either in the anchor model itself or in its base model (via inclusions); for
+    self-contained models it must originate in the anchor. Used by the transformation-group import
+    to resolve a portable UniqueName back to a local attribute ID without matching any database IDs.
+    """
+    # `IS NOT TRUE` (not `== False`) so a legacy Attribute row with Deleted = NULL still resolves,
+    # matching the partial unique index uq_attributes_uniquename_datamodelid_active (WHERE
+    # "Deleted" IS NOT TRUE) that governs which attributes are active.
+    base_conditions = [Attribute.UniqueName == unique_name, Attribute.Deleted.isnot(True)]
+
+    if data_model_type == DataModelType.OrgLIF or data_model_type == DataModelType.PartnerLIF:
+        base_conditions.append(or_(Attribute.DataModelId == base_data_model_id, Attribute.DataModelId == data_model_id))
+    else:
+        base_conditions.append(Attribute.DataModelId == data_model_id)
+    query = select(Attribute).where(*base_conditions)
     result = await session.execute(query)
     return result.scalars().first()
 
