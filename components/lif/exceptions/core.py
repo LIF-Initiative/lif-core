@@ -48,19 +48,3 @@ class ResourceNotFoundException(LIFException):
     def __init__(self, resource_id, message=None):
         self.resource_id = resource_id
         super().__init__(message if message else f"Resource with ID '{resource_id}' not found.")
-
-
-class IllegalTriggerStateError(Exception):
-    pass
-
-
-class MissingSftpConfigurationError(Exception):
-    pass
-
-
-class MissingTriggerError(Exception):
-    pass
-
-
-class ScheduleNotFoundError(Exception):
-    pass
