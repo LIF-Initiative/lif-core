@@ -14,7 +14,7 @@ from lif.mdr_services.attribute_service import soft_delete_attribute
 from lif.mdr_services.helper_service import check_datamodel_by_id
 from lif.mdr_utils.logger_config import get_logger
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlmodel import func, or_, select
+from sqlmodel import case, func, or_, select
 
 logger = get_logger(__name__)
 
@@ -605,6 +605,10 @@ async def get_unique_entity(
     else:
         base_conditions.append(Entity.DataModelId == data_model_id)
     query = select(Entity).where(*base_conditions)
+    # When the same UniqueName exists in both the anchor (Org/Partner) model and its base, prefer the
+    # anchor's own row — an org override must win over the inherited base entity. Without this the
+    # bare .first() picks a DB-dependent row and can silently bind to the wrong (base) entity.
+    query = query.order_by(case((Entity.DataModelId == data_model_id, 0), else_=1))
     result = await session.execute(query)
     entity = result.scalars().first()
     return entity
