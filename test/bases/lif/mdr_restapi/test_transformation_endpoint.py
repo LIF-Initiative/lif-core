@@ -4,6 +4,9 @@ import re
 
 import pytest
 from deepdiff import DeepDiff
+from lif.datatypes.mdr_sql_model import Attribute, DataModel, DataModelType, Entity
+from lif.mdr_services.attribute_service import get_unique_attribute
+from lif.mdr_services.entity_service import get_unique_entity
 from sqlalchemy import text
 
 from test.utils.lif.datasets.transform_deep_literal_attribute.loader import DatasetTransformDeepLiteralAttribute
@@ -1241,3 +1244,75 @@ async def test_import_hand_edited_group_then_translate_reflects_all_changes(
             "Preferences": {"WorkPreference": "Advanced"},
         }
     }
+
+
+async def _make_data_model(session, name: str, model_type: DataModelType, base_data_model_id: int | None) -> int:
+    dm = DataModel(
+        Name=name,
+        Description=None,
+        UseConsiderations=None,
+        Type=model_type,
+        BaseDataModelId=base_data_model_id,
+        Notes=None,
+        DataModelVersion="1.0",
+        ContributorOrganization="test",
+        Deleted=False,
+    )
+    session.add(dm)
+    await session.flush()
+    return dm.Id
+
+
+@pytest.mark.asyncio
+async def test_get_unique_attribute_prefers_org_override_over_base(test_db_session):
+    """For an Org/Partner LIF anchor, when the same UniqueName exists in both the base model and the
+    anchor, the anchor's own (override) attribute must win. The base row is inserted first so that a
+    bare `.first()` (no ORDER BY) would return the base — this locks in the anchor-preferring order."""
+    base_id = await _make_data_model(test_db_session, "unique_attr_base", DataModelType.BaseLIF, None)
+    org_id = await _make_data_model(test_db_session, "unique_attr_org", DataModelType.OrgLIF, base_id)
+
+    # Insert the BASE row first, the ORG override second — physical order favours base for an
+    # unordered scan, so returning the org row proves the ordering is doing the work.
+    base_attr = Attribute(Name="Skill Level", UniqueName="shared.attr", DataModelId=base_id, DataType="string")
+    org_attr = Attribute(Name="Skill Level", UniqueName="shared.attr", DataModelId=org_id, DataType="string")
+    test_db_session.add(base_attr)
+    await test_db_session.flush()
+    test_db_session.add(org_attr)
+    await test_db_session.flush()
+
+    resolved = await get_unique_attribute(
+        session=test_db_session,
+        unique_name="shared.attr",
+        data_model_id=org_id,
+        base_data_model_id=base_id,
+        data_model_type=DataModelType.OrgLIF,
+    )
+    assert resolved is not None
+    assert resolved.Id == org_attr.Id
+    assert resolved.DataModelId == org_id
+
+
+@pytest.mark.asyncio
+async def test_get_unique_entity_prefers_org_override_over_base(test_db_session):
+    """Entity-side mirror of the attribute preference: an org override entity must win over the
+    inherited base entity of the same UniqueName."""
+    base_id = await _make_data_model(test_db_session, "unique_entity_base", DataModelType.BaseLIF, None)
+    org_id = await _make_data_model(test_db_session, "unique_entity_org", DataModelType.OrgLIF, base_id)
+
+    base_entity = Entity(Name="Person", UniqueName="shared.entity", DataModelId=base_id, Deleted=False)
+    org_entity = Entity(Name="Person", UniqueName="shared.entity", DataModelId=org_id, Deleted=False)
+    test_db_session.add(base_entity)
+    await test_db_session.flush()
+    test_db_session.add(org_entity)
+    await test_db_session.flush()
+
+    resolved = await get_unique_entity(
+        session=test_db_session,
+        unique_name="shared.entity",
+        data_model_id=org_id,
+        base_data_model_id=base_id,
+        data_model_type=DataModelType.OrgLIF,
+    )
+    assert resolved is not None
+    assert resolved.Id == org_entity.Id
+    assert resolved.DataModelId == org_id
