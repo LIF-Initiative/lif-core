@@ -1632,6 +1632,12 @@ async def _resolve_and_validate_import_path(
     if ids[-1] >= 0:
         return None, "portable path must end in an attribute"
 
+    # TransformationAttributes.EntityId is NOT NULL, so a lone-attribute path (no owning entity
+    # segment) would resolve here but blow up as an IntegrityError on insert — surface it as a
+    # normal non-match instead. A hand-authored file omitting the entity is the natural trigger.
+    if len(ids) < 2:
+        return None, "path must include the attribute's owning entity"
+
     id_path = ",".join(str(node_id) for node_id in ids)
     try:
         # Reuse the #843 chain validator against the freshly resolved LOCAL numeric path.
@@ -1639,7 +1645,7 @@ async def _resolve_and_validate_import_path(
     except HTTPException as error:
         return None, f"resolved by name but is not a valid chain in this data model: {error.detail}"
 
-    return {"id_path": id_path, "attribute_id": abs(ids[-1]), "entity_id": ids[-2] if len(ids) >= 2 else None}, ""
+    return {"id_path": id_path, "attribute_id": abs(ids[-1]), "entity_id": ids[-2]}, ""
 
 
 def _build_import_attribute(

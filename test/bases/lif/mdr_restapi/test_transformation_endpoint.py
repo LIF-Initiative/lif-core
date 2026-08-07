@@ -955,6 +955,38 @@ async def test_import_missing_paths_aborts_without_allow(async_client_mdr, mdr_a
 
 
 @pytest.mark.asyncio
+async def test_import_lone_attribute_path_is_a_non_match(async_client_mdr, mdr_api_headers):
+    """A single-segment path (attribute with no owning-entity segment) resolves by name but has no
+    entity to satisfy the NOT NULL TransformationAttributes.EntityId. It must surface as a normal
+    non-match rather than blowing up as an opaque IntegrityError."""
+    test_case_name = inspect.currentframe().f_code.co_name
+    dataset, exported = await _prepare_group_with_two_jsonata_transforms(async_client_mdr, test_case_name)
+
+    body = copy.deepcopy(exported)
+    # Reduce the target path to just its terminal attribute segment — a valid attribute UniqueName,
+    # but with the owning entity stripped off.
+    full_target_path = body["Transformations"][0]["TargetAttribute"]["EntityIdPath"]
+    body["Transformations"][0]["TargetAttribute"]["EntityIdPath"] = full_target_path.split(",")[-1]
+
+    result = await import_transformation_group(
+        async_client_mdr=async_client_mdr,
+        transformation_group_id=dataset.transformation_group_id,
+        body=body,
+        version=None,
+        allow_missing_paths=False,
+        headers=mdr_api_headers,
+    )
+
+    assert result["Success"] is False
+    assert result["TransformationGroupId"] is None
+    assert result["ImportedTransformationCount"] == 0
+    assert any(
+        non_match["AttributeType"] == "Target" and "owning entity" in non_match["Reason"]
+        for non_match in result["MissingPaths"]
+    )
+
+
+@pytest.mark.asyncio
 async def test_import_missing_paths_skipped_with_allow(async_client_mdr, mdr_api_headers):
     """With allowMissingPaths, a transformation with an unmatched path is skipped whole while the
     rest import; the response lists the non-match."""
