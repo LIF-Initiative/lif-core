@@ -143,21 +143,25 @@ ignore = [
 ]
 
 [tool.ty.src]
+# Entries here are temporary debt, not policy: each production path left in this list
+# must have an owning issue, and the list should only ever shrink. See #1137.
 exclude = [
   "scripts/",
   "test/",
   "integration_tests/",
-  "bases/lif/advisor_restapi/",
-  "bases/lif/api_graphql/",
-  "bases/lif/mdr_restapi/",
-  "bases/lif/semantic_search_mcp_server",
-  "components/lif/langchain_agent/",
-  "components/lif/mdr_dto/",
-  "components/lif/mdr_services/",
-  "components/lif/mdr_utils/",
-  "components/lif/openapi_to_graphql/",
-  "components/lif/orchestrator_clients/",
-  "components/lif/semantic_search_service/",
-  "development/"
+  "development/",
+  # Remaining production debt: ~660 diagnostics, tracked by #1137 (sequence against #1132,
+  # which rewrites much of this brick's storage layer). Do not add to this list.
+  "components/lif/mdr_services/"
 ]
 
+
+# `type_factory` builds Strawberry GraphQL types at runtime from OpenAPI schemas, so
+# `List[some_runtime_variable]` is the module's entire purpose rather than a mistake. A static
+# checker cannot validate that pattern, and 17 inline suppressions would only add noise. Scoped to
+# this one rule in this one file; everything else in the file is still checked.
+[[tool.ty.overrides]]
+include = ["components/lif/openapi_to_graphql/type_factory.py"]
+
+[tool.ty.overrides.rules]
+invalid-type-form = "ignore"

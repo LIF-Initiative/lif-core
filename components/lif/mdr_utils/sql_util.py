@@ -11,7 +11,11 @@ logger = get_logger(__name__)
 
 
 async def run_sql(
-    db_type: str, sql_query: str, filter_parameter: list[str] = None, offset: int = None, limit: int = None
+    db_type: str,
+    sql_query: str,
+    filter_parameter: list[str] | None = None,
+    offset: int | None = None,
+    limit: int | None = None,
 ):
     logger.info("In run SQL method..")
     logger.info("Getting connection")

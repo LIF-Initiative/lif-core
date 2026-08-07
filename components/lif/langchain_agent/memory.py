@@ -4,10 +4,12 @@ from langchain_openai import ChatOpenAI
 from langmem.short_term import SummarizationNode
 from langchain_core.messages.utils import count_tokens_approximately
 from langgraph.prebuilt.chat_agent_executor import AgentState
-from typing import Any
+from typing import Any, Callable, NotRequired
 
 
-def make_pre_model_hook(summarizer_node: SummarizationNode, max_messages: int, logger: logging.Logger) -> callable:
+def make_pre_model_hook(
+    summarizer_node: SummarizationNode, max_messages: int, logger: logging.Logger
+) -> Callable[..., Any]:
     """
     This function creates the pre_model_hook used by the agent
     Args:
@@ -35,7 +37,8 @@ def make_pre_model_hook(summarizer_node: SummarizationNode, max_messages: int, l
             if len(state.get("messages")) > max_messages:
                 messages_to_retain = state["messages"][-max_messages:]
                 summary_input_messages = state["messages"]
-                state["summary_input_messages"] = summary_input_messages
+                # ty-ignore: langgraph's AgentState is a loosely-typed TypedDict.
+                state["summary_input_messages"] = summary_input_messages  # ty: ignore[invalid-assignment]
                 before_context = state.get("context", {}).copy()
                 state = summarizer_node.invoke(state)
                 after_context = state.get("context", {})
@@ -93,4 +96,4 @@ class ChatState(AgentState):
     # to make sure we're not summarizing on every LLM call
     context: dict[str, Any]
     summary_input_messages: list[Any]
-    use_summary_prompt: bool = False
+    use_summary_prompt: NotRequired[bool]
