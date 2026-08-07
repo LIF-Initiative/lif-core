@@ -4,6 +4,30 @@ Expose an MDR endpoint that imports a portable Transformation Group JSON (the co
 of the already-merged export, #771), resolving portable **name** paths back to local
 database IDs and validating them with the PR #843 chain-validation logic.
 
+---
+
+## As shipped (Layer 1) — read this before implementing Layers 2–4
+
+Layer 1 merged in **#1136**. Several decisions changed during review, so **the plan below is the
+original design, not a description of the current code.** Where they disagree, the code is right.
+The remaining layers are tracked as **#1140** (edit mode), **#1141** (robustness, re-scoped) and
+**#1142** (docs).
+
+| Plan says | Actually shipped | Why |
+|---|---|---|
+| Empty result → **400** | **200 with `Success=false`**, no changes | So callers handle every non-success identically; `409` is now reserved for genuine conflicts (version exists, concurrent-create `IntegrityError`). |
+| Non-JSONata → skip + **log** | Skipped, logged, **and reported** in `SkippedTransformations` | A server log was the only trace; a UI (#773) needs the reason. These skips deliberately do **not** trip the `allowMissingPaths` abort — only unresolved *paths* do. |
+| Disambiguate `UniqueName` collisions via the file's **relative prefix grouping** | Deterministic **anchor-over-base** `ORDER BY` in `get_unique_attribute` / `get_unique_entity` | Much simpler, and an org override beating the inherited base row is the behavior that was actually wanted. Whether the prefix approach still buys anything is an open question in #1141. |
+| Non-match record is **per path** | Per **transformation** (`SkippedTransformations`) | See the note further down. |
+| `resolve_named_path_to_id_path(...) -> str` | `resolve_named_path(...) -> List[int]`, plus `_resolve_and_validate_import_path(...)` | Resolution and validation split into two functions. |
+| *(not in the plan)* | A path **must include the attribute's owning entity** | `TransformationAttributes.EntityId` is NOT NULL, so a lone-attribute path resolved fine and then failed as an `IntegrityError`. Now reported as an ordinary non-match. |
+
+Unchanged and still accurate: the portability contract (only the route's group ID is matched against
+the DB), the single-transaction `commit=False` mechanism, and the reuse of the existing
+`ux_transformationsgroup_model_id_version_active` partial unique index as the concurrency guard.
+
+---
+
 ## Goal (from the ticket)
 
 A transformation import request shall:
@@ -132,6 +156,12 @@ computed next-major = 2.0" race.
 
 Non-match record shape: `{ transformationName, attributeType (Source|Target), namedPath, reason }`.
 
+> **As shipped:** this per-path shape was replaced during review by a per-**transformation** one —
+> `SkippedTransformations: [{ TransformationName, Reason }]` (`TransformationImportSkipDTO`). The unit
+> of reporting is always a whole transformation, because a whole transformation is the unit that gets
+> skipped; multiple path failures for one transformation are joined into a single `Reason`. See the
+> "As shipped (Layer 1)" section above.
+
 ## Layered implementation
 
 ### Layer 1 — MVP: clone-mode import + full reuse of #843 validation + concurrency safety
@@ -164,16 +194,23 @@ documented). Tests for edit + delete-not-in-file.
 
 ### Layer 3 — Robustness & diagnostics
 
-- Disambiguate `UniqueName` collisions across anchor+base using the file's **relative** prefix
-  grouping (segments sharing a prefix share an originating model).
-- Distinguish `not-found` vs `chain-invalid` in the non-match `reason`.
+> **Re-scoped — see #1141.** Most of this either landed in Layer 1 or was superseded. Treat the list
+> below as the original intent, not as remaining work.
+
+- ~~Disambiguate `UniqueName` collisions across anchor+base using the file's **relative** prefix
+  grouping (segments sharing a prefix share an originating model).~~ **Superseded** by
+  anchor-over-base ordering; whether the prefix approach still adds anything is the open question in
+  #1141.
+- Distinguish `not-found` vs `chain-invalid` in the non-match `reason`. **Partially done** — reasons
+  differentiate the two; confirm the granularity is enough for #773.
 - Guardrails:
-  - Non-JSONata transforms: **skip and log a warning** (mirror export's out-of-scope rule) —
-    not silent, so operators can see what was dropped.
+  - ~~Non-JSONata transforms: **skip and log a warning**~~ — **done**, and also reported in
+    `SkippedTransformations`.
   - Empty/malformed file (unparseable JSON, missing required fields): **fail with 400**, no changes.
-  - Empty result (file has no JSONata transformations, or every transformation was skipped for
-    missing paths under `allowMissingPaths=true`): **fail with 400**, no changes — a group with no
-    transformations is not allowed (mirrors the export side, which refuses to emit an empty group).
+    **Still open** — Pydantic currently returns **422** for a body that doesn't match the request DTO;
+    #1141 decides whether to normalize.
+  - ~~Empty result … **fail with 400**~~ — **shipped as 200 with `Success=false`**, no changes. See
+    the "As shipped" table at the top.
   - Edge-case tests for each.
 
 ### Layer 4 — Docs
