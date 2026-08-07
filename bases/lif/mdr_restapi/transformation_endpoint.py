@@ -153,7 +153,7 @@ async def get_paginated_transformations_for_given_source_and_target(
 
 @router.get("/transformations_by_path_ids/", response_model=List[TransformationDTO])
 async def get_transformations_by_path_ids(
-    entity_id_path: str, attribute_id: int = None, session: AsyncSession = Depends(get_session)
+    entity_id_path: str, attribute_id: int | None = None, session: AsyncSession = Depends(get_session)
 ):
     return await transformation_service.get_transformations_by_path_ids(session, entity_id_path, attribute_id)
 
@@ -293,8 +293,8 @@ async def get_all_transformations_for_an_attribute(
     request: Request,
     attribute_id: int,
     attribute_as_source: bool,
-    source_data_model_id: int = None,
-    target_data_model_id: int = None,
+    source_data_model_id: int | None = None,
+    target_data_model_id: int | None = None,
     page: int = Query(1, ge=1),  # Default to page 1
     size: int = Query(10, ge=1),  # Default to size 10
     session: AsyncSession = Depends(get_session),
@@ -338,7 +338,11 @@ async def get_all_transformations_for_an_attribute(
 async def create_transformation_group_with_transformations(
     data: CreateTransformationGroupDTO, response: Response, session: AsyncSession = Depends(get_session)
 ):
-    transformation_group = await transformation_service.create_transformation_group(session, data)
+    transformation_group = await transformation_service.create_transformation_group(
+        session,
+        # ty-ignore: Duplicate DTO definitions (transformation_dto vs transformation_group_dto) — see #1138.
+        data,  # ty: ignore[invalid-argument-type]
+    )
     # Set the Location header with the new entity association ID
     response.headers["Location"] = f"/transformation_groups/{transformation_group.Id}"
     return transformation_group
@@ -365,7 +369,12 @@ async def create_transformation_group_with_transformations(
 async def update_transformation(
     transformation_group_id: int, data: UpdateTransformationGroupDTO, session: AsyncSession = Depends(get_session)
 ):
-    return await transformation_service.update_transformation_group(session, transformation_group_id, data)
+    return await transformation_service.update_transformation_group(
+        session,
+        transformation_group_id,
+        # ty-ignore: Duplicate DTO definitions (transformation_dto vs transformation_group_dto) — see #1138.
+        data,  # ty: ignore[invalid-argument-type]
+    )
 
 
 @router.delete("/{transformation_group_id}")

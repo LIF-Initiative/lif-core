@@ -276,7 +276,7 @@ async def get_entity_associations_by_data_model_id(session: AsyncSession, data_m
 
 
 async def get_entity_associations_by_parent_entity_id(
-    session: AsyncSession, parent_entity_id: int, including_extended_by_data_model_id: int = None
+    session: AsyncSession, parent_entity_id: int, including_extended_by_data_model_id: int | None = None
 ) -> List[EntityAssociationDTO]:
     # Check if parent entity exists
     parent_entity = await check_entity_by_id(session=session, id=parent_entity_id)

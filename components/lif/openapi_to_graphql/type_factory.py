@@ -149,7 +149,8 @@ def create_enum_type(enum_name: str, values: List[Any], created_types: Dict[str,
             key = f"{orig_key}_{i}"
         used_names.add(key)
         enum_dict[key] = v
-    enum_cls = Enum(enum_name, enum_dict)
+    # ty-ignore: Enum name is built at runtime from the schema.
+    enum_cls = Enum(enum_name, enum_dict)  # ty: ignore[mismatched-type-name]
     strawberry_enum_cls = strawberry.enum(enum_cls)
     created_types[enum_name] = strawberry_enum_cls
     return strawberry_enum_cls
@@ -359,7 +360,8 @@ def create_type(
             # collisions, so an illegal char or a name clash can't crash schema build (#1011).
             safe_field_name, graphql_name = resolve_field_names(field_name, used_attr_names, used_graphql_names, name)
 
-            annotations[safe_field_name] = field_type_class
+            # ty-ignore: annotations dict is assembled at runtime.
+            annotations[safe_field_name] = field_type_class  # ty: ignore[invalid-assignment]
             class_fields[safe_field_name] = strawberry.field(
                 name=graphql_name, description=field_def.get("Description")
             )
@@ -639,9 +641,11 @@ def dict_to_dataclass(cls: Any, data: Any) -> Any:
                     elif is_dataclass_or_strawberry(real_type) or can_instantiate_with_kwargs(real_type):
                         if isinstance(value, dict):
                             value = dict_to_dataclass(real_type, value)
-                    elif is_datetime_type(field_type):
+                    # ty-ignore: field_type may be a type or a schema type-name at runtime.
+                    elif is_datetime_type(field_type):  # ty: ignore[invalid-argument-type]
                         value = convert_to_datetime(value)
-                    elif is_date_type(field_type):
+                    # ty-ignore: field_type may be a type or a schema type-name at runtime.
+                    elif is_date_type(field_type):  # ty: ignore[invalid-argument-type]
                         value = convert_to_date(value)
                 instance_data[field_name] = value
             except Exception as exc:
@@ -888,7 +892,7 @@ def build_root_mutation_type(
     created_types: Dict[str, Type[Any]],
     query_planner_update_url: str,
     mutable_input_types: Dict[str, Optional[Type[Any]]],
-    input_types: Dict[str, Optional[Type[Any]]] = None,  # You may need this!
+    input_types: Optional[Dict[str, Optional[Type[Any]]]] = None,
 ) -> Type[Any]:
     type_class = created_types[root_name]
     input_class = mutable_input_types.get(root_name)

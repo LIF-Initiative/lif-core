@@ -59,6 +59,7 @@ def parse_dt(val):
 REFERENCE_KEY_MARKER = "Ref"
 
 
+# cspell:ignore erenced - deliberate fragment in the docstring below, illustrating a mis-parse
 def parse_reference_key(prop_name: str) -> tuple[Optional[str], str]:
     """Split an inlined-reference key into (relationship, child_entity_name).
 
@@ -612,8 +613,8 @@ async def create_data_model_from_openapi_schema(
     base_data_model_id: Optional[int],
     use_considerations: Optional[str],
     notes: Optional[str],
-    activation_date: Optional[str],
-    deprecation_date: Optional[str],
+    activation_date: Optional[datetime],
+    deprecation_date: Optional[datetime],
     contributor: Optional[str],
     contributor_organization: Optional[str],
     state: Optional[str] = "Draft",
