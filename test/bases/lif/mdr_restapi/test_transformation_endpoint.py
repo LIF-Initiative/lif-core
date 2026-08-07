@@ -899,7 +899,7 @@ async def test_import_transformation_group_round_trip_clone(async_client_mdr, md
     )
 
     assert result["Success"] is True
-    assert result["MissingPaths"] == []
+    assert result["SkippedTransformations"] == []
     assert result["ImportedTransformationCount"] == 2
     new_group_id = result["TransformationGroupId"]
     assert new_group_id is not None
@@ -917,7 +917,8 @@ async def test_import_transformation_group_round_trip_clone(async_client_mdr, md
 @pytest.mark.asyncio
 async def test_import_missing_paths_aborts_without_allow(async_client_mdr, mdr_api_headers):
     """A path whose UniqueName does not resolve is a non-match; without allowMissingPaths the whole
-    import fails, returns the non-match list, and makes no changes (no new group)."""
+    import fails, lists the skipped transformation with the reason, and makes no changes (no new
+    group)."""
     test_case_name = inspect.currentframe().f_code.co_name
     dataset, exported = await _prepare_group_with_two_jsonata_transforms(async_client_mdr, test_case_name)
 
@@ -935,13 +936,25 @@ async def test_import_missing_paths_aborts_without_allow(async_client_mdr, mdr_a
         headers=mdr_api_headers,
     )
 
-    assert result["Success"] is False
-    assert result["TransformationGroupId"] is None
-    assert result["ImportedTransformationCount"] == 0
-    assert any(
-        nm["AttributeType"] == "Target" and "totally.bogus.attribute" in (nm["NamedPath"] or "")
-        for nm in result["MissingPaths"]
-    )
+    # The corrupted transformation is the sole skip; its reason weaves in the target path and the
+    # unresolved UniqueName. The second (untouched) transformation is not reported — it resolved
+    # fine and was simply rolled back with everything else.
+    assert result == {
+        "Success": False,
+        "TransformationGroupId": None,
+        "ImportedTransformationCount": 0,
+        "SkippedTransformationCount": 1,
+        "SkippedTransformations": [
+            {
+                "TransformationName": exported["Transformations"][0]["Name"],
+                "Reason": (
+                    "no attribute uniquely named 'totally.bogus.attribute' found in the target path "
+                    f"999:~totally.bogus.attribute in data model {test_case_name}_target "
+                    f"({dataset.target_data_model_id}) (or its base model)"
+                ),
+            }
+        ],
+    }
 
     # No new (2.0) group should have been created — the transaction was rolled back.
     response = await async_client_mdr.get(
@@ -969,7 +982,8 @@ async def test_import_lone_attribute_path_is_a_non_match(async_client_mdr, mdr_a
     # Reduce the target path to just its terminal attribute segment — a valid attribute UniqueName,
     # but with the owning entity stripped off.
     full_target_path = body["Transformations"][0]["TargetAttribute"]["EntityIdPath"]
-    body["Transformations"][0]["TargetAttribute"]["EntityIdPath"] = full_target_path.split(",")[-1]
+    lone_attribute_path = full_target_path.split(",")[-1]
+    body["Transformations"][0]["TargetAttribute"]["EntityIdPath"] = lone_attribute_path
 
     result = await import_transformation_group(
         async_client_mdr=async_client_mdr,
@@ -980,19 +994,24 @@ async def test_import_lone_attribute_path_is_a_non_match(async_client_mdr, mdr_a
         headers=mdr_api_headers,
     )
 
-    assert result["Success"] is False
-    assert result["TransformationGroupId"] is None
-    assert result["ImportedTransformationCount"] == 0
-    assert any(
-        non_match["AttributeType"] == "Target" and "owning entity" in non_match["Reason"]
-        for non_match in result["MissingPaths"]
-    )
+    assert result == {
+        "Success": False,
+        "TransformationGroupId": None,
+        "ImportedTransformationCount": 0,
+        "SkippedTransformationCount": 1,
+        "SkippedTransformations": [
+            {
+                "TransformationName": exported["Transformations"][0]["Name"],
+                "Reason": f"the target path {lone_attribute_path} must include the attribute's owning entity",
+            }
+        ],
+    }
 
 
 @pytest.mark.asyncio
 async def test_import_missing_paths_skipped_with_allow(async_client_mdr, mdr_api_headers):
     """With allowMissingPaths, a transformation with an unmatched path is skipped whole while the
-    rest import; the response lists the non-match."""
+    rest import; the response lists the skipped transformation."""
     test_case_name = inspect.currentframe().f_code.co_name
     dataset, exported = await _prepare_group_with_two_jsonata_transforms(async_client_mdr, test_case_name)
 
@@ -1008,12 +1027,24 @@ async def test_import_missing_paths_skipped_with_allow(async_client_mdr, mdr_api
         headers=mdr_api_headers,
     )
 
-    assert result["Success"] is True
-    assert result["TransformationGroupId"] is not None
-    assert result["ImportedTransformationCount"] == 1  # only the untouched (second) transformation
-    assert result["SkippedTransformationCount"] == 1
-    assert len(result["MissingPaths"]) == 1
-    assert result["MissingPaths"][0]["AttributeType"] == "Target"
+    imported_group_id = result["TransformationGroupId"]
+    assert imported_group_id is not None
+    assert result == {
+        "Success": True,
+        "TransformationGroupId": imported_group_id,
+        "ImportedTransformationCount": 1,  # only the untouched (second) transformation
+        "SkippedTransformationCount": 1,
+        "SkippedTransformations": [
+            {
+                "TransformationName": exported["Transformations"][0]["Name"],
+                "Reason": (
+                    "no attribute uniquely named 'totally.bogus.attribute' found in the target path "
+                    f"999:~totally.bogus.attribute in data model {test_case_name}_target "
+                    f"({dataset.target_data_model_id}) (or its base model)"
+                ),
+            }
+        ],
+    }
 
     new_export = await export_transformation_group(
         async_client_mdr=async_client_mdr,
@@ -1042,9 +1073,46 @@ async def test_import_empty_transformations_fails(async_client_mdr, mdr_api_head
         version=None,
         headers=mdr_api_headers,
     )
-    assert result["Success"] is False
-    assert result["TransformationGroupId"] is None
-    assert result["ImportedTransformationCount"] == 0
+    assert result == {
+        "Success": False,
+        "TransformationGroupId": None,
+        "ImportedTransformationCount": 0,
+        "SkippedTransformationCount": 0,
+        "SkippedTransformations": [],
+    }
+
+
+@pytest.mark.asyncio
+async def test_import_non_jsonata_transformations_are_reported_as_skipped(async_client_mdr, mdr_api_headers):
+    """Non-JSONata transformations are out of scope for portable import. They must be surfaced in the
+    response (SkippedTransformations + SkippedTransformationCount), not dropped with the only trace in
+    the server log. A file of only non-JSONata transforms imports nothing (Success=false) but explains
+    why."""
+    test_case_name = inspect.currentframe().f_code.co_name
+    dataset, exported = await _prepare_group_with_two_jsonata_transforms(async_client_mdr, test_case_name)
+
+    body = copy.deepcopy(exported)
+    for transformation in body["Transformations"]:
+        transformation["ExpressionLanguage"] = "LIF_Pseudo_Code"
+
+    result = await import_transformation_group(
+        async_client_mdr=async_client_mdr,
+        transformation_group_id=dataset.transformation_group_id,
+        body=body,
+        version=None,
+        headers=mdr_api_headers,
+    )
+    out_of_scope_reason = "non-JSONata expression language 'LIF_Pseudo_Code' is out of scope for portable import"
+    assert result == {
+        "Success": False,
+        "TransformationGroupId": None,
+        "ImportedTransformationCount": 0,
+        "SkippedTransformationCount": 2,
+        "SkippedTransformations": [
+            {"TransformationName": body["Transformations"][0]["Name"], "Reason": out_of_scope_reason},
+            {"TransformationName": body["Transformations"][1]["Name"], "Reason": out_of_scope_reason},
+        ],
+    }
 
 
 @pytest.mark.asyncio
@@ -1113,9 +1181,10 @@ async def test_import_hand_edited_group_then_translate_reflects_all_changes(
     async_client_mdr, async_client_translator, mdr_api_headers
 ):
     """End-to-end: export a group, hand-edit the file (materially change flow1's mapping +
-    expression, keep flow2, add a new valid flow3, add a flow4 whose source path is broken), import
-    with allowMissingPaths, delete the original group, then confirm the Translator output reflects
-    exactly those edits.
+    expression, keep flow2, add a new valid flow3, add a flow4 whose source path is broken, add a
+    non-JSONata flow5 that would overwrite flow3's output if applied), import with allowMissingPaths,
+    delete the original group, then confirm the Translator output reflects exactly the edits that
+    landed — and that flow5's out-of-scope overwrite did NOT.
 
     Hand-written EntityIdPaths use a dummy "0:" originating-model prefix to prove the prefix is
     ignored on import and paths resolve portably by UniqueName.
@@ -1188,8 +1257,37 @@ async def test_import_hand_edited_group_then_translate_reflects_all_changes(
         }
     )
 
+    # (5) Add a flow5 that is NON-JSONata but otherwise fully valid — every path resolves, and its
+    #     expression, IF it were treated as JSONata, would overwrite flow3's WorkPreference ("Advanced")
+    #     with "Mastery". It must be dropped at import (out of scope) so the translated shape below is
+    #     unaffected — proving the skip happens before anything lands in the DB, not just in the logs.
+    transformations.append(
+        {
+            "Name": "Non-JSONata WorkPreference Overwrite",
+            "Expression": (
+                '{ "User": { "Preferences": '
+                '{ "WorkPreference": Person.Employment.SkillsGainedFromCourses.SkillLevel } } }'
+            ),
+            "ExpressionLanguage": "LIF_Pseudo_Code",
+            "Notes": None,
+            "Alignment": None,
+            "CreationDate": None,
+            "ActivationDate": None,
+            "DeprecationDate": None,
+            "Contributor": None,
+            "ContributorOrganization": None,
+            "SourceAttributes": [
+                _hand_written_attribute(
+                    "0:person,0:person.employment,0:person.employment.skillsgainedfromcourses,"
+                    "0:~person.employment.skillsgainedfromcourses.skilllevel"
+                )
+            ],
+            "TargetAttribute": _hand_written_attribute("0:user,0:user.preferences,0:~user.preferences.workpreference"),
+        }
+    )
+
     # Import with allowMissingPaths: flow1 (edited) + flow2 + flow3 import; flow4 is skipped for its
-    # broken source path and reported as a non-match.
+    # broken source path and flow5 is skipped as non-JSONata — both reported in SkippedTransformations.
     result = await import_transformation_group(
         async_client_mdr=async_client_mdr,
         transformation_group_id=dataset.transformation_group_id,
@@ -1204,17 +1302,20 @@ async def test_import_hand_edited_group_then_translate_reflects_all_changes(
         "Success": True,
         "TransformationGroupId": imported_group_id,
         "ImportedTransformationCount": 3,  # edited flow1 + flow2 + new flow3
-        "SkippedTransformationCount": 1,  # flow4 (broken source)
-        "MissingPaths": [
+        "SkippedTransformationCount": 2,  # flow4 (broken source) + flow5 (non-JSONata)
+        "SkippedTransformations": [
             {
                 "TransformationName": "Broken Source Transform",
-                "AttributeType": "Source",
-                "NamedPath": "0:~totally.bogus.attribute",
                 "Reason": (
-                    "no attribute named 'totally.bogus.attribute' found in data model "
-                    f"{test_case_name}_source ({dataset.source_data_model_id}) (or its base model)"
+                    "no attribute uniquely named 'totally.bogus.attribute' found in the source path "
+                    f"0:~totally.bogus.attribute in data model {test_case_name}_source "
+                    f"({dataset.source_data_model_id}) (or its base model)"
                 ),
-            }
+            },
+            {
+                "TransformationName": "Non-JSONata WorkPreference Overwrite",
+                "Reason": "non-JSONata expression language 'LIF_Pseudo_Code' is out of scope for portable import",
+            },
         ],
     }
 
@@ -1244,7 +1345,9 @@ async def test_import_hand_edited_group_then_translate_reflects_all_changes(
             "Workplace": {"Abilities": {"Skills": {"LevelOfSkillAbility": "10 Years"}}},
             # flow2 (unchanged) still supplies this.
             "Abilities": {"Skills": {"LevelOfSkillAbility": "10 Years"}},
-            # flow3 (hand-added) supplies WorkPreference. No "SomethingElse": flow4 was skipped.
+            # flow3 (hand-added) supplies WorkPreference = "Advanced". It is NOT "Mastery": flow5's
+            # non-JSONata overwrite was dropped at import, never reaching the DB. No "SomethingElse"
+            # either: flow4 was skipped for its broken source path.
             "Preferences": {"WorkPreference": "Advanced"},
         }
     }

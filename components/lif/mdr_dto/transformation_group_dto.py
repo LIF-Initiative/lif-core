@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import List, Optional
 
-from lif.datatypes.mdr_sql_model import AttributeType, ExpressionLanguageType
+from lif.datatypes.mdr_sql_model import ExpressionLanguageType
 from lif.mdr_dto.transformation_dto import CreateTransformationDTO, TransformationDTO, UpdateTransformationDTO
 from pydantic import BaseModel
 
@@ -151,17 +151,17 @@ class ImportTransformationGroupRequestDTO(BaseModel):
     Transformations: Optional[List[ImportTransformationDTO]] = None
 
 
-class TransformationImportNonMatchDTO(BaseModel):
-    """A source/target attribute path from the import file that could not be applied.
+class TransformationImportSkipDTO(BaseModel):
+    """A transformation from the import file that was not applied, with the reason why.
 
-    A non-match is either an entity/attribute ``UniqueName`` that does not resolve in the target
-    database, or a path that resolves by name but does not form a valid chain in the anchor data
-    model. Governed by ``allowMissingPaths``.
+    Covers every skip reason under one shape (the unit is always a whole transformation, never a
+    single path): out of scope for portable import (a non-JSONata expression language, or an empty
+    expression), or one or more of its attribute paths did not resolve/validate — an entity/attribute
+    ``UniqueName`` that does not resolve in this database, or a path that resolves by name but is not a
+    valid chain in the anchor data model. Path non-matches are governed by ``allowMissingPaths``.
     """
 
     TransformationName: Optional[str] = None
-    AttributeType: AttributeType  # Source or Target
-    NamedPath: Optional[str] = None
     Reason: str
 
 
@@ -170,4 +170,4 @@ class ImportTransformationGroupResultDTO(BaseModel):
     TransformationGroupId: Optional[int] = None
     ImportedTransformationCount: int = 0
     SkippedTransformationCount: int = 0
-    MissingPaths: List[TransformationImportNonMatchDTO] = []
+    SkippedTransformations: List[TransformationImportSkipDTO] = []

@@ -29,7 +29,7 @@ from lif.mdr_dto.transformation_group_dto import (
     ImportTransformationGroupRequestDTO,
     ImportTransformationGroupResultDTO,
     TransformationGroupDTO,
-    TransformationImportNonMatchDTO,
+    TransformationImportSkipDTO,
     UpdateTransformationGroupDTO,
 )
 from lif.mdr_services.attribute_service import get_attribute_dto_by_id, get_unique_attribute
@@ -1553,7 +1553,9 @@ class UnmatchedPathError(Exception):
         super().__init__(reason)
 
 
-async def resolve_named_path(session: AsyncSession, named_path: str, anchor_data_model: DataModel) -> List[int]:
+async def resolve_named_path(
+    session: AsyncSession, named_path: str, anchor_data_model: DataModel, path_label: str = "attribute"
+) -> List[int]:
     """Resolve a portable named path to a list of signed local IDs (entities positive, terminal
     attribute negative) — the inverse of ``_resolve_entity_id_path_to_named_path``.
 
@@ -1603,7 +1605,8 @@ async def resolve_named_path(session: AsyncSession, named_path: str, anchor_data
         if not record:
             kind = "attribute" if is_attribute else "entity"
             raise UnmatchedPathError(
-                f"no {kind} named '{unique_name}' found in data model {anchor_data_model.Name} ({anchor_data_model.Id}) (or its base model)"
+                f"no {kind} uniquely named '{unique_name}' found in the {path_label} path {named_path} in data model "
+                f"{anchor_data_model.Name} ({anchor_data_model.Id}) (or its base model)"
             )
 
         resolved_ids.append(-record.Id if is_attribute else record.Id)
@@ -1612,9 +1615,12 @@ async def resolve_named_path(session: AsyncSession, named_path: str, anchor_data
 
 
 async def _resolve_and_validate_import_path(
-    session: AsyncSession, named_path: str | None, anchor_data_model: DataModel
+    session: AsyncSession, named_path: str | None, anchor_data_model: DataModel, path_label: str
 ) -> tuple[dict | None, str]:
     """Resolve + validate one import path.
+
+    ``path_label`` (``"source"`` / ``"target"``) is woven into the non-match reason so a folded skip
+    list still says which path failed.
 
     Returns ``(resolved, "")`` on success, where ``resolved`` carries the numeric ``id_path`` plus
     the terminal ``attribute_id`` and owning ``entity_id`` (``TransformationAttributes.AttributeId``
@@ -1623,27 +1629,32 @@ async def _resolve_and_validate_import_path(
     valid chain in the anchor data model (per decision, folded into the same non-match list).
     """
     if not named_path:
-        return None, "missing entity path"
+        return None, f"missing {path_label} path"
     try:
-        ids = await resolve_named_path(session=session, named_path=named_path, anchor_data_model=anchor_data_model)
+        ids = await resolve_named_path(
+            session=session, named_path=named_path, anchor_data_model=anchor_data_model, path_label=path_label
+        )
     except UnmatchedPathError as error:
         return None, error.reason
 
     if ids[-1] >= 0:
-        return None, "portable path must end in an attribute"
+        return None, f"the {path_label} path {named_path} must end in an attribute"
 
     # TransformationAttributes.EntityId is NOT NULL, so a lone-attribute path (no owning entity
     # segment) would resolve here but blow up as an IntegrityError on insert — surface it as a
     # normal non-match instead. A hand-authored file omitting the entity is the natural trigger.
     if len(ids) < 2:
-        return None, "path must include the attribute's owning entity"
+        return None, f"the {path_label} path {named_path} must include the attribute's owning entity"
 
     id_path = ",".join(str(node_id) for node_id in ids)
     try:
         # Reuse the #843 chain validator against the freshly resolved LOCAL numeric path.
         await check_transformation_attribute(session=session, anchor_data_model=anchor_data_model, id_path=id_path)
     except HTTPException as error:
-        return None, f"resolved by name but is not a valid chain in this data model: {error.detail}"
+        return None, (
+            f"the {path_label} path {named_path} resolved by name but is not a valid chain in this data "
+            f"model: {error.detail}"
+        )
 
     return {"id_path": id_path, "attribute_id": abs(ids[-1]), "entity_id": ids[-2]}, ""
 
@@ -1768,83 +1779,71 @@ async def import_transformation_group(
         commit=False,
     )
 
-    non_matches: List[TransformationImportNonMatchDTO] = []
+    # Every non-applied transformation lands in one flat list (the unit is always a whole
+    # transformation, never a single path). `had_path_non_match` tracks path failures separately so
+    # they alone gate the allowMissingPaths abort — out-of-scope skips (non-JSONata / empty) never do.
+    skipped_transformations: List[TransformationImportSkipDTO] = []
+    had_path_non_match = False
     imported_count = 0
-    skipped_count = 0
 
     for transformation in data.Transformations or []:
-        # Out of scope for portable import: silently-ignored on export, warned-and-skipped here.
+        # Out of scope for portable import: silently-ignored on export, warned-and-skipped here. Also
+        # surfaced in the response (SkippedTransformations) so a UI can explain why nothing landed,
+        # rather than leaving the only trace in the server log.
         if transformation.ExpressionLanguage != ExpressionLanguageType.JSONata:
-            logger.warning(
-                f"Import: skipping transformation '{transformation.Name}' — non-JSONata expression language "
-                f"'{transformation.ExpressionLanguage}' is out of scope for portable import."
+            language = getattr(transformation.ExpressionLanguage, "value", transformation.ExpressionLanguage)
+            reason = f"non-JSONata expression language '{language}' is out of scope for portable import"
+            logger.warning(f"Import: skipping transformation '{transformation.Name}' — {reason}.")
+            skipped_transformations.append(
+                TransformationImportSkipDTO(TransformationName=transformation.Name, Reason=reason)
             )
             continue
         if not transformation.Expression:
-            logger.warning(f"Import: skipping transformation '{transformation.Name}' — it has no expression.")
+            reason = "it has no expression"
+            logger.warning(f"Import: skipping transformation '{transformation.Name}' — {reason}.")
+            skipped_transformations.append(
+                TransformationImportSkipDTO(TransformationName=transformation.Name, Reason=reason)
+            )
             continue
 
-        transformation_non_matches: List[TransformationImportNonMatchDTO] = []
+        # Collect every path non-match for this transformation, then fold them into one skip entry.
+        path_non_match_reasons: List[str] = []
         source_attributes: List[CreateTransformationAttributeDTO] = []
 
         file_source_attributes = transformation.SourceAttributes or []
         if not file_source_attributes:
-            transformation_non_matches.append(
-                TransformationImportNonMatchDTO(
-                    TransformationName=transformation.Name,
-                    AttributeType=AttributeType.Source,
-                    NamedPath=None,
-                    Reason="transformation has no source attributes",
-                )
-            )
+            path_non_match_reasons.append("transformation has no source attributes")
         for source_attribute in file_source_attributes:
             resolved, reason = await _resolve_and_validate_import_path(
-                session, source_attribute.EntityIdPath, source_data_model
+                session, source_attribute.EntityIdPath, source_data_model, "source"
             )
             if resolved is None:
-                transformation_non_matches.append(
-                    TransformationImportNonMatchDTO(
-                        TransformationName=transformation.Name,
-                        AttributeType=AttributeType.Source,
-                        NamedPath=source_attribute.EntityIdPath,
-                        Reason=reason,
-                    )
-                )
+                path_non_match_reasons.append(reason)
             else:
                 source_attributes.append(_build_import_attribute(source_attribute, AttributeType.Source, resolved))
 
         target_attribute: CreateTransformationAttributeDTO | None = None
         if transformation.TargetAttribute is None:
-            transformation_non_matches.append(
-                TransformationImportNonMatchDTO(
-                    TransformationName=transformation.Name,
-                    AttributeType=AttributeType.Target,
-                    NamedPath=None,
-                    Reason="transformation has no target attribute",
-                )
-            )
+            path_non_match_reasons.append("transformation has no target attribute")
         else:
             resolved, reason = await _resolve_and_validate_import_path(
-                session, transformation.TargetAttribute.EntityIdPath, target_data_model
+                session, transformation.TargetAttribute.EntityIdPath, target_data_model, "target"
             )
             if resolved is None:
-                transformation_non_matches.append(
-                    TransformationImportNonMatchDTO(
-                        TransformationName=transformation.Name,
-                        AttributeType=AttributeType.Target,
-                        NamedPath=transformation.TargetAttribute.EntityIdPath,
-                        Reason=reason,
-                    )
-                )
+                path_non_match_reasons.append(reason)
             else:
                 target_attribute = _build_import_attribute(
                     transformation.TargetAttribute, AttributeType.Target, resolved
                 )
 
         # Skip the WHOLE transformation if any of its paths did not resolve/validate.
-        if transformation_non_matches:
-            non_matches.extend(transformation_non_matches)
-            skipped_count += 1
+        if path_non_match_reasons:
+            had_path_non_match = True
+            skipped_transformations.append(
+                TransformationImportSkipDTO(
+                    TransformationName=transformation.Name, Reason="; ".join(path_non_match_reasons)
+                )
+            )
             continue
 
         # An empty non-match list guarantees the target resolved; this guard is unreachable in
@@ -1873,15 +1872,15 @@ async def import_transformation_group(
         )
         imported_count += 1
 
-    if non_matches and not allow_missing_paths:
+    if had_path_non_match and not allow_missing_paths:
         # Fail the call and do NOT make any changes.
         await session.rollback()
         return ImportTransformationGroupResultDTO(
             Success=False,
             TransformationGroupId=None,
             ImportedTransformationCount=0,
-            SkippedTransformationCount=skipped_count,
-            MissingPaths=non_matches,
+            SkippedTransformationCount=len(skipped_transformations),
+            SkippedTransformations=skipped_transformations,
         )
 
     if imported_count == 0:
@@ -1889,14 +1888,14 @@ async def import_transformation_group(
         # emit an empty group). Reached when the file has no JSONata transformations or when every
         # transformation was skipped for missing paths under allowMissingPaths=true. Reported as a
         # 200 Success=false result (not an HTTP error) so callers can handle every non-success the
-        # same way — the counts and MissingPaths carry the verdict. No changes are made.
+        # same way — the counts and SkippedTransformations carry the verdict. No changes are made.
         await session.rollback()
         return ImportTransformationGroupResultDTO(
             Success=False,
             TransformationGroupId=None,
             ImportedTransformationCount=0,
-            SkippedTransformationCount=skipped_count,
-            MissingPaths=non_matches,
+            SkippedTransformationCount=len(skipped_transformations),
+            SkippedTransformations=skipped_transformations,
         )
 
     await session.commit()
@@ -1904,6 +1903,6 @@ async def import_transformation_group(
         Success=True,
         TransformationGroupId=new_group.Id,
         ImportedTransformationCount=imported_count,
-        SkippedTransformationCount=skipped_count,
-        MissingPaths=non_matches,
+        SkippedTransformationCount=len(skipped_transformations),
+        SkippedTransformations=skipped_transformations,
     )

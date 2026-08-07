@@ -463,7 +463,7 @@ async def import_transformation_group(
         expected_status_code: Asserted response status code (default 200)
 
     Returns:
-        The response json (ImportTransformationGroupResultDTO shape, or {"detail": ...} on error)
+        The response json (ImportTransformationGroupResultDTO shape, or {"detail": ...} on 4xx)
     """
     params: dict = {"allowMissingPaths": str(allow_missing_paths).lower()}
     if version is not None:

@@ -267,7 +267,8 @@ async def import_transformation_group(
     ``transformation_group_id`` (the only DB-matched ID) supplies the source/target data models.
     ``version`` blank -> clone into the next major version; a new version -> clone into it; a known
     version -> edit (not yet supported). ``allowMissingPaths`` controls whether unmatched attribute
-    paths abort the import or are skipped; the response always lists every non-match.
+    paths abort the import or are skipped; the response's ``SkippedTransformations`` always lists
+    every transformation that was not applied and why.
     """
     try:
         return await transformation_service.import_transformation_group(
