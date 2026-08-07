@@ -283,7 +283,7 @@ async def import_transformation_group(
         logger.exception("Transformation group import failed due to a database integrity error")
         raise HTTPException(
             status_code=409, detail="The import could not be completed due to a database integrity error."
-        )
+        ) from exc
 
 
 @router.get("/{transformation_group_id}", response_model=Dict[str, Any])
