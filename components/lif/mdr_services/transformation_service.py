@@ -1728,8 +1728,10 @@ async def import_transformation_group(
                 target_data_model.Id,
                 normalized_version,
             )
+            # 409 Conflict: the request collides with an existing (source, target, version) group.
+            # (Not 501 — the server does support import; this specific version just can't be edited yet.)
             raise HTTPException(
-                status_code=501,
+                status_code=409,
                 detail=(
                     f"A transformation group already exists at version '{normalized_version}'. Editing an "
                     "existing version via import is not yet supported; omit the version to clone into the "
@@ -1883,18 +1885,18 @@ async def import_transformation_group(
         )
 
     if imported_count == 0:
-        # Importing a transformation group with no transformations is not allowed (mirrors the export
-        # side, which refuses to emit an empty group). Reached when the file has no JSONata
-        # transformations or when every transformation was skipped for missing paths under
-        # allowMissingPaths=true.
+        # Nothing was imported, so no group is created (mirrors the export side, which refuses to
+        # emit an empty group). Reached when the file has no JSONata transformations or when every
+        # transformation was skipped for missing paths under allowMissingPaths=true. Reported as a
+        # 200 Success=false result (not an HTTP error) so callers can handle every non-success the
+        # same way — the counts and MissingPaths carry the verdict. No changes are made.
         await session.rollback()
-        raise HTTPException(
-            status_code=400,
-            detail=(
-                "No transformations were imported, so no transformation group was created. A "
-                "transformation group must contain at least one JSONata transformation whose "
-                "attribute paths all resolve in this database."
-            ),
+        return ImportTransformationGroupResultDTO(
+            Success=False,
+            TransformationGroupId=None,
+            ImportedTransformationCount=0,
+            SkippedTransformationCount=skipped_count,
+            MissingPaths=non_matches,
         )
 
     await session.commit()

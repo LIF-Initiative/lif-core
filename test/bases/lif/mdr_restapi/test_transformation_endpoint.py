@@ -1026,7 +1026,9 @@ async def test_import_missing_paths_skipped_with_allow(async_client_mdr, mdr_api
 
 @pytest.mark.asyncio
 async def test_import_empty_transformations_fails(async_client_mdr, mdr_api_headers):
-    """A group with no importable transformations is rejected with 400 (no empty groups)."""
+    """A group with no importable transformations imports nothing: a 200 result with Success=false
+    and no new group (no empty groups), rather than an HTTP error — clients handle every non-success
+    through the one result shape."""
     test_case_name = inspect.currentframe().f_code.co_name
     dataset, exported = await _prepare_group_with_two_jsonata_transforms(async_client_mdr, test_case_name)
 
@@ -1039,15 +1041,17 @@ async def test_import_empty_transformations_fails(async_client_mdr, mdr_api_head
         body=body,
         version=None,
         headers=mdr_api_headers,
-        expected_status_code=400,
     )
-    assert "no transformations" in result["detail"].lower()
+    assert result["Success"] is False
+    assert result["TransformationGroupId"] is None
+    assert result["ImportedTransformationCount"] == 0
 
 
 @pytest.mark.asyncio
 async def test_import_known_version_edit_not_yet_supported(async_client_mdr, mdr_api_headers):
     """Layer 1 boundary: importing into an already-existing version (edit mode) is not yet
-    implemented and returns 501 rather than silently cloning or corrupting the existing group."""
+    implemented and returns 409 Conflict (with a detail message) rather than silently cloning or
+    corrupting the existing group."""
     test_case_name = inspect.currentframe().f_code.co_name
     dataset, exported = await _prepare_group_with_two_jsonata_transforms(async_client_mdr, test_case_name)
 
@@ -1057,7 +1061,7 @@ async def test_import_known_version_edit_not_yet_supported(async_client_mdr, mdr
         body=exported,
         version="1.0",  # already exists for this (source, target)
         headers=mdr_api_headers,
-        expected_status_code=501,
+        expected_status_code=409,
     )
     assert "not yet supported" in result["detail"].lower()
 
