@@ -348,6 +348,29 @@ async def delete_transformation(
     return response_json
 
 
+async def delete_transformation_group(
+    *,
+    async_client_mdr: AsyncClient,
+    transformation_group_id: str,
+    headers: dict = HEADER_MDR_API_KEY_GRAPHQL,
+    expected_status_code: int = 200,
+) -> dict:
+    """Helper to soft-delete a transformation group (DELETE /transformation_groups/{id}).
+
+    Args:
+        async_client_mdr: An instance of AsyncClient to make HTTP requests to the MDR API
+        transformation_group_id: The ID of the transformation group to delete
+        headers: Optional headers to include in the request (default is HEADER_MDR_API_KEY_GRAPHQL)
+        expected_status_code: The expected HTTP status code of the response (default is 200)
+
+    Returns:
+        The response from the delete operation as a dictionary
+    """
+    response = await async_client_mdr.delete(f"/transformation_groups/{transformation_group_id}", headers=headers)
+    assert response.status_code == expected_status_code, str(response.text) + str(response.headers)
+    return response.json()
+
+
 async def update_transformation(
     *,
     async_client_mdr: AsyncClient,
@@ -417,3 +440,36 @@ async def export_transformation_group(
         assert diff == {}, diff
 
     return response_json
+
+
+async def import_transformation_group(
+    *,
+    async_client_mdr: AsyncClient,
+    transformation_group_id: str,
+    body: dict,
+    version: str | None = None,
+    allow_missing_paths: bool = False,
+    headers: dict = HEADER_MDR_API_KEY_GRAPHQL,
+    expected_status_code: int = 200,
+) -> dict:
+    """Helper to POST a transformation-group import file to the import endpoint (#772).
+
+    Args:
+        async_client_mdr: AsyncClient for the MDR API
+        transformation_group_id: The group whose source/target models anchor resolution
+        body: The exported transformation-group JSON to import
+        version: Import version (None/blank -> clone into the next major version)
+        allow_missing_paths: Whether to proceed past unmatched attribute paths
+        expected_status_code: Asserted response status code (default 200)
+
+    Returns:
+        The response json (ImportTransformationGroupResultDTO shape, or {"detail": ...} on 4xx)
+    """
+    params: dict = {"allowMissingPaths": str(allow_missing_paths).lower()}
+    if version is not None:
+        params["version"] = version
+    response = await async_client_mdr.post(
+        f"/transformation_groups/{transformation_group_id}/import", headers=headers, params=params, json=body
+    )
+    assert response.status_code == expected_status_code, str(response.text) + str(response.headers)
+    return response.json()

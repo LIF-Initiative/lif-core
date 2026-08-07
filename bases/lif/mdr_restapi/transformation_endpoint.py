@@ -13,9 +13,11 @@ from lif.mdr_dto.transformation_dto import (
     UpdateTransformationDTO,
     UpdateTransformationGroupDTO,
 )
+from lif.mdr_dto.transformation_group_dto import ImportTransformationGroupRequestDTO, ImportTransformationGroupResultDTO
 from lif.mdr_services import tag_service, transformation_service
 from lif.mdr_utils.database_setup import get_session
 from lif.mdr_utils.logger_config import get_logger
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 router = APIRouter()
@@ -250,6 +252,38 @@ async def export_transformation_group(transformation_group_id: int, session: Asy
     headers = {"Content-Disposition": f'attachment; filename="{filename}"'}
     payload = json.dumps(encoded, indent=2)
     return Response(content=payload, media_type="application/json", headers=headers)
+
+
+@router.post("/{transformation_group_id}/import", response_model=ImportTransformationGroupResultDTO)
+async def import_transformation_group(
+    transformation_group_id: int,
+    data: ImportTransformationGroupRequestDTO,
+    version: Optional[str] = None,
+    allowMissingPaths: bool = False,  # noqa: N803 — query param name is part of the public API contract (#772)
+    session: AsyncSession = Depends(get_session),
+):
+    """Import a portable transformation-group file (#772).
+
+    ``transformation_group_id`` (the only DB-matched ID) supplies the source/target data models.
+    ``version`` blank -> clone into the next major version; a new version -> clone into it; a known
+    version -> edit (not yet supported). ``allowMissingPaths`` controls whether unmatched attribute
+    paths abort the import or are skipped; the response's ``SkippedTransformations`` always lists
+    every transformation that was not applied and why.
+    """
+    try:
+        return await transformation_service.import_transformation_group(
+            session=session,
+            transformation_group_id=transformation_group_id,
+            data=data,
+            version=version,
+            allow_missing_paths=allowMissingPaths,
+        )
+    except IntegrityError as exc:
+        await session.rollback()
+        logger.exception("Transformation group import failed due to a database integrity error")
+        raise HTTPException(
+            status_code=409, detail="The import could not be completed due to a database integrity error."
+        ) from exc
 
 
 @router.get("/{transformation_group_id}", response_model=Dict[str, Any])
