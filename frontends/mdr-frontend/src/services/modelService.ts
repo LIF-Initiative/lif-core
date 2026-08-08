@@ -13,6 +13,10 @@ import {
 import { downloadJsonFile } from "../utils/downloadJsonFile";
 
 const apiBaseUrl = import.meta.env.VITE_API_URL;
+const BaseLIF = 'BaseLIF';
+const OrgLIF = 'OrgLIF';
+const SourceSchema = 'SourceSchema';
+const PartnerLIF = 'PartnerLIF';
 
 /**
  * List data models, optionally filtering by DataModel.Type on the client side.
@@ -45,6 +49,26 @@ export const listModels = async (
   } catch (error) {
     console.error("Error fetching data:", error);
     throw error;
+  }
+};
+
+export const getModel_BaseLIF = async () => { // returns the first BaseLIF model
+  try {
+    const models = await listModels({ type: BaseLIF });
+    if (models?.length) return models[0];
+    else throw new Error("No Base LIF model found");
+  } catch (error) {
+    console.error("Error fetching Base LIF model:", error);
+  }
+};
+
+export const getModel_OrgLIF = async () => { // returns the first OrgLIF model
+  try {
+    const models = await listModels({ type: OrgLIF });
+    if (models?.length) return models[0];
+    else throw new Error("No Org LIF model found");
+  } catch (error) {
+    console.error("Error fetching Org LIF model:", error);
   }
 };
 
