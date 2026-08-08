@@ -3,73 +3,979 @@
     {
       "Name": [
         {
-          "informationSourceId": "Org3",
           "lastName": "Diaz",
           "firstName": "Jenna",
-          "informationSourceOrganization": "Regional University",
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
           "identifier": "name-jenna-diaz-org3-001"
+        }
+      ],
+      "Proficiency": [
+        {
+          "name": "Research Skills",
+          "description": "Research is a skill that involves gathering and analyzing information to answer questions or solve problems. It involves identifying reliable sources of information, evaluating the credibility of those sources, and synthesizing the information to draw meaningful conclusions. Research skills are essential in many fields, including academia, business, and journalism. Effective research requires critical thinking, attention to detail, and the ability to discern biases and limitations in information sources.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-research-skills-org3-001"
+        },
+        {
+          "name": "Advanced Cardiovascular Life Support (ACLS)",
+          "description": "ACLS Certification is a certification that healthcare professionals can obtain to demonstrate proficiency in advanced cardiac life support skills including recognition and management of cardiac arrest, stroke, and other cardiac emergencies.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-advanced-cardiovascular-life-s-org3-002"
+        },
+        {
+          "name": "Data Analysis",
+          "description": "Data analysis involves using various techniques and methods to process, transform, and summarize data in order to extract meaningful insights and information that can inform decision-making. It involves the application of statistical and computational tools to large datasets, and requires a specialized set of skills and knowledge, including expertise in programming languages, data visualization, and machine learning. Effective data analysis can help businesses, governments, and other organizations better understand their operations, customers, and markets, and make informed decisions based on the insights gained from their data.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-data-analysis-org3-003"
+        },
+        {
+          "name": "Chemistry",
+          "description": "Chemistry is a specialized skill that involves the study of matter, its properties, and the changes that it undergoes. It is a branch of science that explores the composition, structure, and properties of elements and compounds, as well as the reactions that take place between them. Chemists use this knowledge to develop new compounds, analyze substances, and design processes that can be used for industrial applications. It is an important field that has applications in many industries, including pharmaceuticals, materials science, and energy production.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-chemistry-org3-004"
+        },
+        {
+          "name": "Molecular Biology",
+          "description": "Molecular biology is a specialized skill that involves the study of biological macromolecules (DNA, RNA, proteins) and their interactions within cells to understand biological processes such as replication, transcription, and translation. It involves the use of various techniques such as PCR, gel electrophoresis, and DNA sequencing to isolate, manipulate, and analyze DNA and RNA molecules. Molecular biology is crucial in understanding the causes of genetic diseases, developing new drugs, and improving crop yields in agriculture.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-molecular-biology-org3-005"
+        },
+        {
+          "name": "Biology",
+          "description": "Biology is a specialized skill focused on the study of living organisms, including their structure, function, growth, evolution, distribution, and taxonomy. It involves a deep understanding of the natural world and the processes that drive life. This scientific discipline is critical to many fields, including medicine, agriculture, genetics, and ecology, and it is continually advancing our knowledge of the world around us. Those who study biology must possess a combination of critical thinking, analytical skills, and creativity to excel in their work.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-biology-org3-006"
+        },
+        {
+          "name": "Business Process Improvement",
+          "description": "Business Process Improvement (BPI) is a specialized skill that involves analyzing current business processes, identifying inefficiencies or areas of improvement, and implementing changes to increase efficiency, productivity, and overall performance. BPI experts use various tools and methodologies to assess and optimize business processes, such as Six Sigma, Lean Management, and Kaizen. Effective BPI requires a deep understanding of business operations, strong analytical skills, and the ability to collaborate with different teams and stakeholders.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-business-process-improvement-org3-007"
+        },
+        {
+          "name": "Computer Literacy",
+          "description": "Computer literacy refers to the ability to use computers and related technology effectively for a wide range of purposes. It is a common skill in today's society, where most work and communication is done using technology. Individuals who are computer literate are able to perform various tasks such as computer programming, software applications, data management, and Internet browsing. This skill is highly valued in the job market, especially in fields such as computer science, technology, and business.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-computer-literacy-org3-008"
+        },
+        {
+          "name": "Conflict Resolution",
+          "description": "Conflict Resolution is a specialized skill that involves finding solutions to disputes and disagreements between individuals or groups. It involves active listening, empathy, and effective communication to understand the needs and concerns of each party involved in the conflict. A successful conflict resolution requires a neutral and objective approach to finding a mutually beneficial solution that satisfies all parties involved.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-conflict-resolution-org3-009"
+        },
+        {
+          "name": "Critical Thinking",
+          "description": "Critical thinking is a skill that allows individuals to analyze and evaluate information to make sound judgements and decisions. It involves the ability to question assumptions, identify biases, and examine evidence to reach logical conclusions. It is a common skill that is essential in various areas of life, including education, career, and personal relationships.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-critical-thinking-org3-010"
+        },
+        {
+          "name": "Data Presentation",
+          "description": "Data presentation is the process of organizing, visualizing, and communicating data in a way that is clear, accurate, and meaningful. It is a specialized skill that involves the use of various tools and techniques such as charts, graphs, infographics, and storytelling to present data in a way that can be easily understood and interpreted by the target audience. Effective data presentation is essential for decision-making, problem-solving, and communication in various fields including business, academia, and research.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-data-presentation-org3-011"
+        },
+        {
+          "name": "Digital Storytelling",
+          "description": "Digital Storytelling is a specialized skill that involves using digital tools to create a compelling narrative or story. It requires a combination of technical skills and creativity to bring together images, audio, and video in a way that engages the audience and communicates a message effectively. Digital storytelling is a powerful way to share experiences, educate others, and create meaningful connections between people, and is commonly used in marketing, education, advocacy, and other fields.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-digital-storytelling-org3-012"
+        },
+        {
+          "name": "Leadership",
+          "description": "Leadership is a skill that is common among successful individuals in various fields. It involves the ability to motivate and guide a team towards achieving common goals. Good leadership qualities include effective communication, empathy, decision-making skills, adaptability, and vision. Leadership can be developed and honed through training, practice, and learning from others.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-leadership-org3-013"
+        },
+        {
+          "name": "Health Care",
+          "description": "Text Kernel Skill",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-health-care-org3-014"
+        },
+        {
+          "name": "Medical Software",
+          "description": "Medical software refers to software applications used in the field of medicine and healthcare. This includes software used for electronic medical records, medical imaging, diagnostic tools, telemedicine, clinical decision support, and medical billing and coding. Medical software is designed to improve patient care, increase efficiency, and reduce errors in healthcare settings. To work with medical software, one needs specialized skills in software development, data analysis, and healthcare regulations.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-medical-software-org3-015"
+        },
+        {
+          "name": "Knowledge of Hygiene",
+          "description": "Hygiene is a specialized skill that involves maintaining cleanliness and preventing infection in various settings, such as healthcare facilities, schools, and public spaces. It involves knowledge of best practices for hand hygiene, cleaning and disinfection, waste management, and infection control. Proper hygiene is essential for preventing the spread of diseases and ensuring the health and safety of individuals and communities.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-knowledge-of-hygiene-org3-016"
+        },
+        {
+          "name": "Interpersonal Communications",
+          "description": "Interpersonal communication is the process of exchanging information, feelings, and meaning through verbal and nonverbal interactions. It is an essential skill that involves the ability to listen actively, speak clearly, and empathize with others. Effective interpersonal communication promotes strong relationships, enhances understanding, and fosters mutual respect between individuals. It is a common skill that is used in personal, social, and professional contexts.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-interpersonal-communications-org3-017"
+        },
+        {
+          "name": "Problem Solving",
+          "description": "Problem solving is the process of identifying, analyzing and resolving problems that can arise in any situation. It is a common skill that is required in many different industries and situations, and involves identifying the root cause of a problem, generating possible solutions, evaluating those solutions and implementing the best one. Successful problem solving involves critical thinking, creativity and communication skills. Learning how to effectively solve problems can help individuals and organizations to more efficiently achieve their goals and objectives.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-problem-solving-org3-018"
+        },
+        {
+          "name": "Life Support",
+          "description": "Life support is a specialized skill that involves providing medical assistance to individuals who require help in maintaining bodily functions such as breathing or circulation. It requires knowledge of advanced medical techniques and equipment to stabilize patients in critical condition. Life support providers must be knowledgeable in a variety of emergency situations and able to respond quickly to save lives.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-life-support-org3-019"
+        },
+        {
+          "name": "Long-Term Care",
+          "description": "Long-term care is a specialized skill that involves providing ongoing assistance and support to individuals who have chronic health conditions or disabilities that limit their ability to perform daily activities. This type of care can be provided in a variety of settings, including nursing homes, assisted living facilities, and in the individual's own home. Caregivers in long-term care must be skilled in providing medical care, managing medications, handling complex equipment, and supporting the emotional and social needs of their patients. It is a demanding and challenging field that requires specialized training and experience.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-long-term-care-org3-020"
+        },
+        {
+          "name": "Nursing",
+          "description": "Nursing is a specialized skill that involves the care and treatment of patients who are ill, injured, or recovering from surgery. It encompasses a broad range of tasks that vary depending on the patient's needs, from administering medication to providing emotional support. Nurses are highly trained professionals who work closely with physicians and other healthcare providers to ensure that patients receive the best possible care. They are essential members of the healthcare team and play a critical role in the overall health and well-being of patients.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-nursing-org3-021"
+        },
+        {
+          "name": "Physics",
+          "description": "Physics is the scientific study of matter, energy, and their interactions. It involves the use of mathematical equations, experimental methods, and critical thinking to understand the natural world. Physicists may specialize in subfields such as astrophysics, biophysics, quantum mechanics, and thermodynamics. Overall, physics is a specialized skill that requires a deep understanding of complex concepts and rigorous analytical abilities.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-physics-org3-022"
+        },
+        {
+          "name": "Professional Communication",
+          "description": "Professional communication is the effective and appropriate exchange of information and ideas within a professional setting. It encompasses verbal, written, and nonverbal communication skills aimed at achieving specific goals, such as building relationships, addressing conflicts, or achieving business objectives. Effective professional communication involves clear, concise messaging, active listening, empathetic response building, and the appropriate levels of confidence, respect, and assertiveness. It is a critical skill for success in most career paths.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-professional-communication-org3-023"
+        },
+        {
+          "name": "Scientific Reasoning",
+          "description": "Scientific reasoning is a specific skill that requires a certain set of abilities and practices to critically analyze and solve problems using scientific methods. It involves logical thinking, experimentation, observation, data analysis, and communication of findings. Developing and refining scientific reasoning skills is essential for success in scientific fields and applications.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-scientific-reasoning-org3-024"
+        },
+        {
+          "name": "Nursing Home Care",
+          "description": "Nursing home care is a specialized skill that involves providing medical care and personal assistance to elderly adults who have complex health conditions and require long-term care in a residential facility. This type of healthcare requires knowledge of geriatric medicine, patience, compassion, and excellent communication skills to provide quality care for patients and their families. Nursing home care also involves working collaboratively with a team of healthcare professionals to create individualized care plans and manage patients' health conditions.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-nursing-home-care-org3-025"
+        },
+        {
+          "name": "Systems Thinking",
+          "description": "Systems thinking is a way of making sense of the complexity of the world by looking at it in terms of wholes and relationships rather than by splitting it down into its parts. It has been used as a way of exploring and developing effective action in complex contexts. Systems thinking draws on and contributes to systems theory and the system sciences.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-systems-thinking-org3-026"
+        },
+        {
+          "name": "Time Management",
+          "description": "Time management is a common skill that involves organizing and prioritizing tasks and activities to make the most efficient use of time. It involves setting goals, breaking them down into smaller tasks, and allocating time to each task. Effective time management can increase productivity, reduce stress, and provide a sense of accomplishment.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-time-management-org3-027"
+        },
+        {
+          "name": "Wound Care",
+          "description": "Wound care is a specialized skill that involves the assessment, management, and treatment of various types of wounds. It includes proper and timely wound cleaning, dressing changes, infection control, and pain management. Skilled healthcare professionals are responsible for providing appropriate wound care to promote wound healing, prevent complications, and ensure the best possible outcomes for patients.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-wound-care-org3-028"
+        },
+        {
+          "name": "Patient Assessment",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-patient-assessment-org3-029"
+        },
+        {
+          "name": "Carrying out Assessments",
+          "description": "Text Kernel Skill",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-carrying-out-assessments-org3-030"
+        },
+        {
+          "name": "Mentoring",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-mentoring-org3-031"
+        },
+        {
+          "name": "Thought Leadership",
+          "description": "Thought Leadership is the ability to lead, inspire and influence others by providing innovative and insightful ideas and perspectives in a particular field or industry. It requires a combination of expertise, strategic thinking, and effective communication skills to establish oneself as a thought leader in a specific niche. Thought leaders often publish articles, speak at conferences, engage with their audience on social media, and demonstrate their expertise in other ways to establish credibility and influence.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-thought-leadership-org3-032"
+        },
+        {
+          "name": "Receptivity",
+          "description": "Text Kernel Skill",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-receptivity-org3-033"
+        },
+        {
+          "name": "Certified Nursing Assistant",
+          "description": "Certified Nursing Assistant (CNA) is a certification that qualifies individuals to provide basic nursing care to patients and residents in healthcare settings. CNAs work under the supervision of licensed nurses and are responsible for providing assistance with daily tasks such as bathing, dressing, feeding, and monitoring vital signs. They also aid in maintaining a safe and clean environment for patients. To become a CNA, individuals must complete a state-approved training program and pass a competency exam.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-certified-nursing-assistant-org3-034"
+        },
+        {
+          "name": "Certified Nurse Practitioner",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-certified-nurse-practitioner-org3-035"
+        },
+        {
+          "name": "Written Communication",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-written-communication-org3-036"
+        },
+        {
+          "name": "Communications",
+          "description": "Communication is a vital skill that involves exchanging information through speaking, writing or non-verbal means. It is crucial for building relationships, conveying ideas, clarifying misunderstandings, and achieving goals. Effective communication requires active listening, clear and concise expression, empathy, and persuasion skills. It is applicable in all aspects of life, including personal relationships, social interactions, and professional settings.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-communications-org3-037"
+        },
+        {
+          "name": "Cultural Sensitivity",
+          "description": "Cultural sensitivity, also sometimes referred to as cross-cultural sensitivity or simply cultural awareness, is the knowledge, awareness, and acceptance of other cultures and others' cultural identities. It is related to cultural competence, and sometimes regarded as the precursor to the achievement of cultural competence, but is a more widely used term than cultural competence. On the individual level, cultural sensitivity enables travelers and workers to successfully navigate a different culture with which they are interacting.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-cultural-sensitivity-org3-038"
+        },
+        {
+          "name": "Mentorship",
+          "description": "Mentorship is the act of guiding and advising someone with less experience or knowledge in a specific area. It involves sharing expertise, knowledge, and experience to help the mentee grow professionally or personally. It is a common skill that is valued in many industries, including business, education, and healthcare. Good mentorship involves active listening, empathy, respect, and open communication. It can benefit both the mentor and the mentee, and result in long-lasting relationships and positive outcomes.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-mentorship-org3-039"
+        },
+        {
+          "name": "Influencing Skills",
+          "description": "Influencing skills refer to the ability to persuade or convince others to support an idea, decision or action. This involves understanding the perspectives and needs of others, communicating effectively, building trust and rapport, and using various techniques such as negotiation and persuasion to achieve the desired outcome. Influencing skills are commonly required in various personal and professional settings, such as leadership, sales, marketing, and teamwork.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-influencing-skills-org3-040"
+        },
+        {
+          "name": "Goal Oriented",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-goal-oriented-org3-041"
+        },
+        {
+          "name": "Research",
+          "description": "Research is a skill that involves gathering and analyzing information to answer questions or solve problems. It involves identifying reliable sources of information, evaluating the credibility of those sources, and synthesizing the information to draw meaningful conclusions. Research skills are essential in many fields, including academia, business, and journalism. Effective research requires critical thinking, attention to detail, and the ability to discern biases and limitations in information sources.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-research-org3-042"
+        },
+        {
+          "name": "Detail Oriented",
+          "description": "Detail Oriented is a skill that involves a strong focus on precision and thoroughness when performing tasks or handling information. This skill is used to spot errors, maintain accuracy, and ensure quality in work. Detail-oriented individuals excel in tasks such as proofreading documents, conducting thorough research, performing quality control checks, and meticulously reviewing data to prevent mistakes and produce high-quality results.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-detail-oriented-org3-043"
+        },
+        {
+          "name": "Academic Tenacity",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-academic-tenacity-org3-044"
+        },
+        {
+          "name": "Teamwork",
+          "description": "Teamwork is the ability to work effectively and harmoniously with others towards a common goal. It involves being cooperative, communicative, and collaborative, as well as being able to contribute to and participate in group decision-making processes. Teamwork is a valued skill in many workplaces and is essential for successful project completion and overall business success.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-teamwork-org3-045"
+        },
+        {
+          "name": "Persuasive Communication",
+          "description": "Persuasive communication refers to the ability to convince others to take a certain course of action or persuade them to believe in a particular idea or viewpoint. This skill is commonly used in various settings such as politics, advertising, sales, and public speaking. Effective persuasive communication involves understanding the audience, identifying their needs and values, presenting compelling arguments, using persuasive techniques such as storytelling and emotional appeals, and addressing potential objections. It is a valuable skill to have in personal and professional life as it can lead to successful negotiations, increased influence, and improved relationships.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-persuasive-communication-org3-046"
+        },
+        {
+          "name": "Professionalism",
+          "description": "Professionalism is a skill that is essential in any career or job role. It involves demonstrating a high level of quality, competence, and integrity in one's work and interactions with others. Professionalism includes things like punctuality, good communication, a positive attitude, and respect for others. It is important for building trust, credibility, and a strong reputation in the workplace.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-professionalism-org3-047"
+        },
+        {
+          "name": "Acceptance",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-acceptance-org3-048"
+        },
+        {
+          "name": "Mental Agility",
+          "description": "Mental agility refers to a person's ability to think critically, creatively, and adaptably. It involves being able to solve problems quickly and efficiently, think on the spot, and remain flexible in one's thinking. Mental agility is an essential skill for success in many areas of life, including academics, business, and personal relationships.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-mental-agility-org3-049"
+        },
+        {
+          "name": "Communication and Interaction",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-communication-and-interaction-org3-050"
+        },
+        {
+          "name": "Empirical Analysis",
+          "description": "Empirical analysis is the process of gathering and analyzing data to draw inferences or conclusions. It requires specialized skills, including knowledge of statistical methods, research design, and data collection techniques. Empirical analysis is used in various fields, including economics, psychology, sociology, and political science. The goal of empirical analysis is to produce reliable and valid findings that can inform policy decisions or advance academic knowledge.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-empirical-analysis-org3-051"
+        },
+        {
+          "name": "Formal Analysis",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-formal-analysis-org3-052"
+        },
+        {
+          "name": "Novel And Adaptive Thinking",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-novel-and-adaptive-thinking-org3-053"
+        },
+        {
+          "name": "Sensemaking",
+          "description": "Sensemaking is a cognitive process in which people attempt to make sense of complex, ambiguous, or uncertain situations by creating their own mental models of the situation. It is a specialized skill that involves identifying patterns, generating hypotheses, collecting and analyzing data, and creating meaning from that data. Sensemaking is particularly important in fields such as law enforcement, intelligence gathering, and business strategy, where decision-makers need to understand complex information and make decisions based on that information.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-sensemaking-org3-054"
+        },
+        {
+          "name": "Digital Fluency",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-digital-fluency-org3-055"
+        },
+        {
+          "name": "Physical Science",
+          "description": "Physical Science is a field of science that deals with the study of matter and energy, including their interactions and transformations. It includes disciplines such as physics, chemistry, and astronomy. Physical scientists use specialized instruments and methods to observe and measure physical phenomena, and use mathematical models to explain and predict behavior. They study everything from the behavior of subatomic particles to the dynamics of the universe as a whole, and their work has practical applications in fields such as engineering, medicine, and technology development.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-physical-science-org3-056"
+        },
+        {
+          "name": "Human Literacy",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-human-literacy-org3-057"
+        },
+        {
+          "name": "Writing",
+          "description": "Writing is a skill that involves putting thoughts and ideas into words through the use of language. It is an essential communication tool used to convey messages, express thoughts and emotions, and share information. Writing can be done in various forms, such as essays, reports, stories, and letters. It is a skill that can be developed through practice, patience, and dedication. Effective writing requires clarity, coherence, and proper grammar and punctuation, among other things.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-writing-org3-058"
         }
       ],
       "Contact": [
         {
           "Email": [
             {
-              "informationSourceId": "Org3",
               "emailAddress": [
                 "jdiaz_lifdemo@stateu.edu"
-              ]
-            }
-          ],
-          "Address": [
-            {
+              ],
               "informationSourceId": "Org3",
-              "addressCity": null,
-              "countryCode": null,
-              "addressState": null,
-              "addressPostalCode": null
-            }
-          ],
-          "Telephone": [
-            {
-              "informationSourceId": "Org3",
-              "telephoneNumber": []
+              "informationSourceOrganization": "Summit Valley University",
+              "identifier": "email-jenna-diaz-org3-001"
             }
           ],
           "informationSourceId": "Org3",
-          "informationSourceOrganization": "Regional University",
-          "identifier": "contact-org3-001"
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "contact-org3-001",
+          "Address": [
+            {
+              "informationSourceId": "Org3",
+              "addressStreet": "455 N 3rd Street",
+              "addressCity": "Phoenix",
+              "addressState": "Arizona",
+              "addressPostalCode": "85004",
+              "countryCode": "US",
+              "informationSourceOrganization": "Summit Valley University",
+              "identifier": "address-jenna-diaz-org3-001"
+            }
+          ]
         }
       ],
       "Identifier": [
         {
-          "informationSourceId": "Org3",
           "identifier": "100002",
           "identifierType": "SCHOOL_ASSIGNED_NUMBER",
-          "informationSourceOrganization": "Regional University"
-        },
-        {
           "informationSourceId": "Org3",
-          "identifier": "SVU-20250002",
-          "identifierType": "Summit Valley University student ID",
-          "informationSourceOrganization": "Regional University"
+          "informationSourceOrganization": "Summit Valley University"
         }
       ],
       "CourseLearningExperience": [
         {
-          "informationSourceId": "Org3",
           "AssertedByRefOrganization": {
-            "informationSourceId": "Org3",
-            "name": "Summit Valley University",
-            "identificationSystem": "Summit Valley University SIS",
+            "name": "State University",
+            "identificationSystem": "State University SIS",
             "organizationType": [],
-            "informationSourceOrganization": "Regional University",
-            "identifier": "organization-summit-valley-university-org3-001"
-          },
-          "RefCourse": {
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Summit Valley University",
-            "identifier": "CS651",
-            "name": "Computer Science 651",
+            "identifier": "organization-state-university-org3-001"
+          },
+          "RefCourse": {
             "Identifier": [
               {
                 "identifier": "CS651",
@@ -77,9 +983,14 @@
                 "identifierVerification": [
                   "Academic Records"
                 ],
-                "informationSourceId": "Org3"
+                "informationSourceId": "Org3",
+                "informationSourceOrganization": "Summit Valley University"
               }
-            ]
+            ],
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "name": "Course CS651",
+            "identifier": "course-cs651-org3-legacy-001"
           },
           "OfferedByRefOrganization": {
             "identificationSystem": "stateu-state-university-id",
@@ -91,650 +1002,701 @@
             "informationSourceOrganization": "Summit Valley University",
             "identifier": "organization-state-university-org3-001"
           },
+          "informationSourceId": "Org3",
           "RefCredentialAward": {
+            "id": "7b214972-2eb2-4320-b645-72518b7b2f83",
+            "awardIssueDate": "2021-10-11T09:24:23Z",
+            "credentialAwardee": "Jenna Diaz",
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Summit Valley University",
-            "identifier": "32acbc32-9cc5-468b-ab31-aaa01a90aa3e",
-            "name": "Computer Science 651 Course Completion",
-            "awardIssueDate": "2020-07-13",
-            "credentialAwardee": "Jenna Diaz"
+            "identifier": "credentialaward-7b214972-2eb2-4320-b645-72518b-org3-001",
+            "name": "Course CS651 Credential Award"
           },
           "informationSourceOrganization": "Summit Valley University",
-          "identifier": "courselearningexperience-org3-001"
+          "identifier": "courselearningexperience-org3-001",
+          "name": "Course CS651"
+        },
+        {
+          "AssertedByRefOrganization": {
+            "name": "State University",
+            "identificationSystem": "State University SIS",
+            "organizationType": [],
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "organization-state-university-org3-001"
+          },
+          "RefCourse": {
+            "Identifier": [
+              {
+                "identifier": "CS651",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org3",
+                "informationSourceOrganization": "Summit Valley University"
+              }
+            ],
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "name": "Course CS651",
+            "identifier": "course-cs651-org3-legacy-001"
+          },
+          "OfferedByRefOrganization": {
+            "identificationSystem": "stateu-state-university-id",
+            "name": "State University",
+            "organizationType": [
+              "University"
+            ],
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "organization-state-university-org3-001"
+          },
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "3433e0e2-456d-4359-932c-f972a3e0c12b",
+            "awardIssueDate": "2022-02-10",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-3433e0e2-456d-4359-932c-f972a3-org3-001",
+            "name": "Course CS651 Credential Award"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "courselearningexperience-org3-002",
+          "name": "Course CS651"
+        },
+        {
+          "AssertedByRefOrganization": {
+            "name": "State University",
+            "identificationSystem": "State University SIS",
+            "organizationType": [],
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "organization-state-university-org3-001"
+          },
+          "RefCourse": {
+            "Identifier": [
+              {
+                "identifier": "CS651",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org3",
+                "informationSourceOrganization": "Summit Valley University"
+              }
+            ],
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "name": "Course CS651",
+            "identifier": "course-cs651-org3-legacy-001"
+          },
+          "OfferedByRefOrganization": {
+            "identificationSystem": "stateu-state-university-id",
+            "name": "State University",
+            "organizationType": [
+              "University"
+            ],
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "organization-state-university-org3-001"
+          },
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "efa65065-c6bf-4d35-a88a-5d1a07cd8cbf",
+            "awardIssueDate": "2021-11-24T07:25:02Z",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-efa65065-c6bf-4d35-a88a-5d1a07-org3-001",
+            "name": "Course CS651 Credential Award"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "courselearningexperience-org3-003",
+          "name": "Course CS651"
+        },
+        {
+          "AssertedByRefOrganization": {
+            "name": "State University",
+            "identificationSystem": "State University SIS",
+            "organizationType": [],
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "organization-state-university-org3-001"
+          },
+          "RefCourse": {
+            "Identifier": [
+              {
+                "identifier": "CS651",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org3",
+                "informationSourceOrganization": "Summit Valley University"
+              }
+            ],
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "name": "Course CS651",
+            "identifier": "course-cs651-org3-legacy-001"
+          },
+          "OfferedByRefOrganization": {
+            "identificationSystem": "stateu-state-university-id",
+            "name": "State University",
+            "organizationType": [
+              "University"
+            ],
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "organization-state-university-org3-001"
+          },
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "fd606e09-f7b6-4700-be4e-9a11fa2d3b6a",
+            "awardIssueDate": "2023-06-10",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-fd606e09-f7b6-4700-be4e-9a11fa-org3-001",
+            "name": "Course CS651 Credential Award"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "courselearningexperience-org3-004",
+          "name": "Course CS651"
+        },
+        {
+          "AssertedByRefOrganization": {
+            "name": "State University",
+            "identificationSystem": "State University SIS",
+            "organizationType": [],
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "organization-state-university-org3-001"
+          },
+          "RefCourse": {
+            "Identifier": [
+              {
+                "identifier": "CS651",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org3",
+                "informationSourceOrganization": "Summit Valley University"
+              }
+            ],
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "name": "Course CS651",
+            "identifier": "course-cs651-org3-legacy-001"
+          },
+          "OfferedByRefOrganization": {
+            "identificationSystem": "stateu-state-university-id",
+            "name": "State University",
+            "organizationType": [
+              "University"
+            ],
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "organization-state-university-org3-001"
+          },
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "314ae65e-0581-4f3b-988b-9ecd98ba91fc",
+            "awardIssueDate": "2020-02-08",
+            "credentialAwardee": "Jenna Diaz",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-314ae65e-0581-4f3b-988b-9ecd98-org3-001",
+            "name": "Course CS651 Credential Award"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "courselearningexperience-org3-005",
+          "name": "Course CS651"
         },
         {
           "informationSourceId": "Org3",
-          "AssertedByRefOrganization": {
-            "informationSourceId": "Org3",
-            "name": "Summit Valley University",
-            "identificationSystem": "Summit Valley University SIS",
-            "organizationType": [],
-            "informationSourceOrganization": "Regional University",
-            "identifier": "organization-summit-valley-university-org3-001"
-          },
-          "RefCourse": {
-            "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University",
-            "identifier": "CS651",
-            "name": "Computer Science 651",
-            "Identifier": [
-              {
-                "identifier": "CS651",
-                "identifierType": "Course Code",
-                "identifierVerification": [
-                  "Academic Records"
-                ],
-                "informationSourceId": "Org3"
-              }
-            ]
-          },
-          "OfferedByRefOrganization": {
-            "identificationSystem": "stateu-state-university-id",
-            "name": "State University",
-            "organizationType": [
-              "University"
-            ],
-            "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University",
-            "identifier": "organization-state-university-org3-001"
-          },
-          "RefCredentialAward": {
-            "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University",
-            "identifier": "68aabc07-81aa-47b7-9c3d-0378d15784d1",
-            "name": "Computer Science 651 Course Completion",
-            "awardIssueDate": "2021-02-25T08:49:53Z",
-            "credentialAwardee": "Jenna Diaz"
-          },
           "informationSourceOrganization": "Summit Valley University",
-          "identifier": "courselearningexperience-org3-002"
+          "identifier": "courselearningexperience-c165-org3-101",
+          "name": "Integrated Physical Sciences",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2023-01-09",
+          "enrollmentStatusType": "Completed",
+          "courseTotal": "3",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "C165-01",
+          "institution": "State University",
+          "department": "College of Health Professions",
+          "currentlyAttendingIndicator": "false",
+          "RefCourse": {
+            "name": "Integrated Physical Sciences",
+            "identifier": "course-c165-org3-001",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-org3-005",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-org3-005",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University"
+          },
+          "endDate": "2023-03-05",
+          "experienceGrade": "Competent",
+          "goodStandingIndicator": "true",
+          "courseGradeStatusCode": "Final"
         },
         {
           "informationSourceId": "Org3",
-          "AssertedByRefOrganization": {
-            "informationSourceId": "Org3",
-            "name": "Summit Valley University",
-            "identificationSystem": "Summit Valley University SIS",
-            "organizationType": [],
-            "informationSourceOrganization": "Regional University",
-            "identifier": "organization-summit-valley-university-org3-001"
-          },
-          "RefCourse": {
-            "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University",
-            "identifier": "CS651",
-            "name": "Computer Science 651",
-            "Identifier": [
-              {
-                "identifier": "CS651",
-                "identifierType": "Course Code",
-                "identifierVerification": [
-                  "Academic Records"
-                ],
-                "informationSourceId": "Org3"
-              }
-            ]
-          },
-          "OfferedByRefOrganization": {
-            "identificationSystem": "stateu-state-university-id",
-            "name": "State University",
-            "organizationType": [
-              "University"
-            ],
-            "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University",
-            "identifier": "organization-state-university-org3-001"
-          },
-          "RefCredentialAward": {
-            "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University",
-            "identifier": "be88469a-5e0e-4b09-9975-c921bbb4533a",
-            "name": "Computer Science 651 Course Completion",
-            "awardIssueDate": "2023-04-27",
-            "credentialAwardee": "Jenna Diaz"
-          },
           "informationSourceOrganization": "Summit Valley University",
-          "identifier": "courselearningexperience-org3-003"
+          "identifier": "courselearningexperience-d265-org3-102",
+          "name": "Critical Thinking: Reason and Evidence",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2023-03-06",
+          "enrollmentStatusType": "Completed",
+          "courseTotal": "3",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "D265-01",
+          "institution": "State University",
+          "department": "College of Health Professions",
+          "currentlyAttendingIndicator": "false",
+          "RefCourse": {
+            "name": "Critical Thinking: Reason and Evidence",
+            "identifier": "course-d265-org3-001",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-org3-005",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-org3-005",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University"
+          },
+          "endDate": "2023-04-20",
+          "experienceGrade": "Competent",
+          "goodStandingIndicator": "true",
+          "courseGradeStatusCode": "Final"
         },
         {
           "informationSourceId": "Org3",
-          "AssertedByRefOrganization": {
-            "informationSourceId": "Org3",
-            "name": "Summit Valley University",
-            "identificationSystem": "Summit Valley University SIS",
-            "organizationType": [],
-            "informationSourceOrganization": "Regional University",
-            "identifier": "organization-summit-valley-university-org3-001"
-          },
-          "RefCourse": {
-            "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University",
-            "identifier": "CS651",
-            "name": "Computer Science 651",
-            "Identifier": [
-              {
-                "identifier": "CS651",
-                "identifierType": "Course Code",
-                "identifierVerification": [
-                  "Academic Records"
-                ],
-                "informationSourceId": "Org3"
-              }
-            ]
-          },
-          "OfferedByRefOrganization": {
-            "identificationSystem": "stateu-state-university-id",
-            "name": "State University",
-            "organizationType": [
-              "University"
-            ],
-            "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University",
-            "identifier": "organization-state-university-org3-001"
-          },
-          "RefCredentialAward": {
-            "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University",
-            "identifier": "5c824455-52ca-4491-9dca-0379028dd03a",
-            "name": "Computer Science 651 Course Completion",
-            "awardIssueDate": "2022-10-07T15:11:21Z",
-            "credentialAwardee": "Jenna Diaz"
-          },
           "informationSourceOrganization": "Summit Valley University",
-          "identifier": "courselearningexperience-org3-004"
+          "identifier": "courselearningexperience-d269-org3-103",
+          "name": "Composition: Writing with a Strategy",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2023-04-21",
+          "enrollmentStatusType": "Completed",
+          "courseTotal": "3",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "D269-01",
+          "institution": "State University",
+          "department": "College of Health Professions",
+          "currentlyAttendingIndicator": "false",
+          "RefCourse": {
+            "name": "Composition: Writing with a Strategy",
+            "identifier": "course-d269-org3-001",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-org3-005",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-org3-005",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University"
+          },
+          "endDate": "2023-06-10",
+          "experienceGrade": "Competent",
+          "goodStandingIndicator": "true",
+          "courseGradeStatusCode": "Final"
         },
         {
           "informationSourceId": "Org3",
-          "AssertedByRefOrganization": {
-            "informationSourceId": "Org3",
-            "name": "Summit Valley University",
-            "identificationSystem": "Summit Valley University SIS",
-            "organizationType": [],
-            "informationSourceOrganization": "Regional University",
-            "identifier": "organization-summit-valley-university-org3-001"
-          },
-          "RefCourse": {
-            "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University",
-            "identifier": "CS651",
-            "name": "Computer Science 651",
-            "Identifier": [
-              {
-                "identifier": "CS651",
-                "identifierType": "Course Code",
-                "identifierVerification": [
-                  "Academic Records"
-                ],
-                "informationSourceId": "Org3"
-              }
-            ]
-          },
-          "OfferedByRefOrganization": {
-            "identificationSystem": "stateu-state-university-id",
-            "name": "State University",
-            "organizationType": [
-              "University"
-            ],
-            "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University",
-            "identifier": "organization-state-university-org3-001"
-          },
-          "RefCredentialAward": {
-            "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University",
-            "identifier": "d53c9325-fcb7-4ac7-9b33-0d372c44c58d",
-            "name": "Computer Science 651 Course Completion",
-            "awardIssueDate": "2021-07-29",
-            "credentialAwardee": "Jenna Diaz"
-          },
           "informationSourceOrganization": "Summit Valley University",
-          "identifier": "courselearningexperience-org3-005"
+          "identifier": "courselearningexperience-nura-org3-104",
+          "name": "Fundamentals of Nursing",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2025-05-01",
+          "enrollmentStatusType": "In Progress",
+          "courseTotal": "3",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "NURA-01",
+          "institution": "State University",
+          "department": "College of Health Professions",
+          "currentlyAttendingIndicator": "true",
+          "RefCourse": {
+            "name": "Fundamentals of Nursing",
+            "identifier": "course-nura-org3-001",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-org3-005",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-org3-005",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University"
+          }
         }
       ],
       "CredentialAward": [
         {
-          "informationSourceId": "Org3",
-          "informationSourceOrganization": "Summit Valley University",
           "awardStatus": "Completed",
           "InstanceOfRefCredential": {
+            "id": "249cdd22-6fb1-47c1-aea0-4cd77947e226",
             "informationSourceId": "Org3",
+            "name": "C165 - Integrated Physical Sciences",
             "informationSourceOrganization": "Summit Valley University",
-            "identifier": "84d6de55-974c-47e5-92bf-889addac75ae",
-            "name": "Bachelor of Science (BS): Computer Science"
+            "identifier": "credential-c165---integrated-physical-sci-org3-001"
           },
-          "identifier": "fb8e3666-654d-4544-b353-1285242f9a4a",
-          "awardIssueDate": "2023-08-22",
-          "credentialAwardee": "Jenna Diaz"
+          "id": "cde063e8-63bb-479e-ac09-2bf016db9500",
+          "awardIssueDate": "2022-12-09",
+          "credentialAwardee": "Jenna Diaz",
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "credentialaward-cde063e8-63bb-479e-ac09-2bf016-org3-001",
+          "name": "C165 - Integrated Physical Sciences"
         },
         {
           "awardStatus": "Completed",
           "InstanceOfRefCredential": {
+            "id": "249cdd22-6fb1-47c1-aea0-4cd77947e226",
             "informationSourceId": "Org3",
+            "name": "C165 - Integrated Physical Sciences",
             "informationSourceOrganization": "Summit Valley University",
-            "identifier": "",
-            "name": "Computer Science Proficiency Certificate"
+            "identifier": "credential-c165---integrated-physical-sci-org3-001"
           },
-          "identifier": "cred-proficiency-certificate-001",
+          "id": "e86d5e3b-793c-443e-8e2c-218423d6178c",
+          "awardIssueDate": "2020-12-19",
+          "credentialAwardee": "Jenna Diaz",
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "credentialaward-e86d5e3b-793c-443e-8e2c-218423-org3-002",
+          "name": "C165 - Integrated Physical Sciences"
+        },
+        {
+          "awardStatus": "Completed",
+          "InstanceOfRefCredential": {
+            "id": "249cdd22-6fb1-47c1-aea0-4cd77947e226",
+            "informationSourceId": "Org3",
+            "name": "C165 - Integrated Physical Sciences",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credential-c165---integrated-physical-sci-org3-001"
+          },
+          "id": "6c364507-a0a3-4afb-ac74-4cc3b5938a49",
+          "awardIssueDate": "2021-12-22",
+          "credentialAwardee": "Jenna Diaz",
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "credentialaward-6c364507-a0a3-4afb-ac74-4cc3b5-org3-003",
+          "name": "C165 - Integrated Physical Sciences"
+        },
+        {
+          "awardStatus": "Completed",
+          "InstanceOfRefCredential": {
+            "id": "249cdd22-6fb1-47c1-aea0-4cd77947e226",
+            "informationSourceId": "Org3",
+            "name": "C165 - Integrated Physical Sciences",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credential-c165---integrated-physical-sci-org3-001"
+          },
+          "id": "01dd6b6d-ad9c-4df8-a110-7989c6a772a4",
+          "awardIssueDate": "2021-03-29T15:17:25Z",
+          "credentialAwardee": "Jenna Diaz",
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "credentialaward-01dd6b6d-ad9c-4df8-a110-7989c6-org3-004",
+          "name": "C165 - Integrated Physical Sciences"
+        },
+        {
+          "awardStatus": "Completed",
+          "InstanceOfRefCredential": {
+            "id": "249cdd22-6fb1-47c1-aea0-4cd77947e226",
+            "informationSourceId": "Org3",
+            "name": "C165 - Integrated Physical Sciences",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credential-c165---integrated-physical-sci-org3-001"
+          },
+          "id": "c7e9cf5e-8399-4ca5-8735-f8c1368e8428",
+          "awardIssueDate": "2021-03-18T00:02:09Z",
+          "credentialAwardee": "Jenna Diaz",
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "credentialaward-c7e9cf5e-8399-4ca5-8735-f8c136-org3-005",
+          "name": "C165 - Integrated Physical Sciences"
+        },
+        {
+          "id": "cred-proficiency-certificate-001",
           "awardIssueDate": "2024-12-15T10:00:00Z",
           "credentialAwardee": "Jenna Diaz",
           "informationSourceId": "Org3",
-          "informationSourceOrganization": "Summit Valley University"
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "credentialaward-cred-proficiency-certificate-0-org3-006",
+          "name": "State University Credential"
         },
         {
-          "awardStatus": "Completed",
-          "InstanceOfRefCredential": {
-            "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University",
-            "identifier": "",
-            "name": "Computer Science 651 Course Completion"
-          },
+          "id": "7b214972-2eb2-4320-b645-72518b7b2f83",
+          "awardIssueDate": "2021-10-11T09:24:23Z",
+          "credentialAwardee": "Jenna Diaz",
           "informationSourceId": "Org3",
           "informationSourceOrganization": "Summit Valley University",
-          "identifier": "32acbc32-9cc5-468b-ab31-aaa01a90aa3e",
-          "awardIssueDate": "2020-07-13",
-          "credentialAwardee": "Jenna Diaz"
+          "identifier": "credentialaward-7b214972-2eb2-4320-b645-72518b-org3-007",
+          "name": "State University Credential"
         },
         {
-          "awardStatus": "Completed",
-          "InstanceOfRefCredential": {
-            "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University",
-            "identifier": "",
-            "name": "Computer Science 651 Course Completion"
-          },
+          "id": "3433e0e2-456d-4359-932c-f972a3e0c12b",
+          "awardIssueDate": "2022-02-10",
+          "credentialAwardee": "Jenna Diaz",
           "informationSourceId": "Org3",
           "informationSourceOrganization": "Summit Valley University",
-          "identifier": "68aabc07-81aa-47b7-9c3d-0378d15784d1",
-          "awardIssueDate": "2021-02-25T08:49:53Z",
-          "credentialAwardee": "Jenna Diaz"
+          "identifier": "credentialaward-3433e0e2-456d-4359-932c-f972a3-org3-008",
+          "name": "State University Credential"
         },
         {
-          "awardStatus": "Completed",
-          "InstanceOfRefCredential": {
-            "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University",
-            "identifier": "",
-            "name": "Computer Science 651 Course Completion"
-          },
+          "id": "efa65065-c6bf-4d35-a88a-5d1a07cd8cbf",
+          "awardIssueDate": "2021-11-24T07:25:02Z",
+          "credentialAwardee": "Jenna Diaz",
           "informationSourceId": "Org3",
           "informationSourceOrganization": "Summit Valley University",
-          "identifier": "be88469a-5e0e-4b09-9975-c921bbb4533a",
-          "awardIssueDate": "2023-04-27",
-          "credentialAwardee": "Jenna Diaz"
+          "identifier": "credentialaward-efa65065-c6bf-4d35-a88a-5d1a07-org3-009",
+          "name": "State University Credential"
         },
         {
-          "awardStatus": "Completed",
-          "InstanceOfRefCredential": {
-            "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University",
-            "identifier": "",
-            "name": "Computer Science 651 Course Completion"
-          },
+          "id": "fd606e09-f7b6-4700-be4e-9a11fa2d3b6a",
+          "awardIssueDate": "2023-06-10",
+          "credentialAwardee": "Jenna Diaz",
           "informationSourceId": "Org3",
           "informationSourceOrganization": "Summit Valley University",
-          "identifier": "5c824455-52ca-4491-9dca-0379028dd03a",
-          "awardIssueDate": "2022-10-07T15:11:21Z",
-          "credentialAwardee": "Jenna Diaz"
+          "identifier": "credentialaward-fd606e09-f7b6-4700-be4e-9a11fa-org3-010",
+          "name": "State University Credential"
         },
         {
-          "awardStatus": "Completed",
-          "InstanceOfRefCredential": {
-            "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University",
-            "identifier": "",
-            "name": "Computer Science 651 Course Completion"
-          },
+          "id": "314ae65e-0581-4f3b-988b-9ecd98ba91fc",
+          "awardIssueDate": "2020-02-08",
+          "credentialAwardee": "Jenna Diaz",
           "informationSourceId": "Org3",
           "informationSourceOrganization": "Summit Valley University",
-          "identifier": "d53c9325-fcb7-4ac7-9b33-0d372c44c58d",
-          "awardIssueDate": "2021-07-29",
-          "credentialAwardee": "Jenna Diaz"
+          "identifier": "credentialaward-314ae65e-0581-4f3b-988b-9ecd98-org3-011",
+          "name": "State University Credential"
+        },
+        {
+          "id": "cred-employment-certificate-001",
+          "awardIssueDate": "2024-12-15T10:00:00Z",
+          "credentialAwardee": "Jenna Diaz",
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "credentialaward-cred-employment-certificate-00-org3-012",
+          "name": "State University Credential"
         }
       ],
-      "Proficiency": [
+      "informationSourceId": "Org3",
+      "ProgramLearningExperience": [
         {
           "informationSourceId": "Org3",
-          "name": "Algorithm Design Principles",
-          "description": "Applies principles such as divide-and-conquer, greedy strategies, and dynamic programming to solve computational problems.",
-          "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
-            "awardIssueDate": "2024-12-15T10:00:00Z",
-            "credentialAwardee": "Jenna Diaz",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "programlearningexperience-bsn-org3-001",
+          "name": "Bachelor of Science in Nursing (BSN)",
+          "type": "Undergraduate degree program",
+          "participationStatus": "In Progress",
+          "startDate": "2022-09-01",
+          "RefProgram": {
+            "name": "Bachelor of Science in Nursing (BSN)",
+            "identifier": "program-bsn-org3-001",
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Summit Valley University"
           },
-          "informationSourceOrganization": "Summit Valley University",
-          "identifier": "proficiency-algorithm-design-principles-org3-001"
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-org3-005",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-org3-005",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University"
+          }
         },
         {
           "informationSourceId": "Org3",
-          "name": "Time and Space Complexity Analysis",
-          "description": "Analyzes the efficiency of algorithms using Big-O, Big-Theta, and Big-Omega notation.",
-          "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
-            "awardIssueDate": "2024-12-15T10:00:00Z",
-            "credentialAwardee": "Jenna Diaz",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "programlearningexperience-cna-org3-002",
+          "name": "Certified Nursing Assistant (CNA) Program",
+          "type": "Certificate program",
+          "participationStatus": "Completed",
+          "startDate": "2017-09-05",
+          "endDate": "2018-02-16",
+          "RefProgram": {
+            "name": "Certified Nursing Assistant (CNA) Program",
+            "identifier": "program-cna-org3-002",
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Summit Valley University"
           },
-          "informationSourceOrganization": "Summit Valley University",
-          "identifier": "proficiency-time-and-space-complexity-anal-org3-002"
-        },
-        {
-          "informationSourceId": "Org3",
-          "name": "Recursive Algorithm Development",
-          "description": "Constructs recursive algorithms and explains their execution through call stacks and recurrence relations.",
-          "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
-            "awardIssueDate": "2024-12-15T10:00:00Z",
-            "credentialAwardee": "Jenna Diaz",
+          "offeredByRefOrganization": {
+            "name": "Training Provider",
+            "identifier": "organization-training-provider-org3-007",
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Summit Valley University"
           },
-          "informationSourceOrganization": "Summit Valley University",
-          "identifier": "proficiency-recursive-algorithm-developmen-org3-003"
-        },
-        {
-          "informationSourceId": "Org3",
-          "name": "Sorting and Searching Algorithms",
-          "description": "Implements and compares the performance of sorting and searching algorithms like quicksort, mergesort, and binary search.",
-          "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
-            "awardIssueDate": "2024-12-15T10:00:00Z",
-            "credentialAwardee": "Jenna Diaz",
+          "assertedByRefOrganization": {
+            "name": "Training Provider",
+            "identifier": "organization-training-provider-org3-007",
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Summit Valley University"
-          },
-          "informationSourceOrganization": "Summit Valley University",
-          "identifier": "proficiency-sorting-and-searching-algorith-org3-004"
-        },
-        {
-          "informationSourceId": "Org3",
-          "name": "Basic Data Structures Usage",
-          "description": "Uses arrays, stacks, queues, and linked lists to support algorithm implementation.",
-          "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
-            "awardIssueDate": "2024-12-15T10:00:00Z",
-            "credentialAwardee": "Jenna Diaz",
-            "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University"
-          },
-          "informationSourceOrganization": "Summit Valley University",
-          "identifier": "proficiency-basic-data-structures-usage-org3-005"
-        },
-        {
-          "informationSourceId": "Org3",
-          "name": "Graph Algorithms Fundamentals",
-          "description": "Implements graph algorithms such as breadth-first search, depth-first search, and shortest path algorithms.",
-          "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
-            "awardIssueDate": "2024-12-15T10:00:00Z",
-            "credentialAwardee": "Jenna Diaz",
-            "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University"
-          },
-          "informationSourceOrganization": "Summit Valley University",
-          "identifier": "proficiency-graph-algorithms-fundamentals-org3-006"
-        },
-        {
-          "informationSourceId": "Org3",
-          "name": "Dynamic Programming Techniques",
-          "description": "Solves optimization problems using overlapping subproblems and optimal substructure properties.",
-          "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
-            "awardIssueDate": "2024-12-15T10:00:00Z",
-            "credentialAwardee": "Jenna Diaz",
-            "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University"
-          },
-          "informationSourceOrganization": "Summit Valley University",
-          "identifier": "proficiency-dynamic-programming-techniques-org3-007"
-        },
-        {
-          "informationSourceId": "Org3",
-          "name": "Abstract Data Type Implementation",
-          "description": "Implements abstract data types like stacks, queues, and priority queues in multiple programming contexts.",
-          "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
-            "awardIssueDate": "2024-12-15T10:00:00Z",
-            "credentialAwardee": "Jenna Diaz",
-            "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University"
-          },
-          "informationSourceOrganization": "Summit Valley University",
-          "identifier": "proficiency-abstract-data-type-implementat-org3-008"
-        },
-        {
-          "informationSourceId": "Org3",
-          "name": "Tree Structures and Traversals",
-          "description": "Applies binary trees, AVL trees, and traversal techniques to solve hierarchical data problems.",
-          "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
-            "awardIssueDate": "2024-12-15T10:00:00Z",
-            "credentialAwardee": "Jenna Diaz",
-            "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University"
-          },
-          "informationSourceOrganization": "Summit Valley University",
-          "identifier": "proficiency-tree-structures-and-traversals-org3-009"
-        },
-        {
-          "informationSourceId": "Org3",
-          "name": "Hash Tables and Collision Resolution",
-          "description": "Implements hash functions and handles collisions using chaining and open addressing.",
-          "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
-            "awardIssueDate": "2024-12-15T10:00:00Z",
-            "credentialAwardee": "Jenna Diaz",
-            "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University"
-          },
-          "informationSourceOrganization": "Summit Valley University",
-          "identifier": "proficiency-hash-tables-and-collision-reso-org3-010"
-        },
-        {
-          "informationSourceId": "Org3",
-          "name": "Heap Structures and Priority Queues",
-          "description": "Uses heaps and priority queues in optimization problems such as scheduling and resource management.",
-          "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
-            "awardIssueDate": "2024-12-15T10:00:00Z",
-            "credentialAwardee": "Jenna Diaz",
-            "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University"
-          },
-          "informationSourceOrganization": "Summit Valley University",
-          "identifier": "proficiency-heap-structures-and-priority-q-org3-011"
-        },
-        {
-          "informationSourceId": "Org3",
-          "name": "Graph Algorithms and Applications",
-          "description": "Applies graph algorithms like Dijkstra\u2019s and Kruskal\u2019s to solve real-world connectivity and pathfinding problems.",
-          "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
-            "awardIssueDate": "2024-12-15T10:00:00Z",
-            "credentialAwardee": "Jenna Diaz",
-            "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University"
-          },
-          "informationSourceOrganization": "Summit Valley University",
-          "identifier": "proficiency-graph-algorithms-and-applicati-org3-012"
-        },
-        {
-          "informationSourceId": "Org3",
-          "name": "CPU Components and Functions",
-          "description": "Identifies components of a CPU and explains their role in executing instructions.",
-          "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
-            "awardIssueDate": "2024-12-15T10:00:00Z",
-            "credentialAwardee": "Jenna Diaz",
-            "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University"
-          },
-          "informationSourceOrganization": "Summit Valley University",
-          "identifier": "proficiency-cpu-components-and-functions-org3-013"
-        },
-        {
-          "informationSourceId": "Org3",
-          "name": "Assembly Language Programming",
-          "description": "Writes and debugs simple assembly programs to demonstrate low-level instruction execution.",
-          "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
-            "awardIssueDate": "2024-12-15T10:00:00Z",
-            "credentialAwardee": "Jenna Diaz",
-            "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University"
-          },
-          "informationSourceOrganization": "Summit Valley University",
-          "identifier": "proficiency-assembly-language-programming-org3-014"
-        },
-        {
-          "informationSourceId": "Org3",
-          "name": "Memory Hierarchy and Access",
-          "description": "Compares types of memory and explains their interaction in a modern computing system.",
-          "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
-            "awardIssueDate": "2024-12-15T10:00:00Z",
-            "credentialAwardee": "Jenna Diaz",
-            "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University"
-          },
-          "informationSourceOrganization": "Summit Valley University",
-          "identifier": "proficiency-memory-hierarchy-and-access-org3-015"
-        },
-        {
-          "informationSourceId": "Org3",
-          "name": "Process Management and Scheduling",
-          "description": "Explains how operating systems manage processes, threads, and scheduling policies.",
-          "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
-            "awardIssueDate": "2024-12-15T10:00:00Z",
-            "credentialAwardee": "Jenna Diaz",
-            "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University"
-          },
-          "informationSourceOrganization": "Summit Valley University",
-          "identifier": "proficiency-process-management-and-schedul-org3-016"
-        },
-        {
-          "informationSourceId": "Org3",
-          "name": "Memory Management and Paging",
-          "description": "Describes memory management techniques including virtual memory, segmentation, and paging.",
-          "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
-            "awardIssueDate": "2024-12-15T10:00:00Z",
-            "credentialAwardee": "Jenna Diaz",
-            "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University"
-          },
-          "informationSourceOrganization": "Summit Valley University",
-          "identifier": "proficiency-memory-management-and-paging-org3-017"
-        },
-        {
-          "informationSourceId": "Org3",
-          "name": "Concurrency and Synchronization",
-          "description": "Analyzes concurrency problems and applies synchronization solutions like semaphores and mutexes.",
-          "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
-            "awardIssueDate": "2024-12-15T10:00:00Z",
-            "credentialAwardee": "Jenna Diaz",
-            "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University"
-          },
-          "informationSourceOrganization": "Summit Valley University",
-          "identifier": "proficiency-concurrency-and-synchronizatio-org3-018"
-        },
-        {
-          "informationSourceId": "Org3",
-          "name": "File Systems and Storage Management",
-          "description": "Explains how operating systems manage files, directories, and storage devices.",
-          "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
-            "awardIssueDate": "2024-12-15T10:00:00Z",
-            "credentialAwardee": "Jenna Diaz",
-            "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University"
-          },
-          "informationSourceOrganization": "Summit Valley University",
-          "identifier": "proficiency-file-systems-and-storage-manag-org3-019"
-        },
-        {
-          "informationSourceId": "Org3",
-          "name": "Software Development Life Cycle (SDLC) Models",
-          "description": "Compares SDLC models including Waterfall and Agile, selecting appropriate methodologies for projects.",
-          "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
-            "awardIssueDate": "2024-12-15T10:00:00Z",
-            "credentialAwardee": "Jenna Diaz",
-            "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University"
-          },
-          "informationSourceOrganization": "Summit Valley University",
-          "identifier": "proficiency-software-development-life-cycl-org3-020"
-        },
-        {
-          "informationSourceId": "Org3",
-          "name": "Requirements Elicitation and Analysis",
-          "description": "Gathers and analyzes software requirements using interviews and modeling techniques.",
-          "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
-            "awardIssueDate": "2024-12-15T10:00:00Z",
-            "credentialAwardee": "Jenna Diaz",
-            "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University"
-          },
-          "informationSourceOrganization": "Summit Valley University",
-          "identifier": "proficiency-requirements-elicitation-and-a-org3-021"
-        },
-        {
-          "informationSourceId": "Org3",
-          "name": "Software Design Principles",
-          "description": "Applies modularity, abstraction, and cohesion principles in scalable software design.",
-          "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
-            "awardIssueDate": "2024-12-15T10:00:00Z",
-            "credentialAwardee": "Jenna Diaz",
-            "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University"
-          },
-          "informationSourceOrganization": "Summit Valley University",
-          "identifier": "proficiency-software-design-principles-org3-022"
-        },
-        {
-          "informationSourceId": "Org3",
-          "name": "Version Control and Collaboration",
-          "description": "Uses tools like Git for collaborative development and change tracking.",
-          "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
-            "awardIssueDate": "2024-12-15T10:00:00Z",
-            "credentialAwardee": "Jenna Diaz",
-            "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University"
-          },
-          "informationSourceOrganization": "Summit Valley University",
-          "identifier": "proficiency-version-control-and-collaborat-org3-023"
-        },
-        {
-          "informationSourceId": "Org3",
-          "name": "Software Testing Techniques",
-          "description": "Implements unit, integration, and system tests to ensure software quality.",
-          "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
-            "awardIssueDate": "2024-12-15T10:00:00Z",
-            "credentialAwardee": "Jenna Diaz",
-            "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University"
-          },
-          "informationSourceOrganization": "Summit Valley University",
-          "identifier": "proficiency-software-testing-techniques-org3-024"
+          }
         }
       ],
-      "informationSourceId": "Org3"
+      "AssessmentLearningExperience": [
+        {
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "assessmentlearningexperience-nnaap-cna-org3-001",
+          "name": "NNAAP Nurse Aide Certification Examination",
+          "type": "State certification assessment",
+          "startDate": "2018-02-20",
+          "endDate": "2018-02-20",
+          "offeredBy": "National Nurse Aide Assessment Program (NNAAP)",
+          "scoreValue": "92",
+          "scoreType": "Scaled score (0-100)",
+          "resultDataType": "xsd:integer",
+          "gradeStatus": "Final",
+          "completionStatus": "Completed",
+          "timeAssessed": "2018-02-20",
+          "RefAssessment": {
+            "identifier": "assessment-nnaap-cna-org3-001",
+            "name": "NNAAP Nurse Aide Certification Examination",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University"
+          },
+          "RefProficiency": {
+            "name": "Patient Assessment",
+            "identifier": "proficiency-patient-assessment-org3-029",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University"
+          },
+          "offeredByRefOrganization": {
+            "name": "National Nurse Aide Assessment Program (NNAAP)",
+            "identifier": "organization-nnaap-org3-008",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University"
+          }
+        },
+        {
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "assessmentlearningexperience-wgu-c165-org3-002",
+          "name": "Objective Assessment: C165 Integrated Physical Sciences",
+          "type": "Competency-based assessment",
+          "startDate": "2023-03-01",
+          "endDate": "2023-03-01",
+          "offeredBy": "State University",
+          "scoreValue": "Competent",
+          "scoreType": "Competent / Not Competent",
+          "resultDataType": "xsd:string",
+          "gradeStatus": "Final",
+          "completionStatus": "Completed",
+          "RefAssessment": {
+            "identifier": "assessment-wgu-c165-org3-002",
+            "name": "Objective Assessment: C165 Integrated Physical Sciences",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University"
+          },
+          "RefProficiency": {
+            "name": "Scientific Reasoning",
+            "identifier": "proficiency-scientific-reasoning-org3-024",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-org3-005",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University"
+          }
+        }
+      ],
+      "Birth": [
+        {
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "birth-org3-001",
+          "birthDate": "1991-07-22",
+          "cityOfBirth": "Phoenix",
+          "stateOfBirth": "Arizona"
+        }
+      ],
+      "SexAndGender": [
+        {
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "sexandgender-org3-001",
+          "sex": "Female",
+          "gender": "Female",
+          "pronouns": "she/her"
+        }
+      ],
+      "Residency": [
+        {
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "residency-org3-001",
+          "localType": "In-State",
+          "countyFIPSCode": "04013",
+          "dateEffective": "2016-01-01",
+          "doNotPublishIndicator": "false"
+        }
+      ],
+      "Language": [
+        {
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "language-english-org3-001",
+          "name": "English",
+          "iSO639_2LangCode": "eng",
+          "iSO639_3LangCode": "eng",
+          "languageType": "Primary"
+        }
+      ],
+      "Demographics": [
+        {
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "demographics-org3-001",
+          "highestLevelEducation": "SomeCollegeButNoDegree",
+          "usCitizenship": "true",
+          "economicDisadvantage": "false",
+          "homeless": "false",
+          "militaryActiveStatus": "false",
+          "militaryVeteranStatus": "false"
+        }
+      ]
     }
   ],
   "Course": [
     {
-      "informationSourceId": "Org3",
       "Identifier": [
         {
           "identifier": "CS651",
@@ -743,93 +1705,171 @@
             "Academic Records"
           ],
           "informationSourceId": "Org3",
-          "informationSourceOrganization": "Regional University"
+          "informationSourceOrganization": "Summit Valley University"
         }
       ],
-      "informationSourceOrganization": "Regional University"
+      "informationSourceId": "Org3",
+      "informationSourceOrganization": "Summit Valley University",
+      "name": "Course CS651",
+      "identifier": "course-cs651-org3-legacy-001"
+    },
+    {
+      "informationSourceId": "Org3",
+      "informationSourceOrganization": "Summit Valley University",
+      "name": "Integrated Physical Sciences",
+      "identifier": "course-c165-org3-001",
+      "Identifier": [
+        {
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "C165",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ]
+        }
+      ]
+    },
+    {
+      "informationSourceId": "Org3",
+      "informationSourceOrganization": "Summit Valley University",
+      "name": "Critical Thinking: Reason and Evidence",
+      "identifier": "course-d265-org3-001",
+      "Identifier": [
+        {
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "D265",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ]
+        }
+      ]
+    },
+    {
+      "informationSourceId": "Org3",
+      "informationSourceOrganization": "Summit Valley University",
+      "name": "Composition: Writing with a Strategy",
+      "identifier": "course-d269-org3-001",
+      "Identifier": [
+        {
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "D269",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ]
+        }
+      ]
+    },
+    {
+      "informationSourceId": "Org3",
+      "informationSourceOrganization": "Summit Valley University",
+      "name": "Fundamentals of Nursing",
+      "identifier": "course-nura-org3-001",
+      "Identifier": [
+        {
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "NURA",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ]
+        }
+      ]
     }
   ],
   "Organization": [
     {
-      "informationSourceId": "Org3",
-      "name": "Summit Valley University",
-      "description": "Summit Valley University (SVU) is a for-profit online university offering career-focused associate, bachelor's, and master's degree programs. SVU delivers instruction through traditional term-based courses led by experienced faculty. With an emphasis on practical skills and industry alignment, SVU serves a diverse student population seeking flexible, accessible pathways to advancement in business, healthcare, information technology, and criminal justice.",
+      "name": "State University",
+      "description": "State University (StateU) is an accredited online university offering online bachelor's and master's degree programs. The programs are competency-based, student-focused, online, nonprofit university.",
       "Contact": [
         {
           "Address": [
             {
-              "addressCity": "Aspen Falls",
+              "addressCity": "Dallas",
               "countryCode": "US",
-              "addressState": "Colorado",
-              "addressStreet": "123 Innovation Drive, Suite 500",
-              "addressPostalCode": "80901",
-              "informationSourceId": "Org3"
+              "addressState": "Texas",
+              "addressStreet": "632 East Hwy 3",
+              "addressPostalCode": "75001",
+              "informationSourceId": "Org3",
+              "informationSourceOrganization": "Summit Valley University",
+              "identifier": "address-state-university-org3-001"
             }
           ],
           "Email": [
             {
               "emailAddress": [
-                "info@summitvalley.edu"
+                "credentials@stateu.edu"
               ],
-              "informationSourceId": "Org3"
+              "informationSourceId": "Org3",
+              "informationSourceOrganization": "Summit Valley University",
+              "identifier": "email-state-university-org3-001"
             }
           ],
-          "websiteAddress": "https://www.summitvalley.edu/",
+          "websiteAddress": "https://www.stateu.edu/",
           "Telephone": [
             {
               "telephoneNumber": [
-                "888-555-7210"
+                "111-222-3333"
               ],
-              "informationSourceId": "Org3"
+              "informationSourceId": "Org3",
+              "informationSourceOrganization": "Summit Valley University",
+              "identifier": "telephone-state-university-org3-001"
             }
           ],
           "informationSourceId": "Org3",
-          "informationSourceOrganization": "Regional University",
+          "informationSourceOrganization": "Summit Valley University",
           "identifier": "contact-org3-001"
         }
       ],
-      "imageUrl": "https://cdn.summitvalley.edu/assets/logo.svg",
+      "imageUrl": "https://assets.stateu.edu/99da0cfd314920b5cf8cb6c8727e7675",
       "Identifier": [
         {
-          "identifier": "999112233",
+          "identifier": "833333326",
           "identifierType": "Federal employer identification number",
           "informationSourceId": "Org3",
-          "informationSourceOrganization": "Regional University"
+          "informationSourceOrganization": "Summit Valley University"
         },
         {
-          "identifier": "123456789",
+          "identifier": "23323331",
           "identifierType": "Dun and Bradstreet number",
           "informationSourceId": "Org3",
-          "informationSourceOrganization": "Regional University"
+          "informationSourceOrganization": "Summit Valley University"
         },
         {
-          "identifier": "https://credentialfinder.org/organization/999/Summit_Valley_University",
+          "identifier": "https://credentialfinder.org/organization/000/State_University",
           "identifierType": "credentialfinder.org",
           "informationSourceId": "Org3",
-          "informationSourceOrganization": "Regional University"
+          "informationSourceOrganization": "Summit Valley University"
         }
       ],
-      "identificationSystem": "Summit Valley University SIS",
+      "identificationSystem": "State University SIS",
       "organizationType": [],
-      "informationSourceOrganization": "Regional University"
+      "informationSourceId": "Org3",
+      "informationSourceOrganization": "Summit Valley University",
+      "identifier": "organization-state-university-org3-001"
     },
     {
-      "identificationSystem": "svu-corporate-partner-id",
-      "name": "Summit Valley Corporate Partner",
+      "identificationSystem": "stateu-employing-organization-id",
+      "name": "Corporate Partner",
       "organizationType": [
         "Company"
       ],
       "informationSourceId": "Org3",
-      "informationSourceOrganization": "Regional University",
-      "identifier": "organization-summit-valley-corporate-partne-org3-002"
+      "informationSourceOrganization": "Summit Valley University",
+      "identifier": "organization-corporate-partner-org3-002"
     },
     {
-      "informationSourceId": "Org3",
-      "name": "Summit Valley University",
-      "identificationSystem": "Summit Valley University SIS",
+      "name": "State University",
+      "identificationSystem": "State University SIS",
       "organizationType": [],
-      "informationSourceOrganization": "Regional University",
-      "identifier": "organization-summit-valley-university-org3-003"
+      "informationSourceId": "Org3",
+      "informationSourceOrganization": "Summit Valley University",
+      "identifier": "organization-state-university-org3-004"
     },
     {
       "identificationSystem": "stateu-state-university-id",
@@ -838,88 +1878,40 @@
         "University"
       ],
       "informationSourceId": "Org3",
-      "informationSourceOrganization": "Regional University",
-      "identifier": "organization-state-university-org3-004"
+      "informationSourceOrganization": "Summit Valley University",
+      "identifier": "organization-state-university-org3-005"
+    },
+    {
+      "name": "Brookdale Senior Living",
+      "informationSourceId": "Org3",
+      "informationSourceOrganization": "Summit Valley University",
+      "identifier": "organization-brookdale-senior-living-org3-006"
+    },
+    {
+      "identificationSystem": "stateu-training-provider-id",
+      "name": "Training Provider",
+      "organizationType": [
+        "Training Organization"
+      ],
+      "informationSourceId": "Org3",
+      "informationSourceOrganization": "Summit Valley University",
+      "identifier": "organization-training-provider-org3-007"
+    },
+    {
+      "informationSourceId": "Org3",
+      "informationSourceOrganization": "Summit Valley University",
+      "name": "National Nurse Aide Assessment Program (NNAAP)",
+      "description": "Administers the standardized nurse aide competency examination used for state CNA certification.",
+      "identificationSystem": "nnaap-org-id",
+      "identifier": "organization-nnaap-org3-008"
     }
   ],
   "Credential": [
     {
-      "informationSourceId": "Org3",
-      "identifier": "84d6de55-974c-47e5-92bf-889addac75ae",
-      "name": "Bachelor of Science (BS): Computer Science",
+      "id": "249cdd22-6fb1-47c1-aea0-4cd77947e226",
+      "name": "C165 - Integrated Physical Sciences",
       "format": [
         "http://schema.hropenstandards.org/4.4/recruiting/json/ler-rs/LER-RSType.json"
-      ],
-      "AlignedProgram": [
-        {
-          "specialization": "Artificial Intelligence and Machine Learning",
-          "informationSourceId": "Org3"
-        }
-      ],
-      "IssuedByRefOrganization": [
-        {
-          "informationSourceId": "Org3",
-          "name": "Summit Valley University",
-          "description": "Summit Valley University (SVU) is a for-profit online university offering career-focused associate, bachelor's, and master's degree programs. SVU delivers instruction through traditional term-based courses led by experienced faculty. With an emphasis on practical skills and industry alignment, SVU serves a diverse student population seeking flexible, accessible pathways to advancement in business, healthcare, information technology, and criminal justice.",
-          "Contact": [
-            {
-              "Address": [
-                {
-                  "addressCity": "Aspen Falls",
-                  "countryCode": "US",
-                  "addressState": "Colorado",
-                  "addressStreet": "123 Innovation Drive, Suite 500",
-                  "addressPostalCode": "80901",
-                  "informationSourceId": "Org3"
-                }
-              ],
-              "Email": [
-                {
-                  "emailAddress": [
-                    "info@summitvalley.edu"
-                  ],
-                  "informationSourceId": "Org3"
-                }
-              ],
-              "websiteAddress": "https://www.summitvalley.edu/",
-              "Telephone": [
-                {
-                  "telephoneNumber": [
-                    "888-555-7210"
-                  ],
-                  "informationSourceId": "Org3"
-                }
-              ],
-              "informationSourceId": "Org3",
-              "informationSourceOrganization": "Regional University",
-              "identifier": "contact-org3-001"
-            }
-          ],
-          "imageUrl": "https://cdn.summitvalley.edu/assets/logo.svg",
-          "Identifier": [
-            {
-              "identifier": "999112233",
-              "identifierType": "Federal employer identification number",
-              "informationSourceId": "Org3",
-              "informationSourceOrganization": "Regional University"
-            },
-            {
-              "identifier": "123456789",
-              "identifierType": "Dun and Bradstreet number",
-              "informationSourceId": "Org3",
-              "informationSourceOrganization": "Regional University"
-            },
-            {
-              "identifier": "https://credentialfinder.org/organization/999/Summit_Valley_University",
-              "identifierType": "credentialfinder.org",
-              "informationSourceId": "Org3",
-              "informationSourceOrganization": "Regional University"
-            }
-          ],
-          "identificationSystem": "summit-valley-university-sis",
-          "organizationType": [],
-          "informationSourceOrganization": "Regional University"
-        }
       ],
       "Accreditation": [
         {
@@ -927,16 +1919,346 @@
           "accreditingAgency": "Higher Learning Commission",
           "accreditationType": "Institutional",
           "dateAccredited": "2020-01-01",
-          "accreditationStatus": "Active"
+          "accreditationStatus": "Active",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "accreditation-higher-learning-commission-org3-001"
         }
       ],
-      "informationSourceOrganization": "Regional University"
+      "informationSourceId": "Org3",
+      "informationSourceOrganization": "Summit Valley University",
+      "identifier": "credential-c165---integrated-physical-sci-org3-001"
+    },
+    {
+      "id": "249cdd22-6fb1-47c1-aea0-4cd77947e226",
+      "name": "D198 - Global Arts and Humanities",
+      "format": [
+        "http://schema.hropenstandards.org/4.4/recruiting/json/ler-rs/LER-RSType.json"
+      ],
+      "Accreditation": [
+        {
+          "informationSourceId": "Org3",
+          "accreditingAgency": "Higher Learning Commission",
+          "accreditationType": "Institutional",
+          "dateAccredited": "2020-01-01",
+          "accreditationStatus": "Active",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "accreditation-higher-learning-commission-org3-002"
+        }
+      ],
+      "informationSourceId": "Org3",
+      "informationSourceOrganization": "Summit Valley University",
+      "identifier": "credential-d198---global-arts-and-humanit-org3-002"
+    },
+    {
+      "id": "249cdd22-6fb1-47c1-aea0-4cd77947e226",
+      "name": "D265 - Critical Thinking: Reason and Evidence",
+      "format": [
+        "http://schema.hropenstandards.org/4.4/recruiting/json/ler-rs/LER-RSType.json"
+      ],
+      "Accreditation": [
+        {
+          "informationSourceId": "Org3",
+          "accreditingAgency": "Higher Learning Commission",
+          "accreditationType": "Institutional",
+          "dateAccredited": "2020-01-01",
+          "accreditationStatus": "Active",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "accreditation-higher-learning-commission-org3-003"
+        }
+      ],
+      "informationSourceId": "Org3",
+      "informationSourceOrganization": "Summit Valley University",
+      "identifier": "credential-d265---critical-thinking--reas-org3-003"
+    },
+    {
+      "id": "249cdd22-6fb1-47c1-aea0-4cd77947e226",
+      "name": "D268 - Introduction to Communication: Connecting with Others",
+      "format": [
+        "http://schema.hropenstandards.org/4.4/recruiting/json/ler-rs/LER-RSType.json"
+      ],
+      "Accreditation": [
+        {
+          "informationSourceId": "Org3",
+          "accreditingAgency": "Higher Learning Commission",
+          "accreditationType": "Institutional",
+          "dateAccredited": "2020-01-01",
+          "accreditationStatus": "Active",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "accreditation-higher-learning-commission-org3-004"
+        }
+      ],
+      "informationSourceId": "Org3",
+      "informationSourceOrganization": "Summit Valley University",
+      "identifier": "credential-d268---introduction-to-communi-org3-004"
+    },
+    {
+      "id": "249cdd22-6fb1-47c1-aea0-4cd77947e226",
+      "name": "D269 - Composition: Writing with a Strategy",
+      "format": [
+        "http://schema.hropenstandards.org/4.4/recruiting/json/ler-rs/LER-RSType.json"
+      ],
+      "Accreditation": [
+        {
+          "informationSourceId": "Org3",
+          "accreditingAgency": "Higher Learning Commission",
+          "accreditationType": "Institutional",
+          "dateAccredited": "2020-01-01",
+          "accreditationStatus": "Active",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "accreditation-higher-learning-commission-org3-005"
+        }
+      ],
+      "informationSourceId": "Org3",
+      "informationSourceOrganization": "Summit Valley University",
+      "identifier": "credential-d269---composition--writing-wi-org3-005"
+    },
+    {
+      "id": "249cdd22-6fb1-47c1-aea0-4cd77947e226",
+      "informationSourceId": "Org3",
+      "informationSourceOrganization": "Summit Valley University",
+      "identifier": "credential-249cdd22-6fb1-47c1-aea0-4cd779-org3-006",
+      "name": "C165 - Integrated Physical Sciences"
+    }
+  ],
+  "informationSourceId": "Org3",
+  "Assessment": [
+    {
+      "informationSourceId": "Org3",
+      "informationSourceOrganization": "Summit Valley University",
+      "identifier": "assessment-nnaap-cna-org3-001",
+      "name": "NNAAP Nurse Aide Certification Examination",
+      "shortName": "NNAAP CNA",
+      "provider": "National Nurse Aide Assessment Program (NNAAP)",
+      "type": "State certification examination",
+      "description": "Standardized written and skills examination for state certification as a nurse aide (CNA).",
+      "purpose": "State CNA certification",
+      "assessmentLevel": "AudLevel:PostSecondaryLevel",
+      "scoreMetricType": "Scaled score (0-100)",
+      "deliveryType": "In-person written plus skills demonstration",
+      "methodType": "Multiple choice and performance-based skills",
+      "AssessmentPerformanceLevel": [
+        {
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "assessmentperformancelevel-nnaap-pass-org3-001",
+          "label": "Pass",
+          "performanceLowerLevel": "70",
+          "performanceUpperLevel": "100",
+          "descriptiveFeedback": "A score of 70 or higher on both the written and skills sections earns certification."
+        }
+      ],
+      "demonstratesRefCompetency": {
+        "name": "Clinical Care and Safety",
+        "identifier": "competency-clinical-care-safety-org3-002",
+        "informationSourceId": "Org3",
+        "informationSourceOrganization": "Summit Valley University"
+      },
+      "awardedByRefOrganization": {
+        "name": "National Nurse Aide Assessment Program (NNAAP)",
+        "identifier": "organization-nnaap-org3-008",
+        "informationSourceId": "Org3",
+        "informationSourceOrganization": "Summit Valley University"
+      },
+      "offeredByRefOrganization": {
+        "name": "National Nurse Aide Assessment Program (NNAAP)",
+        "identifier": "organization-nnaap-org3-008",
+        "informationSourceId": "Org3",
+        "informationSourceOrganization": "Summit Valley University"
+      }
     },
     {
       "informationSourceId": "Org3",
-      "identifier": "84d6de55-974c-47e5-92bf-889addac75ae",
-      "informationSourceOrganization": "Regional University"
+      "informationSourceOrganization": "Summit Valley University",
+      "identifier": "assessment-wgu-c165-org3-002",
+      "name": "Objective Assessment: C165 Integrated Physical Sciences",
+      "shortName": "C165 OA",
+      "provider": "State University",
+      "type": "Competency-based objective assessment",
+      "description": "Proctored competency-based assessment verifying physical science competence for the nursing program prerequisites.",
+      "purpose": "Competency verification for course credit",
+      "assessmentLevel": "AudLevel:PostSecondaryLevel",
+      "scoreMetricType": "Competent / Not Competent",
+      "deliveryType": "Online proctored",
+      "methodType": "Objective assessment",
+      "AssessmentPerformanceLevel": [
+        {
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "assessmentperformancelevel-c165-competent-org3-002",
+          "label": "Competent",
+          "descriptiveFeedback": "Demonstrates competency in integrated physical sciences sufficient to earn course credit."
+        }
+      ],
+      "demonstratesRefCompetency": {
+        "name": "Patient Assessment",
+        "identifier": "competency-patient-assessment-org3-001",
+        "informationSourceId": "Org3",
+        "informationSourceOrganization": "Summit Valley University"
+      },
+      "offeredByRefOrganization": {
+        "name": "State University",
+        "identifier": "organization-state-university-org3-005",
+        "informationSourceId": "Org3",
+        "informationSourceOrganization": "Summit Valley University"
+      }
     }
   ],
-  "informationSourceId": "Org3"
+  "CompetencyFramework": [
+    {
+      "informationSourceId": "Org3",
+      "informationSourceOrganization": "Summit Valley University",
+      "name": "Nursing & Patient Care Competency Framework",
+      "description": "Competency framework for nursing and patient-care roles, aligned to O*NET Registered Nurses and Nursing Assistants.",
+      "uri": "https://stateu.edu/frameworks/nursing-patient-care/v1",
+      "publisher": "State University",
+      "creator": "State University",
+      "publicationStatus": "Published",
+      "publicationDate": "2022-05-01",
+      "version": "1.0",
+      "identifier": "competencyframework-nursing-patient-care-org3-001",
+      "Competency": [
+        {
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "name": "Patient Assessment",
+          "code": "NUR-01",
+          "statement": "Gathers and interprets patient data to inform care planning and identify changes in condition.",
+          "identifier": "competency-patient-assessment-org3-001",
+          "CompetencyAlignments": [
+            {
+              "informationSourceId": "Org3",
+              "informationSourceOrganization": "Summit Valley University",
+              "identifier": "competencyalignment-onet-rn-org3-001",
+              "alignmentType": "majorAlignment",
+              "alignsToUri": "https://www.onetonline.org/link/summary/29-1141.00",
+              "alignsToText": "Registered Nurses",
+              "alignsToType": "O*NET-SOC Occupation"
+            }
+          ]
+        },
+        {
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "name": "Clinical Care and Safety",
+          "code": "NUR-02",
+          "statement": "Delivers safe, evidence-based bedside care and follows infection-control and safety protocols.",
+          "identifier": "competency-clinical-care-safety-org3-002",
+          "CompetencyAlignments": [
+            {
+              "informationSourceId": "Org3",
+              "informationSourceOrganization": "Summit Valley University",
+              "identifier": "competencyalignment-onet-cna-org3-002",
+              "alignmentType": "minorAlignment",
+              "alignsToUri": "https://www.onetonline.org/link/summary/31-1131.00",
+              "alignsToText": "Nursing Assistants",
+              "alignsToType": "O*NET-SOC Occupation"
+            }
+          ]
+        },
+        {
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "name": "Wound Care",
+          "code": "NUR-03",
+          "statement": "Assesses and manages wounds and supports skin integrity.",
+          "identifier": "competency-wound-care-org3-003"
+        },
+        {
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "name": "Life Support",
+          "code": "NUR-04",
+          "statement": "Performs basic and advanced life-support interventions (BLS/ACLS) in emergencies.",
+          "identifier": "competency-life-support-org3-004"
+        },
+        {
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "name": "Health Communication",
+          "code": "NUR-05",
+          "statement": "Communicates clearly and compassionately with patients, families, and care teams.",
+          "identifier": "competency-health-communication-org3-005"
+        }
+      ],
+      "Association": [
+        {
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "association-wound-child-of-clinical-org3-001",
+          "competencyAssociationType": "isChildOf",
+          "competencyAssociationOriginName": "Wound Care",
+          "competencyAssociationOriginUri": "urn:lif:competency:competency-wound-care-org3-003",
+          "competencyAssociationDestinationName": "Clinical Care and Safety",
+          "competencyAssociationDestinationUri": "urn:lif:competency:competency-clinical-care-safety-org3-002"
+        },
+        {
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "association-lifesupport-related-clinical-org3-002",
+          "competencyAssociationType": "isRelatedTo",
+          "competencyAssociationOriginName": "Life Support",
+          "competencyAssociationOriginUri": "urn:lif:competency:competency-life-support-org3-004",
+          "competencyAssociationDestinationName": "Clinical Care and Safety",
+          "competencyAssociationDestinationUri": "urn:lif:competency:competency-clinical-care-safety-org3-002"
+        }
+      ]
+    }
+  ],
+  "Program": [
+    {
+      "informationSourceId": "Org3",
+      "informationSourceOrganization": "Summit Valley University",
+      "name": "Bachelor of Science in Nursing (BSN)",
+      "description": "Pre-licensure baccalaureate nursing program preparing graduates for RN licensure (NCLEX-RN).",
+      "identifier": "program-bsn-org3-001",
+      "programIdentifierSystem": "State University SIS",
+      "instructionalProgramCode": "51.3801",
+      "instructionalProgramUse": "CIP 2020",
+      "creditsRequired": "120",
+      "creditUnitTypeDescription": "Competency units",
+      "postSecondaryProgramLevel": "Bachelor's Degree",
+      "normalTimeCompletion": "4",
+      "normalTimeCompletionUnits": "Years",
+      "deliveryType": "Online, competency-based",
+      "distanceEducationProgram": "true",
+      "demonstratesRefCompetency": {
+        "name": "Patient Assessment",
+        "identifier": "competency-patient-assessment-org3-001",
+        "informationSourceId": "Org3",
+        "informationSourceOrganization": "Summit Valley University"
+      },
+      "offeredByRefOrganization": {
+        "name": "State University",
+        "identifier": "organization-state-university-org3-005",
+        "informationSourceId": "Org3",
+        "informationSourceOrganization": "Summit Valley University"
+      }
+    },
+    {
+      "informationSourceId": "Org3",
+      "informationSourceOrganization": "Summit Valley University",
+      "name": "Certified Nursing Assistant (CNA) Program",
+      "description": "State-approved nurse aide training program preparing students for CNA certification.",
+      "identifier": "program-cna-org3-002",
+      "programIdentifierSystem": "training-provider-program-id",
+      "creditsRequired": "120",
+      "creditUnitTypeDescription": "Clock hours",
+      "postSecondaryProgramLevel": "Postsecondary Certificate (less than 1 year)",
+      "workBasedLearningOpportunityType": "Clinical placement",
+      "programSponsorType": "Training provider",
+      "deliveryType": "In-person with clinical",
+      "demonstratesRefCompetency": {
+        "name": "Clinical Care and Safety",
+        "identifier": "competency-clinical-care-safety-org3-002",
+        "informationSourceId": "Org3",
+        "informationSourceOrganization": "Summit Valley University"
+      },
+      "offeredByRefOrganization": {
+        "name": "Training Provider",
+        "identifier": "organization-training-provider-org3-007",
+        "informationSourceId": "Org3",
+        "informationSourceOrganization": "Summit Valley University"
+      }
+    }
+  ]
 }

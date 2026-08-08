@@ -28,8 +28,8 @@ INFO_SOURCE_ORG_MAP = {
     "org1": "State University",
     "org2": "Community College",
     "org3": "Regional University",
-    "Single-Org": "Demo University",
-    "single-org": "Demo University",
+    "Single-Org": "State University",
+    "single-org": "State University",
 }
 
 # Mapping from JSON keys (camelCase) to schema entity names (PascalCase)
