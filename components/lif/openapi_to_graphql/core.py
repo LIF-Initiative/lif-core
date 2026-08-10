@@ -12,7 +12,7 @@ from lif.openapi_to_graphql.type_factory import (
 
 def generate_graphql_root_types(
     openapi: dict, root_type_name: str, query_planner_query_url: str, query_planner_update_url: str, created_types: dict
-) -> (type, type):
+) -> tuple[type, type]:
     """Generates a GraphQL root query type and root mutation type from an OpenAPI dict.
 
     Args:

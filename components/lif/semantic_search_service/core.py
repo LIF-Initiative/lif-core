@@ -104,7 +104,8 @@ def build_dynamic_filter_model(schema_leaves: List[SchemaLeaf]) -> Dict[str, Typ
         if enum_name in enums:
             return enums[enum_name]
         members = {to_value_enum_name(v): v for v in values}
-        enum_cls = Enum(enum_name, members)
+        # ty-ignore: Enum name is built at runtime from the schema.
+        enum_cls = Enum(enum_name, members)  # ty: ignore[mismatched-type-name]
         enums[enum_name] = enum_cls
         return enum_cls
 
@@ -175,7 +176,8 @@ def build_dynamic_mutation_model(schema_leaves: List[SchemaLeaf]) -> Dict[str, T
         if enum_name in enums:
             return enums[enum_name]
         members = {to_value_enum_name(v): v for v in values}
-        enum_cls = Enum(enum_name, members)
+        # ty-ignore: Enum name is built at runtime from the schema.
+        enum_cls = Enum(enum_name, members)  # ty: ignore[mismatched-type-name]
         enums[enum_name] = enum_cls
         return enum_cls
 

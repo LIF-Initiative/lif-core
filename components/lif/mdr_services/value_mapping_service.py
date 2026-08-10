@@ -15,7 +15,9 @@ from sqlmodel import select, func
 logger = get_logger(__name__)
 
 
-async def create_value_set_value_mapping(session: AsyncSession, data: CreateValueSetValueMappingDTO) -> dict:
+async def create_value_set_value_mapping(
+    session: AsyncSession, data: CreateValueSetValueMappingDTO
+) -> ValueSetValueMappingDTO:
     # Check if transformation group exists
     await get_transformation_group_by_id(session=session, id=data.TransformationGroupId)
 

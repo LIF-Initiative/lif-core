@@ -17,6 +17,7 @@ import logging
 import os
 import uuid
 from datetime import datetime
+from typing import Any
 
 from langchain.prompts import PromptTemplate
 from langchain_mcp_adapters.client import MultiServerMCPClient
@@ -35,7 +36,8 @@ LLM_TOKEN_COSTS = {
     "gpt-4.1-nano": {"input": 0.1, "output": 0.4, "cached": 0.025},
     "gpt-4.1": {"input": 2.0, "output": 8.0, "cached": 0.5},
 }
-LLM_TOKEN_COST = LLM_TOKEN_COSTS.get(LLM_MODEL_NAME, {})
+# ty-ignore: langchain stubs type this dict.get overload more narrowly than the runtime API.
+LLM_TOKEN_COST = LLM_TOKEN_COSTS.get(LLM_MODEL_NAME, {})  # ty: ignore[no-matching-overload]
 LLM_INPUT_TOKEN_COST = LLM_TOKEN_COST.get("input", 0)
 LLM_OUTPUT_TOKEN_COST = LLM_TOKEN_COST.get("output", 0)
 LLM_CACHED_TOKEN_COST = LLM_TOKEN_COST.get("cached", 0)
@@ -108,13 +110,17 @@ class LIFAIAgent:
     def create_mcp_client(cls):
         """Creates and returns an MCP client."""
         return MultiServerMCPClient(
-            {"mcp-graphql": {"url": LIF_SEMANTIC_SEARCH_MCP_SERVER_URL, "transport": "streamable_http"}}
+            # ty-ignore: langchain/langgraph stubs are narrower than the runtime API.
+            {  # ty: ignore[invalid-argument-type]
+                "mcp-graphql": {"url": LIF_SEMANTIC_SEARCH_MCP_SERVER_URL, "transport": "streamable_http"}
+            }
         )
 
     @classmethod
     def create_agent_with_memory(cls, task_name, tools, checkpointer, config=None):
         """Creates and returns a LangChain agent with conversation memory."""
-        model = ChatOpenAI(model_name=LLM_MODEL_NAME, temperature=0.0)
+        # ty-ignore: ChatOpenAI exposes `model_name` as a pydantic alias for `model`.
+        model = ChatOpenAI(model_name=LLM_MODEL_NAME, temperature=0.0)  # ty: ignore[unknown-argument]
 
         base_dir = os.path.dirname(__file__)
         prompt_path = os.path.join(base_dir, "prompts", f"{task_name}.txt")
@@ -124,8 +130,10 @@ class LIFAIAgent:
         if task_name == "save_interaction_summary":
             prompt = PromptTemplate.from_template(template=prompt_text).format(
                 tools=tools,
-                identifier_type=config["user_identifier_type"],
-                identifier=config["user_identifier"],
+                # ty-ignore: `config` is required for this task_name; the None default applies to other tasks.
+                identifier_type=config["user_identifier_type"],  # ty: ignore[not-subscriptable]
+                # ty-ignore: `config` is required for this task_name; the None default applies to other tasks.
+                identifier=config["user_identifier"],  # ty: ignore[not-subscriptable]
                 interaction_id=uuid.uuid4().hex,
                 channel=CHANNEL,
                 channel_identifier=CHANNEL_IDENTIFIER,
@@ -235,7 +243,9 @@ class LIFAIAgent:
         logger.info(f"Tokens: {total_input_tokens + total_output_tokens + total_cached_tokens} Cost: {cost}")
         return total_tokens, cost
 
-    def reframe_query_with_identifiers(self, query: str, identifier: str, identifier_type: str, greeting: str) -> str:
+    def reframe_query_with_identifiers(
+        self, query: str, identifier: str, identifier_type: str, greeting: str
+    ) -> dict[str, Any]:
         """Reframes the query with identifier info."""
         try:
             base_dir = os.path.dirname(__file__)
@@ -245,7 +255,8 @@ class LIFAIAgent:
             prompt = PromptTemplate.from_template(template=prompt_text).format(
                 personal_query=query, identifier_value=identifier, identifier_type=identifier_type, greeting=greeting
             )
-            llm = ChatOpenAI(model=LLM_MODEL_NAME)
+            # ty-ignore: langchain/langgraph stubs are narrower than the runtime API.
+            llm = ChatOpenAI(model=LLM_MODEL_NAME)  # ty: ignore[invalid-argument-type]
             response = llm.invoke(prompt)
             tokens, cost = self.calculate_tokens_and_cost([response])
             return {"content": response.content, "tokens": tokens, "cost": cost}

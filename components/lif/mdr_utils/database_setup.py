@@ -53,7 +53,10 @@ logger.info("DATABASE_URL : %s", _redact_url(DATABASE_URL))
 engine = create_async_engine(DATABASE_URL, echo=True)
 
 # Create an async sessionmaker
-async_session = sessionmaker(bind=engine, class_=AsyncSession, expire_on_commit=False)
+# ty-ignore: Legacy sessionmaker(class_=AsyncSession); async_sessionmaker is the modern API.
+async_session = sessionmaker(  # ty: ignore[no-matching-overload]
+    bind=engine, class_=AsyncSession, expire_on_commit=False
+)
 
 # Tenant schema names reach SET search_path via string interpolation (PG does
 # not accept bind parameters for SET), so they must match a strict identifier
@@ -80,7 +83,8 @@ async def get_session(request: Request) -> AsyncGenerator[AsyncSession, None]:
     would either leak data across tenants or mask a resolver bug.
     """
     tenant_schema = getattr(request.state, "tenant_schema", None)
-    async with async_session() as session:
+    # ty-ignore: Session type is unresolvable through sessionmaker's generic.
+    async with async_session() as session:  # ty: ignore[invalid-context-manager]
         # `SET search_path` persists on the underlying pooled connection
         # for its entire lifetime. We MUST issue an explicit SET on every
         # request — including the no-tenant branch below — or a connection

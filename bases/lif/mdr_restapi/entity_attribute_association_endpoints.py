@@ -92,7 +92,7 @@ async def get_entity_associations(
     entity_id: int,
     request: Request,
     session: AsyncSession = Depends(get_session),
-    including_extended_by_data_model_id: int = None,
+    including_extended_by_data_model_id: int | None = None,
     page: int = Query(1, ge=1),  # Page number, default is 1
     size: int = Query(10, ge=1),  # Page size, default is 10
     pagination: bool = True,
@@ -135,7 +135,7 @@ async def get_entity_associations(
     attribute_id: int,
     request: Request,
     session: AsyncSession = Depends(get_session),
-    including_extended_by_data_model_id: int = None,
+    including_extended_by_data_model_id: int | None = None,
     page: int = Query(1, ge=1),  # Page number, default is 1
     size: int = Query(10, ge=1),  # Page size, default is 10
     pagination: bool = True,

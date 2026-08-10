@@ -13,9 +13,11 @@ from lif.mdr_dto.transformation_dto import (
     UpdateTransformationDTO,
     UpdateTransformationGroupDTO,
 )
+from lif.mdr_dto.transformation_group_dto import ImportTransformationGroupRequestDTO, ImportTransformationGroupResultDTO
 from lif.mdr_services import tag_service, transformation_service
 from lif.mdr_utils.database_setup import get_session
 from lif.mdr_utils.logger_config import get_logger
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 router = APIRouter()
@@ -153,7 +155,7 @@ async def get_paginated_transformations_for_given_source_and_target(
 
 @router.get("/transformations_by_path_ids/", response_model=List[TransformationDTO])
 async def get_transformations_by_path_ids(
-    entity_id_path: str, attribute_id: int = None, session: AsyncSession = Depends(get_session)
+    entity_id_path: str, attribute_id: int | None = None, session: AsyncSession = Depends(get_session)
 ):
     return await transformation_service.get_transformations_by_path_ids(session, entity_id_path, attribute_id)
 
@@ -252,6 +254,38 @@ async def export_transformation_group(transformation_group_id: int, session: Asy
     return Response(content=payload, media_type="application/json", headers=headers)
 
 
+@router.post("/{transformation_group_id}/import", response_model=ImportTransformationGroupResultDTO)
+async def import_transformation_group(
+    transformation_group_id: int,
+    data: ImportTransformationGroupRequestDTO,
+    version: Optional[str] = None,
+    allowMissingPaths: bool = False,  # noqa: N803 — query param name is part of the public API contract (#772)
+    session: AsyncSession = Depends(get_session),
+):
+    """Import a portable transformation-group file (#772).
+
+    ``transformation_group_id`` (the only DB-matched ID) supplies the source/target data models.
+    ``version`` blank -> clone into the next major version; a new version -> clone into it; a known
+    version -> edit (not yet supported). ``allowMissingPaths`` controls whether unmatched attribute
+    paths abort the import or are skipped; the response's ``SkippedTransformations`` always lists
+    every transformation that was not applied and why.
+    """
+    try:
+        return await transformation_service.import_transformation_group(
+            session=session,
+            transformation_group_id=transformation_group_id,
+            data=data,
+            version=version,
+            allow_missing_paths=allowMissingPaths,
+        )
+    except IntegrityError as exc:
+        await session.rollback()
+        logger.exception("Transformation group import failed due to a database integrity error")
+        raise HTTPException(
+            status_code=409, detail="The import could not be completed due to a database integrity error."
+        ) from exc
+
+
 @router.get("/{transformation_group_id}", response_model=Dict[str, Any])
 async def get_all_transformations_for_a_group(
     request: Request,
@@ -293,8 +327,8 @@ async def get_all_transformations_for_an_attribute(
     request: Request,
     attribute_id: int,
     attribute_as_source: bool,
-    source_data_model_id: int = None,
-    target_data_model_id: int = None,
+    source_data_model_id: int | None = None,
+    target_data_model_id: int | None = None,
     page: int = Query(1, ge=1),  # Default to page 1
     size: int = Query(10, ge=1),  # Default to size 10
     session: AsyncSession = Depends(get_session),
@@ -338,7 +372,11 @@ async def get_all_transformations_for_an_attribute(
 async def create_transformation_group_with_transformations(
     data: CreateTransformationGroupDTO, response: Response, session: AsyncSession = Depends(get_session)
 ):
-    transformation_group = await transformation_service.create_transformation_group(session, data)
+    transformation_group = await transformation_service.create_transformation_group(
+        session,
+        # ty-ignore: Duplicate DTO definitions (transformation_dto vs transformation_group_dto) — see #1138.
+        data,  # ty: ignore[invalid-argument-type]
+    )
     # Set the Location header with the new entity association ID
     response.headers["Location"] = f"/transformation_groups/{transformation_group.Id}"
     return transformation_group
@@ -365,7 +403,12 @@ async def create_transformation_group_with_transformations(
 async def update_transformation(
     transformation_group_id: int, data: UpdateTransformationGroupDTO, session: AsyncSession = Depends(get_session)
 ):
-    return await transformation_service.update_transformation_group(session, transformation_group_id, data)
+    return await transformation_service.update_transformation_group(
+        session,
+        transformation_group_id,
+        # ty-ignore: Duplicate DTO definitions (transformation_dto vs transformation_group_dto) — see #1138.
+        data,  # ty: ignore[invalid-argument-type]
+    )
 
 
 @router.delete("/{transformation_group_id}")

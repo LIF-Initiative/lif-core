@@ -58,7 +58,9 @@ class UpdateDataModelDTO(BaseModel):
     Name: Optional[str] = None
     Description: Optional[str] = None
     UseConsiderations: Optional[str] = None
-    Type: DataModelType = None  # Assuming Type is an enum, it can be replaced by the specific enum type if required
+    Type: Optional[DataModelType] = (
+        None  # Assuming Type is an enum, it can be replaced by the specific enum type if required
+    )
     BaseDataModelId: Optional[int] = None
     Notes: Optional[str] = None
     DataModelVersion: Optional[str] = None
@@ -84,8 +86,8 @@ class ValueSetValuesDTO(BaseModel):
 class EntityAttributeExportDTO(BaseModel):
     Entity: EntityDTO
     Attributes: List[AttributeDTO]
-    ParentEntities: List[EntityDTO] = None
-    ChildEntities: List[ChildEntityDTO] = None
+    ParentEntities: Optional[List[EntityDTO]] = None
+    ChildEntities: Optional[List[ChildEntityDTO]] = None
 
 
 class DataModelWithDetailsDTO(BaseModel):
