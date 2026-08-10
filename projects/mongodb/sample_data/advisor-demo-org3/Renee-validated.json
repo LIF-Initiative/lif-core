@@ -51,9 +51,15 @@
       ],
       "Identifier": [
         {
+          "informationSourceId": "Org3",
           "identifier": "100004",
           "identifierType": "SCHOOL_ASSIGNED_NUMBER",
+          "informationSourceOrganization": "Summit Valley University"
+        },
+        {
           "informationSourceId": "Org3",
+          "identifier": "SVU-20250004",
+          "identifierType": "Summit Valley University student ID",
           "informationSourceOrganization": "Summit Valley University"
         }
       ],

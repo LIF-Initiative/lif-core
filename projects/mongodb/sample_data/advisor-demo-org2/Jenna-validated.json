@@ -41,9 +41,9 @@
       ],
       "Identifier": [
         {
+          "informationSourceId": "Org2",
           "identifier": "100002",
           "identifierType": "SCHOOL_ASSIGNED_NUMBER",
-          "informationSourceId": "Org2",
           "informationSourceOrganization": "Community College"
         }
       ],

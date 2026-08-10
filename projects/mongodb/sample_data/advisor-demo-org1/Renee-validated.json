@@ -685,9 +685,9 @@
       ],
       "Identifier": [
         {
+          "informationSourceId": "Org1",
           "identifier": "100004",
           "identifierType": "SCHOOL_ASSIGNED_NUMBER",
-          "informationSourceId": "Org1",
           "informationSourceOrganization": "State University"
         }
       ],
@@ -812,13 +812,13 @@
             "informationSourceId": "Org1",
             "informationSourceOrganization": "State University"
           },
-          "offeredByRefOrganization": {
+          "OfferedByRefOrganization": {
             "name": "State University",
             "identifier": "organization-state-university-org1-005",
             "informationSourceId": "Org1",
             "informationSourceOrganization": "State University"
           },
-          "assertedByRefOrganization": {
+          "AssertedByRefOrganization": {
             "name": "State University",
             "identifier": "organization-state-university-org1-005",
             "informationSourceId": "Org1",
@@ -850,13 +850,13 @@
             "informationSourceId": "Org1",
             "informationSourceOrganization": "State University"
           },
-          "offeredByRefOrganization": {
+          "OfferedByRefOrganization": {
             "name": "State University",
             "identifier": "organization-state-university-org1-005",
             "informationSourceId": "Org1",
             "informationSourceOrganization": "State University"
           },
-          "assertedByRefOrganization": {
+          "AssertedByRefOrganization": {
             "name": "State University",
             "identifier": "organization-state-university-org1-005",
             "informationSourceId": "Org1",
@@ -888,13 +888,13 @@
             "informationSourceId": "Org1",
             "informationSourceOrganization": "State University"
           },
-          "offeredByRefOrganization": {
+          "OfferedByRefOrganization": {
             "name": "State University",
             "identifier": "organization-state-university-org1-005",
             "informationSourceId": "Org1",
             "informationSourceOrganization": "State University"
           },
-          "assertedByRefOrganization": {
+          "AssertedByRefOrganization": {
             "name": "State University",
             "identifier": "organization-state-university-org1-005",
             "informationSourceId": "Org1",
@@ -926,13 +926,13 @@
             "informationSourceId": "Org1",
             "informationSourceOrganization": "State University"
           },
-          "offeredByRefOrganization": {
+          "OfferedByRefOrganization": {
             "name": "State University",
             "identifier": "organization-state-university-org1-005",
             "informationSourceId": "Org1",
             "informationSourceOrganization": "State University"
           },
-          "assertedByRefOrganization": {
+          "AssertedByRefOrganization": {
             "name": "State University",
             "identifier": "organization-state-university-org1-005",
             "informationSourceId": "Org1",
@@ -1218,13 +1218,13 @@
             "informationSourceId": "Org1",
             "informationSourceOrganization": "State University"
           },
-          "offeredByRefOrganization": {
+          "OfferedByRefOrganization": {
             "name": "Training Provider",
             "identifier": "organization-training-provider-org1-007",
             "informationSourceId": "Org1",
             "informationSourceOrganization": "State University"
           },
-          "assertedByRefOrganization": {
+          "AssertedByRefOrganization": {
             "name": "Training Provider",
             "identifier": "organization-training-provider-org1-007",
             "informationSourceId": "Org1",
@@ -1245,13 +1245,13 @@
             "informationSourceId": "Org1",
             "informationSourceOrganization": "State University"
           },
-          "offeredByRefOrganization": {
+          "OfferedByRefOrganization": {
             "name": "State University",
             "identifier": "organization-state-university-org1-005",
             "informationSourceId": "Org1",
             "informationSourceOrganization": "State University"
           },
-          "assertedByRefOrganization": {
+          "AssertedByRefOrganization": {
             "name": "State University",
             "identifier": "organization-state-university-org1-005",
             "informationSourceId": "Org1",
@@ -1287,7 +1287,7 @@
             "informationSourceId": "Org1",
             "informationSourceOrganization": "State University"
           },
-          "offeredByRefOrganization": {
+          "OfferedByRefOrganization": {
             "name": "American Academy of Professional Coders (AAPC)",
             "identifier": "organization-aapc-org1-012",
             "informationSourceId": "Org1",
@@ -1321,7 +1321,7 @@
             "informationSourceId": "Org1",
             "informationSourceOrganization": "State University"
           },
-          "offeredByRefOrganization": {
+          "OfferedByRefOrganization": {
             "name": "National Healthcareer Association (NHA)",
             "identifier": "organization-nha-org1-013",
             "informationSourceId": "Org1",
@@ -1670,19 +1670,19 @@
           "descriptiveFeedback": "A score of 70% or higher earns the CPC credential."
         }
       ],
-      "demonstratesRefCompetency": {
+      "DemonstratesRefCompetency": {
         "name": "Medical Coding",
         "identifier": "competency-medical-coding-org1-001",
         "informationSourceId": "Org1",
         "informationSourceOrganization": "State University"
       },
-      "awardedByRefOrganization": {
+      "AwardedByRefOrganization": {
         "name": "American Academy of Professional Coders (AAPC)",
         "identifier": "organization-aapc-org1-012",
         "informationSourceId": "Org1",
         "informationSourceOrganization": "State University"
       },
-      "offeredByRefOrganization": {
+      "OfferedByRefOrganization": {
         "name": "American Academy of Professional Coders (AAPC)",
         "identifier": "organization-aapc-org1-012",
         "informationSourceId": "Org1",
@@ -1714,19 +1714,19 @@
           "descriptiveFeedback": "A scaled score of 390 or higher earns the credential."
         }
       ],
-      "demonstratesRefCompetency": {
+      "DemonstratesRefCompetency": {
         "name": "Claims and Billing",
         "identifier": "competency-claims-billing-org1-002",
         "informationSourceId": "Org1",
         "informationSourceOrganization": "State University"
       },
-      "awardedByRefOrganization": {
+      "AwardedByRefOrganization": {
         "name": "National Healthcareer Association (NHA)",
         "identifier": "organization-nha-org1-013",
         "informationSourceId": "Org1",
         "informationSourceOrganization": "State University"
       },
-      "offeredByRefOrganization": {
+      "OfferedByRefOrganization": {
         "name": "National Healthcareer Association (NHA)",
         "identifier": "organization-nha-org1-013",
         "informationSourceId": "Org1",
@@ -1849,13 +1849,13 @@
       "creditUnitTypeDescription": "Semester credit hours",
       "postSecondaryProgramLevel": "Postsecondary Certificate (less than 1 year)",
       "deliveryType": "In-person and online",
-      "demonstratesRefCompetency": {
+      "DemonstratesRefCompetency": {
         "name": "Medical Coding",
         "identifier": "competency-medical-coding-org1-001",
         "informationSourceId": "Org1",
         "informationSourceOrganization": "State University"
       },
-      "offeredByRefOrganization": {
+      "OfferedByRefOrganization": {
         "name": "Training Provider",
         "identifier": "organization-training-provider-org1-007",
         "informationSourceId": "Org1",
@@ -1877,13 +1877,13 @@
       "normalTimeCompletion": "2",
       "normalTimeCompletionUnits": "Years",
       "deliveryType": "Online",
-      "demonstratesRefCompetency": {
+      "DemonstratesRefCompetency": {
         "name": "Revenue Cycle Management",
         "identifier": "competency-revenue-cycle-org1-003",
         "informationSourceId": "Org1",
         "informationSourceOrganization": "State University"
       },
-      "offeredByRefOrganization": {
+      "OfferedByRefOrganization": {
         "name": "State University",
         "identifier": "organization-state-university-org1-005",
         "informationSourceId": "Org1",

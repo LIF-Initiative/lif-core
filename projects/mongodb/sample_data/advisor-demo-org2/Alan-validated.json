@@ -4,7 +4,7 @@
       "Name": [
         {
           "lastName": "Tsatrian",
-          "firstName": "Alan ",
+          "firstName": "Alan",
           "informationSourceId": "Org2",
           "informationSourceOrganization": "Community College",
           "identifier": "name-alan -tsatrian-org2-001"
@@ -15,7 +15,7 @@
           "Email": [
             {
               "emailAddress": [
-                "atsatrian_lifdemo@stateu.edu "
+                "atsatrian_lifdemo@stateu.edu"
               ],
               "informationSourceId": "Org2",
               "informationSourceOrganization": "Community College",
@@ -41,29 +41,28 @@
       ],
       "Identifier": [
         {
+          "informationSourceId": "Org2",
           "identifier": "100001",
           "identifierType": "SCHOOL_ASSIGNED_NUMBER",
-          "informationSourceId": "Org2",
           "informationSourceOrganization": "Community College"
         }
       ],
       "EmploymentLearningExperience": [
         {
-          "name": "Compliance Manager ",
-          "refRefPosition": [
-            {
-              "description": "Oversee the compliance department to ensure adherence to industry regulations and company policies. \n-\tLead audits, risk assessments, and training initiatives to reduce non-compliance risks across the organization. \n-\tCollaborate with cross-functional teams to implement compliance strategies and streamline reporting processes. \n-\tAdvocate for accessibility and inclusivity within compliance practices, integrating new tools and technologies to improve team efficiency. \n-\tManage multiple priorities, including work deadlines, master's program coursework, and personal caregiving responsibilities. \n",
-              "OfferedByRefOrganization": {
-                "name": "Three Trees Compliance",
-                "informationSourceId": "Org2",
-                "informationSourceOrganization": "Community College",
-                "identifier": "organization-three-trees-compliance-org2-001"
-              },
+          "name": "Compliance Manager",
+          "RefPosition": {
+            "description": "Oversee the compliance department to ensure adherence to industry regulations and company policies. \n-\tLead audits, risk assessments, and training initiatives to reduce non-compliance risks across the organization. \n-\tCollaborate with cross-functional teams to implement compliance strategies and streamline reporting processes. \n-\tAdvocate for accessibility and inclusivity within compliance practices, integrating new tools and technologies to improve team efficiency. \n-\tManage multiple priorities, including work deadlines, master's program coursework, and personal caregiving responsibilities.",
+            "OfferedByRefOrganization": {
+              "name": "Three Trees Compliance",
               "informationSourceId": "Org2",
               "informationSourceOrganization": "Community College",
-              "identifier": "position-org2-001"
-            }
-          ],
+              "identifier": "organization-three-trees-compliance-org2-001"
+            },
+            "informationSourceId": "Org2",
+            "informationSourceOrganization": "Community College",
+            "identifier": "position-org2-001",
+            "name": "Referenced Employment Experience"
+          },
           "startDate": "2007-06",
           "AssertedByRefOrganization": {
             "identificationSystem": "stateu-employing-organization-id",
@@ -111,22 +110,20 @@
           "identifier": "employmentlearningexperience-compliance-manager--org2-001"
         },
         {
-          "name": "Compliance Specialist ",
+          "name": "Compliance Specialist",
           "endDate": "2007-05",
-          "refRefPosition": [
-            {
-              "OfferedByRefOrganization": {
-                "name": "McBradshaw Brothers",
-                "informationSourceId": "Org2",
-                "informationSourceOrganization": "Community College",
-                "identifier": "organization-mcbradshaw-brothers-org2-001"
-              },
+          "RefPosition": {
+            "OfferedByRefOrganization": {
+              "name": "McBradshaw Brothers",
               "informationSourceId": "Org2",
-              "name": "Referenced Employment Experience",
               "informationSourceOrganization": "Community College",
-              "identifier": "position-referenced-employment-experien-org2-001"
-            }
-          ],
+              "identifier": "organization-mcbradshaw-brothers-org2-001"
+            },
+            "informationSourceId": "Org2",
+            "name": "Referenced Employment Experience",
+            "informationSourceOrganization": "Community College",
+            "identifier": "position-referenced-employment-experien-org2-001"
+          },
           "startDate": "2004-06",
           "AssertedByRefOrganization": {
             "identificationSystem": "stateu-employing-organization-id",

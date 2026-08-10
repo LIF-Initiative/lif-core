@@ -51,15 +51,15 @@
       ],
       "Identifier": [
         {
+          "informationSourceId": "Org2",
           "identifier": "sha256$de620a3b2b4ba794513008a7d918a429351144c47b697f4c3976387138f33e43",
           "identifierType": "INSTITUTION_ASSIGNED_NUMBER",
-          "informationSourceId": "Org2",
           "informationSourceOrganization": "Community College"
         },
         {
+          "informationSourceId": "Org2",
           "identifier": "100003",
           "identifierType": "SCHOOL_ASSIGNED_NUMBER",
-          "informationSourceId": "Org2",
           "informationSourceOrganization": "Community College"
         }
       ],

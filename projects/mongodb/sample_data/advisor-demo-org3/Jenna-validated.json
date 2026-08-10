@@ -959,9 +959,15 @@
       ],
       "Identifier": [
         {
+          "informationSourceId": "Org3",
           "identifier": "100002",
           "identifierType": "SCHOOL_ASSIGNED_NUMBER",
+          "informationSourceOrganization": "Summit Valley University"
+        },
+        {
           "informationSourceId": "Org3",
+          "identifier": "SVU-20250002",
+          "identifierType": "Summit Valley University student ID",
           "informationSourceOrganization": "Summit Valley University"
         }
       ],
@@ -1236,13 +1242,13 @@
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Summit Valley University"
           },
-          "offeredByRefOrganization": {
+          "OfferedByRefOrganization": {
             "name": "State University",
             "identifier": "organization-state-university-org3-005",
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Summit Valley University"
           },
-          "assertedByRefOrganization": {
+          "AssertedByRefOrganization": {
             "name": "State University",
             "identifier": "organization-state-university-org3-005",
             "informationSourceId": "Org3",
@@ -1273,13 +1279,13 @@
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Summit Valley University"
           },
-          "offeredByRefOrganization": {
+          "OfferedByRefOrganization": {
             "name": "State University",
             "identifier": "organization-state-university-org3-005",
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Summit Valley University"
           },
-          "assertedByRefOrganization": {
+          "AssertedByRefOrganization": {
             "name": "State University",
             "identifier": "organization-state-university-org3-005",
             "informationSourceId": "Org3",
@@ -1310,13 +1316,13 @@
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Summit Valley University"
           },
-          "offeredByRefOrganization": {
+          "OfferedByRefOrganization": {
             "name": "State University",
             "identifier": "organization-state-university-org3-005",
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Summit Valley University"
           },
-          "assertedByRefOrganization": {
+          "AssertedByRefOrganization": {
             "name": "State University",
             "identifier": "organization-state-university-org3-005",
             "informationSourceId": "Org3",
@@ -1347,13 +1353,13 @@
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Summit Valley University"
           },
-          "offeredByRefOrganization": {
+          "OfferedByRefOrganization": {
             "name": "State University",
             "identifier": "organization-state-university-org3-005",
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Summit Valley University"
           },
-          "assertedByRefOrganization": {
+          "AssertedByRefOrganization": {
             "name": "State University",
             "identifier": "organization-state-university-org3-005",
             "informationSourceId": "Org3",
@@ -1527,13 +1533,13 @@
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Summit Valley University"
           },
-          "offeredByRefOrganization": {
+          "OfferedByRefOrganization": {
             "name": "State University",
             "identifier": "organization-state-university-org3-005",
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Summit Valley University"
           },
-          "assertedByRefOrganization": {
+          "AssertedByRefOrganization": {
             "name": "State University",
             "identifier": "organization-state-university-org3-005",
             "informationSourceId": "Org3",
@@ -1555,13 +1561,13 @@
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Summit Valley University"
           },
-          "offeredByRefOrganization": {
+          "OfferedByRefOrganization": {
             "name": "Training Provider",
             "identifier": "organization-training-provider-org3-007",
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Summit Valley University"
           },
-          "assertedByRefOrganization": {
+          "AssertedByRefOrganization": {
             "name": "Training Provider",
             "identifier": "organization-training-provider-org3-007",
             "informationSourceId": "Org3",
@@ -1597,7 +1603,7 @@
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Summit Valley University"
           },
-          "offeredByRefOrganization": {
+          "OfferedByRefOrganization": {
             "name": "National Nurse Aide Assessment Program (NNAAP)",
             "identifier": "organization-nnaap-org3-008",
             "informationSourceId": "Org3",
@@ -1630,7 +1636,7 @@
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Summit Valley University"
           },
-          "offeredByRefOrganization": {
+          "OfferedByRefOrganization": {
             "name": "State University",
             "identifier": "organization-state-university-org3-005",
             "informationSourceId": "Org3",
@@ -2047,19 +2053,19 @@
           "descriptiveFeedback": "A score of 70 or higher on both the written and skills sections earns certification."
         }
       ],
-      "demonstratesRefCompetency": {
+      "DemonstratesRefCompetency": {
         "name": "Clinical Care and Safety",
         "identifier": "competency-clinical-care-safety-org3-002",
         "informationSourceId": "Org3",
         "informationSourceOrganization": "Summit Valley University"
       },
-      "awardedByRefOrganization": {
+      "AwardedByRefOrganization": {
         "name": "National Nurse Aide Assessment Program (NNAAP)",
         "identifier": "organization-nnaap-org3-008",
         "informationSourceId": "Org3",
         "informationSourceOrganization": "Summit Valley University"
       },
-      "offeredByRefOrganization": {
+      "OfferedByRefOrganization": {
         "name": "National Nurse Aide Assessment Program (NNAAP)",
         "identifier": "organization-nnaap-org3-008",
         "informationSourceId": "Org3",
@@ -2089,13 +2095,13 @@
           "descriptiveFeedback": "Demonstrates competency in integrated physical sciences sufficient to earn course credit."
         }
       ],
-      "demonstratesRefCompetency": {
+      "DemonstratesRefCompetency": {
         "name": "Patient Assessment",
         "identifier": "competency-patient-assessment-org3-001",
         "informationSourceId": "Org3",
         "informationSourceOrganization": "Summit Valley University"
       },
-      "offeredByRefOrganization": {
+      "OfferedByRefOrganization": {
         "name": "State University",
         "identifier": "organization-state-university-org3-005",
         "informationSourceId": "Org3",
@@ -2221,13 +2227,13 @@
       "normalTimeCompletionUnits": "Years",
       "deliveryType": "Online, competency-based",
       "distanceEducationProgram": "true",
-      "demonstratesRefCompetency": {
+      "DemonstratesRefCompetency": {
         "name": "Patient Assessment",
         "identifier": "competency-patient-assessment-org3-001",
         "informationSourceId": "Org3",
         "informationSourceOrganization": "Summit Valley University"
       },
-      "offeredByRefOrganization": {
+      "OfferedByRefOrganization": {
         "name": "State University",
         "identifier": "organization-state-university-org3-005",
         "informationSourceId": "Org3",
@@ -2247,13 +2253,13 @@
       "workBasedLearningOpportunityType": "Clinical placement",
       "programSponsorType": "Training provider",
       "deliveryType": "In-person with clinical",
-      "demonstratesRefCompetency": {
+      "DemonstratesRefCompetency": {
         "name": "Clinical Care and Safety",
         "identifier": "competency-clinical-care-safety-org3-002",
         "informationSourceId": "Org3",
         "informationSourceOrganization": "Summit Valley University"
       },
-      "offeredByRefOrganization": {
+      "OfferedByRefOrganization": {
         "name": "Training Provider",
         "identifier": "organization-training-provider-org3-007",
         "informationSourceId": "Org3",

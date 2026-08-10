@@ -1810,9 +1810,9 @@
       ],
       "Identifier": [
         {
+          "informationSourceId": "Org1",
           "identifier": "100006",
           "identifierType": "SCHOOL_ASSIGNED_NUMBER",
-          "informationSourceId": "Org1",
           "informationSourceOrganization": "State University"
         }
       ],
@@ -3824,13 +3824,13 @@
             "informationSourceId": "Org1",
             "informationSourceOrganization": "State University"
           },
-          "offeredByRefOrganization": {
+          "OfferedByRefOrganization": {
             "name": "State University",
             "identifier": "organization-state-university-org1-005",
             "informationSourceId": "Org1",
             "informationSourceOrganization": "State University"
           },
-          "assertedByRefOrganization": {
+          "AssertedByRefOrganization": {
             "name": "State University",
             "identifier": "organization-state-university-org1-005",
             "informationSourceId": "Org1",
@@ -3861,13 +3861,13 @@
             "informationSourceId": "Org1",
             "informationSourceOrganization": "State University"
           },
-          "offeredByRefOrganization": {
+          "OfferedByRefOrganization": {
             "name": "State University",
             "identifier": "organization-state-university-org1-005",
             "informationSourceId": "Org1",
             "informationSourceOrganization": "State University"
           },
-          "assertedByRefOrganization": {
+          "AssertedByRefOrganization": {
             "name": "State University",
             "identifier": "organization-state-university-org1-005",
             "informationSourceId": "Org1",
@@ -3898,13 +3898,13 @@
             "informationSourceId": "Org1",
             "informationSourceOrganization": "State University"
           },
-          "offeredByRefOrganization": {
+          "OfferedByRefOrganization": {
             "name": "State University",
             "identifier": "organization-state-university-org1-005",
             "informationSourceId": "Org1",
             "informationSourceOrganization": "State University"
           },
-          "assertedByRefOrganization": {
+          "AssertedByRefOrganization": {
             "name": "State University",
             "identifier": "organization-state-university-org1-005",
             "informationSourceId": "Org1",
@@ -3936,13 +3936,13 @@
             "informationSourceId": "Org1",
             "informationSourceOrganization": "State University"
           },
-          "offeredByRefOrganization": {
+          "OfferedByRefOrganization": {
             "name": "State University",
             "identifier": "organization-state-university-org1-005",
             "informationSourceId": "Org1",
             "informationSourceOrganization": "State University"
           },
-          "assertedByRefOrganization": {
+          "AssertedByRefOrganization": {
             "name": "State University",
             "identifier": "organization-state-university-org1-005",
             "informationSourceId": "Org1",
@@ -3966,13 +3966,13 @@
             "informationSourceId": "Org1",
             "informationSourceOrganization": "State University"
           },
-          "offeredByRefOrganization": {
+          "OfferedByRefOrganization": {
             "name": "State University",
             "identifier": "organization-state-university-org1-005",
             "informationSourceId": "Org1",
             "informationSourceOrganization": "State University"
           },
-          "assertedByRefOrganization": {
+          "AssertedByRefOrganization": {
             "name": "State University",
             "identifier": "organization-state-university-org1-005",
             "informationSourceId": "Org1",
@@ -3994,13 +3994,13 @@
             "informationSourceId": "Org1",
             "informationSourceOrganization": "State University"
           },
-          "offeredByRefOrganization": {
+          "OfferedByRefOrganization": {
             "name": "Training Provider",
             "identifier": "organization-training-provider-org1-007",
             "informationSourceId": "Org1",
             "informationSourceOrganization": "State University"
           },
-          "assertedByRefOrganization": {
+          "AssertedByRefOrganization": {
             "name": "Training Provider",
             "identifier": "organization-training-provider-org1-007",
             "informationSourceId": "Org1",
@@ -4031,7 +4031,7 @@
             "informationSourceId": "Org1",
             "informationSourceOrganization": "State University"
           },
-          "offeredByRefOrganization": {
+          "OfferedByRefOrganization": {
             "name": "College Board",
             "identifier": "organization-college-board-org1-013",
             "informationSourceId": "Org1",
@@ -4064,7 +4064,7 @@
             "informationSourceId": "Org1",
             "informationSourceOrganization": "State University"
           },
-          "offeredByRefOrganization": {
+          "OfferedByRefOrganization": {
             "name": "Training Provider",
             "identifier": "organization-training-provider-org1-007",
             "informationSourceId": "Org1",
@@ -6096,13 +6096,13 @@
           "descriptiveFeedback": "A scaled score of 50 or higher earns ACE-recommended credit."
         }
       ],
-      "awardedByRefOrganization": {
+      "AwardedByRefOrganization": {
         "name": "College Board",
         "identifier": "organization-college-board-org1-013",
         "informationSourceId": "Org1",
         "informationSourceOrganization": "State University"
       },
-      "offeredByRefOrganization": {
+      "OfferedByRefOrganization": {
         "name": "College Board",
         "identifier": "organization-college-board-org1-013",
         "informationSourceId": "Org1",
@@ -6134,13 +6134,13 @@
           "descriptiveFeedback": "Demonstrates independent proficiency in consultative selling scenarios."
         }
       ],
-      "demonstratesRefCompetency": {
+      "DemonstratesRefCompetency": {
         "name": "Consultative Selling",
         "identifier": "competency-consultative-selling-org1-001",
         "informationSourceId": "Org1",
         "informationSourceOrganization": "State University"
       },
-      "offeredByRefOrganization": {
+      "OfferedByRefOrganization": {
         "name": "Training Provider",
         "identifier": "organization-training-provider-org1-007",
         "informationSourceId": "Org1",
@@ -6257,7 +6257,7 @@
       "normalTimeCompletionUnits": "Years",
       "deliveryType": "Online",
       "distanceEducationProgram": "true",
-      "offeredByRefOrganization": {
+      "OfferedByRefOrganization": {
         "name": "State University",
         "identifier": "organization-state-university-org1-005",
         "informationSourceId": "Org1",
@@ -6276,13 +6276,13 @@
       "workBasedLearningOpportunityType": "Work-based learning",
       "programSponsorType": "Workforce training provider",
       "deliveryType": "Online, competency-based",
-      "demonstratesRefCompetency": {
+      "DemonstratesRefCompetency": {
         "name": "Consultative Selling",
         "identifier": "competency-consultative-selling-org1-001",
         "informationSourceId": "Org1",
         "informationSourceOrganization": "State University"
       },
-      "offeredByRefOrganization": {
+      "OfferedByRefOrganization": {
         "name": "Training Provider",
         "identifier": "organization-training-provider-org1-007",
         "informationSourceId": "Org1",

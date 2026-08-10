@@ -1334,15 +1334,15 @@
       ],
       "Identifier": [
         {
+          "informationSourceId": "Org1",
           "identifier": "sha256$de620a3b2b4ba794513008a7d918a429351144c47b697f4c3976387138f33e43",
           "identifierType": "INSTITUTION_ASSIGNED_NUMBER",
-          "informationSourceId": "Org1",
           "informationSourceOrganization": "State University"
         },
         {
+          "informationSourceId": "Org1",
           "identifier": "100003",
           "identifierType": "SCHOOL_ASSIGNED_NUMBER",
-          "informationSourceId": "Org1",
           "informationSourceOrganization": "State University"
         }
       ],
@@ -2140,13 +2140,13 @@
             "informationSourceId": "Org1",
             "informationSourceOrganization": "State University"
           },
-          "offeredByRefOrganization": {
+          "OfferedByRefOrganization": {
             "name": "State University",
             "identifier": "organization-state-university-org1-005",
             "informationSourceId": "Org1",
             "informationSourceOrganization": "State University"
           },
-          "assertedByRefOrganization": {
+          "AssertedByRefOrganization": {
             "name": "State University",
             "identifier": "organization-state-university-org1-005",
             "informationSourceId": "Org1",
@@ -2177,13 +2177,13 @@
             "informationSourceId": "Org1",
             "informationSourceOrganization": "State University"
           },
-          "offeredByRefOrganization": {
+          "OfferedByRefOrganization": {
             "name": "State University",
             "identifier": "organization-state-university-org1-005",
             "informationSourceId": "Org1",
             "informationSourceOrganization": "State University"
           },
-          "assertedByRefOrganization": {
+          "AssertedByRefOrganization": {
             "name": "State University",
             "identifier": "organization-state-university-org1-005",
             "informationSourceId": "Org1",
@@ -2214,13 +2214,13 @@
             "informationSourceId": "Org1",
             "informationSourceOrganization": "State University"
           },
-          "offeredByRefOrganization": {
+          "OfferedByRefOrganization": {
             "name": "State University",
             "identifier": "organization-state-university-org1-005",
             "informationSourceId": "Org1",
             "informationSourceOrganization": "State University"
           },
-          "assertedByRefOrganization": {
+          "AssertedByRefOrganization": {
             "name": "State University",
             "identifier": "organization-state-university-org1-005",
             "informationSourceId": "Org1",
@@ -2251,13 +2251,13 @@
             "informationSourceId": "Org1",
             "informationSourceOrganization": "State University"
           },
-          "offeredByRefOrganization": {
+          "OfferedByRefOrganization": {
             "name": "State University",
             "identifier": "organization-state-university-org1-005",
             "informationSourceId": "Org1",
             "informationSourceOrganization": "State University"
           },
-          "assertedByRefOrganization": {
+          "AssertedByRefOrganization": {
             "name": "State University",
             "identifier": "organization-state-university-org1-005",
             "informationSourceId": "Org1",
@@ -2281,13 +2281,13 @@
             "informationSourceId": "Org1",
             "informationSourceOrganization": "State University"
           },
-          "offeredByRefOrganization": {
+          "OfferedByRefOrganization": {
             "name": "State University",
             "identifier": "organization-state-university-org1-005",
             "informationSourceId": "Org1",
             "informationSourceOrganization": "State University"
           },
-          "assertedByRefOrganization": {
+          "AssertedByRefOrganization": {
             "name": "State University",
             "identifier": "organization-state-university-org1-005",
             "informationSourceId": "Org1",
@@ -2309,13 +2309,13 @@
             "informationSourceId": "Org1",
             "informationSourceOrganization": "State University"
           },
-          "offeredByRefOrganization": {
+          "OfferedByRefOrganization": {
             "name": "State University",
             "identifier": "organization-state-university-org1-005",
             "informationSourceId": "Org1",
             "informationSourceOrganization": "State University"
           },
-          "assertedByRefOrganization": {
+          "AssertedByRefOrganization": {
             "name": "State University",
             "identifier": "organization-state-university-org1-005",
             "informationSourceId": "Org1",
@@ -2351,7 +2351,7 @@
             "informationSourceId": "Org1",
             "informationSourceOrganization": "State University"
           },
-          "offeredByRefOrganization": {
+          "OfferedByRefOrganization": {
             "name": "Educational Testing Service (ETS)",
             "identifier": "organization-ets-org1-011",
             "informationSourceId": "Org1",
@@ -2384,7 +2384,7 @@
             "informationSourceId": "Org1",
             "informationSourceOrganization": "State University"
           },
-          "offeredByRefOrganization": {
+          "OfferedByRefOrganization": {
             "name": "State University",
             "identifier": "organization-state-university-org1-005",
             "informationSourceId": "Org1",
@@ -3463,19 +3463,19 @@
           "descriptiveFeedback": "Meets Colorado's passing score for elementary educator licensure."
         }
       ],
-      "demonstratesRefCompetency": {
+      "DemonstratesRefCompetency": {
         "name": "Lesson Planning and Instruction",
         "identifier": "competency-lesson-planning-org1-001",
         "informationSourceId": "Org1",
         "informationSourceOrganization": "State University"
       },
-      "awardedByRefOrganization": {
+      "AwardedByRefOrganization": {
         "name": "Educational Testing Service (ETS)",
         "identifier": "organization-ets-org1-011",
         "informationSourceId": "Org1",
         "informationSourceOrganization": "State University"
       },
-      "offeredByRefOrganization": {
+      "OfferedByRefOrganization": {
         "name": "Educational Testing Service (ETS)",
         "identifier": "organization-ets-org1-011",
         "informationSourceId": "Org1",
@@ -3505,13 +3505,13 @@
           "descriptiveFeedback": "Demonstrates competency in technology-enhanced learning sufficient to earn course credit."
         }
       ],
-      "demonstratesRefCompetency": {
+      "DemonstratesRefCompetency": {
         "name": "Educational Technology",
         "identifier": "competency-educational-technology-org1-004",
         "informationSourceId": "Org1",
         "informationSourceOrganization": "State University"
       },
-      "offeredByRefOrganization": {
+      "OfferedByRefOrganization": {
         "name": "State University",
         "identifier": "organization-state-university-org1-005",
         "informationSourceId": "Org1",
@@ -3635,13 +3635,13 @@
       "normalTimeCompletionUnits": "Years",
       "deliveryType": "Online, competency-based",
       "distanceEducationProgram": "true",
-      "demonstratesRefCompetency": {
+      "DemonstratesRefCompetency": {
         "name": "Lesson Planning and Instruction",
         "identifier": "competency-lesson-planning-org1-001",
         "informationSourceId": "Org1",
         "informationSourceOrganization": "State University"
       },
-      "offeredByRefOrganization": {
+      "OfferedByRefOrganization": {
         "name": "State University",
         "identifier": "organization-state-university-org1-005",
         "informationSourceId": "Org1",
@@ -3659,13 +3659,13 @@
       "creditUnitTypeDescription": "Competency units",
       "postSecondaryProgramLevel": "Postsecondary Certificate",
       "deliveryType": "Online, competency-based",
-      "demonstratesRefCompetency": {
+      "DemonstratesRefCompetency": {
         "name": "Educational Technology",
         "identifier": "competency-educational-technology-org1-004",
         "informationSourceId": "Org1",
         "informationSourceOrganization": "State University"
       },
-      "offeredByRefOrganization": {
+      "OfferedByRefOrganization": {
         "name": "State University",
         "identifier": "organization-state-university-org1-005",
         "informationSourceId": "Org1",

@@ -51,15 +51,15 @@
       ],
       "Identifier": [
         {
+          "informationSourceId": "Org2",
           "identifier": "100006",
           "identifierType": "SCHOOL_ASSIGNED_NUMBER",
-          "informationSourceId": "Org2",
           "informationSourceOrganization": "Community College"
         }
       ],
       "EmploymentLearningExperience": [
         {
-          "name": "Sales Associate ",
+          "name": "Sales Associate",
           "RefPosition": {
             "informationSourceId": "Org2",
             "name": "Referenced Employment Experience",
@@ -111,7 +111,7 @@
           "identifier": "employmentlearningexperience-sales-associate--org2-001"
         },
         {
-          "name": "Receptionist ",
+          "name": "Receptionist",
           "endDate": "2016-09",
           "RefPosition": {
             "informationSourceId": "Org2",
@@ -538,13 +538,13 @@
           "dischargeStatus": "Honorable",
           "dischargeDate": "2011-06-30",
           "comments": "Part-time service (monthly drill plus annual training) alongside civilian employment; drill schedules and a deployment interrupted early college coursework.",
-          "offeredByRefOrganization": {
+          "OfferedByRefOrganization": {
             "name": "Florida Army National Guard",
             "identifier": "organization-florida-army-national-guard-org2-014",
             "informationSourceId": "Org2",
             "informationSourceOrganization": "Community College"
           },
-          "assertedByRefOrganization": {
+          "AssertedByRefOrganization": {
             "name": "Florida Army National Guard",
             "identifier": "organization-florida-army-national-guard-org2-014",
             "informationSourceId": "Org2",
