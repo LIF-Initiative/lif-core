@@ -616,8 +616,8 @@ async def get_paginated_all_transformations(
     offset: int = 0,
     limit: int = 10,
     pagination: bool = True,
-    source_data_model_id: int = None,
-    target_data_model_id: int = None,
+    source_data_model_id: int | None = None,
+    target_data_model_id: int | None = None,
 ):
     transformations_dtos: list[GetALLTransformationsDTO] = []
     # Query to count total transformations for pagination
@@ -786,8 +786,8 @@ async def get_paginated_all_transformations_for_an_attribute(
     offset: int = 0,
     limit: int = 10,
     pagination: bool = True,
-    source_data_model_id: int = None,
-    target_data_model_id: int = None,
+    source_data_model_id: int | None = None,
+    target_data_model_id: int | None = None,
 ):
     if attribute_as_source and not source_data_model_id:
         raise HTTPException(
@@ -977,8 +977,8 @@ async def get_paginated_transformations_groups(
     offset: int = 0,
     limit: int = 10,
     pagination: bool = True,
-    source_data_model_id: int = None,
-    target_data_model_id: int = None,
+    source_data_model_id: int | None = None,
+    target_data_model_id: int | None = None,
     exportable: bool = False,
 ):
     transformations_group_dtos: list[TransformationGroupDTO] = []
@@ -1508,7 +1508,7 @@ async def get_transformations_by_data_model_id(session: AsyncSession, data_model
 
 
 async def get_transformations_by_path_ids(
-    session: AsyncSession, entity_id_path: str, attribute_id: int = None
+    session: AsyncSession, entity_id_path: str, attribute_id: int | None = None
 ) -> List[TransformationDTO]:
     # Select Transformations where TransformationAttribute.EntityIdPath == entity_id_path and TransformationAttribute.AttributeId == attribute_id
     query = (

@@ -49,8 +49,8 @@ async def get_paginated_datamodels(
     offset: int = 0,
     limit: int = 0,
     pagination: bool = True,
-    level_of_access: AccessType = None,
-    state: StateType = None,
+    level_of_access: AccessType | None = None,
+    state: StateType | None = None,
     include_extension: bool = True,
     name: str | None = None,
     version: str | None = None,
@@ -342,7 +342,7 @@ async def is_datamodel_orglif(session: AsyncSession, id: int):
 
 
 async def get_list_of_orglif_model(
-    session: AsyncSession, contributor_organization: Optional[str] = None, state: StateType = None
+    session: AsyncSession, contributor_organization: Optional[str] = None, state: StateType | None = None
 ):
     data_model_query = select(DataModel).where(
         DataModel.Type == DataModelType.OrgLIF,
@@ -364,7 +364,7 @@ async def get_extensions_for_data_model(
     data_model_id: int,
     contributor: str = None,
     contributorOrganization: str = None,
-    state: StateType = None,
+    state: StateType | None = None,
 ):
     # Start with the base query
     query = select(DataModel).where(
@@ -403,7 +403,7 @@ async def get_partner_extensions_for_data_model(
     data_model_id: int,
     contributor: str = None,
     contributorOrganization: str = None,
-    state: StateType = None,
+    state: StateType | None = None,
 ):
     return await get_datamodel_with_details_by_id(
         session=session, id=data_model_id, partner_only=True, org_ext_only=False

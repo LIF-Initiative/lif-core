@@ -256,7 +256,8 @@ async def start_conversation(username: str = Depends(get_current_user)) -> ChatM
     # TODO(#986): move this hard-coded query prompt to env/config
     query = "Load my most recent interaction. Load other profile details including academic progress, coursework, skills, competencies, and credentials. And generate an appropriate response"
 
-    response = await agent.ask_agent(task, query)
+    # ty-ignore: `agent` is a module-level Optional populated at app startup.
+    response = await agent.ask_agent(task, query)  # ty: ignore[unresolved-attribute]
 
     return ChatMessage(
         content=f"{response.get('content', '')}", tokens=response.get("tokens", 0), cost=response.get("cost", 0.0)
@@ -276,7 +277,8 @@ async def continue_conversation(question: Question, username: str = Depends(get_
     task = "continue_conversation"
 
     query = question.message.strip()
-    response = await agent.ask_agent(task, query)
+    # ty-ignore: `agent` is a module-level Optional populated at app startup.
+    response = await agent.ask_agent(task, query)  # ty: ignore[unresolved-attribute]
 
     return ChatMessage(
         content=response.get("content", ""), tokens=response.get("tokens", 0), cost=response.get("cost", 0.0)

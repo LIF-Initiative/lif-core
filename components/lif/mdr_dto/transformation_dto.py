@@ -151,7 +151,7 @@ class TransformationGroupWithTransformationsDTO(BaseModel):
     SourceDataModelId: int
     TargetDataModelId: int
     Name: Optional[str] = None
-    GroupVersion: str = None
+    GroupVersion: Optional[str] = None
     Description: Optional[str] = None
     Notes: Optional[str] = None
     CreationDate: Optional[datetime] = None
@@ -175,7 +175,7 @@ class TransformationGroupDTO(BaseModel):
     SourceDataModelName: Optional[str] = None
     TargetDataModelName: Optional[str] = None
     Name: Optional[str] = None
-    GroupVersion: str = None
+    GroupVersion: Optional[str] = None
     Description: Optional[str] = None
     Notes: Optional[str] = None
     CreationDate: Optional[datetime] = None
@@ -244,7 +244,7 @@ class GetALLTransformationsDTO(BaseModel):
     SourceDataModelId: int
     TargetDataModelId: int
     TransformationGroupName: Optional[str] = None
-    TransformationGroupVersion: str = None
+    TransformationGroupVersion: Optional[str] = None
     TransformationGroupDescription: Optional[str] = None
     TransformationGroupNotes: Optional[str] = None
     TransformationId: Optional[int] = None

@@ -69,7 +69,7 @@ async def get_entity_associations(
 async def get_entity_associations_by_parent(
     parent_entity_id: int,
     session: AsyncSession = Depends(get_session),
-    including_extended_by_data_model_id: int = None,
+    including_extended_by_data_model_id: int | None = None,
     allow_empty: bool = Query(False, description="Return an empty list instead of 404 when no associations are found."),
 ):
     entity_associations = await entity_association_service.get_entity_associations_by_parent_entity_id(

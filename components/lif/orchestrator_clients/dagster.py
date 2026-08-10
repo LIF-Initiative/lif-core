@@ -62,7 +62,8 @@ class DagsterClient(OrchestratorClient):
             return DagsterGraphQLClient(
                 hostname=self._cfg.base_url,
                 use_https=bool(self._cfg.use_https),
-                headers={"Dagster-Cloud-Api-Token": self._cfg.api_token},
+                # ty-ignore: dagster-graphql stubs type `headers` more narrowly than the runtime API.
+                headers={"Dagster-Cloud-Api-Token": self._cfg.api_token},  # ty: ignore[invalid-argument-type]
             )
         parsed = urlparse(self._cfg.base_url)
         host = parsed.hostname

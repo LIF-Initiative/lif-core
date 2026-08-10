@@ -23,8 +23,8 @@ async def read_datamodels(
     page: int = Query(1, ge=1),  # Default to page 1
     size: int = Query(10, ge=1),  # Default to 10 items per page
     pagination: bool = True,
-    level_of_access: AccessType = None,
-    state: StateType = None,
+    level_of_access: AccessType | None = None,
+    state: StateType | None = None,
     include_extension: bool = True,
     name: str | None = None,
     version: str | None = None,
@@ -125,7 +125,9 @@ async def id_datamodel_extension(datamodel_id: int, session: AsyncSession = Depe
 
 @router.get("/orglif/", response_model=List[DataModelDTO])
 async def get_all_extended_datamodels(
-    session: AsyncSession = Depends(get_session), contributor_organization: str = None, state: StateType = None
+    session: AsyncSession = Depends(get_session),
+    contributor_organization: str | None = None,
+    state: StateType | None = None,
 ):
     datamodel = await datamodel_service.get_list_of_orglif_model(
         session=session, contributor_organization=contributor_organization, state=state
@@ -137,7 +139,7 @@ async def get_all_extended_datamodels(
 async def get_base_model_for_a_given_extension(
     extended_datamodel_id: int, session: AsyncSession = Depends(get_session)
 ):
-    base_model = await datamodel_service.get_base_model_for_given_extension(session, extended_datamodel_id)
+    base_model = await datamodel_service.get_base_model_for_given_orglif(session, extended_datamodel_id)
     return base_model
 
 
