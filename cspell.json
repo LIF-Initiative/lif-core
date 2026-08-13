@@ -237,6 +237,7 @@
         "spyproject",
         "sqlmodel",
         "sqls",
+        "SQLALCHEMY",
         "stateu",
         "Starlette",
         "Streamable",

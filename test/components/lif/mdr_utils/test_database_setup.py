@@ -8,6 +8,7 @@ The `get_session` tests patch `async_session`, so no real connection is made."""
 
 # cspell:ignore mydb dbhost cret unparseable agen sw0rd
 
+import importlib
 import types
 from unittest.mock import AsyncMock, MagicMock
 
@@ -56,6 +57,30 @@ class TestRedactUrl:
         # documents the "no exception" guarantee.
         assert _redact_url("") == ""
         assert _redact_url("not-a-url") == "not-a-url"
+
+
+class TestEchoToggle:
+    """#956 — SQLAlchemy echo must default to off and only come on via an
+    explicit `SQLALCHEMY_ECHO=true`. The engine is built at module import,
+    so reload the module under each env condition and inspect `engine.echo`."""
+
+    @staticmethod
+    def _reload(monkeypatch, value=None, *, unset=False):
+        if unset:
+            monkeypatch.delenv("SQLALCHEMY_ECHO", raising=False)
+        else:
+            monkeypatch.setenv("SQLALCHEMY_ECHO", value)
+        return importlib.reload(database_setup).engine.echo
+
+    def test_echo_off_by_default(self, monkeypatch):
+        assert self._reload(monkeypatch, unset=True) is False
+
+    @pytest.mark.parametrize("value", ["true", "TRUE", "True"])
+    def test_echo_on_when_env_is_true(self, monkeypatch, value):
+        assert self._reload(monkeypatch, value) is True
+
+    def test_echo_off_for_any_other_value(self, monkeypatch):
+        assert self._reload(monkeypatch, "1") is False
 
 
 def _make_request(tenant_schema):
