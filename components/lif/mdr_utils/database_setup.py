@@ -49,8 +49,11 @@ def _redact_url(url: str) -> str:
 
 DATABASE_URL = f"postgresql+asyncpg://{os.getenv('POSTGRESQL_USER')}:{os.getenv('POSTGRESQL_PASSWORD')}@{os.getenv('POSTGRESQL_HOST')}:{os.getenv('POSTGRESQL_PORT')}/{os.getenv('POSTGRESQL_DB')}"
 logger.info("DATABASE_URL : %s", _redact_url(DATABASE_URL))
+# SQLAlchemy echo emits every SQL statement + bound parameters at INFO
+# level (#956). Dev-only debugging aid — keep off in deployed envs.
+SQLALCHEMY_ECHO = os.getenv("SQLALCHEMY_ECHO", "false").lower() == "true"
 # Create an async engine
-engine = create_async_engine(DATABASE_URL, echo=True)
+engine = create_async_engine(DATABASE_URL, echo=SQLALCHEMY_ECHO)
 
 # Create an async sessionmaker
 # ty-ignore: Legacy sessionmaker(class_=AsyncSession); async_sessionmaker is the modern API.
