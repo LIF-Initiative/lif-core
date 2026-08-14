@@ -31,7 +31,26 @@
     border: 0;
     white-space: nowrap;
   }
-  .file-upload__filename {
-    color: var(--gray-10, #555);
+  .file-upload__filename { color: var(--gray-10, #555); }
+ 
+  .file-input__fields {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
   }
+  .file-input__fields label {
+    display: inline-block;
+    cursor: pointer;
+    font-weight: bold;
+    margin-right: 1em;
+    margin-bottom: 0.25rem;
+  }
+  .file-input__label { white-space: nowrap; }
+  .file-input__input { white-space: nowrap; }
+  .file-input__description {
+    font-size: 0.875rem;
+    color: var(--gray-10, #888);
+    margin-top: 0.25rem;
+  }
+  .hide { display: none !important; }
 }
