@@ -2,19 +2,20 @@ import logging
 
 from langchain_openai import ChatOpenAI
 from langmem.short_term import SummarizationNode
-from langchain_core.messages.utils import count_tokens_approximately
+from langchain_core.messages.utils import count_tokens_approximately, trim_messages
 from langgraph.prebuilt.chat_agent_executor import AgentState
 from typing import Any, Callable, NotRequired
 
 
 def make_pre_model_hook(
-    summarizer_node: SummarizationNode, max_messages: int, logger: logging.Logger
+    summarizer_node: SummarizationNode, max_messages: int, max_tokens: int, logger: logging.Logger
 ) -> Callable[..., Any]:
     """
     This function creates the pre_model_hook used by the agent
     Args:
          summarizer_node: node for summarization
          max_messages: number of messages from last to keep out of summarization.
+         max_tokens: max token budget for the message list sent to the LLM.
          logger: logger to log
     Returns:
         Callable: the pre_model_hook callable function .
@@ -50,17 +51,45 @@ def make_pre_model_hook(
 
                 summarized_messages = state["summary_output_messages"]
 
-            # TODO Add safe trim_messages here
             # Step 2: Prepare new messages list with summarized messages
             messages = []
             if summarized_messages:
                 messages.extend(summarized_messages)
                 messages.extend(messages_to_retain)
-                state["messages"] = messages
+                state["messages"] = _safe_trim_messages(messages, max_tokens, logger)
 
         return state
 
     return pre_model_hook
+
+
+def _safe_trim_messages(messages: list[Any], max_tokens: int, logger: logging.Logger) -> list[Any]:
+    """
+    Trim a message list to fit within max_tokens, preserving the system message and
+    the most recent messages.  Falls back to the untrimmed list if trimming would
+    produce nothing (e.g. a single over-budget summary).
+    Args:
+        messages: The message list to trim.
+        max_tokens: Max token count of the trimmed messages.
+        logger: logger to log.
+    Returns:
+        list: the trimmed message list, or the original list if trimming yields nothing.
+    """
+    # strategy="last" keeps the most recent messages (including any in-flight
+    # tool-call results, which must survive for the agent to continue) and trims
+    # the oldest ones first.  include_system=True protects a SystemMessage summary
+    # at index 0.  Note: start_on is deliberately NOT set - it would force the
+    # trimmed history to end on a HumanMessage, dropping trailing AI/tool messages
+    # even when within budget and breaking multi-step tool use.
+    trimmed = trim_messages(
+        messages, token_counter=count_tokens_approximately, max_tokens=max_tokens, strategy="last", include_system=True
+    )
+    if not trimmed:
+        logger.warning(
+            f"Trimming produced an empty message list - falling back to the untrimmed {len(messages)} messages."
+        )
+        return messages
+    return trimmed
 
 
 def create_summarization_node(

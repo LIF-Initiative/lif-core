@@ -225,3 +225,6 @@ pnpm-lock.yaml
 
 # Dagster stuff:
 .dagster/
+
+# Local AI-agent working files (not source-controlled)
+.claude/plans/

@@ -195,6 +195,7 @@
         "pytestmark",
         "pytype",
         "PYTHONPATH",
+        "caplog",
         "queryables",
         "RDBMS",
         "regclass",

@@ -145,7 +145,7 @@ class LIFAIAgent:
             prompt = PromptTemplate.from_template(template=prompt_text).format(tools=tools)
 
         summarization_node = create_summarization_node(model, MAX_CONVERSATION_SIZE, MAX_SUMMARY_SIZE)
-        pre_model_hook = make_pre_model_hook(summarization_node, MESSAGES_TO_KEEP, logger)
+        pre_model_hook = make_pre_model_hook(summarization_node, MESSAGES_TO_KEEP, TRIMMED_MESSAGES_SIZE, logger)
 
         return create_react_agent(
             model,
