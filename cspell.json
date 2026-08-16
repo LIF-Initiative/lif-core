@@ -248,6 +248,15 @@
         "ntvs",
         "njsproj",
         "poolclass",
+        "aiomysql",
+        "asyncmy",
+        "GIL",
+        "mariadb",
+        "sqlalchemy",
+        "to_thread",
+        "DataStoreException",
+        "superlinear",
+        "upserts",
         "xform"
     ],
     "ignorePaths": [

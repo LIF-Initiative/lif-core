@@ -19,6 +19,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Identity Mapper `save_mappings` is now all-or-nothing: a single transaction with a single commit,
+  so a mid-batch failure rolls back the entire batch instead of leaving partial saves; storage DB
+  work is offloaded off the FastAPI event loop via `asyncio.to_thread`, and per-request delete/read
+  round trips are reduced
+
 ### Deprecated
 
 ### Removed

@@ -40,6 +40,8 @@ Version 1.0.0
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Example Usage](#example-usage)
 
+[Performance Report](#performance-report)
+
 [Possible Future Roadmap Items](#possible-future-roadmap-items)
 
 # Overview
@@ -186,4 +188,73 @@ TBD
 ## Possible Future Roadmap Items
 
 - [Issue #12: Add Identity Mapper Support for Bulk Upload Process](https://github.com/LIF-Initiative/lif-core/issues/12)
-- [Issue #13: Investigate and Improve Identity Mapper Performance](https://github.com/LIF-Initiative/lif-core/issues/13)
+
+# Performance Report
+
+Issue [#13](https://github.com/LIF-Initiative/lif-core/issues/13) investigated and improved the
+Identity Mapper against the *Performance* and *Concurrency* design requirements above (sub-issue of
+the performance epic #1131; sibling of the #10 composer work). Validation run 2026-08-16 against the
+standalone mariadb container with a local uvicorn server.
+
+## Findings (code review)
+
+| # | Problem | Location |
+|---|---|---|
+| P0 | Blocking sync SQLAlchemy inside `async def` handlers on the single FastAPI event loop; uvicorn runs 1 worker → concurrent requests serialize on DB latency | all `IdentityMapperSqlStorage` methods |
+| P0 | `save_mappings` N+1: per-mapping session/transaction, ~2-3 round trips + 1 commit each (~250 for a 100-mapping batch); partial saves on mid-batch failure | service + SQL storage |
+| P1 | `delete_mapping` = 4 SELECTs + 1 DELETE across 3 sessions | service + storage + CRUD |
+| P1 | `session.refresh()` after `flush` on create/update → extra SELECT per row; all columns are client-assigned | CRUD |
+| P2 | Model declares 5 single-column indexes that production DDL does not have → 5 unused indexes under auto-create | model |
+| P2 | Leftover `DEBUG: …SELECT 1…` log at startup; engine pool not env-configurable | db |
+
+## Changes
+
+1. `save_mappings` is now **all-or-nothing**: one session, one transaction, one batched read, a
+   per-row no-op/update/insert (duplicate keys within a batch keep last-wins upsert semantics), and a
+   single commit; any failure rolls everything back and raises a `DataStoreException`.
+2. Every storage method offloads DB work off the event loop via `asyncio.to_thread(...)`.
+3. `delete_mapping` collapses 4 SELECTs + 1 DELETE across 3 sessions into 1 SELECT + 1 DELETE in 1
+   session; the deleted mapping is validated from the delete call's return value.
+4. Dropped `session.refresh()` (one fewer SELECT per create/update) and the 5 unused indexes.
+5. Engine now configurable via `IDENTITY_MAPPER_DB_POOL_SIZE` (default 10) and
+   `IDENTITY_MAPPER_DB_POOL_PRE_PING` (default false).
+
+## Validation
+
+Wall-clock bench (single runs, before vs. after):
+
+| operation | before (ms) | after (ms) | Δ |
+|---|---|---|---|
+| POST save n=1   | 25.8 | 21.3 | |
+| POST save n=10  | 37.0 | 11.7 | |
+| POST save n=100 | 316.9 | 30.1 | ~10.5× |
+| POST save n=500 | 1669.2 | 113.2 | ~14.7× |
+| GET n=100       | 3.4 | 2.9 | |
+| GET n=500       | 9.1 | 8.0 | |
+| DELETE n=100    | 429.0 | 331.5 | ~1.3× |
+| DELETE n=500    | 2093.9 | 1587.3 | ~1.3× |
+
+- **POST save** now scales near-linearly (10→100→500: 11.7→30.1→113 ms) vs. the old superlinear
+  curve (37→317→1669 ms). DB round trips for a 500-mapping batch drop from ~1500 (3 per mapping in
+  500 transactions) to ~501 (1 read + 500 writes, 1 commit).
+- **DELETE** cuts per-request DB queries from 5 to 2; the wall-clock win is largely masked because
+  one mapping is deleted per HTTP request and the HTTP round trip dominates.
+- **GET** was already one indexed SELECT; effectively unchanged.
+- Live correctness on the mariadb container: batch create assigns IDs; re-POST of an existing key
+  upserts and preserves the original `mapping_id`; duplicate keys in one batch collapse to a single
+  row with last-wins value; DELETE returns 204; DELETE of a missing ID returns 404.
+
+### Concurrency (50 parallel GETs)
+
+| mode | wall (ms) | p50 (ms) | p95 (ms) |
+|---|---|---|---|
+| before (blocking event loop) | 51.0 | 21.7 | 38.1 |
+| after (`asyncio.to_thread`)  | 66.7 | 36.0 | 55.4 |
+
+Wall time is equivalent between the two approaches. Root cause: `pymysql` is pure-Python, so the DB
+work is **GIL-bound** — the event loop was never the throughput ceiling. The value of `to_thread` is
+therefore **event-loop non-starvation** (the *Concurrency* requirement): DB latency no longer blocks
+the single event loop, so slow or latent DB queries (or mixed async work such as the query planner's
+HTTP calls) no longer stall unrelated requests. True single-host throughput needs a follow-up:
+async SQLAlchemy with a C-extension async MariaDB driver (`asyncmy`/`aiomysql`), matching the MDR
+brick's async pattern.
