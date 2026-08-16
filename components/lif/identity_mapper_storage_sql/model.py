@@ -11,12 +11,12 @@ class IdentityMappingModel(Base):
 
     __tablename__ = "identity_mappings"
 
-    mapping_id: Mapped[str] = mapped_column(String(36), primary_key=True, index=True, default=lambda: str(uuid4()))
-    lif_organization_id: Mapped[str] = mapped_column(String(255), index=True, nullable=False)
-    lif_organization_person_id: Mapped[str] = mapped_column(String(255), index=True, nullable=False)
-    target_system_id: Mapped[str] = mapped_column(String(255), index=True, nullable=False)
-    target_system_person_id_type: Mapped[str] = mapped_column(String(100), index=True, nullable=False)
-    target_system_person_id: Mapped[str] = mapped_column(String(255), index=True, nullable=False)
+    mapping_id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: str(uuid4()))
+    lif_organization_id: Mapped[str] = mapped_column(String(255), nullable=False)
+    lif_organization_person_id: Mapped[str] = mapped_column(String(255), nullable=False)
+    target_system_id: Mapped[str] = mapped_column(String(255), nullable=False)
+    target_system_person_id_type: Mapped[str] = mapped_column(String(100), nullable=False)
+    target_system_person_id: Mapped[str] = mapped_column(String(255), nullable=False)
     __table_args__ = (
         UniqueConstraint(
             "lif_organization_id",

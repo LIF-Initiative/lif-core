@@ -245,6 +245,9 @@
         "webassets",
         "workpreference",
         "worktree",
+        "ntvs",
+        "njsproj",
+        "poolclass",
         "xform"
     ],
     "ignorePaths": [

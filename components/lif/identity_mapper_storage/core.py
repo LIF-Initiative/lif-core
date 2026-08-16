@@ -25,6 +25,15 @@ class IdentityMapperStorage(Protocol):
         """
         pass
 
+    async def save_mappings(self, identity_mappings: List[IdentityMapping]) -> List[IdentityMapping]:
+        """
+        Save a collection of identity mappings in a single transaction.
+
+        If a mapping exists, update the existing mapping; otherwise, create a new one.
+        Returns the saved identity mappings.
+        """
+        pass
+
     async def delete_mapping_by_id(self, mapping_id: str) -> IdentityMapping | None:
         """
         Delete the identity mapping identified by the mapping_id.

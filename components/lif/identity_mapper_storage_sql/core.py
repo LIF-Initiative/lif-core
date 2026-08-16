@@ -1,17 +1,11 @@
+import asyncio
 from typing import List
 
 from lif.datatypes import IdentityMapping
 from lif.exceptions.core import DataStoreException
 from lif.identity_mapper_storage.core import IdentityMapperStorage
 from lif.identity_mapper_storage_sql.model import IdentityMappingModel
-from lif.identity_mapper_storage_sql.crud import (
-    create,
-    read,
-    update,
-    delete,
-    read_by_lif_org_and_person,
-    read_by_lif_org_and_person_and_target_system_and_target_system_person_id_type,
-)
+from lif.identity_mapper_storage_sql.crud import create, read, read_by_lif_org_and_person, delete
 
 
 class IdentityMapperSqlStorage(IdentityMapperStorage):
@@ -29,15 +23,18 @@ class IdentityMapperSqlStorage(IdentityMapperStorage):
         Raises DataStoreException for database-related errors.
         """
         try:
-            with self.db_session_factory() as session:
-                with session.begin():
-                    mapping_model: IdentityMappingModel | None = read(session, mapping_id)
-                    if mapping_model:
-                        return IdentityMapping.model_validate(mapping_model)
-                    else:
-                        return None
+            return await asyncio.to_thread(self._get_mapping_by_id, mapping_id)
         except Exception as e:
             raise DataStoreException from e
+
+    def _get_mapping_by_id(self, mapping_id: str) -> IdentityMapping | None:
+        with self.db_session_factory() as session:
+            with session.begin():
+                mapping_model: IdentityMappingModel | None = read(session, mapping_id)
+                if mapping_model:
+                    return IdentityMapping.model_validate(mapping_model)
+                else:
+                    return None
 
     async def get_mappings(self, lif_organization_id: str, lif_organization_person_id: str) -> List[IdentityMapping]:
         """
@@ -45,46 +42,91 @@ class IdentityMapperSqlStorage(IdentityMapperStorage):
         Raises DataStoreException for database-related errors.
         """
         try:
-            with self.db_session_factory() as session:
-                with session.begin():
-                    mapping_models: List[IdentityMappingModel] = read_by_lif_org_and_person(
-                        session, lif_organization_id, lif_organization_person_id
-                    )
-                    return [IdentityMapping.model_validate(mapping_model) for mapping_model in mapping_models]
+            return await asyncio.to_thread(self._get_mappings, lif_organization_id, lif_organization_person_id)
         except Exception as e:
             raise DataStoreException from e
 
-    async def save_mapping(self, identity_mapping: IdentityMapping) -> IdentityMapping:
-        try:
-            with self.db_session_factory() as session:
-                with session.begin():
-                    mapping_id: str | None = identity_mapping.mapping_id
-                    org_id: str = identity_mapping.lif_organization_id
-                    person_id: str = identity_mapping.lif_organization_person_id
-                    target_system_id: str = identity_mapping.target_system_id
-                    target_system_person_id: str = identity_mapping.target_system_person_id
-                    target_system_person_id_type: str = identity_mapping.target_system_person_id_type
+    def _get_mappings(self, lif_organization_id: str, lif_organization_person_id: str) -> List[IdentityMapping]:
+        with self.db_session_factory() as session:
+            with session.begin():
+                mapping_models: List[IdentityMappingModel] = read_by_lif_org_and_person(
+                    session, lif_organization_id, lif_organization_person_id
+                )
+                return [IdentityMapping.model_validate(mapping_model) for mapping_model in mapping_models]
 
-                    existing: IdentityMappingModel | None = (
-                        read_by_lif_org_and_person_and_target_system_and_target_system_person_id_type(
-                            session, org_id, person_id, target_system_id, target_system_person_id_type
+    async def save_mapping(self, identity_mapping: IdentityMapping) -> IdentityMapping:
+        """
+        Save a single identity mapping.
+        Raises DataStoreException for database-related errors.
+        """
+        try:
+            saved: List[IdentityMapping] = await asyncio.to_thread(self._save_mappings, [identity_mapping])
+            return saved[0]
+        except Exception as e:
+            raise DataStoreException from e
+
+    async def save_mappings(self, identity_mappings: List[IdentityMapping]) -> List[IdentityMapping]:
+        """
+        Save a collection of identity mappings in a single transaction.
+
+        Existing mappings are updated, new ones are created, and unchanged ones are
+        returned as-is. The whole batch commits atomically: any failure rolls back
+        every change.
+        Raises DataStoreException for database-related errors.
+        """
+        try:
+            return await asyncio.to_thread(self._save_mappings, identity_mappings)
+        except Exception as e:
+            raise DataStoreException from e
+
+    def _save_mappings(self, identity_mappings: List[IdentityMapping]) -> List[IdentityMapping]:
+        existing_by_key: dict[tuple[str, str, str, str], IdentityMappingModel] = {}
+        existing_by_mapping_id: dict[str, IdentityMappingModel] = {}
+        with self.db_session_factory() as session:
+            with session.begin():
+                seen_pairs: set[tuple[str, str]] = set()
+                for mapping in identity_mappings:
+                    pair = (mapping.lif_organization_id, mapping.lif_organization_person_id)
+                    if pair in seen_pairs:
+                        continue
+                    seen_pairs.add(pair)
+                    for existing in read_by_lif_org_and_person(session, pair[0], pair[1]):
+                        key = (
+                            existing.lif_organization_id,
+                            existing.lif_organization_person_id,
+                            existing.target_system_id,
+                            existing.target_system_person_id_type,
                         )
-                        if mapping_id is None
-                        else read(session, mapping_id)
+                        existing_by_key[key] = existing
+                        existing_by_mapping_id[existing.mapping_id] = existing
+
+                saved_models: List[IdentityMappingModel] = []
+                for mapping in identity_mappings:
+                    key = (
+                        mapping.lif_organization_id,
+                        mapping.lif_organization_person_id,
+                        mapping.target_system_id,
+                        mapping.target_system_person_id_type,
+                    )
+                    existing: IdentityMappingModel | None = (
+                        existing_by_mapping_id.get(mapping.mapping_id)
+                        if mapping.mapping_id is not None
+                        else existing_by_key.get(key)
                     )
                     if existing is None:
                         mapping_model = IdentityMappingModel()
-                        mapping_model.from_identity_mapping(identity_mapping)
-                        created: IdentityMappingModel = create(session, mapping_model)
-                        return IdentityMapping.model_validate(created)
-                    elif existing.target_system_person_id == target_system_person_id:
-                        return IdentityMapping.model_validate(existing)  # nothing to update
+                        mapping_model.from_identity_mapping(mapping)
+                        create(session, mapping_model)
+                        existing_by_key[key] = mapping_model
+                        existing_by_mapping_id[mapping_model.mapping_id] = mapping_model
+                        saved_models.append(mapping_model)
+                    elif existing.target_system_person_id != mapping.target_system_person_id:
+                        existing.target_system_person_id = mapping.target_system_person_id
+                        session.flush()
+                        saved_models.append(existing)
                     else:
-                        existing.target_system_person_id = target_system_person_id
-                        updated: IdentityMappingModel = update(session, existing)
-                        return IdentityMapping.model_validate(updated)
-        except Exception as e:
-            raise DataStoreException from e
+                        saved_models.append(existing)
+                return [IdentityMapping.model_validate(model) for model in saved_models]
 
     async def delete_mapping_by_id(self, mapping_id: str) -> IdentityMapping | None:
         """
@@ -93,13 +135,15 @@ class IdentityMapperSqlStorage(IdentityMapperStorage):
         Raises DataStoreException for database-related errors.
         """
         try:
-            existing: IdentityMapping | None = await self.get_mapping_by_id(mapping_id)
-            if existing is None:
-                return None
-            else:
-                with self.db_session_factory() as session:
-                    with session.begin():
-                        delete(session, mapping_id)
-                return existing
+            return await asyncio.to_thread(self._delete_mapping_by_id, mapping_id)
         except Exception as e:
             raise DataStoreException from e
+
+    def _delete_mapping_by_id(self, mapping_id: str) -> IdentityMapping | None:
+        with self.db_session_factory() as session:
+            with session.begin():
+                existing: IdentityMappingModel | None = read(session, mapping_id)
+                if existing is None:
+                    return None
+                delete(session, existing)
+                return IdentityMapping.model_validate(existing)
