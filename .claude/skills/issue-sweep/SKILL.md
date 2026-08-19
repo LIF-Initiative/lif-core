@@ -60,10 +60,30 @@ Labels: ${(issue.labels || []).join(', ')}
 Investigate with:
 - gh issue view ${issue.number}  (read the body + comments + any linked PRs)
 - gh pr list --state merged --search "${issue.number}"  (a PR that closed/referenced it)
-- git log --oneline --grep "#${issue.number}"  and  git log -S "<headline symbol>"  (commit evidence)
+- git log main --oneline --grep "#${issue.number}"  and  git log main -S "<headline symbol>"  (commit evidence)
 - grep/Glob for the feature's headline keywords / named files/functions to confirm the code exists
 
-Return status=resolved ONLY with concrete evidence (a merged PR #, a commit SHA, or a named shipped file/symbol). status=open if it's clearly not done. status=uncertain if the evidence is ambiguous. Put the evidence (or the reason it's still open) in the evidence field.`
+**Commit evidence must come from \`main\`, and you must prove it. Two rules, both required:**
+
+1. **Scope the search to \`main\`** — note the explicit \`main\` in the commands above. A bare
+   \`git log --grep\` searches from HEAD, so running this sweep from a feature branch silently
+   includes that branch's unmerged commits. Never "widen" a search that came back empty by
+   adding \`--all\`; an empty result from \`main\` is the answer.
+2. **Ancestor-check every SHA you cite**, wherever you found it (a PR body, an issue comment,
+   a wider search):
+   \`\`\`bash
+   git merge-base --is-ancestor <sha> main && echo "on main" || echo "NOT on main"
+   \`\`\`
+   If it fails, the issue is **not** resolved by that commit — at most it is in progress on a
+   branch. Return status=open (or uncertain) and say so in the evidence field: "commit <sha>
+   exists on <branch>, not merged to main." Do not drop the finding — an in-flight branch is
+   useful information, it is just not a closure.
+
+Live example in this repo (2026-08-19): issue #722 is OPEN, and two commits titled
+\`Issue #722: …\` sit on \`upstream/issue-722---Translator-performance\`. From \`main\` the grep
+returns nothing; from that branch it returns a commit that looks exactly like a closure.
+
+Return status=resolved ONLY with concrete evidence (a merged PR #, a commit SHA **confirmed on \`main\`**, or a named shipped file/symbol). status=open if it's clearly not done. status=uncertain if the evidence is ambiguous. Put the evidence (or the reason it's still open) in the evidence field.`
 
 const results = await pipeline(
   issues,
@@ -79,7 +99,8 @@ const results = await pipeline(
     return agent(
       `Two judges disagreed on whether issue #${issue.number} ("${issue.title}") is resolved.\n` +
       votes.map((v, i) => `Judge ${i + 1}: ${v.status} — ${v.evidence} (${v.confidence})`).join('\n') +
-      `\nInvestigate the same way (gh issue view, merged PRs, git log, code presence) and return the final verdict.`,
+      `\nInvestigate the same way (gh issue view, merged PRs, git log, code presence) and return the final verdict. ` +
+      `Re-run \`git merge-base --is-ancestor <sha> main\` on any commit either judge cited — a commit on an unmerged branch is not evidence of resolution, and a judge citing one is the most common way this sweep returns a false 'resolved'.`,
       { label: `arbiter:#${issue.number}`, phase: 'Arbitrate', schema: VERDICT, model: 'sonnet' }
     ).then(verdict => ({ issue, verdict, votes }))
   }
@@ -107,5 +128,6 @@ Build a table from the Workflow result:
 ## Rules
 
 - **Evidence or it didn't resolve.** `resolved` requires a concrete merged PR #, commit SHA, or named shipped symbol — never a vibe.
+- **A cited commit must be an ancestor of `main`.** Scope commit searches to `main` explicitly (`git log main --grep …`), and run `git merge-base --is-ancestor <sha> main` on any SHA before believing it. A bare `git log --grep` searches from HEAD, so a sweep run from a feature branch — or an agent that "widens" an empty search with `--all` — reads work-in-progress as shipped. This is the single most likely way the sweep produces a false `resolved`; verified live against open issue #722 on 2026-08-19.
 - **Stale ≠ resolved.** An old `updatedAt` flags an issue *to check*, not to close.
 - **Never auto-close.** The close-list is a proposal; the user decides.
