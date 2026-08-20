@@ -1,3 +1,4 @@
+import asyncio
 import os
 import uuid
 from typing import Any, Dict, List
@@ -285,6 +286,17 @@ async def continue_conversation(question: Question, username: str = Depends(get_
     )
 
 
+async def _safe_summarize(agent, task, username):
+    """Run summarization in the background; swallows errors."""
+    try:
+        response = await agent.ask_agent(
+            task, "Summarize our conversation extracting metadata about the conversation and then save it"
+        )
+        logger.info(f"Summarization response for {username}: {response}")
+    except Exception:
+        logger.exception(f"Background summarization failed for {username}")
+
+
 @app.post("/logout", response_model=LogoutResponse)
 async def logout(username: str = Depends(get_current_user)) -> LogoutResponse:
     """
@@ -297,12 +309,7 @@ async def logout(username: str = Depends(get_current_user)) -> LogoutResponse:
     if state and state.get("lif_ai_agent"):
         agent = state["lif_ai_agent"]
         task = "save_interaction_summary"
-
-        # TODO(#986): move this hard-coded query prompt to env/config
-        response = await agent.ask_agent(
-            task, "Summarize our conversation extracting metadata about the conversation and then save it"
-        )
-        logger.info(f"Summarization response: {response}")
+        asyncio.create_task(_safe_summarize(agent, task, username))
 
     conversation_states.pop(username, None)
     refresh_tokens_store.pop(username, None)
