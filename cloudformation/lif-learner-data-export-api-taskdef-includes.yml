@@ -16,8 +16,13 @@ Environment:
       Fn::Sub: "http://translator-org1.lif.${EnvironmentName}.aws:8007"
   - Name: QUERY_PLANNER_CLIENT_TIMEOUT_SECONDS
     Value: "30"
+  # 90s, not 30 (#1157). A CLR/OB3 export evaluates 32 JSONata expressions over the
+  # composed learner record on a 0.5-1 vCPU task; measured demo runs land at ~30s, so a
+  # 30s budget put the call permanently on the edge of its own timeout and the demo
+  # synthetic monitor flapped. This accommodates the real cost; it does not make the
+  # translator faster.
   - Name: TRANSLATOR_CLIENT_TIMEOUT_SECONDS
-    Value: "30"
+    Value: "90"
   # API Key Auth configuration (public paths that don't require auth)
   - Name: LDE_AUTH__PUBLIC_PATHS
     Value: "/health,/health-check"
