@@ -16,13 +16,17 @@ Environment:
       Fn::Sub: "http://translator-org1.lif.${EnvironmentName}.aws:8007"
   - Name: QUERY_PLANNER_CLIENT_TIMEOUT_SECONDS
     Value: "30"
-  # 90s, not 30 (#1157). A CLR/OB3 export evaluates 32 JSONata expressions over the
-  # composed learner record on a 0.5-1 vCPU task; measured demo runs land at ~30s, so a
-  # 30s budget put the call permanently on the edge of its own timeout and the demo
-  # synthetic monitor flapped. This accommodates the real cost; it does not make the
-  # translator faster.
+  # 45s, not 30 (#1157). A CLR/OB3 export evaluates 32 JSONata expressions over the
+  # composed learner record; measured demo runs landed at ~30s, so a 30s budget put the
+  # call permanently on the edge of its own timeout and the monitor flapped.
+  #
+  # 45 and not something larger, deliberately: the synthetic monitor asserts the Result
+  # panel within 60s (e2e/tests/mdr-export-playground.spec.ts). The timeout hierarchy has
+  # to run outward-in — monitor (60s) > LDE (45s) > actual export — so a slow export
+  # surfaces as a clean 500 with a cause in the logs, instead of the monitor timing out
+  # first on a request that is still in flight. A value above 60 would invert that.
   - Name: TRANSLATOR_CLIENT_TIMEOUT_SECONDS
-    Value: "90"
+    Value: "45"
   # API Key Auth configuration (public paths that don't require auth)
   - Name: LDE_AUTH__PUBLIC_PATHS
     Value: "/health,/health-check"
