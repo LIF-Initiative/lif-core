@@ -218,18 +218,24 @@ top_matches = np.argsort(-similarities)[:top_k]
 
 **Challenge:** Long conversations exceed context limits and increase costs.
 
-**Solution:** LangMem-based summarization with configurable thresholds.
+**Solution:** LangMem-based summarization with configurable thresholds, followed by a
+token-budget trim of the summarized context before it reaches the LLM.
 
 ```python
 # Configuration
 LIF_ADVISOR_MESSAGES_TO_KEEP = 4       # Recent messages retained
 LIF_ADVISOR_MAX_CONVERSATION_SIZE = 2048  # Tokens before summarization
 LIF_ADVISOR_MAX_SUMMARY_SIZE = 1024    # Max summary tokens
+LIF_ADVISOR_TRIMMED_MESSAGES_SIZE = 384  # Max tokens for the LLM message list
 
-# Pre-model hook summarizes if conversation exceeds limits
+# Pre-model hook summarizes if conversation exceeds limits, then trims the
+# summarized context to fit the token budget sent to the LLM
 def pre_model_hook(state):
-    if count_tokens(state.messages) > MAX_CONVERSATION_SIZE:
+    if len(state.messages) > MESSAGES_TO_KEEP:
         state.messages = summarize_messages(state.messages)
+        # Keeps the summary + most recent messages within the budget.  Short
+        # conversations (at or below MESSAGES_TO_KEEP) go through untrimmed (#718).
+        state.messages = trim_messages(state.messages, max_tokens=TRIMMED_MESSAGES_SIZE)
     return state
 ```
 
@@ -323,6 +329,7 @@ numpy = "~2.3"
 | `LIF_ADVISOR_MESSAGES_TO_KEEP` | Messages before summarization | `4` |
 | `LIF_ADVISOR_MAX_CONVERSATION_SIZE` | Token limit for context | `2048` |
 | `LIF_ADVISOR_MAX_SUMMARY_SIZE` | Max summary tokens | `1024` |
+| `LIF_ADVISOR_TRIMMED_MESSAGES_SIZE` | Max tokens for the LLM message list | `384` |
 | `LIF_SEMANTIC_SEARCH_MODEL_NAME` | Embedding model | `all-MiniLM-L6-v2` |
 
 ## Consequences
