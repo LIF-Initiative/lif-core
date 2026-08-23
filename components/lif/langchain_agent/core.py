@@ -43,6 +43,11 @@ LLM_OUTPUT_TOKEN_COST = LLM_TOKEN_COST.get("output", 0)
 LLM_CACHED_TOKEN_COST = LLM_TOKEN_COST.get("cached", 0)
 AGENT_TASKS = os.environ.get("LIF_ADVISOR_AGENT_TASKS", None)
 MESSAGES_TO_KEEP = int(os.environ.get("LIF_ADVISOR_MESSAGES_TO_KEEP", "4"))
+# Post-summarization token budget for the message list sent to the LLM.  The summary
+# SystemMessage is always kept first by the trim, so this budget must exceed the real
+# summary length (langmem does not enforce MAX_SUMMARY_SIZE on the summarizer LLM) plus
+# headroom for retained messages - otherwise the trimmed list collapses to the summary
+# alone and recent turns are silently dropped.
 TRIMMED_MESSAGES_SIZE = int(os.environ.get("LIF_ADVISOR_TRIMMED_MESSAGES_SIZE", "384"))
 MAX_CONVERSATION_SIZE = int(os.environ.get("LIF_ADVISOR_MAX_CONVERSATION_SIZE", "384"))
 MAX_SUMMARY_SIZE = int(os.environ.get("LIF_ADVISOR_MAX_SUMMARY_SIZE", "128"))

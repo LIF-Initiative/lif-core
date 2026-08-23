@@ -196,6 +196,8 @@
         "pytype",
         "PYTHONPATH",
         "caplog",
+        "njsproj",
+        "ntvs",
         "queryables",
         "RDBMS",
         "regclass",

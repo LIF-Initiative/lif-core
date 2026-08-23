@@ -53,6 +53,10 @@ def make_pre_model_hook(
 
             # Step 2: Prepare new messages list with summarized messages
             messages = []
+            # NOTE: _safe_trim_messages runs only on this post-summarization path - a
+            # conversation at or below max_messages goes to the LLM untrimmed regardless
+            # of its token count.  Enforcing the budget before summarization is tracked
+            # as issue #718.
             if summarized_messages:
                 messages.extend(summarized_messages)
                 messages.extend(messages_to_retain)
