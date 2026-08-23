@@ -228,5 +228,3 @@ pnpm-lock.yaml
 
 #AI
 .agents/
-# AI agent planning scratch space (never version-controlled)
-.claude/plans/
