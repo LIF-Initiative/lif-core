@@ -204,9 +204,6 @@ cython_debug/
 # Ruff stuff:
 .ruff_cache/
 
-# Agent planning / report scratch space — never committed
-.claude/plans/
-
 # PyPI configuration file
 .pypirc
 

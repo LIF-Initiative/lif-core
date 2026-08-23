@@ -1,6 +1,11 @@
 import json
 
-from lif.composer.core import compose_with_fragment_list, compose_with_single_fragment
+from lif.composer.core import (
+    compose_json_with_fragment_list,
+    compose_json_with_single_fragment,
+    compose_with_fragment_list,
+    compose_with_single_fragment,
+)
 from lif.datatypes.core import LIFFragment, LIFRecord
 
 
@@ -209,3 +214,66 @@ def test_compose_for_fragment_list_with_one_multi_item_fragment_and_lif_record_w
     assert new_lif_record.person[0]["employmentLearningExperience"][1] == employment_learning_experience_1_dict
     assert new_lif_record.person[0]["employmentLearningExperience"][2] == employment_learning_experience_2_dict
     assert new_lif_record.person[0]["employmentLearningExperience"][3] == employment_learning_experience_3_dict
+
+
+def _reference_compose_via_sequential_single_fragments(lif_record, lif_fragments):
+    current_lif_record = lif_record
+    for lif_fragment in lif_fragments:
+        current_lif_record = LIFRecord(
+            **json.loads(compose_json_with_single_fragment(current_lif_record.model_dump_json(), lif_fragment))
+        )
+    return current_lif_record
+
+
+def _multi_path_fragments(count):
+    lif_fragments = []
+    for i in range(count):
+        lif_fragments.append(
+            LIFFragment(
+                fragment_path="person.employmentLearningExperience",
+                fragment=[{"sequence": str(i), "source": "employment"}],
+            )
+        )
+        lif_fragments.append(
+            LIFFragment(fragment_path="person.identifier", fragment=[{"sequence": str(i), "source": "identifier"}])
+        )
+    return lif_fragments
+
+
+def test_compose_with_fragment_list_matches_sequential_single_fragment_composition():
+    lif_record_json = {
+        "person": [
+            {
+                "foo": "foo",
+                "employmentLearningExperience": [employment_learning_experience_3_dict],
+                "identifier": [identifier_1_dict],
+            }
+        ]
+    }
+    lif_record = LIFRecord(**lif_record_json)
+    lif_fragments = _multi_path_fragments(20)
+    new_lif_record = compose_with_fragment_list(lif_record, lif_fragments)
+    reference_lif_record = _reference_compose_via_sequential_single_fragments(lif_record, lif_fragments)
+    assert len(new_lif_record.person[0]["employmentLearningExperience"]) == 21
+    assert len(new_lif_record.person[0]["identifier"]) == 21
+    assert new_lif_record.model_dump() == reference_lif_record.model_dump()
+
+
+def test_compose_json_with_fragment_list_matches_repeated_single_fragment_calls():
+    lif_record_json_str = json.dumps(
+        {
+            "person": [
+                {
+                    "foo": "foo",
+                    "employmentLearningExperience": [employment_learning_experience_3_dict],
+                    "identifier": [identifier_1_dict],
+                }
+            ]
+        }
+    )
+    lif_fragments = _multi_path_fragments(20)
+    expected = lif_record_json_str
+    for lif_fragment in lif_fragments:
+        expected = compose_json_with_single_fragment(expected, lif_fragment)
+    actual = compose_json_with_fragment_list(lif_record_json_str, lif_fragments)
+    assert actual == expected
