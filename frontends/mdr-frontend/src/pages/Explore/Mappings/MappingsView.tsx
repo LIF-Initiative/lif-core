@@ -2407,9 +2407,9 @@ const MappingsView: React.FC = () => {
                                 <button type="button" className="mappings-icon-btn" title="Export transformation group" onClick={onExportGroup}>
                                     <DownloadIcon />
                                 </button>
-                                {/* <button type="button" className="mappings-icon-btn" title="Import transformation group" onClick={() => setImportDialogOpen(true)}>
+                                <button type="button" className="mappings-icon-btn" title="Import transformation group" onClick={() => setImportDialogOpen(true)}>
                                     <UploadIcon />
-                                </button> */}
+                                </button>
                                 <button type="button" className="mappings-icon-btn" title="Edit details" onClick={onEditDetails}>
                                     <Pencil2Icon />
                                 </button>
@@ -2931,7 +2931,10 @@ const MappingsView: React.FC = () => {
                 onCancel={() => setImportDialogOpen(false)}
                 onSaved={async () => {
                     if (!group) return;
-                    try { fetchTransformations(); }
+                    try {
+                        // fetchTransformations(); // ALH: Not updating the forks, so:
+                        window.location.href = `/explore/data-mappings/${group.Id}`;
+                    }
                     finally { setImportDialogOpen(false); }
                 }}
             />

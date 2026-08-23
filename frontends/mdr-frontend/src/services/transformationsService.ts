@@ -1,5 +1,6 @@
 import api from './api';
 import { parseEntityIdPath } from '../utils/entityIdPath';
+import { errorToString } from '../utils/errorUtils';
 
 const apiBaseUrl = import.meta.env.VITE_API_URL;
 
@@ -406,6 +407,46 @@ export const exportTransformationsForGroup = async (id: number) => {
         const eDetails = (e as any)?.response?.data?.detail || (e as any).message || e;
         // console.error(`Error occurred while exporting transformation group: ${eDetails}`);
         throw new Error(`Error occurred while exporting transformation group: ${eDetails}`);
+    }
+};
+
+ /** Import Group Transformations and allow for missing paths and version handling
+  * @param id - The ID of the transformation group to import
+  * @param file - The JSON file containing the transformations to import
+  * @param allowMissing - How to handle bad data during import (default: false)
+  *     FALSE: any unresolved path aborts the whole import (no changes)
+  *     TRUE: skip just the bad transformations, import the rest
+  * @param version - Optional version number to import (default: null)
+  *     NULL: defaults to the next major version
+  *     VALUE, NEW: becomes that version (e.g. MAJOR.MINOR)
+  *     VALUE, EXISTING: throws 409 error as edit is not yet supported
+  */
+export const importTransformationsForGroup = async (
+    id: number,
+    file: File | null,
+    allowMissing: boolean = false,
+    ver: number | null = null
+) => {
+    if (!file) {
+        throw new Error('File is required when importing transformation group data.');
+    }
+
+    const fileText = await file.text();
+    let payload: unknown;
+    try {
+        payload = JSON.parse(fileText);
+    } catch (err) {
+        throw new Error('Invalid JSON file: failed to parse the imported transformation group.');
+    }
+
+    let url = `${apiBaseUrl}/transformation_groups/${id}/import?allowMissingPaths=${allowMissing}`;
+    // url += ver && ver > 0 ? `&version=${ver}` : ''; // TODO: backend doesn't support version param yet, but will in future
+
+    try {
+        const result = await api.post(url, payload, {headers: { 'Content-Type': 'application/json' }});
+        return result.data;
+    } catch (err) {
+        throw new Error(`The transformation group failed to import: ${errorToString(err)}`);
     }
 };
 
