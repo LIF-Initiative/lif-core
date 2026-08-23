@@ -47,11 +47,16 @@ def _redact_url(url: str) -> str:
         return "<unparseable-url>"
 
 
+def _echo_from_env() -> bool:
+    """True only when SQLALCHEMY_ECHO is set to ``true`` (case-insensitive); default off (#956)."""
+    return os.getenv("SQLALCHEMY_ECHO", "false").lower() == "true"
+
+
 DATABASE_URL = f"postgresql+asyncpg://{os.getenv('POSTGRESQL_USER')}:{os.getenv('POSTGRESQL_PASSWORD')}@{os.getenv('POSTGRESQL_HOST')}:{os.getenv('POSTGRESQL_PORT')}/{os.getenv('POSTGRESQL_DB')}"
 logger.info("DATABASE_URL : %s", _redact_url(DATABASE_URL))
 # SQLAlchemy echo emits every SQL statement + bound parameters at INFO
 # level (#956). Dev-only debugging aid — keep off in deployed envs.
-SQLALCHEMY_ECHO = os.getenv("SQLALCHEMY_ECHO", "false").lower() == "true"
+SQLALCHEMY_ECHO = _echo_from_env()
 # Create an async engine
 engine = create_async_engine(DATABASE_URL, echo=SQLALCHEMY_ECHO)
 

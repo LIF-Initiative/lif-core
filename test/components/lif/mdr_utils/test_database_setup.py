@@ -8,7 +8,6 @@ The `get_session` tests patch `async_session`, so no real connection is made."""
 
 # cspell:ignore mydb dbhost cret unparseable agen sw0rd
 
-import importlib
 import types
 from unittest.mock import AsyncMock, MagicMock
 
@@ -16,7 +15,7 @@ import pytest
 from fastapi import HTTPException
 
 from lif.mdr_utils import database_setup
-from lif.mdr_utils.database_setup import _redact_url, get_session
+from lif.mdr_utils.database_setup import _echo_from_env, _redact_url, get_session
 
 
 class TestRedactUrl:
@@ -61,26 +60,22 @@ class TestRedactUrl:
 
 class TestEchoToggle:
     """#956 — SQLAlchemy echo must default to off and only come on via an
-    explicit `SQLALCHEMY_ECHO=true`. The engine is built at module import,
-    so reload the module under each env condition and inspect `engine.echo`."""
-
-    @staticmethod
-    def _reload(monkeypatch, value=None, *, unset=False):
-        if unset:
-            monkeypatch.delenv("SQLALCHEMY_ECHO", raising=False)
-        else:
-            monkeypatch.setenv("SQLALCHEMY_ECHO", value)
-        return importlib.reload(database_setup).engine.echo
+    explicit `SQLALCHEMY_ECHO=true`. The parse logic lives in
+    `_echo_from_env` (consumed by engine construction at import), so test
+    the predicate directly instead of reloading the module."""
 
     def test_echo_off_by_default(self, monkeypatch):
-        assert self._reload(monkeypatch, unset=True) is False
+        monkeypatch.delenv("SQLALCHEMY_ECHO", raising=False)
+        assert _echo_from_env() is False
 
     @pytest.mark.parametrize("value", ["true", "TRUE", "True"])
     def test_echo_on_when_env_is_true(self, monkeypatch, value):
-        assert self._reload(monkeypatch, value) is True
+        monkeypatch.setenv("SQLALCHEMY_ECHO", value)
+        assert _echo_from_env() is True
 
     def test_echo_off_for_any_other_value(self, monkeypatch):
-        assert self._reload(monkeypatch, "1") is False
+        monkeypatch.setenv("SQLALCHEMY_ECHO", "1")
+        assert _echo_from_env() is False
 
 
 def _make_request(tenant_schema):
