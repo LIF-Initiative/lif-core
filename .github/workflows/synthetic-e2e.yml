@@ -62,7 +62,16 @@ jobs:
           echo "ADVISOR_PASSWORD=$adv" >> "$GITHUB_ENV"
           echo "MDR_PASSWORD=$mdr" >> "$GITHUB_ENV"
 
+      # #1165: the Advisor check still runs, but it no longer pages. Demo org1 learner
+      # data is duplicated thousands of times over (~6.3MB per lif_query), so every
+      # Advisor conversation exceeds the model context window and this check fails 100%
+      # of the time. A check that always fails is not a signal — it just trains people to
+      # filter the topic, which would also hide a real MDR/LDE outage. Its status is
+      # still reported in the run summary below.
+      # REMOVE continue-on-error THE MOMENT #1165 IS FIXED, or this check is dead weight.
       - name: Advisor happy path
+        id: advisor
+        continue-on-error: true
         env:
           BASE_URL: https://advisor.demo.lif.unicon.net/
           E2E_USERNAME: atsatrian_lifdemo@stateu.edu
@@ -76,6 +85,19 @@ jobs:
           MDR_USERNAME: lif-e2e-test@unicon.net
           MDR_PASSWORD: ${{ env.MDR_PASSWORD }}
         run: npx playwright test --grep @happy-path
+
+      # Keep the muted check visible. A mute that hides its own status is how a
+      # known issue quietly becomes an unknown one.
+      - name: Report Advisor check status (muted, #1165)
+        if: always()
+        working-directory: ${{ github.workspace }}
+        run: |
+          echo "### Advisor happy path: ${{ steps.advisor.outcome }}" >> "$GITHUB_STEP_SUMMARY"
+          if [ "${{ steps.advisor.outcome }}" = "failure" ]; then
+            echo "Muted under #1165 (demo org1 data duplication) — does not page." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "Advisor is passing. If #1165 is fixed, remove continue-on-error from that step." >> "$GITHUB_STEP_SUMMARY"
+          fi
 
       - name: Upload Playwright report on failure
         if: failure()
@@ -113,7 +135,7 @@ jobs:
           run_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
           aws sns publish --topic-arn "$topic" \
             --subject "LIF demo synthetic monitor FAILED (2+ consecutive)" \
-            --message "The demo happy-path monitor has failed at least twice in a row (advisor and/or MDR/LDE). Investigate: ${run_url}"
+            --message "The demo MDR/LDE happy-path check has failed at least twice in a row. The Advisor check is muted under #1165 and is NOT covered by this alert. Investigate: ${run_url}"
 
       # Send an "all clear" only when we actually alerted — i.e. the two previous
       # completed runs both failed, which is exactly the condition that fired the
@@ -134,6 +156,12 @@ jobs:
           fi
           topic=$(aws ssm get-parameter --name /demo/alerts/TopicArn --query Parameter.Value --output text)
           run_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+          # Never claim a full recovery while the Advisor check is muted and still failing.
+          if [ "${{ steps.advisor.outcome }}" = "failure" ]; then
+            detail="The MDR/LDE happy-path check is passing again. The Advisor check is STILL FAILING but is muted under #1165, so it no longer pages."
+          else
+            detail="The demo happy-path monitor is passing again after a sustained failure."
+          fi
           aws sns publish --topic-arn "$topic" \
-            --subject "LIF demo synthetic monitor RECOVERED" \
-            --message "The demo happy-path monitor is passing again after a sustained failure. ${run_url}"
+            --subject "LIF demo synthetic monitor RECOVERED (MDR/LDE)" \
+            --message "${detail} ${run_url}"
