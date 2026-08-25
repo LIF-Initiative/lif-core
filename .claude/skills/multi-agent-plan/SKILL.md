@@ -1,11 +1,11 @@
 ---
 name: multi-agent-plan
-description: Iteratively design a multi-layer LIF Core feature via a Workflow that runs sequential Opus Plan agents, each refining the prior version through one lens (FP/Polylith → backend correctness → frontend/holistic), then converges on a fresh-reviewer pass until no blocking findings remain (capped). Writes v1–vN plan files to .claude/plans/<feature>-vN.md.
+description: Iteratively design a multi-layer LIF Core feature via a Workflow that runs sequential Opus Plan agents, each refining the prior version through one lens (FP/Polylith → backend correctness → frontend/holistic), then converges on fresh-reviewer passes until two consecutive reviews find no blockers (capped, loop-until-dry). Writes v1–vN plan files to .claude/plans/<feature>-vN.md.
 argument-hint: <feature-name-kebab-case>
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Workflow, Agent
 ---
 
-Design a multi-layer feature by running a **Workflow** that pipelines sequential Opus `Plan` agents. Each agent reads the prior version and refines it through **one lens**. A fresh reviewer then checks the result against all three lens checklists, and the plan converges through targeted revisions until no blocking findings remain. Invoking this skill is explicit opt-in to the Workflow tool.
+Design a multi-layer feature by running a **Workflow** that pipelines sequential Opus `Plan` agents. Each agent reads the prior version and refines it through **one lens**. A fresh reviewer then checks the result against all three lens checklists, and the plan converges through targeted revisions until **two consecutive** reviewers find no blockers. Invoking this skill is explicit opt-in to the Workflow tool.
 
 **Why four lenses then a loop, and not just "loop until clean":** the value of v1→v4 is *lens diversity*, not repetition — re-running the same lens adds nothing. The loop is bolted onto the **tail**, where the question changes from "what else should this plan cover?" to "is it done?". That second question needs an independent answer, which is why the reviewer is never the agent that wrote the revision.
 
@@ -27,7 +27,7 @@ Skip when:
 
 ## Pre-flight (do this inline, before the Workflow)
 
-1. **Confirm scope with the user.** This writes 4–6 plan files (~2000–3000 lines total) and runs 5–8 Opus agents — four lens passes plus one or two review/revise rounds. Don't kick off if scope is fuzzy.
+1. **Confirm scope with the user.** This writes 4–7 plan files and runs 6–11 Opus agents — four lens passes, then up to four review passes and three revisions. The tail is capped but not cheap; don't kick off if scope is fuzzy.
 2. **Assemble the "read first" list** the agents will need. Always include [`CLAUDE.md`](../../../CLAUDE.md) and [`ARCHITECTURE.md`](../../../ARCHITECTURE.md). Then add the closest analogues:
    - The nearest existing proposal under [`docs/operations/proposals/`](../../../docs/operations/proposals/) — these are the canonical multi-layer plan format for LIF.
    - The relevant component `core.py`, the base/API handler it flows through, and the frontend file (`frontends/lif_advisor_app/` or `frontends/mdr-frontend/`).
@@ -52,9 +52,12 @@ export const meta = {
   ],
 }
 
-// Convergence cap. Two rounds is deliberate: the tail is for closing real gaps, not for
-// grinding a reviewer into silence. Hitting the cap is a REPORTED RESULT, never a silent stop.
-const MAX_ROUNDS = 2
+// Convergence control, ported from spec-forge (orchestration/process.md "Loop control").
+// CLEAN_PASSES_REQUIRED = 2 is the loop-until-dry rule: a SINGLE clean pass isn't enough,
+// because one reviewer returning nothing is one opinion, not evidence. MAX_REVIEWS caps the
+// whole tail; hitting it is a REPORTED RESULT ('cap-reached'), never a silent stop.
+const CLEAN_PASSES_REQUIRED = 2
+const MAX_REVIEWS = 4
 
 const F = args.feature          // kebab feature name
 const READ = args.readFirst     // string: bullet list of files to read first
@@ -151,7 +154,7 @@ const PLAN_FINDINGS = {
   required: ['findings'],
 }
 
-const reviewPrompt = (candidate, round) => `You are reviewing a LIF Core implementation plan you did NOT write. Judge whether it is implementation-ready. Do not rewrite it.
+const reviewPrompt = (candidate, round, streak) => `You are reviewing a LIF Core implementation plan you did NOT write. Judge whether it is implementation-ready. Do not rewrite it.
 
 **Feature:** ${F}
 **Description:** ${DESC}
@@ -159,7 +162,7 @@ const reviewPrompt = (candidate, round) => `You are reviewing a LIF Core impleme
 **Read first:**
 ${READ}
 
-**Plan under review (round ${round} of at most ${MAX_ROUNDS}):**
+**Plan under review (review pass ${round} of at most ${MAX_REVIEWS}${streak ? `; ${streak} prior pass(es) found no blockers — you are the independent second opinion, judge it yourself rather than deferring` : ''}):**
 ${candidate}
 
 Check it against all three lenses the plan was built through, plus scope:
@@ -188,37 +191,39 @@ ${JSON.stringify(blockers, null, 2)}
 Return ONLY the full revised plan body (markdown). Preserve everything the findings do not touch; this is a targeted revision, not a rewrite. Start with a "Round ${version - 4} — blockers closed" table listing each finding and how it was addressed. If you believe a finding is wrong, keep the plan as it is for that point and say so in the table with your reasoning — do not silently ignore it.`
 
 let candidate = v4
-let round = 0
+let reviews = 0
+let cleanStreak = 0     // consecutive reviews with zero blockers
 let accepted = 0        // revisions actually taken -- drives the version number
-let outcome = 'converged'
+let outcome = 'cap-reached'   // only a real exit condition overwrites this
 const rounds = []
 
-while (round < MAX_ROUNDS) {
-  round++
-  const version = 4 + round
+while (reviews < MAX_REVIEWS) {
+  reviews++
+  const version = 5 + accepted
 
-  const review = await agent(reviewPrompt(candidate, round), {
-    label: `review-r${round}`, phase: 'Review', schema: PLAN_FINDINGS, model: 'opus',
+  const review = await agent(reviewPrompt(candidate, reviews, cleanStreak), {
+    label: `review-${reviews}`, phase: 'Review', schema: PLAN_FINDINGS, model: 'opus',
   })
   const findings = (review && review.findings) || []
   const blockers = findings.filter(f => f.severity === 'blocker')
-  rounds.push({ round, total: findings.length, blockers: blockers.length, findings })
-
-  // Guard: a first-round clean sweep on a 250-400 line plan is more likely a weak
-  // reviewer than a perfect plan. Flag it rather than treating it as success.
-  if (round === 1 && findings.length === 0) {
-    outcome = 'clean-first-pass-verify'
-    log('Round 1 returned ZERO findings of any severity — suspicious for a plan this size. Flagging for human check.')
-    break
-  }
+  rounds.push({ review: reviews, total: findings.length, blockers: blockers.length, findings })
 
   if (blockers.length === 0) {
-    outcome = 'converged'
-    log(`Round ${round}: no blocking findings (${findings.length} non-blocking). Converged.`)
-    break
+    cleanStreak++
+    if (cleanStreak >= CLEAN_PASSES_REQUIRED) {
+      outcome = 'converged'
+      log(`Review ${reviews}: clean pass ${cleanStreak}/${CLEAN_PASSES_REQUIRED}. Converged.`)
+      break
+    }
+    // Loop-until-dry: an unchanged plan gets a SECOND independent reviewer rather than
+    // being declared done on one opinion. This is not a re-roll for a better answer --
+    // we are requiring two reviewers to agree, not shopping until one says yes.
+    log(`Review ${reviews}: clean pass ${cleanStreak}/${CLEAN_PASSES_REQUIRED} — re-reviewing the same plan with a fresh reviewer before declaring it done.`)
+    continue
   }
 
-  log(`Round ${round}: ${blockers.length} blocker(s) of ${findings.length} finding(s) — revising to v${version}.`)
+  cleanStreak = 0
+  log(`Review ${reviews}: ${blockers.length} blocker(s) of ${findings.length} finding(s) — revising to v${version}.`)
   const revised = await agent(revisePrompt(candidate, blockers, version), {
     label: `v${version}`, phase: 'Converge', agentType: 'Plan', model: 'opus',
   })
@@ -227,13 +232,19 @@ while (round < MAX_ROUNDS) {
   // stall, and looping again would just burn agents on the same disagreement.
   if (!revised || revised.trim() === candidate.trim()) {
     outcome = 'stalled'
-    log(`Round ${round}: revision produced no change while blockers remain — stalling out.`)
+    log(`Review ${reviews}: revision produced no change while blockers remain — stalling out.`)
     break
   }
   candidate = revised
   accepted++
+}
 
-  if (round === MAX_ROUNDS) outcome = 'cap-reached'
+// Guard: if NO reviewer ever found anything at all, the streak proves reviewer agreement,
+// not plan quality. On a 250-400 line plan that is more likely two weak passes than
+// perfection. Report it as unverified rather than banking it as success.
+if (outcome === 'converged' && !rounds.some(r => r.total > 0)) {
+  outcome = 'clean-but-unverified'
+  log('Every review returned zero findings of any severity — suspicious for a plan this size. Flagging for human check.')
 }
 
 return { v1, v2, v3, v4, finalPlan: candidate, finalVersion: 4 + accepted, outcome, rounds }
@@ -252,10 +263,10 @@ return { v1, v2, v3, v4, finalPlan: candidate, finalVersion: 4 + accepted, outco
 
    | `outcome` | What to tell the user |
    |---|---|
-   | `converged` | The reviewer found no blockers. State how many rounds and how many non-blocking findings remain — those are still worth reading before implementing. |
-   | `cap-reached` | **The plan still had blockers when the cap hit.** Say so plainly, list them, and treat the plan as not ready. This is the case the cap exists to make visible. |
+   | `converged` | **Two consecutive** reviewers found no blockers. State how many review passes it took and how many non-blocking findings remain — those are still worth reading before implementing. |
+   | `cap-reached` | **The plan never got two clean passes in a row before the cap.** Say so plainly, list the surviving blockers, and treat the plan as not ready. This is the case the cap exists to make visible — including the subtle one where a lone clean pass was followed by a reviewer that found more. |
    | `stalled` | A revision changed nothing while blockers stood. The reviewer and reviser genuinely disagree — surface both sides and let the user arbitrate. Don't re-run hoping for a different answer. |
-   | `clean-first-pass-verify` | Round 1 found nothing at all. Report it as *unverified*, not as success, and offer a second opinion pass before anyone implements. |
+   | `clean-but-unverified` | Two clean passes, but **no reviewer ever found anything at all**, at any severity. That measures reviewer agreement, not plan quality. Report it as unverified, not as success, and offer a human read before anyone implements. |
 
 3. **Then the substance:**
    - The v1 → final evolution, one line per version naming the key insight each lens added.
@@ -278,6 +289,7 @@ A loop that exits when a judge reports zero issues applies pressure in exactly o
 - **The reviewer is never the reviser.** Separate agents, and the reviewer is told it did not write the plan. If the same pass finds and fixes, "zero findings" is self-issued.
 - **The cap is reported, not silent.** `cap-reached` means the plan still had blockers — a *result*, and a more useful one than a forced zero. Silently stopping at N would state the opposite of the truth.
 - **A round must produce a delta.** Blockers standing plus an unchanged plan is a stall, not progress. Looping again just re-litigates the same disagreement with the same two agents.
-- **A first-round zero is suspicious, not excellent.** On a 250–400 line plan it more likely measures a weak reviewer. The skill flags it for a human rather than banking it.
+- **One clean pass is not convergence.** Exiting on the first zero-blocker review declares done on a single opinion. The loop requires **two consecutive** clean passes, re-reviewing the unchanged plan with a fresh reviewer — requiring two reviewers to agree, not shopping until one says yes. Ported from `spec-forge` (`orchestration/process.md`, "Loop control"), which has had this rule since June 2026: *"a single clean pass isn't enough."*
+- **An all-zero run is suspicious, not excellent.** If no reviewer ever found anything at any severity, two clean passes measure agreement between two weak reviewers. On a 250–400 line plan that's the likelier reading, so the skill reports `clean-but-unverified` rather than banking it.
 
 Prefer a deterministic gate to a judge wherever one exists — that's why `refactor` and `test` loop on `ruff`/`ty`/`pytest`/`poly check` instead of on an opinion. A plan has no such oracle, which is the only reason a judge loop is the right tool here.
