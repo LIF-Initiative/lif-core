@@ -317,7 +317,11 @@ async def save(lif_query_filter: LIFQueryFilter, lif_fragments: List[LIFFragment
             else LIFRecord(person=lif_person)  # ty: ignore[unknown-argument]
         )
 
-        updated_lif_record = compose_with_fragment_list(lif_record, lif_fragments)
+        # Issue #1165: replace, don't append. `lif_record` was just loaded from Mongo and
+        # already holds every fragment composed by previous refreshes, while `lif_fragments`
+        # is the current truth from the sources for the paths it covers. Appending here made
+        # each refresh re-add data the record already had.
+        updated_lif_record = compose_with_fragment_list(lif_record, lif_fragments, replace_existing=True)
         mongo_update_response = await collection.update_one(
             mongo_filter, {"$set": updated_lif_record.model_dump(by_alias=True)}, upsert=True
         )
