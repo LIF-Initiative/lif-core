@@ -20,24 +20,23 @@ def compose_json_with_single_fragment(lif_record_json: str, lif_fragment: LIFFra
 
 
 def compose_json_with_fragment_list(lif_record_json: str, lif_fragments: List[LIFFragment]) -> str:
-    result = lif_record_json
-    for item in lif_fragments:
-        result = compose_json_with_single_fragment(lif_record_json=result, lif_fragment=item)
-    return result
+    lif_record_dict = json.loads(lif_record_json)
+    for lif_fragment in lif_fragments:
+        add_fragment_to_lif_record(lif_record_dict, lif_fragment.fragment_path, lif_fragment.fragment)
+    return json.dumps(lif_record_dict)
 
 
 def compose_with_single_fragment(lif_record: LIFRecord, lif_fragment: LIFFragment) -> LIFRecord:
-    lif_record_json = lif_record.model_dump_json()
-    new_lif_record_json = compose_json_with_single_fragment(lif_record_json, lif_fragment)
-    new_lif_record_dict = json.loads(new_lif_record_json)
-    return LIFRecord(**new_lif_record_dict)
+    lif_record_dict = lif_record.model_dump()
+    add_fragment_to_lif_record(lif_record_dict, lif_fragment.fragment_path, lif_fragment.fragment)
+    return LIFRecord(**lif_record_dict)
 
 
 def compose_with_fragment_list(lif_record: LIFRecord, lif_fragments: List[LIFFragment]) -> LIFRecord:
-    lif_record_json = lif_record.model_dump_json()
-    new_lif_record_json = compose_json_with_fragment_list(lif_record_json=lif_record_json, lif_fragments=lif_fragments)
-    new_lif_record_dict = json.loads(new_lif_record_json)
-    return LIFRecord(**new_lif_record_dict)
+    lif_record_dict = lif_record.model_dump()
+    for lif_fragment in lif_fragments:
+        add_fragment_to_lif_record(lif_record_dict, lif_fragment.fragment_path, lif_fragment.fragment)
+    return LIFRecord(**lif_record_dict)
 
 
 def adjust_fragment_path_for_root_person_list(fragment_path: str) -> str:
@@ -75,7 +74,7 @@ def add_fragment_to_lif_record(lif_record_dict: dict, fragment_path: str, new_it
         else:
             logger.info(f"key in lif record has unexpected type: {key}")
             return
-    logger.info(f"Adding items to the list at {dot_map_path}")
+    logger.debug(f"Adding items to the list at {dot_map_path}")
     if isinstance(current_field, list):
         add_fragment_items_to_list(current_field, new_items)
     else:
