@@ -20,6 +20,7 @@
         "MVCC",
         "abstra",
         "adrs",
+        "pymongo",
         "elif",
         "threadpool",
         "oneline",
