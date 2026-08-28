@@ -1,17 +1,21 @@
 import asyncio
 import httpx
-from unittest.mock import patch, MagicMock
+import pytest
+from unittest.mock import patch, MagicMock, AsyncMock
 
 from lif.datatypes import (
     LIFFragment,
     LIFQuery,
     LIFQueryFilter,
     LIFQueryPersonFilter,
+    LIFQueryPlan,
     LIFQueryStatusResponse,
     LIFPersonIdentifier,
     LIFPersonIdentifiers,
+    LIFUpdate,
     OrchestratorJobQueryPlanPartResults,
 )
+from lif.datatypes.core import LIFUpdatePersonPayload
 from lif.query_planner_service import core
 from lif.query_planner_service.core import OrchestratorJobResults, add_job_to_store
 
@@ -299,3 +303,153 @@ def _create_mock_post_response(status_code, json_data, uri):
     else:
         mock_response.raise_for_status.return_value = None
     return mock_response
+
+
+def _make_query():
+    return LIFQuery(
+        filter=LIFQueryFilter(
+            root=LIFQueryPersonFilter(
+                person=LIFPersonIdentifiers(
+                    Identifier=LIFPersonIdentifier(identifier="12345", identifierType="School-assigned number")
+                )
+            )
+        ),
+        selected_fields=["person.name"],
+    )
+
+
+# -------------------------------------------------------------------------
+# LIFQueryPlannerConfig timeout
+# -------------------------------------------------------------------------
+def test_query_planner_config_default_query_timeout_is_300():
+    config = core.LIFQueryPlannerConfig(
+        lif_cache_url="https://api.example.com",
+        lif_orchestrator_url="https://api.example.com",
+        information_sources_config=[],
+    )
+    assert config.query_timeout_seconds == 300
+
+
+def test_query_planner_config_accepts_explicit_query_timeout():
+    config = core.LIFQueryPlannerConfig(
+        lif_cache_url="https://api.example.com",
+        lif_orchestrator_url="https://api.example.com",
+        information_sources_config=[],
+        query_timeout_seconds=120,
+    )
+    assert config.query_timeout_seconds == 120
+
+
+def test_query_planner_config_rejects_non_positive_query_timeout():
+    from pydantic import ValidationError
+
+    with pytest.raises(ValidationError):
+        core.LIFQueryPlannerConfig(
+            lif_cache_url="https://api.example.com",
+            lif_orchestrator_url="https://api.example.com",
+            information_sources_config=[],
+            query_timeout_seconds=0,
+        )
+
+
+# -------------------------------------------------------------------------
+# Internal HTTP clients use the configured query timeout
+# -------------------------------------------------------------------------
+@patch("httpx.AsyncClient")
+def test_query_lif_cache_uses_configured_timeout(mock_client_cls):
+    mock_client = AsyncMock()
+    mock_client.post.return_value = _create_mock_post_response(200, [], "https://api.example.com/query")
+    mock_client_cls.return_value.__aenter__ = AsyncMock(return_value=mock_client)
+    mock_client_cls.return_value.__aexit__ = AsyncMock(return_value=False)
+
+    asyncio.run(core.query_lif_cache("https://api.example.com/query", _make_query(), timeout=300))
+
+    mock_client_cls.assert_called_once_with(timeout=300)
+
+
+@patch("httpx.AsyncClient")
+def test_post_orchestrator_job_uses_configured_timeout(mock_client_cls):
+    mock_client = AsyncMock()
+    mock_client.post.return_value = _create_mock_post_response(200, {"run_id": "123"}, "https://api.example.com/jobs")
+    mock_client_cls.return_value.__aenter__ = AsyncMock(return_value=mock_client)
+    mock_client_cls.return_value.__aexit__ = AsyncMock(return_value=False)
+
+    request = core.OrchestratorJobRequest(lif_query_plan=LIFQueryPlan(root=[]), async_=True)
+    asyncio.run(core.post_orchestrator_job("https://api.example.com/jobs", request, timeout=300))
+
+    mock_client_cls.assert_called_once_with(timeout=300)
+
+
+@patch("httpx.AsyncClient")
+def test_run_update_uses_config_query_timeout(mock_client_cls):
+    config = core.LIFQueryPlannerConfig(
+        lif_cache_url="https://api.example.com/cache",
+        lif_orchestrator_url="https://api.example.com/orchestrator",
+        information_sources_config=[],
+        query_timeout_seconds=123,
+    )
+    service = core.LIFQueryPlannerService(config=config)
+
+    mock_client = AsyncMock()
+    mock_client.post.return_value = _create_mock_post_response(200, {}, "https://api.example.com/cache/update")
+    mock_client_cls.return_value.__aenter__ = AsyncMock(return_value=mock_client)
+    mock_client_cls.return_value.__aexit__ = AsyncMock(return_value=False)
+
+    update = LIFUpdate(
+        updatePerson=LIFUpdatePersonPayload(
+            filter={"Person": {"Identifier": {"identifier": "12345", "identifierType": "School-assigned number"}}},
+            input={"Person": {"Name": "Test"}},
+        )
+    )
+    asyncio.run(service.run_update(update))
+
+    mock_client_cls.assert_called_once_with(timeout=123)
+
+
+@patch("httpx.AsyncClient")
+def test_run_post_orchestration_results_uses_config_query_timeout(mock_client_cls):
+    config = core.LIFQueryPlannerConfig(
+        lif_cache_url="https://api.example.com/cache",
+        lif_orchestrator_url="https://api.example.com/orchestrator",
+        information_sources_config=[
+            {
+                "information_source_id": "source_1",
+                "information_source_organization": "Example Org 1",
+                "adapter_id": "lif-to-lif",
+                "ttl_hours": 24,
+                "lif_fragment_paths": ["Person.name"],
+            }
+        ],
+        query_timeout_seconds=123,
+    )
+    service = core.LIFQueryPlannerService(config=config)
+
+    mock_client = AsyncMock()
+    mock_client.post.return_value = _create_mock_post_response(200, [], "https://api.example.com/cache/save")
+    mock_client_cls.return_value.__aenter__ = AsyncMock(return_value=mock_client)
+    mock_client_cls.return_value.__aexit__ = AsyncMock(return_value=False)
+
+    add_job_to_store(core.LIFQueryPlannerJob(job_id="123", status="PENDING", query=_make_query()))
+    orchestration_results = OrchestratorJobResults(
+        run_id="123",
+        query_plan_part_results=[
+            OrchestratorJobQueryPlanPartResults(
+                information_source_id="source_1",
+                adapter_id="lif_to_lif",
+                data_timestamp="2023-10-01T12:00:00Z",
+                person_id=LIFPersonIdentifier(identifier="12345", identifierType="School-assigned number"),
+                fragments=[
+                    {
+                        "fragment_path": "person.name",
+                        "fragment": [
+                            {"identifier": [{"identifier": "12345", "identifierType": "School-assigned number"}]}
+                        ],
+                    }
+                ],
+                error=None,
+            )
+        ],
+    )
+    asyncio.run(service.run_post_orchestration_results(orchestration_results))
+
+    mock_client_cls.assert_called_once_with(timeout=123)

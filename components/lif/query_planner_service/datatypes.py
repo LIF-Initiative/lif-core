@@ -32,11 +32,16 @@ class LIFQueryPlannerConfig(BaseModel):
     Attributes:
         lif_cache_url (str): URL of the LIF Cache service.
         lif_orchestrator_url (str): URL of the LIF Orchestrator service.
-        information_sources_config_path (str): Path to the information sources configuration file.
+        information_sources_config (List[LIFQueryPlannerInfoSourceConfig]): Configuration for the information sources.
+        query_timeout_seconds (int): Maximum time in seconds to wait for a query to complete, including
+            orchestration. Used to bound the synchronous polling loop and the internal HTTP clients.
     """
 
     lif_cache_url: str = Field(..., description="URL of the LIF Cache service")
     lif_orchestrator_url: str = Field(..., description="URL of the LIF Orchestrator service")
     information_sources_config: List[LIFQueryPlannerInfoSourceConfig] = Field(
         ..., description="Configuration for the information sources"
+    )
+    query_timeout_seconds: int = Field(
+        300, gt=0, description="Maximum time in seconds to wait for a query to complete, including orchestration."
     )
