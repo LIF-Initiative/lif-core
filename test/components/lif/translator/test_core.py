@@ -618,7 +618,7 @@ async def test_cache_hit_skips_mdr_call(monkeypatch):
 
 
 @pytest.mark.asyncio
-async def test_transformation_refetched_each_call(monkeypatch):
+async def test_transformation_fetched_on_each_call(monkeypatch):
     """Transformations are NOT cached — each call must hit the MDR so edits to the
     transformation (e.g. an updated expression or an imported/hand-edited group) are
     reflected on the very next translation. See test_bases...::test_update_transform_only_expression."""
