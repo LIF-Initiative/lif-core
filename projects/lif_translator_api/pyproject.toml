@@ -9,6 +9,7 @@ version = "0.1.0"
 requires-python = ">=3.13,<3.14"
 
 dependencies = [
+    "cachetools~=6.1",
     "fastapi~=0.115",
     "httpx~=0.28",
     "jsonata-python~=0.6",

@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.13,<3.14"
 dependencies = [
     "boto3~=1.43",
+    "cachetools~=6.1",
     "dagster~=1.11",
     "dagster-graphql~=1.11",
     "deepdiff~=8.6",
@@ -54,6 +55,7 @@ dev = [
     "psycopg2-binary~=2.9",
     "pytest~=8.4",
     "pytest-asyncio~=1.1",
+    "pytest-benchmark~=5.1",
     "ruff~=0.11",
     "strawberry-graphql[debug-server]~=0.275.0",
     "testcontainers[postgres]~=4.13",
