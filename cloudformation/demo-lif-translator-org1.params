@@ -53,7 +53,7 @@
   },
   {
     "ParameterKey": "ImageUrl",
-    "ParameterValue": "381492161417.dkr.ecr.us-east-1.amazonaws.com/lif/dev/lif_translator_api:2026-06-24-19-49-25-328d493"
+    "ParameterValue": "381492161417.dkr.ecr.us-east-1.amazonaws.com/lif/dev/lif_translator_api:2026-08-22-23-20-10-b7b9351"
   },
   {
     "ParameterKey": "TaskDefIncludesFile",
@@ -69,11 +69,11 @@
   },
   {
     "ParameterKey": "ContainerMemory",
-    "ParameterValue": "1024"
+    "ParameterValue": "2048"
   },
   {
     "ParameterKey": "ContainerCpu",
-    "ParameterValue": "512"
+    "ParameterValue": "1024"
   },
   {
     "ParameterKey": "HealthCheckGracePeriod",

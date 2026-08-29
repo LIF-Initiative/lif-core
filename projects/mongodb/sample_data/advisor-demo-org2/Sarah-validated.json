@@ -3,9 +3,9 @@
     {
       "Name": [
         {
-          "informationSourceId": "Org2",
           "lastName": "Marin",
           "firstName": "Sarah",
+          "informationSourceId": "Org2",
           "informationSourceOrganization": "Community College",
           "identifier": "name-sarah-marin-org2-001"
         }
@@ -14,27 +14,34 @@
         {
           "Email": [
             {
-              "informationSourceId": "Org2",
               "emailAddress": [
                 "smarin_lifdemo@stateu.edu"
-              ]
+              ],
+              "informationSourceId": "Org2",
+              "informationSourceOrganization": "Community College",
+              "identifier": "email-sarah-marin-org2-001"
             }
           ],
           "Address": [
             {
-              "informationSourceId": "Org2",
               "addressCity": "Littleton",
               "countryCode": "US",
               "addressState": "Colorado",
-              "addressPostalCode": "80014"
+              "addressPostalCode": "80014",
+              "informationSourceId": "Org2",
+              "addressStreet": "5000 S Federal Blvd",
+              "informationSourceOrganization": "Community College",
+              "identifier": "address-sarah-marin-org2-001"
             }
           ],
           "Telephone": [
             {
-              "informationSourceId": "Org2",
               "telephoneNumber": [
                 "+16661234567"
-              ]
+              ],
+              "informationSourceId": "Org2",
+              "informationSourceOrganization": "Community College",
+              "identifier": "telephone-sarah-marin-org2-001"
             }
           ],
           "informationSourceId": "Org2",
@@ -58,14 +65,13 @@
       ],
       "EmploymentLearningExperience": [
         {
-          "informationSourceId": "Org2",
           "name": "Volunteer Nursing Assistant",
           "endDate": "2018-03",
           "RefPosition": {
             "informationSourceId": "Org2",
-            "name": "Volunteer Nursing Assistant Position",
             "informationSourceOrganization": "Community College",
-            "identifier": "position-org2-001"
+            "identifier": "position-org2-001",
+            "name": "Volunteer Nursing Assistant"
           },
           "startDate": "2017-02",
           "AssertedByRefOrganization": {
@@ -98,28 +104,28 @@
             "informationSourceOrganization": "Community College",
             "identifier": "organization-approving-authority-org2-001"
           },
+          "informationSourceId": "Org2",
           "RefCredentialAward": {
-            "identifier": "cred-employment-certificate-001",
-            "name": "Employment Certificate",
+            "id": "cred-employment-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Org2",
-            "informationSourceOrganization": "Org2"
+            "informationSourceOrganization": "Community College",
+            "identifier": "credentialaward-cred-employment-certificate-00-org2-001",
+            "name": "Employment Certificate"
           },
           "informationSourceOrganization": "Community College",
           "identifier": "employmentlearningexperience-volunteer-nursing-assistant-org2-001"
         },
         {
-          "informationSourceId": "Org2",
           "name": "Teaching Aide",
           "RefPosition": {
             "informationSourceId": "Org2",
-            "name": "Teaching Aide Position",
             "informationSourceOrganization": "Community College",
-            "identifier": "position-org2-001"
+            "identifier": "position-org2-001",
+            "name": "Teaching Aide"
           },
           "startDate": "2008-09",
-          "endDate": "2017-01",
           "AssertedByRefOrganization": {
             "identificationSystem": "stateu-employing-organization-id",
             "name": "Employing Organization",
@@ -150,13 +156,15 @@
             "informationSourceOrganization": "Community College",
             "identifier": "organization-approving-authority-org2-001"
           },
+          "informationSourceId": "Org2",
           "RefCredentialAward": {
-            "identifier": "cred-employment-certificate-001",
-            "name": "Employment Certificate",
+            "id": "cred-employment-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Sarah Marin",
             "informationSourceId": "Org2",
-            "informationSourceOrganization": "Org2"
+            "informationSourceOrganization": "Community College",
+            "identifier": "credentialaward-cred-employment-certificate-00-org2-001",
+            "name": "Employment Certificate"
           },
           "informationSourceOrganization": "Community College",
           "identifier": "employmentlearningexperience-teaching-aide-org2-002"
@@ -236,13 +244,14 @@
           "awardIssueDate": "2024-12-15T10:00:00Z",
           "credentialAwardee": "Sarah Marin",
           "informationSourceId": "Org2",
-          "informationSourceOrganization": "Org2",
+          "informationSourceOrganization": "Community College",
           "InstanceOfRefCredential": {
             "informationSourceId": "Org2",
-            "informationSourceOrganization": "Org2",
+            "informationSourceOrganization": "Community College",
             "identifier": "cred-employment-certificate-001",
             "name": "Employment Certificate"
-          }
+          },
+          "name": "Employment Certificate"
         }
       ],
       "CourseLearningExperience": [
@@ -295,7 +304,8 @@
             "name": "Course Completion Certificate",
             "awardIssueDate": "2020-05-20T10:00:00Z",
             "credentialAwardee": "Sarah Marin"
-          }
+          },
+          "name": "Introduction to Business"
         },
         {
           "informationSourceId": "Org2",
@@ -346,7 +356,63 @@
             "name": "Course Completion Certificate",
             "awardIssueDate": "2020-12-20T10:00:00Z",
             "credentialAwardee": "Sarah Marin"
-          }
+          },
+          "name": "Business Communications"
+        }
+      ],
+      "Birth": [
+        {
+          "informationSourceId": "Org2",
+          "informationSourceOrganization": "Community College",
+          "identifier": "birth-org2-001",
+          "birthDate": "1986-09-30",
+          "cityOfBirth": "Denver",
+          "stateOfBirth": "Colorado"
+        }
+      ],
+      "SexAndGender": [
+        {
+          "informationSourceId": "Org2",
+          "informationSourceOrganization": "Community College",
+          "identifier": "sexandgender-org2-001",
+          "sex": "Female",
+          "gender": "Female",
+          "pronouns": "she/her"
+        }
+      ],
+      "Residency": [
+        {
+          "informationSourceId": "Org2",
+          "informationSourceOrganization": "Community College",
+          "identifier": "residency-org2-001",
+          "localType": "In-State",
+          "countyFIPSCode": "08005",
+          "dateEffective": "2010-01-01",
+          "doNotPublishIndicator": "false"
+        }
+      ],
+      "Language": [
+        {
+          "informationSourceId": "Org2",
+          "informationSourceOrganization": "Community College",
+          "identifier": "language-english-org2-001",
+          "name": "English",
+          "iSO639_2LangCode": "eng",
+          "iSO639_3LangCode": "eng",
+          "languageType": "Primary"
+        }
+      ],
+      "Demographics": [
+        {
+          "informationSourceId": "Org2",
+          "informationSourceOrganization": "Community College",
+          "identifier": "demographics-org2-001",
+          "highestLevelEducation": "SomeCollegeButNoDegree",
+          "usCitizenship": "true",
+          "economicDisadvantage": "false",
+          "homeless": "false",
+          "militaryActiveStatus": "false",
+          "militaryVeteranStatus": "false"
         }
       ]
     }
