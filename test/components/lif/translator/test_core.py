@@ -685,3 +685,53 @@ async def test_cache_re_fetches_after_ttl(monkeypatch):
     # Restore the original cache so later tests see a sane TTL
     core._schema_cache = original_cache
     core._schema_cache.clear()
+
+
+# ---------------------------------------------------------------------------
+# Tests for validate_intermediately flag
+# ---------------------------------------------------------------------------
+
+
+def test_validate_intermediately_true_is_default():
+    config = core.BaseTranslatorConfig(source_schema={"type": "object"}, target_schema={"type": "object"}, mappings=[])
+    assert config.validate_intermediately is True
+
+
+def test_validate_intermediately_false_skips_per_fragment_validation():
+    source_schema = {"type": "object"}
+    target_schema = {
+        "type": "object",
+        "properties": {"x": {"type": "integer"}, "y": {"type": "string"}},
+        "additionalProperties": False,
+    }
+    mappings = [
+        '{ "x": 1 }',
+        '{ "y": 123 }',  # invalid: y should be string
+    ]
+    config = core.BaseTranslatorConfig(
+        source_schema=source_schema, target_schema=target_schema, mappings=mappings, validate_intermediately=False
+    )
+    translator = core.BaseTranslator(config)
+    # Without intermediate validation, the invalid fragment merges in.
+    # Final validation catches the type mismatch.
+    with pytest.raises(ValueError, match="does not conform"):
+        translator.run({})
+
+
+def test_validate_intermediately_true_rollback_on_violation():
+    source_schema = {"type": "object"}
+    target_schema = {
+        "type": "object",
+        "properties": {"x": {"type": "integer"}, "y": {"type": "string"}},
+        "additionalProperties": False,
+    }
+    mappings = [
+        '{ "x": 1 }',
+        '{ "y": 123 }',  # invalid type for y -> should be rolled back
+    ]
+    config = core.BaseTranslatorConfig(
+        source_schema=source_schema, target_schema=target_schema, mappings=mappings, validate_intermediately=True
+    )
+    translator = core.BaseTranslator(config)
+    result = translator.run({})
+    assert result == {"x": 1}  # y was rolled back

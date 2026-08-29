@@ -23,6 +23,9 @@ class BaseTranslatorConfig(BaseModel):
     source_schema: dict = Field(..., description="The JSON schema of the source data")
     target_schema: dict = Field(..., description="The JSON schema of the target data")
     mappings: List[str] = Field(..., description="List of transformation expressions")
+    validate_intermediately: bool = Field(
+        default=True, description="Validate against target schema after each mapping merge"
+    )
 
 
 class BaseTranslator:
@@ -73,20 +76,26 @@ class BaseTranslator:
 
             # Tentative merge -> validate -> commit or rollback
             t1 = perf_counter()
-            tentative = deepcopy(result)
-            deep_merge(tentative, fragment)
+            if self.config.validate_intermediately:
+                tentative = deepcopy(result)
+                deep_merge(tentative, fragment)
 
-            try:
-                # If you want to be strict about *partial* validity, validate after each merge:
-                self._validate_against_schema(data=tentative, schema=self.target_schema)
-                result = tentative
+                try:
+                    # If you want to be strict about *partial* validity, validate after each merge:
+                    self._validate_against_schema(data=tentative, schema=self.target_schema)
+                    result = tentative
+                    applied += 1
+                except ValueError as e:
+                    discarded += 1
+                    logger.warning("Discarding fragment due to target schema violation: %s", e)
+                    # do not apply this fragment
+                finally:
+                    merge_seconds += perf_counter() - t1
+            else:
+                # Skip intermediate validation and the rollback copy it requires;
+                # the final validation below is the sole gate.
+                deep_merge(result, fragment)
                 applied += 1
-            except ValueError as e:
-                discarded += 1
-                logger.warning("Discarding fragment due to target schema violation: %s", e)
-                # do not apply this fragment
-                continue
-            finally:
                 merge_seconds += perf_counter() - t1
 
         # final validation (should already be valid if the per-fragment check is kept)
