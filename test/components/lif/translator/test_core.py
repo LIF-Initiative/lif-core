@@ -1,4 +1,7 @@
+import time
+
 from lif.translator import core
+import cachetools
 import pytest
 
 
@@ -576,3 +579,109 @@ async def test_translator_run_with_openbadgecredential(monkeypatch):
 
     result = await translator.run(input_data)
     assert result == expected
+
+
+# ---------------------------------------------------------------------------
+# Tests for MDR response caching
+# ---------------------------------------------------------------------------
+
+
+@pytest.fixture(autouse=True)
+def _clear_translator_caches():
+    """Reset module-level caches between tests to avoid cross-test contamination."""
+    core._schema_cache.clear()
+    core._transformation_cache.clear()
+    yield
+    core._schema_cache.clear()
+    core._transformation_cache.clear()
+
+
+@pytest.mark.asyncio
+async def test_cache_hit_skips_mdr_call(monkeypatch):
+    call_count = 0
+
+    async def fake_get_schema(
+        schema_id: str, include_attr_md: bool, include_entity_md: bool, tenant_schema: str | None = None
+    ):
+        nonlocal call_count
+        call_count += 1
+        return {"id": schema_id}
+
+    monkeypatch.setattr(core, "get_data_model_schema", fake_get_schema, raising=True)
+
+    t = core.Translator(core.TranslatorConfig(source_schema_id="S", target_schema_id="T"))
+
+    await t._fetch_schema("S")
+    await t._fetch_schema("S")
+
+    assert call_count == 1
+
+
+@pytest.mark.asyncio
+async def test_cache_hit_skips_transformation_call(monkeypatch):
+    call_count = 0
+
+    async def fake_get_xform(source_schema_id: str, target_schema_id: str, tenant_schema: str | None = None):
+        nonlocal call_count
+        call_count += 1
+        return {"total": 1, "data": [{"TransformationExpression": "{}"}]}
+
+    monkeypatch.setattr(core, "get_data_model_transformation", fake_get_xform, raising=True)
+
+    t = core.Translator(core.TranslatorConfig(source_schema_id="A", target_schema_id="B"))
+
+    await t._fetch_transformation("A", "B")
+    await t._fetch_transformation("A", "B")
+
+    assert call_count == 1
+
+
+@pytest.mark.asyncio
+async def test_cache_separates_tenant_schemas(monkeypatch):
+    call_count = 0
+
+    async def fake_get_schema(
+        schema_id: str, include_attr_md: bool, include_entity_md: bool, tenant_schema: str | None = None
+    ):
+        nonlocal call_count
+        call_count += 1
+        return {"id": schema_id, "tenant": tenant_schema}
+
+    monkeypatch.setattr(core, "get_data_model_schema", fake_get_schema, raising=True)
+
+    t = core.Translator(core.TranslatorConfig(source_schema_id="S", target_schema_id="T"))
+
+    result_a = await t._fetch_schema("S", tenant_schema="org1")
+    result_b = await t._fetch_schema("S", tenant_schema="org2")
+
+    assert call_count == 2
+    assert result_a["tenant"] == "org1"
+    assert result_b["tenant"] == "org2"
+
+
+@pytest.mark.asyncio
+async def test_cache_re_fetches_after_ttl(monkeypatch):
+    """With a 1-second TTL, a second call after sleep should re-fetch."""
+    original_cache = core._schema_cache
+    core._schema_cache.clear()
+
+    async def fake_get_schema(
+        schema_id: str, include_attr_md: bool, include_entity_md: bool, tenant_schema: str | None = None
+    ):
+        return {"id": schema_id, "ts": time.time()}
+
+    monkeypatch.setattr(core, "get_data_model_schema", fake_get_schema, raising=True)
+
+    # Replace cache with a short-TTL version for this test
+    core._schema_cache = cachetools.TTLCache(maxsize=128, ttl=1)
+    t = core.Translator(core.TranslatorConfig(source_schema_id="S", target_schema_id="T"))
+
+    first = await t._fetch_schema("S")
+    time.sleep(1.5)
+    second = await t._fetch_schema("S")
+
+    assert first["ts"] != second["ts"]
+
+    # Restore the original cache so later tests see a sane TTL
+    core._schema_cache = original_cache
+    core._schema_cache.clear()

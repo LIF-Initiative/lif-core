@@ -1,8 +1,11 @@
+import os
 from copy import deepcopy
 from time import perf_counter
 from typing import List
+
+from cachetools import TTLCache
 from jsonata import jsonata
-from jsonschema import validate, ValidationError
+from jsonschema import ValidationError, validate
 from pydantic import BaseModel, Field
 
 from lif.logging.core import get_logger
@@ -10,6 +13,10 @@ from lif.mdr_client.core import get_data_model_schema, get_data_model_transforma
 from lif.translator.utils import convert_transformation_to_mappings, deep_merge
 
 logger = get_logger(__name__)
+
+_CACHE_TTL = int(os.environ.get("TRANSLATOR_CACHE_TTL_SECONDS", 300))
+_schema_cache: TTLCache = TTLCache(maxsize=128, ttl=_CACHE_TTL)
+_transformation_cache: TTLCache = TTLCache(maxsize=128, ttl=_CACHE_TTL)
 
 
 class BaseTranslatorConfig(BaseModel):
@@ -138,11 +145,25 @@ class Translator:
         return result
 
     async def _fetch_schema(self, schema_id: str, tenant_schema: str | None = None) -> dict:
-        return await get_data_model_schema(
+        cache_key = f"{schema_id}:{tenant_schema or ''}"
+        cached = _schema_cache.get(cache_key)
+        if cached is not None:
+            logger.info("Cache hit for schema %s", schema_id)
+            return cached
+        result = await get_data_model_schema(
             schema_id, include_attr_md=True, include_entity_md=False, tenant_schema=tenant_schema
         )
+        _schema_cache[cache_key] = result
+        return result
 
     async def _fetch_transformation(
         self, source_schema_id: str, target_schema_id: str, tenant_schema: str | None = None
     ) -> dict:
-        return await get_data_model_transformation(source_schema_id, target_schema_id, tenant_schema=tenant_schema)
+        cache_key = f"{source_schema_id}:{target_schema_id}:{tenant_schema or ''}"
+        cached = _transformation_cache.get(cache_key)
+        if cached is not None:
+            logger.info("Cache hit for transformation %s -> %s", source_schema_id, target_schema_id)
+            return cached
+        result = await get_data_model_transformation(source_schema_id, target_schema_id, tenant_schema=tenant_schema)
+        _transformation_cache[cache_key] = result
+        return result
