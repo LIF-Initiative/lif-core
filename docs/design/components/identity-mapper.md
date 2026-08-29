@@ -214,7 +214,10 @@ standalone mariadb container with a local uvicorn server.
    single commit; any failure rolls everything back and raises a `DataStoreException`.
 2. Every storage method offloads DB work off the event loop via `asyncio.to_thread(...)`.
 3. `delete_mapping` collapses 4 SELECTs + 1 DELETE across 3 sessions into 1 SELECT + 1 DELETE in 1
-   session; the deleted mapping is validated from the delete call's return value.
+   session. Ownership is checked **inside that transaction**, between the SELECT and the DELETE, and
+   the storage call reports `DELETED` / `NOT_FOUND` / `NOT_OWNED` so the service keeps its 404-vs-400
+   responses. Validating ownership from the return value *after* the transaction committed was the
+   defect in #1150: the delete was already durable, so the error raised afterwards could not undo it.
 4. Dropped `session.refresh()` (one fewer SELECT per create/update) and the 5 unused indexes.
 5. Engine now configurable via `IDENTITY_MAPPER_DB_POOL_SIZE` (default 10) and
    `IDENTITY_MAPPER_DB_POOL_PRE_PING` (default false).

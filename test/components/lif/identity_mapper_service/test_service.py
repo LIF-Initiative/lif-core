@@ -4,7 +4,7 @@ import pytest
 from lif.datatypes import IdentityMapping
 from lif.exceptions.core import DataNotFoundException, DataStoreException
 from lif.identity_mapper_service.core import IdentityMapperService
-from lif.identity_mapper_storage.core import IdentityMapperStorage
+from lif.identity_mapper_storage.core import DeleteOutcome, IdentityMapperStorage
 
 
 def _mapping(mapping_id=None, org="org-1", person="person-1", target_system="ext-org-1", person_id="ext-person-1"):
@@ -115,20 +115,21 @@ async def test_save_mappings_with_person_mismatch():
 
 @pytest.mark.asyncio
 async def test_delete_mapping_success():
-    mapping = _mapping(mapping_id="mapping-id-1")
     storage: IdentityMapperStorage = Mock()
-    storage.delete_mapping_by_id = AsyncMock(return_value=mapping)
+    storage.delete_mapping_for_owner = AsyncMock(return_value=DeleteOutcome.DELETED)
     service = IdentityMapperService(storage=storage)
     result = await service.delete_mapping("org-1", "person-1", "mapping-id-1")
     assert result is None
-    storage.delete_mapping_by_id.assert_called_once_with("mapping-id-1")
+    # The caller's org and person must reach storage, which is where ownership is
+    # enforced -- the service no longer checks it afterwards (#1150).
+    storage.delete_mapping_for_owner.assert_called_once_with("mapping-id-1", "org-1", "person-1")
     storage.get_mapping_by_id.assert_not_called()
 
 
 @pytest.mark.asyncio
 async def test_delete_mapping_when_mapping_not_found():
     storage: IdentityMapperStorage = Mock()
-    storage.delete_mapping_by_id = AsyncMock(return_value=None)
+    storage.delete_mapping_for_owner = AsyncMock(return_value=DeleteOutcome.NOT_FOUND)
     service = IdentityMapperService(storage=storage)
     with pytest.raises(DataNotFoundException) as err:
         await service.delete_mapping("org-1", "person-1", "non-existent-id")
@@ -136,18 +137,10 @@ async def test_delete_mapping_when_mapping_not_found():
 
 
 @pytest.mark.asyncio
-async def test_delete_mapping_with_org_mismatch():
+async def test_delete_mapping_not_owned_raises_value_error():
+    """A mapping owned by someone else is a 400, distinct from the 404 above."""
     storage: IdentityMapperStorage = Mock()
-    storage.delete_mapping_by_id = AsyncMock(return_value=_mapping(mapping_id="mapping-id-1", org="org-2"))
-    service = IdentityMapperService(storage=storage)
-    with pytest.raises(ValueError):
-        await service.delete_mapping("org-1", "person-1", "mapping-id-1")
-
-
-@pytest.mark.asyncio
-async def test_delete_mapping_with_person_mismatch():
-    storage: IdentityMapperStorage = Mock()
-    storage.delete_mapping_by_id = AsyncMock(return_value=_mapping(mapping_id="mapping-id-1", person="person-2"))
+    storage.delete_mapping_for_owner = AsyncMock(return_value=DeleteOutcome.NOT_OWNED)
     service = IdentityMapperService(storage=storage)
     with pytest.raises(ValueError):
         await service.delete_mapping("org-1", "person-1", "mapping-id-1")
@@ -156,9 +149,9 @@ async def test_delete_mapping_with_person_mismatch():
 @pytest.mark.asyncio
 async def test_delete_mapping_when_storage_raises_exception():
     storage: IdentityMapperStorage = Mock()
-    storage.delete_mapping_by_id = AsyncMock(side_effect=DataStoreException("Database error."))
+    storage.delete_mapping_for_owner = AsyncMock(side_effect=DataStoreException("Database error."))
     service = IdentityMapperService(storage=storage)
     with pytest.raises(DataStoreException) as err:
         await service.delete_mapping("org-1", "person-1", "mapping-id-1")
     assert str(err.value) == "Database error."
-    storage.delete_mapping_by_id.assert_called_once_with("mapping-id-1")
+    storage.delete_mapping_for_owner.assert_called_once_with("mapping-id-1", "org-1", "person-1")

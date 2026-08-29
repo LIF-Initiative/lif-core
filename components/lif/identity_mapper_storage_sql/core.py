@@ -3,7 +3,7 @@ from typing import List
 
 from lif.datatypes import IdentityMapping
 from lif.exceptions.core import DataStoreException
-from lif.identity_mapper_storage.core import IdentityMapperStorage
+from lif.identity_mapper_storage.core import DeleteOutcome, IdentityMapperStorage
 from lif.identity_mapper_storage_sql.model import IdentityMappingModel
 from lif.identity_mapper_storage_sql.crud import create, read, read_by_lif_org_and_person, delete
 
@@ -128,22 +128,37 @@ class IdentityMapperSqlStorage(IdentityMapperStorage):
                         saved_models.append(existing)
                 return [IdentityMapping.model_validate(model) for model in saved_models]
 
-    async def delete_mapping_by_id(self, mapping_id: str) -> IdentityMapping | None:
+    async def delete_mapping_for_owner(
+        self, mapping_id: str, lif_organization_id: str, lif_organization_person_id: str
+    ) -> DeleteOutcome:
         """
-        Delete the identity mapping identified by the mapping_id.
-        Returns the deleted IdentityMapping, or None if it did not exist.
+        Delete the identity mapping identified by mapping_id, only if it belongs to the
+        given LIF organization and person.
         Raises DataStoreException for database-related errors.
         """
         try:
-            return await asyncio.to_thread(self._delete_mapping_by_id, mapping_id)
+            return await asyncio.to_thread(
+                self._delete_mapping_for_owner, mapping_id, lif_organization_id, lif_organization_person_id
+            )
         except Exception as e:
             raise DataStoreException from e
 
-    def _delete_mapping_by_id(self, mapping_id: str) -> IdentityMapping | None:
+    def _delete_mapping_for_owner(
+        self, mapping_id: str, lif_organization_id: str, lif_organization_person_id: str
+    ) -> DeleteOutcome:
+        # Read, authorize, and delete inside ONE transaction. `session.begin()` commits
+        # when this block exits, so any ownership check placed after the block runs
+        # against an already-durable delete and cannot undo it (#1150). Returning early
+        # on a mismatch leaves the transaction with no pending delete to commit.
         with self.db_session_factory() as session:
             with session.begin():
                 existing: IdentityMappingModel | None = read(session, mapping_id)
                 if existing is None:
-                    return None
+                    return DeleteOutcome.NOT_FOUND
+                if (
+                    existing.lif_organization_id != lif_organization_id
+                    or existing.lif_organization_person_id != lif_organization_person_id
+                ):
+                    return DeleteOutcome.NOT_OWNED
                 delete(session, existing)
-                return IdentityMapping.model_validate(existing)
+                return DeleteOutcome.DELETED

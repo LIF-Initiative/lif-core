@@ -4,6 +4,7 @@ import pytest
 
 from lif.datatypes import IdentityMapping
 from lif.exceptions.core import DataStoreException
+from lif.identity_mapper_storage.core import DeleteOutcome
 from lif.identity_mapper_storage_sql.core import IdentityMapperSqlStorage
 
 
@@ -108,14 +109,45 @@ async def test_get_mappings_returns_empty_list_when_none(storage: IdentityMapper
 
 
 @pytest.mark.asyncio
-async def test_delete_mapping_by_id_deletes_and_returns_mapping(storage: IdentityMapperSqlStorage):
+async def test_delete_mapping_for_owner_deletes_own_mapping(storage: IdentityMapperSqlStorage):
     saved = await storage.save_mappings([_mapping(target_system="sys-1", person_id="ext-1")])
-    deleted = await storage.delete_mapping_by_id(saved[0].mapping_id)
-    assert deleted is not None
-    assert deleted.mapping_id == saved[0].mapping_id
+    outcome = await storage.delete_mapping_for_owner(saved[0].mapping_id, "org-1", "person-1")
+    assert outcome is DeleteOutcome.DELETED
     assert await storage.get_mappings("org-1", "person-1") == []
 
 
 @pytest.mark.asyncio
-async def test_delete_mapping_by_id_returns_none_for_missing(storage: IdentityMapperSqlStorage):
-    assert await storage.delete_mapping_by_id("does-not-exist") is None
+async def test_delete_mapping_for_owner_returns_not_found_for_missing(storage: IdentityMapperSqlStorage):
+    assert await storage.delete_mapping_for_owner("does-not-exist", "org-1", "person-1") is DeleteOutcome.NOT_FOUND
+
+
+@pytest.mark.asyncio
+async def test_delete_mapping_for_owner_does_not_delete_another_orgs_mapping(storage: IdentityMapperSqlStorage):
+    """#1150: a foreign mapping_id must survive the attempt.
+
+    The regression this guards is ordering, not signalling: the old code deleted and
+    committed first and compared organizations afterwards, so the caller got an error
+    *and* the other organization lost its row. Asserting the outcome alone would still
+    pass against that bug -- the surviving row is the assertion that matters.
+    """
+    saved = await storage.save_mappings([_mapping(org="org-2", person="person-2", target_system="sys-1")])
+    victim_id = saved[0].mapping_id
+
+    outcome = await storage.delete_mapping_for_owner(victim_id, "org-1", "person-1")
+
+    assert outcome is DeleteOutcome.NOT_OWNED
+    survivors = await storage.get_mappings("org-2", "person-2")
+    assert [m.mapping_id for m in survivors] == [victim_id]
+
+
+@pytest.mark.asyncio
+async def test_delete_mapping_for_owner_does_not_delete_another_persons_mapping(storage: IdentityMapperSqlStorage):
+    """#1150: same organization, different person -- the row must also survive."""
+    saved = await storage.save_mappings([_mapping(org="org-1", person="person-2", target_system="sys-1")])
+    victim_id = saved[0].mapping_id
+
+    outcome = await storage.delete_mapping_for_owner(victim_id, "org-1", "person-1")
+
+    assert outcome is DeleteOutcome.NOT_OWNED
+    survivors = await storage.get_mappings("org-1", "person-2")
+    assert [m.mapping_id for m in survivors] == [victim_id]
