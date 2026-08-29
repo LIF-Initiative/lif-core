@@ -1,4 +1,7 @@
+import time
+
 from lif.translator import core
+import cachetools
 import pytest
 
 
@@ -576,3 +579,216 @@ async def test_translator_run_with_openbadgecredential(monkeypatch):
 
     result = await translator.run(input_data)
     assert result == expected
+
+
+# ---------------------------------------------------------------------------
+# Tests for MDR response caching
+# ---------------------------------------------------------------------------
+
+
+@pytest.fixture(autouse=True)
+def _clear_translator_caches():
+    """Reset module-level caches between tests to avoid cross-test contamination."""
+    core._schema_cache.clear()
+    core._expression_cache.__dict__.clear()
+    yield
+    core._schema_cache.clear()
+    core._expression_cache.__dict__.clear()
+
+
+@pytest.mark.asyncio
+async def test_cache_hit_skips_mdr_call(monkeypatch):
+    call_count = 0
+
+    async def fake_get_schema(
+        schema_id: str, include_attr_md: bool, include_entity_md: bool, tenant_schema: str | None = None
+    ):
+        nonlocal call_count
+        call_count += 1
+        return {"id": schema_id}
+
+    monkeypatch.setattr(core, "get_data_model_schema", fake_get_schema, raising=True)
+
+    t = core.Translator(core.TranslatorConfig(source_schema_id="S", target_schema_id="T"))
+
+    await t._fetch_schema("S")
+    await t._fetch_schema("S")
+
+    assert call_count == 1
+
+
+@pytest.mark.asyncio
+async def test_transformation_fetched_on_each_call(monkeypatch):
+    """Transformations are NOT cached — each call must hit the MDR so edits to the
+    transformation (e.g. an updated expression or an imported/hand-edited group) are
+    reflected on the very next translation. See test_bases...::test_update_transform_only_expression."""
+    call_count = 0
+
+    async def fake_get_xform(source_schema_id: str, target_schema_id: str, tenant_schema: str | None = None):
+        nonlocal call_count
+        call_count += 1
+        return {"total": 1, "data": [{"TransformationExpression": "{}"}]}
+
+    monkeypatch.setattr(core, "get_data_model_transformation", fake_get_xform, raising=True)
+
+    t = core.Translator(core.TranslatorConfig(source_schema_id="A", target_schema_id="B"))
+
+    await t._fetch_transformation("A", "B")
+    await t._fetch_transformation("A", "B")
+
+    assert call_count == 2
+
+
+@pytest.mark.asyncio
+async def test_cache_separates_tenant_schemas(monkeypatch):
+    call_count = 0
+
+    async def fake_get_schema(
+        schema_id: str, include_attr_md: bool, include_entity_md: bool, tenant_schema: str | None = None
+    ):
+        nonlocal call_count
+        call_count += 1
+        return {"id": schema_id, "tenant": tenant_schema}
+
+    monkeypatch.setattr(core, "get_data_model_schema", fake_get_schema, raising=True)
+
+    t = core.Translator(core.TranslatorConfig(source_schema_id="S", target_schema_id="T"))
+
+    result_a = await t._fetch_schema("S", tenant_schema="org1")
+    result_b = await t._fetch_schema("S", tenant_schema="org2")
+
+    assert call_count == 2
+    assert result_a["tenant"] == "org1"
+    assert result_b["tenant"] == "org2"
+
+
+@pytest.mark.asyncio
+async def test_cache_re_fetches_after_ttl(monkeypatch):
+    """With a 1-second TTL, a second call after sleep should re-fetch."""
+    original_cache = core._schema_cache
+    core._schema_cache.clear()
+
+    async def fake_get_schema(
+        schema_id: str, include_attr_md: bool, include_entity_md: bool, tenant_schema: str | None = None
+    ):
+        return {"id": schema_id, "ts": time.time()}
+
+    monkeypatch.setattr(core, "get_data_model_schema", fake_get_schema, raising=True)
+
+    # Replace cache with a short-TTL version for this test
+    core._schema_cache = cachetools.TTLCache(maxsize=128, ttl=1)
+    t = core.Translator(core.TranslatorConfig(source_schema_id="S", target_schema_id="T"))
+
+    first = await t._fetch_schema("S")
+    time.sleep(1.5)
+    second = await t._fetch_schema("S")
+
+    assert first["ts"] != second["ts"]
+
+    # Restore the original cache so later tests see a sane TTL
+    core._schema_cache = original_cache
+    core._schema_cache.clear()
+
+
+# ---------------------------------------------------------------------------
+# Tests for validate_intermediately flag
+# ---------------------------------------------------------------------------
+
+
+def test_validate_intermediately_true_is_default():
+    config = core.BaseTranslatorConfig(source_schema={"type": "object"}, target_schema={"type": "object"}, mappings=[])
+    assert config.validate_intermediately is True
+
+
+def test_validate_intermediately_false_skips_per_fragment_validation():
+    source_schema = {"type": "object"}
+    target_schema = {
+        "type": "object",
+        "properties": {"x": {"type": "integer"}, "y": {"type": "string"}},
+        "additionalProperties": False,
+    }
+    mappings = [
+        '{ "x": 1 }',
+        '{ "y": 123 }',  # invalid: y should be string
+    ]
+    config = core.BaseTranslatorConfig(
+        source_schema=source_schema, target_schema=target_schema, mappings=mappings, validate_intermediately=False
+    )
+    translator = core.BaseTranslator(config)
+    # Without intermediate validation, the invalid fragment merges in.
+    # Final validation catches the type mismatch.
+    with pytest.raises(ValueError, match="does not conform"):
+        translator.run({})
+
+
+def test_validate_intermediately_true_rollback_on_violation():
+    source_schema = {"type": "object"}
+    target_schema = {
+        "type": "object",
+        "properties": {"x": {"type": "integer"}, "y": {"type": "string"}},
+        "additionalProperties": False,
+    }
+    mappings = [
+        '{ "x": 1 }',
+        '{ "y": 123 }',  # invalid type for y -> should be rolled back
+    ]
+    config = core.BaseTranslatorConfig(
+        source_schema=source_schema, target_schema=target_schema, mappings=mappings, validate_intermediately=True
+    )
+    translator = core.BaseTranslator(config)
+    result = translator.run({})
+    assert result == {"x": 1}  # y was rolled back
+
+
+# ---------------------------------------------------------------------------
+# Tests for JSONata expression caching
+# ---------------------------------------------------------------------------
+
+
+def test_compiled_expression_cached_across_runs(monkeypatch):
+    real = core.jsonata.Jsonata
+    constructions = {"count": 0}
+
+    class CountingJsonata(real):
+        def __init__(self, expr):
+            constructions["count"] += 1
+            super().__init__(expr)
+
+    monkeypatch.setattr(core.jsonata, "Jsonata", CountingJsonata)
+
+    source_schema = {"type": "object"}
+    target_schema = {"type": "object"}
+    mappings = ['{ "x": 1 }', '{ "y": 2 }']
+    config = core.BaseTranslatorConfig(source_schema=source_schema, target_schema=target_schema, mappings=mappings)
+    translator = core.BaseTranslator(config)
+
+    translator.run({})
+    translator.run({})
+
+    # Each distinct expression compiles once; the second run reuses the cache.
+    assert constructions["count"] == len(mappings)
+
+
+def test_compiled_expression_cache_separates_distinct_expressions(monkeypatch):
+    real = core.jsonata.Jsonata
+    constructed_exprs = []
+
+    class RecordingJsonata(real):
+        def __init__(self, expr):
+            constructed_exprs.append(expr)
+            super().__init__(expr)
+
+    monkeypatch.setattr(core.jsonata, "Jsonata", RecordingJsonata)
+
+    source_schema = {"type": "object"}
+    target_schema = {"type": "object"}
+    mappings = ['{ "x": 1 }', '{ "x": 2 }']
+    config = core.BaseTranslatorConfig(source_schema=source_schema, target_schema=target_schema, mappings=mappings)
+    translator = core.BaseTranslator(config)
+
+    translator.run({})
+    translator.run({})
+
+    # Distinct expression strings are cached under separate keys, so every
+    # expression compiles exactly once across both runs.
+    assert constructed_exprs == mappings
