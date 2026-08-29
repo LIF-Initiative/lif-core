@@ -29,6 +29,7 @@ All settings come from environment variables, parsed by `Settings` in `component
 | Env var | Purpose |
 |---|---|
 | `POSTGRESQL_*` | Database connection |
+| `SQLALCHEMY_ECHO` | `true` logs every SQL statement + bound params (dev-only; default `false`, read by `database_setup.py`) |
 | `MDR__AUTH__JWT_SECRET_KEY` | Signs HS256 access/refresh JWTs + workspace cookies + invite tokens |
 | `MDR__AUTH__SERVICE_API_KEY__*` | One key per internal service caller (graphql, semantic_search, translator, post_confirm, learner_data_export) |
 | `MDR__AUTH__COGNITO_*` | User pool id, region, SPA client id; empty user pool disables Cognito |
