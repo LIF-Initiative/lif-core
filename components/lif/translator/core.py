@@ -17,7 +17,6 @@ logger = get_logger(__name__)
 
 _CACHE_TTL = int(os.environ.get("TRANSLATOR_CACHE_TTL_SECONDS", 300))
 _schema_cache: TTLCache = TTLCache(maxsize=128, ttl=_CACHE_TTL)
-_transformation_cache: TTLCache = TTLCache(maxsize=128, ttl=_CACHE_TTL)
 _expression_cache = threading.local()
 
 
@@ -182,11 +181,10 @@ class Translator:
     async def _fetch_transformation(
         self, source_schema_id: str, target_schema_id: str, tenant_schema: str | None = None
     ) -> dict:
-        cache_key = f"{source_schema_id}:{target_schema_id}:{tenant_schema or ''}"
-        cached = _transformation_cache.get(cache_key)
-        if cached is not None:
-            logger.info("Cache hit for transformation %s -> %s", source_schema_id, target_schema_id)
-            return cached
+        # Transformations are intentionally NOT cached: the MDR transformation
+        # endpoint has no versioning the translator could use to invalidate a
+        # cache, and edits (an updated expression, an imported/hand-edited group)
+        # must be reflected on the very next translation. ADR 0001's live-MDR
+        # guarantee takes precedence here.
         result = await get_data_model_transformation(source_schema_id, target_schema_id, tenant_schema=tenant_schema)
-        _transformation_cache[cache_key] = result
         return result

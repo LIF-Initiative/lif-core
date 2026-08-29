@@ -11,7 +11,7 @@ Proposed
 Issue #722 identifies performance bottlenecks in the Translator component. Every
 request currently:
 
-1. Makes 3 HTTP round-trips to the MDR (source schema, target schema,
+1. Makes HTTP round-trips to the MDR (source schema, target schema,
    transformation mappings). ADR 0001 acknowledged this trade-off when choosing
    runtime fetching over pre-initialization, noting "this may slow the
    performance of the translator if this data is not cached."
@@ -30,9 +30,18 @@ baseline.
 
 ### 1. MDR Response Caching
 
-Add in-memory TTL cache (`cachetools.TTLCache`) for MDR-fetched schemas and
-transformations. Cache TTL is configurable via the `TRANSLATOR_CACHE_TTL_SECONDS`
-environment variable, defaulting to 300 seconds (5 minutes).
+Add an in-memory TTL cache (`cachetools.TTLCache`) for MDR-fetched **schemas
+only** (source and target). Cache TTL is configurable via the
+`TRANSLATOR_CACHE_TTL_SECONDS` environment variable, defaulting to 300 seconds
+(5 minutes).
+
+**Transformations are deliberately NOT cached.** The MDR transformation endpoint
+returns no version/ETag the translator could use to invalidate a cache, so an
+edit — an updated expression, or an imported/hand-edited group — would otherwise
+be hidden until TTL expiry, violating ADR 0001's live-MDR guarantee that edits
+are reflected on the very next translation (enforced by the
+`test_update_transform_only_expression` and
+`test_import_hand_edited_group_then_translate_reflects_all_changes` tests).
 
 Cache keys include the `tenant_schema` parameter to ensure correctness in
 multi-tenant deployments. Process-local only — no shared or distributed cache.
@@ -90,17 +99,23 @@ practice is a small fixed set.
 
 ## Consequences
 
-- **Staleness window**: Cached schemas and transformations may be stale for up
-  to `TRANSLATOR_CACHE_TTL_SECONDS` (default 300s). Acceptable because MDR
-  schemas and transformation mappings change infrequently in production.
-- **Cold start**: Process-local cache is empty after restart. First request per
-  schema pair incurs full MDR latency; subsequent requests within the TTL window
-  are served from cache.
+- **Staleness window (schemas only)**: Cached schemas may be stale for up to
+  `TRANSLATOR_CACHE_TTL_SECONDS` (default 300s). Acceptable because schema
+  definitions change infrequently in production and no correctness test depends
+  on immediate schema reflection. Transformations are not cached, so mapping
+  edits always take effect on the next translation.
+- **Transformation fetch cost remains**: Every translation still performs one
+  MDR round-trip for the transformation mappings (2 of the original 3 round-trips
+  — the two schemas — are served from cache). This is the price of the live-edit
+  guarantee and is the same behavior as before this ADR.
+- **Cold start**: The schema cache is empty after restart. First request per
+  schema pair incurs schema MDR latency; subsequent requests within the TTL
+  window are served from cache.
 - **`validate_intermediately=False` trade-off**: Sacrifices early error detection
   and per-fragment diagnostics (and rollback) for speed. Callers must understand
   this trade-off.
-- **Memory overhead**: TTLCaches bounded at 128 entries (schemas and
-  transformations); each entry holds a JSON dict, so memory impact is negligible.
+- **Memory overhead**: The schema TTLCache is bounded at 128 entries; each entry
+  holds a JSON dict, so memory impact is negligible.
   The JSONata cache is per-thread and bounded by distinct expression strings.
 - **New dependency**: `cachetools` (~6.1), a pure-Python library with no native
   dependencies.

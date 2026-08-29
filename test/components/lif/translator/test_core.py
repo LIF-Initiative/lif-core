@@ -590,11 +590,9 @@ async def test_translator_run_with_openbadgecredential(monkeypatch):
 def _clear_translator_caches():
     """Reset module-level caches between tests to avoid cross-test contamination."""
     core._schema_cache.clear()
-    core._transformation_cache.clear()
     core._expression_cache.__dict__.clear()
     yield
     core._schema_cache.clear()
-    core._transformation_cache.clear()
     core._expression_cache.__dict__.clear()
 
 
@@ -620,7 +618,10 @@ async def test_cache_hit_skips_mdr_call(monkeypatch):
 
 
 @pytest.mark.asyncio
-async def test_cache_hit_skips_transformation_call(monkeypatch):
+async def test_transformation_refetched_each_call(monkeypatch):
+    """Transformations are NOT cached — each call must hit the MDR so edits to the
+    transformation (e.g. an updated expression or an imported/hand-edited group) are
+    reflected on the very next translation. See test_bases...::test_update_transform_only_expression."""
     call_count = 0
 
     async def fake_get_xform(source_schema_id: str, target_schema_id: str, tenant_schema: str | None = None):
@@ -635,7 +636,7 @@ async def test_cache_hit_skips_transformation_call(monkeypatch):
     await t._fetch_transformation("A", "B")
     await t._fetch_transformation("A", "B")
 
-    assert call_count == 1
+    assert call_count == 2
 
 
 @pytest.mark.asyncio
