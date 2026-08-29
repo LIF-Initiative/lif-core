@@ -591,9 +591,11 @@ def _clear_translator_caches():
     """Reset module-level caches between tests to avoid cross-test contamination."""
     core._schema_cache.clear()
     core._transformation_cache.clear()
+    core._expression_cache.__dict__.clear()
     yield
     core._schema_cache.clear()
     core._transformation_cache.clear()
+    core._expression_cache.__dict__.clear()
 
 
 @pytest.mark.asyncio
@@ -735,3 +737,57 @@ def test_validate_intermediately_true_rollback_on_violation():
     translator = core.BaseTranslator(config)
     result = translator.run({})
     assert result == {"x": 1}  # y was rolled back
+
+
+# ---------------------------------------------------------------------------
+# Tests for JSONata expression caching
+# ---------------------------------------------------------------------------
+
+
+def test_compiled_expression_cached_across_runs(monkeypatch):
+    real = core.jsonata.Jsonata
+    constructions = {"count": 0}
+
+    class CountingJsonata(real):
+        def __init__(self, expr):
+            constructions["count"] += 1
+            super().__init__(expr)
+
+    monkeypatch.setattr(core.jsonata, "Jsonata", CountingJsonata)
+
+    source_schema = {"type": "object"}
+    target_schema = {"type": "object"}
+    mappings = ['{ "x": 1 }', '{ "y": 2 }']
+    config = core.BaseTranslatorConfig(source_schema=source_schema, target_schema=target_schema, mappings=mappings)
+    translator = core.BaseTranslator(config)
+
+    translator.run({})
+    translator.run({})
+
+    # Each distinct expression compiles once; the second run reuses the cache.
+    assert constructions["count"] == len(mappings)
+
+
+def test_compiled_expression_cache_separates_distinct_expressions(monkeypatch):
+    real = core.jsonata.Jsonata
+    constructed_exprs = []
+
+    class RecordingJsonata(real):
+        def __init__(self, expr):
+            constructed_exprs.append(expr)
+            super().__init__(expr)
+
+    monkeypatch.setattr(core.jsonata, "Jsonata", RecordingJsonata)
+
+    source_schema = {"type": "object"}
+    target_schema = {"type": "object"}
+    mappings = ['{ "x": 1 }', '{ "x": 2 }']
+    config = core.BaseTranslatorConfig(source_schema=source_schema, target_schema=target_schema, mappings=mappings)
+    translator = core.BaseTranslator(config)
+
+    translator.run({})
+    translator.run({})
+
+    # Distinct expression strings are cached under separate keys, so every
+    # expression compiles exactly once across both runs.
+    assert constructed_exprs == mappings

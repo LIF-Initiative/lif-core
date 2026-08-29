@@ -1,4 +1,5 @@
 import os
+import threading
 from copy import deepcopy
 from time import perf_counter
 from typing import List
@@ -17,6 +18,19 @@ logger = get_logger(__name__)
 _CACHE_TTL = int(os.environ.get("TRANSLATOR_CACHE_TTL_SECONDS", 300))
 _schema_cache: TTLCache = TTLCache(maxsize=128, ttl=_CACHE_TTL)
 _transformation_cache: TTLCache = TTLCache(maxsize=128, ttl=_CACHE_TTL)
+_expression_cache = threading.local()
+
+
+def _get_compiled_expression(expr: str) -> jsonata.Jsonata:
+    cache = getattr(_expression_cache, "compiled", None)
+    if cache is None:
+        cache = {}
+        _expression_cache.compiled = cache
+    compiled = cache.get(expr)
+    if compiled is None:
+        compiled = jsonata.Jsonata(expr)
+        cache[expr] = compiled
+    return compiled
 
 
 class BaseTranslatorConfig(BaseModel):
@@ -56,7 +70,7 @@ class BaseTranslator:
         for mapping_expression_str in self.mappings:
             try:
                 t0 = perf_counter()
-                mapping_expression = jsonata.Jsonata(mapping_expression_str)
+                mapping_expression = _get_compiled_expression(mapping_expression_str)
                 fragment = mapping_expression.evaluate(input)
                 eval_seconds += perf_counter() - t0
                 # DEBUG, not INFO: two lines per mapping per request, and `fragment`
