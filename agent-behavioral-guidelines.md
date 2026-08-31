@@ -100,6 +100,8 @@ A plausible root cause is not a root cause. Before reporting one, measure it.
 [ ] pre-commit passes on the changed files
       (uv run pre-commit run --files <changed files>)
 [ ] Files staged explicitly by path — never `git add -A`
+[ ] The PR targets `main` — not a personal or integration branch, which
+      silently skips CI and the required checks
 [ ] Commit message follows `Issue #XXX: Brief description` (commitlint-enforced)
 [ ] No secrets, credentials, or hardcoded hostnames
 [ ] If a shared brick changed: the consuming services are named, and their
