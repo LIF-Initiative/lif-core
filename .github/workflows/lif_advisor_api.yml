@@ -6,11 +6,11 @@ on:
     branches: ["main"]
     paths:
       - .github/workflows/lif_advisor_api.yml
-      - bases/lif_advisor_restapi/**
+      - bases/lif/advisor_restapi/**
       - cloudformation/dev-lif-advisor-api.params
-      - cloudformation/lif-advisor-taskdef-includes.yml
+      - cloudformation/lif-advisor-api-taskdef-includes.yml
       - components/lif/langchain_agent/**
-      - components/lif/lif_logging/**
+      - components/lif/logging/**
       - components/lif/auth/**
       - projects/lif_advisor_api/**
       - .github/workflows/_deploy-service.yml
