@@ -10,6 +10,7 @@ on:
       - cloudformation/dev-lif-advisor-api.params
       - cloudformation/lif-advisor-api-taskdef-includes.yml
       - components/lif/langchain_agent/**
+      - components/lif/demo_personas/**
       - components/lif/logging/**
       - components/lif/auth/**
       - projects/lif_advisor_api/**

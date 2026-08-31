@@ -25,4 +25,4 @@ packages = ["lif"]
 "../../bases/lif/example_data_source_rest_api" = "lif/example_data_source_rest_api"
 "../../components/lif/example_data_source_service" = "lif/example_data_source_service"
 "../../components/lif/logging" = "lif/logging"
-"../../components/lif/auth" = "lif/auth"
+"../../components/lif/api_token_auth" = "lif/api_token_auth"

@@ -7,7 +7,7 @@ from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
-from lif.auth.core import create_access_token, create_refresh_token, decode_jwt, get_current_user, require_secret_key
+from lif.auth.core import create_access_token, create_refresh_token, decode_jwt, get_current_user
 from lif.demo_personas import get_demo_personas_as_dicts
 from lif.langchain_agent import LIFAIAgent
 from lif.logging import get_logger
@@ -25,10 +25,6 @@ if _demo_password is None or not _demo_password.strip():
         "service's taskdef-includes; locally, export it or set it in your .env."
     )
 DEMO_USER_PASSWORD = _demo_password.strip()
-
-# This service mints and verifies JWTs, so resolve the signing key at startup
-# rather than letting the first login discover it is missing (#1191).
-require_secret_key()
 
 # --- Mock Database and State ---
 # Demo login accounts come from the shared demo-persona source (#1055) so the
