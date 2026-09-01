@@ -229,3 +229,5 @@ pnpm-lock.yaml
 # Dagster stuff:
 .dagster/
 
+#AI
+.agents/

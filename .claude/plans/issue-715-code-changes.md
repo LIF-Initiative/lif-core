@@ -78,13 +78,27 @@ Findings F2: `semantic_search_service/core.py:396` truncates to top_k *before* `
 
 Change: filter paths by `config.reference_data_roots` first, then slice `[:top_k]`.
 
+In `run_semantic_search` (`:366`), `config` is `Optional[LIFSchemaConfig] = None` (`:374`) and
+`reference_data_roots` is not bound in that scope, so it needs the same `None` guard
+`filter_paths_for_graphql` uses at `:336`:
+
 ```python
-queryable_idx = [int(i) for i in np.argsort(-sims)
-                 if leaves[int(i)].json_path.split(".")[0] not in reference_data_roots]
+if config is None:
+    config = LIFSchemaConfig()
+reference_data_roots = config.reference_data_roots
+
+queryable_idx = [
+    int(i)
+    for i in np.argsort(-sims)
+    if leaves[int(i)].json_path.split(".")[0] not in reference_data_roots
+]
 idxs = queryable_idx[:top_k]
 ```
 
-Risk note: changes tool output shape slightly (fewer discarded-path entries); re-run the spike sweep after landing to re-evaluate whether k=200 can drop toward 150 (advisor.md rec R3). **Decided: gets its own GitHub issue** — #715 is labeled Advisor API and this lives in semantic_search_service.
+Risk note: the function returns the GraphQL response (`:429`), not `results`, so the effect is **more**
+queryable Person paths surviving into `graphql_paths` — a wider requested field list and a larger response
+payload, not fewer discarded-path entries. Re-run the spike sweep after landing to re-evaluate whether
+k=200 can drop toward 150 (advisor.md rec R3). **Decided: gets its own GitHub issue** — #715 is labeled Advisor API and this lives in semantic_search_service.
 
 ## Follow-up candidates — Change Set C sketch (not in this PR)
 
@@ -98,7 +112,7 @@ Where it lands is TBD (semantic_search_service vs langchain_agent); file as foll
 
 ## Cleanup rider (tiny, same PR as A or B)
 
-- `lif_schema_config/core.py:92` lists `Organization` as an additional root that no longer exists in the MDR model → startup ERROR log noise. Either drop from defaults or leave with a comment pointing at MDR. (Flagged in findings appendix.)
+- `Organization` is listed as an additional root that no longer exists in the MDR model → startup ERROR log noise. It appears in **two** places and both must change: the dataclass default at `lif_schema_config/core.py:92` and the `from_environment()` fallback string at `:178` (`os.getenv("LIF_GRAPHQL_ROOT_NODES", "Course,Organization,Credential")`). The production path is `from_environment()` — `semantic_search_mcp_server/core.py:35` and `api_graphql/core.py:24` — and `LIF_GRAPHQL_ROOT_NODES` is set in no compose file, script, or CloudFormation template, so editing only `:92` changes nothing deployed and the ERROR noise persists. Either drop it from both, or leave both with a comment pointing at MDR. (Flagged in findings appendix.)
 
 ## Verification checklist
 

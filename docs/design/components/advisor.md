@@ -132,7 +132,7 @@ The service follows today's no-server-side-streaming, request/response design: e
 **Internal structure:**
 
 - `bases/lif/advisor_restapi/core.py` — FastAPI app, session/user helpers, per-user conversation registry.
-- `components/lif/langchain_agent/core.py` — `LIFAIAgent`: builds MCP toolset + one LangGraph react agent per task type (`LIF_ADVISOR_AGENT_TASKS`) sharing an `InMemorySaver`; each turn **reframes** the user query (identifier-preserving rewrite) before invoking the agent. Memory summarization knobs `LIF_ADVISOR_MESSAGES_TO_KEEP` / `_TRIMMED_MESSAGES_SIZE` / `_MAX_CONVERSATION_SIZE` / `_MAX_SUMMARY_SIZE` (`core.py:44-48`).
+- `components/lif/langchain_agent/core.py` — `LIFAIAgent`: builds MCP toolset + one LangGraph react agent per task type (`LIF_ADVISOR_AGENT_TASKS`) sharing an `InMemorySaver`; each turn **reframes** the user query (identifier-preserving rewrite) before invoking the agent. Memory summarization knobs `LIF_ADVISOR_MESSAGES_TO_KEEP` / `_TRIMMED_MESSAGES_SIZE` / `_MAX_CONVERSATION_SIZE` / `_MAX_SUMMARY_SIZE` (`core.py:45-48`).
 - Two `ChatOpenAI` call sites: agent model (`core.py:123`, `temperature=0.0`) and reframer model (`core.py:259`, temperature unset → OpenAI server default 1.0). See tuning study below.
 - Single uvicorn worker; the reframe is a synchronous blocking call on the event loop — tracked with streaming work in [`advisor-streaming.md`](../../operations/proposals/advisor-streaming.md) (#970).
 
@@ -154,10 +154,12 @@ The service follows today's no-server-side-streaming, request/response design: e
 | `LIF_ADVISOR_LLM_MODEL_NAME` | — | Chat model name for both `ChatOpenAI` sites |
 | `LIF_ADVISOR_MESSAGES_TO_KEEP` | `4` | Turns kept before summarization |
 | `LIF_ADVISOR_TRIMMED_MESSAGES_SIZE` | `384` | Trimmed message window |
-| `LIF_ADVISOR_MAX_CONVERSATION_SIZE` | `384` | Conversation size cap |
-| `LIF_ADVISOR_MAX_SUMMARY_SIZE` | `128` | Summarized-reminder size cap |
+| `LIF_ADVISOR_MAX_CONVERSATION_SIZE` | `2048` | Conversation size cap (Python fallback is `384`) |
+| `LIF_ADVISOR_MAX_SUMMARY_SIZE` | `1024` | Summarized-reminder size cap (Python fallback is `128`) |
 | `SEMANTIC_SEARCH__TOP_K` | `200` | Retrieval result count (schema leaves) |
 | `SEMANTIC_SEARCH__MODEL_NAME` | `all-MiniLM-L6-v2` | Embedding model for retrieval |
+
+The `Default` column is the **deployed** value. `MESSAGES_TO_KEEP` and `TRIMMED_MESSAGES_SIZE` match the Python fallbacks in `langchain_agent/core.py:45-48`, but the two size caps do not: every deployment surface overrides them to `2048`/`1024` — `development/docker-compose.yml:181-182`, `development/advisor-demo-1org/docker-compose.yml:132-133`, `development/advisor-demo-3orgs/docker-compose.yml:253-254`, `deployments/advisor-demo-docker/docker-compose.yml:425-426`, `cloudformation/lif-advisor-api-taskdef-includes.yml:17,19`, and `development/scripts/run_lif_advisor_restapi.sh:14-15`. No running advisor has used the `384`/`128` fallbacks.
 
 Generation-side sampling knobs (`temperature`, `top_p`, `presence_penalty`, `frequency_penalty`) are not configurable today — the agent is hardcoded to `0.0` and the reframer runs at the OpenAI server default `1.0`. Making them env-configurable at both call sites (default `temperature=0.1`) is recommendation **R1** — see [Possible Future Roadmap Items](#possible-future-roadmap-items).
 
@@ -214,7 +216,7 @@ curl -X POST localhost:8004/continue-conversation \
 
 # LLM Invocation Tuning Study (issue #715 spike, 2026-08-21)
 
-Empirical review of every LLM/retrieval knob in the Advisor path: offline TOP_K sweep over a replicated production pipeline, then live gpt-4.1-mini validation of sampling params (125-call temperature sweep + end-to-end reframer retrieval test). Raw scripts and result JSONs are archived in `.claude/plans/artifacts/` (gitignored working space).
+Empirical review of every LLM/retrieval knob in the Advisor path: offline TOP_K sweep over a replicated production pipeline, then live gpt-4.1-mini validation of sampling params (125-call temperature sweep + end-to-end reframer retrieval test). **The figures below are a one-shot measurement and are not reproducible from this repository.** The sweep scripts and raw result JSONs were written to a local, gitignored working directory (`.claude/plans/artifacts/`) that was not preserved, so nothing in source control regenerates them. Treat every number here as a point-in-time observation of the 2026-08-21 schema and model, not as a regression baseline; re-measuring means rebuilding the harness.
 
 Context: [bjagg's issue comment](https://github.com/LIF-Initiative/lif-core/issues/715) suggested `temperature 0.1–0.3 · top_p 1.0 · top_k 150–250 · penalties 0` — "focus on correctness, not creativity." Note his `top_k` means retrieval result count here (`SEMANTIC_SEARCH__TOP_K`); OpenAI's chat API has no sampling `top_k`.
 
@@ -282,11 +284,11 @@ Synonym expansion is strongly **query-dependent**: big wins where raw wording mi
 # Operational Notes
 
 - Demos: `development/advisor-demo-{1org,3orgs}/docker-compose.yml`, `deployments/advisor-demo-docker/docker-compose.yml`; dev stack `development/docker-compose.yml`.
-- Experiment artifacts (sweep scripts + raw JSON results) live in gitignored `.claude/plans/artifacts/`; copy them into a permanent location before deleting that directory.
+- **Experiment artifacts were not preserved.** The sweep scripts and raw JSON results lived in a local, gitignored `.claude/plans/artifacts/` directory that no longer exists, so the study above cannot be re-run from this repo. Any re-measurement (for example the post-R2 TOP_K sweep called for by R3) starts from a rebuilt harness — commit that harness under `test/` so the next round is reproducible.
 
 # Possible Future Roadmap Items
 
-Mapped from the study findings to concrete work; where the change is scoped, the owning issue/plan is linked.
+Mapped from the study findings to concrete work; where the change is scoped, the owning issue/plan is linked. The supporting figures are a one-shot measurement (see above), so any recommendation whose threshold depends on them — R1's default temperature, R3's `TOP_K` value — should be re-measured against a committed harness before it is treated as settled.
 
 1. **R1 (high, finding F4/F5)** — Env-configurable generation params (`LIF_ADVISOR_LLM_TEMPERATURE`, `_TOP_P`, `_PRESENCE_PENALTY`, `_FREQUENCY_PENALTY`) applied at **both** ChatOpenAI sites; default temperature `0.1`. Justification is consistency/reproducibility across the two call sites (variance 0.750→0.888), not identifier safety. Plan: `.claude/plans/issue-715-code-changes.md`.
 2. **R2 (high, finding F2)** — Filter non-queryable reference-data paths **before** top_k truncation (or raise effective k). Needs its own issue — lives in `semantic_search_service`, #715 is labeled Advisor API.
