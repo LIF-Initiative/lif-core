@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, FastAPI, HTTPException
 from fastapi.responses import JSONResponse
 from fastapi.security import APIKeyHeader
 
-from lif.auth.core import verify_token
+from lif.api_token_auth.core import verify_token
 from lif.example_data_source_service import core as service
 from lif.logging import get_logger
 

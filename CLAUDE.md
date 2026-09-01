@@ -1,6 +1,10 @@
 # CLAUDE.md
 
+@./agent-behavioral-guidelines.md
+
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+**Read [`agent-behavioral-guidelines.md`](agent-behavioral-guidelines.md) first** (imported above). This file describes *what the repo is*; that one constrains *how much you may change* — scope discipline, verification, and the stop-and-ask boundaries.
 
 ## Project Overview
 
