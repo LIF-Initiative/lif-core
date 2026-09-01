@@ -204,6 +204,9 @@ cython_debug/
 # Ruff stuff:
 .ruff_cache/
 
+# Plan / KT docs under .claude/plans/ ARE source-controlled (see #1136/#715).
+.claude/plans/artifacts/
+
 # PyPI configuration file
 .pypirc
 
