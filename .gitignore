@@ -228,3 +228,9 @@ pnpm-lock.yaml
 
 # Dagster stuff:
 .dagster/
+
+#AI
+.agents/
+
+# Claude Code personal overrides (shared config lives in .claude/settings.json)
+.claude/settings.local.json
