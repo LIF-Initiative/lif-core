@@ -22,7 +22,7 @@ Refs #715 · Docs-only PR (code changes to follow as separate PRs)
 
 ## Proposed follow-on changes
 
-- **Set A (this issue, next PR):** env-configurable `LIF_ADVISOR_LLM_TEMPERATURE/_TOP_P/_PRESENCE_PENALTY/_FREQUENCY_PENALTY` at both ChatOpenAI sites; single shared default **0.1**, justified by consistency/reproducibility. Deployment wiring + offline unit tests.
+- **Set A (this issue, next PR):** env-configurable `LIF_ADVISOR_LLM_TEMPERATURE/_TOP_P/_PRESENCE_PENALTY/_FREQUENCY_PENALTY` at both ChatOpenAI sites; single shared value across both sites, justified by consistency/reproducibility; the default itself is an open question (Part B shows no end-to-end gain at `0.1` and one regression). Deployment wiring + offline unit tests.
 - **Set B (own issue):** filter reference-data paths *before* top_k truncation in `semantic_search_service` (label mismatch keeps it off #715); then re-run the sweep and consider k→150.
 - **Cleanup rider:** drop nonexistent `Organization` root from defaults (startup ERROR noise).
 - **Follow-up tickets:** embed `json_path + description`; enrich boilerplate MDR descriptions; tame the regression tail via dual-query fusion / constrained reframer prompt / skip-expansion-when-schema-vocabulary.
@@ -35,6 +35,6 @@ Refs #715 · Docs-only PR (code changes to follow as separate PRs)
 
 ## Decisions made during the spike
 
-- Single shared temperature default 0.1 (not split agent/reframer values).
+- Single shared temperature value, not split agent/reframer. The default value is reopened as of 2026-09-01.
 - Findings live in `design/components/` (Advisor was the missing per-service doc) rather than a new ADR.
 - Set B gets its own GitHub issue.
