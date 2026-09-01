@@ -161,7 +161,7 @@ The service follows today's no-server-side-streaming, request/response design: e
 
 The `Default` column is the **deployed** value. `MESSAGES_TO_KEEP` and `TRIMMED_MESSAGES_SIZE` match the Python fallbacks in `langchain_agent/core.py:45-48`, but the two size caps do not: every deployment surface overrides them to `2048`/`1024` — `development/docker-compose.yml:181-182`, `development/advisor-demo-1org/docker-compose.yml:132-133`, `development/advisor-demo-3orgs/docker-compose.yml:253-254`, `deployments/advisor-demo-docker/docker-compose.yml:425-426`, `cloudformation/lif-advisor-api-taskdef-includes.yml:17,19`, and `development/scripts/run_lif_advisor_restapi.sh:14-15`. No running advisor has used the `384`/`128` fallbacks.
 
-Generation-side sampling knobs (`temperature`, `top_p`, `presence_penalty`, `frequency_penalty`) are not configurable today — the agent is hardcoded to `0.0` and the reframer runs at the OpenAI server default `1.0`. Making them env-configurable at both call sites (default `temperature=0.1`) is recommendation **R1** — see [Possible Future Roadmap Items](#possible-future-roadmap-items).
+Generation-side sampling knobs (`temperature`, `top_p`, `presence_penalty`, `frequency_penalty`) are not configurable today — the agent is hardcoded to `0.0` and the reframer runs at the OpenAI server default `1.0`. Making them env-configurable at both call sites is recommendation **R1**; the default value is deliberately left open — see [Possible Future Roadmap Items](#possible-future-roadmap-items).
 
 ## Dependencies
 
@@ -288,9 +288,10 @@ Synonym expansion is strongly **query-dependent**: big wins where raw wording mi
 
 # Possible Future Roadmap Items
 
-Mapped from the study findings to concrete work; where the change is scoped, the owning issue/plan is linked. The supporting figures are a one-shot measurement (see above), so any recommendation whose threshold depends on them — R1's default temperature, R3's `TOP_K` value — should be re-measured against a committed harness before it is treated as settled.
+Mapped from the study findings to concrete work; where the change is scoped, the owning issue/plan is linked. The supporting figures are a one-shot measurement (see above), so any recommendation whose threshold depends on them — R1's default temperature, R3's `TOP_K` value — should be re-measured against a committed harness before it is settled. Neither is settled here.
 
-1. **R1 (high, finding F4/F5)** — Env-configurable generation params (`LIF_ADVISOR_LLM_TEMPERATURE`, `_TOP_P`, `_PRESENCE_PENALTY`, `_FREQUENCY_PENALTY`) applied at **both** ChatOpenAI sites; default temperature `0.1`. Justification is consistency/reproducibility across the two call sites (variance 0.750→0.888), not identifier safety. Plan: `.claude/plans/issue-715-code-changes.md`.
+1. **R1 (high, finding F4/F5)** — Env-configurable generation params (`LIF_ADVISOR_LLM_TEMPERATURE`, `_TOP_P`, `_PRESENCE_PENALTY`, `_FREQUENCY_PENALTY`) applied at **both** ChatOpenAI sites. Justification is consistency/reproducibility across the two call sites (variance 0.750→0.888), not identifier safety.
+   **The default temperature is deliberately left unset by this recommendation.** An earlier draft proposed `0.1`, but Part B is the only end-to-end retrieval measurement here and it shows `@0.1` tied with `@1.0` on four of five queries and materially worse on the fifth (advising session, rank 8 → 49). The consistency argument supports being *able* to set both sites to one value; it does not select `0.1`. Pick the default when the sweep is rebuilt and committed (see R3). Plan: `.claude/plans/issue-715-code-changes.md`.
 2. **R2 (high, finding F2)** — Filter non-queryable reference-data paths **before** top_k truncation (or raise effective k). Needs its own issue — lives in `semantic_search_service`, #715 is labeled Advisor API.
 3. **R3 (medium, finding F1)** — Keep `SEMANTIC_SEARCH__TOP_K=200` short-term; re-run the sweep after R2 lands, consider 150.
 4. **R4 (medium, finding F3)** — Follow-up ticket: embed `json_path + description` instead of description-only; separately push MDR owners to enrich boilerplate leaf descriptions (`Relocation.*`, `RemoteWork.*`, `Proficiency.*`). Addresses F3, the actual ceiling.

@@ -2,9 +2,9 @@
 
 **Companion to:** `docs/design/components/advisor.md` § "LLM invocation tuning study" (findings F4/F5 → recs R1/R2; F7 → R7)
 **Issue:** #715 · **Label:** LIF Advisor API
-**Status:** Draft plan · **Decisions locked 2026-08-23:** single shared temperature default 0.1 at both call sites; findings homed in `docs/design/components/advisor.md`; Change Set B gets its own GitHub issue
+**Status:** Draft plan · **Reopened 2026-09-01 (review of #1173):** the temperature *default* is no longer locked — see Open questions. What remains settled: a single shared value across both call sites (not split); findings homed in `docs/design/components/advisor.md`; Change Set B gets its own GitHub issue
 
-One-line summary: Hoist ChatOpenAI sampling params into `LIF_ADVISOR_LLM_*` env vars applied at both call sites (defaulting temperature to 0.1 so the query reframer stops running at OpenAI's server default 1.0), wire through all deployment surfaces, plus an optional second change filtering reference-data paths before TOP_K truncation.
+One-line summary: Hoist ChatOpenAI sampling params into `LIF_ADVISOR_LLM_*` env vars applied at both call sites (so the query reframer stops running at OpenAI's server default 1.0; the default value itself is an open question — `0.1` below is a placeholder), wire through all deployment surfaces, plus an optional second change filtering reference-data paths before TOP_K truncation.
 
 ---
 
@@ -27,7 +27,7 @@ One-line summary: Hoist ChatOpenAI sampling params into `LIF_ADVISOR_LLM_*` env 
 Add module-level reads alongside the existing block (:44–48):
 
 ```python
-LLM_TEMPERATURE = float(os.environ.get("LIF_ADVISOR_LLM_TEMPERATURE", "0.1"))
+LLM_TEMPERATURE = float(os.environ.get("LIF_ADVISOR_LLM_TEMPERATURE", "0.1"))  # default TBD — see Open questions
 LLM_TOP_P = float(os.environ.get("LIF_ADVISOR_LLM_TOP_P", "1.0"))
 LLM_PRESENCE_PENALTY = float(os.environ.get("LIF_ADVISOR_LLM_PRESENCE_PENALTY", "0"))
 LLM_FREQUENCY_PENALTY = float(os.environ.get("LIF_ADVISOR_LLM_FREQUENCY_PENALTY", "0"))
@@ -41,6 +41,8 @@ Apply at both sites:
 | Reframer model (`reframe_query_with_identifiers`) | :259 | *(nothing → server default 1.0)* | same four params |
 
 Defaults rationale (revised after live validation, advisor.md Part A): identifier/type/format fidelity was perfect at *every* temperature tested including 1.0, so this change is justified by **consistency/reproducibility**, not correctness safety — lower risk than originally framed. Measured reframer output stability (mean pairwise Jaccard) improves monotonically as temperature drops: 0.750 @ 1.0 → 0.831 @ 0.7 → 0.844 @ 0.3 → 0.888 @ 0.1 → 0.929 @ 0.0. Temp `0.1` sits in bjagg's recommended 0.1–0.3 range, captures most of the stability gain without 0.0's residual nondeterminism (even T=0 showed min pairwise Jaccard 0.814). `top_p=1.0`; penalties `0`. Net effect vs today: agent 0.0→0.1 (behavioral delta minimal), reframer 1.0→0.1 (the fix). Single shared value across both sites by decision — splitting values would need two env pairs for negligible benefit.
+
+**Caveat added 2026-09-01:** the above argues from Part A (reframer self-consistency) only. Part B, the one end-to-end retrieval measurement, does **not** support `0.1`: it ties `@1.0` on four of five queries and is materially worse on the fifth (advising session, rank 8 → 49). So the stability numbers justify making the value configurable and shared; they do not select `0.1`. Treat `0.1` here as a placeholder until re-measured.
 
 Note: keep the existing `# ty: ignore[unknown-argument]` comment style on the ChatOpenAI lines — stubs may flag the new kwargs.
 
@@ -124,7 +126,7 @@ Where it lands is TBD (semantic_search_service vs langchain_agent); file as foll
 ## Open questions — all resolved 2026-08-23
 
 - ~~Final resting place for the findings write-up?~~ → `docs/design/components/advisor.md`.
-- ~~Defaults temp `0.1` shared vs split agent/reframer values?~~ → Single shared value, default `0.1`.
+- ~~Defaults temp `0.1` shared vs split agent/reframer values?~~ → Single shared value. **The default value itself is reopened (2026-09-01):** Part B shows no end-to-end benefit at `0.1` and one regression, so pick it when the sweep is rebuilt and committed (advisor.md R1/R3).
 - ~~Does Change Set B need its own GH issue given the label mismatch?~~ → Yes, its own issue.
 
 Remaining pre-PR work: implement Change Set A (+ rider), open the Set B issue.
