@@ -1,11 +1,13 @@
 from unittest.mock import patch
 
 import pytest
+from sqlalchemy import func, select
 
 from lif.datatypes import IdentityMapping
 from lif.exceptions.core import DataStoreException
 from lif.identity_mapper_storage.core import DeleteOutcome
 from lif.identity_mapper_storage_sql.core import IdentityMapperSqlStorage
+from lif.identity_mapper_storage_sql.model import IdentityMappingModel
 
 
 def _mapping(
@@ -65,20 +67,92 @@ async def test_save_mappings_duplicate_keys_in_batch_last_wins(storage: Identity
     saved = await storage.save_mappings(
         [_mapping(target_system="sys-1", person_id="ext-1"), _mapping(target_system="sys-1", person_id="ext-2")]
     )
-    assert len(saved) == 2
+    assert len(saved) == 1
+    assert saved[0].target_system_person_id == "ext-2"
     fetched = await storage.get_mappings("org-1", "person-1")
     assert len(fetched) == 1
     assert fetched[0].target_system_person_id == "ext-2"
+    assert saved[0].mapping_id == fetched[0].mapping_id
 
 
 @pytest.mark.asyncio
 async def test_save_mappings_rolls_back_whole_batch_on_failure(storage: IdentityMapperSqlStorage):
+    """
+    The insert path runs for real here — real create_all, real flush, real INSERTs — and
+    the failure is injected afterwards, in the response mapping. That is what makes this a
+    discriminator: an implementation that committed each row as it inserted would leave
+    those rows behind. Stubbing the insert path instead (as this test used to) hides
+    exactly the behavior under test.
+    """
     mappings = [_mapping(target_system="sys-1", person_id="ext-1"), _mapping(target_system="sys-2", person_id="ext-2")]
-    with patch("lif.identity_mapper_storage_sql.core.create", side_effect=[mappings[0], Exception("boom")]):
+
+    def fail_after_insert(model):
+        raise RuntimeError("boom")
+
+    with patch.object(IdentityMapping, "model_validate", side_effect=fail_after_insert):
         with pytest.raises(DataStoreException):
             await storage.save_mappings(mappings)
+
+    with storage.db_session_factory() as session:
+        surviving = session.execute(select(func.count()).select_from(IdentityMappingModel)).scalar()
+    assert surviving == 0
+
+
+@pytest.mark.asyncio
+async def test_save_mappings_updates_in_place_when_mapping_id_supplied(storage: IdentityMapperSqlStorage):
+    saved = await storage.save_mappings([_mapping(target_system="sys-1", person_id="ext-1")])
+    updated = await storage.save_mappings(
+        [_mapping(target_system="sys-1", person_id="ext-2", mapping_id=saved[0].mapping_id)]
+    )
+    assert updated[0].mapping_id == saved[0].mapping_id
+    assert updated[0].target_system_person_id == "ext-2"
     fetched = await storage.get_mappings("org-1", "person-1")
-    assert fetched == []
+    assert len(fetched) == 1
+
+
+@pytest.mark.asyncio
+async def test_save_mappings_rejects_unknown_mapping_id(storage: IdentityMapperSqlStorage):
+    with pytest.raises(ValueError, match="Unknown mapping_id"):
+        await storage.save_mappings([_mapping(target_system="sys-1", person_id="ext-1", mapping_id="no-such-id")])
+    assert await storage.get_mappings("org-1", "person-1") == []
+
+
+@pytest.mark.asyncio
+async def test_save_mappings_rejects_mapping_id_owned_by_another_org(storage: IdentityMapperSqlStorage):
+    """A foreign mapping_id must not reach the create branch, where it would collide on the
+    primary key and surface as an opaque 500 that discards the rest of the batch."""
+    victim = await storage.save_mappings([_mapping(org="org-2", person="person-2", person_id="victim")])
+    with pytest.raises(ValueError, match="Unknown mapping_id"):
+        await storage.save_mappings([_mapping(person_id="ext-1", mapping_id=victim[0].mapping_id)])
+    still_there = await storage.get_mappings("org-2", "person-2")
+    assert len(still_there) == 1
+    assert still_there[0].target_system_person_id == "victim"
+
+
+@pytest.mark.asyncio
+async def test_save_mappings_rejects_mapping_id_with_mismatched_target_system(storage: IdentityMapperSqlStorage):
+    saved = await storage.save_mappings([_mapping(target_system="sys-1", person_id="ext-1")])
+    with pytest.raises(ValueError, match="not 'sys-2'"):
+        await storage.save_mappings(
+            [_mapping(target_system="sys-2", person_id="ext-2", mapping_id=saved[0].mapping_id)]
+        )
+    fetched = await storage.get_mappings("org-1", "person-1")
+    assert len(fetched) == 1
+    assert fetched[0].target_system_id == "sys-1"
+    assert fetched[0].target_system_person_id == "ext-1"
+
+
+@pytest.mark.asyncio
+async def test_save_mappings_rejection_discards_the_whole_batch(storage: IdentityMapperSqlStorage):
+    """Rejection is all-or-nothing, like any other failure in the batch."""
+    with pytest.raises(ValueError):
+        await storage.save_mappings(
+            [
+                _mapping(target_system="sys-1", person_id="ext-1"),
+                _mapping(target_system="sys-2", person_id="ext-2", mapping_id="no-such-id"),
+            ]
+        )
+    assert await storage.get_mappings("org-1", "person-1") == []
 
 
 @pytest.mark.asyncio

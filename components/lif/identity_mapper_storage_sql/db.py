@@ -1,3 +1,4 @@
+import json
 from logging import DEBUG
 from os import getenv
 from sqlalchemy import create_engine
@@ -16,7 +17,7 @@ db_port: str = getenv("IDENTITY_MAPPER_DB_PORT", "3306")
 db_name: str = getenv("IDENTITY_MAPPER_DB_NAME", "lif")
 db_auto_create_tables: bool = getenv("IDENTITY_MAPPER_DB_AUTO_CREATE_TABLES", "false").lower() == "true"
 db_pool_size: int = int(getenv("IDENTITY_MAPPER_DB_POOL_SIZE", "10"))
-db_pool_pre_ping: bool = getenv("IDENTITY_MAPPER_DB_POOL_PRE_PING", "false").lower() == "true"
+db_pool_pre_ping: bool = getenv("IDENTITY_MAPPER_DB_POOL_PRE_PING", "true").lower() == "true"
 
 
 logger = get_logger(__name__)
@@ -41,12 +42,29 @@ def create_db_connection_url() -> URL:
     )
 
 
+def parse_connect_args(raw: str | None) -> dict:
+    """
+    IDENTITY_MAPPER_DB_CONNECT_ARGS arrives as a string but SQLAlchemy wants a dict.
+    Parsed here rather than at import so a malformed value fails engine creation with a
+    clear message instead of breaking the module import.
+    """
+    if not raw:
+        return {}
+    try:
+        parsed = json.loads(raw)
+    except json.JSONDecodeError as e:
+        raise ValueError("IDENTITY_MAPPER_DB_CONNECT_ARGS must be a JSON object") from e
+    if not isinstance(parsed, dict):
+        raise ValueError("IDENTITY_MAPPER_DB_CONNECT_ARGS must be a JSON object")
+    return parsed
+
+
 def create_db_engine():
     validate_db_environment()
     url: URL = create_db_connection_url()
     global engine
     engine = create_engine(
-        url, connect_args=db_connect_args or {}, pool_size=db_pool_size, pool_pre_ping=db_pool_pre_ping
+        url, connect_args=parse_connect_args(db_connect_args), pool_size=db_pool_size, pool_pre_ping=db_pool_pre_ping
     )
 
 

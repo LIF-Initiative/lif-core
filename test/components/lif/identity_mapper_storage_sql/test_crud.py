@@ -38,3 +38,12 @@ def test_delete_removes_row(session):
     crud.delete(session, model)
     session.flush()
     assert crud.read(session, model.mapping_id) is None
+
+
+def test_create_all_defers_the_flush(session):
+    """The batch save relies on staging every insert and flushing once."""
+    models = [_model(target_system="sys-1"), _model(target_system="sys-2")]
+    crud.create_all(session, models)
+    session.flush()
+    results = crud.read_by_lif_org_and_person(session, "org-1", "person-1")
+    assert {r.target_system_id for r in results} == {"sys-1", "sys-2"}

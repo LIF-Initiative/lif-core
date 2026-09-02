@@ -10,6 +10,12 @@ def create(session: Session, model: IdentityMappingModel) -> IdentityMappingMode
     return model
 
 
+def create_all(session: Session, models: List[IdentityMappingModel]) -> List[IdentityMappingModel]:
+    """Add many models without flushing each one; the caller flushes once."""
+    session.add_all(models)
+    return models
+
+
 def read(session: Session, mapping_id: str) -> IdentityMappingModel | None:
     query = select(IdentityMappingModel).where(IdentityMappingModel.mapping_id == mapping_id)
     return session.execute(query).scalar()

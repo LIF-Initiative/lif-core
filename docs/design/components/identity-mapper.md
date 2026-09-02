@@ -220,7 +220,18 @@ standalone mariadb container with a local uvicorn server.
    defect in #1150: the delete was already durable, so the error raised afterwards could not undo it.
 4. Dropped `session.refresh()` (one fewer SELECT per create/update) and the 5 unused indexes.
 5. Engine now configurable via `IDENTITY_MAPPER_DB_POOL_SIZE` (default 10) and
-   `IDENTITY_MAPPER_DB_POOL_PRE_PING` (default false).
+   `IDENTITY_MAPPER_DB_POOL_PRE_PING` (**default true**). Pre-ping defaults on because this change
+   removed the startup `SELECT 1` — the only connection validation — while raising the pool from 5
+   to 10 and letting more connections idle on threads; without it, connections outlive MariaDB's
+   `wait_timeout` and surface as intermittent "server has gone away" 500s. Both are wired into
+   `cloudformation/lif-identity-mapper-taskdef-includes.yml`.
+6. A client-supplied `mapping_id` must name a row the caller already owns, and must agree with the
+   `target_system_id` / `target_system_person_id_type` sent alongside it. Either violation raises
+   `ValueError` → **400**. Previously an unrecognized id fell through to the create branch, copied
+   itself into a new row's primary key and failed the unique constraint as an opaque 500 — which,
+   once the batch became all-or-nothing, discarded every other mapping in the request.
+7. `save_mappings` returns one entry per persisted row. A batch carrying the same key twice yields
+   one entry, not two entries pointing at the same row.
 
 ## Validation
 
@@ -240,12 +251,18 @@ Wall-clock bench (single runs, before vs. after):
 - **POST save** now scales near-linearly (10→100→500: 11.7→30.1→113 ms) vs. the old superlinear
   curve (37→317→1669 ms). DB round trips for a 500-mapping batch drop from ~1500 (3 per mapping in
   500 transactions) to ~501 (1 read + 500 writes, 1 commit).
+- **The table above was measured before the batched flush landed.** At bench time every insert
+  flushed individually to materialize the uuid primary key. That id is now generated in Python
+  (`IdentityMappingModel.from_identity_mapping`), so the batch stages all inserts and flushes once,
+  taking a 500-mapping batch to ~3 round trips rather than ~501. The recorded figures are therefore
+  a floor, not a ceiling — they have not been re-measured against the current code.
 - **DELETE** cuts per-request DB queries from 5 to 2; the wall-clock win is largely masked because
   one mapping is deleted per HTTP request and the HTTP round trip dominates.
 - **GET** was already one indexed SELECT; effectively unchanged.
 - Live correctness on the mariadb container: batch create assigns IDs; re-POST of an existing key
   upserts and preserves the original `mapping_id`; duplicate keys in one batch collapse to a single
-  row with last-wins value; DELETE returns 204; DELETE of a missing ID returns 404.
+  row with last-wins value and a single response entry; DELETE returns 204; DELETE of a missing ID
+  returns 404.
 
 ### Concurrency (50 parallel GETs)
 
