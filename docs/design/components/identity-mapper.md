@@ -235,44 +235,65 @@ standalone mariadb container with a local uvicorn server.
 
 ## Validation
 
-Wall-clock bench (single runs, before vs. after):
+Wall-clock bench, re-run 2026-09-01 with `development/scripts/bench_lif_identity_mapper.py` against
+the `lif-identity-mapper-db` container (MariaDB 10.11, production DDL) and a local uvicorn. Both code
+states were measured back to back on the same machine in the same sitting, so the ratios are
+comparable; "before" is the pre-#13 tree at `c3dce0e`. Medians: n=1 and n=10 over 25 runs, n=100 and
+n=500 over 5. Every run uses a fresh org/person.
 
-| operation | before (ms) | after (ms) | Δ |
+**POST save** (ms):
+
+| n | before | after | Δ |
 |---|---|---|---|
-| POST save n=1   | 25.8 | 21.3 | |
-| POST save n=10  | 37.0 | 11.7 | |
-| POST save n=100 | 316.9 | 30.1 | ~10.5× |
-| POST save n=500 | 1669.2 | 113.2 | ~14.7× |
-| GET n=100       | 3.4 | 2.9 | |
-| GET n=500       | 9.1 | 8.0 | |
-| DELETE n=100    | 429.0 | 331.5 | ~1.3× |
-| DELETE n=500    | 2093.9 | 1587.3 | ~1.3× |
+| 1 | 14.2 | 16.8 | 0.85× — *slower*, see below |
+| 10 | 222.6 | 42.0 | ~5.3× |
+| 100 | 2275.5 | 84.6 | ~26.9× |
+| 500 | 12801.1 | 159.1 | **~80×** |
 
-- **POST save** now scales near-linearly (10→100→500: 11.7→30.1→113 ms) vs. the old superlinear
-  curve (37→317→1669 ms). DB round trips for a 500-mapping batch drop from ~1500 (3 per mapping in
-  500 transactions) to ~501 (1 read + 500 writes, 1 commit).
-- **The wall-clock table above predates the batched flush and has not been re-measured.** At bench
-  time every insert flushed individually to materialize the uuid primary key. That id is now
-  generated in Python (`IdentityMappingModel.from_identity_mapping`), so the batch stages all
-  inserts and flushes once. The recorded times are therefore a floor, not a ceiling. What *has*
-  been measured is the statement count, by counting `before_cursor_execute` events for a
-  500-mapping batch:
+**GET** (ms):
+
+| n | before | after |
+|---|---|---|
+| 1 | 6.4 | 7.0 |
+| 10 | 7.3 | 8.1 |
+| 100 | 16.7 | 16.6 |
+| 500 | 43.4 | 28.9 |
+
+**DELETE**, one HTTP request per mapping (ms):
+
+| n | before | after | Δ |
+|---|---|---|---|
+| 1 | 21.4 | 17.8 | |
+| 10 | 295.2 | 216.1 | ~1.4× |
+| 100 | 2827.6 | 2119.8 | ~1.3× |
+| 500 | 16558.7 | 10739.6 | ~1.5× |
+
+- **POST save** is the headline: the old per-mapping-transaction path is superlinear
+  (222→2275→12801 ms), the batched path near-flat (42→85→159 ms). The earlier ad-hoc run recorded
+  ~14.7× at n=500; that was measured while each insert still flushed individually. With the flush
+  batched it is ~80×.
+- **n=1 is marginally slower** (14.2 → 16.8 ms, ~2.6 ms). The batch path reads the person's existing
+  mappings before deciding create-vs-update and hops through `asyncio.to_thread`, neither of which
+  the old single-mapping save did. The cost is fixed and small, and it buys atomicity and the curve
+  above; worth knowing rather than hiding.
+- `pool_pre_ping` was checked separately and its cost is inside run-to-run noise at this scale
+  (n=1 POST 16.8 ms with it on, and a 24.5 ms median in a noisier 5-run sample with it off).
+- **Statement counts** for a 500-mapping batch, from `before_cursor_execute` events:
 
   | code state | SELECT | INSERT |
   |---|---|---|
-  | this branch as benched (flush per row) | 1 | 500 |
+  | this branch as first benched (flush per row) | 1 | 500 |
   | this branch now (single flush) | 1 | 1 |
 
-  SQLAlchemy's `insertmanyvalues` collapses the staged inserts into one statement, so a
-  500-mapping batch costs 2 statements rather than 501. `test_save_mappings_issues_one_insert_for_the_whole_batch`
-  guards this; it fails with `assert 50 == 1` against the per-row-flush implementation.
-- Re-running the wall-clock bench needs a live MariaDB. The harness is committed at
-  `development/scripts/bench_lif_identity_mapper.py` — the original figures came from an ad-hoc
-  script that was never committed, which is why they could not be reproduced when the batching
-  changed.
-- **DELETE** cuts per-request DB queries from 5 to 2; the wall-clock win is largely masked because
-  one mapping is deleted per HTTP request and the HTTP round trip dominates.
-- **GET** was already one indexed SELECT; effectively unchanged.
+  SQLAlchemy's `insertmanyvalues` collapses the staged inserts into one statement, so the batch
+  costs 2 statements rather than 501. `test_save_mappings_issues_one_insert_for_the_whole_batch`
+  guards it and fails with `assert 50 == 1` against the per-row-flush implementation.
+- **DELETE** cuts per-request DB queries from 5 to 2; the wall-clock win stays modest because one
+  mapping is deleted per HTTP request and the round trip dominates.
+- **GET** was already one indexed SELECT; unchanged except at n=500.
+- Absolute figures differ substantially from the 2026-08-16 run (which recorded a 1669 ms before at
+  n=500 against this run's 12801 ms) — different hardware, container state and method. That
+  divergence is the reason the harness is now committed rather than left ad hoc.
 - Live correctness on the mariadb container: batch create assigns IDs; re-POST of an existing key
   upserts and preserves the original `mapping_id`; duplicate keys in one batch collapse to a single
   row with last-wins value and a single response entry; DELETE returns 204; DELETE of a missing ID

@@ -24,7 +24,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   work is offloaded off the FastAPI event loop via `asyncio.to_thread`, and per-request delete/read
   round trips are reduced
 - Identity Mapper `save_mappings` stages all inserts and flushes once instead of flushing per row;
-  the mapping id is generated in Python rather than by the column default
+  the mapping id is generated in Python rather than by the column default. Measured against MariaDB,
+  a 500-mapping batch goes from 12801 ms to 159 ms (~80x) and from 501 SQL statements to 2
 - Identity Mapper `save_mappings` returns one entry per persisted row, so duplicate keys in one
   batch no longer produce two response entries for the same row
 - `IDENTITY_MAPPER_DB_POOL_PRE_PING` now defaults to `true` and is wired into the ECS task
