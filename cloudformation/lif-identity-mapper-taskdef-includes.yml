@@ -12,3 +12,7 @@ Environment:
     Value: "3306"
   - Name: IDENTITY_MAPPER_DB_NAME
     Value: "lif"
+  - Name: IDENTITY_MAPPER_DB_POOL_SIZE
+    Value: "10"
+  - Name: IDENTITY_MAPPER_DB_POOL_PRE_PING
+    Value: "true"

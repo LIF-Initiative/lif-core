@@ -11,12 +11,12 @@ class IdentityMappingModel(Base):
 
     __tablename__ = "identity_mappings"
 
-    mapping_id: Mapped[str] = mapped_column(String(36), primary_key=True, index=True, default=lambda: str(uuid4()))
-    lif_organization_id: Mapped[str] = mapped_column(String(255), index=True, nullable=False)
-    lif_organization_person_id: Mapped[str] = mapped_column(String(255), index=True, nullable=False)
-    target_system_id: Mapped[str] = mapped_column(String(255), index=True, nullable=False)
-    target_system_person_id_type: Mapped[str] = mapped_column(String(100), index=True, nullable=False)
-    target_system_person_id: Mapped[str] = mapped_column(String(255), index=True, nullable=False)
+    mapping_id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: str(uuid4()))
+    lif_organization_id: Mapped[str] = mapped_column(String(255), nullable=False)
+    lif_organization_person_id: Mapped[str] = mapped_column(String(255), nullable=False)
+    target_system_id: Mapped[str] = mapped_column(String(255), nullable=False)
+    target_system_person_id_type: Mapped[str] = mapped_column(String(100), nullable=False)
+    target_system_person_id: Mapped[str] = mapped_column(String(255), nullable=False)
     __table_args__ = (
         UniqueConstraint(
             "lif_organization_id",
@@ -28,9 +28,10 @@ class IdentityMappingModel(Base):
     )
 
     def from_identity_mapping(self, identity_mapping: IdentityMapping):
-        # mapping_id is Optional on the DTO; when unset, let the column default (uuid4) generate it.
-        if identity_mapping.mapping_id is not None:
-            self.mapping_id = identity_mapping.mapping_id
+        # mapping_id is Optional on the DTO. Generate it here rather than leaning on the
+        # column default: the batch save adds every new row and flushes once, so the PK
+        # has to exist before that flush for callers to read it back.
+        self.mapping_id = identity_mapping.mapping_id or str(uuid4())
         self.lif_organization_id = identity_mapping.lif_organization_id
         self.lif_organization_person_id = identity_mapping.lif_organization_person_id
         self.target_system_id = identity_mapping.target_system_id
