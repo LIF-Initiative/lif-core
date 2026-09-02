@@ -251,11 +251,25 @@ Wall-clock bench (single runs, before vs. after):
 - **POST save** now scales near-linearly (10→100→500: 11.7→30.1→113 ms) vs. the old superlinear
   curve (37→317→1669 ms). DB round trips for a 500-mapping batch drop from ~1500 (3 per mapping in
   500 transactions) to ~501 (1 read + 500 writes, 1 commit).
-- **The table above was measured before the batched flush landed.** At bench time every insert
-  flushed individually to materialize the uuid primary key. That id is now generated in Python
-  (`IdentityMappingModel.from_identity_mapping`), so the batch stages all inserts and flushes once,
-  taking a 500-mapping batch to ~3 round trips rather than ~501. The recorded figures are therefore
-  a floor, not a ceiling — they have not been re-measured against the current code.
+- **The wall-clock table above predates the batched flush and has not been re-measured.** At bench
+  time every insert flushed individually to materialize the uuid primary key. That id is now
+  generated in Python (`IdentityMappingModel.from_identity_mapping`), so the batch stages all
+  inserts and flushes once. The recorded times are therefore a floor, not a ceiling. What *has*
+  been measured is the statement count, by counting `before_cursor_execute` events for a
+  500-mapping batch:
+
+  | code state | SELECT | INSERT |
+  |---|---|---|
+  | this branch as benched (flush per row) | 1 | 500 |
+  | this branch now (single flush) | 1 | 1 |
+
+  SQLAlchemy's `insertmanyvalues` collapses the staged inserts into one statement, so a
+  500-mapping batch costs 2 statements rather than 501. `test_save_mappings_issues_one_insert_for_the_whole_batch`
+  guards this; it fails with `assert 50 == 1` against the per-row-flush implementation.
+- Re-running the wall-clock bench needs a live MariaDB. The harness is committed at
+  `development/scripts/bench_lif_identity_mapper.py` — the original figures came from an ad-hoc
+  script that was never committed, which is why they could not be reproduced when the batching
+  changed.
 - **DELETE** cuts per-request DB queries from 5 to 2; the wall-clock win is largely masked because
   one mapping is deleted per HTTP request and the HTTP round trip dominates.
 - **GET** was already one indexed SELECT; effectively unchanged.

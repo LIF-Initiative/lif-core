@@ -129,6 +129,8 @@
         "ipynb",
         "ipython",
         "isnot",
+        "insertmanyvalues",
+        "executemany",
         "isoformat",
         "isready",
         "JDBC",

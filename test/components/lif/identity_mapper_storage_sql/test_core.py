@@ -1,7 +1,7 @@
 from unittest.mock import patch
 
 import pytest
-from sqlalchemy import func, select
+from sqlalchemy import event, func, select
 
 from lif.datatypes import IdentityMapping
 from lif.exceptions.core import DataStoreException
@@ -225,3 +225,25 @@ async def test_delete_mapping_for_owner_does_not_delete_another_persons_mapping(
     assert outcome is DeleteOutcome.NOT_OWNED
     survivors = await storage.get_mappings("org-1", "person-2")
     assert [m.mapping_id for m in survivors] == [victim_id]
+
+
+@pytest.mark.asyncio
+async def test_save_mappings_issues_one_insert_for_the_whole_batch(db_engine, storage: IdentityMapperSqlStorage):
+    """
+    The uuid primary key is generated in Python precisely so the batch can stage every
+    insert and flush once. Nothing else in the suite would notice a regression back to a
+    flush per row, which is the difference between 1 INSERT and one per mapping.
+    """
+    statements: list[str] = []
+
+    def record(conn, cursor, statement, parameters, context, executemany):
+        statements.append(statement.strip().split()[0].upper())
+
+    event.listen(db_engine, "before_cursor_execute", record)
+    try:
+        await storage.save_mappings([_mapping(target_system=f"sys-{i}", person_id=f"ext-{i}") for i in range(50)])
+    finally:
+        event.remove(db_engine, "before_cursor_execute", record)
+
+    assert statements.count("SELECT") == 1
+    assert statements.count("INSERT") == 1
