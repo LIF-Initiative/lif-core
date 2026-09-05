@@ -216,7 +216,7 @@ services:
       LIF_QUERY_CACHE_URL: http://lif-query-cache-org1:8001
       LIF_ORCHESTRATOR_URL: ${LIF_ORCHESTRATOR_URL:-http://lif-orchestrator-api-org1:8005}
       LIF_QUERY_PLANNER_INFORMATION_SOURCES_CONFIG_PATH: ${LIF_QUERY_PLANNER_INFORMATION_SOURCES_CONFIG_PATH:-/opt/app/information_sources_config.yml}
-      LIF_QUERY_TIMEOUT_SECONDS: ${LIF_QUERY_TIMEOUT_SECONDS:-120}
+      LIF_QUERY_TIMEOUT_SECONDS: ${LIF_QUERY_TIMEOUT_SECONDS:-300}
     ports:
       - "8002:8002"
     depends_on:
@@ -232,7 +232,7 @@ services:
     environment:
       LIF_QUERY_CACHE_URL: http://lif-query-cache-org2:8001
       LIF_QUERY_PLANNER_INFORMATION_SOURCES_CONFIG_PATH: ${LIF_QUERY_PLANNER_INFORMATION_SOURCES_CONFIG_PATH:-/opt/app/information_sources_config.yml}
-      LIF_QUERY_TIMEOUT_SECONDS: ${LIF_QUERY_TIMEOUT_SECONDS:-120}
+      LIF_QUERY_TIMEOUT_SECONDS: ${LIF_QUERY_TIMEOUT_SECONDS:-300}
     ports:
       - "8102:8002"
     depends_on:
@@ -248,7 +248,7 @@ services:
     environment:
       LIF_QUERY_CACHE_URL: http://lif-query-cache-org3:8001
       LIF_QUERY_PLANNER_INFORMATION_SOURCES_CONFIG_PATH: ${LIF_QUERY_PLANNER_INFORMATION_SOURCES_CONFIG_PATH:-/opt/app/information_sources_config.yml}
-      LIF_QUERY_TIMEOUT_SECONDS: ${LIF_QUERY_TIMEOUT_SECONDS:-120}
+      LIF_QUERY_TIMEOUT_SECONDS: ${LIF_QUERY_TIMEOUT_SECONDS:-300}
     ports:
       - "8202:8002"
     depends_on:
