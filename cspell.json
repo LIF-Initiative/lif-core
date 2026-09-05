@@ -37,6 +37,7 @@
         "checkpointing",
         "cachetools",
         "dedupe",
+        "dedup",
         "deepcopy",
         "Checkpointing",
         "classmethod",

@@ -1,5 +1,4 @@
 import os
-import threading
 from copy import deepcopy
 from time import perf_counter
 from typing import List
@@ -17,28 +16,12 @@ logger = get_logger(__name__)
 
 _CACHE_TTL = int(os.environ.get("TRANSLATOR_CACHE_TTL_SECONDS", 300))
 _schema_cache: TTLCache = TTLCache(maxsize=128, ttl=_CACHE_TTL)
-_expression_cache = threading.local()
-
-
-def _get_compiled_expression(expr: str) -> jsonata.Jsonata:
-    cache = getattr(_expression_cache, "compiled", None)
-    if cache is None:
-        cache = {}
-        _expression_cache.compiled = cache
-    compiled = cache.get(expr)
-    if compiled is None:
-        compiled = jsonata.Jsonata(expr)
-        cache[expr] = compiled
-    return compiled
 
 
 class BaseTranslatorConfig(BaseModel):
     source_schema: dict = Field(..., description="The JSON schema of the source data")
     target_schema: dict = Field(..., description="The JSON schema of the target data")
     mappings: List[str] = Field(..., description="List of transformation expressions")
-    validate_intermediately: bool = Field(
-        default=True, description="Validate against target schema after each mapping merge"
-    )
 
 
 class BaseTranslator:
@@ -69,7 +52,7 @@ class BaseTranslator:
         for mapping_expression_str in self.mappings:
             try:
                 t0 = perf_counter()
-                mapping_expression = _get_compiled_expression(mapping_expression_str)
+                mapping_expression = jsonata.Jsonata(mapping_expression_str)
                 fragment = mapping_expression.evaluate(input)
                 eval_seconds += perf_counter() - t0
                 # DEBUG, not INFO: two lines per mapping per request, and `fragment`
@@ -89,26 +72,20 @@ class BaseTranslator:
 
             # Tentative merge -> validate -> commit or rollback
             t1 = perf_counter()
-            if self.config.validate_intermediately:
-                tentative = deepcopy(result)
-                deep_merge(tentative, fragment)
+            tentative = deepcopy(result)
+            deep_merge(tentative, fragment)
 
-                try:
-                    # If you want to be strict about *partial* validity, validate after each merge:
-                    self._validate_against_schema(data=tentative, schema=self.target_schema)
-                    result = tentative
-                    applied += 1
-                except ValueError as e:
-                    discarded += 1
-                    logger.warning("Discarding fragment due to target schema violation: %s", e)
-                    # do not apply this fragment
-                finally:
-                    merge_seconds += perf_counter() - t1
-            else:
-                # Skip intermediate validation and the rollback copy it requires;
-                # the final validation below is the sole gate.
-                deep_merge(result, fragment)
+            try:
+                # If you want to be strict about *partial* validity, validate after each merge:
+                self._validate_against_schema(data=tentative, schema=self.target_schema)
+                result = tentative
                 applied += 1
+            except ValueError as e:
+                discarded += 1
+                logger.warning("Discarding fragment due to target schema violation: %s", e)
+                # do not apply this fragment
+                continue
+            finally:
                 merge_seconds += perf_counter() - t1
 
         # final validation (should already be valid if the per-fragment check is kept)
@@ -186,5 +163,4 @@ class Translator:
         # cache, and edits (an updated expression, an imported/hand-edited group)
         # must be reflected on the very next translation. ADR 0001's live-MDR
         # guarantee takes precedence here.
-        result = await get_data_model_transformation(source_schema_id, target_schema_id, tenant_schema=tenant_schema)
-        return result
+        return await get_data_model_transformation(source_schema_id, target_schema_id, tenant_schema=tenant_schema)

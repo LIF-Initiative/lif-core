@@ -26,6 +26,29 @@ prior to this work. Note that #1158 subsequently instrumented the merge loop
 with stage timings and applied/discarded counters; this ADR builds on that
 baseline.
 
+### Measured baseline
+
+`test/components/lif/translator/benchmark_core.py` establishes the baseline #722
+asks for. Run it explicitly -- it is deliberately not named `test_*.py`, so a
+directory scan will not collect it and pytest-benchmark's several-hundred
+iterations per case stay out of every CI run:
+
+    uv run pytest test/components/lif/translator/benchmark_core.py --benchmark-only
+
+`BaseTranslator.run`, median, scaling with mapping count:
+
+| mappings | median |
+|---:|---:|
+| 1 | 2.0 ms |
+| 5 | 6.1 ms |
+| 10 | 11.5 ms |
+| 20 | 21.7 ms |
+| 50 | 53.1 ms |
+
+Roughly linear at ~1 ms per mapping. That is the number any future optimization
+has to beat, and it is why sections 3 and 4 below were withdrawn rather than
+tuned: neither had a measurement showing it moved this curve.
+
 ## Decision
 
 ### 1. MDR Response Caching
@@ -46,50 +69,64 @@ are reflected on the very next translation (enforced by the
 Cache keys include the `tenant_schema` parameter to ensure correctness in
 multi-tenant deployments. Process-local only — no shared or distributed cache.
 
-### 2. Merge / Rollback Pattern
+### 2. Merge / Rollback Pattern — unchanged
 
 Keep the per-fragment "tentative merge, validate, commit or rollback" pattern
-already shipped in #1158: copy the accumulated result, merge the fragment into
-the copy, validate the copy, and either commit it or discard the fragment. One
-`deepcopy` per fragment is the minimum required to support rollback, and the
-fragment copy inside `deep_merge` is to avoid mutating the mapping's output.
+already shipped in #1158, exactly as it stands: copy the accumulated result,
+merge the fragment into the copy, validate the copy, and either commit it or
+discard the fragment. One `deepcopy` per fragment is the minimum required to
+support rollback.
 
-When intermediate validation is disabled (see below), rollback is impossible by
-definition, so the per-fragment `deepcopy` is skipped entirely and each fragment
-is merged in place — the final validation is the sole gate.
+### 3. Not adopted: configurable intermediate validation
 
-### 3. Configurable Intermediate Validation
+An earlier revision of this ADR proposed a `validate_intermediately` flag to skip
+per-fragment validation and its rollback copy. Withdrawn during review: as
+implemented it was unreachable from production — `Translator.run` never passed it
+and `TranslatorConfig` had no field for it, so only the `/initialize` test harness
+could set it. It would have shipped permanently disabled, adding a branch to the
+hot path in exchange for nothing. Revisit only with a measurement showing the
+per-fragment validation is actually a bottleneck, and with the flag wired through
+`TranslatorConfig`.
 
-Add a `validate_intermediately` flag to `BaseTranslatorConfig` (default `True`).
-When `True`, the translator validates the accumulated result against the target
-schema after each fragment merge (current behavior). When `False`, intermediate
-validation is skipped — along with the per-fragment rollback copy — and only the
-final validation runs.
+### 4. Not adopted: JSONata expression caching
 
-Default `True` preserves the safe, existing behavior. Callers prioritizing
-throughput over early error detection can set it to `False`.
+An earlier revision cached compiled `jsonata.Jsonata` objects keyed by expression
+string. **Withdrawn during review as incorrect.**
 
-### 4. JSONata Expression Caching
+`jsonata-python` resolves `$now()` and `$millis()` through
+`Jsonata.CURRENT.jsonata.timestamp`, a class-level thread-local re-pointed **only
+in `Jsonata.__init__`**, while `evaluate()` updates `self.timestamp`. Constructing
+an instance per evaluation keeps those the same object, so the current code is
+correct by construction. Caching the instances freezes `CURRENT` on whichever
+expression was compiled last, and every other cached expression then emits a stale
+timestamp. Reproduced: a cached `$millis()` mapping returned an identical value
+across a 2-second gap (delta 0 ms) where the uncached path advanced 2001 ms.
 
-Cache compiled `jsonata.Jsonata` objects keyed by expression string. The cache is
-**thread-local** because a `Jsonata` instance binds the input document into its
-own evaluation environment on each `evaluate()` call (`exec_env.bind("$", input)`),
-so a single shared instance is not safe for concurrent use across threads. The
-library itself uses the same thread-local pattern for its parser. A thread-local
-cache is bounded by the number of distinct expressions seen per thread, which in
-practice is a small fixed set.
+No transformation in this repository currently uses `$now()` or `$millis()`, so
+the defect was latent rather than active — but transformations are live-fetched
+from MDR, so the repository is not the full population.
+
+Two further problems, either of which would need solving independently:
+
+- A cached instance retains a reference to the last document it evaluated
+  (`environment.bindings["$"]`), so full learner payloads stay reachable in a
+  long-lived cache across tenants. Verified directly.
+- The cache was an unbounded plain dict keyed by expression string. Because
+  transformations are live-fetched by design, every playground edit would add a
+  permanent entry.
+
+Any future attempt should re-point `Jsonata.CURRENT` per evaluation (or use a
+library version that does), bound the cache the way the schema cache is bounded,
+and carry a regression test that evaluates a `$millis()` mapping twice across a
+sleep.
 
 ## Alternatives Considered
 
 - **Redis or shared cache**: Adds operational complexity (deployment, connection
   management, serialization overhead). Rejected for now. Revisit if multi-worker
   shared caching becomes a concrete requirement.
-- **Remove per-fragment validation entirely**: Sacrifices early error detection
-  and provides less useful diagnostics when invalid fragments are produced.
-  Kept as an opt-out rather than removed.
-- **Process-shared compiled JSONata cache**: A `TTLCache` shared across threads
-  risks a race on the instance's evaluation environment (see above). Rejected in
-  favor of the thread-local cache, which is safe and nearly as effective.
+- **Remove or make optional the per-fragment validation**: Sacrifices early error
+  detection and per-fragment diagnostics. Not adopted -- see section 3.
 - **Batch/streaming translation**: Deferred to future roadmap per the design
   doc. The component's design anticipates streaming as an extension, not a
   redesign.
@@ -111,12 +148,8 @@ practice is a small fixed set.
 - **Cold start**: The schema cache is empty after restart. First request per
   schema pair incurs schema MDR latency; subsequent requests within the TTL
   window are served from cache.
-- **`validate_intermediately=False` trade-off**: Sacrifices early error detection
-  and per-fragment diagnostics (and rollback) for speed. Callers must understand
-  this trade-off.
 - **Memory overhead**: The schema TTLCache is bounded at 128 entries; each entry
   holds a JSON dict, so memory impact is negligible.
-  The JSONata cache is per-thread and bounded by distinct expression strings.
 - **New dependency**: `cachetools` (~6.1), a pure-Python library with no native
   dependencies.
 

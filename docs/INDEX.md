@@ -60,7 +60,7 @@
 - [`orchestrator/0001-orchestrator-for-demo.md`](design/adr/orchestrator/0001-orchestrator-for-demo.md) — Orchestrator: design for demo deployment.
 - [`translator/0001-initialization-vs-mdr-dependency.md`](design/adr/translator/0001-initialization-vs-mdr-dependency.md) — Translator: initialization vs MDR dependency.
 - [`translator/0002-query-translation.md`](design/adr/translator/0002-query-translation.md) — Translator: query translation approach.
-- [`translator/0003-performance-caching-and-optimization.md`](design/adr/translator/0003-performance-caching-and-optimization.md) — Translator: MDR TTL cache, optional intermediate validation, thread-local JSONata cache.
+- [`translator/0003-performance-caching-and-optimization.md`](design/adr/translator/0003-performance-caching-and-optimization.md) — Translator: MDR schema TTL cache, measured baseline, and why expression caching and optional intermediate validation were withdrawn.
 - *Subdirectories `api/`, `query_cache/`, `query_mapper/` currently hold only `_template.md` placeholders.*
 
 ### `docs/design/cross-cutting/` — Topics spanning services

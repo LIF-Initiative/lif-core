@@ -148,13 +148,15 @@ The **Translator** mainly interacts with the host data pipeline that invokes it 
 
 ### Performance
 
-The component applies several optimizations to provide consistent performance:
+**MDR schema caching.** Source and target schemas fetched from the MDR are cached in-memory with a configurable TTL (env var `TRANSLATOR_CACHE_TTL_SECONDS`, default 300s), keyed by schema id and tenant. This removes two of the three MDR round-trips per translation. Transformation mappings are deliberately **not** cached, so an edit is reflected on the very next translation. See [ADR 0003](../adr/translator/0003-performance-caching-and-optimization.md).
 
-1. **MDR Response Caching:** Source/target schemas fetched from the MDR are cached in-memory with a configurable TTL (env var `TRANSLATOR_CACHE_TTL_SECONDS`, default 300s). This eliminates redundant schema round-trips for repeated translation requests with the same schema pair. Transformation mappings are deliberately **not** cached so that edits are reflected on the very next translation. See [ADR 0003](../adr/translator/0003-performance-caching-and-optimization.md).
+**Measured baseline.** `BaseTranslator.run` costs roughly 1 ms per mapping and scales linearly (2.0 ms at 1 mapping, 53.1 ms at 50). Reproduce with:
 
-2. **Configurable Intermediate Validation:** The `validate_intermediately` flag on `BaseTranslatorConfig` (default `True`) controls whether the accumulated result is validated against the target schema after each fragment merge. Setting it to `False` skips intermediate checks — and the per-fragment rollback copy they require — and relies on the final validation only, trading early error detection for throughput.
+```
+uv run pytest test/components/lif/translator/benchmark_core.py --benchmark-only
+```
 
-3. **JSONata Expression Caching:** Compiled JSONata expression objects are cached per thread by expression string, avoiding repeated parsing of the same expressions on repeated requests.
+Two further optimizations — caching compiled JSONata expressions, and making per-fragment validation optional — were proposed and **withdrawn during review**; ADR 0003 records why, including a reproduced defect in the expression cache. Neither had a measurement showing it moved the curve above.
 
 Batch and streaming translation remain future roadmap items.
 

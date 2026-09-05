@@ -1,3 +1,25 @@
+"""Translator performance baseline (#722 item 1: "do load testing to determine baseline").
+
+Run explicitly -- this file is deliberately NOT named ``test_*.py``:
+
+    uv run pytest test/components/lif/translator/benchmark_core.py --benchmark-only
+
+pytest's default ``python_files`` patterns are ``test_*.py`` / ``*_test.py``, so a
+directory scan or a bare ``pytest --benchmark-only`` will not collect this file. That is
+intentional: pytest-benchmark runs each case hundreds of times (~8s total here), which
+does not belong in every CI run. Passing the path explicitly collects it regardless of
+those patterns.
+
+Measured baseline on the reviewer's reference run, scaling with mapping count:
+
+    1 mapping    2.0 ms      10 mappings   11.5 ms
+    5 mappings   6.1 ms      20 mappings   21.7 ms
+                             50 mappings   53.1 ms
+
+Roughly linear at ~1 ms per mapping, which is the number to beat for any future
+optimization of ``BaseTranslator.run``.
+"""
+
 import pytest
 from lif.translator.core import BaseTranslator, BaseTranslatorConfig
 

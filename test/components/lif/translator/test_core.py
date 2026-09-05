@@ -590,10 +590,8 @@ async def test_translator_run_with_openbadgecredential(monkeypatch):
 def _clear_translator_caches():
     """Reset module-level caches between tests to avoid cross-test contamination."""
     core._schema_cache.clear()
-    core._expression_cache.__dict__.clear()
     yield
     core._schema_cache.clear()
-    core._expression_cache.__dict__.clear()
 
 
 @pytest.mark.asyncio
@@ -665,7 +663,6 @@ async def test_cache_separates_tenant_schemas(monkeypatch):
 @pytest.mark.asyncio
 async def test_cache_re_fetches_after_ttl(monkeypatch):
     """With a 1-second TTL, a second call after sleep should re-fetch."""
-    original_cache = core._schema_cache
     core._schema_cache.clear()
 
     async def fake_get_schema(
@@ -675,8 +672,9 @@ async def test_cache_re_fetches_after_ttl(monkeypatch):
 
     monkeypatch.setattr(core, "get_data_model_schema", fake_get_schema, raising=True)
 
-    # Replace cache with a short-TTL version for this test
-    core._schema_cache = cachetools.TTLCache(maxsize=128, ttl=1)
+    # Replace cache with a short-TTL version for this test. monkeypatch restores it even
+    # if an assertion below fails, which a manual restore-after-assert would not.
+    monkeypatch.setattr(core, "_schema_cache", cachetools.TTLCache(maxsize=128, ttl=1), raising=True)
     t = core.Translator(core.TranslatorConfig(source_schema_id="S", target_schema_id="T"))
 
     first = await t._fetch_schema("S")
@@ -685,110 +683,39 @@ async def test_cache_re_fetches_after_ttl(monkeypatch):
 
     assert first["ts"] != second["ts"]
 
-    # Restore the original cache so later tests see a sane TTL
-    core._schema_cache = original_cache
-    core._schema_cache.clear()
-
 
 # ---------------------------------------------------------------------------
-# Tests for validate_intermediately flag
+# Guard: JSONata expressions must not be cached across evaluations
 # ---------------------------------------------------------------------------
 
 
-def test_validate_intermediately_true_is_default():
-    config = core.BaseTranslatorConfig(source_schema={"type": "object"}, target_schema={"type": "object"}, mappings=[])
-    assert config.validate_intermediately is True
+def test_time_functions_are_evaluated_fresh_on_every_run():
+    """
+    jsonata-python resolves $now()/$millis() through Jsonata.CURRENT.jsonata.timestamp,
+    a thread-local re-pointed only in Jsonata.__init__ -- evaluate() updates just
+    self.timestamp. Constructing an instance per evaluation keeps those the same object,
+    which is the only reason time functions are correct today.
 
-
-def test_validate_intermediately_false_skips_per_fragment_validation():
-    source_schema = {"type": "object"}
-    target_schema = {
-        "type": "object",
-        "properties": {"x": {"type": "integer"}, "y": {"type": "string"}},
-        "additionalProperties": False,
-    }
-    mappings = [
-        '{ "x": 1 }',
-        '{ "y": 123 }',  # invalid: y should be string
-    ]
+    Caching compiled expressions (proposed under #722, withdrawn in review) freezes
+    CURRENT on whichever expression was compiled last, and every other cached expression
+    then emits a stale timestamp -- reproduced as a 0 ms delta across a 2 s gap. This
+    pins the property so a reintroduced cache fails here rather than silently shipping
+    wrong timestamps.
+    """
+    schema = {"type": "object"}
     config = core.BaseTranslatorConfig(
-        source_schema=source_schema, target_schema=target_schema, mappings=mappings, validate_intermediately=False
+        source_schema=schema, target_schema=schema, mappings=['{ "t": $millis() }', '{ "u": $millis() }']
     )
     translator = core.BaseTranslator(config)
-    # Without intermediate validation, the invalid fragment merges in.
-    # Final validation catches the type mismatch.
-    with pytest.raises(ValueError, match="does not conform"):
-        translator.run({})
 
+    first = translator.run({})
+    time.sleep(0.2)
+    second = translator.run({})
 
-def test_validate_intermediately_true_rollback_on_violation():
-    source_schema = {"type": "object"}
-    target_schema = {
-        "type": "object",
-        "properties": {"x": {"type": "integer"}, "y": {"type": "string"}},
-        "additionalProperties": False,
-    }
-    mappings = [
-        '{ "x": 1 }',
-        '{ "y": 123 }',  # invalid type for y -> should be rolled back
-    ]
-    config = core.BaseTranslatorConfig(
-        source_schema=source_schema, target_schema=target_schema, mappings=mappings, validate_intermediately=True
+    # Assert advancement against the sleep, not merely `>`. Under a reintroduced cache
+    # the second run reports the *first* run's trailing timestamp, which is a few ms
+    # later than that run's leading one -- enough to satisfy a bare `>` by accident.
+    elapsed_ms = second["t"] - first["t"]
+    assert elapsed_ms >= 150, (
+        f"$millis() advanced only {elapsed_ms}ms across a 200ms sleep -- are expressions being cached?"
     )
-    translator = core.BaseTranslator(config)
-    result = translator.run({})
-    assert result == {"x": 1}  # y was rolled back
-
-
-# ---------------------------------------------------------------------------
-# Tests for JSONata expression caching
-# ---------------------------------------------------------------------------
-
-
-def test_compiled_expression_cached_across_runs(monkeypatch):
-    real = core.jsonata.Jsonata
-    constructions = {"count": 0}
-
-    class CountingJsonata(real):
-        def __init__(self, expr):
-            constructions["count"] += 1
-            super().__init__(expr)
-
-    monkeypatch.setattr(core.jsonata, "Jsonata", CountingJsonata)
-
-    source_schema = {"type": "object"}
-    target_schema = {"type": "object"}
-    mappings = ['{ "x": 1 }', '{ "y": 2 }']
-    config = core.BaseTranslatorConfig(source_schema=source_schema, target_schema=target_schema, mappings=mappings)
-    translator = core.BaseTranslator(config)
-
-    translator.run({})
-    translator.run({})
-
-    # Each distinct expression compiles once; the second run reuses the cache.
-    assert constructions["count"] == len(mappings)
-
-
-def test_compiled_expression_cache_separates_distinct_expressions(monkeypatch):
-    real = core.jsonata.Jsonata
-    constructed_exprs = []
-
-    class RecordingJsonata(real):
-        def __init__(self, expr):
-            constructed_exprs.append(expr)
-            super().__init__(expr)
-
-    monkeypatch.setattr(core.jsonata, "Jsonata", RecordingJsonata)
-
-    source_schema = {"type": "object"}
-    target_schema = {"type": "object"}
-    mappings = ['{ "x": 1 }', '{ "x": 2 }']
-    config = core.BaseTranslatorConfig(source_schema=source_schema, target_schema=target_schema, mappings=mappings)
-    translator = core.BaseTranslator(config)
-
-    translator.run({})
-    translator.run({})
-
-    # Distinct expression strings are cached under separate keys, so every
-    # expression compiles exactly once across both runs.
-    assert constructed_exprs == mappings
