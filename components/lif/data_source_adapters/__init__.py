@@ -1,12 +1,11 @@
 from .core import LIFDataSourceAdapter
 from .lif_to_lif_adapter import LIFToLIFAdapter
-from .example_data_source_rest_api_to_lif_adapter.adapter import ExampleDataSourceRestAPIToLIFAdapter
 
 # Core adapter registry
 _CORE_ADAPTERS = {"lif-to-lif": LIFToLIFAdapter}
 
-# External adapters registry
-_EXTERNAL_ADAPTERS = {"example-data-source-rest-api-to-lif": ExampleDataSourceRestAPIToLIFAdapter}
+# External adapters registry — populated at startup via register_adapter()
+_EXTERNAL_ADAPTERS: dict[str, type[LIFDataSourceAdapter]] = {}
 
 # Combined registry
 ADAPTER_REGISTRY = {**_CORE_ADAPTERS, **_EXTERNAL_ADAPTERS}
