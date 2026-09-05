@@ -176,18 +176,48 @@ __all__ = ["MySourceAdapter"]
 
 ### Step 3: Register the adapter
 
-Add your adapter to the registry in `components/lif/data_source_adapters/__init__.py`:
+`ADAPTER_REGISTRY` maps adapter IDs to adapter classes, and `get_adapter_by_id` resolves
+against it. How you get your adapter into that map depends on which tier it belongs to.
+The registry key must match your adapter's `adapter_id` in every case.
+
+**Product-tier adapter living in this repo** — add it to `_EXTERNAL_ADAPTERS` in
+`components/lif/data_source_adapters/__init__.py`:
 
 ```python
 from .my_source_adapter import MySourceAdapter
 
-_EXTERNAL_ADAPTERS = {
-    "example-data-source-rest-api-to-lif": ExampleDataSourceRestAPIToLIFAdapter,
+_EXTERNAL_ADAPTERS: dict[str, type[LIFDataSourceAdapter]] = {
     "my-source-to-lif": MySourceAdapter,  # <-- add this
 }
 ```
 
-The registry key must match your adapter's `adapter_id`.
+**Demo/example adapter** — it does not belong in `data_source_adapters` at all. Per
+[ADR 0004](../../design/adr/general/0004-components-are-the-unit-of-reuse.md), core components
+must never depend on demo bricks, so demo adapters live in
+`components/lif/demo_data_source_adapters/` and register themselves at startup:
+
+```python
+# components/lif/demo_data_source_adapters/__init__.py
+DEMO_ADAPTERS: dict[str, type[LIFDataSourceAdapter]] = {
+    "my-demo-source-to-lif": MyDemoSourceAdapter,  # <-- add this
+}
+```
+
+The consuming base or job then calls `register_demo_adapters()` once at startup — see
+`orchestrators/dagster/lif-orchestrator/src/lif_orchestrator/defs/lif_job.py`.
+
+**Adapter you maintain outside this repo** — register it from your own base at startup,
+without editing LIF core:
+
+```python
+from lif.data_source_adapters import register_adapter
+from my_package.adapters import MySourceAdapter
+
+register_adapter("my-source-to-lif", MySourceAdapter)
+```
+
+`register_adapter` validates that the class subclasses `LIFDataSourceAdapter` and refuses to
+shadow a core adapter ID.
 
 ### Step 4: Wire it up
 
@@ -247,9 +277,9 @@ The repository includes two adapters you can study or clone as a starting point:
 | Adapter | Type | Returns | Path |
 |---------|------|---------|------|
 | `lif-to-lif` | `LIF_TO_LIF` | `OrchestratorJobQueryPlanPartResults` | `components/lif/data_source_adapters/lif_to_lif_adapter/` |
-| `example-data-source-rest-api-to-lif` | `PIPELINE_INTEGRATED` | `dict` | `components/lif/data_source_adapters/example_data_source_rest_api_to_lif_adapter/` |
+| `example-data-source-rest-api-to-lif` | `PIPELINE_INTEGRATED` | `dict` | `components/lif/demo_data_source_adapters/example_data_source_rest_api_to_lif_adapter/` |
 
-The `example-data-source-rest-api-to-lif` adapter is the simplest starting point for most custom adapters. It demonstrates the full pipeline-integrated flow in under 45 lines of code.
+The `example-data-source-rest-api-to-lif` adapter is the simplest starting point for most custom adapters. It demonstrates the full pipeline-integrated flow in under 45 lines of code. Note that it is demo-tier and therefore lives in the `demo_data_source_adapters` brick — clone it into `data_source_adapters/` (or your own package) rather than adding a product adapter alongside it.
 
 ## Troubleshooting
 
@@ -257,7 +287,13 @@ For MDR mapping issues, empty fragments, cache invalidation, and Dagster run ins
 
 ### Adapter not found
 
-If the orchestrator raises `Unknown adapter_id`, the adapter class is not in `ADAPTER_REGISTRY`. Verify the import and `_EXTERNAL_ADAPTERS` entry in `components/lif/data_source_adapters/__init__.py`, and that the registry key matches the `adapter_id` class variable exactly.
+If the orchestrator raises `Unknown adapter_id`, the adapter class is not in `ADAPTER_REGISTRY`. Check the registration path for your adapter's tier (see [Step 3](#step-3-register-the-adapter)) and that the registry key matches the `adapter_id` class variable exactly:
+
+- Product-tier: the import and `_EXTERNAL_ADAPTERS` entry in `components/lif/data_source_adapters/__init__.py`
+- Demo-tier: the `DEMO_ADAPTERS` entry in `components/lif/demo_data_source_adapters/__init__.py`, **and** that the consuming base actually calls `register_demo_adapters()` before resolving the ID
+- Out-of-tree: that your `register_adapter(...)` call runs at startup, before the first `get_adapter_by_id`
+
+The error message lists the IDs that are registered, which tells you whether registration ran at all.
 
 ### Empty credentials
 
