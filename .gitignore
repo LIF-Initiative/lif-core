@@ -228,4 +228,6 @@ pnpm-lock.yaml
 
 #AI
 .agents/
-.claude/plans/
+
+# Claude Code personal overrides (shared config lives in .claude/settings.json)
+.claude/settings.local.json

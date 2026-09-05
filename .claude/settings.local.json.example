@@ -1,0 +1,24 @@
+{
+  "_comment": [
+    "Copy to .claude/settings.local.json for PERSONAL overrides. That file is",
+    "gitignored — it is yours alone and never reaches other contributors.",
+    "",
+    "Put shared, repo-wide rules in .claude/settings.json (committed) instead,",
+    "so everyone working in this repo actually gets them.",
+    "",
+    "Use ABSOLUTE paths sparingly and never hardcode your home directory: a",
+    "machine or username change silently turns every such entry into dead config",
+    "that matches nothing, with no warning.",
+    "",
+    "See agent-behavioral-guidelines.md for the behavioral rules that apply",
+    "regardless of these settings."
+  ],
+  "permissions": {
+    "allow": [
+      "Bash(docker compose up:*)",
+      "Bash(docker compose down)",
+      "Bash(docker compose logs:*)"
+    ],
+    "deny": []
+  }
+}

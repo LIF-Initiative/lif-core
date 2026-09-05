@@ -2,6 +2,10 @@
     "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
     "flagWords": [],
     "words": [
+        "hostnames",
+        "toplevel",
+        "ntvs",
+        "njsproj",
         "aget",
         "aiter",
         "astream",
