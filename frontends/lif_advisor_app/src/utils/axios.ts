@@ -22,27 +22,76 @@ axiosInstance.interceptors.request.use(
     }
 );
 
+let isRefreshing = false;
+let failedQueue: Array<{ resolve: (token: string) => void; reject: (err: unknown) => void }> = [];
+
+// Single exit point for "this session is over". #981 wants the redirect target changed
+// from '/login' (a route the SPA does not actually define) to '/'; keeping every caller
+// funnelled through here makes that a one-line change.
+function endSession() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('refreshToken');
+    window.location.href = '/login';
+}
+
+function processQueue(error: unknown, token: string | null) {
+    failedQueue.forEach((prom) => {
+        if (error || !token) {
+            prom.reject(error);
+        } else {
+            prom.resolve(token);
+        }
+    });
+    failedQueue = [];
+}
+
 axiosInstance.interceptors.response.use(
     (response) => response,
     async (error) => {
         const originalRequest = error.config;
 
         if (error.response?.status === 401 && !originalRequest?._retry) {
+            // Don't intercept the refresh-token endpoint itself
+            if (originalRequest.url === '/refresh-token') {
+                endSession();
+                return Promise.reject(error);
+            }
+
+            // If a refresh is already in progress, queue this request
+            if (isRefreshing) {
+                return new Promise<string>((resolve, reject) => {
+                    failedQueue.push({ resolve, reject });
+                }).then((token) => {
+                    originalRequest.headers.Authorization = `Bearer ${token}`;
+                    return axiosInstance(originalRequest);
+                });
+            }
+
             originalRequest._retry = true;
 
+            const refreshToken = localStorage.getItem('refreshToken');
+            if (!refreshToken) {
+                endSession();
+                return Promise.reject(error);
+            }
+
+            isRefreshing = true;
+
             try {
-                const refreshToken = localStorage.getItem('refreshToken');
                 const response = await axiosInstance.post('/refresh-token', { 'refresh_token': refreshToken });
+                const newToken = response.data.access_token;
+                localStorage.setItem('token', newToken);
 
-                localStorage.setItem('token', response.data.access_token);
+                processQueue(null, newToken);
 
-                // Retry the original request with the new token
-                originalRequest.headers.Authorization = `Bearer ${response.data.access_token}`;
+                originalRequest.headers.Authorization = `Bearer ${newToken}`;
                 return axiosInstance(originalRequest);
-            } catch (error) {
-                localStorage.removeItem('token');
-                localStorage.removeItem('refreshToken');
-                window.location.href = '/login';
+            } catch (refreshError) {
+                processQueue(refreshError, null);
+                endSession();
+                return Promise.reject(refreshError);
+            } finally {
+                isRefreshing = false;
             }
         }
 
