@@ -34,7 +34,11 @@ class LIFQueryPlannerConfig(BaseModel):
         lif_orchestrator_url (str): URL of the LIF Orchestrator service.
         information_sources_config (List[LIFQueryPlannerInfoSourceConfig]): Configuration for the information sources.
         query_timeout_seconds (int): Maximum time in seconds to wait for a query to complete, including
-            orchestration. Used to bound the synchronous polling loop and the internal HTTP clients.
+            orchestration. Bounds the synchronous polling loop only.
+        service_request_timeout_seconds (int): Timeout in seconds for individual HTTP calls to the
+            LIF Cache and Orchestrator. These are fast service-to-service requests -- submitting an
+            orchestrator job returns a run_id immediately, and the wait happens in the polling loop --
+            so this is deliberately short and independent of the overall query budget.
     """
 
     lif_cache_url: str = Field(..., description="URL of the LIF Cache service")
@@ -43,5 +47,11 @@ class LIFQueryPlannerConfig(BaseModel):
         ..., description="Configuration for the information sources"
     )
     query_timeout_seconds: int = Field(
-        300, gt=0, description="Maximum time in seconds to wait for a query to complete, including orchestration."
+        300,
+        gt=0,
+        description="Maximum time in seconds to wait for a query to complete, including orchestration. "
+        "Bounds the synchronous polling loop only.",
+    )
+    service_request_timeout_seconds: int = Field(
+        10, gt=0, description="Timeout in seconds for individual HTTP calls to the LIF Cache and Orchestrator."
     )

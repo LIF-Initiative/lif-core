@@ -352,8 +352,30 @@ def test_query_planner_config_rejects_non_positive_query_timeout():
         )
 
 
+def test_query_planner_config_default_service_request_timeout_is_10():
+    """Short by design: these are fast service-to-service calls, not the orchestration wait."""
+    config = core.LIFQueryPlannerConfig(
+        lif_cache_url="https://api.example.com",
+        lif_orchestrator_url="https://api.example.com",
+        information_sources_config=[],
+    )
+    assert config.service_request_timeout_seconds == 10
+
+
+def test_query_planner_config_rejects_non_positive_service_request_timeout():
+    from pydantic import ValidationError
+
+    with pytest.raises(ValidationError):
+        core.LIFQueryPlannerConfig(
+            lif_cache_url="https://api.example.com",
+            lif_orchestrator_url="https://api.example.com",
+            information_sources_config=[],
+            service_request_timeout_seconds=0,
+        )
+
+
 # -------------------------------------------------------------------------
-# Internal HTTP clients use the configured query timeout
+# Internal HTTP clients use the short per-request timeout, not the query budget
 # -------------------------------------------------------------------------
 @patch("httpx.AsyncClient")
 def test_query_lif_cache_uses_configured_timeout(mock_client_cls):
@@ -381,12 +403,14 @@ def test_post_orchestrator_job_uses_configured_timeout(mock_client_cls):
 
 
 @patch("httpx.AsyncClient")
-def test_run_update_uses_config_query_timeout(mock_client_cls):
+def test_run_update_uses_service_request_timeout_not_query_budget(mock_client_cls):
+    # Distinct values: asserting 7 rather than 123 is what pins the decoupling.
     config = core.LIFQueryPlannerConfig(
         lif_cache_url="https://api.example.com/cache",
         lif_orchestrator_url="https://api.example.com/orchestrator",
         information_sources_config=[],
         query_timeout_seconds=123,
+        service_request_timeout_seconds=7,
     )
     service = core.LIFQueryPlannerService(config=config)
 
@@ -403,11 +427,11 @@ def test_run_update_uses_config_query_timeout(mock_client_cls):
     )
     asyncio.run(service.run_update(update))
 
-    mock_client_cls.assert_called_once_with(timeout=123)
+    mock_client_cls.assert_called_once_with(timeout=7)
 
 
 @patch("httpx.AsyncClient")
-def test_run_post_orchestration_results_uses_config_query_timeout(mock_client_cls):
+def test_run_post_orchestration_results_uses_service_request_timeout(mock_client_cls):
     config = core.LIFQueryPlannerConfig(
         lif_cache_url="https://api.example.com/cache",
         lif_orchestrator_url="https://api.example.com/orchestrator",
@@ -421,6 +445,7 @@ def test_run_post_orchestration_results_uses_config_query_timeout(mock_client_cl
             }
         ],
         query_timeout_seconds=123,
+        service_request_timeout_seconds=7,
     )
     service = core.LIFQueryPlannerService(config=config)
 
@@ -452,4 +477,4 @@ def test_run_post_orchestration_results_uses_config_query_timeout(mock_client_cl
     )
     asyncio.run(service.run_post_orchestration_results(orchestration_results))
 
-    mock_client_cls.assert_called_once_with(timeout=123)
+    mock_client_cls.assert_called_once_with(timeout=7)

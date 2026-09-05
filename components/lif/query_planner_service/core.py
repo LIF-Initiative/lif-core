@@ -72,7 +72,7 @@ class LIFQueryPlannerService:
         try:
             # Send the query to the LIF Cache service
             lif_records: List[LIFRecord] = await query_lif_cache(
-                self.lif_cache_query_url, query, self.config.query_timeout_seconds
+                self.lif_cache_query_url, query, self.config.service_request_timeout_seconds
             )
 
             # Raise an error if multiple records are found
@@ -118,7 +118,9 @@ class LIFQueryPlannerService:
 
                 try:
                     orchestrator_job_request_response: OrchestratorJobRequestResponse = await post_orchestrator_job(
-                        self.lif_orchestrator_post_url, orchestrator_job_request, self.config.query_timeout_seconds
+                        self.lif_orchestrator_post_url,
+                        orchestrator_job_request,
+                        self.config.service_request_timeout_seconds,
                     )
                 except Exception as e:
                     logger.error(f"Returning LIF records found so far: {lif_records}")
@@ -191,7 +193,7 @@ class LIFQueryPlannerService:
             LIFException: If the update fails.
         """
         try:
-            async with httpx.AsyncClient(timeout=self.config.query_timeout_seconds) as client:
+            async with httpx.AsyncClient(timeout=self.config.service_request_timeout_seconds) as client:
                 response = await client.post(self.lif_cache_update_url, json=update.model_dump())
             response.raise_for_status()
             response_json = response.json()
@@ -261,7 +263,7 @@ class LIFQueryPlannerService:
                 "lif_query_filter": lif_query_filter.model_dump(by_alias=True),
                 "lif_fragments": [fragment.model_dump() for fragment in lif_fragments],
             }
-            async with httpx.AsyncClient(timeout=self.config.query_timeout_seconds) as client:
+            async with httpx.AsyncClient(timeout=self.config.service_request_timeout_seconds) as client:
                 response = await client.post(self.lif_cache_save_url, json=json_body)
             response.raise_for_status()
 

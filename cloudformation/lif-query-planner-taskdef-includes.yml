@@ -6,7 +6,7 @@ Environment:
     Value: 
       Fn::Sub: "http://orchestrator.lif.${EnvironmentName}.aws:8005"
   - Name: LIF_QUERY_TIMEOUT_SECONDS
-    Value: "120"
+    Value: "300"
   - Name: LIF_QUERY_PLANNER_INFORMATION_SOURCES_CONFIG_PATH
     Value: "/opt/app/information_sources_config.yml"
 Secrets:

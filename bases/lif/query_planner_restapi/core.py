@@ -24,6 +24,10 @@ MIN_POLLING_DELAY_SECONDS: int = 1
 MAX_POLLING_DELAY_SECONDS: int = 16
 DEFAULT_QUERY_TIMEOUT_SECONDS: int = 300
 LIF_QUERY_TIMEOUT_SECONDS: int = int(os.getenv("LIF_QUERY_TIMEOUT_SECONDS", str(DEFAULT_QUERY_TIMEOUT_SECONDS)))
+DEFAULT_SERVICE_REQUEST_TIMEOUT_SECONDS: int = 10
+LIF_SERVICE_REQUEST_TIMEOUT_SECONDS: int = int(
+    os.getenv("LIF_SERVICE_REQUEST_TIMEOUT_SECONDS", str(DEFAULT_SERVICE_REQUEST_TIMEOUT_SECONDS))
+)
 
 app = FastAPI()
 logger = get_logger(__name__)
@@ -91,6 +95,7 @@ config = LIFQueryPlannerConfig(
     lif_orchestrator_url=LIF_ORCHESTRATOR_URL,
     information_sources_config=load_information_sources_yaml_config(INFORMATION_SOURCES_CONFIG_PATH),
     query_timeout_seconds=LIF_QUERY_TIMEOUT_SECONDS,
+    service_request_timeout_seconds=LIF_SERVICE_REQUEST_TIMEOUT_SECONDS,
 )
 service: LIFQueryPlannerService = LIFQueryPlannerService(config)
 
@@ -115,7 +120,7 @@ async def do_run_query_sync(query: LIFQuery, response: Response) -> List[LIFReco
             delay_in_seconds: int = MIN_POLLING_DELAY_SECONDS
             while result.status == "PENDING":
                 # Wait for the query to complete
-                if (datetime.now() - start_time).seconds > config.query_timeout_seconds:
+                if (datetime.now() - start_time).total_seconds() > config.query_timeout_seconds:
                     raise HTTPException(
                         status_code=408, detail=f"Query timed out after {config.query_timeout_seconds} seconds"
                     )
