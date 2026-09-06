@@ -7,6 +7,12 @@ Environment:
       Fn::Sub: "http://orchestrator.lif.${EnvironmentName}.aws:8005"
   - Name: LIF_QUERY_TIMEOUT_SECONDS
     Value: "300"
+  # Per-request ceiling for the QP's own calls to the Cache and Orchestrator, distinct
+  # from the whole-query budget above. Set to the code default so this is tunable
+  # without a code change -- see #572, where an orchestrator submission exceeded
+  # httpx's silent 5s default during a demo.
+  - Name: LIF_SERVICE_REQUEST_TIMEOUT_SECONDS
+    Value: "10"
   - Name: LIF_QUERY_PLANNER_INFORMATION_SOURCES_CONFIG_PATH
     Value: "/opt/app/information_sources_config.yml"
 Secrets:
