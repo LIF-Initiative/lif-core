@@ -1,4 +1,3 @@
-import asyncio
 import os
 from unittest.mock import AsyncMock, patch
 
@@ -21,8 +20,12 @@ class MockAgent:
         self.ask_agent = AsyncMock(return_value={"content": "This is mocked content", "tokens": 10, "cost": 0.57})
 
 
-# From the hard coded users in lif/advisor_restapi
-USER_DETAILS_ALEX = {"username": "atsatrian_lifdemo@stateu.edu", "password": "changeme"}
+# From the hard coded users in lif/advisor_restapi.
+# The password is read from the environment rather than hardcoded: the base now
+# requires LIF_DEMO_USER_PASSWORD with no fallback (#1191), so hardcoding a value
+# here would just re-enshrine the old default and hide that dependency.
+# test/conftest.py supplies a throwaway value for the session.
+USER_DETAILS_ALEX = {"username": "atsatrian_lifdemo@stateu.edu", "password": os.environ["LIF_DEMO_USER_PASSWORD"]}
 
 
 @pytest.mark.asyncio
@@ -399,9 +402,9 @@ async def test_logout():
                 client=client, access_token=response_access_token, expected_response=logout_expected_response
             )
 
-            # Wait for background summarization task to complete
-            await asyncio.sleep(0.1)
-
+            # No synchronization needed: FastAPI's BackgroundTasks run inside the ASGI
+            # call, and ASGITransport awaits that call, so the task has already finished
+            # by the time the request returns.
             # Verify the agent was called (background task ran)
             mocked_ai_agent.ask_agent.assert_awaited_with(
                 "save_interaction_summary",
@@ -559,9 +562,6 @@ async def test_logout_succeeds_even_when_summarization_fails():
 
             assert logout_response.status_code == 200, logout_response.text
             assert logout_response.json() == {"success": True}
-
-            # Wait for background task to attempt and fail
-            await asyncio.sleep(0.1)
 
             # Verify the agent was called (background task ran) but failed silently
             mocked_ai_agent.ask_agent.assert_awaited()
