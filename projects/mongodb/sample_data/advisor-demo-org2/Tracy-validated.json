@@ -3,9 +3,9 @@
     {
       "Name": [
         {
-          "informationSourceId": "Org2",
           "lastName": "Thatcher",
           "firstName": "Tracy",
+          "informationSourceId": "Org2",
           "informationSourceOrganization": "Community College",
           "identifier": "name-tracy-thatcher-org2-001"
         }
@@ -14,27 +14,34 @@
         {
           "Email": [
             {
-              "informationSourceId": "Org2",
               "emailAddress": [
                 "tthatcher_lifdemo@stateu.edu"
-              ]
+              ],
+              "informationSourceId": "Org2",
+              "informationSourceOrganization": "Community College",
+              "identifier": "email-tracy-thatcher-org2-001"
             }
           ],
           "Address": [
             {
-              "informationSourceId": "Org2",
               "addressCity": "Land O' Lakes",
               "countryCode": "US",
               "addressState": "Florida",
-              "addressPostalCode": "33558"
+              "addressPostalCode": "33558",
+              "informationSourceId": "Org2",
+              "addressStreet": "10924 Kentworth Loop",
+              "informationSourceOrganization": "Community College",
+              "identifier": "address-tracy-thatcher-org2-001"
             }
           ],
           "Telephone": [
             {
-              "informationSourceId": "Org2",
               "telephoneNumber": [
                 "+12221234567"
-              ]
+              ],
+              "informationSourceId": "Org2",
+              "informationSourceOrganization": "Community College",
+              "identifier": "telephone-tracy-thatcher-org2-001"
             }
           ],
           "informationSourceId": "Org2",
@@ -52,8 +59,7 @@
       ],
       "EmploymentLearningExperience": [
         {
-          "informationSourceId": "Org2",
-          "name": "Sales Associate ",
+          "name": "Sales Associate",
           "RefPosition": {
             "informationSourceId": "Org2",
             "name": "Referenced Employment Experience",
@@ -91,20 +97,21 @@
             "informationSourceOrganization": "Community College",
             "identifier": "organization-approving-authority-org2-001"
           },
+          "informationSourceId": "Org2",
           "RefCredentialAward": {
-            "identifier": "cred-employment-certificate-001",
-            "name": "Employment Certificate",
+            "id": "cred-employment-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Tracy Thatcher",
             "informationSourceId": "Org2",
-            "informationSourceOrganization": "Org2"
+            "informationSourceOrganization": "Community College",
+            "identifier": "credentialaward-cred-employment-certificate-00-org2-001",
+            "name": "Employment Certificate"
           },
           "informationSourceOrganization": "Community College",
           "identifier": "employmentlearningexperience-sales-associate--org2-001"
         },
         {
-          "informationSourceId": "Org2",
-          "name": "Receptionist ",
+          "name": "Receptionist",
           "endDate": "2016-09",
           "RefPosition": {
             "informationSourceId": "Org2",
@@ -143,19 +150,20 @@
             "informationSourceOrganization": "Community College",
             "identifier": "organization-approving-authority-org2-001"
           },
+          "informationSourceId": "Org2",
           "RefCredentialAward": {
-            "identifier": "cred-employment-certificate-001",
-            "name": "Employment Certificate",
+            "id": "cred-employment-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Tracy Thatcher",
             "informationSourceId": "Org2",
-            "informationSourceOrganization": "Org2"
+            "informationSourceOrganization": "Community College",
+            "identifier": "credentialaward-cred-employment-certificate-00-org2-001",
+            "name": "Employment Certificate"
           },
           "informationSourceOrganization": "Community College",
           "identifier": "employmentlearningexperience-receptionist--org2-002"
         },
         {
-          "informationSourceId": "Org2",
           "name": "Youth Counselor",
           "endDate": "2016-08",
           "RefPosition": {
@@ -195,19 +203,20 @@
             "informationSourceOrganization": "Community College",
             "identifier": "organization-approving-authority-org2-001"
           },
+          "informationSourceId": "Org2",
           "RefCredentialAward": {
-            "identifier": "cred-employment-certificate-001",
-            "name": "Employment Certificate",
+            "id": "cred-employment-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Tracy Thatcher",
             "informationSourceId": "Org2",
-            "informationSourceOrganization": "Org2"
+            "informationSourceOrganization": "Community College",
+            "identifier": "credentialaward-cred-employment-certificate-00-org2-001",
+            "name": "Employment Certificate"
           },
           "informationSourceOrganization": "Community College",
           "identifier": "employmentlearningexperience-youth-counselor-org2-003"
         },
         {
-          "informationSourceId": "Org2",
           "name": "Childcare Provider",
           "endDate": "2006-03",
           "RefPosition": {
@@ -247,13 +256,15 @@
             "informationSourceOrganization": "Community College",
             "identifier": "organization-approving-authority-org2-001"
           },
+          "informationSourceId": "Org2",
           "RefCredentialAward": {
-            "identifier": "cred-employment-certificate-001",
-            "name": "Employment Certificate",
+            "id": "cred-employment-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Tracy Thatcher",
             "informationSourceId": "Org2",
-            "informationSourceOrganization": "Org2"
+            "informationSourceOrganization": "Community College",
+            "identifier": "credentialaward-cred-employment-certificate-00-org2-001",
+            "name": "Employment Certificate"
           },
           "informationSourceOrganization": "Community College",
           "identifier": "employmentlearningexperience-childcare-provider-org2-004"
@@ -339,7 +350,8 @@
             "informationSourceOrganization": "Community College",
             "identifier": "cred-employment-certificate-001",
             "name": "Employment Certificate"
-          }
+          },
+          "name": "Employment Certificate"
         }
       ],
       "CourseLearningExperience": [
@@ -392,7 +404,8 @@
             "name": "Course Completion Certificate",
             "awardIssueDate": "2020-05-20T10:00:00Z",
             "credentialAwardee": "Tracy Thatcher"
-          }
+          },
+          "name": "Introduction to Business"
         },
         {
           "informationSourceId": "Org2",
@@ -443,6 +456,99 @@
             "name": "Course Completion Certificate",
             "awardIssueDate": "2020-12-20T10:00:00Z",
             "credentialAwardee": "Tracy Thatcher"
+          },
+          "name": "Business Communications"
+        }
+      ],
+      "Birth": [
+        {
+          "informationSourceId": "Org2",
+          "informationSourceOrganization": "Community College",
+          "identifier": "birth-org2-001",
+          "birthDate": "1985-03-08",
+          "cityOfBirth": "Jacksonville",
+          "stateOfBirth": "Florida"
+        }
+      ],
+      "SexAndGender": [
+        {
+          "informationSourceId": "Org2",
+          "informationSourceOrganization": "Community College",
+          "identifier": "sexandgender-org2-001",
+          "sex": "Female",
+          "gender": "Female",
+          "pronouns": "she/her"
+        }
+      ],
+      "Residency": [
+        {
+          "informationSourceId": "Org2",
+          "informationSourceOrganization": "Community College",
+          "identifier": "residency-org2-001",
+          "localType": "In-State",
+          "countyFIPSCode": "12101",
+          "dateEffective": "2015-01-01",
+          "doNotPublishIndicator": "false"
+        }
+      ],
+      "Language": [
+        {
+          "informationSourceId": "Org2",
+          "informationSourceOrganization": "Community College",
+          "identifier": "language-english-org2-001",
+          "name": "English",
+          "iSO639_2LangCode": "eng",
+          "iSO639_3LangCode": "eng",
+          "languageType": "Primary"
+        }
+      ],
+      "Demographics": [
+        {
+          "informationSourceId": "Org2",
+          "informationSourceOrganization": "Community College",
+          "identifier": "demographics-org2-001",
+          "highestLevelEducation": "SomeCollegeButNoDegree",
+          "familyIncome": "65000",
+          "familyIncomeCalculation": "Annual household income (self-reported)",
+          "usCitizenship": "true",
+          "economicDisadvantage": "false",
+          "homeless": "false",
+          "militaryActiveStatus": "false",
+          "militaryVeteranStatus": "true"
+        }
+      ],
+      "MilitaryLearningExperience": [
+        {
+          "informationSourceId": "Org2",
+          "informationSourceOrganization": "Community College",
+          "identifier": "militarylearningexperience-flarng-org2-001",
+          "name": "Florida Army National Guard Service",
+          "branch": "Army",
+          "division": "Florida Army National Guard",
+          "militaryStatus": "Veteran",
+          "militaryEnlistmentExit": "End of service obligation",
+          "serviceNumber": "FLARNG-0198734",
+          "experienceStartDate": "2003-06",
+          "experienceEndDate": "2011-06",
+          "countryCode": "US",
+          "experienceCountryCode": "US",
+          "startingRank": "E-1 (Private)",
+          "endingRank": "E-4 (Specialist)",
+          "honors": "Army Good Conduct Medal; National Defense Service Medal",
+          "dischargeStatus": "Honorable",
+          "dischargeDate": "2011-06-30",
+          "comments": "Part-time service (monthly drill plus annual training) alongside civilian employment; drill schedules and a deployment interrupted early college coursework.",
+          "OfferedByRefOrganization": {
+            "name": "Florida Army National Guard",
+            "identifier": "organization-florida-army-national-guard-org2-014",
+            "informationSourceId": "Org2",
+            "informationSourceOrganization": "Community College"
+          },
+          "AssertedByRefOrganization": {
+            "name": "Florida Army National Guard",
+            "identifier": "organization-florida-army-national-guard-org2-014",
+            "informationSourceId": "Org2",
+            "informationSourceOrganization": "Community College"
           }
         }
       ]
@@ -510,6 +616,14 @@
       "informationSourceId": "Org2",
       "informationSourceOrganization": "Community College",
       "identifier": "organization-approving-authority-org2-008"
+    },
+    {
+      "informationSourceId": "Org2",
+      "informationSourceOrganization": "Community College",
+      "name": "Florida Army National Guard",
+      "description": "State component of the U.S. Army National Guard in which Tracy served part-time.",
+      "identificationSystem": "flarng-org-id",
+      "identifier": "organization-florida-army-national-guard-org2-014"
     }
   ],
   "informationSourceId": "Org2"

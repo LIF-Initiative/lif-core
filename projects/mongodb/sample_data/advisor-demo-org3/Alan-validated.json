@@ -3,41 +3,1183 @@
     {
       "Name": [
         {
-          "informationSourceId": "Org3",
           "lastName": "Tsatrian",
-          "firstName": "Alan ",
-          "informationSourceOrganization": "Regional University",
+          "firstName": "Alan",
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
           "identifier": "name-alan -tsatrian-org3-001"
+        }
+      ],
+      "Proficiency": [
+        {
+          "name": "Innovation",
+          "description": "The article argues that innovation is not a talent that only a few possess, but rather a common skill that can be developed by anyone. Innovation requires curiosity, experimentation, and an openness to new ideas. The author suggests that individuals can foster their innovation skills by seeking out diverse perspectives, engaging in continuous learning, and approaching problems with an open mind. Additionally, the article emphasizes the importance of creating a supportive organizational culture that encourages innovation and rewards experimentation.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-innovation-org3-001"
+        },
+        {
+          "name": "Business Intelligence",
+          "description": "Business Intelligence is the process of gathering, analyzing, and interpreting data in order to make informed business decisions. It involves using specialized software and tools to extract valuable insights from large datasets and visualizing those insights in a meaningful way. Business Intelligence professionals must possess strong analytical and technical skills, as well as the ability to communicate complex data to non-technical stakeholders.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-business-intelligence-org3-002"
+        },
+        {
+          "name": "Biological Systems",
+          "description": "Biological systems is the study of living organisms and their interactions with each other and their environment. It involves the study of the structure, function, behavior, and evolution of organisms, as well as the processes that enable them to survive and reproduce. It is a specialized skill that requires an understanding of biology, ecology, and related fields, as well as the ability to analyze complex data and conduct experiments to better understand biological systems. Those with a background in biological systems can pursue careers in fields such as ecology, molecular biology, genetics, and biomedical research.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-biological-systems-org3-003"
+        },
+        {
+          "name": "Business Ethics",
+          "description": "Business ethics is a form of applied ethics or professional ethics, that examines ethical principles and moral or ethical problems that can arise in a business environment. It applies to all aspects of business conduct and is relevant to the conduct of individuals and entire organizations. These ethics originate from individuals, organizational statements or the legal system. These norms, values, ethical, and unethical practices are the principles that guide a business.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-business-ethics-org3-004"
+        },
+        {
+          "name": "Strategic Management",
+          "description": "Strategic management is the process of defining, developing, and implementing long-term plans and strategies for a business or organization in order to achieve its goals and objectives. It involves analyzing internal and external factors that affect the organization, setting clear goals and objectives, and making decisions on the allocation of resources in order to optimize performance and achieve sustainable competitive advantage. It is a specialized skill that requires a combination of analytical, creative, and leadership abilities.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-strategic-management-org3-005"
+        },
+        {
+          "name": "Customer Service",
+          "description": "Customer service is a necessary and common skill in almost every field and industry. It involves effectively communicating with customers to understand their needs, answering their questions or concerns, and providing them with excellent support and service. A successful customer service representative must be patient, empathetic, and knowledgeable about their products or services. Strong customer service skills can lead to increased customer satisfaction, loyalty, and business success.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-customer-service-org3-006"
+        },
+        {
+          "name": "Compliance Training",
+          "description": "Compliance training is a specialized skill that involves educating employees about laws, regulations, and company policies to promote ethical behavior and adherence to rules. This training is necessary to ensure that employees understand and follow guidelines related to industry-specific compliance standards, legal obligations, and ethical conduct. It requires an expert understanding of complex laws and regulations, as well as effective communication skills to educate employees and foster a culture of compliance within an organization.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-compliance-training-org3-007"
+        },
+        {
+          "name": "Conflict Resolution",
+          "description": "Conflict Resolution is a specialized skill that involves finding solutions to disputes and disagreements between individuals or groups. It involves active listening, empathy, and effective communication to understand the needs and concerns of each party involved in the conflict. A successful conflict resolution requires a neutral and objective approach to finding a mutually beneficial solution that satisfies all parties involved.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-conflict-resolution-org3-008"
+        },
+        {
+          "name": "Critical Thinking",
+          "description": "Critical thinking is a skill that allows individuals to analyze and evaluate information to make sound judgements and decisions. It involves the ability to question assumptions, identify biases, and examine evidence to reach logical conclusions. It is a common skill that is essential in various areas of life, including education, career, and personal relationships.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-critical-thinking-org3-009"
+        },
+        {
+          "name": "Cultural Diversity",
+          "description": "Cultural diversity is a specialized skill that involves understanding and appreciating the differences among people from different cultures, including their values, beliefs, behaviors, and communication styles. It requires the ability to be non-judgmental, empathetic, flexible, and open-minded, as well as the willingness to learn and adapt to new cultural situations. This skill is increasingly important in today's globalized and multicultural society, where people of different cultures interact and work together on a daily basis.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-cultural-diversity-org3-010"
+        },
+        {
+          "name": "Data Presentation",
+          "description": "Data presentation is the process of organizing, visualizing, and communicating data in a way that is clear, accurate, and meaningful. It is a specialized skill that involves the use of various tools and techniques such as charts, graphs, infographics, and storytelling to present data in a way that can be easily understood and interpreted by the target audience. Effective data presentation is essential for decision-making, problem-solving, and communication in various fields including business, academia, and research.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-data-presentation-org3-011"
+        },
+        {
+          "name": "Emotional Intelligence",
+          "description": "Emotional Intelligence is the ability to identify, understand and manage one's own emotions as well as the emotions of others. It involves being empathetic, self-aware, and skilled at communicating and resolving conflicts. Emotional intelligence is a common skill that can be developed and improved over time through practice and self-reflection. It is important in personal relationships, professional settings, and overall well-being.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-emotional-intelligence-org3-012"
+        },
+        {
+          "name": "Performance Management",
+          "description": "Performance management is a process of setting goals, monitoring progress, providing feedback, and evaluating results to optimize individual and organizational performance. It involves a range of specialized skills, including effective communication, goal setting, tracking and measuring performance, providing constructive feedback, and developing action plans to improve performance. Performance management is crucial for enhancing productivity, achieving strategic objectives, and driving continuous improvement, and requires ongoing commitment from managers and employees alike.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-performance-management-org3-013"
+        },
+        {
+          "name": "Ethical Codes",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-ethical-codes-org3-014"
+        },
+        {
+          "name": "Leadership",
+          "description": "Leadership is a skill that is common among successful individuals in various fields. It involves the ability to motivate and guide a team towards achieving common goals. Good leadership qualities include effective communication, empathy, decision-making skills, adaptability, and vision. Leadership can be developed and honed through training, practice, and learning from others.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-leadership-org3-015"
+        },
+        {
+          "name": "Human Capital",
+          "description": "Human capital refers to the specialized skills, knowledge, experience, and education of individuals that contribute to their ability to perform labor in the workforce. It is considered a valuable asset for companies as it helps them to increase productivity, performance, and profitability. Investing in the development of human capital through training, education, and career development programs can lead to long-term benefits for individuals and organizations.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-human-capital-org3-016"
+        },
+        {
+          "name": "Information Security Management",
+          "description": "Information Security Management involves the use of specialized techniques, technologies, and procedures to protect digital and physical assets from unauthorized access, use, disclosure, disruption, modification, or destruction. It requires a deep understanding of information security policies, risk management, compliance, and incident response, as well as strong analytical, communication, and leadership skills. Information Security Managers play a crucial role in ensuring the confidentiality, integrity, and availability of organizational information systems and data.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-information-security-managemen-org3-017"
+        },
+        {
+          "name": "International Business",
+          "description": "International business refers to the activities of companies that involve cross-border transactions, trade, investment and other types of business dealings in multiple countries. It requires specialized skills such as knowledge of international laws and regulations, market analysis, cultural sensitivity, language proficiency and global business strategies. Successful international business professionals must be adaptable, flexible and able to navigate complex political, economic and cultural barriers.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-international-business-org3-018"
+        },
+        {
+          "name": "Multimedia",
+          "description": "Multimedia is a specialized skill that involves the creation, manipulation, and integration of various media elements like text, graphics, audio, and video in a digital format to create a more interactive and engaging user experience. This requires technical expertise and creative problem-solving to effectively communicate a message or story to a target audience through a variety of media platforms.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-multimedia-org3-019"
+        },
+        {
+          "name": "Performance Tuning",
+          "description": "Performance tuning involves optimizing the performance of a system or application to ensure it operates efficiently and effectively. It is a specialized skill that requires a deep understanding of the system or application, as well as the underlying hardware and software components. The goal of performance tuning is to improve the speed, responsiveness, and reliability of the system or application, as well as to enhance user experience and minimize downtime. A performance tuning specialist uses various tools and techniques to identify and resolve performance issues, such as monitoring, profiling, and testing.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-performance-tuning-org3-020"
+        },
+        {
+          "name": "Quality Management",
+          "description": "Quality management is a specialized skill that involves ensuring that products and services meet or exceed customer expectations. This includes setting and adhering to standards, designing and implementing quality control measures, and continuously monitoring and improving processes. Quality management is crucial for businesses seeking to maintain customer satisfaction, increase efficiency, and stay competitive in their respective industries. It requires a combination of technical knowledge, analytical skills, and effective communication to succeed.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-quality-management-org3-021"
+        },
+        {
+          "name": "Regulatory Requirements",
+          "description": "Regulatory requirements refer to the laws, rules, and guidelines set by government agencies and other regulatory bodies to ensure that products, services, and practices meet certain safety, quality, and ethical standards. Compliance with these regulations is critical for businesses in various industries to avoid penalties, legal liabilities, and reputational damage. Regulatory requirements management is a specialized skill that involves understanding and adhering to these regulations, monitoring changes and updates, and implementing measures to ensure compliance. This may involve working closely with regulatory agencies, conducting audits and assessments, developing and implementing policies and procedures, and training staff on regulatory compliance.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-regulatory-requirements-org3-022"
+        },
+        {
+          "name": "Social Media",
+          "description": "Social media is a specialized skill that involves creating, curating, and managing online content through various social media platforms. It requires an understanding of social media trends, audience demographics, and engagement strategies to effectively promote a brand or product. Successful social media managers are able to effectively communicate, build relationships, and drive brand awareness through their online presence.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-social-media-org3-023"
+        },
+        {
+          "name": "Stakeholder Management",
+          "description": "Stakeholder management is a specialized skill that involves identifying, analyzing, and managing relationships with individuals or groups who can affect or be affected by the outcome of a project, program, or organization. It requires effective communication, negotiation, and conflict resolution skills to ensure stakeholder needs and expectations are met, and their concerns are addressed. The success of a project or program depends largely on the ability to manage stakeholder relationships effectively, and stakeholders can greatly influence the success or failure of an initiative.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-stakeholder-management-org3-024"
+        },
+        {
+          "name": "Time Management",
+          "description": "Time management is a common skill that involves organizing and prioritizing tasks and activities to make the most efficient use of time. It involves setting goals, breaking them down into smaller tasks, and allocating time to each task. Effective time management can increase productivity, reduce stress, and provide a sense of accomplishment.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-time-management-org3-025"
+        },
+        {
+          "name": "Presentations",
+          "description": "Presentations are a common skill that involves the ability to effectively communicate information to an audience, typically in the form of a speech or visual aid. It requires solid organizational and research skills, as well as the ability to use technology and visual aids effectively. A good presentation should be engaging, informative, and persuasive, and should be tailored to the audience's interests and needs. It is an essential skill for anyone in business, education, or other fields where communication is key.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-presentations-org3-026"
+        },
+        {
+          "name": "Policy Development",
+          "description": "Policy development is the process of creating laws, rules, or guidelines that will guide the actions of government bodies, organizations, or individuals. It involves conducting research, analysis, and stakeholder consultations to identify problems and develop effective solutions that reflect the priorities and values of the community. It requires a specialized skill set, including strong communication, negotiation, critical thinking, and project management skills, as well as an understanding of relevant policy frameworks, legal requirements, and political dynamics. Effective policy development can help to address complex social, economic, and environmental challenges, and promote inclusive and sustainable development.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-policy-development-org3-027"
+        },
+        {
+          "name": "Quality Control",
+          "description": "Quality Control is the process of inspecting, testing, and verifying products or services to ensure they meet or exceed the required standards. This is a common skill in many industries, from manufacturing to healthcare to software development. Effective quality control ensures that customers receive consistent, high-quality products or services and helps to prevent defects, errors, or other issues that could lead to customer dissatisfaction or harm. Key skills for quality control professionals include attention to detail, knowledge of industry standards and regulations, analytical and problem-solving abilities, and strong communication and collaboration skills.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-quality-control-org3-028"
+        },
+        {
+          "name": "Risk Management",
+          "description": "Risk management is the process of identifying, assessing, and prioritizing risks, and then implementing strategies to reduce or mitigate them. It is a specialized skill that requires knowledge of various risk management tools and techniques, as well as an understanding of the specific risks faced by a particular organization or industry. Effective risk management helps organizations identify potential threats and opportunities, and ensures that they are well-prepared to address them.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-risk-management-org3-029"
+        },
+        {
+          "name": "Medical Ethics",
+          "description": "Medical Ethics is the branch of ethics that deals with moral issues and principles regarding medical practices and healthcare. It involves making decisions about medical treatment options, patient care, and research activities. It also includes understanding the role of medical professionals, patients, and the community in promoting ethical conduct in the medical field. Medical ethics requires specialized training and expertise to ensure the best outcomes for patients and to promote ethical decision-making in healthcare.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-medical-ethics-org3-030"
+        },
+        {
+          "name": "Written Communication",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-written-communication-org3-031"
+        },
+        {
+          "name": "Strategic Planning",
+          "description": "Strategic planning is the process of setting a clear direction for an organization or project and mapping out the steps needed to achieve specific goals and objectives. It involves analyzing internal strengths and weaknesses, as well as external opportunities and threats, and making informed decisions about how to prioritize resources and allocate them effectively. Successful strategic planning requires a combination of creativity, critical thinking, and collaboration, as well as the ability to adapt to change and respond to feedback.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-strategic-planning-org3-032"
+        },
+        {
+          "name": "Workforce Management",
+          "description": "Workforce management refers to the process of planning, scheduling, tracking, and optimizing the use of an organization's workforce to ensure productivity, efficiency and profitability. It requires the use of specialized skill sets and software tools to manage employee scheduling, attendance, time-off, and workload distribution. Workforce management is critical for businesses that rely heavily on human resources such as service-oriented industries like retail, hospitality, and healthcare. Effective workforce management can lead to increased employee satisfaction, improved customer service, and organizational success.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-workforce-management-org3-033"
+        },
+        {
+          "name": "Online Communication",
+          "description": "Online communication requires a specialized set of skills such as clear and concise writing, active listening, the ability to interpret nonverbal cues, and effective use of technology. It also involves understanding cultural differences and adapting communication style accordingly. Developing these skills can lead to more successful and efficient communication in virtual settings.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-online-communication-org3-034"
+        },
+        {
+          "name": "Communications",
+          "description": "Communication is a vital skill that involves exchanging information through speaking, writing or non-verbal means. It is crucial for building relationships, conveying ideas, clarifying misunderstandings, and achieving goals. Effective communication requires active listening, clear and concise expression, empathy, and persuasion skills. It is applicable in all aspects of life, including personal relationships, social interactions, and professional settings.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-communications-org3-035"
+        },
+        {
+          "name": "Coordinating",
+          "description": "Coordinating is the ability to effectively manage and organize people, tasks, and resources to achieve a specific goal or objective. It involves communicating clearly, delegating responsibilities, and monitoring progress to ensure everything runs smoothly. Coordinating is a common skill required for many jobs, including project management, event planning, and team leadership.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-coordinating-org3-036"
+        },
+        {
+          "name": "Negotiation",
+          "description": "Negotiation is the process of bargaining and reaching an agreement or compromise between two or more parties. It is a crucial skill that is used in many aspects of life, including business, personal relationships, and everyday interactions. It involves effective communication, active listening, problem-solving, and the ability to find common ground. With practice, negotiation can become a valuable tool for achieving goals and resolving conflicts.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-negotiation-org3-037"
+        },
+        {
+          "name": "Training And Development",
+          "description": "Training and development is a common skill that involves improving the knowledge, skills, and abilities of individuals or groups through teaching, coaching, and mentoring. This skill is essential in enhancing job performance, increasing employee engagement, and achieving organizational goals. It involves identifying training needs, designing and delivering effective training programs, measuring their effectiveness, and continuously improving them. Effective training and development can boost productivity, improve employee retention, and enhance the overall performance of an organization.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-training-and-development-org3-038"
+        },
+        {
+          "name": "Research",
+          "description": "Research is a skill that involves gathering and analyzing information to answer questions or solve problems. It involves identifying reliable sources of information, evaluating the credibility of those sources, and synthesizing the information to draw meaningful conclusions. Research skills are essential in many fields, including academia, business, and journalism. Effective research requires critical thinking, attention to detail, and the ability to discern biases and limitations in information sources.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-research-org3-039"
+        },
+        {
+          "name": "Relationship Building",
+          "description": "Relationship building is the practice of building strong connections and trust with others, which is a common skill among successful individuals in all industries. It involves open communication, active listening, empathy, and understanding the needs and goals of others. Building relationships can help to establish a solid network, increase opportunities, foster collaboration, and improve overall well-being.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-relationship-building-org3-040"
+        },
+        {
+          "name": "Planning",
+          "description": "Planning is the skill of developing a strategy or a course of action to achieve a specific goal or objective. It involves identifying the tasks and resources required to accomplish the goal, setting realistic timelines, and identifying potential obstacles and solutions. Planning is a common skill that can be applied in various areas of life, such as personal, academic, and professional settings. Effective planning helps individuals and organizations to focus their efforts and work efficiently towards their desired outcomes.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-planning-org3-041"
+        },
+        {
+          "name": "Teamwork",
+          "description": "Teamwork is the ability to work effectively and harmoniously with others towards a common goal. It involves being cooperative, communicative, and collaborative, as well as being able to contribute to and participate in group decision-making processes. Teamwork is a valued skill in many workplaces and is essential for successful project completion and overall business success.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-teamwork-org3-042"
+        },
+        {
+          "name": "Persuasive Communication",
+          "description": "Persuasive communication refers to the ability to convince others to take a certain course of action or persuade them to believe in a particular idea or viewpoint. This skill is commonly used in various settings such as politics, advertising, sales, and public speaking. Effective persuasive communication involves understanding the audience, identifying their needs and values, presenting compelling arguments, using persuasive techniques such as storytelling and emotional appeals, and addressing potential objections. It is a valuable skill to have in personal and professional life as it can lead to successful negotiations, increased influence, and improved relationships.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-persuasive-communication-org3-043"
+        },
+        {
+          "name": "Management",
+          "description": "Management is a set of skills that involve a variety of tasks, such as planning, organizing, leading, and controlling resources to achieve specific goals. It is a commonly required skill, applicable in various areas, including business, government, and non-profit organizations. A good manager must possess strong communication, decision-making, problem-solving, and leadership skills, and be able to adapt to different situations and work effectively with a team.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-management-org3-044"
+        },
+        {
+          "name": "Team Leadership",
+          "description": "Team leadership is the ability to guide, direct, and motivate a group of individuals towards a common goal. It involves effective communication, delegation, and conflict resolution skills. Strong team leaders are able to build trust, foster collaboration, and recognize individual strengths and weaknesses to effectively manage and develop their team. This skill is highly valued in many industries and is essential for the success of any team or organization.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-team-leadership-org3-045"
+        },
+        {
+          "name": "Professionalism",
+          "description": "Professionalism is a skill that is essential in any career or job role. It involves demonstrating a high level of quality, competence, and integrity in one's work and interactions with others. Professionalism includes things like punctuality, good communication, a positive attitude, and respect for others. It is important for building trust, credibility, and a strong reputation in the workplace.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-professionalism-org3-046"
+        },
+        {
+          "name": "Change Management",
+          "description": "Change Management is a specialized skill that involves anticipating, planning, executing, and evaluating the necessary changes within an organization to achieve desired outcomes. It involves understanding the impact of change on individuals, processes, systems, and culture, and developing strategies to mitigate potential resistance and facilitate acceptance. Effective change management requires strong leadership, communication, problem-solving, and project management skills, as well as a commitment to continuous improvement and a focus on achieving business objectives.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-change-management-org3-047"
+        },
+        {
+          "name": "Ethical Responsibility",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-ethical-responsibility-org3-048"
+        },
+        {
+          "name": "Analytical Techniques",
+          "description": "Analytical techniques involve the use of specialized skills and methods to analyze data and information. These techniques enable individuals to identify patterns, trends, and relationships in data, as well as to draw insights and make informed decisions. Such skills require a deep understanding of statistics, data modeling, and visualization techniques, as well as the ability to apply critical thinking and logic to complex problems. Effective use of analytical techniques can help businesses and organizations to improve their operations, identify new opportunities, and make informed decisions based on data-driven insights.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-analytical-techniques-org3-049"
+        },
+        {
+          "name": "Auditing",
+          "description": "Auditing is a specialized skill that involves reviewing and analyzing financial statements, documents, and systems to ensure that they are accurate, reliable, and in compliance with applicable laws and regulations. It requires an understanding of accounting principles and practices, as well as knowledge of auditing standards and techniques. An auditor must be objective, independent, and thorough in their assessments in order to provide assurance to stakeholders that financial information is trustworthy.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-auditing-org3-050"
+        },
+        {
+          "name": "Business Operations",
+          "description": "Business Operations is the process of managing and improving the day-to-day activities and resources of a company to achieve greater efficiency, productivity and profitability. It involves creating and implementing strategies, streamlining processes, optimizing technology, managing finances, and ensuring compliance with laws and regulations. It requires specialized skills in management, analysis, communication and problem solving. Successful operations management creates a sound foundation for a business to achieve long-term success.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-business-operations-org3-051"
+        },
+        {
+          "name": "Empathy",
+          "description": "Empathy is the ability to understand and share the feelings of others. It is a common skill that can be developed through practice and is essential for building relationships and improving communication. People who are empathetic are more likely to be kind, compassionate, and understanding of others. They can also solve problems more effectively and make better decisions because they can see things from multiple perspectives. Developing empathy involves active listening, observing body language, and being present in the moment.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-empathy-org3-052"
+        },
+        {
+          "name": "Operations",
+          "description": "Operations is a fundamental skill that involves managing and overseeing the day-to-day activities of a business or organization. This includes managing resources, processes, people, and technology to ensure efficient and effective operations. Strong operations skills are critical for businesses to achieve their objectives, meet customer needs, and remain competitive in the marketplace.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-operations-org3-053"
+        },
+        {
+          "name": "Stress Management",
+          "description": "Stress management is the ability to cope with stressors and challenges in a healthy manner. It involves a range of techniques and strategies, such as mindfulness, exercise, and time management, that help individuals reduce stress and maintain a sense of balance and wellbeing. Effective stress management can improve mental and physical health, enhance productivity and performance, and lead to overall greater satisfaction with life.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-stress-management-org3-054"
+        },
+        {
+          "name": "Responsibility to Others",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-responsibility-to-others-org3-055"
+        },
+        {
+          "name": "Business Acumen",
+          "description": "Business acumen is the ability to understand and analyze business situations and make well-informed decisions. It involves being able to assess financial and market data, identify opportunities and risks, and develop strategies to achieve business objectives. Business acumen is important for individuals at all levels of an organization, as it helps them make sound decisions that contribute to the success of the business.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-business-acumen-org3-056"
+        },
+        {
+          "name": "Communication and Interaction",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-communication-and-interaction-org3-057"
+        },
+        {
+          "name": "Human Resource Management",
+          "description": "Human Resource Management is a specialized skill that involves managing the people who work for a company, organization or institution. It includes recruiting, hiring, training, and developing staff members to achieve their professional goals and meet the objectives of the organization. Good HR management helps organizations to attract and retain high-quality people by creating a positive work environment and providing opportunities for growth and advancement. Successful HR managers have a strong understanding of employment laws and regulations, and are skilled at building effective teams and resolving conflicts.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-human-resource-management-org3-058"
+        },
+        {
+          "name": "Labor Relations",
+          "description": "Labor Relations is a specialized skill that involves managing the relationship between employees and employers, negotiating collective bargaining agreements, mediating labor disputes, and ensuring compliance with labor laws and regulations. A labor relations professional must have a strong understanding of labor laws, communication skills, and the ability to build relationships and resolve conflicts. The ultimate goal of labor relations is to create a productive and harmonious workplace that meets both the needs of workers and employers.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-labor-relations-org3-059"
+        },
+        {
+          "name": "Leadership and Navigation",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-leadership-and-navigation-org3-060"
+        },
+        {
+          "name": "Organizational Ethics",
+          "description": "Organizational Ethics is a specialized skill that involves understanding and applying ethical principles and values in the workplace. It involves creating and implementing ethical codes of conduct, providing training to employees on ethical behavior, and enforcing ethical standards through disciplinary measures. Organizational Ethics requires the ability to navigate complex ethical dilemmas and make decisions that balance the interests of stakeholders while maintaining integrity and fairness in the organization's operations. Effective organizational ethics requires ongoing evaluation and improvement to ensure that the organization's values and practices align with societal norms and expectations.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-organizational-ethics-org3-061"
+        },
+        {
+          "name": "Organizational Leadership",
+          "description": "Organizational leadership is a specialized skill that involves the ability to guide, motivate, and influence individuals and groups in achieving common goals in an organization. It requires a combination of knowledge, strategic thinking, communication skills, and emotional intelligence to lead and manage people effectively. Effective organizational leaders need to be able to inspire and empower their team, foster a positive work culture, and adapt to changing circumstances and challenges.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-organizational-leadership-org3-062"
+        },
+        {
+          "name": "Talent Sourcing",
+          "description": "Talent sourcing involves finding and attracting qualified candidates for specific job positions. It requires specialized skills such as knowledge of recruitment technologies, market trends, candidate research, and networking strategies. Effective talent sourcing is crucial for companies to build a strong talent pipeline and ensure a competitive edge.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-talent-sourcing-org3-063"
+        },
+        {
+          "name": "Occupational Safety And Health Administration (OSHA)",
+          "description": "OSHA is a government agency responsible for ensuring safe and healthy working conditions for employees in the United States. It sets and enforces workplace safety standards, provides training and education, and conducts inspections to ensure compliance with regulations. Understanding and implementing OSHA regulations is a specialized skill that requires knowledge of workplace hazards, safety procedures, and legal requirements.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-occupational-safety-and-health-org3-064"
+        },
+        {
+          "name": "Policy Research And Analysis",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-policy-research-and-analysis-org3-065"
+        },
+        {
+          "name": "Internal Controls",
+          "description": "Internal controls is a specialized skill that involves creating and maintaining effective systems and procedures within an organization to ensure the accuracy and integrity of financial reporting, compliance with laws and regulations, and safeguarding of assets. This skill requires knowledge of accounting, audit, risk management, and technology, and an understanding of organizational structure, culture, and processes. Effective internal controls can prevent fraud, errors, and losses, and enhance the overall performance and sustainability of an organization.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-internal-controls-org3-066"
+        },
+        {
+          "name": "Program Development",
+          "description": "Program development is the process of creating, designing, and implementing software programs that meet specific user needs. It involves identifying user requirements, designing and developing program architecture, writing code, testing, and producing documentation. Program development is a specialized skill that requires technical expertise, problem-solving abilities, and communication skills to collaborate effectively with stakeholders. Successful program development requires a thorough knowledge of programming languages, development tools, and best practices.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-program-development-org3-067"
+        },
+        {
+          "name": "Legislation",
+          "description": "Legislation is the process of creating laws and regulations by a governmental body. It is a specialized skill that requires an understanding of legal and political processes, as well as the ability to navigate complex systems and communicate effectively with stakeholders. Legislators must also have the ability to research and analyze information in order to make informed decisions that promote the common good. Successful legislators often possess strong leadership, negotiation, and problem-solving skills, as well as an understanding of the diverse needs and interests of their constituents.",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-legislation-org3-068"
+        },
+        {
+          "name": "Critical Evaluation",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-critical-evaluation-org3-069"
+        },
+        {
+          "name": "Human Resource (HR) Strategic Planning",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-human-resource--hr--strategic--org3-070"
+        },
+        {
+          "name": "Total Rewards",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-total-rewards-org3-071"
+        },
+        {
+          "name": "U.S. Employment Law and Regulations",
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cred-proficiency-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org3-001",
+            "name": "Proficiency Certificate"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "proficiency-u-s--employment-law-and-regula-org3-072"
         }
       ],
       "Contact": [
         {
           "Email": [
             {
-              "informationSourceId": "Org3",
               "emailAddress": [
-                "atsatrian_lifdemo@stateu.edu "
-              ]
-            }
-          ],
-          "Address": [
-            {
+                "atsatrian_lifdemo@stateu.edu"
+              ],
               "informationSourceId": "Org3",
-              "addressCity": null,
-              "countryCode": null,
-              "addressState": null,
-              "addressPostalCode": null
-            }
-          ],
-          "Telephone": [
-            {
-              "informationSourceId": "Org3",
-              "telephoneNumber": []
+              "informationSourceOrganization": "Summit Valley University",
+              "identifier": "email-alan-tsatrian-org3-001"
             }
           ],
           "informationSourceId": "Org3",
-          "informationSourceOrganization": "Regional University",
-          "identifier": "contact-org3-001"
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "contact-org3-001",
+          "Address": [
+            {
+              "informationSourceId": "Org3",
+              "addressStreet": "250 State Street",
+              "addressCity": "Salt Lake City",
+              "addressState": "Utah",
+              "addressPostalCode": "84111",
+              "countryCode": "US",
+              "informationSourceOrganization": "Summit Valley University",
+              "identifier": "address-alan-tsatrian-org3-001"
+            }
+          ]
         }
       ],
       "Identifier": [
@@ -45,145 +1187,219 @@
           "informationSourceId": "Org3",
           "identifier": "100001",
           "identifierType": "SCHOOL_ASSIGNED_NUMBER",
-          "informationSourceOrganization": "Regional University"
+          "informationSourceOrganization": "Summit Valley University"
         },
         {
           "informationSourceId": "Org3",
           "identifier": "SVU-20250001",
           "identifierType": "Summit Valley University student ID",
-          "informationSourceOrganization": "Regional University"
+          "informationSourceOrganization": "Summit Valley University"
         }
       ],
       "CredentialAward": [
         {
+          "awardStatus": "InProgress",
+          "InstanceOfRefCredential": {
+            "id": "84d6de55-974c-47e5-92bf-889addac75ae",
+            "informationSourceId": "Org3",
+            "name": "Master of Science (MS): Management and Leadership",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credential-master-of-science--ms---manage-org3-001"
+          },
+          "id": "b3d95585-fc3f-4450-a127-9074d41c9ee8",
+          "awardIssueDate": "2021-02-09",
+          "credentialAwardee": "Alan  Tsatrian",
           "informationSourceId": "Org3",
           "informationSourceOrganization": "Summit Valley University",
-          "awardStatus": "Completed",
-          "InstanceOfRefCredential": {
-            "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University",
-            "identifier": "84d6de55-974c-47e5-92bf-889addac75ae",
-            "name": "Bachelor of Science (BS): Environmental Science"
-          },
-          "identifier": "org3-cred-award-001",
-          "awardIssueDate": "2021-12-03T15:43:17Z",
-          "credentialAwardee": "Alan  Tsatrian"
+          "identifier": "credentialaward-b3d95585-fc3f-4450-a127-9074d4-org3-001",
+          "name": "Master of Science (MS): Management and Leadership"
         },
         {
           "awardStatus": "Completed",
           "InstanceOfRefCredential": {
+            "id": "84d6de55-974c-47e5-92bf-889addac75ae",
             "informationSourceId": "Org3",
+            "name": "Master of Science (MS): Management and Leadership",
             "informationSourceOrganization": "Summit Valley University",
-            "identifier": "",
-            "name": "Environmental Science Proficiency Certificate"
+            "identifier": "credential-master-of-science--ms---manage-org3-001"
           },
-          "identifier": "org3-cred-proficiency-certificate-001",
+          "id": "84c4eeef-8403-4cd1-a73c-5cc887c53b5a",
+          "awardIssueDate": "2020-09-26T14:42:24Z",
+          "credentialAwardee": "Alan  Tsatrian",
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "credentialaward-84c4eeef-8403-4cd1-a73c-5cc887-org3-002",
+          "name": "Master of Science (MS): Management and Leadership"
+        },
+        {
+          "awardStatus": "Completed",
+          "InstanceOfRefCredential": {
+            "id": "84d6de55-974c-47e5-92bf-889addac75ae",
+            "informationSourceId": "Org3",
+            "name": "Master of Science (MS): Management and Leadership",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credential-master-of-science--ms---manage-org3-001"
+          },
+          "id": "7a74204a-ae64-4c68-a346-de2b2649c507",
+          "awardIssueDate": "2022-10-24T07:30:44Z",
+          "credentialAwardee": "Alan  Tsatrian",
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "credentialaward-7a74204a-ae64-4c68-a346-de2b26-org3-003",
+          "name": "Master of Science (MS): Management and Leadership"
+        },
+        {
+          "awardStatus": "Completed",
+          "InstanceOfRefCredential": {
+            "id": "84d6de55-974c-47e5-92bf-889addac75ae",
+            "informationSourceId": "Org3",
+            "name": "Master of Science (MS): Management and Leadership",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credential-master-of-science--ms---manage-org3-001"
+          },
+          "id": "83db97a5-1255-422f-8ee1-ddfac6ea42e3",
+          "awardIssueDate": "2023-07-21",
+          "credentialAwardee": "Alan  Tsatrian",
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "credentialaward-83db97a5-1255-422f-8ee1-ddfac6-org3-004",
+          "name": "Master of Science (MS): Management and Leadership"
+        },
+        {
+          "awardStatus": "Completed",
+          "InstanceOfRefCredential": {
+            "id": "84d6de55-974c-47e5-92bf-889addac75ae",
+            "informationSourceId": "Org3",
+            "name": "Master of Science (MS): Management and Leadership",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credential-master-of-science--ms---manage-org3-001"
+          },
+          "id": "a0115c53-e394-4378-9529-47d68902107b",
+          "awardIssueDate": "2020-01-27",
+          "credentialAwardee": "Alan  Tsatrian",
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "credentialaward-a0115c53-e394-4378-9529-47d689-org3-005",
+          "name": "Master of Science (MS): Management and Leadership"
+        },
+        {
+          "awardStatus": "Completed",
+          "InstanceOfRefCredential": {
+            "id": "84d6de55-974c-47e5-92bf-889addac75ae",
+            "informationSourceId": "Org3",
+            "name": "Master of Science (MS): Management and Leadership",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credential-master-of-science--ms---manage-org3-001"
+          },
+          "id": "c9b5ddd5-ef89-4aff-8526-5095b457684d",
+          "awardIssueDate": "2024-03-29",
+          "credentialAwardee": "Alan  Tsatrian",
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "credentialaward-c9b5ddd5-ef89-4aff-8526-5095b4-org3-006",
+          "name": "Master of Science (MS): Management and Leadership"
+        },
+        {
+          "awardStatus": "Completed",
+          "InstanceOfRefCredential": {
+            "id": "84d6de55-974c-47e5-92bf-889addac75ae",
+            "informationSourceId": "Org3",
+            "name": "Master of Science (MS): Management and Leadership",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credential-master-of-science--ms---manage-org3-001"
+          },
+          "id": "8e1852af-4c4b-49a2-87e5-b3705d30c5ca",
+          "awardIssueDate": "2021-05-04T22:52:52Z",
+          "credentialAwardee": "Alan  Tsatrian",
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "credentialaward-8e1852af-4c4b-49a2-87e5-b3705d-org3-007",
+          "name": "Master of Science (MS): Management and Leadership"
+        },
+        {
+          "id": "cred-proficiency-certificate-001",
           "awardIssueDate": "2024-12-15T10:00:00Z",
           "credentialAwardee": "Alan  Tsatrian",
           "informationSourceId": "Org3",
-          "informationSourceOrganization": "Summit Valley University"
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "credentialaward-cred-proficiency-certificate-0-org3-008",
+          "name": "State University Credential"
         },
         {
-          "awardStatus": "Completed",
-          "InstanceOfRefCredential": {
-            "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University",
-            "identifier": "",
-            "name": "Computer Science 651 Course Completion"
-          },
+          "id": "4bafb983-20b2-419d-9cd5-2e7c10eda9dc",
+          "awardIssueDate": "2023-05-25",
+          "credentialAwardee": "Alan  Tsatrian",
           "informationSourceId": "Org3",
           "informationSourceOrganization": "Summit Valley University",
-          "identifier": "31b9edc0-93cb-42a0-8668-bf6e4bc00796",
-          "awardIssueDate": "2023-03-10T17:10:37Z",
-          "credentialAwardee": "Alan  Tsatrian"
+          "identifier": "credentialaward-4bafb983-20b2-419d-9cd5-2e7c10-org3-009",
+          "name": "State University Credential"
         },
         {
-          "awardStatus": "Completed",
-          "InstanceOfRefCredential": {
-            "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University",
-            "identifier": "",
-            "name": "Computer Science 651 Course Completion"
-          },
+          "id": "2cc45e68-86f1-47f8-aa56-f12991633aa1",
+          "awardIssueDate": "2024-09-20",
+          "credentialAwardee": "Alan  Tsatrian",
           "informationSourceId": "Org3",
           "informationSourceOrganization": "Summit Valley University",
-          "identifier": "931b66f4-a70e-4bb7-84df-3d200ed1976a",
-          "awardIssueDate": "2024-04-09",
-          "credentialAwardee": "Alan  Tsatrian"
+          "identifier": "credentialaward-2cc45e68-86f1-47f8-aa56-f12991-org3-010",
+          "name": "State University Credential"
         },
         {
-          "awardStatus": "Completed",
-          "InstanceOfRefCredential": {
-            "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University",
-            "identifier": "",
-            "name": "Computer Science 651 Course Completion"
-          },
+          "id": "e7e9b17a-369c-49c9-9c22-7c9f393de896",
+          "awardIssueDate": "2022-07-04T22:53:31Z",
+          "credentialAwardee": "Alan  Tsatrian",
           "informationSourceId": "Org3",
           "informationSourceOrganization": "Summit Valley University",
-          "identifier": "ad1adb0a-22c5-4643-bd70-1fbe7ef615a6",
-          "awardIssueDate": "2024-08-31T09:51:03Z",
-          "credentialAwardee": "Alan  Tsatrian"
+          "identifier": "credentialaward-e7e9b17a-369c-49c9-9c22-7c9f39-org3-011",
+          "name": "State University Credential"
         },
         {
-          "awardStatus": "Completed",
-          "InstanceOfRefCredential": {
-            "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University",
-            "identifier": "",
-            "name": "Computer Science 651 Course Completion"
-          },
+          "id": "cb05b5fe-c17d-4256-b02f-3702888869fc",
+          "awardIssueDate": "2024-08-06T13:03:24Z",
+          "credentialAwardee": "Alan  Tsatrian",
           "informationSourceId": "Org3",
           "informationSourceOrganization": "Summit Valley University",
-          "identifier": "388bde0e-9e53-44e8-9887-cd9508b34d1e",
-          "awardIssueDate": "2020-09-07",
-          "credentialAwardee": "Alan  Tsatrian"
+          "identifier": "credentialaward-cb05b5fe-c17d-4256-b02f-370288-org3-012",
+          "name": "State University Credential"
         },
         {
-          "awardStatus": "Completed",
-          "InstanceOfRefCredential": {
-            "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University",
-            "identifier": "",
-            "name": "Computer Science 651 Course Completion"
-          },
+          "id": "ac209245-1c44-46f7-9562-bfb97113128b",
+          "awardIssueDate": "2024-10-26",
+          "credentialAwardee": "Alan  Tsatrian",
           "informationSourceId": "Org3",
           "informationSourceOrganization": "Summit Valley University",
-          "identifier": "11403294-d6ba-42e0-bbdd-5864080c7d3e",
-          "awardIssueDate": "2024-12-14T23:57:48Z",
-          "credentialAwardee": "Alan  Tsatrian"
+          "identifier": "credentialaward-ac209245-1c44-46f7-9562-bfb971-org3-013",
+          "name": "State University Credential"
         },
         {
-          "awardStatus": "Completed",
-          "InstanceOfRefCredential": {
-            "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University",
-            "identifier": "",
-            "name": "Computer Science 651 Course Completion"
-          },
+          "id": "e3945c91-5eec-4280-8258-bf7f15afd4b4",
+          "awardIssueDate": "2020-07-11T04:04:01Z",
+          "credentialAwardee": "Alan  Tsatrian",
           "informationSourceId": "Org3",
           "informationSourceOrganization": "Summit Valley University",
-          "identifier": "a02134d5-b3bd-423d-9856-a1702ad18183",
-          "awardIssueDate": "2024-12-18T10:24:11Z",
-          "credentialAwardee": "Alan  Tsatrian"
+          "identifier": "credentialaward-e3945c91-5eec-4280-8258-bf7f15-org3-014",
+          "name": "State University Credential"
+        },
+        {
+          "id": "cred-employment-certificate-001",
+          "awardIssueDate": "2024-12-15T10:00:00Z",
+          "credentialAwardee": "Alan  Tsatrian",
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "credentialaward-cred-employment-certificate-00-org3-015",
+          "name": "State University Credential"
         }
       ],
       "CourseLearningExperience": [
         {
-          "informationSourceId": "Org3",
           "AssertedByRefOrganization": {
-            "informationSourceId": "Org3",
-            "name": "Summit Valley University",
-            "identificationSystem": "Summit Valley University SIS",
+            "name": "State University",
+            "identificationSystem": "State University SIS",
             "organizationType": [],
-            "informationSourceOrganization": "Regional University",
-            "identifier": "organization-summit-valley-university-org3-001"
-          },
-          "RefCourse": {
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Summit Valley University",
-            "identifier": "CS651",
-            "name": "Computer Science 651",
+            "identifier": "organization-state-university-org3-001"
+          },
+          "RefCourse": {
             "Identifier": [
               {
                 "identifier": "CS651",
@@ -191,9 +1407,14 @@
                 "identifierVerification": [
                   "Academic Records"
                 ],
-                "informationSourceId": "Org3"
+                "informationSourceId": "Org3",
+                "informationSourceOrganization": "Summit Valley University"
               }
-            ]
+            ],
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "name": "Course CS651",
+            "identifier": "course-cs651-org3-legacy-001"
           },
           "OfferedByRefOrganization": {
             "identificationSystem": "stateu-state-university-id",
@@ -202,362 +1423,608 @@
               "University"
             ],
             "informationSourceId": "Org3",
-            "informationSourceOrganization": "Regional University",
+            "informationSourceOrganization": "Summit Valley University",
             "identifier": "organization-state-university-org3-001"
           },
+          "informationSourceId": "Org3",
           "RefCredentialAward": {
+            "id": "4bafb983-20b2-419d-9cd5-2e7c10eda9dc",
+            "awardIssueDate": "2023-05-25",
+            "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Summit Valley University",
-            "identifier": "31b9edc0-93cb-42a0-8668-bf6e4bc00796",
-            "name": "Computer Science 651 Course Completion",
-            "awardIssueDate": "2023-03-10T17:10:37Z",
-            "credentialAwardee": "Alan  Tsatrian"
+            "identifier": "credentialaward-4bafb983-20b2-419d-9cd5-2e7c10-org3-001",
+            "name": "Course CS651 Credential Award"
           },
-          "informationSourceOrganization": "Regional University",
-          "identifier": "courselearningexperience-org3-001"
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "courselearningexperience-org3-001",
+          "name": "Course CS651"
+        },
+        {
+          "AssertedByRefOrganization": {
+            "name": "State University",
+            "identificationSystem": "State University SIS",
+            "organizationType": [],
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "organization-state-university-org3-001"
+          },
+          "RefCourse": {
+            "Identifier": [
+              {
+                "identifier": "CS651",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org3",
+                "informationSourceOrganization": "Summit Valley University"
+              }
+            ],
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "name": "Course CS651",
+            "identifier": "course-cs651-org3-legacy-001"
+          },
+          "OfferedByRefOrganization": {
+            "identificationSystem": "stateu-state-university-id",
+            "name": "State University",
+            "organizationType": [
+              "University"
+            ],
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "organization-state-university-org3-001"
+          },
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "2cc45e68-86f1-47f8-aa56-f12991633aa1",
+            "awardIssueDate": "2024-09-20",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-2cc45e68-86f1-47f8-aa56-f12991-org3-001",
+            "name": "Course CS651 Credential Award"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "courselearningexperience-org3-002",
+          "name": "Course CS651"
+        },
+        {
+          "AssertedByRefOrganization": {
+            "name": "State University",
+            "identificationSystem": "State University SIS",
+            "organizationType": [],
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "organization-state-university-org3-001"
+          },
+          "RefCourse": {
+            "Identifier": [
+              {
+                "identifier": "CS651",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org3",
+                "informationSourceOrganization": "Summit Valley University"
+              }
+            ],
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "name": "Course CS651",
+            "identifier": "course-cs651-org3-legacy-001"
+          },
+          "OfferedByRefOrganization": {
+            "identificationSystem": "stateu-state-university-id",
+            "name": "State University",
+            "organizationType": [
+              "University"
+            ],
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "organization-state-university-org3-001"
+          },
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "e7e9b17a-369c-49c9-9c22-7c9f393de896",
+            "awardIssueDate": "2022-07-04T22:53:31Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-e7e9b17a-369c-49c9-9c22-7c9f39-org3-001",
+            "name": "Course CS651 Credential Award"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "courselearningexperience-org3-003",
+          "name": "Course CS651"
+        },
+        {
+          "AssertedByRefOrganization": {
+            "name": "State University",
+            "identificationSystem": "State University SIS",
+            "organizationType": [],
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "organization-state-university-org3-001"
+          },
+          "RefCourse": {
+            "Identifier": [
+              {
+                "identifier": "CS651",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org3",
+                "informationSourceOrganization": "Summit Valley University"
+              }
+            ],
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "name": "Course CS651",
+            "identifier": "course-cs651-org3-legacy-001"
+          },
+          "OfferedByRefOrganization": {
+            "identificationSystem": "stateu-state-university-id",
+            "name": "State University",
+            "organizationType": [
+              "University"
+            ],
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "organization-state-university-org3-001"
+          },
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "cb05b5fe-c17d-4256-b02f-3702888869fc",
+            "awardIssueDate": "2024-08-06T13:03:24Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-cb05b5fe-c17d-4256-b02f-370288-org3-001",
+            "name": "Course CS651 Credential Award"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "courselearningexperience-org3-004",
+          "name": "Course CS651"
+        },
+        {
+          "AssertedByRefOrganization": {
+            "name": "State University",
+            "identificationSystem": "State University SIS",
+            "organizationType": [],
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "organization-state-university-org3-001"
+          },
+          "RefCourse": {
+            "Identifier": [
+              {
+                "identifier": "CS651",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org3",
+                "informationSourceOrganization": "Summit Valley University"
+              }
+            ],
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "name": "Course CS651",
+            "identifier": "course-cs651-org3-legacy-001"
+          },
+          "OfferedByRefOrganization": {
+            "identificationSystem": "stateu-state-university-id",
+            "name": "State University",
+            "organizationType": [
+              "University"
+            ],
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "organization-state-university-org3-001"
+          },
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "ac209245-1c44-46f7-9562-bfb97113128b",
+            "awardIssueDate": "2024-10-26",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-ac209245-1c44-46f7-9562-bfb971-org3-001",
+            "name": "Course CS651 Credential Award"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "courselearningexperience-org3-005",
+          "name": "Course CS651"
+        },
+        {
+          "AssertedByRefOrganization": {
+            "name": "State University",
+            "identificationSystem": "State University SIS",
+            "organizationType": [],
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "organization-state-university-org3-001"
+          },
+          "RefCourse": {
+            "Identifier": [
+              {
+                "identifier": "CS651",
+                "identifierType": "Course Code",
+                "identifierVerification": [
+                  "Academic Records"
+                ],
+                "informationSourceId": "Org3",
+                "informationSourceOrganization": "Summit Valley University"
+              }
+            ],
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "name": "Course CS651",
+            "identifier": "course-cs651-org3-legacy-001"
+          },
+          "OfferedByRefOrganization": {
+            "identificationSystem": "stateu-state-university-id",
+            "name": "State University",
+            "organizationType": [
+              "University"
+            ],
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "organization-state-university-org3-001"
+          },
+          "informationSourceId": "Org3",
+          "RefCredentialAward": {
+            "id": "e3945c91-5eec-4280-8258-bf7f15afd4b4",
+            "awardIssueDate": "2020-07-11T04:04:01Z",
+            "credentialAwardee": "Alan  Tsatrian",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University",
+            "identifier": "credentialaward-e3945c91-5eec-4280-8258-bf7f15-org3-001",
+            "name": "Course CS651 Credential Award"
+          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "courselearningexperience-org3-006",
+          "name": "Course CS651"
         },
         {
           "informationSourceId": "Org3",
-          "AssertedByRefOrganization": {
-            "informationSourceId": "Org3",
-            "name": "Summit Valley University",
-            "identificationSystem": "Summit Valley University SIS",
-            "organizationType": [],
-            "informationSourceOrganization": "Regional University",
-            "identifier": "organization-summit-valley-university-org3-001"
-          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "courselearningexperience-c200-org3-101",
+          "name": "Managing Organizations and Leading People",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2015-01-05",
+          "endDate": "2015-02-20",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "Competent",
+          "courseTotal": "3",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "C200-01",
+          "institution": "State University",
+          "department": "College of Business",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
           "RefCourse": {
+            "name": "Managing Organizations and Leading People",
+            "identifier": "course-c200-org3-001",
             "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University",
-            "identifier": "CS651",
-            "name": "Computer Science 651",
-            "Identifier": [
-              {
-                "identifier": "CS651",
-                "identifierType": "Course Code",
-                "identifierVerification": [
-                  "Academic Records"
-                ],
-                "informationSourceId": "Org3"
-              }
-            ]
+            "informationSourceOrganization": "Summit Valley University"
           },
           "OfferedByRefOrganization": {
-            "identificationSystem": "stateu-state-university-id",
             "name": "State University",
-            "organizationType": [
-              "University"
-            ],
+            "identifier": "organization-state-university-org3-005",
             "informationSourceId": "Org3",
-            "informationSourceOrganization": "Regional University",
-            "identifier": "organization-state-university-org3-001"
+            "informationSourceOrganization": "Summit Valley University"
           },
-          "RefCredentialAward": {
+          "AssertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-org3-005",
             "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University",
-            "identifier": "931b66f4-a70e-4bb7-84df-3d200ed1976a",
-            "name": "Computer Science 651 Course Completion",
-            "awardIssueDate": "2024-04-09",
-            "credentialAwardee": "Alan  Tsatrian"
-          },
-          "informationSourceOrganization": "Regional University",
-          "identifier": "courselearningexperience-org3-002"
+            "informationSourceOrganization": "Summit Valley University"
+          }
         },
         {
           "informationSourceId": "Org3",
-          "AssertedByRefOrganization": {
-            "informationSourceId": "Org3",
-            "name": "Summit Valley University",
-            "identificationSystem": "Summit Valley University SIS",
-            "organizationType": [],
-            "informationSourceOrganization": "Regional University",
-            "identifier": "organization-summit-valley-university-org3-001"
-          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "courselearningexperience-c201-org3-102",
+          "name": "Business Acumen",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2015-02-21",
+          "endDate": "2015-04-10",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "Competent",
+          "courseTotal": "3",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "C201-01",
+          "institution": "State University",
+          "department": "College of Business",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
           "RefCourse": {
+            "name": "Business Acumen",
+            "identifier": "course-c201-org3-001",
             "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University",
-            "identifier": "CS651",
-            "name": "Computer Science 651",
-            "Identifier": [
-              {
-                "identifier": "CS651",
-                "identifierType": "Course Code",
-                "identifierVerification": [
-                  "Academic Records"
-                ],
-                "informationSourceId": "Org3"
-              }
-            ]
+            "informationSourceOrganization": "Summit Valley University"
           },
           "OfferedByRefOrganization": {
-            "identificationSystem": "stateu-state-university-id",
             "name": "State University",
-            "organizationType": [
-              "University"
-            ],
+            "identifier": "organization-state-university-org3-005",
             "informationSourceId": "Org3",
-            "informationSourceOrganization": "Regional University",
-            "identifier": "organization-state-university-org3-001"
+            "informationSourceOrganization": "Summit Valley University"
           },
-          "RefCredentialAward": {
+          "AssertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-org3-005",
             "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University",
-            "identifier": "ad1adb0a-22c5-4643-bd70-1fbe7ef615a6",
-            "name": "Computer Science 651 Course Completion",
-            "awardIssueDate": "2024-08-31T09:51:03Z",
-            "credentialAwardee": "Alan  Tsatrian"
-          },
-          "informationSourceOrganization": "Regional University",
-          "identifier": "courselearningexperience-org3-003"
+            "informationSourceOrganization": "Summit Valley University"
+          }
         },
         {
           "informationSourceId": "Org3",
-          "AssertedByRefOrganization": {
-            "informationSourceId": "Org3",
-            "name": "Summit Valley University",
-            "identificationSystem": "Summit Valley University SIS",
-            "organizationType": [],
-            "informationSourceOrganization": "Regional University",
-            "identifier": "organization-summit-valley-university-org3-001"
-          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "courselearningexperience-c203-org3-103",
+          "name": "Becoming an Effective Leader",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2015-04-11",
+          "endDate": "2015-05-30",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "Competent",
+          "courseTotal": "3",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "C203-01",
+          "institution": "State University",
+          "department": "College of Business",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
           "RefCourse": {
+            "name": "Becoming an Effective Leader",
+            "identifier": "course-c203-org3-001",
             "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University",
-            "identifier": "CS651",
-            "name": "Computer Science 651",
-            "Identifier": [
-              {
-                "identifier": "CS651",
-                "identifierType": "Course Code",
-                "identifierVerification": [
-                  "Academic Records"
-                ],
-                "informationSourceId": "Org3"
-              }
-            ]
+            "informationSourceOrganization": "Summit Valley University"
           },
           "OfferedByRefOrganization": {
-            "identificationSystem": "stateu-state-university-id",
             "name": "State University",
-            "organizationType": [
-              "University"
-            ],
+            "identifier": "organization-state-university-org3-005",
             "informationSourceId": "Org3",
-            "informationSourceOrganization": "Regional University",
-            "identifier": "organization-state-university-org3-001"
+            "informationSourceOrganization": "Summit Valley University"
           },
-          "RefCredentialAward": {
+          "AssertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-org3-005",
             "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University",
-            "identifier": "388bde0e-9e53-44e8-9887-cd9508b34d1e",
-            "name": "Computer Science 651 Course Completion",
-            "awardIssueDate": "2020-09-07",
-            "credentialAwardee": "Alan  Tsatrian"
-          },
-          "informationSourceOrganization": "Regional University",
-          "identifier": "courselearningexperience-org3-004"
+            "informationSourceOrganization": "Summit Valley University"
+          }
         },
         {
           "informationSourceId": "Org3",
-          "AssertedByRefOrganization": {
-            "informationSourceId": "Org3",
-            "name": "Summit Valley University",
-            "identificationSystem": "Summit Valley University SIS",
-            "organizationType": [],
-            "informationSourceOrganization": "Regional University",
-            "identifier": "organization-summit-valley-university-org3-001"
-          },
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "courselearningexperience-c206-org3-104",
+          "name": "Ethical Leadership",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2015-06-01",
+          "endDate": "2015-07-15",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "Competent",
+          "courseTotal": "3",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "C206-01",
+          "institution": "State University",
+          "department": "College of Business",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
           "RefCourse": {
+            "name": "Ethical Leadership",
+            "identifier": "course-c206-org3-001",
             "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University",
-            "identifier": "CS651",
-            "name": "Computer Science 651",
-            "Identifier": [
-              {
-                "identifier": "CS651",
-                "identifierType": "Course Code",
-                "identifierVerification": [
-                  "Academic Records"
-                ],
-                "informationSourceId": "Org3"
-              }
-            ]
+            "informationSourceOrganization": "Summit Valley University"
           },
           "OfferedByRefOrganization": {
-            "identificationSystem": "stateu-state-university-id",
             "name": "State University",
-            "organizationType": [
-              "University"
-            ],
+            "identifier": "organization-state-university-org3-005",
             "informationSourceId": "Org3",
-            "informationSourceOrganization": "Regional University",
-            "identifier": "organization-state-university-org3-001"
+            "informationSourceOrganization": "Summit Valley University"
           },
-          "RefCredentialAward": {
-            "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University",
-            "identifier": "11403294-d6ba-42e0-bbdd-5864080c7d3e",
-            "name": "Computer Science 651 Course Completion",
-            "awardIssueDate": "2024-12-14T23:57:48Z",
-            "credentialAwardee": "Alan  Tsatrian"
-          },
-          "informationSourceOrganization": "Regional University",
-          "identifier": "courselearningexperience-org3-005"
-        },
-        {
-          "informationSourceId": "Org3",
           "AssertedByRefOrganization": {
-            "informationSourceId": "Org3",
-            "name": "Summit Valley University",
-            "identificationSystem": "Summit Valley University SIS",
-            "organizationType": [],
-            "informationSourceOrganization": "Regional University",
-            "identifier": "organization-summit-valley-university-org3-001"
-          },
-          "RefCourse": {
-            "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University",
-            "identifier": "CS651",
-            "name": "Computer Science 651",
-            "Identifier": [
-              {
-                "identifier": "CS651",
-                "identifierType": "Course Code",
-                "identifierVerification": [
-                  "Academic Records"
-                ],
-                "informationSourceId": "Org3"
-              }
-            ]
-          },
-          "OfferedByRefOrganization": {
-            "identificationSystem": "stateu-state-university-id",
             "name": "State University",
-            "organizationType": [
-              "University"
-            ],
+            "identifier": "organization-state-university-org3-005",
             "informationSourceId": "Org3",
-            "informationSourceOrganization": "Regional University",
-            "identifier": "organization-state-university-org3-001"
-          },
-          "RefCredentialAward": {
-            "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University",
-            "identifier": "a02134d5-b3bd-423d-9856-a1702ad18183",
-            "name": "Computer Science 651 Course Completion",
-            "awardIssueDate": "2024-12-18T10:24:11Z",
-            "credentialAwardee": "Alan  Tsatrian"
-          },
-          "informationSourceOrganization": "Regional University",
-          "identifier": "courselearningexperience-org3-006"
+            "informationSourceOrganization": "Summit Valley University"
+          }
         }
       ],
-      "Proficiency": [
+      "informationSourceId": "Org3",
+      "ProgramLearningExperience": [
         {
           "informationSourceId": "Org3",
-          "name": "Fundamentals of Earth\u2019s Climate System",
-          "description": "Describes the key components and processes of Earth's climate system including the atmosphere, hydrosphere, cryosphere, and biosphere.",
-          "RefCredentialAward": {
-            "identifier": "org3-cred-proficiency-certificate-001",
-            "awardIssueDate": "2024-12-15T10:00:00Z",
-            "credentialAwardee": "Alan  Tsatrian",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "programlearningexperience-ms-management-leadership-org3-001",
+          "name": "Master of Science (MS): Management and Leadership",
+          "type": "Graduate degree program",
+          "participationStatus": "Completed",
+          "startDate": "2014-09-01",
+          "endDate": "2016-05-15",
+          "RefProgram": {
+            "name": "Master of Science (MS): Management and Leadership",
+            "identifier": "program-ms-management-leadership-org3-001",
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Summit Valley University"
           },
-          "informationSourceOrganization": "Regional University",
-          "identifier": "proficiency-fundamentals-of-earth-s-climat-org3-001"
+          "OfferedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-org3-005",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University"
+          },
+          "AssertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-org3-005",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University"
+          }
         },
         {
           "informationSourceId": "Org3",
-          "name": "Atmospheric Energy Balance",
-          "description": "Explains how solar radiation, albedo, and greenhouse gases contribute to Earth's energy balance.",
-          "RefCredentialAward": {
-            "identifier": "org3-cred-proficiency-certificate-001",
-            "awardIssueDate": "2024-12-15T10:00:00Z",
-            "credentialAwardee": "Alan  Tsatrian",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "programlearningexperience-crcm-prep-org3-002",
+          "name": "Certified Regulatory Compliance Manager (CRCM) Preparation",
+          "type": "Professional certificate program",
+          "participationStatus": "In Progress",
+          "startDate": "2025-02-01",
+          "RefProgram": {
+            "name": "Certified Regulatory Compliance Manager (CRCM) Preparation",
+            "identifier": "program-crcm-prep-org3-002",
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Summit Valley University"
           },
-          "informationSourceOrganization": "Regional University",
-          "identifier": "proficiency-atmospheric-energy-balance-org3-002"
-        },
-        {
-          "informationSourceId": "Org3",
-          "name": "Paleoclimate Reconstruction Techniques",
-          "description": "Evaluates methods for reconstructing past climates using proxy data such as ice cores, tree rings, and sediment layers.",
-          "RefCredentialAward": {
-            "identifier": "org3-cred-proficiency-certificate-001",
-            "awardIssueDate": "2024-12-15T10:00:00Z",
-            "credentialAwardee": "Alan  Tsatrian",
+          "OfferedByRefOrganization": {
+            "name": "Society of Corporate Compliance and Ethics (SCCE)",
+            "identifier": "organization-scce-org3-012",
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Summit Valley University"
           },
-          "informationSourceOrganization": "Regional University",
-          "identifier": "proficiency-paleoclimate-reconstruction-te-org3-003"
-        },
-        {
-          "informationSourceId": "Org3",
-          "name": "Using Python or R for Environmental Data Analysis",
-          "description": "Writes basic scripts in Python or R to automate environmental data processing, analysis, and visualization tasks.",
-          "RefCredentialAward": {
-            "identifier": "org3-cred-proficiency-certificate-001",
-            "awardIssueDate": "2024-12-15T10:00:00Z",
-            "credentialAwardee": "Alan  Tsatrian",
+          "AssertedByRefOrganization": {
+            "name": "Society of Corporate Compliance and Ethics (SCCE)",
+            "identifier": "organization-scce-org3-012",
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Summit Valley University"
-          },
-          "informationSourceOrganization": "Regional University",
-          "identifier": "proficiency-using-python-or-r-for-environm-org3-004"
-        },
-        {
-          "informationSourceId": "Org3",
-          "name": "Wildlife Tracking and Observation",
-          "description": "Applies observation protocols and non-invasive tracking techniques to monitor wildlife populations in the field.",
-          "RefCredentialAward": {
-            "identifier": "org3-cred-proficiency-certificate-001",
-            "awardIssueDate": "2024-12-15T10:00:00Z",
-            "credentialAwardee": "Alan  Tsatrian",
-            "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University"
-          },
-          "informationSourceOrganization": "Regional University",
-          "identifier": "proficiency-wildlife-tracking-and-observat-org3-005"
-        },
-        {
-          "informationSourceId": "Org3",
-          "name": "Cumulative Impact Analysis",
-          "description": "Assesses cumulative environmental impacts resulting from the interaction of proposed projects with existing or planned activities.",
-          "RefCredentialAward": {
-            "identifier": "org3-cred-proficiency-certificate-001",
-            "awardIssueDate": "2024-12-15T10:00:00Z",
-            "credentialAwardee": "Alan  Tsatrian",
-            "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University"
-          },
-          "informationSourceOrganization": "Regional University",
-          "identifier": "proficiency-cumulative-impact-analysis-org3-006"
-        },
-        {
-          "informationSourceId": "Org3",
-          "name": "Environmental Policy and Ethical Tradeoffs",
-          "description": "Evaluates ethical dilemmas in environmental policy, such as balancing economic growth with ecological preservation.",
-          "RefCredentialAward": {
-            "identifier": "org3-cred-proficiency-certificate-001",
-            "awardIssueDate": "2024-12-15T10:00:00Z",
-            "credentialAwardee": "Alan  Tsatrian",
-            "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University"
-          },
-          "informationSourceOrganization": "Regional University",
-          "identifier": "proficiency-environmental-policy-and-ethic-org3-007"
+          }
         }
       ],
-      "informationSourceId": "Org3"
+      "AssessmentLearningExperience": [
+        {
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "assessmentlearningexperience-ccep-org3-001",
+          "name": "Certified Compliance & Ethics Professional (CCEP) Exam",
+          "type": "Professional certification assessment",
+          "startDate": "2018-10-12",
+          "endDate": "2018-10-12",
+          "offeredBy": "Society of Corporate Compliance and Ethics (SCCE)",
+          "scoreValue": "412",
+          "scoreType": "Scaled score (200-500)",
+          "resultDataType": "xsd:integer",
+          "gradeStatus": "Final",
+          "completionStatus": "Completed",
+          "timeAssessed": "2018-10-12",
+          "RefAssessment": {
+            "identifier": "assessment-ccep-org3-001",
+            "name": "Certified Compliance & Ethics Professional (CCEP) Exam",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University"
+          },
+          "RefProficiency": {
+            "name": "Regulatory Requirements",
+            "identifier": "proficiency-regulatory-requirements-org3-022",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University"
+          },
+          "OfferedByRefOrganization": {
+            "name": "Society of Corporate Compliance and Ethics (SCCE)",
+            "identifier": "organization-scce-org3-012",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University"
+          }
+        },
+        {
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "assessmentlearningexperience-wgu-c206-org3-002",
+          "name": "Objective Assessment: C206 Ethical Leadership",
+          "type": "Competency-based assessment",
+          "startDate": "2015-07-10",
+          "endDate": "2015-07-10",
+          "offeredBy": "State University",
+          "scoreValue": "Competent",
+          "scoreType": "Competent / Not Competent",
+          "resultDataType": "xsd:string",
+          "gradeStatus": "Final",
+          "completionStatus": "Completed",
+          "RefAssessment": {
+            "identifier": "assessment-wgu-c206-org3-002",
+            "name": "Objective Assessment: C206 Ethical Leadership",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University"
+          },
+          "RefProficiency": {
+            "name": "Ethical Codes",
+            "identifier": "proficiency-ethical-codes-org3-014",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University"
+          },
+          "OfferedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-org3-005",
+            "informationSourceId": "Org3",
+            "informationSourceOrganization": "Summit Valley University"
+          }
+        }
+      ],
+      "Birth": [
+        {
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "birth-org3-001",
+          "birthDate": "1980-05-14",
+          "cityOfBirth": "Salt Lake City",
+          "stateOfBirth": "Utah"
+        }
+      ],
+      "SexAndGender": [
+        {
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "sexandgender-org3-001",
+          "sex": "Male",
+          "gender": "Male",
+          "pronouns": "he/him"
+        }
+      ],
+      "Residency": [
+        {
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "residency-org3-001",
+          "localType": "In-State",
+          "countyFIPSCode": "49035",
+          "dateEffective": "2010-01-01",
+          "doNotPublishIndicator": "false"
+        }
+      ],
+      "Language": [
+        {
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "language-english-org3-001",
+          "name": "English",
+          "iSO639_2LangCode": "eng",
+          "iSO639_3LangCode": "eng",
+          "languageType": "Primary"
+        }
+      ],
+      "Demographics": [
+        {
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "demographics-org3-001",
+          "highestLevelEducation": "Master'sDegree(E.g.M.A.M.S.M. Eng.M.Ed.M.S.W.M.B.A.M.L.S.)",
+          "usCitizenship": "true",
+          "economicDisadvantage": "false",
+          "homeless": "false",
+          "militaryActiveStatus": "false",
+          "militaryVeteranStatus": "false"
+        }
+      ]
     }
   ],
   "Course": [
     {
-      "informationSourceId": "Org3",
       "Identifier": [
         {
           "identifier": "CS651",
@@ -566,93 +2033,171 @@
             "Academic Records"
           ],
           "informationSourceId": "Org3",
-          "informationSourceOrganization": "Regional University"
+          "informationSourceOrganization": "Summit Valley University"
         }
       ],
-      "informationSourceOrganization": "Regional University"
+      "informationSourceId": "Org3",
+      "informationSourceOrganization": "Summit Valley University",
+      "name": "Course CS651",
+      "identifier": "course-cs651-org3-legacy-001"
+    },
+    {
+      "informationSourceId": "Org3",
+      "informationSourceOrganization": "Summit Valley University",
+      "name": "Managing Organizations and Leading People",
+      "identifier": "course-c200-org3-001",
+      "Identifier": [
+        {
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "C200",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ]
+        }
+      ]
+    },
+    {
+      "informationSourceId": "Org3",
+      "informationSourceOrganization": "Summit Valley University",
+      "name": "Business Acumen",
+      "identifier": "course-c201-org3-001",
+      "Identifier": [
+        {
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "C201",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ]
+        }
+      ]
+    },
+    {
+      "informationSourceId": "Org3",
+      "informationSourceOrganization": "Summit Valley University",
+      "name": "Becoming an Effective Leader",
+      "identifier": "course-c203-org3-001",
+      "Identifier": [
+        {
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "C203",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ]
+        }
+      ]
+    },
+    {
+      "informationSourceId": "Org3",
+      "informationSourceOrganization": "Summit Valley University",
+      "name": "Ethical Leadership",
+      "identifier": "course-c206-org3-001",
+      "Identifier": [
+        {
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "C206",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ]
+        }
+      ]
     }
   ],
   "Organization": [
     {
-      "informationSourceId": "Org3",
-      "name": "Summit Valley University",
-      "description": "Summit Valley University (SVU) is a for-profit online university offering career-focused associate, bachelor's, and master's degree programs. SVU delivers instruction through traditional term-based courses led by experienced faculty. With an emphasis on practical skills and industry alignment, SVU serves a diverse student population seeking flexible, accessible pathways to advancement in business, healthcare, information technology, and criminal justice.",
+      "name": "State University",
+      "description": "State University (StateU) is an accredited online university offering online bachelor's and master's degree programs. The programs are competency-based, student-focused, online, nonprofit university.",
       "Contact": [
         {
           "Address": [
             {
-              "addressCity": "Aspen Falls",
+              "addressCity": "Dallas",
               "countryCode": "US",
-              "addressState": "Colorado",
-              "addressStreet": "123 Innovation Drive, Suite 500",
-              "addressPostalCode": "80901",
-              "informationSourceId": "Org3"
+              "addressState": "Texas",
+              "addressStreet": "632 East Hwy 3",
+              "addressPostalCode": "75001",
+              "informationSourceId": "Org3",
+              "informationSourceOrganization": "Summit Valley University",
+              "identifier": "address-state-university-org3-001"
             }
           ],
           "Email": [
             {
               "emailAddress": [
-                "info@summitvalley.edu"
+                "credentials@stateu.edu"
               ],
-              "informationSourceId": "Org3"
+              "informationSourceId": "Org3",
+              "informationSourceOrganization": "Summit Valley University",
+              "identifier": "email-state-university-org3-001"
             }
           ],
-          "websiteAddress": "https://www.summitvalley.edu/",
+          "websiteAddress": "https://www.stateu.edu/",
           "Telephone": [
             {
               "telephoneNumber": [
-                "888-555-7210"
+                "111-222-3333"
               ],
-              "informationSourceId": "Org3"
+              "informationSourceId": "Org3",
+              "informationSourceOrganization": "Summit Valley University",
+              "identifier": "telephone-state-university-org3-001"
             }
           ],
           "informationSourceId": "Org3",
-          "informationSourceOrganization": "Regional University",
+          "informationSourceOrganization": "Summit Valley University",
           "identifier": "contact-org3-001"
         }
       ],
-      "imageUrl": "https://cdn.summitvalley.edu/assets/logo.svg",
+      "imageUrl": "https://assets.stateu.edu/99da0cfd314920b5cf8cb6c8727e7675",
       "Identifier": [
         {
-          "identifier": "999112233",
+          "identifier": "833333326",
           "identifierType": "Federal employer identification number",
           "informationSourceId": "Org3",
-          "informationSourceOrganization": "Regional University"
+          "informationSourceOrganization": "Summit Valley University"
         },
         {
-          "identifier": "123456789",
+          "identifier": "23323331",
           "identifierType": "Dun and Bradstreet number",
           "informationSourceId": "Org3",
-          "informationSourceOrganization": "Regional University"
+          "informationSourceOrganization": "Summit Valley University"
         },
         {
-          "identifier": "https://credentialfinder.org/organization/999/Summit_Valley_University",
+          "identifier": "https://credentialfinder.org/organization/000/State_University",
           "identifierType": "credentialfinder.org",
           "informationSourceId": "Org3",
-          "informationSourceOrganization": "Regional University"
+          "informationSourceOrganization": "Summit Valley University"
         }
       ],
-      "identificationSystem": "Summit Valley University SIS",
+      "identificationSystem": "State University SIS",
       "organizationType": [],
-      "informationSourceOrganization": "Regional University"
+      "informationSourceId": "Org3",
+      "informationSourceOrganization": "Summit Valley University",
+      "identifier": "organization-state-university-org3-001"
     },
     {
-      "identificationSystem": "svu-corporate-partner-id",
-      "name": "Summit Valley Corporate Partner",
+      "identificationSystem": "stateu-employing-organization-id",
+      "name": "Corporate Partner",
       "organizationType": [
         "Company"
       ],
       "informationSourceId": "Org3",
-      "informationSourceOrganization": "Regional University",
-      "identifier": "organization-summit-valley-corporate-partne-org3-002"
+      "informationSourceOrganization": "Summit Valley University",
+      "identifier": "organization-corporate-partner-org3-002"
     },
     {
-      "informationSourceId": "Org3",
-      "name": "Summit Valley University",
-      "identificationSystem": "Summit Valley University SIS",
+      "name": "State University",
+      "identificationSystem": "State University SIS",
       "organizationType": [],
-      "informationSourceOrganization": "Regional University",
-      "identifier": "organization-summit-valley-university-org3-003"
+      "informationSourceId": "Org3",
+      "informationSourceOrganization": "Summit Valley University",
+      "identifier": "organization-state-university-org3-004"
     },
     {
       "identificationSystem": "stateu-state-university-id",
@@ -661,56 +2206,473 @@
         "University"
       ],
       "informationSourceId": "Org3",
-      "informationSourceOrganization": "Regional University",
-      "identifier": "organization-state-university-org3-004"
+      "informationSourceOrganization": "Summit Valley University",
+      "identifier": "organization-state-university-org3-005"
     },
     {
       "informationSourceId": "Org3",
-      "name": "Summit Valley University",
-      "identificationSystem": "stateu-state-university-id",
-      "organizationType": [],
-      "informationSourceOrganization": "Regional University",
-      "identifier": "organization-summit-valley-university-org3-005"
+      "informationSourceOrganization": "Summit Valley University",
+      "name": "Society of Corporate Compliance and Ethics (SCCE)",
+      "description": "Professional association that issues corporate compliance and ethics certifications such as the CCEP.",
+      "identificationSystem": "scce-org-id",
+      "identifier": "organization-scce-org3-012"
     }
   ],
   "Credential": [
     {
-      "informationSourceId": "Org3",
-      "identifier": "84d6de55-974c-47e5-92bf-889addac75ae",
-      "name": "Bachelor of Science (BS): Environmental Science",
+      "id": "84d6de55-974c-47e5-92bf-889addac75ae",
+      "name": "Master of Science (MS): Management and Leadership",
       "format": [
         "http://schema.hropenstandards.org/4.4/recruiting/json/ler-rs/LER-RSType.json"
       ],
       "AlignedProgram": [
         {
-          "specialization": "Climate Modeling",
+          "specialization": "Management",
           "informationSourceId": "Org3"
         }
       ],
-      "IssuedByRefOrganization": {
-        "informationSourceId": "Org3",
-        "name": "Summit Valley University",
-        "identificationSystem": "stateu-state-university-id",
-        "organizationType": [],
-        "informationSourceOrganization": "Regional University",
-        "identifier": "organization-summit-valley-university-org3-001"
-      },
+      "IssuedByRefOrganization": [
+        {
+          "name": "State University",
+          "description": "State University (StateU) is an accredited online university offering online bachelor's and master's degree programs. The programs are competency-based, student-focused, online, nonprofit university.",
+          "Contact": [
+            {
+              "Address": [
+                {
+                  "addressCity": "Dallas",
+                  "countryCode": "US",
+                  "addressState": "Texas",
+                  "addressStreet": "632 East Hwy 3",
+                  "addressPostalCode": "75001",
+                  "informationSourceId": "Org3"
+                }
+              ],
+              "Email": [
+                {
+                  "emailAddress": [
+                    "credentials@stateu.edu"
+                  ],
+                  "informationSourceId": "Org3"
+                }
+              ],
+              "websiteAddress": "https://www.stateu.edu/",
+              "Telephone": [
+                {
+                  "telephoneNumber": [
+                    "111-222-3333"
+                  ],
+                  "informationSourceId": "Org3"
+                }
+              ],
+              "informationSourceId": "Org3",
+              "informationSourceOrganization": "Summit Valley University",
+              "identifier": "contact-org3-001"
+            }
+          ],
+          "imageUrl": "https://assets.stateu.edu/99da0cfd314920b5cf8cb6c8727e7675",
+          "Identifier": [
+            {
+              "identifier": "833333326",
+              "identifierType": "Federal employer identification number",
+              "informationSourceId": "Org3",
+              "informationSourceOrganization": "Summit Valley University"
+            },
+            {
+              "identifier": "23323331",
+              "identifierType": "Dun and Bradstreet number",
+              "informationSourceId": "Org3",
+              "informationSourceOrganization": "Summit Valley University"
+            },
+            {
+              "identifier": "https://credentialfinder.org/organization/000/State_University",
+              "identifierType": "credentialfinder.org",
+              "informationSourceId": "Org3",
+              "informationSourceOrganization": "Summit Valley University"
+            }
+          ],
+          "identificationSystem": "State University SIS",
+          "organizationType": [],
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University"
+        }
+      ],
       "Accreditation": [
         {
           "informationSourceId": "Org3",
           "accreditingAgency": "Higher Learning Commission",
           "accreditationType": "Institutional",
           "dateAccredited": "2020-01-01",
-          "accreditationStatus": "Active"
+          "accreditationStatus": "Active",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "accreditation-higher-learning-commission-org3-001"
         }
       ],
-      "informationSourceOrganization": "Regional University"
+      "informationSourceId": "Org3",
+      "informationSourceOrganization": "Summit Valley University",
+      "identifier": "credential-master-of-science--ms---manage-org3-001"
+    },
+    {
+      "id": "84d6de55-974c-47e5-92bf-889addac75ae",
+      "name": "C200 - Managing Organizations and Leading People",
+      "format": [
+        "http://schema.hropenstandards.org/4.4/recruiting/json/ler-rs/LER-RSType.json"
+      ],
+      "Accreditation": [
+        {
+          "informationSourceId": "Org3",
+          "accreditingAgency": "Higher Learning Commission",
+          "accreditationType": "Institutional",
+          "dateAccredited": "2020-01-01",
+          "accreditationStatus": "Active",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "accreditation-higher-learning-commission-org3-002"
+        }
+      ],
+      "informationSourceId": "Org3",
+      "informationSourceOrganization": "Summit Valley University",
+      "identifier": "credential-c200---managing-organizations--org3-002"
+    },
+    {
+      "id": "84d6de55-974c-47e5-92bf-889addac75ae",
+      "name": "C201 - Business Acumen",
+      "format": [
+        "http://schema.hropenstandards.org/4.4/recruiting/json/ler-rs/LER-RSType.json"
+      ],
+      "Accreditation": [
+        {
+          "informationSourceId": "Org3",
+          "accreditingAgency": "Higher Learning Commission",
+          "accreditationType": "Institutional",
+          "dateAccredited": "2020-01-01",
+          "accreditationStatus": "Active",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "accreditation-higher-learning-commission-org3-003"
+        }
+      ],
+      "informationSourceId": "Org3",
+      "informationSourceOrganization": "Summit Valley University",
+      "identifier": "credential-c201---business-acumen-org3-003"
+    },
+    {
+      "id": "84d6de55-974c-47e5-92bf-889addac75ae",
+      "name": "C202 - Managing Human Capital",
+      "format": [
+        "http://schema.hropenstandards.org/4.4/recruiting/json/ler-rs/LER-RSType.json"
+      ],
+      "Accreditation": [
+        {
+          "informationSourceId": "Org3",
+          "accreditingAgency": "Higher Learning Commission",
+          "accreditationType": "Institutional",
+          "dateAccredited": "2020-01-01",
+          "accreditationStatus": "Active",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "accreditation-higher-learning-commission-org3-004"
+        }
+      ],
+      "informationSourceId": "Org3",
+      "informationSourceOrganization": "Summit Valley University",
+      "identifier": "credential-c202---managing-human-capital-org3-004"
+    },
+    {
+      "id": "84d6de55-974c-47e5-92bf-889addac75ae",
+      "name": "C203 - Becoming an Effective Leader",
+      "format": [
+        "http://schema.hropenstandards.org/4.4/recruiting/json/ler-rs/LER-RSType.json"
+      ],
+      "Accreditation": [
+        {
+          "informationSourceId": "Org3",
+          "accreditingAgency": "Higher Learning Commission",
+          "accreditationType": "Institutional",
+          "dateAccredited": "2020-01-01",
+          "accreditationStatus": "Active",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "accreditation-higher-learning-commission-org3-005"
+        }
+      ],
+      "informationSourceId": "Org3",
+      "informationSourceOrganization": "Summit Valley University",
+      "identifier": "credential-c203---becoming-an-effective-l-org3-005"
+    },
+    {
+      "id": "84d6de55-974c-47e5-92bf-889addac75ae",
+      "name": "C204 - Management Communication",
+      "format": [
+        "http://schema.hropenstandards.org/4.4/recruiting/json/ler-rs/LER-RSType.json"
+      ],
+      "Accreditation": [
+        {
+          "informationSourceId": "Org3",
+          "accreditingAgency": "Higher Learning Commission",
+          "accreditationType": "Institutional",
+          "dateAccredited": "2020-01-01",
+          "accreditationStatus": "Active",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "accreditation-higher-learning-commission-org3-006"
+        }
+      ],
+      "informationSourceId": "Org3",
+      "informationSourceOrganization": "Summit Valley University",
+      "identifier": "credential-c204---management-communicatio-org3-006"
+    },
+    {
+      "id": "84d6de55-974c-47e5-92bf-889addac75ae",
+      "name": "C206 - Ethical Leadership",
+      "format": [
+        "http://schema.hropenstandards.org/4.4/recruiting/json/ler-rs/LER-RSType.json"
+      ],
+      "Accreditation": [
+        {
+          "informationSourceId": "Org3",
+          "accreditingAgency": "Higher Learning Commission",
+          "accreditationType": "Institutional",
+          "dateAccredited": "2020-01-01",
+          "accreditationStatus": "Active",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "accreditation-higher-learning-commission-org3-007"
+        }
+      ],
+      "informationSourceId": "Org3",
+      "informationSourceOrganization": "Summit Valley University",
+      "identifier": "credential-c206---ethical-leadership-org3-007"
+    },
+    {
+      "id": "84d6de55-974c-47e5-92bf-889addac75ae",
+      "informationSourceId": "Org3",
+      "informationSourceOrganization": "Summit Valley University",
+      "identifier": "credential-84d6de55-974c-47e5-92bf-889add-org3-008",
+      "name": "Master of Science (MS): Management and Leadership"
+    }
+  ],
+  "informationSourceId": "Org3",
+  "Assessment": [
+    {
+      "informationSourceId": "Org3",
+      "informationSourceOrganization": "Summit Valley University",
+      "identifier": "assessment-ccep-org3-001",
+      "name": "Certified Compliance & Ethics Professional (CCEP) Exam",
+      "shortName": "CCEP",
+      "provider": "Society of Corporate Compliance and Ethics (SCCE)",
+      "type": "Professional certification examination",
+      "description": "Certification exam validating knowledge of compliance program management and ethics.",
+      "purpose": "Professional certification",
+      "assessmentLevel": "AudLevel:PostSecondaryLevel",
+      "scoreMetricType": "Scaled score (200-500)",
+      "deliveryType": "Online proctored / test center",
+      "methodType": "Multiple choice",
+      "AssessmentPerformanceLevel": [
+        {
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "assessmentperformancelevel-ccep-pass-org3-001",
+          "label": "Pass",
+          "performanceLowerLevel": "300",
+          "performanceUpperLevel": "500",
+          "descriptiveFeedback": "A scaled score of 300 or higher earns the certification."
+        }
+      ],
+      "DemonstratesRefCompetency": {
+        "name": "Regulatory Compliance",
+        "identifier": "competency-regulatory-compliance-org3-001",
+        "informationSourceId": "Org3",
+        "informationSourceOrganization": "Summit Valley University"
+      },
+      "AwardedByRefOrganization": {
+        "name": "Society of Corporate Compliance and Ethics (SCCE)",
+        "identifier": "organization-scce-org3-012",
+        "informationSourceId": "Org3",
+        "informationSourceOrganization": "Summit Valley University"
+      },
+      "OfferedByRefOrganization": {
+        "name": "Society of Corporate Compliance and Ethics (SCCE)",
+        "identifier": "organization-scce-org3-012",
+        "informationSourceId": "Org3",
+        "informationSourceOrganization": "Summit Valley University"
+      }
     },
     {
       "informationSourceId": "Org3",
-      "identifier": "84d6de55-974c-47e5-92bf-889addac75ae",
-      "informationSourceOrganization": "Regional University"
+      "informationSourceOrganization": "Summit Valley University",
+      "identifier": "assessment-wgu-c206-org3-002",
+      "name": "Objective Assessment: C206 Ethical Leadership",
+      "shortName": "C206 OA",
+      "provider": "State University",
+      "type": "Competency-based objective assessment",
+      "description": "Proctored competency-based assessment verifying ethical leadership competence for the MS program.",
+      "purpose": "Competency verification for course credit",
+      "assessmentLevel": "AudLevel:PostSecondaryLevel",
+      "scoreMetricType": "Competent / Not Competent",
+      "deliveryType": "Online proctored",
+      "methodType": "Objective assessment",
+      "AssessmentPerformanceLevel": [
+        {
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "assessmentperformancelevel-c206-competent-org3-002",
+          "label": "Competent",
+          "descriptiveFeedback": "Demonstrates competency in ethical leadership sufficient to earn course credit."
+        }
+      ],
+      "DemonstratesRefCompetency": {
+        "name": "Ethics and Integrity",
+        "identifier": "competency-ethics-integrity-org3-003",
+        "informationSourceId": "Org3",
+        "informationSourceOrganization": "Summit Valley University"
+      },
+      "OfferedByRefOrganization": {
+        "name": "State University",
+        "identifier": "organization-state-university-org3-005",
+        "informationSourceId": "Org3",
+        "informationSourceOrganization": "Summit Valley University"
+      }
     }
   ],
-  "informationSourceId": "Org3"
+  "CompetencyFramework": [
+    {
+      "informationSourceId": "Org3",
+      "informationSourceOrganization": "Summit Valley University",
+      "name": "Regulatory Compliance & Ethics Competency Framework",
+      "description": "Competency framework for corporate compliance, ethics, and risk-management roles, aligned to O*NET Compliance Officers.",
+      "uri": "https://stateu.edu/frameworks/compliance-ethics/v1",
+      "publisher": "State University",
+      "creator": "State University",
+      "publicationStatus": "Published",
+      "publicationDate": "2022-03-01",
+      "version": "1.0",
+      "identifier": "competencyframework-compliance-ethics-org3-001",
+      "Competency": [
+        {
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "name": "Regulatory Compliance",
+          "code": "COMP-01",
+          "statement": "Interprets applicable laws and regulations and operates controls that keep the organization in compliance.",
+          "identifier": "competency-regulatory-compliance-org3-001",
+          "CompetencyAlignments": [
+            {
+              "informationSourceId": "Org3",
+              "informationSourceOrganization": "Summit Valley University",
+              "identifier": "competencyalignment-onet-compliance-org3-001",
+              "alignmentType": "majorAlignment",
+              "alignsToUri": "https://www.onetonline.org/link/summary/13-1041.00",
+              "alignsToText": "Compliance Officers",
+              "alignsToType": "O*NET-SOC Occupation"
+            }
+          ]
+        },
+        {
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "name": "Risk Management",
+          "code": "COMP-02",
+          "statement": "Identifies, assesses, and mitigates compliance and operational risk.",
+          "identifier": "competency-risk-management-org3-002"
+        },
+        {
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "name": "Ethics and Integrity",
+          "code": "COMP-03",
+          "statement": "Applies ethical principles and codes of conduct to organizational decision-making.",
+          "identifier": "competency-ethics-integrity-org3-003"
+        },
+        {
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "name": "Audit and Monitoring",
+          "code": "COMP-04",
+          "statement": "Plans and conducts audits and ongoing monitoring to detect and correct non-compliance.",
+          "identifier": "competency-audit-monitoring-org3-004"
+        },
+        {
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "name": "Policy Development",
+          "code": "COMP-05",
+          "statement": "Drafts, implements, and maintains policies and procedures that operationalize regulatory requirements.",
+          "identifier": "competency-policy-development-org3-005"
+        }
+      ],
+      "Association": [
+        {
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "association-risk-child-of-compliance-org3-001",
+          "competencyAssociationType": "isChildOf",
+          "competencyAssociationOriginName": "Risk Management",
+          "competencyAssociationOriginUri": "urn:lif:competency:competency-risk-management-org3-002",
+          "competencyAssociationDestinationName": "Regulatory Compliance",
+          "competencyAssociationDestinationUri": "urn:lif:competency:competency-regulatory-compliance-org3-001"
+        },
+        {
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "association-policy-related-compliance-org3-002",
+          "competencyAssociationType": "isRelatedTo",
+          "competencyAssociationOriginName": "Policy Development",
+          "competencyAssociationOriginUri": "urn:lif:competency:competency-policy-development-org3-005",
+          "competencyAssociationDestinationName": "Regulatory Compliance",
+          "competencyAssociationDestinationUri": "urn:lif:competency:competency-regulatory-compliance-org3-001"
+        }
+      ]
+    }
+  ],
+  "Program": [
+    {
+      "informationSourceId": "Org3",
+      "informationSourceOrganization": "Summit Valley University",
+      "name": "Master of Science (MS): Management and Leadership",
+      "description": "Competency-based graduate degree in management and leadership.",
+      "identifier": "program-ms-management-leadership-org3-001",
+      "programIdentifierSystem": "State University SIS",
+      "instructionalProgramCode": "52.0201",
+      "instructionalProgramUse": "CIP 2020",
+      "creditsRequired": "30",
+      "creditUnitTypeDescription": "Competency units",
+      "postSecondaryProgramLevel": "Master's Degree",
+      "normalTimeCompletion": "18",
+      "normalTimeCompletionUnits": "Years",
+      "deliveryType": "Online, competency-based",
+      "distanceEducationProgram": "true",
+      "DemonstratesRefCompetency": {
+        "name": "Ethics and Integrity",
+        "identifier": "competency-ethics-integrity-org3-003",
+        "informationSourceId": "Org3",
+        "informationSourceOrganization": "Summit Valley University"
+      },
+      "OfferedByRefOrganization": {
+        "name": "State University",
+        "identifier": "organization-state-university-org3-005",
+        "informationSourceId": "Org3",
+        "informationSourceOrganization": "Summit Valley University"
+      }
+    },
+    {
+      "informationSourceId": "Org3",
+      "informationSourceOrganization": "Summit Valley University",
+      "name": "Certified Regulatory Compliance Manager (CRCM) Preparation",
+      "description": "Professional preparation program for the CRCM certification in regulatory compliance management.",
+      "identifier": "program-crcm-prep-org3-002",
+      "programIdentifierSystem": "training-provider-program-id",
+      "creditsRequired": "6",
+      "creditUnitTypeDescription": "Continuing education units",
+      "postSecondaryProgramLevel": "Professional Certificate",
+      "workBasedLearningOpportunityType": "Work-based learning",
+      "programSponsorType": "Professional association",
+      "deliveryType": "Online",
+      "DemonstratesRefCompetency": {
+        "name": "Regulatory Compliance",
+        "identifier": "competency-regulatory-compliance-org3-001",
+        "informationSourceId": "Org3",
+        "informationSourceOrganization": "Summit Valley University"
+      },
+      "OfferedByRefOrganization": {
+        "name": "Society of Corporate Compliance and Ethics (SCCE)",
+        "identifier": "organization-scce-org3-012",
+        "informationSourceId": "Org3",
+        "informationSourceOrganization": "Summit Valley University"
+      }
+    }
+  ]
 }

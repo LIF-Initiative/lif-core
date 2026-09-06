@@ -3,10 +3,10 @@
     {
       "Name": [
         {
-          "informationSourceId": "Org3",
           "lastName": "Hanson",
           "firstName": "Matt",
-          "informationSourceOrganization": "Regional University",
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
           "identifier": "name-matt-hanson-org3-001"
         }
       ],
@@ -14,31 +14,38 @@
         {
           "Email": [
             {
-              "informationSourceId": "Org3",
               "emailAddress": [
                 "mhanson_lifdemo@stateu.edu"
-              ]
+              ],
+              "informationSourceId": "Org3",
+              "informationSourceOrganization": "Summit Valley University",
+              "identifier": "email-matt-hanson-org3-001"
             }
           ],
           "Address": [
             {
-              "informationSourceId": "Org3",
               "addressCity": "Marietta",
               "countryCode": "US",
               "addressState": "Georgia",
-              "addressPostalCode": "30008"
+              "addressPostalCode": "30008",
+              "informationSourceId": "Org3",
+              "addressStreet": "1200 Roswell Road",
+              "informationSourceOrganization": "Summit Valley University",
+              "identifier": "address-matt-hanson-org3-001"
             }
           ],
           "Telephone": [
             {
-              "informationSourceId": "Org3",
               "telephoneNumber": [
                 "+12345678910"
-              ]
+              ],
+              "informationSourceId": "Org3",
+              "informationSourceOrganization": "Summit Valley University",
+              "identifier": "telephone-matt-hanson-org3-001"
             }
           ],
           "informationSourceId": "Org3",
-          "informationSourceOrganization": "Regional University",
+          "informationSourceOrganization": "Summit Valley University",
           "identifier": "contact-org3-001"
         }
       ],
@@ -47,13 +54,13 @@
           "informationSourceId": "Org3",
           "identifier": "100005",
           "identifierType": "SCHOOL_ASSIGNED_NUMBER",
-          "informationSourceOrganization": "Regional University"
+          "informationSourceOrganization": "Summit Valley University"
         },
         {
           "informationSourceId": "Org3",
           "identifier": "SVU-20250005",
           "identifierType": "Summit Valley University student ID",
-          "informationSourceOrganization": "Regional University"
+          "informationSourceOrganization": "Summit Valley University"
         }
       ],
       "CredentialAward": [
@@ -69,7 +76,8 @@
           },
           "identifier": "641d3d79-cf40-47e3-9396-7f4d067ceccd",
           "awardIssueDate": "2023-10-25",
-          "credentialAwardee": "Matt Hanson"
+          "credentialAwardee": "Matt Hanson",
+          "name": "Bachelor of Science in Health and Wellness"
         },
         {
           "awardStatus": "Completed",
@@ -83,7 +91,8 @@
           "awardIssueDate": "2024-12-15T10:00:00Z",
           "credentialAwardee": "Matt Hanson",
           "informationSourceId": "Org3",
-          "informationSourceOrganization": "Summit Valley University"
+          "informationSourceOrganization": "Summit Valley University",
+          "name": "Health and Wellness Proficiency Certificate"
         },
         {
           "awardStatus": "Completed",
@@ -97,7 +106,8 @@
           "identifier": "5367f3bd-e285-4880-be4f-75f270c99de9",
           "awardIssueDate": "2024-11-14T02:37:11Z",
           "credentialAwardee": "Matt Hanson",
-          "informationSourceOrganization": "Summit Valley University"
+          "informationSourceOrganization": "Summit Valley University",
+          "name": "Computer Science 651 Course Completion"
         },
         {
           "awardStatus": "Completed",
@@ -111,7 +121,8 @@
           "identifier": "21448b4f-163d-4806-b0f4-28ffd06a078a",
           "awardIssueDate": "2021-08-05",
           "credentialAwardee": "Matt Hanson",
-          "informationSourceOrganization": "Summit Valley University"
+          "informationSourceOrganization": "Summit Valley University",
+          "name": "Computer Science 651 Course Completion"
         },
         {
           "awardStatus": "Completed",
@@ -125,7 +136,8 @@
           "identifier": "8f6e6d12-2693-4543-85ac-f57174f5863f",
           "awardIssueDate": "2021-10-12T17:39:31Z",
           "credentialAwardee": "Matt Hanson",
-          "informationSourceOrganization": "Summit Valley University"
+          "informationSourceOrganization": "Summit Valley University",
+          "name": "Computer Science 651 Course Completion"
         }
       ],
       "CourseLearningExperience": [
@@ -136,7 +148,7 @@
             "name": "Summit Valley University",
             "identificationSystem": "Summit Valley University SIS",
             "organizationType": [],
-            "informationSourceOrganization": "Regional University",
+            "informationSourceOrganization": "Summit Valley University",
             "identifier": "organization-summit-valley-university-org3-001"
           },
           "RefCourse": {
@@ -174,7 +186,8 @@
             "credentialAwardee": "Matt Hanson"
           },
           "informationSourceOrganization": "Summit Valley University",
-          "identifier": "courselearningexperience-org3-001"
+          "identifier": "courselearningexperience-org3-001",
+          "name": "Computer Science 651"
         },
         {
           "informationSourceId": "Org3",
@@ -183,7 +196,7 @@
             "name": "Summit Valley University",
             "identificationSystem": "Summit Valley University SIS",
             "organizationType": [],
-            "informationSourceOrganization": "Regional University",
+            "informationSourceOrganization": "Summit Valley University",
             "identifier": "organization-summit-valley-university-org3-001"
           },
           "RefCourse": {
@@ -221,7 +234,8 @@
             "credentialAwardee": "Matt Hanson"
           },
           "informationSourceOrganization": "Summit Valley University",
-          "identifier": "courselearningexperience-org3-002"
+          "identifier": "courselearningexperience-org3-002",
+          "name": "Computer Science 651"
         },
         {
           "informationSourceId": "Org3",
@@ -230,7 +244,7 @@
             "name": "Summit Valley University",
             "identificationSystem": "Summit Valley University SIS",
             "organizationType": [],
-            "informationSourceOrganization": "Regional University",
+            "informationSourceOrganization": "Summit Valley University",
             "identifier": "organization-summit-valley-university-org3-001"
           },
           "RefCourse": {
@@ -268,7 +282,8 @@
             "credentialAwardee": "Matt Hanson"
           },
           "informationSourceOrganization": "Summit Valley University",
-          "identifier": "courselearningexperience-org3-003"
+          "identifier": "courselearningexperience-org3-003",
+          "name": "Computer Science 651"
         }
       ],
       "Proficiency": [
@@ -281,7 +296,8 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Matt Hanson",
             "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University"
+            "informationSourceOrganization": "Summit Valley University",
+            "name": "Principles of Public Health"
           },
           "informationSourceOrganization": "Summit Valley University",
           "identifier": "proficiency-principles-of-public-health-org3-001"
@@ -295,7 +311,8 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Matt Hanson",
             "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University"
+            "informationSourceOrganization": "Summit Valley University",
+            "name": "Determinants of Health"
           },
           "informationSourceOrganization": "Summit Valley University",
           "identifier": "proficiency-determinants-of-health-org3-002"
@@ -309,7 +326,8 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Matt Hanson",
             "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University"
+            "informationSourceOrganization": "Summit Valley University",
+            "name": "Health Disparities and Equity"
           },
           "informationSourceOrganization": "Summit Valley University",
           "identifier": "proficiency-health-disparities-and-equity-org3-003"
@@ -323,7 +341,8 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Matt Hanson",
             "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University"
+            "informationSourceOrganization": "Summit Valley University",
+            "name": "Introduction to Epidemiology"
           },
           "informationSourceOrganization": "Summit Valley University",
           "identifier": "proficiency-introduction-to-epidemiology-org3-004"
@@ -337,7 +356,8 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Matt Hanson",
             "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University"
+            "informationSourceOrganization": "Summit Valley University",
+            "name": "Health Behavior Theories"
           },
           "informationSourceOrganization": "Summit Valley University",
           "identifier": "proficiency-health-behavior-theories-org3-005"
@@ -351,7 +371,8 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Matt Hanson",
             "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University"
+            "informationSourceOrganization": "Summit Valley University",
+            "name": "Community Health Needs Assessment"
           },
           "informationSourceOrganization": "Summit Valley University",
           "identifier": "proficiency-community-health-needs-assessm-org3-006"
@@ -365,7 +386,8 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Matt Hanson",
             "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University"
+            "informationSourceOrganization": "Summit Valley University",
+            "name": "Cultural Competency in Health Promotion"
           },
           "informationSourceOrganization": "Summit Valley University",
           "identifier": "proficiency-cultural-competency-in-health--org3-007"
@@ -379,7 +401,8 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Matt Hanson",
             "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University"
+            "informationSourceOrganization": "Summit Valley University",
+            "name": "Health Literacy and Communication"
           },
           "informationSourceOrganization": "Summit Valley University",
           "identifier": "proficiency-health-literacy-and-communicat-org3-008"
@@ -393,7 +416,8 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Matt Hanson",
             "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University"
+            "informationSourceOrganization": "Summit Valley University",
+            "name": "Public Health Systems and Policy"
           },
           "informationSourceOrganization": "Summit Valley University",
           "identifier": "proficiency-public-health-systems-and-poli-org3-009"
@@ -407,7 +431,8 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Matt Hanson",
             "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University"
+            "informationSourceOrganization": "Summit Valley University",
+            "name": "Introduction to Health Promotion Planning"
           },
           "informationSourceOrganization": "Summit Valley University",
           "identifier": "proficiency-introduction-to-health-promoti-org3-010"
@@ -421,7 +446,8 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Matt Hanson",
             "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University"
+            "informationSourceOrganization": "Summit Valley University",
+            "name": "Ethical Issues in Community Health"
           },
           "informationSourceOrganization": "Summit Valley University",
           "identifier": "proficiency-ethical-issues-in-community-he-org3-011"
@@ -435,7 +461,8 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Matt Hanson",
             "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University"
+            "informationSourceOrganization": "Summit Valley University",
+            "name": "Health and Wellness Promotion Across the Lifespan"
           },
           "informationSourceOrganization": "Summit Valley University",
           "identifier": "proficiency-health-and-wellness-promotion--org3-012"
@@ -449,7 +476,8 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Matt Hanson",
             "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University"
+            "informationSourceOrganization": "Summit Valley University",
+            "name": "Principles of Health Education"
           },
           "informationSourceOrganization": "Summit Valley University",
           "identifier": "proficiency-principles-of-health-education-org3-013"
@@ -463,7 +491,8 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Matt Hanson",
             "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University"
+            "informationSourceOrganization": "Summit Valley University",
+            "name": "Behavior Change Theories in Health Education"
           },
           "informationSourceOrganization": "Summit Valley University",
           "identifier": "proficiency-behavior-change-theories-in-he-org3-014"
@@ -477,7 +506,8 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Matt Hanson",
             "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University"
+            "informationSourceOrganization": "Summit Valley University",
+            "name": "Assessment of Health Education Needs"
           },
           "informationSourceOrganization": "Summit Valley University",
           "identifier": "proficiency-assessment-of-health-education-org3-015"
@@ -491,7 +521,8 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Matt Hanson",
             "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University"
+            "informationSourceOrganization": "Summit Valley University",
+            "name": "Health Communication Strategies"
           },
           "informationSourceOrganization": "Summit Valley University",
           "identifier": "proficiency-health-communication-strategie-org3-016"
@@ -499,13 +530,14 @@
         {
           "informationSourceId": "Org3",
           "name": "Developing Health Education Materials",
-          "description": "Creates educational content aligned with learning objectives and appropriate for the target population\u2019s literacy level.",
+          "description": "Creates educational content aligned with learning objectives and appropriate for the target population’s literacy level.",
           "RefCredentialAward": {
             "identifier": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Matt Hanson",
             "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University"
+            "informationSourceOrganization": "Summit Valley University",
+            "name": "Developing Health Education Materials"
           },
           "informationSourceOrganization": "Summit Valley University",
           "identifier": "proficiency-developing-health-education-ma-org3-017"
@@ -519,7 +551,8 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Matt Hanson",
             "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University"
+            "informationSourceOrganization": "Summit Valley University",
+            "name": "Planning Health Education Programs"
           },
           "informationSourceOrganization": "Summit Valley University",
           "identifier": "proficiency-planning-health-education-prog-org3-018"
@@ -533,7 +566,8 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Matt Hanson",
             "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University"
+            "informationSourceOrganization": "Summit Valley University",
+            "name": "Facilitation of Group-Based Education Sessions"
           },
           "informationSourceOrganization": "Summit Valley University",
           "identifier": "proficiency-facilitation-of-group-based-ed-org3-019"
@@ -547,7 +581,8 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Matt Hanson",
             "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University"
+            "informationSourceOrganization": "Summit Valley University",
+            "name": "Motivational Interviewing Techniques"
           },
           "informationSourceOrganization": "Summit Valley University",
           "identifier": "proficiency-motivational-interviewing-tech-org3-020"
@@ -561,7 +596,8 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Matt Hanson",
             "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University"
+            "informationSourceOrganization": "Summit Valley University",
+            "name": "Behavioral Goal Setting and Evaluation"
           },
           "informationSourceOrganization": "Summit Valley University",
           "identifier": "proficiency-behavioral-goal-setting-and-ev-org3-021"
@@ -575,7 +611,8 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Matt Hanson",
             "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University"
+            "informationSourceOrganization": "Summit Valley University",
+            "name": "Evaluating Health Education Effectiveness"
           },
           "informationSourceOrganization": "Summit Valley University",
           "identifier": "proficiency-evaluating-health-education-ef-org3-022"
@@ -589,7 +626,8 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Matt Hanson",
             "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University"
+            "informationSourceOrganization": "Summit Valley University",
+            "name": "Cultural and Ethical Considerations in Health Education"
           },
           "informationSourceOrganization": "Summit Valley University",
           "identifier": "proficiency-cultural-and-ethical-considera-org3-023"
@@ -603,13 +641,71 @@
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Matt Hanson",
             "informationSourceId": "Org3",
-            "informationSourceOrganization": "Summit Valley University"
+            "informationSourceOrganization": "Summit Valley University",
+            "name": "Collaboration with Public Health Stakeholders"
           },
           "informationSourceOrganization": "Summit Valley University",
           "identifier": "proficiency-collaboration-with-public-heal-org3-024"
         }
       ],
-      "informationSourceId": "Org3"
+      "informationSourceId": "Org3",
+      "Birth": [
+        {
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "birth-org3-001",
+          "birthDate": "1988-11-03",
+          "cityOfBirth": "Columbus",
+          "stateOfBirth": "Georgia"
+        }
+      ],
+      "SexAndGender": [
+        {
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "sexandgender-org3-001",
+          "sex": "Male",
+          "gender": "Male",
+          "pronouns": "he/him"
+        }
+      ],
+      "Residency": [
+        {
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "residency-org3-001",
+          "localType": "In-State",
+          "countyFIPSCode": "13067",
+          "dateEffective": "2023-06-01",
+          "doNotPublishIndicator": "false"
+        }
+      ],
+      "Language": [
+        {
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "language-english-org3-001",
+          "name": "English",
+          "iSO639_2LangCode": "eng",
+          "iSO639_3LangCode": "eng",
+          "languageType": "Primary"
+        }
+      ],
+      "Demographics": [
+        {
+          "informationSourceId": "Org3",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "demographics-org3-001",
+          "highestLevelEducation": "Bachelor's(Baccalaureate)Degree",
+          "familyIncome": "70000",
+          "familyIncomeCalculation": "Annual household income (self-reported)",
+          "usCitizenship": "true",
+          "economicDisadvantage": "false",
+          "homeless": "false",
+          "militaryActiveStatus": "true",
+          "militaryVeteranStatus": "false"
+        }
+      ]
     }
   ],
   "Course": [
@@ -623,10 +719,12 @@
             "Academic Records"
           ],
           "informationSourceId": "Org3",
-          "informationSourceOrganization": "Regional University"
+          "informationSourceOrganization": "Summit Valley University"
         }
       ],
-      "informationSourceOrganization": "Regional University"
+      "informationSourceOrganization": "Summit Valley University",
+      "identifier": "course-org3-001",
+      "name": "course-org3-001"
     }
   ],
   "Organization": [
@@ -643,7 +741,9 @@
               "addressState": "Colorado",
               "addressStreet": "123 Innovation Drive, Suite 500",
               "addressPostalCode": "80901",
-              "informationSourceId": "Org3"
+              "informationSourceId": "Org3",
+              "informationSourceOrganization": "Summit Valley University",
+              "identifier": "org-org3-001-address-001"
             }
           ],
           "Email": [
@@ -651,7 +751,9 @@
               "emailAddress": [
                 "info@summitvalley.edu"
               ],
-              "informationSourceId": "Org3"
+              "informationSourceId": "Org3",
+              "informationSourceOrganization": "Summit Valley University",
+              "identifier": "org-org3-001-email-001"
             }
           ],
           "websiteAddress": "https://www.summitvalley.edu/",
@@ -660,11 +762,13 @@
               "telephoneNumber": [
                 "888-555-7210"
               ],
-              "informationSourceId": "Org3"
+              "informationSourceId": "Org3",
+              "informationSourceOrganization": "Summit Valley University",
+              "identifier": "org-org3-001-telephone-001"
             }
           ],
           "informationSourceId": "Org3",
-          "informationSourceOrganization": "Regional University",
+          "informationSourceOrganization": "Summit Valley University",
           "identifier": "contact-org3-001"
         }
       ],
@@ -674,24 +778,25 @@
           "identifier": "999112233",
           "identifierType": "Federal employer identification number",
           "informationSourceId": "Org3",
-          "informationSourceOrganization": "Regional University"
+          "informationSourceOrganization": "Summit Valley University"
         },
         {
           "identifier": "123456789",
           "identifierType": "Dun and Bradstreet number",
           "informationSourceId": "Org3",
-          "informationSourceOrganization": "Regional University"
+          "informationSourceOrganization": "Summit Valley University"
         },
         {
           "identifier": "https://credentialfinder.org/organization/999/Summit_Valley_University",
           "identifierType": "credentialfinder.org",
           "informationSourceId": "Org3",
-          "informationSourceOrganization": "Regional University"
+          "informationSourceOrganization": "Summit Valley University"
         }
       ],
       "identificationSystem": "Summit Valley University SIS",
       "organizationType": [],
-      "informationSourceOrganization": "Regional University"
+      "informationSourceOrganization": "Summit Valley University",
+      "identifier": "org-org3-summit-valley-university"
     },
     {
       "identificationSystem": "svu-corporate-partner-id",
@@ -700,7 +805,7 @@
         "Company"
       ],
       "informationSourceId": "Org3",
-      "informationSourceOrganization": "Regional University",
+      "informationSourceOrganization": "Summit Valley University",
       "identifier": "organization-summit-valley-corporate-partne-org3-002"
     },
     {
@@ -708,7 +813,7 @@
       "name": "Summit Valley University",
       "identificationSystem": "Summit Valley University SIS",
       "organizationType": [],
-      "informationSourceOrganization": "Regional University",
+      "informationSourceOrganization": "Summit Valley University",
       "identifier": "organization-summit-valley-university-org3-003"
     },
     {
@@ -718,7 +823,7 @@
         "University"
       ],
       "informationSourceId": "Org3",
-      "informationSourceOrganization": "Regional University",
+      "informationSourceOrganization": "Summit Valley University",
       "identifier": "organization-state-university-org3-004"
     },
     {
@@ -726,7 +831,7 @@
       "name": "Summit Valley University",
       "identificationSystem": "summit-valley-university-sis",
       "organizationType": [],
-      "informationSourceOrganization": "Regional University",
+      "informationSourceOrganization": "Summit Valley University",
       "identifier": "organization-summit-valley-university-org3-005"
     }
   ],
@@ -749,7 +854,7 @@
         "name": "Summit Valley University",
         "identificationSystem": "summit-valley-university-sis",
         "organizationType": [],
-        "informationSourceOrganization": "Regional University",
+        "informationSourceOrganization": "Summit Valley University",
         "identifier": "organization-summit-valley-university-org3-001"
       },
       "Accreditation": [
@@ -758,15 +863,18 @@
           "accreditingAgency": "Higher Learning Commission",
           "accreditationType": "Institutional",
           "dateAccredited": "2020-01-01",
-          "accreditationStatus": "Active"
+          "accreditationStatus": "Active",
+          "informationSourceOrganization": "Summit Valley University",
+          "identifier": "accreditation-org3-001-001"
         }
       ],
-      "informationSourceOrganization": "Regional University"
+      "informationSourceOrganization": "Summit Valley University"
     },
     {
       "informationSourceId": "Org3",
       "identifier": "a050aa17-45f1-413f-a63b-c3a627ffa686",
-      "informationSourceOrganization": "Regional University"
+      "informationSourceOrganization": "Summit Valley University",
+      "name": "Summit Valley Credential 2"
     }
   ],
   "informationSourceId": "Org3"

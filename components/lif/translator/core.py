@@ -1,4 +1,5 @@
 from copy import deepcopy
+from time import perf_counter
 from typing import List
 from jsonata import jsonata
 from jsonschema import validate, ValidationError
@@ -25,28 +26,46 @@ class BaseTranslator:
         self.mappings = config.mappings
 
     def run(self, input: dict) -> dict:
+        # #1157: this loop is the export hot path. A CLR/OB3 export evaluates ~32
+        # expressions over the composed learner record and has run right at the
+        # caller's timeout on demo. Stage timings are accumulated and emitted as one
+        # summary line so the next slow run is diagnosable from logs alone, instead of
+        # having to reproduce it. Cheap: perf_counter calls, no per-mapping logging.
+        t_start = perf_counter()
+
         # validate input against source schema
         self._validate_against_schema(data=input, schema=self.source_schema)
+        t_source_validated = perf_counter()
 
         # apply mapping expressions to transform input to target schema
         result: dict = {}
+        eval_seconds = 0.0
+        merge_seconds = 0.0
+        applied = discarded = eval_errors = non_object = 0
 
         for mapping_expression_str in self.mappings:
             try:
+                t0 = perf_counter()
                 mapping_expression = jsonata.Jsonata(mapping_expression_str)
                 fragment = mapping_expression.evaluate(input)
-                logger.info("Mapping: %s", mapping_expression_str)
-                logger.info("Fragment: %s", fragment)
+                eval_seconds += perf_counter() - t0
+                # DEBUG, not INFO: two lines per mapping per request, and `fragment`
+                # can be large. The summary below carries the operational signal.
+                logger.debug("Mapping: %s", mapping_expression_str)
+                logger.debug("Fragment: %s", fragment)
             except Exception as e:
+                eval_errors += 1
                 logger.warning("Skipping mapping due to evaluation error: %s", e)
                 continue
 
             # Only merge object-shaped fragments; ignore scalars/None
             if not isinstance(fragment, dict):
+                non_object += 1
                 logger.warning("Skipping non-object fragment: %r", fragment)
                 continue
 
             # Tentative merge -> validate -> commit or rollback
+            t1 = perf_counter()
             tentative = deepcopy(result)
             deep_merge(tentative, fragment)
 
@@ -54,15 +73,33 @@ class BaseTranslator:
                 # If you want to be strict about *partial* validity, validate after each merge:
                 self._validate_against_schema(data=tentative, schema=self.target_schema)
                 result = tentative
+                applied += 1
             except ValueError as e:
+                discarded += 1
                 logger.warning("Discarding fragment due to target schema violation: %s", e)
                 # do not apply this fragment
                 continue
+            finally:
+                merge_seconds += perf_counter() - t1
 
         # final validation (should already be valid if the per-fragment check is kept)
         self._validate_against_schema(data=result, schema=self.target_schema)
 
-        logger.info("Translation result: %s", result)
+        total = perf_counter() - t_start
+        logger.info(
+            "Translation complete in %.2fs (source-validate %.2fs, jsonata-eval %.2fs, merge+validate %.2fs); "
+            "mappings=%d applied=%d discarded=%d eval_errors=%d non_object=%d",
+            total,
+            t_source_validated - t_start,
+            eval_seconds,
+            merge_seconds,
+            len(self.mappings),
+            applied,
+            discarded,
+            eval_errors,
+            non_object,
+        )
+        logger.debug("Translation result: %s", result)
         return result
 
     def _validate_against_schema(self, data: dict, schema: dict):

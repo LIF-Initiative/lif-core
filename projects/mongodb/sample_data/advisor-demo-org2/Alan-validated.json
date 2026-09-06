@@ -3,9 +3,9 @@
     {
       "Name": [
         {
-          "informationSourceId": "Org2",
           "lastName": "Tsatrian",
-          "firstName": "Alan ",
+          "firstName": "Alan",
+          "informationSourceId": "Org2",
           "informationSourceOrganization": "Community College",
           "identifier": "name-alan -tsatrian-org2-001"
         }
@@ -14,15 +14,29 @@
         {
           "Email": [
             {
-              "informationSourceId": "Org2",
               "emailAddress": [
-                "atsatrian_lifdemo@stateu.edu "
-              ]
+                "atsatrian_lifdemo@stateu.edu"
+              ],
+              "informationSourceId": "Org2",
+              "informationSourceOrganization": "Community College",
+              "identifier": "email-alan-tsatrian-org2-001"
             }
           ],
           "informationSourceId": "Org2",
           "informationSourceOrganization": "Community College",
-          "identifier": "contact-org2-001"
+          "identifier": "contact-org2-001",
+          "Address": [
+            {
+              "informationSourceId": "Org2",
+              "addressStreet": "250 State Street",
+              "addressCity": "Salt Lake City",
+              "addressState": "Utah",
+              "addressPostalCode": "84111",
+              "countryCode": "US",
+              "informationSourceOrganization": "Community College",
+              "identifier": "address-alan-tsatrian-org2-001"
+            }
+          ]
         }
       ],
       "Identifier": [
@@ -35,16 +49,21 @@
       ],
       "EmploymentLearningExperience": [
         {
-          "informationSourceId": "Org2",
-          "name": "Compliance Manager ",
+          "name": "Compliance Manager",
           "RefPosition": {
+            "description": "Oversee the compliance department to ensure adherence to industry regulations and company policies. \n-\tLead audits, risk assessments, and training initiatives to reduce non-compliance risks across the organization. \n-\tCollaborate with cross-functional teams to implement compliance strategies and streamline reporting processes. \n-\tAdvocate for accessibility and inclusivity within compliance practices, integrating new tools and technologies to improve team efficiency. \n-\tManage multiple priorities, including work deadlines, master's program coursework, and personal caregiving responsibilities.",
+            "OfferedByRefOrganization": {
+              "name": "Three Trees Compliance",
+              "informationSourceId": "Org2",
+              "informationSourceOrganization": "Community College",
+              "identifier": "organization-three-trees-compliance-org2-001"
+            },
             "informationSourceId": "Org2",
-            "name": "Compliance Manager Position",
             "informationSourceOrganization": "Community College",
-            "identifier": "position-org2-001"
+            "identifier": "position-org2-001",
+            "name": "Referenced Employment Experience"
           },
           "startDate": "2007-06",
-          "endDate": "2024-12",
           "AssertedByRefOrganization": {
             "identificationSystem": "stateu-employing-organization-id",
             "name": "Employing Organization",
@@ -65,32 +84,41 @@
             "informationSourceOrganization": "Community College",
             "identifier": "organization-training-provider-org2-001"
           },
-          "ApprovedByRefOrganization": {
-            "identificationSystem": "stateu-approving-authority-id",
-            "name": "Approving Authority",
-            "organizationType": [
-              "Regulatory Body"
-            ],
-            "informationSourceId": "Org2",
-            "informationSourceOrganization": "Community College",
-            "identifier": "organization-approving-authority-org2-001"
-          },
+          "ApprovedByRefOrganization": [
+            {
+              "identificationSystem": "stateu-approving-authority-id",
+              "name": "Approving Authority",
+              "organizationType": [
+                "Regulatory Body"
+              ],
+              "informationSourceId": "Org2",
+              "informationSourceOrganization": "Community College",
+              "identifier": "organization-approving-authority-org2-001"
+            }
+          ],
+          "informationSourceId": "Org2",
           "RefCredentialAward": {
-            "identifier": "org2-cred-employment-certificate-001",
-            "name": "Employment Certificate",
+            "id": "cred-employment-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Org2",
-            "informationSourceOrganization": "Org2"
+            "informationSourceOrganization": "Community College",
+            "identifier": "credentialaward-cred-employment-certificate-00-org2-001",
+            "name": "Employment Certificate"
           },
           "informationSourceOrganization": "Community College",
           "identifier": "employmentlearningexperience-compliance-manager--org2-001"
         },
         {
-          "informationSourceId": "Org2",
-          "name": "Compliance Specialist ",
+          "name": "Compliance Specialist",
           "endDate": "2007-05",
           "RefPosition": {
+            "OfferedByRefOrganization": {
+              "name": "McBradshaw Brothers",
+              "informationSourceId": "Org2",
+              "informationSourceOrganization": "Community College",
+              "identifier": "organization-mcbradshaw-brothers-org2-001"
+            },
             "informationSourceId": "Org2",
             "name": "Referenced Employment Experience",
             "informationSourceOrganization": "Community College",
@@ -117,23 +145,27 @@
             "informationSourceOrganization": "Community College",
             "identifier": "organization-training-provider-org2-001"
           },
-          "ApprovedByRefOrganization": {
-            "identificationSystem": "stateu-approving-authority-id",
-            "name": "Approving Authority",
-            "organizationType": [
-              "Regulatory Body"
-            ],
-            "informationSourceId": "Org2",
-            "informationSourceOrganization": "Community College",
-            "identifier": "organization-approving-authority-org2-001"
-          },
+          "ApprovedByRefOrganization": [
+            {
+              "identificationSystem": "stateu-approving-authority-id",
+              "name": "Approving Authority",
+              "organizationType": [
+                "Regulatory Body"
+              ],
+              "informationSourceId": "Org2",
+              "informationSourceOrganization": "Community College",
+              "identifier": "organization-approving-authority-org2-001"
+            }
+          ],
+          "informationSourceId": "Org2",
           "RefCredentialAward": {
-            "identifier": "org2-cred-employment-certificate-001",
-            "name": "Employment Certificate",
+            "id": "cred-employment-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian",
             "informationSourceId": "Org2",
-            "informationSourceOrganization": "Org2"
+            "informationSourceOrganization": "Community College",
+            "identifier": "credentialaward-cred-employment-certificate-00-org2-001",
+            "name": "Employment Certificate"
           },
           "informationSourceOrganization": "Community College",
           "identifier": "employmentlearningexperience-compliance-specialist--org2-002"
@@ -249,13 +281,14 @@
           "awardIssueDate": "2024-12-15T10:00:00Z",
           "credentialAwardee": "Alan Tsatrian",
           "informationSourceId": "Org2",
-          "informationSourceOrganization": "Org2",
+          "informationSourceOrganization": "Community College",
           "InstanceOfRefCredential": {
             "informationSourceId": "Org2",
-            "informationSourceOrganization": "Org2",
+            "informationSourceOrganization": "Community College",
             "identifier": "org2-cred-employment-certificate-001",
             "name": "Employment Certificate"
-          }
+          },
+          "name": "Employment Certificate"
         }
       ],
       "CourseLearningExperience": [
@@ -308,7 +341,8 @@
             "name": "Course Completion Certificate",
             "awardIssueDate": "2020-05-20T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian"
-          }
+          },
+          "name": "Introduction to Business"
         },
         {
           "informationSourceId": "Org2",
@@ -359,7 +393,63 @@
             "name": "Course Completion Certificate",
             "awardIssueDate": "2020-12-20T10:00:00Z",
             "credentialAwardee": "Alan  Tsatrian"
-          }
+          },
+          "name": "Business Communications"
+        }
+      ],
+      "Birth": [
+        {
+          "informationSourceId": "Org2",
+          "informationSourceOrganization": "Community College",
+          "identifier": "birth-org2-001",
+          "birthDate": "1980-05-14",
+          "cityOfBirth": "Salt Lake City",
+          "stateOfBirth": "Utah"
+        }
+      ],
+      "SexAndGender": [
+        {
+          "informationSourceId": "Org2",
+          "informationSourceOrganization": "Community College",
+          "identifier": "sexandgender-org2-001",
+          "sex": "Male",
+          "gender": "Male",
+          "pronouns": "he/him"
+        }
+      ],
+      "Residency": [
+        {
+          "informationSourceId": "Org2",
+          "informationSourceOrganization": "Community College",
+          "identifier": "residency-org2-001",
+          "localType": "In-State",
+          "countyFIPSCode": "49035",
+          "dateEffective": "2010-01-01",
+          "doNotPublishIndicator": "false"
+        }
+      ],
+      "Language": [
+        {
+          "informationSourceId": "Org2",
+          "informationSourceOrganization": "Community College",
+          "identifier": "language-english-org2-001",
+          "name": "English",
+          "iSO639_2LangCode": "eng",
+          "iSO639_3LangCode": "eng",
+          "languageType": "Primary"
+        }
+      ],
+      "Demographics": [
+        {
+          "informationSourceId": "Org2",
+          "informationSourceOrganization": "Community College",
+          "identifier": "demographics-org2-001",
+          "highestLevelEducation": "Master'sDegree(E.g.M.A.M.S.M. Eng.M.Ed.M.S.W.M.B.A.M.L.S.)",
+          "usCitizenship": "true",
+          "economicDisadvantage": "false",
+          "homeless": "false",
+          "militaryActiveStatus": "false",
+          "militaryVeteranStatus": "false"
         }
       ]
     }
