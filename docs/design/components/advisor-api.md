@@ -148,18 +148,29 @@ The service follows today's no-server-side-streaming, request/response design: e
 
 ## Configuration
 
+Read by the Advisor itself — `langchain_agent/core.py:31-48`, `advisor_restapi/core.py:17`, and `lif/auth/core.py:34` through the shared `auth` brick:
+
 | Env var | Default | Purpose |
 |---|---|---|
-| `LIF_ADVISOR_AGENT_TASKS` | — (required) | Agent task types; `ValueError` if unset |
-| `LIF_ADVISOR_LLM_MODEL_NAME` | — | Chat model name for both `ChatOpenAI` sites |
+| `OPENAI_API_KEY` | — (required) | Consumed by `ChatOpenAI` via `langchain-openai`. The service starts without it and fails on the first turn. ECS injects it from Secrets Manager (`cloudformation/lif-advisor-api-taskdef-includes.yml:20-23`); compose passes the host value through. |
+| `SECRET_KEY` | — (required) | Signs the Advisor's JWTs (`lif/auth/core.py:34` — `_require_env`, no fallback since #1191) |
+| `LIF_DEMO_USER_PASSWORD` | — (required) | Demo-persona login (`advisor_restapi/core.py:17` — no fallback since #1191) |
+| `LIF_SEMANTIC_SEARCH_MCP_SERVER_URL` | — (required) | MCP endpoint for schema-leaf retrieval (`langchain_agent/core.py:31`) |
+| `LIF_ADVISOR_AGENT_TASKS` | `load_profile,continue_conversation,save_interaction_summary` | Agent task types; `ValueError` if unset |
+| `LIF_ADVISOR_LLM_MODEL_NAME` | `gpt-4.1-mini` | Chat model for both `ChatOpenAI` sites (no Python fallback — `None` if unset) |
 | `LIF_ADVISOR_MESSAGES_TO_KEEP` | `4` | Turns kept before summarization |
 | `LIF_ADVISOR_TRIMMED_MESSAGES_SIZE` | `384` | Trimmed message window |
 | `LIF_ADVISOR_MAX_CONVERSATION_SIZE` | `2048` | Conversation size cap (Python fallback is `384`) |
 | `LIF_ADVISOR_MAX_SUMMARY_SIZE` | `1024` | Summarized-reminder size cap (Python fallback is `128`) |
-| `SEMANTIC_SEARCH__TOP_K` | `200` | Retrieval result count (schema leaves) |
-| `SEMANTIC_SEARCH__MODEL_NAME` | `all-MiniLM-L6-v2` | Embedding model for retrieval |
 
 The `Default` column is the **deployed** value. `MESSAGES_TO_KEEP` and `TRIMMED_MESSAGES_SIZE` match the Python fallbacks in `langchain_agent/core.py:45-48`, but the two size caps do not: every deployment surface overrides them to `2048`/`1024` — `development/docker-compose.yml:181-182`, `development/advisor-demo-1org/docker-compose.yml:132-133`, `development/advisor-demo-3orgs/docker-compose.yml:253-254`, `deployments/advisor-demo-docker/docker-compose.yml:425-426`, `cloudformation/lif-advisor-api-taskdef-includes.yml:17,19`, and `development/scripts/run_lif_advisor_restapi.sh:14-15`. No running advisor has used the `384`/`128` fallbacks.
+
+**Not read by the Advisor**, but the retrieval findings below turn on them — they reach the Semantic Search service through `LIFSchemaConfig` (`components/lif/lif_schema_config/core.py`), and no advisor code path consults them:
+
+| Env var | Default | Purpose |
+|---|---|---|
+| `SEMANTIC_SEARCH__TOP_K` | `200` | Retrieval result count (schema leaves) |
+| `SEMANTIC_SEARCH__MODEL_NAME` | `all-MiniLM-L6-v2` | Embedding model for retrieval |
 
 Generation-side sampling knobs (`temperature`, `top_p`, `presence_penalty`, `frequency_penalty`) are not configurable today — the agent is hardcoded to `0.0` and the reframer runs at the OpenAI server default `1.0`. Making them env-configurable at both call sites is recommendation **R1**; the default value is deliberately left open — see [Possible Future Roadmap Items](#possible-future-roadmap-items).
 
@@ -235,12 +246,14 @@ Verified against langchain-openai ~0.3: `ChatOpenAI(temperature=None)` omits the
 
 ### Retrieval baseline (offline sweep)
 
+> F1, F2, F3 and F6 — and the recommendations that follow from them, R2/R3/R4 — are findings about **`semantic_search_service`**, not the Advisor. They are recorded here because the study was run through the Advisor's retrieval path; see [`semantic-search.md`](semantic-search.md) for that service.
+
 Replicated pipeline: MDR OpenAPI → schema leaves for configured roots → `leaf.description` embeddings (`all-MiniLM-L6-v2`) → cosine ranking; 15 realistic advisor queries, 53-leaf gold set. Index today: Person 186 leaves + Course 14 + Credential 47 = **247** (configured `Organization` root doesn't exist in the MDR model — startup ERROR noise).
 
 Recall@k: k=10 → 34%, 50 → 45%, 100 → 62%, 150 → 81%, 186 → 91%, 200 → 92.5%.
 
 - The original bump 10→200 was correct (two-thirds of relevant fields missed at k=10) but k≥150 ≈ return-everything: 200/247 = 81% of the index per query.
-- **~25–30% of top-k slots are wasted**: truncation to top_k happens *before* `filter_paths_for_graphql` discards non-queryable reference-data roots (`semantic_search_service/core.py:396` slices before filtering at :416).
+- **~25–30% of top-k slots go to paths that are discarded downstream**: truncation to top_k happens *before* `filter_paths_for_graphql` drops non-queryable reference-data roots (`semantic_search_service/core.py:396` slices before filtering at :416). Note what this does **not** cost: `run_semantic_search` returns the GraphQL response (`:429`), not `results`, so filtering first widens the requested field list rather than recovering lost recall. The effect of fixing it is a larger payload built from queryable paths, not gold leaves rescued from below the cut — which bounds the value of R2 well under what "wasted slots" suggests.
 - Tool responses saturate ~2k tokens/query for k≥50 (whole populated record regardless of question).
 - **The binding constraint is description quality, not TOP_K**: rank 1–10 gold leaves have 0% generic-boilerplate descriptions; rank 151+ golds are 90% boilerplate (`informationSource*`, "primary key identifier"). E.g., `PositionPreferences.Relocation.*` never mentions relocation in its descriptions, so "am I willing to relocate?" ranks its gold leaf #87 with negative similarity. Embedding richer text (json_path + description) or enriching MDR descriptions is higher-leverage than any further k tuning.
 
@@ -292,7 +305,7 @@ Mapped from the study findings to concrete work; where the change is scoped, the
 
 1. **R1 (high, finding F4/F5)** — Env-configurable generation params (`LIF_ADVISOR_LLM_TEMPERATURE`, `_TOP_P`, `_PRESENCE_PENALTY`, `_FREQUENCY_PENALTY`) applied at **both** ChatOpenAI sites. Justification is consistency/reproducibility across the two call sites (variance 0.750→0.888), not identifier safety.
    **The default temperature is deliberately left unset by this recommendation.** An earlier draft proposed `0.1`, but Part B is the only end-to-end retrieval measurement here and it shows `@0.1` tied with `@1.0` on four of five queries and materially worse on the fifth (advising session, rank 8 → 49). The consistency argument supports being *able* to set both sites to one value; it does not select `0.1`. Pick the default when the sweep is rebuilt and committed (see R3). Plan: `.claude/plans/issue-715-code-changes.md`.
-2. **R2 (high, finding F2)** — Filter non-queryable reference-data paths **before** top_k truncation (or raise effective k). Needs its own issue — lives in `semantic_search_service`, #715 is labeled Advisor API.
+2. **R2 (medium, finding F2)** — Filter non-queryable reference-data paths **before** top_k truncation (or raise effective k). Ranked *medium* rather than high: because `run_semantic_search` returns the GraphQL response rather than `results`, filtering earlier widens the requested field list instead of recovering recall (see F2), so the payoff is payload hygiene, not retrieval quality. That puts it below R4, which addresses the actual ceiling. Needs its own issue — lives in `semantic_search_service`, #715 is labeled Advisor API.
 3. **R3 (medium, finding F1)** — Keep `SEMANTIC_SEARCH__TOP_K=200` short-term; re-run the sweep after R2 lands, consider 150.
 4. **R4 (medium, finding F3)** — Follow-up ticket: embed `json_path + description` instead of description-only; separately push MDR owners to enrich boilerplate leaf descriptions (`Relocation.*`, `RemoteWork.*`, `Proficiency.*`). Addresses F3, the actual ceiling.
 5. **R5 (low)** — Re-derive defaults as the schema grows (the "137 attributes" assumption in old notes is stale: 186 Person / 247 total today).
