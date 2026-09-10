@@ -2,7 +2,7 @@ from typing import List
 
 from lif.datatypes import IdentityMapping
 from lif.exceptions.core import DataNotFoundException
-from lif.identity_mapper_storage.core import IdentityMapperStorage
+from lif.identity_mapper_storage.core import DeleteOutcome, IdentityMapperStorage
 from lif.exceptions.core import DataStoreException
 
 
@@ -47,7 +47,6 @@ class IdentityMapperService:
         if not lif_organization_id or not lif_organization_person_id or not mappings:
             raise ValueError("Invalid input data for saving mappings")
 
-        saved_mappings = []
         for mapping in mappings:
             if lif_organization_id != mapping.lif_organization_id:
                 raise ValueError("LIF organization ID in mapping does not match the provided LIF organization ID")
@@ -55,10 +54,10 @@ class IdentityMapperService:
                 raise ValueError(
                     "LIF organization person ID in mapping does not match the provided LIF organization person ID"
                 )
-            saved_mapping: IdentityMapping = await self.storage.save_mapping(mapping)
-            if not saved_mapping:
-                raise DataStoreException("Failed to save mapping")
-            saved_mappings.append(saved_mapping)
+
+        saved_mappings: List[IdentityMapping] = await self.storage.save_mappings(mappings)
+        if not saved_mappings:
+            raise DataStoreException("Failed to save mappings")
         return saved_mappings
 
     async def delete_mapping(self, lif_organization_id: str, lif_organization_person_id: str, mapping_id: str) -> None:
@@ -78,17 +77,13 @@ class IdentityMapperService:
         if not lif_organization_id or not lif_organization_person_id or not mapping_id:
             raise ValueError("Invalid input data for deleting mapping")
 
-        existing_mapping: IdentityMapping | None = await self.storage.get_mapping_by_id(mapping_id)
-        if existing_mapping:
-            if existing_mapping.lif_organization_id != lif_organization_id:
-                raise ValueError("LIF organization ID in mapping does not match the provided LIF organization ID")
-            if existing_mapping.lif_organization_person_id != lif_organization_person_id:
-                raise ValueError(
-                    "LIF organization person ID in mapping does not match the provided LIF organization person ID"
-                )
-            await self.storage.delete_mapping_by_id(mapping_id)
-            deleted_mapping = await self.storage.get_mapping_by_id(mapping_id)
-            if deleted_mapping:
-                raise DataStoreException("Failed to delete mapping")
-        else:
+        # Ownership is enforced inside the storage transaction, not here. Checking after
+        # the delete has committed cannot undo it, which let one organization delete
+        # another's mapping (#1150).
+        outcome: DeleteOutcome = await self.storage.delete_mapping_for_owner(
+            mapping_id, lif_organization_id, lif_organization_person_id
+        )
+        if outcome is DeleteOutcome.NOT_FOUND:
             raise DataNotFoundException(f"Mapping not found for ID: {mapping_id}")
+        if outcome is DeleteOutcome.NOT_OWNED:
+            raise ValueError("Mapping does not belong to the provided LIF organization ID and person ID")

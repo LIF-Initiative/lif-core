@@ -58,6 +58,9 @@ services:
     container_name: lif-query-planner
     environment:
       LIF_QUERY_CACHE_URL: http://lif-query-cache:8001
+      LIF_QUERY_PLANNER_INFORMATION_SOURCES_CONFIG_PATH: /config/information_sources_config.yml
+    volumes:
+      - ./volumes/lif_query_planner/information_sources_config.yml:/config/information_sources_config.yml:ro
     depends_on:
       - lif-query-cache
     networks:

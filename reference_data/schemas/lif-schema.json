@@ -2630,7 +2630,7 @@
 									}
 								}
 							},
-							nstanceOfRefCredential": {
+							"InstanceOfRefCredential": {
 								"type": "object",
 								"required": [
 									"identifier",
