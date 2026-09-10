@@ -1,6 +1,7 @@
+import json
 from logging import DEBUG
 from os import getenv
-from sqlalchemy import create_engine, text
+from sqlalchemy import create_engine
 from sqlalchemy.engine import Engine, URL
 from sqlalchemy.orm import declarative_base, sessionmaker, Session
 
@@ -15,6 +16,8 @@ db_host: str | None = getenv("IDENTITY_MAPPER_DB_HOST")
 db_port: str = getenv("IDENTITY_MAPPER_DB_PORT", "3306")
 db_name: str = getenv("IDENTITY_MAPPER_DB_NAME", "lif")
 db_auto_create_tables: bool = getenv("IDENTITY_MAPPER_DB_AUTO_CREATE_TABLES", "false").lower() == "true"
+db_pool_size: int = int(getenv("IDENTITY_MAPPER_DB_POOL_SIZE", "10"))
+db_pool_pre_ping: bool = getenv("IDENTITY_MAPPER_DB_POOL_PRE_PING", "true").lower() == "true"
 
 
 logger = get_logger(__name__)
@@ -39,11 +42,30 @@ def create_db_connection_url() -> URL:
     )
 
 
+def parse_connect_args(raw: str | None) -> dict:
+    """
+    IDENTITY_MAPPER_DB_CONNECT_ARGS arrives as a string but SQLAlchemy wants a dict.
+    Parsed here rather than at import so a malformed value fails engine creation with a
+    clear message instead of breaking the module import.
+    """
+    if not raw:
+        return {}
+    try:
+        parsed = json.loads(raw)
+    except json.JSONDecodeError as e:
+        raise ValueError("IDENTITY_MAPPER_DB_CONNECT_ARGS must be a JSON object") from e
+    if not isinstance(parsed, dict):
+        raise ValueError("IDENTITY_MAPPER_DB_CONNECT_ARGS must be a JSON object")
+    return parsed
+
+
 def create_db_engine():
     validate_db_environment()
     url: URL = create_db_connection_url()
     global engine
-    engine = create_engine(url, connect_args=db_connect_args or {})
+    engine = create_engine(
+        url, connect_args=parse_connect_args(db_connect_args), pool_size=db_pool_size, pool_pre_ping=db_pool_pre_ping
+    )
 
 
 def create_db_session_factory():
@@ -51,7 +73,6 @@ def create_db_session_factory():
     if engine is None:
         raise ValueError("Engine is not initialized. Call create_db_engine() first.")
     sessionFactory = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-    logger.info(f"DEBUG: {sessionFactory().execute(text('SELECT 1')).fetchone()}")
 
 
 def initialize_database() -> None:

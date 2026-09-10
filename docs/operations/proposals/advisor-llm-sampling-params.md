@@ -1,8 +1,12 @@
-# Issue #715 Code-Change Plan: Configurable LLM Sampling Params
+# Configurable LLM sampling params for the Advisor (#715 implementation plan)
 
-**Companion to:** `docs/design/components/advisor-api.md` § "LLM invocation tuning study" (findings F4/F5 → rec R1; F2 → rec R2; F7 → rec R7)
-**Issue:** #715 · **Label:** LIF Advisor API
-**Status:** Draft plan · **Reopened 2026-09-01 (review of #1173):** the temperature *default* is no longer locked — see Open questions. What remains settled: a single shared value across both call sites (not split); findings homed in `docs/design/components/advisor-api.md`; Change Set B gets its own GitHub issue
+**Status:** Proposed
+**Date:** 2026-09-09
+**Author:** dereck-symmetry
+**Tracking issue:** [#715](https://github.com/LIF-Initiative/lif-core/issues/715) (spike)
+**Companion to:** [`advisor-api.md`](../../design/components/advisor-api.md) § "LLM invocation tuning study" (findings F4/F5 → rec R1; F2 → rec R2; F7 → rec R7)
+
+> Turn the #715 tuning study into a sequenced change plan. **Reopened 2026-09-01 (review of #1173):** the temperature *default* is no longer locked — see Open questions. What remains settled: a single shared value across both call sites (not split); findings homed in [`advisor-api.md`](../../design/components/advisor-api.md); Change Set B gets its own GitHub issue.
 
 One-line summary: Hoist ChatOpenAI sampling params into `LIF_ADVISOR_LLM_*` env vars applied at both call sites (so the query reframer stops running at OpenAI's server default 1.0; the default value itself is an open question — `0.1` below is a placeholder), wire through all deployment surfaces, plus an optional second change filtering reference-data paths before TOP_K truncation.
 
@@ -48,7 +52,7 @@ Apply at both sites:
 | Agent model (`create_agent_with_memory`) | :123 | `temperature=0.0` | `**_llm_params()` |
 | Reframer model (`reframe_query_with_identifiers`) | :259 | *(nothing → server default 1.0)* | `**_llm_params()` |
 
-Defaults rationale (revised after live validation, advisor-api.md Part A) — **this plan does not select the temperature value**; what follows is only what the measurements support. Identifier/type/format fidelity was perfect at *every* temperature tested including 1.0, so the change is justified by **consistency/reproducibility**, not correctness safety — lower risk than originally framed. Measured reframer output stability (mean pairwise Jaccard) improves monotonically as temperature drops: 0.750 @ 1.0 → 0.831 @ 0.7 → 0.844 @ 0.3 → 0.888 @ 0.1 → 0.929 @ 0.0. That argues for pinning *one* value at both sites; it does not say which, and it is not an end-to-end measurement (see Caveat). Settled: `top_p=1.0`, penalties `0`, and a single shared value across both sites — splitting would need two env pairs for negligible benefit. Open: the temperature number.
+Defaults rationale (revised after live validation, `advisor-api.md` Part A) — **this plan does not select the temperature value**; what follows is only what the measurements support. Identifier/type/format fidelity was perfect at *every* temperature tested including 1.0, so the change is justified by **consistency/reproducibility**, not correctness safety — lower risk than originally framed. Measured reframer output stability (mean pairwise Jaccard) improves monotonically as temperature drops: 0.750 @ 1.0 → 0.831 @ 0.7 → 0.844 @ 0.3 → 0.888 @ 0.1 → 0.929 @ 0.0. That argues for pinning *one* value at both sites; it does not say which, and it is not an end-to-end measurement (see Caveat). Settled: `top_p=1.0`, penalties `0`, and a single shared value across both sites — splitting would need two env pairs for negligible benefit. Open: the temperature number.
 
 **Caveat added 2026-09-01:** the above argues from Part A (reframer self-consistency) only. Part B, the one end-to-end retrieval measurement, does **not** support `0.1`: it ties `@1.0` on four of five queries and is materially worse on the fifth (advising session, rank 8 → 49). So the stability numbers justify making the value configurable and shared; they do not select `0.1`. Treat `0.1` here as a placeholder until re-measured.
 
@@ -84,7 +88,7 @@ The form differs by surface — the shell script is not like the others:
 ### A4. Docs
 
 - Update env-var tables in `docs/design/adr/ai_architecture/0001-ai-architecture-overview.md` (~:320).
-- Findings live in `docs/design/components/advisor-api.md` (already committed on this branch); this PR's doc edits link there and record the chosen defaults.
+- Findings live in [`advisor-api.md`](../../design/components/advisor-api.md) (already committed on this branch); this PR's doc edits link there and record the chosen defaults.
 
 ### Rollout notes
 
@@ -144,7 +148,7 @@ Where it lands is TBD (semantic_search_service vs langchain_agent); file as foll
 
 Resolved 2026-08-23 unless marked otherwise. **One was reopened 2026-09-01** — the temperature default.
 
-- ~~Final resting place for the findings write-up?~~ → `docs/design/components/advisor-api.md`.
+- ~~Final resting place for the findings write-up?~~ → [`advisor-api.md`](../../design/components/advisor-api.md).
 - ~~Defaults temp `0.1` shared vs split agent/reframer values?~~ → Single shared value. **The default value itself is reopened (2026-09-01):** Part B shows no end-to-end benefit at `0.1` and one regression, so pick it when the sweep is rebuilt and committed (advisor-api.md R1/R3).
 - ~~Does Change Set B need its own GH issue given the label mismatch?~~ → Yes, its own issue.
 
