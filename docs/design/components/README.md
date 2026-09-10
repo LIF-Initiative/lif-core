@@ -9,7 +9,7 @@ Filenames are kebab-case. The `LIF_` prefix is preserved when "LIF" is part of t
 | Service | Filename |
 |---|---|
 | Adapters | `adapters.md` |
-| Advisor API | `advisor.md` |
+| Advisor API | `advisor-api.md` |
 | Composer | `composer.md` |
 | Identity Mapper | `identity-mapper.md` |
 | LIF API | `lif-api.md` |

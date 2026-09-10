@@ -29,8 +29,8 @@ Refs #715 · Docs-only PR (code changes to follow as separate PRs)
 
 ## What this PR contains (docs only)
 
-- New `docs/design/components/advisor.md` — first component doc for advisor-api; carries the full study (inventory tables, measured baselines, findings F1–F8, recommendations R1–R7).
-- `docs/design/components/README.md` file-map row + `docs/INDEX.md` entry; cspell additions (`reframer`, `Jaccard`, `dedup`).
+- New `docs/design/components/advisor-api.md` — first component doc for advisor-api; carries the full study (inventory tables, measured baselines, findings F1–F8, recommendations R1–R7).
+- `docs/design/components/README.md` file-map row + `docs/INDEX.md` entry; cspell additions (`reframer`, `Jaccard`).
 - No behavior changes. Raw experiment scripts/results archived locally under gitignored `.claude/plans/artifacts/`.
 
 ## Decisions made during the spike

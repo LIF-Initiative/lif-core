@@ -26,7 +26,7 @@
 ### `docs/design/components/` — Per-service design
 
 - [`adapters.md`](design/components/adapters.md) — Adapters component: pluggable input layer, contract for source-system integrations.
-- [`advisor.md`](design/components/advisor.md) — Advisor API: demo-tier chat backend over a LangGraph agent + Semantic Search MCP retrieval; carries the #715 LLM-invocation tuning study (sampling params, TOP_K sweep, live reframer validation, findings F1–F8 / recs R1–R7).
+- [`advisor-api.md`](design/components/advisor-api.md) — Advisor API: demo-tier chat backend over a LangGraph agent + Semantic Search MCP retrieval; carries the #715 LLM-invocation tuning study (sampling params, TOP_K sweep, live reframer validation, findings F1–F8 / recs R1–R7).
 - [`composer.md`](design/components/composer.md) — Composer component: data fragment assembly into LIF records.
 - [`identity-mapper.md`](design/components/identity-mapper.md) — Identity Mapper component: cross-system identity resolution.
 - [`lif-api.md`](design/components/lif-api.md) — LIF API service: outbound query interface for learner data.
@@ -97,7 +97,7 @@
 - [`advisor-streaming.md`](operations/proposals/advisor-streaming.md) — End-to-end token streaming for the Advisor (NDJSON over `astream_events` + `StreamingResponse` + a fetch reader), including the single-worker reframe concurrency fix, ALB idle-timeout risk, rollout, and PR sequencing (#970).
 - [`advisor-qp-direct-retrieval.md`](operations/proposals/advisor-qp-direct-retrieval.md) — ADR-0003 implementation plan: rewire Advisor/semantic-search to retrieve from the Query Planner directly (GraphQL becomes a peer facade). Covers the QP async-contract graduation, the net-new partial-result/pending-fragment model, shared query construction, QP auth, the two regimes, and a sequenced t-shirt-sized issue breakdown with a Regime-A-first recommendation (#1053).
 - [`mdr-transformation-output-validation.md`](operations/proposals/mdr-transformation-output-validation.md) — Validate the MDR bulk-transform preview output against the target LIF schema (Ajv) at authoring time; uses the already-wired `targetSchema` prop (#973).
-- [`cf-ci-improvements.md`](operations/proposals/cf-ci-improvements.md) — External review of the AWS delivery setup (CloudFormation/SAM/GitHub Actions/`aws-deploy.sh`): 8 prioritized improvements — PR-time CI, lockfile-based image builds, workflow dedup, targeted/verified deploys, uv standardization, `.params` secrets hygiene, per-org `STACK_ORDER` generation. Epic #1074 (#1066–#1073).
+- [`cf-ci-improvements.md`](operations/proposals/cf-ci-improvements.md) — External review of the AWS delivery setup (CloudFormation/SAM/GitHub Actions/`aws-deploy.sh`): 8 prioritized improvements — PR-time CI, lockfile-based image builds, workflow deduplication, targeted/verified deploys, uv standardization, `.params` secrets hygiene, per-org `STACK_ORDER` generation. Epic #1074 (#1066–#1073).
 
 ---
 
