@@ -1,3 +1,4 @@
+import os
 from unittest.mock import AsyncMock, patch
 
 import pytest
@@ -19,8 +20,12 @@ class MockAgent:
         self.ask_agent = AsyncMock(return_value={"content": "This is mocked content", "tokens": 10, "cost": 0.57})
 
 
-# From the hard coded users in lif/advisor_restapi
-USER_DETAILS_ALEX = {"username": "atsatrian_lifdemo@stateu.edu", "password": "changeme"}
+# From the hard coded users in lif/advisor_restapi.
+# The password is read from the environment rather than hardcoded: the base now
+# requires LIF_DEMO_USER_PASSWORD with no fallback (#1191), so hardcoding a value
+# here would just re-enshrine the old default and hide that dependency.
+# test/conftest.py supplies a throwaway value for the session.
+USER_DETAILS_ALEX = {"username": "atsatrian_lifdemo@stateu.edu", "password": os.environ["LIF_DEMO_USER_PASSWORD"]}
 
 
 @pytest.mark.asyncio

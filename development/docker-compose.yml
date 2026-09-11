@@ -180,6 +180,10 @@ services:
       LIF_ADVISOR_TRIMMED_MESSAGES_SIZE: ${LIF_ADVISOR_TRIMMED_MESSAGES_SIZE:-384}
       LIF_ADVISOR_MAX_CONVERSATION_SIZE: ${LIF_ADVISOR_MAX_CONVERSATION_SIZE:-2048}
       LIF_ADVISOR_MAX_SUMMARY_SIZE: ${LIF_ADVISOR_MAX_SUMMARY_SIZE:-1024}
+      # Required, no default on purpose (#1191) - a fallback secret makes
+      # insecurity the default. Set both in your .env.
+      LIF_DEMO_USER_PASSWORD: ${LIF_DEMO_USER_PASSWORD:?set it in your .env - no default, see issue 1191}
+      SECRET_KEY: ${SECRET_KEY:?signs the Advisor JWTs; set it in your .env - no default, see issue 1191}
       OPENAI_API_KEY: ${OPENAI_API_KEY}
     ports:
       - "8004:8004"

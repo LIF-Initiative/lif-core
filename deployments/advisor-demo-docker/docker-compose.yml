@@ -425,7 +425,8 @@ services:
       LIF_ADVISOR_MAX_CONVERSATION_SIZE: ${LIF_ADVISOR_MAX_CONVERSATION_SIZE:-2048}
       LIF_ADVISOR_MAX_SUMMARY_SIZE: ${LIF_ADVISOR_MAX_SUMMARY_SIZE:-1024}
       OPENAI_API_KEY: ${OPENAI_API_KEY}
-      LIF_DEMO_USER_PASSWORD: ${LIF_DEMO_USER_PASSWORD:-changeme}
+      LIF_DEMO_USER_PASSWORD: ${LIF_DEMO_USER_PASSWORD:?set it in your .env - no default, see issue 1191}
+      SECRET_KEY: ${SECRET_KEY:?signs the Advisor JWTs; set it in your .env - no default, see issue 1191}
       CONFIG_KEY_STORE: ${CONFIG_KEY_STORE:-/etc/keys}
     ports:
       - "8004:8004"
@@ -511,7 +512,7 @@ services:
       # not be marked Secure (browsers drop Secure cookies on plaintext).
       MDR__COOKIE__SECURE: ${MDR__COOKIE__SECURE:-false}
       MDR__INVITE__TOKEN_MAX_AGE_SECONDS: ${MDR__INVITE__TOKEN_MAX_AGE_SECONDS:-604800}
-      LIF_DEMO_USER_PASSWORD: ${LIF_DEMO_USER_PASSWORD:-changeme}
+      LIF_DEMO_USER_PASSWORD: ${LIF_DEMO_USER_PASSWORD:?set it in your .env - no default, see issue 1191}
     ports:
       - "8012:8012"
     networks:
