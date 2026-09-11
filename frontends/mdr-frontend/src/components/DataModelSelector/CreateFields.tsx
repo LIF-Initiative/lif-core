@@ -1,3 +1,6 @@
+import { read } from "fs";
+import { DataModel } from "../../types";
+
 const BaseLIF = 'BaseLIF';
 const OrgLIF = 'OrgLIF';
 const SourceSchema = 'SourceSchema';
@@ -10,6 +13,7 @@ const dataModelFields = (
   modelType?: string,
   isEditMode: boolean = false,
   typeOptions: string[] = Model_Types,
+  dataModels: any = [],
 ) => {
   const invalidType = !modelType || !Model_Types.includes(modelType);
   if (invalidType && modelType) { console.warn(`Invalid model.Type "${modelType}" is not in Model_Types:`, Model_Types); }
@@ -58,12 +62,31 @@ const dataModelFields = (
     { name: "CreationDate", type: "datetime-local" as const, label: "Creation Date", defaultValue: new Date().toISOString().slice(0,16), hidden: true, },
     { name: "ActivationDate", type: "datetime-local" as const, label: "Activation Date", defaultValue: new Date().toISOString().slice(0,16),},
     { name: "DeprecationDate", type: "datetime-local" as const, label: "Deprecation Date", },
-    { name: "File", type: "file" as const, label: "Upload MDR Full OpenAPI Schema File", accept: ".json", hidden: isEditMode }
+    {
+      name: "File",
+      type: "file" as const,
+      label: "Upload MDR Full OpenAPI Schema File",
+      accept: ".json",
+      hidden: isEditMode || dataModels.length === 0,
+      onChangeEnable: ["defaultDataModelId", "dataModelIdMap"], 
+    },
+    {
+      name: "defaultDataModelId",
+      label: "Default Data Model ID for File",
+      type: "select" as const,
+      placeholder: "Select a Model Type",
+      options: dataModels?.map((m: any) => ({ label: m.Name, value: m.Id })) || {},
+      ...(dataModels.find((m: any) => m.Type === OrgLIF) ? { defaultValue: dataModels.find((m: any) => m.Type === OrgLIF).Id } : {}),
+      readOnly: true,
+      hidden: isEditMode || dataModels?.length === 0
+     },
+    { name: "dataModelIdMap", type: "text" as const, label: "Data Model ID Mapping for File", readOnly: true, hidden: isEditMode || dataModels?.length === 0  },
   ];
 };
 
 
-export const DataModelCreateFields = dataModelFields(undefined, false, [SourceSchema, PartnerLIF]);
+export const DataModelCreateFields = (selectableDataModels: DataModel[] = []) =>
+  dataModelFields(undefined, false, [SourceSchema, PartnerLIF], selectableDataModels);
 
 export const DataModelEditFields = (modelType: string) =>
-  dataModelFields(modelType, true).filter((field) => field.name !== "File");
+  dataModelFields(modelType, true).filter((field) => !["File", "defaultDataModelId", "dataModelIdMap"].includes(field.name));
