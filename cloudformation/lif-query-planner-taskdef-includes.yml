@@ -5,12 +5,22 @@ Environment:
   - Name: LIF_ORCHESTRATOR_URL
     Value: 
       Fn::Sub: "http://orchestrator.lif.${EnvironmentName}.aws:8005"
+  # Whole-query budget for the synchronous /query polling loop. 120, not the 300s code
+  # default: the QP has no load balancer of its own (UseLbForService is false), but every
+  # externally reachable caller of /query sits behind the shared ALB, whose idle timeout
+  # is 150s (service-common.yml LoadBalancerIdleTimeoutSeconds). Above 150 the QP never
+  # gets to return its clean 408 -- the ALB cuts the connection first with a 504, which
+  # surfaces in the browser as a CORS error (#1050). 120 leaves ~30s of headroom for the
+  # QP's own response and the caller's hop. Raising this past 150 requires raising the
+  # ALB idle timeout with it.
   - Name: LIF_QUERY_TIMEOUT_SECONDS
-    Value: "300"
+    Value: "120"
   # Per-request ceiling for the QP's own calls to the Cache and Orchestrator, distinct
-  # from the whole-query budget above. Set to the code default so this is tunable
-  # without a code change -- see #572, where an orchestrator submission exceeded
-  # httpx's silent 5s default during a demo.
+  # from the whole-query budget above. Set here so it is tunable without a code change.
+  # 10s is twice the httpx default that failed in #572 -- not a measured figure. The
+  # orchestrator submission is not a cheap enqueue: submit_job in the orchestrator base
+  # blocks on Dagster's submit_job_execution, which resolves the job and writes a run
+  # before returning a run_id. #572 stays open to set this number from data.
   - Name: LIF_SERVICE_REQUEST_TIMEOUT_SECONDS
     Value: "10"
   - Name: LIF_QUERY_PLANNER_INFORMATION_SOURCES_CONFIG_PATH

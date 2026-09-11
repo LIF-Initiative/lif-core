@@ -23,10 +23,44 @@ from lif.query_planner_service.datatypes import LIFQueryPlannerConfig, LIFQueryP
 MIN_POLLING_DELAY_SECONDS: int = 1
 MAX_POLLING_DELAY_SECONDS: int = 16
 DEFAULT_QUERY_TIMEOUT_SECONDS: int = 300
-LIF_QUERY_TIMEOUT_SECONDS: int = int(os.getenv("LIF_QUERY_TIMEOUT_SECONDS", str(DEFAULT_QUERY_TIMEOUT_SECONDS)))
 DEFAULT_SERVICE_REQUEST_TIMEOUT_SECONDS: int = 10
-LIF_SERVICE_REQUEST_TIMEOUT_SECONDS: int = int(
-    os.getenv("LIF_SERVICE_REQUEST_TIMEOUT_SECONDS", str(DEFAULT_SERVICE_REQUEST_TIMEOUT_SECONDS))
+
+
+# Defined above the constants rather than with the other helpers because the reads below
+# happen at import time.
+def _env_int(name: str, default: int, *, minimum: int | None = None) -> int:
+    """Parse an integer environment variable, failing loudly on a malformed value.
+
+    Convention decided in #1179: a present-but-malformed value stops the service with a
+    message naming the variable. The alternative -- fall back to the default with a
+    warning -- leaves the service looking healthy while ignoring what the operator set,
+    and the divergence surfaces later as a mystery.
+
+    An unset *or empty* value still takes the default. An empty string is what a
+    CloudFormation `Value:` entry yields when its source is missing, so treating that as
+    fatal would make the service brittle to unrelated template changes.
+
+    Local to this base pending the shared helper #1179 will add; the semantics are meant
+    to match that helper exactly so the swap is mechanical.
+    """
+    raw = os.environ.get(name)
+    if raw is None or raw.strip() == "":
+        return default
+    try:
+        value = int(raw.strip())
+    except ValueError as exc:
+        raise RuntimeError(
+            f"{name}={raw!r} is not an integer. Set it to a whole number of seconds, "
+            f"or unset it to use the default ({default})."
+        ) from exc
+    if minimum is not None and value < minimum:
+        raise RuntimeError(f"{name}={value} is below the minimum of {minimum}.")
+    return value
+
+
+LIF_QUERY_TIMEOUT_SECONDS: int = _env_int("LIF_QUERY_TIMEOUT_SECONDS", DEFAULT_QUERY_TIMEOUT_SECONDS, minimum=1)
+LIF_SERVICE_REQUEST_TIMEOUT_SECONDS: int = _env_int(
+    "LIF_SERVICE_REQUEST_TIMEOUT_SECONDS", DEFAULT_SERVICE_REQUEST_TIMEOUT_SECONDS, minimum=1
 )
 
 app = FastAPI()

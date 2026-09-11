@@ -36,9 +36,10 @@ class LIFQueryPlannerConfig(BaseModel):
         query_timeout_seconds (int): Maximum time in seconds to wait for a query to complete, including
             orchestration. Bounds the synchronous polling loop only.
         service_request_timeout_seconds (int): Timeout in seconds for individual HTTP calls to the
-            LIF Cache and Orchestrator. These are fast service-to-service requests -- submitting an
-            orchestrator job returns a run_id immediately, and the wait happens in the polling loop --
-            so this is deliberately short and independent of the overall query budget.
+            LIF Cache and Orchestrator. Independent of the overall query budget, because the
+            orchestration wait happens in the polling loop rather than in these calls. Short but
+            not free: the orchestrator submission blocks on Dagster resolving the job and writing
+            a run before it returns a run_id, so it is not a cheap enqueue. See #572.
     """
 
     lif_cache_url: str = Field(..., description="URL of the LIF Cache service")
