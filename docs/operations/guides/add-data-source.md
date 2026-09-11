@@ -42,7 +42,7 @@ The `example-data-source-rest-api-to-lif` adapter is the reference implementatio
 1. Ensure the data source API is reachable by code running in the `dagster-code-location` container. The _data source_ configures an _adapter_. That _adapter_ is run in the `dagster-code-location` container. It likely shouldn't be an issue for the container to access the _data source_ endpoint, but if there are connection issues, consider reviewing the network between that container and the _data source_.
     - If serving the ACME SIS Data Source from the host's localhost network, remember to specify the `..._HOST` configuration further along in this guide as `host.docker.internal[:PORT]`
 
-2. Clone `components/lif/data_source_adapters/example_data_source_rest_api_to_lif_adapter` into a sibling directory called `components/lif/data_source_adapters/sis_data_source_to_lif_adapter`.
+2. Clone `components/lif/demo_data_source_adapters/example_data_source_rest_api_to_lif_adapter` into `components/lif/data_source_adapters/sis_data_source_to_lif_adapter`. The example adapter is demo-tier and lives in the `demo_data_source_adapters` brick; your SIS adapter is product-tier, so it belongs in `data_source_adapters` ([ADR 0004](../../design/adr/general/0004-components-are-the-unit-of-reuse.md)).
 
 3. Adjust the code in `sis_data_source_to_lif_adapter/adapter.py` to access the source API, including:
     - Change the class name to `SisDataSourceToLIFAdapter`
@@ -56,7 +56,7 @@ The `example-data-source-rest-api-to-lif` adapter is the reference implementatio
 
 4. Adjust the import code in `components/lif/data_source_adapters/sis_data_source_to_lif_adapter/__init__.py` to reflect the new adapter name of `SisDataSourceToLIFAdapter`
 
-5. Add the adapter id (`sis-data-source-to-lif`) into the `components/lif/data_source_adapters/__init__.py::_EXTERNAL_ADAPTERS` map and add the adapter import:
+5. Add the adapter id (`sis-data-source-to-lif`) into the `components/lif/data_source_adapters/__init__.py::_EXTERNAL_ADAPTERS` map and add the adapter import. (If you maintain the adapter outside this repo, call `register_adapter("sis-data-source-to-lif", SisDataSourceToLIFAdapter)` from your own startup code instead of editing this file — see [`creating-a-data-source-adapter.md`](creating-a-data-source-adapter.md#step-3-register-the-adapter).)
     ```python
     ...
     from .sis_data_source_to_lif_adapter.adapter import SisDataSourceToLIFAdapter

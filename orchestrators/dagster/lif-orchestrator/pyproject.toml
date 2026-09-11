@@ -30,6 +30,7 @@ packages = ["lif"]
 
 [tool.polylith.bricks]
 "../../../components/lif/data_source_adapters" = "lif/data_source_adapters"
+"../../../components/lif/demo_data_source_adapters" = "lif/demo_data_source_adapters"
 "../../../components/lif/datatypes" = "lif/datatypes"
 "../../../components/lif/exceptions" = "lif/exceptions"
 "../../../components/lif/lif_schema_config" = "lif/lif_schema_config"
