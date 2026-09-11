@@ -71,7 +71,9 @@ class LIFQueryPlannerService:
         """
         try:
             # Send the query to the LIF Cache service
-            lif_records: List[LIFRecord] = await query_lif_cache(self.lif_cache_query_url, query)
+            lif_records: List[LIFRecord] = await query_lif_cache(
+                self.lif_cache_query_url, query, self.config.service_request_timeout_seconds
+            )
 
             # Raise an error if multiple records are found
             if len(lif_records) > 1:
@@ -116,7 +118,9 @@ class LIFQueryPlannerService:
 
                 try:
                     orchestrator_job_request_response: OrchestratorJobRequestResponse = await post_orchestrator_job(
-                        self.lif_orchestrator_post_url, orchestrator_job_request
+                        self.lif_orchestrator_post_url,
+                        orchestrator_job_request,
+                        self.config.service_request_timeout_seconds,
                     )
                 except Exception as e:
                     logger.error(f"Returning LIF records found so far: {lif_records}")
@@ -189,7 +193,7 @@ class LIFQueryPlannerService:
             LIFException: If the update fails.
         """
         try:
-            async with httpx.AsyncClient() as client:
+            async with httpx.AsyncClient(timeout=self.config.service_request_timeout_seconds) as client:
                 response = await client.post(self.lif_cache_update_url, json=update.model_dump())
             response.raise_for_status()
             response_json = response.json()
@@ -259,7 +263,7 @@ class LIFQueryPlannerService:
                 "lif_query_filter": lif_query_filter.model_dump(by_alias=True),
                 "lif_fragments": [fragment.model_dump() for fragment in lif_fragments],
             }
-            async with httpx.AsyncClient() as client:
+            async with httpx.AsyncClient(timeout=self.config.service_request_timeout_seconds) as client:
                 response = await client.post(self.lif_cache_save_url, json=json_body)
             response.raise_for_status()
 
@@ -274,13 +278,14 @@ class LIFQueryPlannerService:
             raise LIFException(msg) from e
 
 
-async def query_lif_cache(lif_cache_query_url: str, query: LIFQuery) -> List[LIFRecord]:
+async def query_lif_cache(lif_cache_query_url: str, query: LIFQuery, timeout: int) -> List[LIFRecord]:
     """
     Query the LIF Cache service and return matching LIF records.
 
     Args:
         lif_cache_query_url (str): The URL of the LIF Cache query endpoint.
         query (LIFQuery): The LIF query to execute.
+        timeout (int): Timeout in seconds for the LIF Cache request.
 
     Returns:
         List[LIFRecord]: List of matching LIF records.
@@ -289,7 +294,7 @@ async def query_lif_cache(lif_cache_query_url: str, query: LIFQuery) -> List[LIF
         LIFException: If the query fails.
     """
     try:
-        async with httpx.AsyncClient() as client:
+        async with httpx.AsyncClient(timeout=timeout) as client:
             response = await client.post(lif_cache_query_url, json=query.model_dump(by_alias=True))
         response.raise_for_status()
         response_json = response.json()
@@ -308,18 +313,19 @@ async def query_lif_cache(lif_cache_query_url: str, query: LIFQuery) -> List[LIF
 
 
 async def post_orchestrator_job(
-    lif_orchestrator_post_url: str, orchestrator_job_request: OrchestratorJobRequest
+    lif_orchestrator_post_url: str, orchestrator_job_request: OrchestratorJobRequest, timeout: int
 ) -> OrchestratorJobRequestResponse:
     """
     Post an orchestrator job request and return the response.
     Args:
         lif_orchestrator_post_url (str): The URL to post the orchestrator job request to.
         orchestrator_job_request (OrchestratorJobRequest): The orchestrator job request to post.
+        timeout (int): Timeout in seconds for the orchestrator job request.
     Returns:
         OrchestratorJobRequestResponse: The response from the orchestrator job request.
     """
     try:
-        async with httpx.AsyncClient() as client:
+        async with httpx.AsyncClient(timeout=timeout) as client:
             response = await client.post(lif_orchestrator_post_url, json=orchestrator_job_request.model_dump())
         response.raise_for_status()
         response_json = response.json()

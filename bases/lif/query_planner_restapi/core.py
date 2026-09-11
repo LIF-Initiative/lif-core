@@ -22,7 +22,46 @@ from lif.query_planner_service.datatypes import LIFQueryPlannerConfig, LIFQueryP
 
 MIN_POLLING_DELAY_SECONDS: int = 1
 MAX_POLLING_DELAY_SECONDS: int = 16
-MAX_QUERY_TIMEOUT_SECONDS: int = 60
+DEFAULT_QUERY_TIMEOUT_SECONDS: int = 300
+DEFAULT_SERVICE_REQUEST_TIMEOUT_SECONDS: int = 10
+
+
+# Defined above the constants rather than with the other helpers because the reads below
+# happen at import time.
+def _env_int(name: str, default: int, *, minimum: int | None = None) -> int:
+    """Parse an integer environment variable, failing loudly on a malformed value.
+
+    Convention decided in #1179: a present-but-malformed value stops the service with a
+    message naming the variable. The alternative -- fall back to the default with a
+    warning -- leaves the service looking healthy while ignoring what the operator set,
+    and the divergence surfaces later as a mystery.
+
+    An unset *or empty* value still takes the default. An empty string is what a
+    CloudFormation `Value:` entry yields when its source is missing, so treating that as
+    fatal would make the service brittle to unrelated template changes.
+
+    Local to this base pending the shared helper #1179 will add; the semantics are meant
+    to match that helper exactly so the swap is mechanical.
+    """
+    raw = os.environ.get(name)
+    if raw is None or raw.strip() == "":
+        return default
+    try:
+        value = int(raw.strip())
+    except ValueError as exc:
+        raise RuntimeError(
+            f"{name}={raw!r} is not an integer. Set it to a whole number of seconds, "
+            f"or unset it to use the default ({default})."
+        ) from exc
+    if minimum is not None and value < minimum:
+        raise RuntimeError(f"{name}={value} is below the minimum of {minimum}.")
+    return value
+
+
+LIF_QUERY_TIMEOUT_SECONDS: int = _env_int("LIF_QUERY_TIMEOUT_SECONDS", DEFAULT_QUERY_TIMEOUT_SECONDS, minimum=1)
+LIF_SERVICE_REQUEST_TIMEOUT_SECONDS: int = _env_int(
+    "LIF_SERVICE_REQUEST_TIMEOUT_SECONDS", DEFAULT_SERVICE_REQUEST_TIMEOUT_SECONDS, minimum=1
+)
 
 app = FastAPI()
 logger = get_logger(__name__)
@@ -89,6 +128,8 @@ config = LIFQueryPlannerConfig(
     lif_cache_url=LIF_CACHE_URL,
     lif_orchestrator_url=LIF_ORCHESTRATOR_URL,
     information_sources_config=load_information_sources_yaml_config(INFORMATION_SOURCES_CONFIG_PATH),
+    query_timeout_seconds=LIF_QUERY_TIMEOUT_SECONDS,
+    service_request_timeout_seconds=LIF_SERVICE_REQUEST_TIMEOUT_SECONDS,
 )
 service: LIFQueryPlannerService = LIFQueryPlannerService(config)
 
@@ -113,8 +154,10 @@ async def do_run_query_sync(query: LIFQuery, response: Response) -> List[LIFReco
             delay_in_seconds: int = MIN_POLLING_DELAY_SECONDS
             while result.status == "PENDING":
                 # Wait for the query to complete
-                if (datetime.now() - start_time).seconds > 300:
-                    raise HTTPException(status_code=408, detail="Query timed out")
+                if (datetime.now() - start_time).total_seconds() > config.query_timeout_seconds:
+                    raise HTTPException(
+                        status_code=408, detail=f"Query timed out after {config.query_timeout_seconds} seconds"
+                    )
                 logger.info(f"Query still pending, waiting for {delay_in_seconds} seconds before polling again")
                 await sleep(delay_in_seconds)
                 delay_in_seconds = (

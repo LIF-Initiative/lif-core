@@ -32,11 +32,27 @@ class LIFQueryPlannerConfig(BaseModel):
     Attributes:
         lif_cache_url (str): URL of the LIF Cache service.
         lif_orchestrator_url (str): URL of the LIF Orchestrator service.
-        information_sources_config_path (str): Path to the information sources configuration file.
+        information_sources_config (List[LIFQueryPlannerInfoSourceConfig]): Configuration for the information sources.
+        query_timeout_seconds (int): Maximum time in seconds to wait for a query to complete, including
+            orchestration. Bounds the synchronous polling loop only.
+        service_request_timeout_seconds (int): Timeout in seconds for individual HTTP calls to the
+            LIF Cache and Orchestrator. Independent of the overall query budget, because the
+            orchestration wait happens in the polling loop rather than in these calls. Short but
+            not free: the orchestrator submission blocks on Dagster resolving the job and writing
+            a run before it returns a run_id, so it is not a cheap enqueue. See #572.
     """
 
     lif_cache_url: str = Field(..., description="URL of the LIF Cache service")
     lif_orchestrator_url: str = Field(..., description="URL of the LIF Orchestrator service")
     information_sources_config: List[LIFQueryPlannerInfoSourceConfig] = Field(
         ..., description="Configuration for the information sources"
+    )
+    query_timeout_seconds: int = Field(
+        300,
+        gt=0,
+        description="Maximum time in seconds to wait for a query to complete, including orchestration. "
+        "Bounds the synchronous polling loop only.",
+    )
+    service_request_timeout_seconds: int = Field(
+        10, gt=0, description="Timeout in seconds for individual HTTP calls to the LIF Cache and Orchestrator."
     )
