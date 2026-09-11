@@ -255,6 +255,26 @@ async def test_soft_delete_entity_marks_related_and_calls_soft_delete_attribute(
     fake_session.commit.assert_awaited()
 
 
+async def test_soft_delete_entity_only_soft_deletes_entity_inclusions(fake_session, monkeypatch):
+    """Issue #1213: entity and attribute ids are independent sequences, so the step-5
+    inclusion cleanup must filter ElementType == Entity or it also soft-deletes an
+    unrelated *attribute* inclusion whose IncludedElementId happens to equal the entity id."""
+    monkeypatch.setattr(svc, "get_entity_by_id", AsyncMock(return_value=types.SimpleNamespace(Id=498, Deleted=False)))
+    monkeypatch.setattr(svc, "soft_delete_attribute", AsyncMock())
+    fake_session.execute.side_effect = [
+        _ScalarListResult([]),  # step 1: entity-attribute associations
+        _ScalarListResult([]),  # step 4: entity associations
+        _ScalarListResult([]),  # step 5: inclusions
+    ]
+
+    await svc.soft_delete_entity(fake_session, 498)
+
+    inclusions_stmt = fake_session.execute.await_args_list[2].args[0]
+    compiled = str(inclusions_stmt.compile(compile_kwargs={"literal_binds": True}))
+    assert '"ExtInclusionsFromBaseDM"."IncludedElementId" = 498' in compiled
+    assert '"ExtInclusionsFromBaseDM"."ElementType" = \'Entity\'' in compiled, compiled
+
+
 async def test_check_entity_exists_returns_entity_when_found(fake_session):
     e = types.SimpleNamespace(Id=1)
     fake_session.execute.return_value = _ScalarListResult([e])
