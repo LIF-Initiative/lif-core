@@ -332,6 +332,29 @@ async def test_get_list_of_entities_for_data_model_baselif_branch(fake_session, 
     assert items == [{"Id": 33, "Name": "R"}]
 
 
+async def test_get_list_of_entities_for_data_model_orglif_check_base_false_returns_own_rows(fake_session, monkeypatch):
+    """check_base=False (the export path, #1210) must skip the base-model / inclusion resolution and
+    return only entities stored under the requested model, mirroring get_list_of_attributes_for_data_model."""
+    dm_type = getattr(svc, "DataModelType")
+    dm = types.SimpleNamespace(Id=100, Type=dm_type.OrgLIF, BaseDataModelId=1)
+    check_datamodel = AsyncMock(return_value=dm)
+    monkeypatch.setattr(svc, "check_datamodel_by_id", check_datamodel)
+
+    fake_session.execute.side_effect = [
+        _CountResult(1),  # count; the inclusion branch would have asked for included ids here instead
+        _ScalarListResult([types.SimpleNamespace(Id=10, Name="OrgOnly")]),
+    ]
+
+    total, items = await svc.get_list_of_entities_for_data_model(
+        fake_session, data_model_id=100, pagination=False, check_base=False
+    )
+    assert total == 1
+    assert items == [{"Id": 10, "Name": "OrgOnly"}]
+    check_datamodel.assert_awaited_once()  # the base model is never resolved
+    count_query = fake_session.execute.await_args_list[0].args[0]
+    assert list(count_query.compile().params.values()) == [[100]]  # DataModelId IN (100), not (100, 1)
+
+
 async def test_get_entity_by_name_ok(fake_session):
     row = types.SimpleNamespace(Id=7, Name="Learner", Deleted=False)
     fake_session.execute.return_value = _ScalarListResult([row])

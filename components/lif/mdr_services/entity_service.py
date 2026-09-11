@@ -275,17 +275,18 @@ async def get_list_of_entities_for_data_model(
     org_ext_only: bool = False,
     this_organization: str = "LIF",
     public_only: bool = False,
+    check_base: bool = True,
 ):
     # Check for data model id and for extension
     data_model_id_list: List[int] = []
     data_model = await check_datamodel_by_id(session=session, id=data_model_id)
     data_model_id_list.append(data_model.Id)
-    if data_model.Type == DataModelType.OrgLIF or data_model.Type == DataModelType.PartnerLIF:
+    if check_base and (data_model.Type == DataModelType.OrgLIF or data_model.Type == DataModelType.PartnerLIF):
         base_data_model = await check_datamodel_by_id(session=session, id=data_model.BaseDataModelId)
         data_model_id_list.append(base_data_model.Id)
 
     # Step 1: If this org's LIF or a partner's LIF, filter to only entities included for this org's data model
-    if data_model.Type == DataModelType.OrgLIF or data_model.Type == DataModelType.PartnerLIF:
+    if check_base and (data_model.Type == DataModelType.OrgLIF or data_model.Type == DataModelType.PartnerLIF):
         # Query to fetch IncludedElementId from ExtInclusionsFromBaseDM table where ExtDataModelId in data_model_id_list and ElementType = Entity
         ext_inclusions_query = select(ExtInclusionsFromBaseDM.IncludedElementId).where(
             ExtInclusionsFromBaseDM.ExtDataModelId.in_(data_model_id_list),
