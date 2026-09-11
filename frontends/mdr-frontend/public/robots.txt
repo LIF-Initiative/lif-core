@@ -1,0 +1,14 @@
+# LIF — dev/demo environments are not intended for public indexing.
+#
+# Disallow everything. These hosts serve non-production evaluation
+# environments; there is no content here that should appear in search
+# results, and indexing them invites crawler traffic we don't want.
+#
+# Deliberately does NOT enumerate paths. Listing specific routes here
+# would advertise them to the scanners this is meant to discourage.
+#
+# NOTE: robots.txt is advisory. Well-behaved crawlers honor it; scanners
+# and malicious bots ignore it entirely. It is not a security control.
+
+User-agent: *
+Disallow: /
