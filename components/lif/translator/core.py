@@ -147,7 +147,10 @@ class Translator:
         cache_key = f"{schema_id}:{tenant_schema or ''}"
         cached = _schema_cache.get(cache_key)
         if cached is not None:
-            logger.info("Cache hit for schema %s", schema_id)
+            # DEBUG, not INFO: two lines per translation (source + target schema)
+            # on the export hot path, same reasoning as the mapping logs in
+            # BaseTranslator.run above (#1157).
+            logger.debug("Cache hit for schema %s", schema_id)
             return cached
         result = await get_data_model_schema(
             schema_id, include_attr_md=True, include_entity_md=False, tenant_schema=tenant_schema

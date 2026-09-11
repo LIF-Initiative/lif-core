@@ -586,14 +586,6 @@ async def test_translator_run_with_openbadgecredential(monkeypatch):
 # ---------------------------------------------------------------------------
 
 
-@pytest.fixture(autouse=True)
-def _clear_translator_caches():
-    """Reset module-level caches between tests to avoid cross-test contamination."""
-    core._schema_cache.clear()
-    yield
-    core._schema_cache.clear()
-
-
 @pytest.mark.asyncio
 async def test_cache_hit_skips_mdr_call(monkeypatch):
     call_count = 0
