@@ -1,3 +1,4 @@
+import os
 from unittest.mock import AsyncMock, patch
 
 import pytest
@@ -19,8 +20,12 @@ class MockAgent:
         self.ask_agent = AsyncMock(return_value={"content": "This is mocked content", "tokens": 10, "cost": 0.57})
 
 
-# From the hard coded users in lif/advisor_restapi
-USER_DETAILS_ALEX = {"username": "atsatrian_lifdemo@stateu.edu", "password": "changeme"}
+# From the hard coded users in lif/advisor_restapi.
+# The password is read from the environment rather than hardcoded: the base now
+# requires LIF_DEMO_USER_PASSWORD with no fallback (#1191), so hardcoding a value
+# here would just re-enshrine the old default and hide that dependency.
+# test/conftest.py supplies a throwaway value for the session.
+USER_DETAILS_ALEX = {"username": "atsatrian_lifdemo@stateu.edu", "password": os.environ["LIF_DEMO_USER_PASSWORD"]}
 
 
 @pytest.mark.asyncio
@@ -397,8 +402,10 @@ async def test_logout():
                 client=client, access_token=response_access_token, expected_response=logout_expected_response
             )
 
-            # Verify the agent
-
+            # No synchronization needed: FastAPI's BackgroundTasks run inside the ASGI
+            # call, and ASGITransport awaits that call, so the task has already finished
+            # by the time the request returns.
+            # Verify the agent was called (background task ran)
             mocked_ai_agent.ask_agent.assert_awaited_with(
                 "save_interaction_summary",
                 "Summarize our conversation extracting metadata about the conversation and then save it",
@@ -535,3 +542,26 @@ async def test_logout_succeeds_when_session_state_already_cleared():
             assert logout_response.status_code == 200, logout_response.text
             assert logout_response.json() == {"success": True}
             mocked_ai_agent.ask_agent.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+async def test_logout_succeeds_even_when_summarization_fails():
+    """Logout must succeed even if background summarization raises an exception."""
+    mocked_ai_agent = MockAgent()
+    mocked_ai_agent.ask_agent = AsyncMock(side_effect=RuntimeError("LLM unavailable"))
+
+    async with get_client() as client:
+        with patch.object(LIFAIAgent, "setup", new=AsyncMock(return_value=mocked_ai_agent)):
+            login_response_json = await login_user_to_lif_advisor(
+                client=client, username=USER_DETAILS_ALEX["username"], password=USER_DETAILS_ALEX["password"]
+            )
+            access_token = login_response_json.get("access_token")
+
+            # Logout — should return success immediately even though summarization will fail
+            logout_response = await client.post("/logout", headers={"Authorization": f"Bearer {access_token}"})
+
+            assert logout_response.status_code == 200, logout_response.text
+            assert logout_response.json() == {"success": True}
+
+            # Verify the agent was called (background task ran) but failed silently
+            mocked_ai_agent.ask_agent.assert_awaited()

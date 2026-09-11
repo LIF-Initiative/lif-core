@@ -1,4 +1,4 @@
-"""Regression tests for import_datamodel (Issue #668).
+"""Regression tests for import_datamodel (Issue #668) and clone_datamodel (Issue #1205).
 
 These exercise the real import_datamodel logic end-to-end with the create_* I/O
 calls mocked out. Each test guards a specific #668 regression — see the docstring
@@ -6,13 +6,15 @@ on each test rather than a running list here (which would drift as tests are add
 """
 
 import types
-from unittest.mock import AsyncMock
+from unittest.mock import AsyncMock, MagicMock
 
 import pytest
+from fastapi import HTTPException
 
-from lif.datatypes.mdr_sql_model import DataModelType, DatamodelElementType
+from lif.datatypes.mdr_sql_model import DataModel, DataModelType, DatamodelElementType
 from lif.mdr_dto.datamodel_dto import CreateDataModelDTO
 from lif.mdr_dto.import_export_dto import (
+    CreateCloneDTO,
     ImportAttributeDTO,
     ImportDataModelConstraintsDTO,
     ImportDataModelDTO,
@@ -120,3 +122,72 @@ async def test_import_skips_constraint_with_unresolvable_element(patched_service
     assert result["skipped_constraints"] == [
         {"element_type": str(DatamodelElementType.Entity), "element_name": "NoSuchEntity"}
     ]
+
+
+# --- clone_datamodel (Issue #1205) -------------------------------------------------------------
+
+
+def _clone_session(existing: DataModel | None) -> MagicMock:
+    """A session whose only SELECT (the uniqueness check) yields `existing`."""
+    result = MagicMock()
+    result.scalars.return_value.first.return_value = existing
+    session = MagicMock()
+    session.execute = AsyncMock(return_value=result)
+    session.commit = AsyncMock()
+    session.refresh = AsyncMock()
+    return session
+
+
+def _clone_payload() -> CreateCloneDTO:
+    return CreateCloneDTO(
+        source_data_model_id=SOURCE_DATA_MODEL_ID,
+        data_model_name="ClonedDM",
+        data_model_type=DataModelType.OrgLIF,
+        data_model_version="2.0",
+    )
+
+
+async def test_clone_rejects_duplicate_with_400():
+    """Guards #1205: the uniqueness check was called with 3 of its 5 positional args, so every
+    clone died with a TypeError (HTTP 500) before the duplicate branch could ever be reached."""
+    session = _clone_session(existing=DataModel(Name="ClonedDM", DataModelVersion="2.0"))
+
+    with pytest.raises(HTTPException) as exc_info:
+        await svc.clone_datamodel(session=session, data=_clone_payload())
+
+    assert exc_info.value.status_code == 400
+    session.add.assert_not_called()
+
+
+async def test_clone_uniqueness_check_matches_inserted_tuple(monkeypatch):
+    """The duplicate check must look for the exact row the clone is about to insert: same name,
+    version and type, with no contributor organization (CreateCloneDTO has none and the clone
+    sets none), rather than blowing up or matching on a tuple the clone never writes."""
+    for helper in (
+        "clone_entities",
+        "clone_value_sets",
+        "clone_attributes",
+        "clone_entity_attribute_association",
+        "clone_entity_association",
+        "clone_value_set_values",
+        "clone_transformation_group",
+        "clone_transformations",
+        "clone_transformation_attributes",
+    ):
+        monkeypatch.setattr(svc, helper, AsyncMock(return_value={}))
+    session = _clone_session(existing=None)
+
+    new_model = await svc.clone_datamodel(session=session, data=_clone_payload())
+
+    (uniqueness_query,) = session.execute.await_args.args
+    compiled = uniqueness_query.compile()
+    where = str(compiled)
+    assert '"DataModels"."Type" = ' in where
+    assert '"DataModels"."ContributorOrganization" IS NULL' in where
+    assert set(compiled.params.values()) >= {"ClonedDM", "2.0", DataModelType.OrgLIF}
+
+    inserted = session.add.call_args.args[0]
+    assert inserted is new_model
+    assert (inserted.Name, inserted.DataModelVersion, inserted.Type) == ("ClonedDM", "2.0", DataModelType.OrgLIF)
+    assert inserted.ContributorOrganization is None
+    assert inserted.BaseDataModelId == SOURCE_DATA_MODEL_ID  # OrgLIF clones point at their source

@@ -8,6 +8,11 @@ Environment:
     Value: "openapi_constrained_with_interactions.json"
   - Name: USE_OPENAPI_DATA_MODEL_FROM_FILE
     Value: "false"
+  # Matches the code default in components/lif/translator/core.py. Present so the
+  # schema-cache TTL can be shortened (or set to 0 to disable) without a code deploy;
+  # see the #1157 export-timeout history on this service.
+  - Name: TRANSLATOR_CACHE_TTL_SECONDS
+    Value: "300"
 Secrets:
   - Name: LIF_MDR_API_AUTH_TOKEN
     ValueFrom: 

@@ -11,7 +11,7 @@ on:
       - cloudformation/lif-example-data-source-rest-api-taskdef-includes.yml
       - components/lif/example_data_source_service/**
       - components/lif/logging/**
-      - components/lif/auth/**
+      - components/lif/api_token_auth/**
       - projects/lif_example_data_source_rest_api/**
       - .github/workflows/_deploy-service.yml
 

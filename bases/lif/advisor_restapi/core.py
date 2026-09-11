@@ -3,7 +3,7 @@ import uuid
 from typing import Any, Dict, List
 
 import jwt
-from fastapi import Depends, FastAPI, HTTPException
+from fastapi import BackgroundTasks, Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
@@ -14,7 +14,17 @@ from lif.logging import get_logger
 
 logger = get_logger(__name__)
 
-DEMO_USER_PASSWORD = os.environ.get("LIF_DEMO_USER_PASSWORD", "changeme")
+_demo_password = os.environ.get("LIF_DEMO_USER_PASSWORD")
+if _demo_password is None or not _demo_password.strip():
+    # No fallback on purpose: a default password is a developer convenience that
+    # makes insecurity the default. See #1191. (#1179 will consolidate this and
+    # the other required-env guards into one shared helper.)
+    raise RuntimeError(
+        "LIF_DEMO_USER_PASSWORD is not set. It is the login password for every demo "
+        "persona, so there is no safe default. In AWS it is supplied from SSM via the "
+        "service's taskdef-includes; locally, export it or set it in your .env."
+    )
+DEMO_USER_PASSWORD = _demo_password.strip()
 
 # --- Mock Database and State ---
 # Demo login accounts come from the shared demo-persona source (#1055) so the
@@ -285,8 +295,25 @@ async def continue_conversation(question: Question, username: str = Depends(get_
     )
 
 
+async def _safe_summarize(agent, task, username):
+    """
+    Summarize the interaction after /logout has already responded.
+
+    Never raises: logout must not depend on LLM availability. Failures are logged with
+    a stack trace rather than silently dropped, so an absent summary is diagnosable.
+    """
+    try:
+        # TODO(#986): move this hard-coded query prompt to env/config
+        response = await agent.ask_agent(
+            task, "Summarize our conversation extracting metadata about the conversation and then save it"
+        )
+        logger.info(f"Summarization response for {username}: {response}")
+    except Exception:
+        logger.exception(f"Background summarization failed for {username}")
+
+
 @app.post("/logout", response_model=LogoutResponse)
-async def logout(username: str = Depends(get_current_user)) -> LogoutResponse:
+async def logout(background_tasks: BackgroundTasks, username: str = Depends(get_current_user)) -> LogoutResponse:
     """
     Logout a user and clear their conversation state and refresh token.
     """
@@ -297,12 +324,11 @@ async def logout(username: str = Depends(get_current_user)) -> LogoutResponse:
     if state and state.get("lif_ai_agent"):
         agent = state["lif_ai_agent"]
         task = "save_interaction_summary"
-
-        # TODO(#986): move this hard-coded query prompt to env/config
-        response = await agent.ask_agent(
-            task, "Summarize our conversation extracting metadata about the conversation and then save it"
-        )
-        logger.info(f"Summarization response: {response}")
+        # FastAPI runs this after the response is sent, so /logout stays fast. Preferred
+        # over asyncio.create_task, whose return value we would have to retain ourselves:
+        # the event loop keeps only a weak reference to a bare task, so it can be
+        # garbage-collected mid-flight and drop the summary with nothing in the logs.
+        background_tasks.add_task(_safe_summarize, agent, task, username)
 
     conversation_states.pop(username, None)
     refresh_tokens_store.pop(username, None)

@@ -12,6 +12,7 @@ class AttributeDTO(BaseModel):
     DataModelId: int
     DataType: Optional[str]
     ValueSetId: Optional[int]
+    TargetEntityId: Optional[int] = None
     Required: Optional[str]
     Array: Optional[str]
     SourceModel: Optional[str]
