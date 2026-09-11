@@ -18,6 +18,7 @@ on:
       - .github/workflows/dagster_code_location.yml
       - projects/dagster_oss_ecs/**
       - components/lif/data_source_adapters/**
+      - components/lif/demo_data_source_adapters/**
       - components/lif/datatypes/**
       - components/lif/exceptions/**
       - components/lif/logging/**
