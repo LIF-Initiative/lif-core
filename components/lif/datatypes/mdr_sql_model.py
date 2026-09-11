@@ -205,6 +205,7 @@ class Attribute(SQLModel, table=True):
     DataModelId: int = Field(foreign_key="DataModels.Id")
     DataType: str
     ValueSetId: Optional[int] = Field(foreign_key="ValueSets.Id")
+    TargetEntityId: Optional[int] = Field(default=None, foreign_key="Entities.Id")
     Required: Optional[str]
     Array: Optional[str]
     SourceModel: Optional[str]
