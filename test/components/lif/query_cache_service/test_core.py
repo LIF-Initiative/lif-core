@@ -62,6 +62,7 @@ def test_update_set_only_uses_single_find_one_and_update():
     args, kwargs = mock_collection.find_one_and_update.await_args
     assert kwargs["projection"] == {"Person": 1, "_id": 0}
     assert kwargs["return_document"] == core.ReturnDocument.AFTER
+    assert args[0] == {"Person.Identifier.identifier": "1"}
     assert args[1] == {"$set": {"Person.0.Name.FamilyName": "Doe"}}
 
 
@@ -84,8 +85,41 @@ def test_update_append_pushes_array_then_sets_then_reads_back():
     mock_collection.update_one.assert_awaited_once_with(
         {"Person.Identifier.identifier": "1"}, {"$set": {"Person.0.Name.GivenName": []}}
     )
-    mock_collection.find_one_and_update.assert_awaited_once()
+    mock_collection.find_one_and_update.assert_awaited_once_with(
+        {"Person.Identifier.identifier": "1"},
+        {"$push": {"Person.0.Name.GivenName": "John"}},
+        projection={"Person": 1, "_id": 0},
+        return_document=core.ReturnDocument.AFTER,
+    )
     assert result.person.root == PERSON_DOC["Person"]
+
+    # The array init must precede the $push -- MongoDB $push fails against a non-array field.
+    assert [c[0] for c in mock_collection.mock_calls] == ["find_one", "update_one", "find_one_and_update"]
+
+
+def test_update_append_multiple_elements_wraps_them_in_each():
+    lif_update = LIFUpdate(
+        updatePerson=LIFUpdatePersonPayload(
+            filter={"Person": {"Identifier": {"identifier": "1"}}},
+            input={"Person": {"Name": {"GivenName": ["John", "Jack"]}}},
+        )
+    )
+    mock_collection = MagicMock()
+    mock_collection.find_one = AsyncMock(return_value={})  # current doc lacks the array
+    mock_collection.update_one = AsyncMock(return_value=MagicMock())
+    mock_collection.find_one_and_update = AsyncMock(return_value=PERSON_DOC)
+
+    with _patch_collection(mock_collection):
+        asyncio.run(core.update(lif_update))
+
+    # A multi-element append must go through $each; without it MongoDB pushes the
+    # list itself as a single nested element.
+    mock_collection.find_one_and_update.assert_awaited_once_with(
+        {"Person.Identifier.identifier": "1"},
+        {"$push": {"Person.0.Name.GivenName": {"$each": ["John", "Jack"]}}},
+        projection={"Person": 1, "_id": 0},
+        return_document=core.ReturnDocument.AFTER,
+    )
 
 
 def test_update_no_match_raises_resource_not_found():
