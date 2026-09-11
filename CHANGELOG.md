@@ -19,11 +19,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Identity Mapper `save_mappings` is now all-or-nothing: a single transaction with a single commit,
+  so a mid-batch failure rolls back the entire batch instead of leaving partial saves; storage DB
+  work is offloaded off the FastAPI event loop via `asyncio.to_thread`, and per-request delete/read
+  round trips are reduced
+- Identity Mapper `save_mappings` stages all inserts and flushes once instead of flushing per row;
+  the mapping id is generated in Python rather than by the column default. Measured against MariaDB,
+  a 500-mapping batch goes from 12801 ms to 159 ms (~80x) and from 501 SQL statements to 2
+- Identity Mapper `save_mappings` returns one entry per persisted row, so duplicate keys in one
+  batch no longer produce two response entries for the same row
+- `IDENTITY_MAPPER_DB_POOL_PRE_PING` now defaults to `true` and is wired into the ECS task
+  definition, replacing the connection validation lost with the startup `SELECT 1`
+
 ### Deprecated
 
 ### Removed
 
 ### Fixed
+
+- Identity Mapper `save_mappings` rejects a `mapping_id` the caller does not own, or one that
+  disagrees with the target system fields sent with it, as a 400 instead of failing the unique
+  constraint as a 500 and discarding the rest of the batch
+- `IDENTITY_MAPPER_DB_CONNECT_ARGS` is parsed from JSON into a dict; the raw string was passed
+  straight to SQLAlchemy, which expects a mapping
 
 ### Security
 
