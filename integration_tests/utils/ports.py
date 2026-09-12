@@ -1,8 +1,9 @@
 """Port configuration for integration tests.
 
-Port mappings are based on deployments/advisor-demo-docker/docker-compose.yml.
-Some internal services (query cache, query planner) are not exposed for org2/org3
-in the default docker-compose configuration.
+Port mappings are based on deployments/advisor-demo-docker/docker-compose.yml, which
+publishes Query Cache and Query Planner for all three orgs. `query_cache` and
+`query_planner` stay Optional so a deployment that omits them makes the corresponding
+tests skip rather than fail.
 """
 
 from dataclasses import dataclass

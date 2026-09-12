@@ -18,12 +18,49 @@ Tests are organized by layer:
 
 ## Prerequisites
 
-1. Docker environment running with `docker-compose up` from `deployments/advisor-demo-docker/`
-2. Sample data seeded in MongoDB (automatic when containers start)
-3. Python dependencies:
+1. **A `.env` file** in `deployments/advisor-demo-docker/`:
    ```bash
-   pip install pytest pymongo httpx
+   cp deployments/advisor-demo-docker/.env.example deployments/advisor-demo-docker/.env
    ```
+   `LIF_DEMO_USER_PASSWORD` and `SECRET_KEY` lost their fallback defaults in #1191, and
+   compose will not even parse this file without them — including for services that do
+   not use them.
+2. Docker environment running with `docker compose up` from `deployments/advisor-demo-docker/`
+3. Sample data seeded in MongoDB (automatic when containers start)
+4. Python dependencies: `uv sync` at the repo root, or `pip install pytest pymongo httpx`
+
+### You usually do not need the whole stack
+
+`docker compose up` starts ~29 services, including MDR, Postgres, Dagster and an
+LLM-backed Advisor. Most layers need far less. The Query Cache, for instance, depends
+only on its MongoDB:
+
+```bash
+docker compose up -d mongodb-org1 lif-query-cache-org1
+```
+
+For that layer there is a script that brings those two up, waits for readiness, and runs
+the tests:
+
+```bash
+scripts/run-query-cache-integration-tests.sh            # leaves the containers running
+scripts/run-query-cache-integration-tests.sh --down     # tears them down afterwards
+scripts/run-query-cache-integration-tests.sh -- -k save # extra args are passed to pytest
+```
+
+### These tests are not run by CI
+
+No workflow runs `integration_tests/`. They are a local-only suite, so a regression they
+would catch can still merge. Treat a green PR as saying nothing about the layers covered
+here, and run the relevant ones yourself when changing a service's data path.
+
+### Write-path tests mutate the database
+
+`test_02_query_cache.py::TestQueryCacheWritePath` exercises `/add`, `/update` and
+`/save`, so it writes to the same MongoDB the read-path tests assert against. Each test
+uses a unique synthetic identifier prefixed `it1200-` and deletes its documents on
+teardown. Cleanup is best-effort by design: the compose file mounts no volume for
+`mongodb-org*`, so restarting the container reseeds from the sample data regardless.
 
 ## Running Tests
 
