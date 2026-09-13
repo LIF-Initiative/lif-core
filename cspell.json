@@ -269,6 +269,10 @@
         "DataStoreException",
         "superlinear",
         "upserts",
+        "InnoDB",
+        "VARCHAR",
+        "utf8mb4",
+        "EXPLAIN",
         "xform"
     ],
     "ignorePaths": [
