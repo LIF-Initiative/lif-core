@@ -86,7 +86,7 @@ def create_summarization_node(
     """
     return SummarizationNode(
         token_counter=count_tokens_approximately,
-        model=model,
+        model=model.bind(max_tokens=max_summary_size),
         max_tokens=max_conversation_size,
         max_summary_tokens=max_summary_size,
         input_messages_key="summary_input_messages",
