@@ -156,7 +156,7 @@ class LIFSchemaConfig:
             LIF_GRAPHQL_ROOT_TYPE_NAME: Primary root type name (default: "Person")
             LIF_GRAPHQL_ROOT_NODES: Comma-separated additional root types (these are reference data)
             LIF_QUERY_PLANNER_URL: Query planner base URL
-            LIF_QUERY_TIMEOUT_SECONDS: Query timeout in seconds
+            LIF_GRAPHQL_CLIENT_TIMEOUT_SECONDS: Query timeout in seconds
             LIF_TRANSLATOR_BASE_URL: Translator base URL
             LIF_MDR_API_URL: MDR API URL
             LIF_MDR_API_AUTH_TOKEN: MDR authentication token
@@ -189,7 +189,7 @@ class LIFSchemaConfig:
             additional_root_types=additional_root_types,
             # Query planner
             query_planner_base_url=os.getenv("LIF_QUERY_PLANNER_URL", "http://localhost:8002"),
-            query_timeout_seconds=int(os.getenv("LIF_QUERY_TIMEOUT_SECONDS", "20")),
+            query_timeout_seconds=int(os.getenv("LIF_GRAPHQL_CLIENT_TIMEOUT_SECONDS", "20")),
             # Translator
             translator_base_url=os.getenv("LIF_TRANSLATOR_BASE_URL", "http://localhost:8007"),
             # MDR

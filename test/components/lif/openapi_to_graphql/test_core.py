@@ -1,6 +1,9 @@
 """Tests for openapi_to_graphql type_factory and core module."""
 
 import json
+import os
+import subprocess
+import sys
 from pathlib import Path
 from typing import Optional
 
@@ -403,3 +406,39 @@ class TestStrawberryTypeDecoratesInPlace:
             "This breaks the placeholder-cache pattern in create_type() for recursive $ref schemas. "
             f"Input id={id(cls)}, output id={id(decorated)}"
         )
+
+
+# === GraphQL client timeout env-read regression (Issue #1203) ===
+
+
+class TestGraphQLClientTimeoutEnvReads:
+    """That type_factory reads LIF_GRAPHQL_CLIENT_TIMEOUT_SECONDS at import.
+
+    The QP-reserved LIF_QUERY_TIMEOUT_SECONDS must stay inert here, or the three-way
+    meaning collision the rename removed silently returns. The constant is read at
+    module import; CLAUDE.md forbids importlib.reload(), so use a fresh interpreter —
+    the same approach the Query Planner timeout tests use.
+    """
+
+    def _timeout_in_subprocess(self, env: dict[str, str | None]) -> int:
+        child_env = dict(os.environ)
+        for name, value in env.items():
+            if value is None:
+                child_env.pop(name, None)
+            else:
+                child_env[name] = value
+        code = "from lif.openapi_to_graphql import type_factory;print(type_factory.LIF_GRAPHQL_CLIENT_TIMEOUT_SECONDS)"
+        result = subprocess.run(
+            [sys.executable, "-c", code], capture_output=True, text=True, env=child_env, check=False
+        )
+        assert result.returncode == 0, result.stderr
+        return int(result.stdout.strip().splitlines()[-1])
+
+    def test_reads_new_graphql_client_timeout_var(self):
+        assert self._timeout_in_subprocess({"LIF_GRAPHQL_CLIENT_TIMEOUT_SECONDS": "42"}) == 42
+
+    def test_old_query_timeout_var_is_inert(self):
+        assert self._timeout_in_subprocess({"LIF_QUERY_TIMEOUT_SECONDS": "42"}) == 20
+
+    def test_default_is_20(self):
+        assert self._timeout_in_subprocess({}) == 20

@@ -45,7 +45,7 @@ from lif.string_utils import (
 logger = get_logger(__name__)
 
 
-LIF_QUERY_TIMEOUT_SECONDS = int(os.getenv("LIF_QUERY_TIMEOUT_SECONDS", "20"))
+LIF_GRAPHQL_CLIENT_TIMEOUT_SECONDS = int(os.getenv("LIF_GRAPHQL_CLIENT_TIMEOUT_SECONDS", "20"))
 
 
 # === Constants ===
@@ -814,7 +814,7 @@ def build_root_query_type(
 
             logger.info(f"Query: {query}")
             # Make the backend API call
-            async with httpx.AsyncClient(timeout=httpx.Timeout(LIF_QUERY_TIMEOUT_SECONDS)) as client:
+            async with httpx.AsyncClient(timeout=httpx.Timeout(LIF_GRAPHQL_CLIENT_TIMEOUT_SECONDS)) as client:
                 response = await client.post(query_planner_query_url, json=query)
 
             if response.status_code == 200:

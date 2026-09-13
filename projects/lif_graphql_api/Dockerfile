@@ -15,5 +15,5 @@ COPY ./$deps /code/$deps
 RUN pip install --no-cache-dir --upgrade --no-deps /code/$wheel
 RUN pip install -r /code/$deps
 
-ENV LIF_QUERY_TIMEOUT_SECONDS=60
-CMD ["sh", "-c", "uvicorn lif.api_graphql.core:app --host 0.0.0.0 --port 8000 --timeout-keep-alive ${LIF_QUERY_TIMEOUT_SECONDS}"]
+ENV LIF_GRAPHQL_KEEPALIVE_SECONDS=60
+CMD ["sh", "-c", "uvicorn lif.api_graphql.core:app --host 0.0.0.0 --port 8000 --timeout-keep-alive ${LIF_GRAPHQL_KEEPALIVE_SECONDS}"]
