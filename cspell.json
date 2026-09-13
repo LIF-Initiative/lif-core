@@ -38,6 +38,7 @@
         "chatbots",
         "checkpointing",
         "cachetools",
+        "caplog",
         "dedupe",
         "dedup",
         "deepcopy",
