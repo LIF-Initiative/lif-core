@@ -1,6 +1,10 @@
 import pytest
 import pytest_asyncio
 from httpx import ASGITransport, AsyncClient
+from sqlalchemy import create_engine, event
+from sqlalchemy.exc import OperationalError
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.pool import StaticPool
 from unittest.mock import AsyncMock, MagicMock, patch
 
 from lif.exceptions.core import DataNotFoundException, DataStoreException
@@ -21,6 +25,65 @@ async def mock_shutdown():
 
 def get_client() -> AsyncClient:
     return AsyncClient(transport=ASGITransport(app=core.app), base_url="http://test")
+
+
+class _UnhealthySession:
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        return False
+
+    def execute(self, *args, **kwargs):
+        raise OperationalError("SELECT 1", {}, Exception("database is down"))
+
+
+@pytest.fixture()
+def db_session_factory():
+    engine = create_engine("sqlite://", connect_args={"check_same_thread": False}, poolclass=StaticPool)
+    yield sessionmaker(autocommit=False, autoflush=False, bind=engine)
+    engine.dispose()
+
+
+@pytest.fixture()
+def unhealthy_session_factory():
+    return lambda: _UnhealthySession()
+
+
+@pytest.mark.asyncio
+@patch("lif.identity_mapper_restapi.core.initialize", mock_initialize)
+@patch("lif.identity_mapper_restapi.core.shutdown", mock_shutdown)
+async def test_health_returns_200_and_ran_a_real_query_when_database_reachable(
+    mock_initialize, mock_shutdown, db_session_factory
+):
+    executed_statements: list[str] = []
+
+    def record_statement(conn, cursor, statement, parameters, context, executemany):
+        executed_statements.append(statement)
+
+    event.listen(db_session_factory.kw["bind"], "before_cursor_execute", record_statement)
+    try:
+        async with get_client() as client:
+            with patch.object(core, "get_db_session_factory", return_value=db_session_factory):
+                response = await client.get("/health")
+        assert response.status_code == 200
+        assert response.json() == {"status": "ok"}
+        assert any("SELECT 1" in statement for statement in executed_statements)
+    finally:
+        event.remove(db_session_factory.kw["bind"], "before_cursor_execute", record_statement)
+
+
+@pytest.mark.asyncio
+@patch("lif.identity_mapper_restapi.core.initialize", mock_initialize)
+@patch("lif.identity_mapper_restapi.core.shutdown", mock_shutdown)
+async def test_health_returns_503_when_session_factory_raises(
+    mock_initialize, mock_shutdown, unhealthy_session_factory
+):
+    async with get_client() as client:
+        with patch.object(core, "get_db_session_factory", return_value=unhealthy_session_factory):
+            response = await client.get("/health")
+        assert response.status_code == 503
+        assert response.json() == {"status": "unhealthy"}
 
 
 @pytest.mark.asyncio
