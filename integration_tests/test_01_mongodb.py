@@ -154,6 +154,13 @@ class TestMongoDBDataIntegrity:
         # At minimum, we expect _id index
         assert "_id_" in indexes, f"{org_id}: Missing _id index in MongoDB"
 
+        expected_index = "person_identifier_idx"
+        assert expected_index in indexes, f"{org_id}: Missing {expected_index} index in MongoDB"
+        assert indexes[expected_index]["key"] == [
+            ("Person.Identifier.identifier", 1),
+            ("Person.Identifier.identifierType", 1),
+        ], f"{org_id}: {expected_index} has unexpected key pattern"
+
     def test_entity_counts_per_person(
         self, org_id: str, org_ports: OrgPorts, sample_data: SampleDataLoader, require_mongodb: None
     ) -> None:

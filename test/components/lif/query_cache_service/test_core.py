@@ -4,7 +4,15 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from lif.datatypes import LIFRecord, LIFUpdate
+from lif.datatypes import (
+    LIFFragment,
+    LIFPersonIdentifier,
+    LIFPersonIdentifiers,
+    LIFQueryFilter,
+    LIFQueryPersonFilter,
+    LIFRecord,
+    LIFUpdate,
+)
 from lif.datatypes.core import LIFUpdatePersonPayload
 from lif.exceptions.core import ResourceNotFoundException
 from lif.query_cache_service import core
@@ -14,6 +22,26 @@ PERSON_DOC = {"Person": [{"Name": [{"FamilyName": "Doe"}]}]}
 
 def _patch_collection(mock_collection):
     return patch.object(core, "collection", mock_collection)
+
+
+def _async_cursor(docs):
+    cursor = MagicMock()
+    cursor.__aiter__.return_value = docs
+    return cursor
+
+
+def _query_filter(identifier="12345", identifier_type="School-assigned number"):
+    return LIFQueryFilter(
+        root=LIFQueryPersonFilter(
+            person=LIFPersonIdentifiers(
+                Identifier=LIFPersonIdentifier(identifier=identifier, identifierType=identifier_type)
+            )
+        )
+    )
+
+
+def _name_fragment(family_name="Smith"):
+    return LIFFragment(fragment_path="Person.Name", fragment=[{"FamilyName": family_name}])
 
 
 def test_add_makes_single_mongodb_call_and_returns_input_record():
@@ -135,3 +163,82 @@ def test_update_no_match_raises_resource_not_found():
     with _patch_collection(mock_collection):
         with pytest.raises(ResourceNotFoundException):
             asyncio.run(core.update(lif_update))
+
+
+def test_save_reads_record_then_upserts_in_two_calls():
+    """save() composes fragments client-side, so it needs one read plus one upsert."""
+    mock_collection = MagicMock()
+    mock_collection.find = MagicMock(return_value=_async_cursor([PERSON_DOC]))
+    mock_collection.update_one = AsyncMock(return_value=SimpleNamespace(modified_count=0))
+
+    with _patch_collection(mock_collection):
+        asyncio.run(core.save(lif_query_filter=_query_filter(), lif_fragments=[_name_fragment()]))
+
+    mongo_filter = {
+        "Person.Identifier.identifier": "12345",
+        "Person.Identifier.identifierType": "School-assigned number",
+    }
+    mock_collection.find.assert_called_once_with(mongo_filter)
+    mock_collection.update_one.assert_awaited_once_with(
+        mongo_filter, {"$set": {"Person": [{"Name": [{"FamilyName": "Smith"}]}]}}, upsert=True
+    )
+
+
+def test_save_upserts_fresh_record_when_none_found():
+    """When no record matches, save() builds one carrying the identifier plus fragments."""
+    mock_collection = MagicMock()
+    mock_collection.find = MagicMock(return_value=_async_cursor([]))
+    mock_collection.update_one = AsyncMock(return_value=SimpleNamespace(modified_count=0))
+
+    with _patch_collection(mock_collection):
+        asyncio.run(core.save(lif_query_filter=_query_filter("999"), lif_fragments=[_name_fragment()]))
+
+    mongo_filter = {"Person.Identifier.identifier": "999", "Person.Identifier.identifierType": "School-assigned number"}
+    mock_collection.update_one.assert_awaited_once_with(
+        mongo_filter,
+        {
+            "$set": {
+                "Person": [
+                    {
+                        "Identifier": {"identifier": "999", "identifierType": "School-assigned number"},
+                        "Name": [{"FamilyName": "Smith"}],
+                    }
+                ]
+            }
+        },
+        upsert=True,
+    )
+
+
+def test_save_raises_when_filter_matches_multiple_records():
+    mock_collection = MagicMock()
+    mock_collection.find = MagicMock(return_value=_async_cursor([PERSON_DOC, PERSON_DOC]))
+    mock_collection.update_one = AsyncMock(return_value=SimpleNamespace(modified_count=0))
+
+    with _patch_collection(mock_collection):
+        with pytest.raises(ValueError):
+            asyncio.run(core.save(lif_query_filter=_query_filter(), lif_fragments=[_name_fragment()]))
+
+    mock_collection.update_one.assert_not_awaited()
+
+
+def test_save_replaces_existing_fragment_data_instead_of_appending():
+    """A second refresh over the same fragments must not re-add them (Issue #1165)."""
+    mock_collection = MagicMock()
+    mock_collection.find = MagicMock(return_value=_async_cursor([]))
+    written_records = []
+
+    async def _update_one(mongo_filter, update_doc, upsert=True):
+        written_records.append(update_doc["$set"])
+        mock_collection.find.return_value = _async_cursor([update_doc["$set"]])
+        return SimpleNamespace(modified_count=0)
+
+    mock_collection.update_one = AsyncMock(side_effect=_update_one)
+
+    fragment = _name_fragment()
+    with _patch_collection(mock_collection):
+        for _ in range(2):
+            asyncio.run(core.save(lif_query_filter=_query_filter(), lif_fragments=[fragment]))
+
+    persisted_name = written_records[1]["Person"][0]["Name"]
+    assert persisted_name == [{"FamilyName": "Smith"}]
