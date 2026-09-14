@@ -41,6 +41,7 @@
         "caplog",
         "dedupe",
         "dedup",
+        "dedups",
         "deepcopy",
         "Checkpointing",
         "classmethod",
