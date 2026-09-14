@@ -4,7 +4,7 @@ from uuid import uuid4
 
 from fastapi import FastAPI, Request, status
 from fastapi.responses import JSONResponse
-from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy.ext.asyncio import async_sessionmaker
 
 from lif.datatypes import IdentityMapping
 from lif.exceptions.core import DataNotFoundException, LIFException
@@ -21,22 +21,22 @@ service: IdentityMapperService | None = None
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    initialize()
+    await initialize()
     yield
-    shutdown()
+    await shutdown()
 
 
-def initialize():
-    initialize_database()
-    session_factory: sessionmaker[Session] = get_db_session_factory()
+async def initialize():
+    await initialize_database()
+    session_factory: async_sessionmaker = get_db_session_factory()
     global storage
     global service
     storage = IdentityMapperSqlStorage(session_factory)
     service = IdentityMapperService(storage=storage)
 
 
-def shutdown():
-    dispose_db_engine()
+async def shutdown():
+    await dispose_db_engine()
 
 
 app = FastAPI(lifespan=lifespan)
