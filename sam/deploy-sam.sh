@@ -107,6 +107,7 @@ EOF
 checkDependencies() {
   which aws 2>&1 > /dev/null || die "This script requires the AWS CLI tools installed"
   which docker 2>&1 > /dev/null || die "This script requires docker installed"
+  docker buildx version > /dev/null 2>&1 || die "This script requires docker buildx (Lambda images must be built with Docker V2 manifests, not OCI — see #1226)"
   which yq 2>&1 > /dev/null || die "This script requires yq installed (https://github.com/mikefarah/yq)"
   which sam 2>&1 > /dev/null || die "This script requires AWS SAM installed (https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/install-sam-cli.html)"
 }
@@ -124,11 +125,21 @@ buildDockerImages() {
     repoExists=$(aws ecr describe-repositories --repository-name ${REPOSITORY} 2>&1) || aws ecr create-repository --repository-name ${REPOSITORY} --image-scanning-configuration scanOnPush=true
 
     aws ecr get-login-password | docker login --username AWS --password-stdin ${REGISTRY}
-    printGreen "building Docker image: $REGISTRY/$REPOSITORY:latest"
-    docker build --platform linux/amd64 . -t $REGISTRY/$REPOSITORY:latest
-    docker push $REGISTRY/$REPOSITORY:latest
-    docker tag $REGISTRY/$REPOSITORY:latest $REGISTRY/$REPOSITORY:$DATE_TAG
-    docker push $REGISTRY/$REPOSITORY:$DATE_TAG 
+    printGreen "building Docker image: $REGISTRY/$REPOSITORY:$DATE_TAG"
+
+    # oci-mediatypes=false is required, not cosmetic. Lambda container images must be
+    # Docker Image Manifest V2 Schema 2; it rejects OCI manifests with
+    #   "The image manifest, config or layer media type for the source image ... is not supported"
+    # and the CloudFormation stack update then rolls back. Docker 23+ with the containerd
+    # image store (the current Docker Desktop default) emits OCI by default, so a plain
+    # `docker build` + `docker push` produces an image Lambda cannot run. Note that
+    # `--output type=docker` is NOT sufficient — it still pushes OCI. See #1226.
+    #
+    # --provenance/--sbom=false keep the push a single image manifest rather than an index.
+    docker buildx build --platform linux/amd64 --provenance=false --sbom=false \
+      --output "type=registry,oci-mediatypes=false,name=$REGISTRY/$REPOSITORY:$DATE_TAG" .
+    docker buildx build --platform linux/amd64 --provenance=false --sbom=false \
+      --output "type=registry,oci-mediatypes=false,name=$REGISTRY/$REPOSITORY:latest" .
     cd -
   done
 }

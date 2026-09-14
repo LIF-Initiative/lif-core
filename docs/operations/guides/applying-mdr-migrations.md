@@ -47,9 +47,36 @@ None of the `.github/workflows/lif_*.yml` service workflows build that image or 
 
 `DATE_TAG` is `$(date +%F_%H-%M-%S)`, so every run produces a new tag and therefore always re-triggers.
 
+### Why the build uses `buildx` with `oci-mediatypes=false`
+
+Lambda container images must be **Docker Image Manifest V2 Schema 2**. Lambda rejects OCI manifests, and the stack update then rolls back:
+
+```
+The image manifest, config or layer media type for the source image
+<acct>.dkr.ecr.us-east-1.amazonaws.com/dev-mdr-flyway:<tag> is not supported.
+```
+
+Docker 23+ with the **containerd image store** — the current Docker Desktop default — emits OCI by default, so a plain `docker build` + `docker push` produces an image Lambda cannot run. That is why `deploy-sam.sh` builds with:
+
+```bash
+docker buildx build --platform linux/amd64 --provenance=false --sbom=false \
+  --output "type=registry,oci-mediatypes=false,name=$REGISTRY/$REPOSITORY:$DATE_TAG" .
+```
+
+**`--output type=docker` is not sufficient** — it still pushes OCI. Only `oci-mediatypes=false` on a registry output produces the Docker V2 manifest. Verify a push with:
+
+```bash
+aws ecr batch-get-image --repository-name dev-mdr-flyway \
+  --image-ids imageTag=<tag> --query 'images[0].imageManifestMediaType' --output text
+# want: application/vnd.docker.distribution.manifest.v2+json
+# bad:  application/vnd.oci.image.index.v1+json
+```
+
+This is why no migration was applied between 2026-08-04 and the fix: the procedure was correct, but the build step silently produced an unusable image on any current Docker, and the deploy rolled back.
+
 ## Prerequisites
 
-- **Docker running.** The script builds an image; it fails at `buildDockerImages` otherwise.
+- **Docker running**, with **`docker buildx`** available. The script builds an image; it fails at `buildDockerImages` otherwise.
 - `aws`, `sam`, `yq`, `docker` on `PATH` (the script checks and dies with a clear message).
 - An active SSO session: `aws sso login --profile lif`, then `export AWS_PROFILE=lif`. Run it in the **foreground** — the browser callback has to land while the command is alive.
 
@@ -100,7 +127,9 @@ Two consequences:
 
 **Deploy succeeded but Flyway did not run.** Check `pImageTag` actually changed. CloudFormation skips custom-resource re-invocation when properties are identical.
 
-**Deploy fails at `buildDockerImages`.** Docker is not running, or `aws ecr get-login-password` lacks credentials — confirm `aws sts get-caller-identity` works first.
+**Deploy fails at `buildDockerImages`.** Docker is not running, `docker buildx` is unavailable, or `aws ecr get-login-password` lacks credentials — confirm `aws sts get-caller-identity` works first.
+
+**Stack rolls back with "image manifest … is not supported".** The image was pushed as OCI rather than Docker V2. See [above](#why-the-build-uses-buildx-with-oci-mediatypesfalse). On an older checkout of `deploy-sam.sh` that still uses plain `docker build`, this is expected on any current Docker Desktop — update the script. The rollback itself is clean: the stack reverts to the previous `pImageTag` and the running Lambda is unaffected.
 
 **A column is missing at runtime but the migration is in the repo.** That is this document's entire subject: the migration has not been applied. Check the last-run timestamp above before debugging the application.
 
