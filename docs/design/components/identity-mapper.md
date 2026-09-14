@@ -40,6 +40,8 @@ Version 1.0.0
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Example Usage](#example-usage)
 
+[Liveness and Startup Validation](#liveness-and-startup-validation)
+
 [Performance Report](#performance-report)
 
 [Possible Future Roadmap Items](#possible-future-roadmap-items)
@@ -188,6 +190,37 @@ TBD
 ## Possible Future Roadmap Items
 
 - [Issue #12: Add Identity Mapper Support for Bulk Upload Process](https://github.com/LIF-Initiative/lif-core/issues/12)
+
+# Liveness and Startup Validation
+
+`GET /health` reports liveness against the real datastore: it runs `SELECT 1` through the session
+factory and returns **200** when the database is reachable and **503** when it is not. The query
+runs off the event loop via `asyncio.to_thread`, matching the mapping handlers, so a hung database
+cannot stall unrelated requests.
+
+**Startup behavior is a deliberate decision (see Issue #1215).** The service starts even when the
+database is unreachable and lets `/health` report unhealthy so the orchestrator / load balancer can
+restart the task; the lifespan does not fail on a down database. This matches the sibling services
+and avoids blocking a rollout on a transient DB blip. The pre-#1178 connection check is not a
+precedent worth restoring — it existed only as a side effect of a leftover debug log, never as a
+decision.
+
+Three places declare the check, and they are **not** interchangeable:
+
+- **`cloudformation/lif-identity-mapper-taskdef-includes.yml`** declares a container-definition
+  `HealthCheck`. This is the one that matters on ECS. Fargate does *not* monitor a `HEALTHCHECK`
+  baked into the image — only a `healthCheck` in the container definition — so without this block
+  "steady state" means merely that the container did not exit, which is exactly how #1215's silent
+  `SUCCEEDED` happened.
+- **`Dockerfile` and `Dockerfile2`** declare an image `HEALTHCHECK` polling the same route. This
+  covers `docker compose` and plain `docker run`, where the image instruction *is* honoured.
+- **`HealthCheckUrl` in the six `{dev,demo}-lif-identity-mapper-org{1,2,3}.params`** files points at
+  `/health`. This is currently **inert**: `cloudformation/service.yml` reads it only inside the
+  target group, which is created under `Condition: UseLbForService`, and that is `false` for this
+  service. It is set correctly so the value is right if a load balancer is ever enabled here.
+
+With the task-definition block in place, a deploy against an unreachable database fails its health
+check, never reaches steady state, and the rollout fails instead of reporting `SUCCEEDED`.
 
 # Performance Report
 
