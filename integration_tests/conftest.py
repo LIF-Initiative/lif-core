@@ -4,8 +4,10 @@ These tests verify data consistency across service layers:
 MongoDB -> Query Cache -> Query Planner -> GraphQL -> Cross-org
 """
 
+import uuid
+from typing import Generator, Iterator
+
 import pytest
-from typing import Generator
 
 from utils.ports import OrgPorts, get_org_ports, get_all_org_ids
 from utils.sample_data import SampleDataLoader
@@ -104,6 +106,18 @@ def check_service_available(url: str, skip_if_unavailable: bool) -> bool:
         return False
 
 
+def require_service(url: str, name: str, skip_if_unavailable: bool) -> None:
+    """Skip or fail cleanly when a service is unreachable.
+
+    The `require_*` fixtures used to call check_service_available() and discard its
+    result, so with a service down and --skip-unavailable off the test ran anyway and
+    died on a raw httpx.ConnectError from inside the assertion. Reporting it here says
+    which service is missing instead.
+    """
+    if not check_service_available(url, skip_if_unavailable):
+        pytest.fail(f"{name} not available at {url}")
+
+
 @pytest.fixture
 def require_mongodb(org_ports: OrgPorts, skip_unavailable: bool) -> None:
     """Ensure MongoDB is available for the current org."""
@@ -122,7 +136,7 @@ def require_mongodb(org_ports: OrgPorts, skip_unavailable: bool) -> None:
 @pytest.fixture
 def require_graphql(org_ports: OrgPorts, skip_unavailable: bool) -> None:
     """Ensure GraphQL API is available for the current org."""
-    check_service_available(org_ports.graphql_url, skip_unavailable)
+    require_service(org_ports.graphql_url, "GraphQL API", skip_unavailable)
 
 
 @pytest.fixture
@@ -130,7 +144,7 @@ def require_query_cache(org_ports: OrgPorts, skip_unavailable: bool) -> None:
     """Ensure Query Cache is available for the current org."""
     if not org_ports.query_cache_url:
         pytest.skip(f"Query Cache not exposed for {org_ports.org_id}")
-    check_service_available(org_ports.query_cache_url, skip_unavailable)
+    require_service(org_ports.query_cache_url, "Query Cache", skip_unavailable)
 
 
 @pytest.fixture
@@ -138,7 +152,7 @@ def require_query_planner(org_ports: OrgPorts, skip_unavailable: bool) -> None:
     """Ensure Query Planner is available for the current org."""
     if not org_ports.query_planner_url:
         pytest.skip(f"Query Planner not exposed for {org_ports.org_id}")
-    check_service_available(org_ports.query_planner_url, skip_unavailable)
+    require_service(org_ports.query_planner_url, "Query Planner", skip_unavailable)
 
 
 @pytest.fixture
@@ -146,4 +160,32 @@ def require_semantic_search(skip_unavailable: bool) -> None:
     """Ensure Semantic Search MCP server is available."""
     from utils.ports import SEMANTIC_SEARCH_HEALTH_URL
 
-    check_service_available(SEMANTIC_SEARCH_HEALTH_URL, skip_unavailable)
+    require_service(SEMANTIC_SEARCH_HEALTH_URL, "Semantic Search MCP server", skip_unavailable)
+
+
+@pytest.fixture
+def write_test_identifier(org_ports: OrgPorts, require_query_cache: None) -> Iterator[str]:
+    """A person identifier unique to one test, with the documents it creates removed after.
+
+    The write-path tests (#1200) mutate the same MongoDB the read-path tests assert
+    against. Two things keep that safe: every identifier is synthetic and unique, so no
+    seeded person is touched; and the surrounding suites assert "at least" counts rather
+    than exact ones, so an extra document in flight cannot fail them.
+
+    Cleanup goes direct to MongoDB because the Query Cache exposes no delete route. It is
+    best-effort: the compose file mounts no volume for mongodb-org*, so a container
+    restart reseeds from scratch regardless.
+    """
+    identifier = f"{uuid.uuid4().hex[:12]}"
+    yield f"it1200-{identifier}"
+
+    try:
+        from pymongo import MongoClient
+    except ImportError:  # pragma: no cover - cleanup is best-effort
+        return
+
+    try:
+        with MongoClient(org_ports.mongodb_uri, serverSelectionTimeoutMS=5000) as client:
+            client["LIF"]["person"].delete_many({"Person.Identifier.identifier": f"it1200-{identifier}"})
+    except Exception:  # pragma: no cover - never fail a test in teardown
+        pass
