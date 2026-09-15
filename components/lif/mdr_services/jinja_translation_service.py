@@ -720,14 +720,16 @@ async def get_base_model_ids(session: AsyncSession, data_model_id: int):
     # Start with the given extension model ID
     current_model_id = data_model_id
 
-    while current_model_id:
+    # `is not None`, not truthiness: a DataModel id of 0 is a real id, and treating it as
+    # "no more base models" would silently drop that model's ancestors from the walk.
+    while current_model_id is not None:
         # Query to get the BaseDataModelId for the current model
         query = select(DataModel.BaseDataModelId).where(DataModel.Id == current_model_id)
         result = await session.execute(query)
         base_data_model_id = result.scalar()
 
         # If there is a base model, add it to the list and continue
-        if base_data_model_id:
+        if base_data_model_id is not None:
             base_model_ids.append(base_data_model_id)
             current_model_id = base_data_model_id  # Set the current model ID to the base model ID
         else:
