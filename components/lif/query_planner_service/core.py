@@ -122,8 +122,8 @@ class LIFQueryPlannerService:
                         orchestrator_job_request,
                         self.config.service_request_timeout_seconds,
                     )
-                except Exception as e:
-                    logger.error(f"Returning LIF records found so far: {lif_records}")
+                except Exception:
+                    logger.exception(f"Orchestrator submission failed; returning {len(lif_records)} cached records")
                     return lif_records
 
                 lif_query_planner_job = LIFQueryPlannerJob(

@@ -148,7 +148,17 @@ The **Translator** mainly interacts with the host data pipeline that invokes it 
 
 ### Performance
 
-(Possible Future Roadmap Item) The component should provide consistent performance irrespective of the size and complexity of the data structure it is translating.
+**MDR schema caching.** Source and target schemas fetched from the MDR are cached in-memory with a configurable TTL (env var `TRANSLATOR_CACHE_TTL_SECONDS`, default 300s), keyed by schema id and tenant. This removes two of the three MDR round-trips per translation. Transformation mappings are deliberately **not** cached, so an edit is reflected on the very next translation. See [ADR 0003](../adr/translator/0003-performance-caching-and-optimization.md).
+
+**Measured baseline.** `BaseTranslator.run` costs roughly 1 ms per mapping and scales linearly (2.0 ms at 1 mapping, 53.1 ms at 50). Reproduce with:
+
+```
+uv run pytest test/components/lif/translator/benchmark_core.py --benchmark-only
+```
+
+Two further optimizations — caching compiled JSONata expressions, and making per-fragment validation optional — were proposed and **withdrawn during review**; ADR 0003 records why, including a reproduced defect in the expression cache. Neither had a measurement showing it moved the curve above.
+
+Batch and streaming translation remain future roadmap items.
 
 ### Concurrency
 

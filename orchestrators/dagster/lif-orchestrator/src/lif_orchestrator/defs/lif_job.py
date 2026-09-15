@@ -11,7 +11,10 @@ import dagster as dg
 
 from lif.data_source_adapters import get_adapter_by_id, get_adapter_class_by_id
 from lif.datatypes import LIFFragment, LIFQueryPlanPart, OrchestratorJobQueryPlanPartResults, OrchestratorJobResults
+from lif.demo_data_source_adapters import register_demo_adapters
 from lif.query_planner_service.util import adjust_lif_fragments_for_initial_orchestrator_simplification
+
+register_demo_adapters()
 
 QUERY_PLANNER_RESULTS_BASE_URL = os.getenv("LIF_QUERY_PLANNER_RESULTS_BASE_URL")
 QUERY_PLANNER_RESULTS_TOKEN = os.getenv("LIF_QUERY_PLANNER_RESULTS_TOKEN")

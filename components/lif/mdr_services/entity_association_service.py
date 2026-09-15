@@ -155,18 +155,26 @@ async def update_entity_association(session: AsyncSession, association_id: int, 
     # Get existing association
     entity_association = await get_entity_association_by_id(session, association_id)
 
-    if dto.ParentEntityId:
+    # `is not None`, not truthiness: an id of 0 is a value the client supplied, and the
+    # write below applies it (dict(exclude_unset=True)) — so it must be validated, not skipped.
+    if dto.ParentEntityId is not None:
         await check_entity_by_id(session, dto.ParentEntityId)
-    if dto.ChildEntityId:
+    if dto.ChildEntityId is not None:
         await check_entity_by_id(session, dto.ChildEntityId)
 
     # Check if the association already exists with the new parent and child IDs
-    if dto.ParentEntityId or dto.ChildEntityId:
-        updated_parent_entity_id = dto.ParentEntityId if dto.ParentEntityId else entity_association.ParentEntityId
-        updated_child_entity_id = dto.ChildEntityId if dto.ChildEntityId else entity_association.ChildEntityId
+    if dto.ParentEntityId is not None or dto.ChildEntityId is not None:
+        updated_parent_entity_id = (
+            dto.ParentEntityId if dto.ParentEntityId is not None else entity_association.ParentEntityId
+        )
+        updated_child_entity_id = (
+            dto.ChildEntityId if dto.ChildEntityId is not None else entity_association.ChildEntityId
+        )
         updated_relationship = dto.Relationship if dto.Relationship else entity_association.Relationship
         updated_extended_by_data_model_id = (
-            dto.ExtendedByDataModelId if dto.ExtendedByDataModelId else entity_association.ExtendedByDataModelId
+            dto.ExtendedByDataModelId
+            if dto.ExtendedByDataModelId is not None
+            else entity_association.ExtendedByDataModelId
         )
         existing_association = await get_entity_association_by_parent_child_relationship(
             session,
