@@ -4,6 +4,7 @@ from fastapi import HTTPException
 from lif.datatypes.mdr_sql_model import (
     Attribute,
     DataModelType,
+    ElementType,
     Entity,
     EntityAssociation,
     EntityAttributeAssociation,
@@ -202,7 +203,9 @@ async def soft_delete_entity(session: AsyncSession, id: int):
 
         # Step 5: Delete Entity from Inclusions
         entity_inclusions_query = select(ExtInclusionsFromBaseDM).where(
-            ExtInclusionsFromBaseDM.IncludedElementId == id, ExtInclusionsFromBaseDM.Deleted == False
+            ExtInclusionsFromBaseDM.ElementType == ElementType.Entity,
+            ExtInclusionsFromBaseDM.IncludedElementId == id,
+            ExtInclusionsFromBaseDM.Deleted == False,
         )
         entity_inclusions_result = await session.execute(entity_inclusions_query)
         entity_inclusions = entity_inclusions_result.scalars().all()
