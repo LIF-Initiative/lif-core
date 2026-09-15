@@ -143,6 +143,14 @@ The following methods should be implemented in the Identity Mapper Service to sa
 
 3.  **Delete Mappings:** DELETE organizations/{org_id}/persons/{person_id}/mappings/{mapping_id}
 
+Delete refusals are deliberately indistinguishable. `DELETE` answers **404** both when no mapping has
+that ID and when the mapping exists but belongs to a different organization or person. Answering the
+second case with a distinct 400 let a caller probe arbitrary IDs and learn which ones were real
+without being able to read or delete them ([#1177](https://github.com/LIF-Initiative/lif-core/issues/1177)).
+The storage layer still reports `NOT_FOUND` and `NOT_OWNED` separately and the service logs a warning
+naming the organization and person on `NOT_OWNED`, so a cross-organization attempt stays visible to an
+operator even though it is invisible to the caller.
+
 The diagrams in the following section illustrate the internal steps the service should implement to enable the above methods.
 
 1.  **Save Mappings:** A collection of mappings should be passed to the method for saving the mappings in the storage.
@@ -248,8 +256,8 @@ standalone mariadb container with a local uvicorn server.
 2. Every storage method offloads DB work off the event loop via `asyncio.to_thread(...)`.
 3. `delete_mapping` collapses 4 SELECTs + 1 DELETE across 3 sessions into 1 SELECT + 1 DELETE in 1
    session. Ownership is checked **inside that transaction**, between the SELECT and the DELETE, and
-   the storage call reports `DELETED` / `NOT_FOUND` / `NOT_OWNED` so the service keeps its 404-vs-400
-   responses. Validating ownership from the return value *after* the transaction committed was the
+   the storage call reports `DELETED` / `NOT_FOUND` / `NOT_OWNED` so the service kept its 404-vs-400
+   responses (the 400 was later folded into the 404 by #1177; the enum still separates the two for logging). Validating ownership from the return value *after* the transaction committed was the
    defect in #1150: the delete was already durable, so the error raised afterwards could not undo it.
 4. Dropped `session.refresh()` (one fewer SELECT per create/update) and the 5 unused indexes.
 5. Engine now configurable via `IDENTITY_MAPPER_DB_POOL_SIZE` (default 10) and
