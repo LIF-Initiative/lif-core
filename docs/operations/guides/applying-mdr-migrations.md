@@ -8,16 +8,22 @@ That gap is tracked in [#1226](https://github.com/LIF-Initiative/lif-core/issues
 
 ## TL;DR
 
-From the **repo root**, with Docker running and an active `lif` AWS session:
+> **Know what you are running.** `sam/mdr-database` is the Aurora cluster stack itself —
+> `AuroraDBCluster`, both instances, parameter groups, security groups, CloudWatch alarms and SNS
+> (`sam/mdr-database/aurora-postgres.yml`). This is a full CloudFormation update of the dev or demo
+> **database** stack that also happens to re-trigger Flyway. It is not a migrations-only command.
+
+From the **repo root**, with Docker running and an active `lif` AWS session, do **dev first**:
 
 ```bash
 aws sso login --profile lif && export AWS_PROFILE=lif
 
-bash sam/deploy-sam.sh -s dev  -d sam/mdr-database   # dev
-bash sam/deploy-sam.sh -s demo -d sam/mdr-database   # demo
+bash sam/deploy-sam.sh -s dev -d sam/mdr-database
 ```
 
-Then [verify it applied](#verifying-it-applied) — do not assume.
+Then [verify it applied](#verifying-it-applied) — do not assume. Only once dev is verified, repeat
+for demo with `-s demo`. The two commands are deliberately not printed adjacent here: run one,
+prove it, then run the other.
 
 ## Why a merge isn't enough
 
@@ -40,7 +46,7 @@ None of the `.github/workflows/lif_*.yml` service workflows build that image or 
 | step | effect |
 |---|---|
 | sources `<env>.aws` | sets `SAM_CONFIG_ENV`, `AWS_REGION` |
-| `buildDockerImages` | builds `sam/mdr-database/flyway/`, pushes `${env}-mdr-flyway:latest` **and** `:$DATE_TAG` to ECR |
+| `buildDockerImages` | builds `sam/mdr-database/flyway/`, pushes `${env}-mdr-flyway:$DATE_TAG` **and** `:latest` to ECR in one export (only `:$DATE_TAG` is consumed by the stack) |
 | `samBuild` | `sam build` |
 | `samDeploy` | `sam deploy --config-env <env> --parameter-overrides "… pImageTag=$DATE_TAG"` |
 | CloudFormation | sees `pImageTag` changed → re-invokes `Custom::FlywayTrigger` → `${env}-mdr-flyway-invoker` → `${env}-mdr-flyway` → `flyway migrate` |
@@ -60,7 +66,7 @@ Docker 23+ with the **containerd image store** — the current Docker Desktop de
 
 ```bash
 docker buildx build --platform linux/amd64 --provenance=false --sbom=false \
-  --output "type=registry,oci-mediatypes=false,name=$REGISTRY/$REPOSITORY:$DATE_TAG" .
+  --output "type=registry,oci-mediatypes=false,\"name=$REGISTRY/$REPOSITORY:$DATE_TAG,$REGISTRY/$REPOSITORY:latest\"" .
 ```
 
 **`--output type=docker` is not sufficient** — it still pushes OCI. Only `oci-mediatypes=false` on a registry output produces the Docker V2 manifest. Verify a push with:
@@ -72,7 +78,14 @@ aws ecr batch-get-image --repository-name dev-mdr-flyway \
 # bad:  application/vnd.oci.image.index.v1+json
 ```
 
-This is why no migration was applied between 2026-08-04 and the fix: the procedure was correct, but the build step silently produced an unusable image on any current Docker, and the deploy rolled back.
+**What was observed on the 2026-09-14 attempt:** the build step produced an OCI image, Lambda
+rejected it, and the stack rolled back — fixed by the `oci-mediatypes=false` change above, after
+which V1.6 applied to dev and demo.
+
+That is what this failure mode looks like; it is deliberately *not* offered as the explanation for
+the 2026-08-04 → 2026-09-14 gap. The separate finding behind [#1226](https://github.com/LIF-Initiative/lif-core/issues/1226)
+is that the procedure was undocumented and nobody ran it — and if no deploy was attempted, a failing
+build step cannot be what stopped one. Both are real; only one of them can be the cause of the gap.
 
 ## Prerequisites
 
@@ -91,26 +104,65 @@ Apply to **dev first**, verify, then demo.
 
 ## Verifying it applied
 
-The deploy reporting success is not sufficient evidence — check the database side.
-
-**When did Flyway last run?**
+The deploy reporting success is not sufficient evidence — check the database side. Every snippet
+below is written against one environment; set it once:
 
 ```bash
-aws logs describe-log-streams --log-group-name /aws/lambda/dev-mdr-flyway \
-  --order-by LastEventTime --descending \
-  --query 'logStreams[0].lastEventTimestamp' --output json
+ENV=dev   # or: ENV=demo
 ```
 
-Convert the epoch milliseconds and confirm it is *now*, not a previous run. A stale timestamp means the trigger did not fire — usually because `pImageTag` did not change.
+### Before you deploy: record what is already applied
+
+This is the check that makes the after-reading meaningful. A last-run timestamp alone cannot tell
+"ran and applied V1.6" apart from "ran and found nothing to do" — and the second is exactly the
+silent failure this document exists to catch.
+
+Flyway prints the migrations it applies and the resulting schema version into its log, so read the
+newest stream before the deploy and keep the output:
+
+```bash
+STREAM=$(aws logs describe-log-streams --log-group-name "/aws/lambda/${ENV}-mdr-flyway" \
+  --order-by LastEventTime --descending --max-items 1 \
+  --query 'logStreams[0].logStreamName' --output text)
+
+aws logs get-log-events --log-group-name "/aws/lambda/${ENV}-mdr-flyway" \
+  --log-stream-name "$STREAM" --query 'events[].message' --output text \
+  | grep -Ei 'Migrating schema|Successfully applied|Current version|up to date'
+```
+
+Note the schema version it reports. That is your "before".
+
+### After the deploy: prove the run happened, and did something
+
+**Did Flyway run just now?**
+
+```bash
+aws logs describe-log-streams --log-group-name "/aws/lambda/${ENV}-mdr-flyway" \
+  --order-by LastEventTime --descending \
+  --query 'logStreams[0].lastEventTimestamp' --output text \
+  | awk '{print strftime("%F %T", $1/1000)}'
+```
+
+That prints a readable local timestamp. Confirm it is *now*, not a previous run. A stale timestamp
+means the trigger did not fire — usually because `pImageTag` did not change.
+
+**Did it apply the migration you expected?** Re-run the log-reading block from the previous section
+and compare against your "before". You want to see the new version applied — e.g.
+`Successfully applied 1 migration` and a current version matching the highest `V*.sql` in
+`sam/mdr-database/flyway/flyway-files/flyway/sql/mdr/`. `up to date` with an unchanged version means
+Flyway ran and did nothing, which is a *failure* if you expected a new migration.
 
 **What tag is deployed?**
 
 ```bash
-aws cloudformation describe-stacks --stack-name dev-lif-sam-resources \
+aws cloudformation describe-stacks \
+  --stack-name "$([ "$ENV" = dev ] && echo dev-lif-sam-resources || echo demo-lif-mdr-db-resources)" \
   --query 'Stacks[0].Parameters[?ParameterKey==`pImageTag`].ParameterValue' --output text
 ```
 
-**What did the run do?** Read the newest `/aws/lambda/dev-mdr-flyway` log stream — Flyway prints each migration it applies and the resulting schema version.
+> **The Lambda's invocation status is not a success signal.** `${ENV}-mdr-flyway` reports
+> `Status: error` / `Runtime.ExitError` even on fully successful runs. Judge the run by the log
+> contents above, never by the invocation result — and do not build a monitor on that status.
 
 ## Local docker-compose is different — and weaker
 
@@ -140,4 +192,4 @@ Two consequences:
 - [#1226](https://github.com/LIF-Initiative/lif-core/issues/1226) — no gate reports repo-vs-database migration drift
 - [#1123](https://github.com/LIF-Initiative/lif-core/issues/1123) — the outage caused by an unapplied V1.5
 - [#1225](https://github.com/LIF-Initiative/lif-core/issues/1225) — schema duplicated across `backup.sql` and `V1.1`
-- `CLAUDE.md` § MDR Schema Migrations — the idempotency rule
+- `CLAUDE.md` § Deployment & Operations — the idempotency rule

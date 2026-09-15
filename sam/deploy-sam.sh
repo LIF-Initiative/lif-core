@@ -136,10 +136,14 @@ buildDockerImages() {
     # `--output type=docker` is NOT sufficient — it still pushes OCI. See #1226.
     #
     # --provenance/--sbom=false keep the push a single image manifest rather than an index.
+    #
+    # Both tags ride one export. buildx takes a comma-separated name list when the value is
+    # quoted inside the CSV, so this pushes :$DATE_TAG and :latest from a single build rather
+    # than rebuilding and re-pushing the same image twice. Only :$DATE_TAG is consumed --
+    # both aurora-postgres.yml templates pin ImageUri to :${pImageTag} (`:745`) -- so :latest
+    # is a convenience for humans pulling the image by hand, not a deploy input.
     docker buildx build --platform linux/amd64 --provenance=false --sbom=false \
-      --output "type=registry,oci-mediatypes=false,name=$REGISTRY/$REPOSITORY:$DATE_TAG" .
-    docker buildx build --platform linux/amd64 --provenance=false --sbom=false \
-      --output "type=registry,oci-mediatypes=false,name=$REGISTRY/$REPOSITORY:latest" .
+      --output "type=registry,oci-mediatypes=false,\"name=$REGISTRY/$REPOSITORY:$DATE_TAG,$REGISTRY/$REPOSITORY:latest\"" .
     cd -
   done
 }

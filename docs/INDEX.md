@@ -80,8 +80,8 @@
 
 - [`884-demo-promotion-cheatsheet.md`](operations/guides/884-demo-promotion-cheatsheet.md) — Tactical runbook layered on `demo-environment-update.md` for the #884 self-serve promotion: SSM keys, MDR API + Cognito + SAM Flyway, frontend, user cleanup.
 - [`add-data-source.md`](operations/guides/add-data-source.md) — Adding a new data source to a LIF deployment: source schema, JSONata mappings, pipeline wiring.
-- [`applying-mdr-migrations.md`](operations/guides/applying-mdr-migrations.md) — how to apply an MDR Flyway migration to dev/demo, why merging alone does not apply it, and how to verify it landed.
 - [`adding-a-new-microservice.md`](operations/guides/adding-a-new-microservice.md) — Runbook for standing up a new HTTP microservice: Polylith brick layout, pyproject hygiene, Dockerfile2, AuthMiddleware wiring, docker-compose entry.
+- [`applying-mdr-migrations.md`](operations/guides/applying-mdr-migrations.md) — how to apply an MDR Flyway migration to dev/demo, why merging alone does not apply it, and how to verify it landed.
 - [`creating-a-data-source-adapter.md`](operations/guides/creating-a-data-source-adapter.md) — Reference for the data source adapter contract: what adapters are, what they receive, what they return.
 - [`demo-environment-update.md`](operations/guides/demo-environment-update.md) — End-to-end runbook for promoting dev images to demo.
 - [`deploying-lif-at-your-institution.md`](operations/guides/deploying-lif-at-your-institution.md) — Adopter-facing hub guide for standing up your own LIF instance: deployment shapes, stack bring-up, data model in MDR, source wiring, auth/tenancy, ops; links the detailed spokes and flags self-host gaps (#1004).
