@@ -10,6 +10,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 from lif.exceptions.core import DataNotFoundException, DataStoreException
 from lif.identity_mapper_restapi import core
 from lif.identity_mapper_service.core import IdentityMapperService
+from lif.identity_mapper_storage.core import DeleteOutcome
 
 
 @pytest_asyncio.fixture
@@ -103,6 +104,35 @@ async def test_do_delete_mapping_not_found(mock_initialize, mock_shutdown):
             assert response_json["path"] == f"/organizations/{org_id}/persons/{person_id}/mappings/{mapping_id}"
             assert response_json["message"] == "Mapping not found"
             mock_delete_mapping.assert_awaited_once_with(org_id, person_id, mapping_id)
+
+
+@pytest.mark.asyncio
+@patch("lif.identity_mapper_restapi.core.initialize", mock_initialize)
+@patch("lif.identity_mapper_restapi.core.shutdown", mock_shutdown)
+async def test_do_delete_mapping_not_owned_is_indistinguishable_from_not_found(mock_initialize, mock_shutdown):
+    """A mapping owned by another organization answers byte-for-byte like a missing one (#1177).
+
+    Asserted on status *and* body rather than "both non-2xx": a differing status code or
+    message is enough to tell a caller that a probed mapping ID is real. Driven through the
+    real service so the exception-to-response mapping is exercised, not mocked past.
+    """
+    org_id = "org-a"
+    person_id = "person-1"
+    mapping_id = "3f0c9c1e-0000-4000-8000-000000000001"
+
+    async def delete_refused_with(outcome: DeleteOutcome):
+        storage = MagicMock()
+        storage.delete_mapping_for_owner = AsyncMock(return_value=outcome)
+        core.service = IdentityMapperService(storage=storage)
+        async with get_client() as client:
+            return await client.delete(f"/organizations/{org_id}/persons/{person_id}/mappings/{mapping_id}")
+
+    not_found = await delete_refused_with(DeleteOutcome.NOT_FOUND)
+    not_owned = await delete_refused_with(DeleteOutcome.NOT_OWNED)
+
+    assert not_found.status_code == 404
+    assert not_owned.status_code == not_found.status_code
+    assert not_owned.text == not_found.text
 
 
 @pytest.mark.asyncio

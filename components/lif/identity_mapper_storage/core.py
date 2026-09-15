@@ -6,9 +6,11 @@ from lif.datatypes import IdentityMapping
 class DeleteOutcome(Enum):
     """Result of an ownership-scoped delete.
 
-    Distinguishing NOT_FOUND from NOT_OWNED lets the service keep its 404-vs-400
-    responses while the ownership check runs inside the delete's own transaction
-    (#1150). A bare Optional cannot express that difference.
+    Distinguishing NOT_FOUND from NOT_OWNED lets the ownership check run inside the
+    delete's own transaction (#1150). A bare Optional cannot express that difference.
+
+    The distinction is for the server log only -- the service answers both refusals
+    with the same 404, so a caller cannot learn which mapping IDs exist (#1177).
     """
 
     DELETED = "DELETED"
