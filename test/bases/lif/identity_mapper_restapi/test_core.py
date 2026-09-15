@@ -1,11 +1,16 @@
 import pytest
 import pytest_asyncio
 from httpx import ASGITransport, AsyncClient
+from sqlalchemy import create_engine, event
+from sqlalchemy.exc import OperationalError
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.pool import StaticPool
 from unittest.mock import AsyncMock, MagicMock, patch
 
 from lif.exceptions.core import DataNotFoundException, DataStoreException
 from lif.identity_mapper_restapi import core
 from lif.identity_mapper_service.core import IdentityMapperService
+from lif.identity_mapper_storage.core import DeleteOutcome
 
 
 @pytest_asyncio.fixture
@@ -21,6 +26,65 @@ async def mock_shutdown():
 
 def get_client() -> AsyncClient:
     return AsyncClient(transport=ASGITransport(app=core.app), base_url="http://test")
+
+
+class _UnhealthySession:
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        return False
+
+    def execute(self, *args, **kwargs):
+        raise OperationalError("SELECT 1", {}, Exception("database is down"))
+
+
+@pytest.fixture()
+def db_session_factory():
+    engine = create_engine("sqlite://", connect_args={"check_same_thread": False}, poolclass=StaticPool)
+    yield sessionmaker(autocommit=False, autoflush=False, bind=engine)
+    engine.dispose()
+
+
+@pytest.fixture()
+def unhealthy_session_factory():
+    return lambda: _UnhealthySession()
+
+
+@pytest.mark.asyncio
+@patch("lif.identity_mapper_restapi.core.initialize", mock_initialize)
+@patch("lif.identity_mapper_restapi.core.shutdown", mock_shutdown)
+async def test_health_returns_200_and_ran_a_real_query_when_database_reachable(
+    mock_initialize, mock_shutdown, db_session_factory
+):
+    executed_statements: list[str] = []
+
+    def record_statement(conn, cursor, statement, parameters, context, executemany):
+        executed_statements.append(statement)
+
+    event.listen(db_session_factory.kw["bind"], "before_cursor_execute", record_statement)
+    try:
+        async with get_client() as client:
+            with patch.object(core, "get_db_session_factory", return_value=db_session_factory):
+                response = await client.get("/health")
+        assert response.status_code == 200
+        assert response.json() == {"status": "ok"}
+        assert any("SELECT 1" in statement for statement in executed_statements)
+    finally:
+        event.remove(db_session_factory.kw["bind"], "before_cursor_execute", record_statement)
+
+
+@pytest.mark.asyncio
+@patch("lif.identity_mapper_restapi.core.initialize", mock_initialize)
+@patch("lif.identity_mapper_restapi.core.shutdown", mock_shutdown)
+async def test_health_returns_503_when_session_factory_raises(
+    mock_initialize, mock_shutdown, unhealthy_session_factory
+):
+    async with get_client() as client:
+        with patch.object(core, "get_db_session_factory", return_value=unhealthy_session_factory):
+            response = await client.get("/health")
+        assert response.status_code == 503
+        assert response.json() == {"status": "unhealthy"}
 
 
 @pytest.mark.asyncio
@@ -40,6 +104,35 @@ async def test_do_delete_mapping_not_found(mock_initialize, mock_shutdown):
             assert response_json["path"] == f"/organizations/{org_id}/persons/{person_id}/mappings/{mapping_id}"
             assert response_json["message"] == "Mapping not found"
             mock_delete_mapping.assert_awaited_once_with(org_id, person_id, mapping_id)
+
+
+@pytest.mark.asyncio
+@patch("lif.identity_mapper_restapi.core.initialize", mock_initialize)
+@patch("lif.identity_mapper_restapi.core.shutdown", mock_shutdown)
+async def test_do_delete_mapping_not_owned_is_indistinguishable_from_not_found(mock_initialize, mock_shutdown):
+    """A mapping owned by another organization answers byte-for-byte like a missing one (#1177).
+
+    Asserted on status *and* body rather than "both non-2xx": a differing status code or
+    message is enough to tell a caller that a probed mapping ID is real. Driven through the
+    real service so the exception-to-response mapping is exercised, not mocked past.
+    """
+    org_id = "org-a"
+    person_id = "person-1"
+    mapping_id = "3f0c9c1e-0000-4000-8000-000000000001"
+
+    async def delete_refused_with(outcome: DeleteOutcome):
+        storage = MagicMock()
+        storage.delete_mapping_for_owner = AsyncMock(return_value=outcome)
+        core.service = IdentityMapperService(storage=storage)
+        async with get_client() as client:
+            return await client.delete(f"/organizations/{org_id}/persons/{person_id}/mappings/{mapping_id}")
+
+    not_found = await delete_refused_with(DeleteOutcome.NOT_FOUND)
+    not_owned = await delete_refused_with(DeleteOutcome.NOT_OWNED)
+
+    assert not_found.status_code == 404
+    assert not_owned.status_code == not_found.status_code
+    assert not_owned.text == not_found.text
 
 
 @pytest.mark.asyncio

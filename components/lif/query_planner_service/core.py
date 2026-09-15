@@ -118,8 +118,8 @@ class LIFQueryPlannerService:
                     orchestrator_job_request_response: OrchestratorJobRequestResponse = await post_orchestrator_job(
                         self.lif_orchestrator_post_url, orchestrator_job_request
                     )
-                except Exception as e:
-                    logger.error(f"Returning LIF records found so far: {lif_records}")
+                except Exception:
+                    logger.exception(f"Orchestrator submission failed; returning {len(lif_records)} cached records")
                     return lif_records
 
                 lif_query_planner_job = LIFQueryPlannerJob(
