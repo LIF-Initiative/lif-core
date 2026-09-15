@@ -40,6 +40,8 @@ Version 1.0.0
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Example Usage](#example-usage)
 
+[Liveness and Startup Validation](#liveness-and-startup-validation)
+
 [Performance Report](#performance-report)
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Async SQLAlchemy + asyncmy (issue #1199)](#async-sqlalchemy--asyncmy-issue-1199)
@@ -143,6 +145,14 @@ The following methods should be implemented in the Identity Mapper Service to sa
 
 3.  **Delete Mappings:** DELETE organizations/{org_id}/persons/{person_id}/mappings/{mapping_id}
 
+Delete refusals are deliberately indistinguishable. `DELETE` answers **404** both when no mapping has
+that ID and when the mapping exists but belongs to a different organization or person. Answering the
+second case with a distinct 400 let a caller probe arbitrary IDs and learn which ones were real
+without being able to read or delete them ([#1177](https://github.com/LIF-Initiative/lif-core/issues/1177)).
+The storage layer still reports `NOT_FOUND` and `NOT_OWNED` separately and the service logs a warning
+naming the organization and person on `NOT_OWNED`, so a cross-organization attempt stays visible to an
+operator even though it is invisible to the caller.
+
 The diagrams in the following section illustrate the internal steps the service should implement to enable the above methods.
 
 1.  **Save Mappings:** A collection of mappings should be passed to the method for saving the mappings in the storage.
@@ -191,6 +201,37 @@ TBD
 
 - [Issue #12: Add Identity Mapper Support for Bulk Upload Process](https://github.com/LIF-Initiative/lif-core/issues/12)
 
+# Liveness and Startup Validation
+
+`GET /health` reports liveness against the real datastore: it runs `SELECT 1` through the session
+factory and returns **200** when the database is reachable and **503** when it is not. The query
+runs off the event loop via `asyncio.to_thread`, matching the mapping handlers, so a hung database
+cannot stall unrelated requests.
+
+**Startup behavior is a deliberate decision (see Issue #1215).** The service starts even when the
+database is unreachable and lets `/health` report unhealthy so the orchestrator / load balancer can
+restart the task; the lifespan does not fail on a down database. This matches the sibling services
+and avoids blocking a rollout on a transient DB blip. The pre-#1178 connection check is not a
+precedent worth restoring — it existed only as a side effect of a leftover debug log, never as a
+decision.
+
+Three places declare the check, and they are **not** interchangeable:
+
+- **`cloudformation/lif-identity-mapper-taskdef-includes.yml`** declares a container-definition
+  `HealthCheck`. This is the one that matters on ECS. Fargate does *not* monitor a `HEALTHCHECK`
+  baked into the image — only a `healthCheck` in the container definition — so without this block
+  "steady state" means merely that the container did not exit, which is exactly how #1215's silent
+  `SUCCEEDED` happened.
+- **`Dockerfile` and `Dockerfile2`** declare an image `HEALTHCHECK` polling the same route. This
+  covers `docker compose` and plain `docker run`, where the image instruction *is* honoured.
+- **`HealthCheckUrl` in the six `{dev,demo}-lif-identity-mapper-org{1,2,3}.params`** files points at
+  `/health`. This is currently **inert**: `cloudformation/service.yml` reads it only inside the
+  target group, which is created under `Condition: UseLbForService`, and that is `false` for this
+  service. It is set correctly so the value is right if a load balancer is ever enabled here.
+
+With the task-definition block in place, a deploy against an unreachable database fails its health
+check, never reaches steady state, and the rollout fails instead of reporting `SUCCEEDED`.
+
 # Performance Report
 
 Issue [#13](https://github.com/LIF-Initiative/lif-core/issues/13) investigated and improved the
@@ -217,8 +258,8 @@ standalone mariadb container with a local uvicorn server.
 2. Every storage method offloads DB work off the event loop via `asyncio.to_thread(...)`.
 3. `delete_mapping` collapses 4 SELECTs + 1 DELETE across 3 sessions into 1 SELECT + 1 DELETE in 1
    session. Ownership is checked **inside that transaction**, between the SELECT and the DELETE, and
-   the storage call reports `DELETED` / `NOT_FOUND` / `NOT_OWNED` so the service keeps its 404-vs-400
-   responses. Validating ownership from the return value *after* the transaction committed was the
+   the storage call reports `DELETED` / `NOT_FOUND` / `NOT_OWNED` so the service kept its 404-vs-400
+   responses (the 400 was later folded into the 404 by #1177; the enum still separates the two for logging). Validating ownership from the return value *after* the transaction committed was the
    defect in #1150: the delete was already durable, so the error raised afterwards could not undo it.
 4. Dropped `session.refresh()` (one fewer SELECT per create/update) and the 5 unused indexes.
 5. Engine now configurable via `IDENTITY_MAPPER_DB_POOL_SIZE` (default 10) and
@@ -384,3 +425,44 @@ and preserves `mapping_id`; duplicate keys last-wins; DELETE 204 / missing 404; 
 contract, or datatype changes. The unit suite runs on async sqlite (`sqlite+aiosqlite`); the
 single-INSERT-per-batch assertion (`test_save_mappings_issues_one_insert_for_the_whole_batch`)
 still holds.
+
+### Table-size sweep (record-count half, issue #1219)
+
+The batch-size tables above hold the table at near-zero rows, so they answer the *volume of the
+requests* half of the Performance requirement but never exercised the *number of identity mapping
+records* half. The harness was extended in #1219 to seed the table and re-time each operation at a
+fixed batch size (n=100) as the table grows. Run 2026-09-13 against the same
+`lif-identity-mapper-db` container (MariaDB 10.11, production DDL) and a local uvicorn. Medians of 5
+runs.
+
+Seeding method (re-runnable): the harness POSTs the rows through the same API it benches, 500 rows
+per request, one fresh `seed-org-*` / `seed-person-*` pair per request spread across 10 org ids.
+Targets are **cumulative** — the table is grown to each target and benched, never reset — so a
+re-run must start from a known table (recreate the container or truncate). Seeding cost: 10k rows in
+20 requests (~1s), 100k in 180 (~9s), 1M in 1800 (~824s).
+
+| operation | rows=0 | rows=10,000 | rows=100,000 | rows=1,000,000 |
+|---|---|---|---|---|
+| POST save | 13.0 | 15.5 | 33.5 | 1064.2 |
+| GET | 4.0 | 5.7 | 24.3 | 1129.1 |
+| DELETE (per-row) | 385.6 | 357.6 | 371.5 | 509.4 |
+
+Flat through 100k rows, then a hard knee at 1M. The curve is not a workload artifact — the benched
+rows are fresh (org, person) pairs, so POST/GET hold their cost to the index descent and DELETE is
+a PK lookup; table size is the only variable. The knee is the schema. `SHOW INDEX` reports
+`uq_identity_mapping` as **`HASH`**, and `EXPLAIN` at 1M shows `type=ALL, key=NULL` (rows≈934k): the
+mappings lookup is a **sequential scan**, never the composite unique key. The four key columns
+(`VARCHAR 255/255/255/100`, utf8mb4) total 865 chars / 3460 bytes, over InnoDB's 3072-byte B-tree
+key limit; MariaDB 10.11 degrades the oversized key to an unusable HASH index instead of erroring
+(MySQL 8 rejects the same DDL with "Specified key was too long"). Reproduced on the container: the
+same DDL with 240-byte key columns is created as `BTREE`; at the original width it is `HASH`. The
+batch-size tables above therefore cannot show this: at near-zero row counts a sequential scan fits in
+cache and looks every bit like the "one indexed SELECT" the code review assumed.
+
+**Verdict.** The *number of identity mapping records* half of the requirement is **not met at 1M
+rows under the current schema** — POST and GET degrade ~25 ms → ~1.1 s. The reads are point queries
+and the workload is fine; `uq_identity_mapping` just is not a usable index. The fix — narrow the key
+columns or charset so the unique key is a real B-tree, with a migration for existing tables — is
+tracked in issue [#1231](https://github.com/LIF-Initiative/lif-core/issues/1231) rather than fixed
+here. Re-run this sweep (`--seeds 0,10000,100000,1000000 --batch 100`) once that lands to confirm
+the curve returns to flat.

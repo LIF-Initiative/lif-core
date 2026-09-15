@@ -2,6 +2,7 @@
     "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
     "flagWords": [],
     "words": [
+        "mediatypes",
         "hostnames",
         "toplevel",
         "ntvs",
@@ -38,8 +39,10 @@
         "chatbots",
         "checkpointing",
         "cachetools",
+        "caplog",
         "dedupe",
         "dedup",
+        "dedups",
         "deepcopy",
         "Checkpointing",
         "classmethod",
@@ -271,6 +274,10 @@
         "DataStoreException",
         "superlinear",
         "upserts",
+        "InnoDB",
+        "VARCHAR",
+        "utf8mb4",
+        "EXPLAIN",
         "xform"
     ],
     "ignorePaths": [

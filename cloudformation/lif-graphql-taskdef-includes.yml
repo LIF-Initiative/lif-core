@@ -7,7 +7,9 @@ Environment:
   - Name: LIF_MDR_API_URL
     Value:
       Fn::Sub: "https://mdr-api.${PublicHostedZoneName}"
-  - Name: LIF_QUERY_TIMEOUT_SECONDS
+  - Name: LIF_GRAPHQL_CLIENT_TIMEOUT_SECONDS
+    Value: 300
+  - Name: LIF_GRAPHQL_KEEPALIVE_SECONDS
     Value: 300
   - Name: OPENAPI_DATA_MODEL_ID
     Value: "17"

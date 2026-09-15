@@ -27,3 +27,13 @@ mongoimport \
   --drop \
   --file /seed-data.json \
   --jsonArray
+
+# Create the person identifier index used by the Query Cache query/save filter.
+# Must run after the import: mongoimport --drop drops the collection and its indexes.
+echo "EP: Creating person_identifier_idx on $MONGO_DB.$MONGO_COLLECTION..."
+mongosh --quiet --host "$MONGO_HOST" "$MONGO_DB" --eval "
+db.getCollection('${MONGO_COLLECTION}').createIndex(
+  { 'Person.Identifier.identifier': 1, 'Person.Identifier.identifierType': 1 },
+  { name: 'person_identifier_idx' }
+);
+"
