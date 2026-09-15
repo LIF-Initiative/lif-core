@@ -838,3 +838,117 @@ async def test_find_ancestors_orglif_filters_to_included_entity_ids(fake_session
 
     assert out == [[50, 100]]
     assert fake_session.execute.await_count == 3
+
+
+# === Issue #1252: find_children / add_ref key-spelling mismatch ===
+#
+# find_children keys an Embedded child as Relationship + EntityName (unless the
+# relationship is NULL or starts with has/relevant). add_ref walks the parent's
+# ancestor chain by bare entity name. When an Embedded association carries a name,
+# the two disagree and add_ref raises an uncaught KeyError -> generic 500.
+#
+# Reported by Tammie Helmick 2026-08-11 against the CASE data model
+# (CFPackage -CFItems-> CFItem embedded, then a Reference beneath it).
+
+
+def _named_embedded_spec():
+    """A spec shaped the way find_children actually writes it.
+
+    'CFItem' is embedded under 'CFPackage' with Relationship='CFItems', so the
+    property key is the concatenation 'CFItemsCFItem' -- NOT the bare 'CFItem'.
+    """
+    return {
+        "components": {
+            "schemas": {
+                "CFPackage": {
+                    "properties": {
+                        "CFItemsCFItem": {
+                            "properties": {
+                                "CFRubric": {
+                                    "type": "object",
+                                    "required": ["identifier"],
+                                    "properties": {"identifier": {"type": "string"}, "title": {"type": "string"}},
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+async def test_add_ref_resolves_named_embedded_ancestor_key():
+    """Issue #1252: the parent-chain walk must use the key find_children wrote."""
+    Row = namedtuple("Row", ["Id", "Name"])
+    df_entity = pd.DataFrame([Row(1, "CFPackage"), Row(2, "CFItem"), Row(3, "CFRubric")])
+    openapi_spec = _named_embedded_spec()
+
+    await svc.add_ref(
+        parent_ancestors=[[1]],
+        child_ancestors=[[1, 2]],
+        df_entity=df_entity,
+        parent_entity_name="CFItem",
+        child_entity_name="CFRubric",
+        openapi_spec=openapi_spec,
+        key="RefCFRubric",
+        property_key_map={(1, 2): "CFItemsCFItem"},
+        parent_entity_id=2,
+        child_entity_id=3,
+    )
+
+    parent_props = openapi_spec["components"]["schemas"]["CFPackage"]["properties"]["CFItemsCFItem"]["properties"]
+    assert "RefCFRubric" in parent_props, (
+        "add_ref resolved the embedded ancestor by bare name 'CFItem' instead of the "
+        "key find_children wrote ('CFItemsCFItem')"
+    )
+    assert parent_props["RefCFRubric"]["type"] == "object"
+
+
+async def test_add_ref_named_embedded_midchain_is_resolved():
+    """The same mismatch one level deeper, in the ancestor_line[1:] loop."""
+    Row = namedtuple("Row", ["Id", "Name"])
+    df_entity = pd.DataFrame([Row(1, "Root"), Row(2, "Mid"), Row(3, "Parent"), Row(4, "Child")])
+    openapi_spec = {
+        "components": {
+            "schemas": {
+                "Root": {
+                    "properties": {
+                        "ownedMid": {
+                            "properties": {
+                                "Parent": {"properties": {}},
+                                "Child": {"type": "object", "required": ["a"], "properties": {"a": {"type": "string"}}},
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    await svc.add_ref(
+        parent_ancestors=[[1, 2]],
+        child_ancestors=[[1, 2]],
+        df_entity=df_entity,
+        parent_entity_name="Parent",
+        child_entity_name="Child",
+        openapi_spec=openapi_spec,
+        key="ChildRef",
+        property_key_map={(1, 2): "ownedMid"},
+        parent_entity_id=3,
+        child_entity_id=4,
+    )
+
+    assert (
+        "ChildRef"
+        in openapi_spec["components"]["schemas"]["Root"]["properties"]["ownedMid"]["properties"]["Parent"]["properties"]
+    )
+
+
+def test_embedded_property_key_matches_find_children_rule():
+    """The shared helper must reproduce find_children's rule exactly (#1252)."""
+    assert svc.embedded_property_key("CFItems", "CFItem") == "CFItemsCFItem"
+    assert svc.embedded_property_key(None, "CFItem") == "CFItem"
+    assert svc.embedded_property_key("hasManager", "Employee") == "Employee"
+    assert svc.embedded_property_key("relevantThing", "Thing") == "Thing"
+    assert svc.embedded_property_key("issuedBy", "Org") == "issuedByOrg"
