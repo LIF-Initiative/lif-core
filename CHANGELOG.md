@@ -30,6 +30,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   batch no longer produce two response entries for the same row
 - `IDENTITY_MAPPER_DB_POOL_PRE_PING` now defaults to `true` and is wired into the ECS task
   definition, replacing the connection validation lost with the startup `SELECT 1`
+- Identity Mapper storage now runs async SQLAlchemy against the C-extension `asyncmy` driver
+  (`mysql+asyncmy`) instead of sync `pymysql` behind `asyncio.to_thread`; per-request latency is
+  unchanged, but under 50 parallel GETs p95 roughly halves (≈83-239 ms vs ≈314-386 ms) with no
+  contract or status-code changes
 
 ### Deprecated
 
