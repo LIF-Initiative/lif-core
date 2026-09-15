@@ -139,9 +139,7 @@ async def get_export_dto(session: AsyncSession, data_model_id: int):
     transformations = await get_transformations_by_data_model_id(session=session, data_model_id=data_model_id)
 
     # Getting Entity associations
-    entity_associations = await get_entity_associations_by_data_model_id(
-        session=session, data_model_id=data_model_id, check_base=False
-    )
+    entity_associations = await get_entity_associations_by_data_model_id(session=session, data_model_id=data_model_id)
 
     total_association, entity_attribute_associations = await get_entity_attribute_associations_by_data_model_id(
         session=session, data_model_id=data_model_id, pagination=False
