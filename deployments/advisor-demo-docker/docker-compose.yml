@@ -535,6 +535,7 @@ services:
       context: ../../frontends/mdr-frontend
       args:
         LIF_MDR_API_URL: ${LIF_MDR_API_URL:-http://localhost:8012} # Web client needs to access the API outside the container
+        LDE_API_URL: ${LDE_API_URL:-http://localhost:8013} # Web client needs to access the API outside the container
     container_name: lif-mdr-app
     ports:
       - "5173:80"
