@@ -1,27 +1,79 @@
+"""Tests for the agent's pre_model_hook.
+
+Two regressions are guarded here.
+
+Issue #1162: the hook returned the whole `ChatState`, so LangGraph merged `messages`
+through the `add_messages` reducer (an APPEND), and the summary was added to the history
+every turn instead of replacing it. Context grew monotonically until OpenAI rejected the
+request at ~3.5M tokens against a 2M ceiling.
+
+Issue #212: summarizing bounds the message *count* but not the token *size* -- the list
+handed to the model was `summary + retained tail` at whatever token cost that came to.
+`_safe_trim_messages` caps it, and the tests at the end of this module cover that cap.
+"""
+
 import logging
-from unittest.mock import MagicMock
+from typing import Any
+from unittest import mock
 
-from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
+from langchain_core.messages import AIMessage, HumanMessage, SystemMessage, ToolMessage
 from langchain_core.messages.utils import count_tokens_approximately
+from langgraph.graph.message import add_messages
 
-from lif.langchain_agent.memory import _safe_trim_messages, make_pre_model_hook
+from lif.langchain_agent.memory import _safe_trim_messages, create_summarization_node, make_pre_model_hook
+
+MAX_MESSAGES = 4
+# Effectively "never trims". The #1162 and #1160 tests below predate the #212 token cap
+# and assert on the summarize-and-retain behavior alone; giving them a budget nothing can
+# exceed keeps them testing exactly what they were written to test.
+NO_TRIM_BUDGET = 1_000_000
+logger = logging.getLogger(__name__)
 
 
-def make_summarizer(summary_messages, context=None):
-    """Build a fake SummarizationNode whose invoke() emits the given summary."""
-
-    def invoke(state):
-        new_state = dict(state)
-        new_state["summary_output_messages"] = summary_messages
-        new_state["context"] = context if context is not None else {"summarized": True}
-        return new_state
-
-    node = MagicMock()
-    node.invoke.side_effect = invoke
+def _fake_summarizer(summary_text: str = "summary") -> mock.Mock:
+    """A summarizer whose invoke() returns a state update, like SummarizationNode does."""
+    node = mock.Mock()
+    node.invoke.side_effect = lambda state: {
+        "summary_output_messages": [AIMessage(content=summary_text)],
+        "context": {"running_summary": summary_text},
+    }
     return node
 
 
-def long_conversation():
+def _summarizer_returning(summary_messages: list[Any]) -> mock.Mock:
+    """A summarizer emitting a specific message list, for the token-budget tests."""
+    node = mock.Mock()
+    node.invoke.side_effect = lambda state: {
+        "summary_output_messages": summary_messages,
+        "context": {"summarized": True},
+    }
+    return node
+
+
+def _apply_update(state: dict[str, Any], update: dict[str, Any]) -> dict[str, Any]:
+    """Merge a hook's state update the way LangGraph would.
+
+    `AgentState.messages` is Annotated[..., add_messages], so a `messages` key in the
+    update is appended, not replaced. Every other key here is last-write-wins.
+    """
+    merged = dict(state)
+    for key, value in update.items():
+        if key == "messages":
+            merged["messages"] = add_messages(state.get("messages", []), value)
+        else:
+            merged[key] = value
+    return merged
+
+
+def _llm_input(merged: dict[str, Any]) -> list[Any]:
+    """What create_react_agent sends to the model.
+
+    Mirrors chat_agent_executor.call_model: prefer `llm_input_messages`, else `messages`.
+    """
+    return merged.get("llm_input_messages") or merged["messages"]
+
+
+def long_conversation() -> list[Any]:
     messages = []
     for i in range(4):
         messages.append(
@@ -40,53 +92,153 @@ def long_conversation():
     return messages
 
 
-def test_trims_messages_to_fit_within_token_budget():
+def test_hook_returns_only_safe_keys():
+    """The hook must not write `messages` (append reducer) or `remaining_steps` (managed)."""
+    hook = make_pre_model_hook(_fake_summarizer(), MAX_MESSAGES, NO_TRIM_BUDGET, logger)
+    state = {"messages": [HumanMessage(content=f"m{i}") for i in range(10)], "remaining_steps": 25}
+
+    update = hook(state)
+
+    assert set(update) <= {"llm_input_messages", "context"}
+    assert "messages" not in update
+    assert "remaining_steps" not in update
+
+
+def test_llm_input_stays_bounded_across_many_turns():
+    """The regression: LLM input must not grow without bound as the conversation runs."""
+    hook = make_pre_model_hook(_fake_summarizer(), MAX_MESSAGES, NO_TRIM_BUDGET, logger)
+    state: dict[str, Any] = {"messages": [], "context": {}, "remaining_steps": 25}
+
+    sizes = []
+    for turn in range(30):
+        # The agent appends a user turn and a model reply, as it would in a real loop.
+        state["messages"] = add_messages(
+            state["messages"], [HumanMessage(content=f"q{turn}"), AIMessage(content=f"a{turn}")]
+        )
+        merged = _apply_update(state, hook(state))
+        sizes.append(len(_llm_input(merged)))
+        state = merged
+
+    # Summary messages plus the retained tail -- a fixed ceiling, independent of turn count.
+    assert max(sizes) <= MAX_MESSAGES + 1
+    # And the last turn is no larger than the first few: no monotonic growth.
+    assert sizes[-1] <= sizes[3]
+
+
+def test_summary_replaces_history_rather_than_extending_it():
+    hook = make_pre_model_hook(_fake_summarizer(), MAX_MESSAGES, NO_TRIM_BUDGET, logger)
+    messages = [HumanMessage(content=f"m{i}") for i in range(20)]
+
+    update = hook({"messages": messages, "context": {}})
+    llm_input = update["llm_input_messages"]
+
+    assert len(llm_input) == MAX_MESSAGES + 1
+    assert llm_input[0].content == "summary"
+    assert [m.content for m in llm_input[1:]] == [m.content for m in messages[-MAX_MESSAGES:]]
+
+
+def test_context_is_propagated_so_summarization_is_not_repeated():
+    """`context` must persist, or the summarizer re-summarizes on every single call."""
+    hook = make_pre_model_hook(_fake_summarizer(), MAX_MESSAGES, NO_TRIM_BUDGET, logger)
+
+    update = hook({"messages": [HumanMessage(content=f"m{i}") for i in range(10)], "context": {}})
+
+    assert update["context"] == {"running_summary": "summary"}
+
+
+def test_short_conversation_passes_through_untouched():
+    summarizer = _fake_summarizer()
+    hook = make_pre_model_hook(summarizer, MAX_MESSAGES, NO_TRIM_BUDGET, logger)
+    messages = [HumanMessage(content="a"), AIMessage(content="b")]
+
+    update = hook({"messages": messages, "context": {}})
+
+    summarizer.invoke.assert_not_called()
+    assert update["llm_input_messages"] == messages
+
+
+def test_empty_state_still_supplies_llm_input_key():
+    """create_react_agent errors unless the hook supplies messages or llm_input_messages."""
+    hook = make_pre_model_hook(_fake_summarizer(), MAX_MESSAGES, NO_TRIM_BUDGET, logger)
+
+    update = hook({"messages": [], "context": {}})
+
+    assert update["llm_input_messages"] == []
+
+
+def test_summarizer_enforces_summary_token_cap():
+    """Issue #1160: langmem treats max_summary_tokens as budget estimation only --
+    the real cap must be bound onto the model or summaries can exceed the budget
+    stack without limit.
+    """
+    model = mock.Mock()
+    max_conversation_size = 2048
+    max_summary_size = 512
+
+    node = create_summarization_node(model, max_conversation_size, max_summary_size)
+
+    model.bind.assert_called_once_with(max_tokens=max_summary_size)
+    assert node.model is model.bind.return_value
+    assert node.max_summary_tokens == max_summary_size
+
+
+def test_oversized_summary_cannot_crowd_out_retained_messages():
+    """Issue #1160: a summary far larger than any budget must not silently reduce
+    the model input to the summary alone -- the retained tail always survives.
+    """
+    hook = make_pre_model_hook(_fake_summarizer(summary_text="x" * 200_000), MAX_MESSAGES, NO_TRIM_BUDGET, logger)
+    messages = [HumanMessage(content=f"m{i}") for i in range(20)]
+
+    llm_input = hook({"messages": messages, "context": {}})["llm_input_messages"]
+
+    assert len(llm_input) == MAX_MESSAGES + 1
+    assert [m.content for m in llm_input[1:]] == [m.content for m in messages[-MAX_MESSAGES:]]
+
+
+# --- Issue #212: token budget on the list handed to the model -------------------------
+
+
+def test_trims_llm_input_to_fit_within_token_budget():
     conversation = long_conversation()
     summary = [SystemMessage("Running summary of the entire conversation that captures the key points so far.")]
-    node = make_summarizer(summary)
-    hook = make_pre_model_hook(node, max_messages=2, max_tokens=100, logger=logging.getLogger("test"))
+    budget = 60
+    untrimmed = summary + conversation[-2:]
+    # Guard the guard: the untrimmed list has to genuinely exceed the budget, or this
+    # test would pass just as well with the trim removed. It sat at 96 tokens against a
+    # budget of 100 when first written, and so proved nothing.
+    assert count_tokens_approximately(untrimmed) > budget
 
-    result = hook({"messages": conversation, "context": {}})
+    hook = make_pre_model_hook(_summarizer_returning(summary), 2, budget, logging.getLogger("test"))
 
-    assert count_tokens_approximately(result["messages"]) <= 100
-    assert isinstance(result["messages"][0], SystemMessage)
-    assert result["messages"][-1] is conversation[-1]
+    llm_input = hook({"messages": conversation, "context": {}})["llm_input_messages"]
+
+    assert count_tokens_approximately(llm_input) <= budget
+    assert llm_input != untrimmed, "expected the list to be trimmed, not passed through"
+    assert isinstance(llm_input[0], SystemMessage)
+    assert llm_input[-1] is conversation[-1]
 
 
-def test_leaves_messages_untouched_when_within_token_budget():
+def test_leaves_llm_input_untouched_when_within_token_budget():
     conversation = long_conversation()
     summary = [SystemMessage("Running summary of the entire conversation that captures the key points so far.")]
-    node = make_summarizer(summary)
-    hook = make_pre_model_hook(node, max_messages=2, max_tokens=500, logger=logging.getLogger("test"))
+    hook = make_pre_model_hook(_summarizer_returning(summary), 2, 500, logging.getLogger("test"))
 
-    result = hook({"messages": conversation, "context": {}})
+    llm_input = hook({"messages": conversation, "context": {}})["llm_input_messages"]
 
-    assert count_tokens_approximately(result["messages"]) <= 500
-    assert result["messages"] == summary + conversation[-2:]
-
-
-def test_short_conversation_is_not_summarized():
-    conversation = [HumanMessage("Hi there"), AIMessage("Hello!")]
-    node = make_summarizer([SystemMessage("irrelevant")])
-    hook = make_pre_model_hook(node, max_messages=5, max_tokens=50, logger=logging.getLogger("test"))
-
-    result = hook({"messages": list(conversation), "context": {}})
-
-    assert result is not None
-    assert result["messages"] == conversation
+    assert count_tokens_approximately(llm_input) <= 500
+    assert llm_input == summary + conversation[-2:]
 
 
 def test_falls_back_to_untrimmed_list_when_trim_is_empty(caplog):
     conversation = long_conversation()
     summary = [HumanMessage("Summary of the conversation.")]
-    node = make_summarizer(summary)
-    logger = logging.getLogger("test_trim_fallback")
-    hook = make_pre_model_hook(node, max_messages=2, max_tokens=1, logger=logger)
+    trim_logger = logging.getLogger("test_trim_fallback")
+    hook = make_pre_model_hook(_summarizer_returning(summary), 2, 1, trim_logger)
 
     with caplog.at_level(logging.WARNING, logger="test_trim_fallback"):
-        result = hook({"messages": conversation, "context": {}})
+        llm_input = hook({"messages": conversation, "context": {}})["llm_input_messages"]
 
-    assert result["messages"] == summary + conversation[-2:]
+    assert llm_input == summary + conversation[-2:]
     assert "empty message list" in caplog.text
 
 
@@ -104,8 +256,6 @@ def test_safe_trim_preserves_system_message_and_latest_human_message():
 def test_safe_trim_keeps_tool_call_tail_within_budget():
     """A mid-tool-loop message list (no trailing human) must keep its tool results
     when within budget, so the agent can continue instead of re-planning."""
-    from langchain_core.messages import ToolMessage
-
     tool_call_ai = AIMessage(content="", tool_calls=[{"name": "lif_query", "args": {}, "id": "call_1"}])
     tool_result = ToolMessage(content="Found 3 courses.", tool_call_id="call_1")
     messages = [SystemMessage("Running summary of the conversation."), tool_call_ai, tool_result]

@@ -13,9 +13,10 @@ from lif.data_source_adapters import LIFDataSourceAdapter, ADAPTER_REGISTRY, reg
 | Adapter id | Directory | Notes |
 |---|---|---|
 | `lif-to-lif` | [`lif_to_lif_adapter/`](lif_to_lif_adapter/) | Reads from another LIF GraphQL API |
-| `example-data-source-rest-api-to-lif` | [`example_data_source_rest_api_to_lif_adapter/`](example_data_source_rest_api_to_lif_adapter/) | Reference impl that pulls from the bundled example data source |
 
 External adapters can be registered via `register_adapter(adapter_id, adapter_class)`.
+
+Demo/example adapters live in [`demo_data_source_adapters/`](../demo_data_source_adapters/) (separate brick per [ADR 0004](../../../docs/design/adr/general/0004-components-are-the-unit-of-reuse.md)).
 
 ## Adding a new adapter
 

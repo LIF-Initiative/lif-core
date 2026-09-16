@@ -204,6 +204,9 @@ cython_debug/
 # Ruff stuff:
 .ruff_cache/
 
+# Agent planning / report scratch space — never committed
+.claude/plans/
+
 # PyPI configuration file
 .pypirc
 
@@ -228,3 +231,6 @@ pnpm-lock.yaml
 
 #AI
 .agents/
+
+# Claude Code personal overrides (shared config lives in .claude/settings.json)
+.claude/settings.local.json

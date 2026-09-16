@@ -1,9 +1,11 @@
+import asyncio
 from contextlib import asynccontextmanager
 from typing import List
 from uuid import uuid4
 
 from fastapi import FastAPI, Request, status
 from fastapi.responses import JSONResponse
+from sqlalchemy import text
 from sqlalchemy.orm import sessionmaker, Session
 
 from lif.datatypes import IdentityMapping
@@ -42,6 +44,29 @@ def shutdown():
 app = FastAPI(lifespan=lifespan)
 logger = get_logger(__name__)
 logger.info("Identity Mapper REST API service initialized successfully")
+
+
+def database_roundtrip() -> None:
+    session_factory: sessionmaker[Session] = get_db_session_factory()
+    with session_factory() as session:
+        session.execute(text("SELECT 1"))
+
+
+@app.get("/health")
+async def check_health() -> JSONResponse:
+    """
+    Liveness check against the real database.
+
+    Runs a SELECT 1 through the session factory (off the event loop, like the mapping
+    handlers) so a hung or unreachable database reports unhealthy instead of stalling the
+    loop — and the container HEALTHCHECK / load balancer can restart the task.
+    """
+    try:
+        await asyncio.to_thread(database_roundtrip)
+    except Exception as e:
+        logger.error(f"Health check failed, database unreachable: {e}")
+        return JSONResponse(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, content={"status": "unhealthy"})
+    return JSONResponse(status_code=status.HTTP_200_OK, content={"status": "ok"})
 
 
 @app.post(

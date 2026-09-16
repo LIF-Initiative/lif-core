@@ -316,9 +316,14 @@ async def find_ancestors(session, child_id, data_model_type, data_model_id, incl
             ancestors.append([parent_id])
         else:
             for parent_ancestor_line in parent_ancestors:
-                parent_ancestor_line.reverse()  # Reverse to start from root
+                # The recursive call already returns each line ordered root -> parent, so the
+                # parent id appends straight onto the end. Reversing here scrambled any line
+                # longer than one element, which made add_ref look for a nested entity name at
+                # the top level of components.schemas and raise a KeyError. A single-element
+                # line was unaffected, which is why this only surfaced for a Reference whose
+                # target sits three or more levels deep.
                 parent_ancestor_line.append(parent_id)
-                logger.debug(f"parent_ancestor_line after reverse: {parent_ancestor_line}")
+                logger.debug(f"parent_ancestor_line: {parent_ancestor_line}")
                 ancestors.append(parent_ancestor_line)
 
     return ancestors

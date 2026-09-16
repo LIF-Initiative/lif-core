@@ -22,47 +22,57 @@ def make_pre_model_hook(
     """
 
     # This function will be called every time before the node that calls LLM
-    def pre_model_hook(state: ChatState) -> ChatState:
-        """Prepares the state for the LLM call by summarizing the messages
+    def pre_model_hook(state: ChatState) -> dict[str, Any]:
+        """Prepares the input for the LLM call by summarizing the messages
         to fit within the token limits of the LLM.  This is useful to keep the context
         within the token limits of the LLM.
+
+        The return value is a *state update*, not a replacement state. `create_react_agent`
+        merges it into the graph state, and `AgentState.messages` carries an `add_messages`
+        reducer that APPENDS rather than replaces. Returning `messages` here would therefore
+        grow the history on every turn instead of trimming it, so the trimmed list is handed
+        to the model via `llm_input_messages`, which feeds the LLM without mutating `messages`.
+        Only keys that genuinely need to persist are returned -- `context` must, so the
+        summarizer can tell it already summarized. `remaining_steps` is a managed value and
+        must never be written back.
+
         Args:
             state: The current state of the agent.
         Returns:
-            state: Updated state with summarized and last max_messages messages.
+            dict: State update carrying the messages to send to the LLM.
         """
-        if state.get("messages"):
-            # If the state already has messages
-            # Step 1: Summarize the messages
-            summarized_messages = None
-            if len(state.get("messages")) > max_messages:
-                messages_to_retain = state["messages"][-max_messages:]
-                summary_input_messages = state["messages"]
-                # ty-ignore: langgraph's AgentState is a loosely-typed TypedDict.
-                state["summary_input_messages"] = summary_input_messages  # ty: ignore[invalid-assignment]
-                before_context = state.get("context", {}).copy()
-                state = summarizer_node.invoke(state)
-                after_context = state.get("context", {})
+        messages = list(state.get("messages") or [])
+        context: dict[str, Any] = dict(state.get("context") or {})
 
-                if before_context != after_context:
-                    logger.info(
-                        f"Summarized {len(summary_input_messages)} messages into {len(state['summary_output_messages'])} summary messages."
-                    )
+        if not messages:
+            return {"llm_input_messages": messages, "context": context}
 
-                summarized_messages = state["summary_output_messages"]
+        llm_input_messages = messages
 
-            # Step 2: Prepare new messages list with summarized messages
-            messages = []
+        if len(messages) > max_messages:
+            messages_to_retain = messages[-max_messages:]
+            before_context = dict(context)
+
+            summarizer_state: dict[str, Any] = {**state}
+            summarizer_state["summary_input_messages"] = messages
+            summarizer_result = summarizer_node.invoke(summarizer_state)
+
+            context = dict(summarizer_result.get("context") or context)
+            summarized_messages = list(summarizer_result.get("summary_output_messages") or [])
+
+            if before_context != context:
+                logger.info("Summarized %d messages into %d summary messages.", len(messages), len(summarized_messages))
+
             # NOTE: _safe_trim_messages runs only on this post-summarization path - a
             # conversation at or below max_messages goes to the LLM untrimmed regardless
             # of its token count.  Enforcing the budget before summarization is tracked
             # as issue #718.
             if summarized_messages:
-                messages.extend(summarized_messages)
-                messages.extend(messages_to_retain)
-                state["messages"] = _safe_trim_messages(messages, max_tokens, logger)
+                llm_input_messages = _safe_trim_messages(
+                    [*summarized_messages, *messages_to_retain], max_tokens, logger
+                )
 
-        return state
+        return {"llm_input_messages": llm_input_messages, "context": context}
 
     return pre_model_hook
 
@@ -112,7 +122,7 @@ def create_summarization_node(
     """
     return SummarizationNode(
         token_counter=count_tokens_approximately,
-        model=model,
+        model=model.bind(max_tokens=max_summary_size),
         max_tokens=max_conversation_size,
         max_summary_tokens=max_summary_size,
         input_messages_key="summary_input_messages",
