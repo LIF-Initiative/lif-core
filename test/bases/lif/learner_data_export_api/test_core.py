@@ -558,7 +558,9 @@ async def test_export_blank_query_param_returns_422(param, blank):
             response = await client.get("/exports", headers={"X-API-Key": DEFAULT_API_KEY}, params=params)
 
     assert response.status_code == 422, response.text
-    assert response.json()["detail"][0]["loc"] == ["query", param]
+    error = response.json()["detail"][0]
+    assert error["loc"] == ["query", param]
+    assert error["msg"] == f"{param} must not be blank"
     mdr_mock.assert_not_called()
 
 
