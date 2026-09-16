@@ -29,7 +29,10 @@ docker build -t flyway-aws .
 
 ### Running Migrations
 
-Flyway runs automatically during deployments. You should not need to run it manually. There are more details [backend](../README.md) documentation.
+Flyway runs when this SAM stack is deployed with a **new `pImageTag`** — not on a merge to `main`, and not on a
+service deploy. Merging a migration does **not** apply it. See
+[`docs/operations/guides/applying-mdr-migrations.md`](../../../docs/operations/guides/applying-mdr-migrations.md)
+for the procedure and how to verify it landed, and #1226 for why there is currently no gate reporting the drift.
 
 ## Configuration
 

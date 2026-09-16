@@ -179,13 +179,15 @@ async def update_attribute(session: AsyncSession, id: int, data: UpdateAttribute
         raise HTTPException(status_code=404, detail=f"Attribute with ID {id} is deleted")
 
     # Checking if data model exists or not
-    if data.DataModelId:
+    # `is not None`, not truthiness: an id of 0 is a value the client supplied, and the
+    # write below applies it (dict(exclude_unset=True)) — so it must be validated, not skipped.
+    if data.DataModelId is not None:
         await check_datamodel_by_id(session=session, id=data.DataModelId)
 
     # Checking if attribute with same unique name exists
-    if data.UniqueName or data.DataModelId:
+    if data.UniqueName or data.DataModelId is not None:
         updated_unique_name = data.UniqueName if data.UniqueName else attribute.UniqueName
-        updated_data_model_id = data.DataModelId if data.DataModelId else attribute.DataModelId
+        updated_data_model_id = data.DataModelId if data.DataModelId is not None else attribute.DataModelId
         existing_attribute = await check_attribute_exists(session, updated_unique_name, updated_data_model_id)
         logger.info(f"Existing attribute: {existing_attribute}")
         if existing_attribute and existing_attribute.Id != id:
@@ -195,7 +197,7 @@ async def update_attribute(session: AsyncSession, id: int, data: UpdateAttribute
             )
 
     # If updating with value set, check if value set exists
-    if data.ValueSetId:
+    if data.ValueSetId is not None:
         await check_value_set_exists_by_id(session=session, id=data.ValueSetId)
 
     for key, value in data.dict(exclude_unset=True).items():
