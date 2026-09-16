@@ -952,3 +952,55 @@ def test_embedded_property_key_matches_find_children_rule():
     assert svc.embedded_property_key("hasManager", "Employee") == "Employee"
     assert svc.embedded_property_key("relevantThing", "Thing") == "Thing"
     assert svc.embedded_property_key("issuedBy", "Org") == "issuedByOrg"
+
+
+async def test_find_children_records_the_key_it_writes(monkeypatch):
+    """Issue #1252: the map and the schema must be written from the same value.
+
+    The add_ref tests above supply a hand-built property_key_map, so they prove
+    add_ref *uses* a map but not that find_children *fills* one. Without this test
+    the threading (generate_openapi_schema -> find_children -> add_ref) could break
+    and every other test would still pass while production still 500s.
+    """
+    assoc = types.SimpleNamespace(Relationship="CFItems", ParentEntityId=1, ChildEntityId=2)
+
+    class _Assocs:
+        def scalars(self):
+            return self
+
+        def all(self):
+            return [assoc]
+
+        def fetchall(self):
+            return []
+
+    session = MagicMock()
+    session.execute = AsyncMock(return_value=_Assocs())
+
+    child_entity = types.SimpleNamespace(Name="CFItem", Array="No", UseConsiderations=None)
+    monkeypatch.setattr(svc, "get_entity_by_id", AsyncMock(return_value=child_entity))
+    monkeypatch.setattr(svc, "get_attributes_with_association_metadata_for_entity", AsyncMock(return_value=[]))
+
+    property_key_map = {}
+    parent_schema = {"properties": {}}
+    await svc.find_children(
+        {1: [2]},
+        1,
+        parent_schema,
+        df_entity=pd.DataFrame([{"Id": 1, "Name": "CFPackage"}, {"Id": 2, "Name": "CFItem"}]),
+        session=session,
+        include_attr_md=False,
+        data_model_id=17,
+        data_model=types.SimpleNamespace(Type="BaseLIF"),
+        include_entity_md=False,
+        public_only=False,
+        full_export=False,
+        property_key_map=property_key_map,
+    )
+
+    written_key = "CFItemsCFItem"
+    assert written_key in parent_schema["properties"], "find_children did not apply the relationship-qualified key"
+    assert property_key_map == {(1, 2): written_key}, (
+        "the recorded key must be the key actually written -- if these can differ, add_ref "
+        "navigates a structure that does not exist"
+    )
