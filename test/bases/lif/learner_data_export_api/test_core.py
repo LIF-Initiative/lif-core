@@ -543,3 +543,60 @@ async def test_export_translator_failure_returns_500(exc_msg):
 
     assert response.status_code == 500
     assert response.json()["detail"] == "Unable to translate the learner data from the LIF model into the target model"
+
+
+@pytest.mark.parametrize("param", sorted(_EXPORT_PARAMS))
+@pytest.mark.parametrize("blank", ["", "   "])
+async def test_export_blank_query_param_returns_422(param, blank):
+    """A blank required query parameter is rejected at validation, before any MDR call."""
+    params = {**_EXPORT_PARAMS, param: blank}
+    with (
+        mock.patch("lif.learner_data_export_api.learner_data_export_endpoints.fetch_data_models_from_mdr") as mdr_mock,
+        mock.patch.object(_ep.CONFIG, "openapi_data_model_id", "17"),
+    ):
+        async with get_client() as client:
+            response = await client.get("/exports", headers={"X-API-Key": DEFAULT_API_KEY}, params=params)
+
+    assert response.status_code == 422, response.text
+    assert response.json()["detail"][0]["loc"] == ["query", param]
+    mdr_mock.assert_not_called()
+
+
+@pytest.mark.parametrize("param", sorted(_EXPORT_PARAMS))
+async def test_export_missing_query_param_returns_422(param):
+    """An omitted required query parameter is still a required-field error."""
+    params = {k: v for k, v in _EXPORT_PARAMS.items() if k != param}
+    with mock.patch.object(_ep.CONFIG, "openapi_data_model_id", "17"):
+        async with get_client() as client:
+            response = await client.get("/exports", headers={"X-API-Key": DEFAULT_API_KEY}, params=params)
+
+    assert response.status_code == 422, response.text
+    assert response.json()["detail"][0]["type"] == "missing"
+    assert response.json()["detail"][0]["loc"] == ["query", param]
+
+
+async def test_export_query_params_are_trimmed():
+    """Padded query parameters are trimmed before they reach MDR and the Query Planner."""
+    params = {k: f"  {v}  " for k, v in _EXPORT_PARAMS.items()}
+    qp_mock = mock.AsyncMock(return_value=[{"Person": {"firstName": "John"}}])
+    with (
+        mock.patch(
+            "lif.learner_data_export_api.learner_data_export_endpoints.fetch_data_models_from_mdr",
+            return_value=_MDR_RESPONSE,
+        ) as mdr_mock,
+        mock.patch(
+            "lif.learner_data_export_api.learner_data_export_endpoints.fetch_query_from_query_planner", new=qp_mock
+        ),
+        mock.patch(
+            "lif.learner_data_export_api.learner_data_export_endpoints.translate_learner_data",
+            new=mock.AsyncMock(return_value={"name": "John Doe"}),
+        ),
+        mock.patch.object(_ep.CONFIG, "openapi_data_model_id", "17"),
+    ):
+        async with get_client() as client:
+            response = await client.get("/exports", headers={"X-API-Key": DEFAULT_API_KEY}, params=params)
+
+    assert response.status_code == 200, response.text
+    assert mdr_mock.call_args.args[1:4] == ("OpenBadges", "3.0", "OB")
+    query_filter = qp_mock.call_args.args[1]["filter"]["Person"]["Identifier"][0]
+    assert query_filter["identifier"] == "learner-123"

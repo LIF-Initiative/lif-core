@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import Any, Dict
+from typing import Annotated, Any, Dict
 
 from fastapi import APIRouter, HTTPException, Query, Request
 from lif.datatypes.core import TargetTransformationDataModelDTO, TargetTransformationDataModelsDTO
@@ -9,6 +9,7 @@ from lif.mdr_client.core import MDRClientException, fetch_data_models_from_mdr, 
 from lif.mdr_utils.logger_config import get_logger
 from lif.query_planner_client import QueryPlannerException, fetch_query_from_query_planner
 from lif.translator_client import TranslatorException, translate_learner_data
+from pydantic import StringConstraints
 
 router = APIRouter()
 logger = get_logger(__name__)
@@ -21,14 +22,17 @@ logger.info(f"LIF_QUERY_PLANNER_URL: {CONFIG.query_planner_base_url}")
 logger.info(f"LIF_TRANSLATOR_BASE_URL: {CONFIG.translator_base_url}")
 logger.info(f"LIF_MDR_API_URL: {CONFIG.mdr_api_url}")
 
+# Query parameters are rejected when empty or whitespace-only; accepted values are trimmed.
+RequiredQueryStr = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1)]
+
 
 @router.get("/exports", response_model=Dict[str, Any])
 async def get_data(
     request: Request,
-    learner_id: str = Query(..., alias="learnerId"),
-    data_model_name: str = Query(..., alias="dataModelName"),
-    data_model_version: str = Query(..., alias="dataModelVersion"),
-    data_model_contributor_organization: str = Query(..., alias="dataModelContributorOrganization"),
+    learner_id: Annotated[RequiredQueryStr, Query(alias="learnerId")],
+    data_model_name: Annotated[RequiredQueryStr, Query(alias="dataModelName")],
+    data_model_version: Annotated[RequiredQueryStr, Query(alias="dataModelVersion")],
+    data_model_contributor_organization: Annotated[RequiredQueryStr, Query(alias="dataModelContributorOrganization")],
 ):
     """Endpoint to export learner data in a specified format.
 
