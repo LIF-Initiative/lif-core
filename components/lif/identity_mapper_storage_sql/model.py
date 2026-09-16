@@ -1,6 +1,6 @@
 from uuid import uuid4
 
-from sqlalchemy import String, UniqueConstraint
+from sqlalchemy import Index, String, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column
 from lif.identity_mapper_storage_sql.db import Base
 from lif.datatypes import IdentityMapping
@@ -25,6 +25,12 @@ class IdentityMappingModel(Base):
             "target_system_person_id_type",
             name="uq_identity_mapping",
         ),
+        # Mirrors projects/lif_identity_mapper_mariadb/02-ddl.sql, which is what production
+        # actually runs; this declaration only takes effect under
+        # IDENTITY_MAPPER_DB_AUTO_CREATE_TABLES. Keep the two in sync -- see that file for why
+        # uq_identity_mapping cannot serve read_by_lif_org_and_person and why this index's
+        # column widths are load-bearing (#1231).
+        Index("idx_org_person", "lif_organization_id", "lif_organization_person_id"),
     )
 
     def from_identity_mapping(self, identity_mapping: IdentityMapping):

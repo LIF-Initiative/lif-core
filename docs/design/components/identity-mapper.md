@@ -388,10 +388,61 @@ same DDL with 240-byte key columns is created as `BTREE`; at the original width 
 batch-size tables above therefore cannot show this: at near-zero row counts a sequential scan fits in
 cache and looks every bit like the "one indexed SELECT" the code review assumed.
 
-**Verdict.** The *number of identity mapping records* half of the requirement is **not met at 1M
-rows under the current schema** — POST and GET degrade ~25 ms → ~1.1 s. The reads are point queries
-and the workload is fine; `uq_identity_mapping` just is not a usable index. The fix — narrow the key
-columns or charset so the unique key is a real B-tree, with a migration for existing tables — is
-tracked in issue [#1231](https://github.com/LIF-Initiative/lif-core/issues/1231) rather than fixed
-here. Re-run this sweep (`--seeds 0,10000,100000,1000000 --batch 100`) once that lands to confirm
-the curve returns to flat.
+**Verdict.** The *number of identity mapping records* half of the requirement was **not met at 1M
+rows under the schema as measured** — POST and GET degrade ~25 ms → ~1.1 s. The reads are point
+queries and the workload is fine; `uq_identity_mapping` just is not a usable index. The read path
+is fixed in [#1231](https://github.com/LIF-Initiative/lif-core/issues/1231); the unique key itself
+is still `HASH`, tracked in [#1258](https://github.com/LIF-Initiative/lif-core/issues/1258). See
+below.
+
+### Resolution (#1231) — the read path
+
+`read_by_lif_org_and_person` — the GET handler and the save pre-read, and the only
+table-size-sensitive read — now has a dedicated B-tree of its own:
+
+```sql
+INDEX idx_org_person (lif_organization_id, lif_organization_person_id)
+```
+
+Measured on a clean `mariadb:10.11` at 50,000 rows after `ANALYZE TABLE`, against the production
+DDL:
+
+| DDL | `EXPLAIN` (2-column lookup) | per-lookup |
+|---|---|---|
+| before | `type=ALL`, `key=NULL`, rows=49758 | 15.3 ms |
+| after | `type=ref`, `key=idx_org_person`, rows=5 | ~0.05 ms |
+
+Two things worth carrying forward:
+
+- **The penalty was never only at 1M.** The index was unusable at *every* table size; what grows
+  with row count is just what the full scan costs. At 10k–100k the scan hides inside HTTP overhead,
+  which is why the curve above reads as flat-then-knee.
+- **`uq_identity_mapping` is still `HASH`, deliberately.** Narrowing the key columns to
+  `VARCHAR(191)` would have made it a real B-tree (verified: 2692 bytes, `BTREE`, `type=ref`) and
+  would additionally make the DDL portable to MySQL 8, which rejects it outright today. That was
+  weighed against the additive index and not taken here, because it changes a column-width contract
+  for no measured read gain — the two fixes time identically. The constraint still enforces
+  uniqueness correctly; it is simply never read through. It remains open work, tracked in
+  [#1258](https://github.com/LIF-Initiative/lif-core/issues/1258), which also has to decide whether
+  `idx_org_person` then becomes redundant.
+
+`idx_org_person` is 2 × 255 chars × 4 bytes (utf8mb4) = **3060 bytes, 12 bytes under the same
+3072-byte limit** that broke `uq_identity_mapping`. Widening either column, or adding a third to
+this index, silently degrades it to `HASH` as well. `02-ddl.sql` carries this warning inline.
+
+**Verifying it, and the trap in doing so.** `EXPLAIN` on an empty or tiny table reports `key=NULL`
+whether or not a usable index exists, because the optimizer prefers a scan there — indistinguishable
+from the bug. Check `SHOW INDEX` for `Index_type = BTREE`, on a **populated** table, and do not
+validate in either direction against an empty one.
+
+No migration is required in dev or demo: ECS mounts EFS at `/mnt/efs`, not `/var/lib/mysql`, so the
+MariaDB datadir is ephemeral and `docker-entrypoint-initdb.d` replays `02-ddl.sql` on every task
+start. Local docker-compose *does* use named volumes (`mariadb_data_org{1,2,3}`), which hold only
+sample seed data, so pick the new schema up with:
+
+```bash
+docker compose -f deployments/advisor-demo-docker/docker-compose.yml down -v
+```
+
+Re-run this sweep (`--seeds 0,10000,100000,1000000 --batch 100`) to confirm the end-to-end curve
+returns to flat at 1M.
