@@ -184,6 +184,98 @@ class TestQueryPlannerSyncQueryTimeout(unittest.TestCase):
 
         return FakeDateTime
 
+    class _ManualClock:
+        """A clock the mocks move, so elapsed time reflects what the handler actually did.
+
+        The fixed-sequence _fake_clock above cannot tell these cases apart: moving
+        start_time across the first run_query does not change how many times now() is
+        called, only when. Letting run_query and sleep advance the clock does.
+        """
+
+        def __init__(self, start):
+            self.current = start
+
+        def now(self, tz=None):
+            return self.current
+
+        def advance(self, seconds):
+            self.current += dt.timedelta(seconds=seconds)
+
+    def test_first_run_query_counts_against_the_budget(self):
+        """The cache read and orchestrator submission are inside the budget, not free (#571).
+
+        start_time used to be taken *after* the first run_query, so both round trips sat
+        outside the ceiling -- the request could exceed the 150s ALB idle timeout while the
+        polling loop still believed it was within budget.
+
+        The 408 alone does not pin this: with start_time taken late the loop still times
+        out, just 20s later, after burning the whole budget in sleeps. What separates the
+        two is that a budget already spent before the loop starts must produce *no* sleep
+        at all, so that is what is asserted.
+        """
+        from lif.query_planner_restapi import core
+
+        pending = LIFQueryStatusResponse(query_id="123", status="PENDING")
+        clock = self._ManualClock(dt.datetime(2026, 1, 1, 12, 0, 0))
+        slept: list[float] = []
+
+        async def slow_run_query(*args, **kwargs):
+            clock.advance(30)  # cache POST + orchestrator POST
+            return pending
+
+        async def recording_sleep(seconds):
+            slept.append(seconds)
+            clock.advance(seconds)
+
+        async def _run():
+            with (
+                patch.object(core.config, "query_timeout_seconds", 20),
+                patch.object(core.service, "run_query", AsyncMock(side_effect=slow_run_query)),
+                patch.object(core.service, "get_query_status", AsyncMock(return_value=pending)),
+                patch.object(core, "datetime", clock),
+                patch.object(core, "sleep", new=recording_sleep),
+            ):
+                return await core.do_run_query_sync(query=_make_query(), response=MagicMock())
+
+        with self.assertRaises(HTTPException) as exc_info:
+            asyncio.run(_run())
+        self.assertEqual(exc_info.exception.status_code, 408)
+        self.assertEqual(slept, [])
+
+    def test_polling_sleep_is_clamped_to_the_remaining_budget(self):
+        """The loop must not sleep past its own deadline (#571).
+
+        The check sits at the top of the loop, so an unclamped sleep overshoots by up to a
+        whole MAX_POLLING_DELAY_SECONDS before the next check can fire. With a 10s budget the
+        unclamped backoff sleeps 1+2+4+8 = 15s, blowing the budget by half again.
+        """
+        from lif.query_planner_restapi import core
+
+        pending = LIFQueryStatusResponse(query_id="123", status="PENDING")
+        clock = self._ManualClock(dt.datetime(2026, 1, 1, 12, 0, 0))
+        slept: list[float] = []
+
+        async def recording_sleep(seconds):
+            slept.append(seconds)
+            clock.advance(seconds)
+
+        async def _run():
+            with (
+                patch.object(core.config, "query_timeout_seconds", 10),
+                patch.object(core.service, "run_query", AsyncMock(return_value=pending)),
+                patch.object(core.service, "get_query_status", AsyncMock(return_value=pending)),
+                patch.object(core, "datetime", clock),
+                patch.object(core, "sleep", new=recording_sleep),
+            ):
+                return await core.do_run_query_sync(query=_make_query(), response=MagicMock())
+
+        with self.assertRaises(HTTPException) as exc_info:
+            asyncio.run(_run())
+        self.assertEqual(exc_info.exception.status_code, 408)
+        # Exponential backoff 1, 2, 4, then 3 rather than 8 -- the deadline, not the curve.
+        self.assertEqual(slept, [1, 2, 4, 3])
+        self.assertEqual(sum(slept), 10)
+
     def test_sync_query_polls_past_timeout_and_returns_408(self):
         from lif.query_planner_restapi import core
 

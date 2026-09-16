@@ -147,19 +147,26 @@ def root() -> dict:
 async def do_run_query_sync(query: LIFQuery, response: Response) -> List[LIFRecord]:
     logger.info("CALL RECEIVED TO /query (sync) API")
     try:
+        # Counted from before the first run_query: that call makes the cache read and the
+        # orchestrator submission, so starting the clock after it left those round trips
+        # outside the budget entirely (#571).
+        start_time = datetime.now()
         result = await service.run_query(query, first_run=True)
         if isinstance(result, LIFQueryStatusResponse):
             logger.info("Query is still processing, entering polling loop")
-            start_time = datetime.now()
             delay_in_seconds: int = MIN_POLLING_DELAY_SECONDS
             while result.status == "PENDING":
                 # Wait for the query to complete
-                if (datetime.now() - start_time).total_seconds() > config.query_timeout_seconds:
+                remaining_seconds = config.query_timeout_seconds - (datetime.now() - start_time).total_seconds()
+                if remaining_seconds <= 0:
                     raise HTTPException(
                         status_code=408, detail=f"Query timed out after {config.query_timeout_seconds} seconds"
                     )
-                logger.info(f"Query still pending, waiting for {delay_in_seconds} seconds before polling again")
-                await sleep(delay_in_seconds)
+                # Clamped to what is left: an unclamped sleep runs past the deadline by up to
+                # one whole MAX_POLLING_DELAY_SECONDS before the next check can fire.
+                wait_seconds = min(delay_in_seconds, remaining_seconds)
+                logger.info(f"Query still pending, waiting for {wait_seconds} seconds before polling again")
+                await sleep(wait_seconds)
                 delay_in_seconds = (
                     delay_in_seconds * 2 if delay_in_seconds < MAX_POLLING_DELAY_SECONDS else MAX_POLLING_DELAY_SECONDS
                 )

@@ -2,7 +2,7 @@ import asyncio
 import logging
 import httpx
 import pytest
-from unittest.mock import patch, MagicMock, AsyncMock
+from unittest.mock import patch, call, MagicMock, AsyncMock
 
 from lif.datatypes import (
     LIFFragment,
@@ -544,6 +544,48 @@ def test_post_orchestrator_job_uses_configured_timeout(mock_client_cls):
     asyncio.run(core.post_orchestrator_job("https://api.example.com/jobs", request, timeout=300))
 
     mock_client_cls.assert_called_once_with(timeout=300)
+
+
+@patch("httpx.AsyncClient")
+def test_run_query_passes_service_request_timeout_to_both_http_calls(mock_client_cls):
+    """run_query's own call sites must pass the per-request timeout, not the query budget (#571).
+
+    The two tests above call the module-level functions directly with a literal timeout, so
+    they pin the *signatures*. They stay green even if run_query hands those functions
+    self.config.query_timeout_seconds -- which is exactly the coupling this issue removed.
+    Distinct values (7 vs 123) are what make the assertion mean something.
+    """
+    config = core.LIFQueryPlannerConfig(
+        lif_cache_url="https://api.example.com/cache",
+        lif_orchestrator_url="https://api.example.com/orchestrator",
+        information_sources_config=[
+            {
+                "information_source_id": "source_1",
+                "information_source_organization": "Example Org 1",
+                "adapter_id": "lif-to-lif",
+                "ttl_hours": 24,
+                "lif_fragment_paths": ["Person.name"],
+            }
+        ],
+        query_timeout_seconds=123,
+        service_request_timeout_seconds=7,
+    )
+    service = core.LIFQueryPlannerService(config=config)
+
+    mock_client = AsyncMock()
+    mock_client.post.side_effect = [
+        _create_mock_post_response(200, [], "https://api.example.com/cache/query"),
+        _create_mock_post_response(200, {"run_id": "run-1"}, "https://api.example.com/orchestrator/jobs"),
+    ]
+    mock_client_cls.return_value.__aenter__ = AsyncMock(return_value=mock_client)
+    mock_client_cls.return_value.__aexit__ = AsyncMock(return_value=False)
+
+    # run_query registers the submitted job, so keep the mutation out of the module singleton.
+    with patch.dict(core.JOB_STORE, {}, clear=True):
+        asyncio.run(service.run_query(_make_query(), first_run=True))
+
+    # The cache read and the orchestrator submission -- both on 7, neither on the 123 budget.
+    assert mock_client_cls.call_args_list == [call(timeout=7), call(timeout=7)]
 
 
 @patch("httpx.AsyncClient")
