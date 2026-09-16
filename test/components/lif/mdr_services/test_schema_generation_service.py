@@ -964,7 +964,7 @@ async def test_find_children_records_the_key_it_writes(monkeypatch):
     """
     assoc = types.SimpleNamespace(Relationship="CFItems", ParentEntityId=1, ChildEntityId=2)
 
-    class _Assocs:
+    class _Associations:
         def scalars(self):
             return self
 
@@ -975,7 +975,7 @@ async def test_find_children_records_the_key_it_writes(monkeypatch):
             return []
 
     session = MagicMock()
-    session.execute = AsyncMock(return_value=_Assocs())
+    session.execute = AsyncMock(return_value=_Associations())
 
     child_entity = types.SimpleNamespace(Name="CFItem", Array="No", UseConsiderations=None)
     monkeypatch.setattr(svc, "get_entity_by_id", AsyncMock(return_value=child_entity))
