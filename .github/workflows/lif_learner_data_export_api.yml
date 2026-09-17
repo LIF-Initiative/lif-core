@@ -23,6 +23,8 @@ on:
       - components/lif/translator_client/**
       - projects/lif_learner_data_export_api/**
       - .github/workflows/_deploy-service.yml
+      - components/lif/api_key_auth/**
+      - components/lif/cognito_auth/**
 
 permissions:
   id-token: write

@@ -13,6 +13,8 @@ on:
       - components/lif/mdr_services/**
       - components/lif/mdr_utils/**
       - .github/workflows/_deploy-service.yml
+      - components/lif/demo_personas/**
+      - components/lif/tenant_routing/**
 
 permissions:
   id-token: write

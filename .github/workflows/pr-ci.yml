@@ -52,6 +52,13 @@ jobs:
       - name: Tests
         run: uv run pytest test
 
+      # Re-derives each deploy workflow's brick set from its project's pyproject.toml
+      # and fails if the workflow's `paths:` filter does not cover it. Without this the
+      # filter is a hand-maintained duplicate that drifts, and a brick-only change
+      # merges green while the service keeps running the old image (#1171).
+      - name: Deploy-workflow paths cover packaged bricks
+        run: python3 scripts/check-workflow-paths.py
+
   frontend:
     name: Frontend build
     runs-on: ubuntu-latest

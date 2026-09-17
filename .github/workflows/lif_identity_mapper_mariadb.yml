@@ -26,6 +26,7 @@ on:
       - components/lif/datatypes/**
       - components/lif/logging/**
       - projects/lif_identity_mapper_mariadb/**
+      - components/lif/exceptions/**
 
 jobs:
 
