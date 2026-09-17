@@ -16,3 +16,20 @@ Environment:
     Value: "10"
   - Name: IDENTITY_MAPPER_DB_POOL_PRE_PING
     Value: "true"
+
+# Container-level health check. Fargate ignores the image's own HEALTHCHECK instruction
+# (that one covers docker-compose / plain docker); only a healthCheck in the container
+# definition is honoured, and without one "steady state" means merely that the process did
+# not exit. UseLbForService is false for this service, so there is no target group polling
+# HealthCheckUrl either — this block is what makes a deploy against an unreachable database
+# fail instead of reporting SUCCEEDED (#1215).
+HealthCheck:
+  Command:
+    - CMD-SHELL
+    - Fn::Sub: >-
+        python -c "import urllib.request,sys;
+        sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:${ContainerPort}/health', timeout=4).status == 200 else 1)"
+  Interval: 30
+  Timeout: 5
+  Retries: 3
+  StartPeriod: 60

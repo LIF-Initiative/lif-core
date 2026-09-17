@@ -74,6 +74,13 @@ class TestLIFSchemaConfig:
             assert config.query_planner_base_url == "http://test:9000"
             assert config.semantic_search_top_k == 50
 
+    def test_from_environment_reads_graphql_client_timeout_var(self):
+        """Issue #1203: query_timeout_seconds reads LIF_GRAPHQL_CLIENT_TIMEOUT_SECONDS,
+        and the QP-reserved LIF_QUERY_TIMEOUT_SECONDS is ignored.
+        """
+        with patch.dict(os.environ, {"LIF_GRAPHQL_CLIENT_TIMEOUT_SECONDS": "42", "LIF_QUERY_TIMEOUT_SECONDS": "999"}):
+            assert LIFSchemaConfig.from_environment().query_timeout_seconds == 42
+
     def test_is_reference_data_root(self):
         """Test checking if a root is reference data."""
         config = LIFSchemaConfig()
