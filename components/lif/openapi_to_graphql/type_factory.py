@@ -45,7 +45,14 @@ from lif.string_utils import (
 logger = get_logger(__name__)
 
 
-LIF_QUERY_TIMEOUT_SECONDS = int(os.getenv("LIF_QUERY_TIMEOUT_SECONDS", "20"))
+# TRANSITIONAL (#1203): fall back to the old shared name while deployed task definitions
+# still carry it. CI builds and redeploys the image on merge but never updates the
+# CloudFormation stack -- `aws-deploy.sh` does, by hand -- so without this fallback the new
+# image would read an unset variable and silently drop from the deployed 300s to the 20s
+# default. Remove the fallback once every environment's taskdef sets the new name.
+LIF_GRAPHQL_CLIENT_TIMEOUT_SECONDS = int(
+    os.getenv("LIF_GRAPHQL_CLIENT_TIMEOUT_SECONDS") or os.getenv("LIF_QUERY_TIMEOUT_SECONDS") or "20"
+)
 
 
 # === Constants ===
@@ -814,7 +821,7 @@ def build_root_query_type(
 
             logger.info(f"Query: {query}")
             # Make the backend API call
-            async with httpx.AsyncClient(timeout=httpx.Timeout(LIF_QUERY_TIMEOUT_SECONDS)) as client:
+            async with httpx.AsyncClient(timeout=httpx.Timeout(LIF_GRAPHQL_CLIENT_TIMEOUT_SECONDS)) as client:
                 response = await client.post(query_planner_query_url, json=query)
 
             if response.status_code == 200:

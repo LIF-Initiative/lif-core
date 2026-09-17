@@ -4,6 +4,10 @@ from lif.datatypes import IdentityMapping
 from lif.exceptions.core import DataNotFoundException
 from lif.identity_mapper_storage.core import DeleteOutcome, IdentityMapperStorage
 from lif.exceptions.core import DataStoreException
+from lif.logging.core import get_logger
+
+
+logger = get_logger(__name__)
 
 
 class IdentityMapperService:
@@ -71,7 +75,9 @@ class IdentityMapperService:
 
         Raises:
             ValueError: If the input data is invalid.
-            DataNotFoundException: If the mapping is not found.
+            DataNotFoundException: If the mapping is not found, or is not owned by the
+                given organization and person -- the two are deliberately indistinguishable
+                to the caller (#1177).
             DataStoreException: If there is an error deleting the mapping.
         """
         if not lif_organization_id or not lif_organization_person_id or not mapping_id:
@@ -83,7 +89,15 @@ class IdentityMapperService:
         outcome: DeleteOutcome = await self.storage.delete_mapping_for_owner(
             mapping_id, lif_organization_id, lif_organization_person_id
         )
-        if outcome is DeleteOutcome.NOT_FOUND:
-            raise DataNotFoundException(f"Mapping not found for ID: {mapping_id}")
         if outcome is DeleteOutcome.NOT_OWNED:
-            raise ValueError("Mapping does not belong to the provided LIF organization ID and person ID")
+            # Logged, not returned. The operator needs to see a cross-organization delete
+            # attempt; the caller must not be able to tell it apart from a missing mapping.
+            logger.warning(
+                f"Delete refused: mapping {mapping_id} does not belong to LIF organization "
+                f"{lif_organization_id} and person {lif_organization_person_id}"
+            )
+        if outcome in (DeleteOutcome.NOT_FOUND, DeleteOutcome.NOT_OWNED):
+            # Both refusals answer identically. Distinct responses let a caller probe
+            # arbitrary IDs and learn which ones exist without being able to read or
+            # delete them (#1177).
+            raise DataNotFoundException(f"Mapping not found for ID: {mapping_id}")
