@@ -44,6 +44,8 @@
         "dedup",
         "dedups",
         "deepcopy",
+        "midchain",
+        "Helmick",
         "Checkpointing",
         "classmethod",
         "ainvoke",
