@@ -5,11 +5,7 @@ import exportService, { DataFormat } from "../services/exportService";
 import personasService, { Persona } from "../services/personasService";
 import JsonHighlight from "../components/JsonHighlight/JsonHighlight";
 import { useToast } from "../context/ToastContext";
-
-function errorMessage(err: unknown, fallback: string): string {
-  const e = err as { response?: { data?: { detail?: string } }; message?: string };
-  return e?.response?.data?.detail || e?.message || fallback;
-}
+import { errorToString } from "../utils/errorUtils";
 
 export default function ExportPlayground() {
   const { showToast } = useToast();
@@ -66,7 +62,7 @@ export default function ExportPlayground() {
       });
       setOutput(data);
     } catch (err) {
-      setExportError(errorMessage(err, "Export failed."));
+      setExportError(errorToString(err));
     } finally {
       setSubmitting(false);
     }
