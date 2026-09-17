@@ -101,7 +101,7 @@ class LIFQueryPlannerService:
                 lif_query_plan: LIFQueryPlan = util.create_lif_query_plan_from_information_sources_config(
                     lif_person_identifier, self.information_sources_config, lif_fragment_paths
                 )
-                logger.info(f"Created LIF Query Plan: {lif_query_plan}")
+                logger.info(f"Created LIF Query Plan: {util.summarize_query_plan(lif_query_plan)}")
 
                 if not lif_query_plan.root:
                     logger.warning(
@@ -217,7 +217,10 @@ class LIFQueryPlannerService:
         Raises:
             LIFException: If posting results fails.
         """
-        logger.info(f"Received orchestration results for Run ID [{results.run_id}]: {results}")
+        logger.info(
+            f"Received orchestration results for Run ID [{results.run_id}]: "
+            f"{util.summarize_orchestration_results(results)}"
+        )
 
         try:
             # Get the Run ID from the results
@@ -295,7 +298,6 @@ async def query_lif_cache(lif_cache_query_url: str, query: LIFQuery) -> List[LIF
         response_json = response.json()
         lif_records = [LIFRecord(**record) for record in response_json]
         logger.info(f"Queried LIF Cache and found {len(lif_records)} records.")
-        logger.debug(f"LIF Records: {lif_records}")
         return lif_records
     except httpx.HTTPStatusError as e:
         msg = f"LIF Cache query HTTP error: {e.response.status_code} - {e.response.text}"
