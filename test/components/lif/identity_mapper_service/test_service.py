@@ -1,3 +1,4 @@
+import logging
 from unittest.mock import AsyncMock, Mock
 import pytest
 
@@ -137,13 +138,34 @@ async def test_delete_mapping_when_mapping_not_found():
 
 
 @pytest.mark.asyncio
-async def test_delete_mapping_not_owned_raises_value_error():
-    """A mapping owned by someone else is a 400, distinct from the 404 above."""
-    storage: IdentityMapperStorage = Mock()
-    storage.delete_mapping_for_owner = AsyncMock(return_value=DeleteOutcome.NOT_OWNED)
-    service = IdentityMapperService(storage=storage)
-    with pytest.raises(ValueError):
-        await service.delete_mapping("org-1", "person-1", "mapping-id-1")
+async def test_delete_mapping_not_owned_answers_as_not_found(caplog):
+    """A mapping owned by someone else is refused exactly like one that does not exist (#1177).
+
+    Answering NOT_OWNED differently told a caller which mapping IDs were real. The
+    distinction survives in the server log, where an operator can audit the attempt.
+    """
+
+    async def refuse(outcome: DeleteOutcome) -> str:
+        storage: IdentityMapperStorage = Mock()
+        storage.delete_mapping_for_owner = AsyncMock(return_value=outcome)
+        service = IdentityMapperService(storage=storage)
+        with pytest.raises(DataNotFoundException) as err:
+            await service.delete_mapping("org-1", "person-1", "mapping-id-1")
+        return str(err.value)
+
+    with caplog.at_level(logging.WARNING, logger="lif.identity_mapper_service.core"):
+        caplog.clear()
+        not_found_message = await refuse(DeleteOutcome.NOT_FOUND)
+        not_found_logs = [record.getMessage() for record in caplog.records]
+        caplog.clear()
+        not_owned_message = await refuse(DeleteOutcome.NOT_OWNED)
+        not_owned_logs = [record.getMessage() for record in caplog.records]
+
+    # What the caller sees is identical.
+    assert not_owned_message == not_found_message == "Mapping not found for ID: mapping-id-1"
+    # What the operator sees is not.
+    assert not_found_logs == []
+    assert any("does not belong" in line for line in not_owned_logs)
 
 
 @pytest.mark.asyncio

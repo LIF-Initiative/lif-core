@@ -278,6 +278,30 @@ async def test_update_attribute_conflict_raises_400(fake_session, monkeypatch):
     assert exc.value.status_code == 400
 
 
+async def test_update_attribute_validates_a_zero_data_model_id(fake_session, monkeypatch):
+    """DataModelId=0 must be validated, not read as "field not provided".
+
+    The write applies whatever the client set (dict(exclude_unset=True)), so skipping the
+    check for 0 would let an invalid foreign key reach the database.
+    """
+    from lif.mdr_dto.attribute_dto import UpdateAttributeDTO
+
+    current = types.SimpleNamespace(Id=5, Deleted=False, UniqueName="dm.height", DataModelId=1)
+    fake_session.get.return_value = current
+
+    check_datamodel = AsyncMock()
+    monkeypatch.setattr(svc, "check_datamodel_by_id", check_datamodel)
+    check_exists = AsyncMock(return_value=None)
+    monkeypatch.setattr(svc, "check_attribute_exists", check_exists)
+
+    await svc.update_attribute(fake_session, 5, UpdateAttributeDTO(DataModelId=0))
+
+    check_datamodel.assert_awaited_once_with(session=fake_session, id=0)
+    # The uniqueness check must use the supplied 0, not fall back to the existing 1.
+    assert check_exists.await_args.args[2] == 0
+    assert current.DataModelId == 0
+
+
 async def test_delete_attribute_ok(fake_session):
     fake_session.get.return_value = types.SimpleNamespace(Id=3, Deleted=False)
     fake_session.execute.return_value = _ScalarListResult([])

@@ -1,6 +1,7 @@
 import asyncio
 import httpx
-from unittest.mock import patch, MagicMock
+import logging
+from unittest.mock import patch, MagicMock, AsyncMock
 
 from lif.datatypes import (
     LIFFragment,
@@ -13,6 +14,7 @@ from lif.datatypes import (
     OrchestratorJobQueryPlanPartResults,
 )
 from lif.query_planner_service import core
+from lif.exceptions.core import LIFException
 from lif.query_planner_service.core import OrchestratorJobResults, add_job_to_store
 
 
@@ -121,6 +123,148 @@ def test_run_query_when_no_data_sources_found_for_any_fragment_paths(mock_post):
 
     asyncio.run(run_test())
     mock_post.assert_called_once()
+
+
+@patch("lif.query_planner_service.core.post_orchestrator_job", new_callable=AsyncMock)
+def test_run_query_logs_failure_reason_when_orchestrator_submission_fails(mock_post_orchestrator_job, caplog):
+    query = LIFQuery(
+        filter=LIFQueryFilter(
+            root=LIFQueryPersonFilter(
+                person=LIFPersonIdentifiers(
+                    Identifier=LIFPersonIdentifier(identifier="12345", identifierType="School-assigned number")
+                )
+            )
+        ),
+        selected_fields=["person.name", "person.positionPreferences"],
+    )
+
+    information_sources_config = [
+        {
+            "information_source_id": "source_1",
+            "information_source_organization": "Example Org 1",
+            "adapter_id": "lif-to-lif",
+            "ttl_hours": 24,
+            "lif_fragment_paths": ["Person.name"],
+        },
+        {
+            "information_source_id": "source_2",
+            "information_source_organization": "Example Org 2",
+            "adapter_id": "lif-to-lif",
+            "ttl_hours": 24,
+            "lif_fragment_paths": ["Person.positionPreferences"],
+        },
+    ]
+
+    config: core.LIFQueryPlannerConfig = core.LIFQueryPlannerConfig(
+        lif_cache_url="https://api.example.com",
+        lif_orchestrator_url="https://api.example.com",
+        information_sources_config=information_sources_config,
+    )
+    service: core.LIFQueryPlannerService = core.LIFQueryPlannerService(config=config)
+
+    mock_post_orchestrator_job.side_effect = httpx.ReadTimeout("Read timed out.")
+
+    mock_cache_response = _create_mock_post_response(200, [{"person": [{}]}], "https://api.example.com/query")
+    with caplog.at_level(logging.ERROR, logger="lif.query_planner_service.core"):
+        with patch("httpx.AsyncClient.post") as mock_post:
+            mock_post.return_value = mock_cache_response
+
+            async def run_test():
+                # The partial-degrade is preserved: cached records are returned, not a hard failure.
+                lif_records = await service.run_query(query, first_run=True)
+                assert isinstance(lif_records, list)
+                assert len(lif_records) == 1
+
+            asyncio.run(run_test())
+
+    mock_post_orchestrator_job.assert_awaited_once()
+
+    failure_logs = [
+        record
+        for record in caplog.records
+        if record.name == "lif.query_planner_service.core" and record.levelname == "ERROR"
+    ]
+    assert failure_logs
+    assert any("Orchestrator submission failed" in record.getMessage() for record in failure_logs)
+    assert any("1 cached records" in record.getMessage() for record in failure_logs)
+    assert any(record.exc_info is not None and "Read timed out." in str(record.exc_info[1]) for record in failure_logs)
+
+
+@patch("httpx.AsyncClient.post")
+def test_orchestrator_timeout_type_survives_the_empty_message_wrapping(mock_post, caplog):
+    """Issue #1204: the real failure chain, not a mocked stand-in.
+
+    `post_orchestrator_job` renders the reason as f"...: {e}", and transport timeouts
+    carry an EMPTY message, so it logs "Orchestrator job post error: " and re-raises a
+    LIFException carrying that same empty message. This test lets that real erasure
+    happen -- it patches the transport, not `post_orchestrator_job` -- and pins that
+    `logger.exception` still surfaces the httpx type through the `raise ... from e`
+    chain. A test that mocks `post_orchestrator_job` cannot show this: it would assert
+    against an exception the production path never raises here.
+    """
+    query = LIFQuery(
+        filter=LIFQueryFilter(
+            root=LIFQueryPersonFilter(
+                person=LIFPersonIdentifiers(
+                    Identifier=LIFPersonIdentifier(identifier="12345", identifierType="School-assigned number")
+                )
+            )
+        ),
+        selected_fields=["person.name", "person.positionPreferences"],
+    )
+
+    information_sources_config = [
+        {
+            "information_source_id": "source_1",
+            "information_source_organization": "Example Org 1",
+            "adapter_id": "lif-to-lif",
+            "ttl_hours": 24,
+            "lif_fragment_paths": ["Person.name"],
+        },
+        {
+            "information_source_id": "source_2",
+            "information_source_organization": "Example Org 2",
+            "adapter_id": "lif-to-lif",
+            "ttl_hours": 24,
+            "lif_fragment_paths": ["Person.positionPreferences"],
+        },
+    ]
+
+    config: core.LIFQueryPlannerConfig = core.LIFQueryPlannerConfig(
+        lif_cache_url="https://api.example.com",
+        lif_orchestrator_url="https://api.example.com",
+        information_sources_config=information_sources_config,
+    )
+    service: core.LIFQueryPlannerService = core.LIFQueryPlannerService(config=config)
+
+    mock_cache_response = _create_mock_post_response(200, [{"person": [{}]}], "https://api.example.com/query")
+
+    def route(url, *args, **kwargs):
+        if str(url).endswith("/query"):
+            return mock_cache_response
+        # httpx timeout exceptions from the transport carry an empty message -- that is
+        # the whole point, so do not give this one a message.
+        raise httpx.ReadTimeout("")
+
+    mock_post.side_effect = route
+
+    with caplog.at_level(logging.ERROR, logger="lif.query_planner_service.core"):
+        asyncio.run(service.run_query(query, first_run=True))
+
+    messages = [r.getMessage() for r in caplog.records]
+    # The upstream handler still erases the reason -- pinned so a future "cleanup" there
+    # cannot quietly become the only record of the failure.
+    assert "Orchestrator job post error: " in messages
+
+    submission_failures = [r for r in caplog.records if "Orchestrator submission failed" in r.getMessage()]
+    assert submission_failures
+    record = submission_failures[0]
+    assert record.exc_info is not None
+    # The immediate exception is the LIFException with the empty message; the httpx type
+    # survives only as its __cause__, which is what logger.exception renders.
+    assert isinstance(record.exc_info[1], LIFException)
+    assert isinstance(record.exc_info[1].__cause__, httpx.ReadTimeout)
+    assert "ReadTimeout" in caplog.text
 
 
 @patch("httpx.AsyncClient.post")

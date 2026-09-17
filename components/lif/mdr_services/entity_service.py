@@ -4,6 +4,7 @@ from fastapi import HTTPException
 from lif.datatypes.mdr_sql_model import (
     Attribute,
     DataModelType,
+    ElementType,
     Entity,
     EntityAssociation,
     EntityAttributeAssociation,
@@ -87,14 +88,16 @@ async def create_entity(session: AsyncSession, data: CreateEntityDTO):
 
 async def update_entity(session: AsyncSession, id: int, data: UpdateEntityDTO):
     # Checking if data model  exists or not
-    if data.DataModelId:
+    # `is not None`, not truthiness: an id of 0 is a value the client supplied, and the
+    # write below applies it (dict(exclude_unset=True)) — so it must be validated, not skipped.
+    if data.DataModelId is not None:
         await check_datamodel_by_id(session=session, id=data.DataModelId)
 
     entity = await get_entity_by_id(session=session, id=id)
 
-    if data.UniqueName or data.DataModelId:
+    if data.UniqueName or data.DataModelId is not None:
         updated_unique_name = data.UniqueName if data.UniqueName else entity.UniqueName
-        updated_data_model_id = data.DataModelId if data.DataModelId else entity.DataModelId
+        updated_data_model_id = data.DataModelId if data.DataModelId is not None else entity.DataModelId
         existing_entity = await check_entity_exists(session, updated_unique_name, updated_data_model_id)
         logger.info(f"existing_entity : {existing_entity}")
         if existing_entity and existing_entity.Id != id:
@@ -202,7 +205,9 @@ async def soft_delete_entity(session: AsyncSession, id: int):
 
         # Step 5: Delete Entity from Inclusions
         entity_inclusions_query = select(ExtInclusionsFromBaseDM).where(
-            ExtInclusionsFromBaseDM.IncludedElementId == id, ExtInclusionsFromBaseDM.Deleted == False
+            ExtInclusionsFromBaseDM.ElementType == ElementType.Entity,
+            ExtInclusionsFromBaseDM.IncludedElementId == id,
+            ExtInclusionsFromBaseDM.Deleted == False,
         )
         entity_inclusions_result = await session.execute(entity_inclusions_query)
         entity_inclusions = entity_inclusions_result.scalars().all()

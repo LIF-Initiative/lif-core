@@ -28,6 +28,7 @@ x-lif-graphql-api-template: &lif-graphql-api-template
     context: ../../
     dockerfile: projects/lif_graphql_api/Dockerfile2
   environment:
+    LIF_GRAPHQL_CLIENT_TIMEOUT_SECONDS: ${LIF_GRAPHQL_CLIENT_TIMEOUT_SECONDS:-300}
     LIF_GRAPHQL_ROOT_TYPE_NAME: ${LIF_GRAPHQL_ROOT_TYPE_NAME:-Person}
     LIF_MDR_API_URL: ${LIF_MDR_API_URL:-http://host.docker.internal:8081}
     OPENAPI_DATA_MODEL_ID: ${OPENAPI_DATA_MODEL_ID:-17}
@@ -153,7 +154,6 @@ services:
       - "${LIF_GRAPHQL_PORT_ORG1:-8010}:8000"
     environment:
       LIF_QUERY_PLANNER_URL: http://lif-query-planner-org1:8002
-      LIF_QUERY_TIMEOUT_SECONDS: ${LIF_QUERY_TIMEOUT:-60}
     depends_on:
       - lif-query-planner-org1
     networks:

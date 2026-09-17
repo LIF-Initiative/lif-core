@@ -13,7 +13,7 @@ from unittest import mock
 from langchain_core.messages import AIMessage, HumanMessage
 from langgraph.graph.message import add_messages
 
-from lif.langchain_agent.memory import make_pre_model_hook
+from lif.langchain_agent.memory import create_summarization_node, make_pre_model_hook
 
 MAX_MESSAGES = 4
 logger = logging.getLogger(__name__)
@@ -124,3 +124,32 @@ def test_empty_state_still_supplies_llm_input_key():
     update = hook({"messages": [], "context": {}})
 
     assert update["llm_input_messages"] == []
+
+
+def test_summarizer_enforces_summary_token_cap():
+    """Issue #1160: langmem treats max_summary_tokens as budget estimation only --
+    the real cap must be bound onto the model or summaries can exceed the budget
+    stack without limit.
+    """
+    model = mock.Mock()
+    max_conversation_size = 2048
+    max_summary_size = 512
+
+    node = create_summarization_node(model, max_conversation_size, max_summary_size)
+
+    model.bind.assert_called_once_with(max_tokens=max_summary_size)
+    assert node.model is model.bind.return_value
+    assert node.max_summary_tokens == max_summary_size
+
+
+def test_oversized_summary_cannot_crowd_out_retained_messages():
+    """Issue #1160: a summary far larger than any budget must not silently reduce
+    the model input to the summary alone -- the retained tail always survives.
+    """
+    hook = make_pre_model_hook(_fake_summarizer(summary_text="x" * 200_000), MAX_MESSAGES, logger)
+    messages = [HumanMessage(content=f"m{i}") for i in range(20)]
+
+    llm_input = hook({"messages": messages, "context": {}})["llm_input_messages"]
+
+    assert len(llm_input) == MAX_MESSAGES + 1
+    assert [m.content for m in llm_input[1:]] == [m.content for m in messages[-MAX_MESSAGES:]]
