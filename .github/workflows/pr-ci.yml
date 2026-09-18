@@ -36,9 +36,11 @@ jobs:
           python-version: "3.13"
           enable-cache: true
 
-      # --frozen fails if uv.lock is stale, covering the uv-lock pre-commit hook.
+      # --locked asserts the root lock matches pyproject.toml, covering the uv-lock
+      # pre-commit hook. --frozen does NOT: it means "do not update the lock", so it
+      # installs a stale one and exits 0 (verified with the pinned uv 0.7.15).
       - name: Install dependencies (locked)
-        run: uv sync --frozen
+        run: uv sync --locked
 
       - name: Ruff lint
         run: uv run ruff check
@@ -49,8 +51,12 @@ jobs:
       - name: Type check (ty)
         run: uv run ty check --error-on-warning
 
+      - name: Per-project lockfiles are current
+        run: uv run python scripts/check_project_locks.py
+
       - name: Tests
         run: uv run pytest test
+
 
   frontend:
     name: Frontend build
