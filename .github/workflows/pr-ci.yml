@@ -49,8 +49,12 @@ jobs:
       - name: Type check (ty)
         run: uv run ty check --error-on-warning
 
+      - name: Deploy-workflow paths cover packaged bricks
+        run: uv run python scripts/check_workflow_paths.py
+
       - name: Tests
         run: uv run pytest test
+
 
   frontend:
     name: Frontend build

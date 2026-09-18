@@ -17,6 +17,10 @@ on:
       - components/lif/mdr_client/**
       - projects/lif_semantic_search_mcp_server/**
       - .github/workflows/_deploy-service.yml
+      - components/lif/exceptions/**
+      - components/lif/graphql_client/**
+      - components/lif/lif_schema_config/**
+      - components/lif/schema_state_manager/**
 
 permissions:
   id-token: write
