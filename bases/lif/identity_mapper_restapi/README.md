@@ -9,6 +9,8 @@ Identity mappings are scoped per `{org_id}/{person_id}`:
 - `GET    /organizations/{org_id}/persons/{person_id}/mappings` (and variants)   — list / fetch mappings
 - `DELETE /organizations/{org_id}/persons/{person_id}/mappings/{mapping_id}`     — delete a mapping (204 on success)
 
+A refused `DELETE` answers `404` whether no mapping has that ID or the mapping exists but belongs to a different organization or person. The two are deliberately indistinguishable, so a caller cannot probe IDs to discover which ones are real (#1177); the not-owned case is logged at the server instead.
+
 Plus exception handlers translating `DataNotFoundException`, `LIFException`, and validation errors into stable HTTP responses.
 
 ## Storage

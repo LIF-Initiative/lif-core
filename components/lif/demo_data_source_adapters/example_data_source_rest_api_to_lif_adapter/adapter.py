@@ -2,7 +2,7 @@ import requests
 
 from lif.datatypes import LIFQueryPlanPart
 from lif.logging import get_logger
-from ..core import LIFAdapterType, LIFDataSourceAdapter
+from lif.data_source_adapters.core import LIFAdapterType, LIFDataSourceAdapter
 
 
 logger = get_logger(__name__)

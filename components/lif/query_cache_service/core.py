@@ -9,6 +9,7 @@ and filter conversion.
 
 from typing import Any, Dict, List
 
+from pymongo import ReturnDocument
 from pymongo.asynchronous.database import AsyncDatabase
 
 from lif.composer.core import compose_with_fragment_list
@@ -238,14 +239,14 @@ async def update(lif_update: LIFUpdate) -> LIFRecord:
         if not update_doc:
             raise ValueError("No update fields provided.")
 
-        logger.info("===> WILL NOW MAKE MONGODB COLLECTION.UPDATE_ONE CALL: ")
+        logger.info("===> WILL NOW MAKE MONGODB COLLECTION.FIND_ONE_AND_UPDATE CALL: ")
         logger.info(f"FILTER: {mongo_filter}")
         logger.info(f"UPDATE DOC: {update_doc}")
-        await collection.update_one(mongo_filter, update_doc)
+        doc = await collection.find_one_and_update(
+            mongo_filter, update_doc, projection={PERSON_KEY_PASCAL: 1, "_id": 0}, return_document=ReturnDocument.AFTER
+        )
         logger.info("===> DONE MAKING MONGODB CALL")
 
-        # Return ONLY the full 'Person' array as { "Person": [ ... ] }
-        doc = await collection.find_one(mongo_filter, {PERSON_KEY_PASCAL: 1, "_id": 0})
         if doc and PERSON_KEY_PASCAL in doc:
             # ty doesn't model pydantic's populate_by_name aliasing; `person` is the
             # field name (alias "Person") and is valid at runtime.
@@ -268,7 +269,7 @@ async def add(lif_record: LIFRecord) -> LIFRecord:
         lif_record (LIFRecord): The record to add.
 
     Returns:
-        LIFRecord: The added record with '_id' field included.
+        LIFRecord: The added record.
 
     Raises:
         Exception: If the add operation fails.
@@ -277,8 +278,7 @@ async def add(lif_record: LIFRecord) -> LIFRecord:
         logger.info(f"===> CALL MADE TO ADD: {lif_record}")
         result = await collection.insert_one(lif_record.model_dump(by_alias=True))
         if result.inserted_id:
-            added_record = await collection.find_one({"_id": result.inserted_id})
-            return LIFRecord(**added_record)  # type: ignore
+            return lif_record
         raise ResourceNotFoundException("Failed to add record, no inserted ID returned.")
     except Exception as e:
         logger.exception("Add Exception: %s", e)
@@ -317,7 +317,11 @@ async def save(lif_query_filter: LIFQueryFilter, lif_fragments: List[LIFFragment
             else LIFRecord(person=lif_person)  # ty: ignore[unknown-argument]
         )
 
-        updated_lif_record = compose_with_fragment_list(lif_record, lif_fragments)
+        # Issue #1165: replace, don't append. `lif_record` was just loaded from Mongo and
+        # already holds every fragment composed by previous refreshes, while `lif_fragments`
+        # is the current truth from the sources for the paths it covers. Appending here made
+        # each refresh re-add data the record already had.
+        updated_lif_record = compose_with_fragment_list(lif_record, lif_fragments, replace_existing=True)
         mongo_update_response = await collection.update_one(
             mongo_filter, {"$set": updated_lif_record.model_dump(by_alias=True)}, upsert=True
         )

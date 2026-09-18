@@ -24,4 +24,9 @@ Secrets:
   - Name: LIF_DEMO_USER_PASSWORD
     ValueFrom:
       Fn::Sub: "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${EnvironmentName}/${ServiceName}/DemoUserPassword"
+  # Signs and verifies the Advisor's session JWTs. Required — the code has no
+  # fallback on purpose (#1191). The parameter must exist before deploying.
+  - Name: SECRET_KEY
+    ValueFrom:
+      Fn::Sub: "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${EnvironmentName}/${ServiceName}/JwtSecretKey"
 

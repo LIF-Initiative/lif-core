@@ -422,8 +422,8 @@ async def get_base_model_for_given_orglif(session: AsyncSession, extended_data_m
 
 
 async def check_unique_data_model_exists(
-    session: AsyncSession, name: str, version: str, dataModelType: str, contributorOrganization: str
-) -> bool:
+    session: AsyncSession, name: str, version: str, dataModelType: str, contributorOrganization: str | None
+) -> DataModel | None:
     # Query to check if a data model with the same name exists
     query = select(DataModel).where(
         DataModel.Name == name,
