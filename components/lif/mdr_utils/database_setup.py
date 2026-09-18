@@ -122,6 +122,23 @@ async def get_session(request: Request) -> AsyncGenerator[AsyncSession, None]:
             # given table still falls through to public for that table — the
             # clean fix (copy PG types into tenant schemas, then drop the
             # `public` fallback) is tracked as a follow-up under #949/#961.
+            #
+            # `public` is NOT a safety net for schema drift, and reading it as
+            # one costs real debugging time (#1265). Fall-through is per-OBJECT.
+            # A tenant schema that has `Attributes` but lacks a column `public`
+            # gained in a later migration resolves the table tenant-first and
+            # then errors on the missing column; it never consults public's
+            # copy. Migrations are written `ALTER TABLE public."…"`, so on
+            # 2026-09-17 all 19 tenant schemas across dev and demo were missing
+            # `Attributes.TargetEntityId` while public had it and Flyway
+            # reported Success.
+            #
+            # Concretely: `public` having a column proves nothing about the
+            # schemas this function actually routes to. Since
+            # MDR__TENANT_ROUTING__SERVICE_SCHEMA is `tenant_lif_team` in dev
+            # and demo, no ordinary caller reads public at all — it is a clone
+            # template, not a live schema. Verify a migration against
+            # information_schema per schema, not against flyway_schema_history.
             await session.execute(text(f'SET search_path TO "{tenant_schema}", public'))
         elif tenant_schema:
             logger.error("Refusing to SET search_path to invalid tenant_schema %r", tenant_schema)
