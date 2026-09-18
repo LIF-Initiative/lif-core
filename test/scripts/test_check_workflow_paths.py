@@ -45,7 +45,7 @@ def test_coverage_is_directional(brick, paths, expected, why):
 
 def test_repo_workflows_all_cover_their_bricks():
     """The live audit passes. This is the regression guard for the repo itself."""
-    rows, unauditable = guard.audit()
+    rows, unauditable, _not_projects = guard.audit()
     assert rows, "no deploy workflows discovered -- has the layout changed?"
     drifted = {name: missing for name, _project, _bricks, missing in rows if missing}
     assert not drifted, f"workflows missing brick coverage: {drifted}"
@@ -63,6 +63,16 @@ def test_an_unreadable_project_is_reported_not_skipped(monkeypatch):
     """Dropping a workflow silently would let drift disable the drift detector."""
     monkeypatch.setattr(guard, "project_bricks", lambda project: None)
     monkeypatch.setattr(guard, "NO_BRICK_PROJECTS", set())
-    rows, unauditable = guard.audit()
+    rows, unauditable, _not_projects = guard.audit()
     assert not rows
     assert unauditable, "an unreadable project must surface, not vanish from the denominator"
+
+
+def test_non_project_deploys_are_recorded_not_silently_dropped():
+    """The two named skips are auditable lists; this one is a heuristic.
+
+    A heuristic that removes a workflow from the denominator without saying so is how
+    a drift check quietly stops checking something.
+    """
+    _rows, _unauditable, not_projects = guard.audit()
+    assert "lif_mdr_frontend.yml" in not_projects, "frontend deploys build from frontends/, not projects/"

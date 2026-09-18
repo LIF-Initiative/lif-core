@@ -76,10 +76,11 @@ def covered(brick: str, paths: list[str]) -> bool:
     return False
 
 
-def audit() -> tuple[list[tuple[str, str, list[str], list[str]]], list[tuple[str, str]]]:
-    """Return (rows, unauditable). rows are (workflow, project, bricks, missing)."""
+def audit() -> tuple[list[tuple[str, str, list[str], list[str]]], list[tuple[str, str]], list[str]]:
+    """Return (rows, unauditable, not_projects). rows are (workflow, project, bricks, missing)."""
     rows: list[tuple[str, str, list[str], list[str]]] = []
     unauditable: list[tuple[str, str]] = []
+    not_projects: list[str] = []
 
     for workflow in sorted(WORKFLOW_DIR.glob("*.yml")):
         if workflow.name in NOT_DEPLOY_WORKFLOWS:
@@ -87,7 +88,13 @@ def audit() -> tuple[list[tuple[str, str, list[str], list[str]]], list[tuple[str
         text = workflow.read_text()
         projects = sorted(set(re.findall(r"projects/([a-z0-9_]+)", text)))
         if not projects:
-            continue  # not a project deploy workflow
+            # Deploys something that is not a Polylith project -- the frontends build
+            # from frontends/, not projects/. Recorded rather than dropped: the two
+            # skips above are explicit named lists, but this one is a heuristic, and a
+            # heuristic that silently removes a workflow from the denominator is how a
+            # drift check stops seeing the thing it checks.
+            not_projects.append(workflow.name)
+            continue
         for project in projects:
             if project in NO_BRICK_PROJECTS:
                 continue
@@ -99,11 +106,11 @@ def audit() -> tuple[list[tuple[str, str, list[str], list[str]]], list[tuple[str
                 unauditable.append((workflow.name, f"projects/{project} declares no [tool.polylith.bricks]"))
                 continue
             rows.append((workflow.name, project, bricks, [b for b in bricks if not covered(b, workflow_paths(text))]))
-    return rows, unauditable
+    return rows, unauditable, not_projects
 
 
 def main() -> int:
-    rows, unauditable = audit()
+    rows, unauditable, not_projects = audit()
     if not rows:
         print("check_workflow_paths: no deploy workflows found -- has the layout changed?")
         return 1
@@ -119,6 +126,9 @@ def main() -> int:
                 print(f"      {brick}")
         elif show_all:
             print(f"  {name:46s} {project:34s} ok ({len(bricks)} bricks)")
+
+    if show_all and not_projects:
+        print(f"  (not Polylith project deploys, so nothing to check: {', '.join(not_projects)})")
 
     for name, reason in unauditable:
         failures += 1
