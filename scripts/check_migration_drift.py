@@ -39,16 +39,31 @@ import urllib.request
 REPO = pathlib.Path(__file__).resolve().parent.parent
 MIGRATIONS = REPO / "sam" / "mdr-database" / "flyway" / "flyway-files" / "flyway" / "sql" / "mdr"
 VERSION_RE = re.compile(r"^V(\d+(?:\.\d+)*)__")
+REPEATABLE_RE = re.compile(r"^R__")
 
 
-def repo_versions() -> list[str]:
-    """Migration versions present in the repo, ascending."""
-    versions = []
-    for path in MIGRATIONS.glob("V*.sql"):
-        match = VERSION_RE.match(path.name)
-        if match:
-            versions.append(match.group(1))
-    return sorted(versions, key=lambda v: [int(p) for p in v.split(".")])
+def version_key(version: str) -> list[int]:
+    """Sort key that orders by number, not string: V1.10 after V1.2, not before."""
+    return [int(part) for part in version.split(".")]
+
+
+def repo_versions(directory: pathlib.Path | None = None) -> list[str]:
+    """Versioned migrations present in the repo, ascending.
+
+    Repeatable migrations (``R__``) have no version and are deliberately not returned --
+    Flyway re-applies them on checksum change, so "is version N applied" is not a
+    question that applies to them. They are reported separately by
+    ``repeatable_migrations`` so their existence is not silently invisible.
+    """
+    directory = MIGRATIONS if directory is None else directory
+    versions = [m.group(1) for path in directory.glob("V*.sql") if (m := VERSION_RE.match(path.name))]
+    return sorted(versions, key=version_key)
+
+
+def repeatable_migrations(directory: pathlib.Path | None = None) -> list[str]:
+    """``R__`` migration filenames, which carry no version."""
+    directory = MIGRATIONS if directory is None else directory
+    return sorted(p.name for p in directory.glob("R__*.sql") if REPEATABLE_RE.match(p.name))
 
 
 def fetch_state(base_url: str, api_key: str) -> dict:

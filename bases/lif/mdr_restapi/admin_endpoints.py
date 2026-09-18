@@ -40,6 +40,20 @@ class SchemaStateResponse(BaseModel):
     drifted_schema_count: int
 
 
+def _highest_successful(applied: List[Dict[str, Any]]) -> str | None:
+    """The highest version recorded as successfully applied.
+
+    Not simply the newest row: `flyway_schema_history` is ordered by attempt, so a
+    failed migration is the most recent entry. Reporting that as `latest_version`
+    would have the script print it in its reassuring branch -- "all N repo migrations
+    recorded applied (latest X)" -- naming the version that did not apply.
+    """
+    successful = [row["version"] for row in applied if row["success"]]
+    if not successful:
+        return None
+    return max(successful, key=lambda v: [int(part) for part in v.split(".")])
+
+
 async def require_service_principal(request: Request) -> str:
     """403 unless the caller authenticated with an X-API-Key service credential.
 
@@ -77,7 +91,7 @@ async def get_schema_state(
 
     return SchemaStateResponse(
         applied_migrations=[AppliedMigration(**row) for row in applied],
-        latest_version=applied[0]["version"] if applied else None,
+        latest_version=_highest_successful(applied),
         schemas=[SchemaDrift(schema_name=s["schema"], missing=s["missing"]) for s in schemas],
         drifted_schema_count=len(drifted),
     )

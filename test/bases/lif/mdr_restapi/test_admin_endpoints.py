@@ -106,7 +106,40 @@ async def test_empty_history_means_flyway_never_ran(monkeypatch):
     assert response.json()["applied_migrations"] == []
 
 
-async def test_requires_a_service_principal():
-    """Schema shape is operational detail — an unauthenticated caller gets nothing."""
+async def test_unauthenticated_caller_is_rejected_by_the_middleware():
+    """No credentials at all never reaches the route -- AuthMiddleware stops it first."""
     response = await _get(_build_app(APPLIED, []), {})
-    assert response.status_code in (401, 403), response.text
+    assert response.status_code == 401, response.text
+
+
+async def test_a_cognito_user_is_rejected_by_the_dependency(monkeypatch):
+    """The check that actually matters: authenticated, but not a service principal.
+
+    The previous version of this test sent no headers and asserted `in (401, 403)`.
+    That passes on the middleware's 401 without ever reaching
+    `require_service_principal`, so it proved nothing about the dependency. A loose
+    assertion was hiding the fact that I did not know which code path ran.
+    """
+    monkeypatch.setattr(
+        admin_endpoints.schema_drift_service, "applied_migrations", mock.AsyncMock(return_value=APPLIED)
+    )
+    monkeypatch.setattr(admin_endpoints.schema_drift_service, "tenant_schema_drift", mock.AsyncMock(return_value=[]))
+
+    app = FastAPI()  # no AuthMiddleware: exercise the dependency in isolation
+
+    async def fake_session():
+        yield mock.MagicMock()
+
+    app.dependency_overrides[admin_endpoints.get_session] = fake_session
+    app.include_router(admin_endpoints.router, prefix="/admin")
+
+    @app.middleware("http")
+    async def as_cognito_user(request, call_next):
+        request.state.principal = "user:alice@example.com"  # authenticated, not a service
+        return await call_next(request)
+
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
+        response = await client.get("/admin/schema-state")
+
+    assert response.status_code == 403, response.text
+    assert response.json()["detail"] == "Service principal required"

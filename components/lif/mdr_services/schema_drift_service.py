@@ -28,24 +28,26 @@ from typing import Any
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
-# Schemas that are never tenants and should not be compared against public.
-_NON_TENANT_SCHEMAS = ("pg_catalog", "information_schema", "pg_toast", "public")
+# Tenant schemas are named `tenant_{group}` (`lif.tenant_routing.SCHEMA_PREFIX`), and
+# V1.5 already enumerates them this way. Matching the prefix is more precise than
+# "everything that is not public" -- an extension or tooling schema would otherwise be
+# counted as clean and inflate the denominator.
+_TENANT_SCHEMA_PATTERN = "^tenant_"
 
-# The schema Flyway records its history in. Flyway writes this table into its own
-# default schema, which for this stack is public.
+# The schema Flyway records its history in -- its own default schema for this stack.
 _HISTORY_SCHEMA = "public"
 
 
 async def applied_migrations(session: AsyncSession) -> list[dict[str, Any]]:
-    """Every row of ``flyway_schema_history``, newest first.
+    """Every versioned row of ``flyway_schema_history``, newest first.
 
-    Returns an empty list when the table does not exist, which is itself the
-    answer: Flyway has never run against this database.
+    Returns an empty list when the table does not exist, which is itself the answer:
+    Flyway has never run against this database.
     """
     exists = await session.execute(
         text(
-            "SELECT 1 FROM information_schema.tables "
-            "WHERE table_schema = :schema AND table_name = 'flyway_schema_history'"
+            "SELECT 1 FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace "
+            "WHERE n.nspname = :schema AND c.relname = 'flyway_schema_history'"
         ),
         {"schema": _HISTORY_SCHEMA},
     )
@@ -54,9 +56,9 @@ async def applied_migrations(session: AsyncSession) -> list[dict[str, Any]]:
 
     rows = await session.execute(
         text(
-            f'SELECT "version", "description", "success", "installed_on" '  # noqa: S608 - schema is a module constant
+            'SELECT "version", "description", "success", "installed_on" '  # noqa: S608 - schema is a module constant
             f"FROM {_HISTORY_SCHEMA}.flyway_schema_history "
-            f'WHERE "version" IS NOT NULL ORDER BY "installed_rank" DESC'
+            'WHERE "version" IS NOT NULL ORDER BY "installed_rank" DESC'
         )
     )
     return [
@@ -71,53 +73,58 @@ async def applied_migrations(session: AsyncSession) -> list[dict[str, Any]]:
 
 
 async def tenant_schema_drift(session: AsyncSession) -> list[dict[str, Any]]:
-    """Per non-public schema, the columns ``public`` has that it does not.
+    """Per tenant schema, the columns ``public`` has that it does not.
 
-    A tenant schema is a clone of ``public`` taken when the tenant was created, so
-    any column a later migration added to ``public`` is absent there. Only tables
-    present in both schemas are compared -- a table the tenant does not have at all
-    is a different problem (it still falls through to public at query time) and
-    would drown this signal.
+    Reads ``pg_catalog`` rather than ``information_schema``. The latter is filtered by
+    the connecting role's privileges, so a schema the role lacks ``USAGE`` on vanishes
+    from the result entirely and reads as clean -- which is precisely the false negative
+    this check exists to prevent. Verified against PostgreSQL: as an unprivileged role,
+    ``information_schema.schemata`` omitted a drifted schema that ``pg_namespace``
+    reported. ``pg_class``/``pg_attribute`` give the same independence for the columns.
 
-    Reports one entry per schema, with ``missing`` empty when it is current.
+    Only tables present in both schemas are compared. A table a tenant lacks entirely is
+    a different problem -- it still falls through to ``public`` at query time -- and
+    including it would drown the column signal.
     """
-    excluded = ", ".join(f"'{name}'" for name in _NON_TENANT_SCHEMAS)
-    drift_sql = f"""
+    drift_sql = """
         WITH public_cols AS (
-            SELECT table_name, column_name
-            FROM information_schema.columns
-            WHERE table_schema = 'public'
+            SELECT c.relname AS table_name, a.attname AS column_name
+            FROM pg_class c
+            JOIN pg_namespace n ON n.oid = c.relnamespace
+            JOIN pg_attribute a ON a.attrelid = c.oid
+            WHERE n.nspname = 'public' AND c.relkind = 'r' AND a.attnum > 0 AND NOT a.attisdropped
         ),
-        other_schemas AS (
-            SELECT schema_name
-            FROM information_schema.schemata
-            WHERE schema_name NOT IN ({excluded})
-              AND schema_name NOT LIKE 'pg\\_%'
+        tenant_schemas AS (
+            SELECT nspname FROM pg_namespace WHERE nspname ~ :pattern
+        ),
+        tenant_cols AS (
+            SELECT n.nspname AS schema_name, c.relname AS table_name, a.attname AS column_name
+            FROM pg_class c
+            JOIN pg_namespace n ON n.oid = c.relnamespace
+            JOIN pg_attribute a ON a.attrelid = c.oid
+            WHERE n.nspname ~ :pattern AND c.relkind = 'r' AND a.attnum > 0 AND NOT a.attisdropped
+        ),
+        tenant_tables AS (
+            SELECT DISTINCT schema_name, table_name FROM tenant_cols
         )
-        SELECT o.schema_name, p.table_name, p.column_name
-        FROM other_schemas o
-        JOIN public_cols p ON TRUE
-        JOIN information_schema.tables it
-          ON it.table_schema = o.schema_name AND it.table_name = p.table_name
+        SELECT t.schema_name, p.table_name, p.column_name
+        FROM tenant_tables t
+        JOIN public_cols p ON p.table_name = t.table_name
         WHERE NOT EXISTS (
-            SELECT 1 FROM information_schema.columns c
-            WHERE c.table_schema = o.schema_name
-              AND c.table_name = p.table_name
-              AND c.column_name = p.column_name
+            SELECT 1 FROM tenant_cols tc
+            WHERE tc.schema_name = t.schema_name
+              AND tc.table_name = p.table_name
+              AND tc.column_name = p.column_name
         )
-        ORDER BY o.schema_name, p.table_name, p.column_name
-    """  # noqa: S608 - interpolation is a module constant, never request input
-
-    rows = await session.execute(text(drift_sql))
+        ORDER BY t.schema_name, p.table_name, p.column_name
+    """
+    rows = await session.execute(text(drift_sql), {"pattern": _TENANT_SCHEMA_PATTERN})
     by_schema: dict[str, list[str]] = {}
     for schema, table, column in rows.fetchall():
         by_schema.setdefault(schema, []).append(f"{table}.{column}")
 
     known = await session.execute(
-        text(
-            f"SELECT schema_name FROM information_schema.schemata "  # noqa: S608 - same constant
-            f"WHERE schema_name NOT IN ({excluded}) AND schema_name NOT LIKE 'pg\\_%' "
-            f"ORDER BY schema_name"
-        )
+        text("SELECT nspname FROM pg_namespace WHERE nspname ~ :pattern ORDER BY nspname"),
+        {"pattern": _TENANT_SCHEMA_PATTERN},
     )
     return [{"schema": name, "missing": by_schema.get(name, [])} for (name,) in known.fetchall()]

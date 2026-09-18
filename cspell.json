@@ -277,6 +277,11 @@
         "InnoDB",
         "VARCHAR",
         "utf8mb4",
+        "pg_attribute",
+        "relkind",
+        "attrelid",
+        "attisdropped",
+        "attnum",
         "EXPLAIN",
         "xform"
     ],
