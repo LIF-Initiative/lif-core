@@ -7,7 +7,7 @@ on:
     paths:
       - .github/workflows/lif_mdr_api.yml
       - bases/lif/mdr_restapi/**
-      - components/lif/datatypes/mdr_sqlmodel
+      - components/lif/datatypes/**
       - components/lif/mdr_auth/**
       - components/lif/mdr_dto/**
       - components/lif/mdr_services/**

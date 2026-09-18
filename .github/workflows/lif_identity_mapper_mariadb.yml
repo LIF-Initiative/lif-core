@@ -27,6 +27,7 @@ on:
       - components/lif/logging/**
       - projects/lif_identity_mapper_mariadb/**
       - components/lif/exceptions/**
+      - components/lif/identity_mapper_storage/**
 
 jobs:
 
