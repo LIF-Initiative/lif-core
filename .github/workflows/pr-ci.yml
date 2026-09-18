@@ -36,9 +36,11 @@ jobs:
           python-version: "3.13"
           enable-cache: true
 
-      # --frozen fails if uv.lock is stale, covering the uv-lock pre-commit hook.
+      # --locked asserts the root lock matches pyproject.toml, covering the uv-lock
+      # pre-commit hook. --frozen does NOT: it means "do not update the lock", so it
+      # installs a stale one and exits 0 (verified with the pinned uv 0.7.15).
       - name: Install dependencies (locked)
-        run: uv sync --frozen
+        run: uv sync --locked
 
       - name: Ruff lint
         run: uv run ruff check
@@ -49,16 +51,12 @@ jobs:
       - name: Type check (ty)
         run: uv run ty check --error-on-warning
 
+      - name: Per-project lockfiles are current
+        run: uv run python scripts/check_project_locks.py
+
       - name: Tests
         run: uv run pytest test
 
-      # `uv sync --frozen` above covers the ROOT lock only. The per-project locks under
-      # projects/*/ are what the Docker images install from, and a dependency declared
-      # without re-running `uv lock` there crash-loops the service at startup (#1125,
-      # #1174). `uv export --frozen` cannot be used for this -- it exits 0 and silently
-      # omits the undeclared dependency, which is how #1174 reached review.
-      - name: Per-project lockfiles are current
-        run: python3 scripts/check-project-locks.py
 
   frontend:
     name: Frontend build

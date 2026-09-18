@@ -29,6 +29,11 @@ import sys
 REPO = pathlib.Path(__file__).resolve().parent.parent
 PROJECTS = REPO / "projects"
 
+# Projects whose image installs no Python dependencies, so a lock would have nothing
+# to pin. Named explicitly: a project that stops installing deps by accident should
+# still be reported rather than silently qualifying.
+NO_PYTHON_PROJECTS = {"lif_identity_mapper_mariadb", "mongodb", "lif_mdr_database"}
+
 
 def uv_version() -> str:
     try:
@@ -39,9 +44,34 @@ def uv_version() -> str:
 
 
 def check(project: pathlib.Path) -> tuple[bool, str]:
-    """True when the project's lock is current. Second item is uv's message on failure."""
-    result = subprocess.run(["uv", "lock", "--check"], cwd=project, capture_output=True, text=True, timeout=300)
+    """True when the project's lock is current. Second item is uv's message on failure.
+
+    Subprocess failures are reported in this script's own voice rather than as a
+    traceback -- a reviewer running it without uv on PATH is the likely victim.
+    """
+    try:
+        result = subprocess.run(["uv", "lock", "--check"], cwd=project, capture_output=True, text=True, timeout=300)
+    except FileNotFoundError:
+        return False, "uv is not on PATH"
+    except subprocess.TimeoutExpired:
+        return False, "uv lock --check timed out after 300s"
+    except OSError as exc:  # pragma: no cover - environment-specific
+        return False, f"could not run uv: {exc}"
     return result.returncode == 0, (result.stderr or result.stdout).strip()
+
+
+def lockless_projects() -> list[pathlib.Path]:
+    """Projects declaring a pyproject.toml with no sibling lock.
+
+    Globbing `*/uv.lock` alone makes these invisible rather than failing: the only
+    signal is the trailing count quietly dropping, which nobody diffs. Reporting them
+    keeps the denominator honest -- real coverage was 11 of 15, not 11 of 11.
+    """
+    return sorted(
+        p.parent
+        for p in PROJECTS.glob("*/pyproject.toml")
+        if not (p.parent / "uv.lock").exists() and p.parent.name not in NO_PYTHON_PROJECTS
+    )
 
 
 def main() -> int:
@@ -64,7 +94,17 @@ def main() -> int:
                 if line.strip() and not line.startswith("Using CPython"):
                     print(f"      {line.strip()}")
 
+    missing = lockless_projects()
+    for project in missing:
+        # A warning, not a failure. These predate this check and their images resolve
+        # dependencies at build time instead; making them reproducible means generating
+        # locks, which is its own change. Reported so the denominator stays honest.
+        print(f"  {project.name:38s} NO LOCKFILE (build resolves fresh; not reproducible)")
+        print(f"::warning file=projects/{project.name}/pyproject.toml::no uv.lock -- image deps are unpinned")
+
     if stale:
+        for project in stale:
+            print(f"::error file=projects/{project.name}/uv.lock::lockfile is out of date with pyproject.toml")
         print(
             f"\n{len(stale)} of {len(locked)} project lockfiles are out of date with their pyproject.toml.\n"
             "The Docker image installs from the lock, so a dependency declared but not locked is\n"
@@ -75,7 +115,7 @@ def main() -> int:
         print(f"\nUse the uv version CI pins, not whatever is on PATH. This ran {uv_version()}.")
         return 1
 
-    print(f"check-project-locks: {len(locked)} project lockfiles are current ({uv_version()}).")
+    print(f"check_project_locks: {len(locked)} lockfiles current, {len(missing)} project(s) unlocked ({uv_version()}).")
     return 0
 
 
