@@ -6,6 +6,7 @@ from sqlalchemy import event, func, select
 from lif.datatypes import IdentityMapping
 from lif.exceptions.core import DataStoreException
 from lif.identity_mapper_storage.core import DeleteOutcome
+from lif.identity_mapper_storage_sql import core as storage_core
 from lif.identity_mapper_storage_sql.core import IdentityMapperSqlStorage
 from lif.identity_mapper_storage_sql.model import IdentityMappingModel
 
@@ -247,3 +248,72 @@ async def test_save_mappings_issues_one_insert_for_the_whole_batch(db_engine, st
 
     assert statements.count("SELECT") == 1
     assert statements.count("INSERT") == 1
+
+
+def _stale_pre_read(stale_calls: int):
+    """
+    Patch the pre-read to miss rows that are already committed, which is what a concurrent
+    insert does to it: under REPEATABLE READ the read cannot see a row another transaction
+    commits after it, so the create-vs-update decision is made from a stale snapshot.
+    `stale_calls` bounds how many reads lie -- 1 models a race that a retry resolves,
+    a large number models a collision that no retry can.
+    """
+    real = storage_core.read_by_lif_org_and_person
+    calls: list[int] = []
+
+    def stale(session, lif_organization_id, lif_organization_person_id):
+        calls.append(1)
+        if len(calls) <= stale_calls:
+            return []
+        return real(session, lif_organization_id, lif_organization_person_id)
+
+    return patch.object(storage_core, "read_by_lif_org_and_person", side_effect=stale), calls
+
+
+@pytest.mark.asyncio
+async def test_save_mappings_retries_when_a_concurrent_insert_invalidates_the_pre_read(
+    storage: IdentityMapperSqlStorage,
+):
+    """
+    A racing save of one natural key used to cost the whole batch a 500 (#1216). The retry
+    re-reads in a fresh transaction, so the colliding key resolves to the update branch and
+    the rows that never conflicted are still persisted -- the point of the fix is that the
+    batch is not discarded over one row.
+    """
+    await storage.save_mappings([_mapping(target_system="sys-1", person_id="ext-racer")])
+
+    batch = [
+        _mapping(target_system="sys-1", person_id="ext-1"),
+        _mapping(target_system="sys-2", person_id="ext-2"),
+        _mapping(target_system="sys-3", person_id="ext-3"),
+    ]
+    patcher, _ = _stale_pre_read(stale_calls=1)
+    with patcher:
+        saved = await storage.save_mappings(batch)
+
+    assert len(saved) == 3
+    fetched = await storage.get_mappings("org-1", "person-1")
+    assert {(m.target_system_id, m.target_system_person_id) for m in fetched} == {
+        ("sys-1", "ext-1"),
+        ("sys-2", "ext-2"),
+        ("sys-3", "ext-3"),
+    }
+
+
+@pytest.mark.asyncio
+async def test_save_mappings_retries_only_once_when_the_collision_persists(storage: IdentityMapperSqlStorage):
+    """
+    A collision that survives the retry is not a race, so it must surface rather than loop.
+    Asserting the pre-read ran exactly twice is what pins the bound: an unbounded retry
+    passes the `raises` check too.
+    """
+    await storage.save_mappings([_mapping(target_system="sys-1", person_id="ext-racer")])
+
+    patcher, calls = _stale_pre_read(stale_calls=99)
+    with patcher:
+        with pytest.raises(DataStoreException):
+            await storage.save_mappings([_mapping(target_system="sys-1", person_id="ext-1")])
+
+    assert len(calls) == 2
+    fetched = await storage.get_mappings("org-1", "person-1")
+    assert [(m.target_system_id, m.target_system_person_id) for m in fetched] == [("sys-1", "ext-racer")]

@@ -1,6 +1,8 @@
 import asyncio
 from typing import List
 
+from sqlalchemy.exc import IntegrityError
+
 from lif.datatypes import IdentityMapping
 from lif.exceptions.core import DataStoreException
 from lif.identity_mapper_storage.core import DeleteOutcome, IdentityMapperStorage
@@ -87,6 +89,20 @@ class IdentityMapperSqlStorage(IdentityMapperStorage):
             raise DataStoreException from e
 
     def _save_mappings(self, identity_mappings: List[IdentityMapping]) -> List[IdentityMapping]:
+        try:
+            return self._save_mappings_once(identity_mappings)
+        except IntegrityError:
+            # A concurrent save of the same natural key committed after our pre-read, so the
+            # create-vs-update decision was made from a stale snapshot and the insert violated
+            # uq_identity_mapping -- discarding the whole batch over one row (#1216). The retry
+            # opens a fresh transaction whose read sees that row and takes the update branch.
+            # Retrying is safe because nothing from the rolled-back attempt survives it: the
+            # models are built inside the attempt and `from_identity_mapping` writes the
+            # generated mapping_id onto the model, never back onto the caller's DTO.
+            # Bounded to one retry -- a collision that survives a re-read is not a race.
+            return self._save_mappings_once(identity_mappings)
+
+    def _save_mappings_once(self, identity_mappings: List[IdentityMapping]) -> List[IdentityMapping]:
         existing_by_key: dict[tuple[str, str, str, str], IdentityMappingModel] = {}
         existing_by_mapping_id: dict[str, IdentityMappingModel] = {}
         with self.db_session_factory() as session:
