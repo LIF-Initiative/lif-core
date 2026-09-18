@@ -5,6 +5,7 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from lif.mdr_auth.core import AuthMiddleware, create_access_token, create_refresh_token, decode_jwt
 from lif.mdr_restapi import (
+    admin_endpoints,
     attribute_endpoints,
     datamodel_constraints_endpoints,
     datamodel_endpoints,
@@ -489,6 +490,9 @@ app.include_router(generate_jinja_endpoint.router, prefix="/generate_jinja")
 
 
 app.include_router(datamodel_constraints_endpoints.router, prefix="/datamodel_constraints")
+
+# Operational read-only schema-state reporting; service-principal only (#1226).
+app.include_router(admin_endpoints.router, prefix="/admin")
 
 app.include_router(tenant_endpoints.router, prefix="/tenants")
 app.include_router(developer_api_key_endpoints.router, prefix="/api-keys")
