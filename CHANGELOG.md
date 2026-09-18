@@ -42,6 +42,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   constraint as a 500 and discarding the rest of the batch
 - `IDENTITY_MAPPER_DB_CONNECT_ARGS` is parsed from JSON into a dict; the raw string was passed
   straight to SQLAlchemy, which expects a mapping
+- Identity Mapper schema adds `idx_org_person (lif_organization_id, lif_organization_person_id)`.
+  `uq_identity_mapping` exceeds InnoDB's 3072-byte key limit, so MariaDB degrades it to `USING
+  HASH` and the optimizer cannot use it, making every org/person read a full table scan. Measured
+  at 50k rows: `type=ALL` / 49758 rows / 15.3 ms becomes `type=ref` / 5 rows / ~0.05 ms. Local
+  docker-compose volumes must be recreated (`down -v`) to pick up the new DDL; dev and demo need
+  no migration, as their MariaDB datadir is ephemeral
 
 ### Security
 
