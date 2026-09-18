@@ -52,6 +52,14 @@ jobs:
       - name: Tests
         run: uv run pytest test
 
+      # `uv sync --frozen` above covers the ROOT lock only. The per-project locks under
+      # projects/*/ are what the Docker images install from, and a dependency declared
+      # without re-running `uv lock` there crash-loops the service at startup (#1125,
+      # #1174). `uv export --frozen` cannot be used for this -- it exits 0 and silently
+      # omits the undeclared dependency, which is how #1174 reached review.
+      - name: Per-project lockfiles are current
+        run: python3 scripts/check-project-locks.py
+
   frontend:
     name: Frontend build
     runs-on: ubuntu-latest
