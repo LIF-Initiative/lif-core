@@ -1,11 +1,11 @@
 ---
 name: self-review-relay
-description: Run the 4-pass self-review relay over a diff before opening or finalizing a PR — three independent lenses (correctness/security, robustness/ops, tests/conventions/scope) in parallel, then a synthesis pass that dedupes and sorts into blockers vs. nits. Catches issues before a reviewer does.
+description: Run the self-review relay over a diff before opening or finalizing a PR — three independent lenses (correctness/security, robustness/ops, tests/conventions/scope) in parallel, then a synthesis pass that dedupes and sorts into blockers vs. nits. Loops fix → re-relay until two consecutive passes find no blockers AND the deterministic gate is green (capped). Catches issues before a reviewer does.
 argument-hint: [diff range, default main...HEAD]
 allowed-tools: Read, Glob, Grep, Bash, Agent, Workflow
 ---
 
-Run the **self-review relay**: a structured multi-lens pass over your own change before a human reviewer sees it. Three independent lenses run in parallel, then a synthesis pass merges and prioritizes. This is the rigor step that earns the "no blockers" verdict (it's what produced the relay note on PR #978). It complements — does not replace — the built-in `/code-review`: the relay is broader (security + ops + scope, not just correctness) and ends in a ship/hold verdict.
+Run the **self-review relay**: a structured multi-lens pass over your own change before a human reviewer sees it. Three independent lenses run in parallel, then a synthesis pass merges and prioritizes — and the whole thing loops (fix → re-relay) until two consecutive passes find no blockers *and* the deterministic gate is green. See [Convergence loop](#convergence-loop). This is the rigor step that earns the "no blockers" verdict (it's what produced the relay note on PR #978). It complements — does not replace — the built-in `/code-review`: the relay is broader (security + ops + scope, not just correctness) and ends in a ship/hold verdict.
 
 Invoking this skill is explicit opt-in to the Workflow tool. If Workflow is unavailable, spawn the three lens agents directly with the Agent tool (one message, parallel) and synthesize their results yourself.
 
@@ -98,32 +98,83 @@ const lenses = await parallel([
 
 const all = lenses.filter(Boolean).flatMap(r => r.findings)
 
+// Structured, not prose: the convergence loop branches on blockers.length, and a verdict
+// buried in a paragraph can't be branched on reliably.
+const VERDICT = {
+  type: 'object',
+  properties: {
+    blockers: { type: 'array', items: FINDINGS.properties.findings.items },
+    shouldFix: { type: 'array', items: FINDINGS.properties.findings.items },
+    nits: { type: 'array', items: FINDINGS.properties.findings.items },
+    verdict: { type: 'string', description: 'one line: ready to request review, or hold — N blocker(s)' },
+  },
+  required: ['blockers', 'shouldFix', 'nits', 'verdict'],
+}
+
 const synthesis = await agent(
   `Synthesize a self-review verdict for a LIF Core change from these lens findings. Intent: ${INTENT}
 
 Findings (JSON):
 ${JSON.stringify(all, null, 2)}
 
-Deduplicate overlapping findings, drop any that are wrong or not supported by the diff, and sort by severity. Then give:
-1. A blockers list (must fix before requesting review) — empty is a valid, good answer.
-2. A should-fix list.
-3. A nits list.
-4. A one-line verdict: "ready to request review" or "hold — N blocker(s)".
-Be a skeptic: if a finding looks plausible but you can't tie it to a real line in the diff, cut it.`,
-  { label: 'synthesis', phase: 'Synthesis' }
+Deduplicate overlapping findings, drop any that are wrong or not supported by the diff, and sort by severity into blockers / shouldFix / nits. An empty blockers array is a valid, good answer.
+
+Be a skeptic: if a finding looks plausible but you can't tie it to a real line in the diff, cut it. Do not promote a nit to a blocker to look thorough, and do not demote a real blocker to keep the verdict clean.`,
+  { label: 'synthesis', phase: 'Synthesis', schema: VERDICT }
 )
 
-return { findingCount: all.length, synthesis }
+return { findingCount: all.length, ...synthesis }
 ```
+
+## Convergence loop
+
+The relay is not one-shot. A single pass tells you what one round of reviewers saw in one version of the diff; it doesn't tell you the change is ready. Loop it — **you** (the main loop) drive this, because the relay reviews and never edits:
+
+```
+run relay  ──▶  blockers?
+                  │ yes → fix them in the working tree
+                  │        run the deterministic gate (the `test` skill)
+                  │        re-run the relay on the NEW diff        ──┐
+                  │                                                  │
+                  │ no  → clean pass 1 of 2 → re-run the relay ──────┤
+                  │                            (same diff,           │
+                  │                             fresh reviewers)     │
+                  ▼                                                  │
+        two consecutive clean passes  AND  gate green  ──▶ ready ◀───┘
+```
+
+**Exit requires both conditions.** Zero blockers on **two consecutive** relay passes, *and* `ruff` + `ty` + `pytest` green. Cap at **3 relay runs** (12 agents); hitting the cap means **not ready**, and you say so.
+
+### Why both, and not just the judge
+
+This is the one place `self-review-relay` should *not* copy `multi-agent-plan`. A plan has no oracle — nothing can mechanically check it, so a judge loop is all there is. **A diff does.** The two check genuinely different things and neither subsumes the other:
+
+- The gate catches what the judge can't verify — a test that actually fails, a type error, a lint break.
+- The judge catches what the gate can't see — scope creep, a missing tenant-isolation argument, an undocumented env var, a silent fallback that passes every test.
+
+A green suite is not a clean review, and a clean review is not a green suite. Requiring both is the whole point.
+
+**If the gate is red, don't spend judges.** Fix it first. A relay over a diff that doesn't compile is reviewing something nobody will ship.
+
+### Guards
+
+Same failure mode as any judge loop — it applies pressure toward the reviewers reporting nothing — so the same guards apply, ported from `spec-forge` (`orchestration/process.md`, "Loop control") via `multi-agent-plan`:
+
+- **Two consecutive clean passes, not one.** *"A single clean pass isn't enough."* One reviewer returning nothing is one opinion. When the diff didn't change between passes, the second relay is an independent second sample — requiring two panels to agree, not re-rolling until one says yes.
+- **The reviewer never fixes.** The relay reports; the main loop edits. Keeping them separate is what stops "zero findings" from being self-issued.
+- **The cap is reported.** 3 runs with blockers still standing is a *result* — "not ready, N blockers after 3 rounds" — never a silent stop that implies the opposite.
+- **A round must change something.** If you fix nothing and re-run hoping for a cleaner verdict, that's shopping. Either the finding was wrong (say why, in the PR) or it needs a fix.
+- **An all-zero run is suspicious.** If no lens ever found anything at any severity across two passes on a non-trivial diff, that more likely measures three weak lenses than a perfect change. Report it as unverified and read the diff yourself.
 
 ## After the relay
 
-- **Present the synthesis verdict** (blockers / should-fix / nits / ready-or-hold) to the user.
-- **Offer to fix the blockers + should-fix** in the working tree, then re-run the relevant lens or `uv run pytest` to confirm.
-- This pairs with **`open-pr`** — run the relay, clear blockers, then scaffold the PR. The relay's synthesis is good raw material for the PR description's "how to test" / "limitations" sections.
+- **Present the verdict** (blockers / should-fix / nits / ready-or-hold) plus how many passes it took and whether the gate is green.
+- **Fix blockers, then loop** per above. `should-fix` items don't gate the loop, but say which ones you're deferring and why.
+- This pairs with **`open-pr`** — converge the relay, then scaffold the PR. The synthesis is good raw material for the PR description's "how to test" / "limitations" sections, and "converged after N passes" is worth stating in the PR body.
 
 ## Rules
 
 - **Blockers gate the PR.** Don't hand off to a human reviewer with known blockers — that's what this pass is for.
 - **Empty findings is a real result.** The lenses must not manufacture issues to look thorough; the synthesis must cut unsupported ones.
 - **The relay reviews; it doesn't ship.** It never pushes or opens a PR — that's `open-pr`.
+- **One clean pass is not converged, and a green suite is not a review.** Both conditions, or the change isn't ready. See the convergence loop above.
