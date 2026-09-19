@@ -1,4 +1,7 @@
+import time
+
 from lif.translator import core
+import cachetools
 import pytest
 
 
@@ -576,3 +579,135 @@ async def test_translator_run_with_openbadgecredential(monkeypatch):
 
     result = await translator.run(input_data)
     assert result == expected
+
+
+# ---------------------------------------------------------------------------
+# Tests for MDR response caching
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.asyncio
+async def test_cache_hit_skips_mdr_call(monkeypatch):
+    call_count = 0
+
+    async def fake_get_schema(
+        schema_id: str, include_attr_md: bool, include_entity_md: bool, tenant_schema: str | None = None
+    ):
+        nonlocal call_count
+        call_count += 1
+        return {"id": schema_id}
+
+    monkeypatch.setattr(core, "get_data_model_schema", fake_get_schema, raising=True)
+
+    t = core.Translator(core.TranslatorConfig(source_schema_id="S", target_schema_id="T"))
+
+    await t._fetch_schema("S")
+    await t._fetch_schema("S")
+
+    assert call_count == 1
+
+
+@pytest.mark.asyncio
+async def test_transformation_fetched_on_each_call(monkeypatch):
+    """Transformations are NOT cached — each call must hit the MDR so edits to the
+    transformation (e.g. an updated expression or an imported/hand-edited group) are
+    reflected on the very next translation. See test_bases...::test_update_transform_only_expression."""
+    call_count = 0
+
+    async def fake_get_xform(source_schema_id: str, target_schema_id: str, tenant_schema: str | None = None):
+        nonlocal call_count
+        call_count += 1
+        return {"total": 1, "data": [{"TransformationExpression": "{}"}]}
+
+    monkeypatch.setattr(core, "get_data_model_transformation", fake_get_xform, raising=True)
+
+    t = core.Translator(core.TranslatorConfig(source_schema_id="A", target_schema_id="B"))
+
+    await t._fetch_transformation("A", "B")
+    await t._fetch_transformation("A", "B")
+
+    assert call_count == 2
+
+
+@pytest.mark.asyncio
+async def test_cache_separates_tenant_schemas(monkeypatch):
+    call_count = 0
+
+    async def fake_get_schema(
+        schema_id: str, include_attr_md: bool, include_entity_md: bool, tenant_schema: str | None = None
+    ):
+        nonlocal call_count
+        call_count += 1
+        return {"id": schema_id, "tenant": tenant_schema}
+
+    monkeypatch.setattr(core, "get_data_model_schema", fake_get_schema, raising=True)
+
+    t = core.Translator(core.TranslatorConfig(source_schema_id="S", target_schema_id="T"))
+
+    result_a = await t._fetch_schema("S", tenant_schema="org1")
+    result_b = await t._fetch_schema("S", tenant_schema="org2")
+
+    assert call_count == 2
+    assert result_a["tenant"] == "org1"
+    assert result_b["tenant"] == "org2"
+
+
+@pytest.mark.asyncio
+async def test_cache_re_fetches_after_ttl(monkeypatch):
+    """With a 1-second TTL, a second call after sleep should re-fetch."""
+    core._schema_cache.clear()
+
+    async def fake_get_schema(
+        schema_id: str, include_attr_md: bool, include_entity_md: bool, tenant_schema: str | None = None
+    ):
+        return {"id": schema_id, "ts": time.time()}
+
+    monkeypatch.setattr(core, "get_data_model_schema", fake_get_schema, raising=True)
+
+    # Replace cache with a short-TTL version for this test. monkeypatch restores it even
+    # if an assertion below fails, which a manual restore-after-assert would not.
+    monkeypatch.setattr(core, "_schema_cache", cachetools.TTLCache(maxsize=128, ttl=1), raising=True)
+    t = core.Translator(core.TranslatorConfig(source_schema_id="S", target_schema_id="T"))
+
+    first = await t._fetch_schema("S")
+    time.sleep(1.5)
+    second = await t._fetch_schema("S")
+
+    assert first["ts"] != second["ts"]
+
+
+# ---------------------------------------------------------------------------
+# Guard: JSONata expressions must not be cached across evaluations
+# ---------------------------------------------------------------------------
+
+
+def test_time_functions_are_evaluated_fresh_on_every_run():
+    """
+    jsonata-python resolves $now()/$millis() through Jsonata.CURRENT.jsonata.timestamp,
+    a thread-local re-pointed only in Jsonata.__init__ -- evaluate() updates just
+    self.timestamp. Constructing an instance per evaluation keeps those the same object,
+    which is the only reason time functions are correct today.
+
+    Caching compiled expressions (proposed under #722, withdrawn in review) freezes
+    CURRENT on whichever expression was compiled last, and every other cached expression
+    then emits a stale timestamp -- reproduced as a 0 ms delta across a 2 s gap. This
+    pins the property so a reintroduced cache fails here rather than silently shipping
+    wrong timestamps.
+    """
+    schema = {"type": "object"}
+    config = core.BaseTranslatorConfig(
+        source_schema=schema, target_schema=schema, mappings=['{ "t": $millis() }', '{ "u": $millis() }']
+    )
+    translator = core.BaseTranslator(config)
+
+    first = translator.run({})
+    time.sleep(0.2)
+    second = translator.run({})
+
+    # Assert advancement against the sleep, not merely `>`. Under a reintroduced cache
+    # the second run reports the *first* run's trailing timestamp, which is a few ms
+    # later than that run's leading one -- enough to satisfy a bare `>` by accident.
+    elapsed_ms = second["t"] - first["t"]
+    assert elapsed_ms >= 150, (
+        f"$millis() advanced only {elapsed_ms}ms across a 200ms sleep -- are expressions being cached?"
+    )

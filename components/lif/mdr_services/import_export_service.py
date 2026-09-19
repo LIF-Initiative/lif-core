@@ -308,7 +308,11 @@ async def clone_datamodel(session: AsyncSession, data: CreateCloneDTO):
     ):
         raise HTTPException(status_code=400, detail="DataModel source mode id, name, type and version are required.")
 
-    if await check_unique_data_model_exists(session, data.data_model_name, data.data_model_version) != None:
+    # Check against exactly the tuple the clone inserts below: CreateCloneDTO carries no contributor
+    # organization and the new DataModel is created without one, so the org is checked as NULL.
+    if await check_unique_data_model_exists(
+        session, data.data_model_name, data.data_model_version, data.data_model_type, None
+    ):
         raise HTTPException(status_code=400, detail=f"DataModel with name '{data.data_model_name}' already exists")
 
     base_data_model_id = None

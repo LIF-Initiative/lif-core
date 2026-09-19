@@ -31,7 +31,17 @@ from pydantic import BaseModel
 
 logger = get_logger(__name__)
 
-DEMO_USER_PASSWORD = os.environ.get("LIF_DEMO_USER_PASSWORD", "changeme")
+_demo_password = os.environ.get("LIF_DEMO_USER_PASSWORD")
+if _demo_password is None or not _demo_password.strip():
+    # No fallback on purpose: a default password is a developer convenience that
+    # makes insecurity the default. See #1191. (#1179 will consolidate this and
+    # the other required-env guards into one shared helper.)
+    raise RuntimeError(
+        "LIF_DEMO_USER_PASSWORD is not set. It is the demo login password, so there is "
+        "no safe default. In AWS it is supplied from SSM via the service's "
+        "taskdef-includes; locally, export it or set it in your .env."
+    )
+DEMO_USER_PASSWORD = _demo_password.strip()
 
 app = FastAPI(title="LIF Metadata Repository API", description="API for the LIF Metadata Repository", version="1.0.0")
 

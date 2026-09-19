@@ -15,5 +15,7 @@ COPY ./$deps /code/$deps
 RUN pip install --no-cache-dir --upgrade --no-deps /code/$wheel
 RUN pip install -r /code/$deps
 
-ENV LIF_QUERY_TIMEOUT_SECONDS=60
-CMD ["sh", "-c", "uvicorn lif.api_graphql.core:app --host 0.0.0.0 --port 8000 --timeout-keep-alive ${LIF_QUERY_TIMEOUT_SECONDS}"]
+# No ENV default: it would always be set and so would shadow the transitional fallback below.
+# TRANSITIONAL (#1203): prefer the new name, fall back to the old shared one that deployed
+# task definitions still set, then to 60. Drop the middle term once the stacks are updated.
+CMD ["sh", "-c", "uvicorn lif.api_graphql.core:app --host 0.0.0.0 --port 8000 --timeout-keep-alive ${LIF_GRAPHQL_KEEPALIVE_SECONDS:-${LIF_QUERY_TIMEOUT_SECONDS:-60}}"]
