@@ -27,7 +27,7 @@ from lif.datatypes import (
 from lif.exceptions.core import LIFException
 from lif.logging.core import get_logger
 from lif.query_planner_service.datatypes import LIFQueryPlannerConfig
-from lif.query_planner_service import util
+from lif.query_planner_service import statistics, util
 
 logger = get_logger(__name__)
 
@@ -52,6 +52,31 @@ class LIFQueryPlannerService:
         self.lif_cache_update_url = self.lif_cache_url + "/update"
         self.lif_cache_save_url = self.lif_cache_url + "/save"
         self.lif_orchestrator_post_url = self.lif_orchestrator_url + "/jobs"
+
+    # -------------------------------------------------------------------------
+    # Query statistics emission (#341)
+    # -------------------------------------------------------------------------
+    def _emit_query_planned(
+        self,
+        outcome: str,
+        requested_paths: List[str],
+        paths_not_in_cache: List[str],
+        lif_query_plan: LIFQueryPlan | None = None,
+        correlation_id: str | None = None,
+    ) -> None:
+        """
+        Emit the planning-phase statistics event. Never raises -- statistics must not fail a query.
+        """
+        try:
+            logger.info(
+                statistics.format_event(
+                    statistics.build_query_planned_event(
+                        outcome, requested_paths, paths_not_in_cache, lif_query_plan, correlation_id
+                    )
+                )
+            )
+        except Exception:
+            logger.exception("Failed to emit query statistics")
 
     # Main function to run a query
     # -------------------------------------------------------------------------
@@ -89,6 +114,10 @@ class LIFQueryPlannerService:
 
             if not lif_fragment_paths_not_found:
                 logger.info("LIF Record contains all requested fields, returning directly.")
+                # Guarded on first_run: the sync /query path calls run_query twice, and the
+                # second call lands here once the orchestrator has filled the cache (#341 gap 3).
+                if first_run:
+                    self._emit_query_planned(statistics.OUTCOME_SERVED_FROM_CACHE, lif_fragment_paths, [])
                 return lif_records
             logger.info(f"LIF Record does not contain all requested fields, missing: {lif_fragment_paths_not_found}")
 
@@ -107,6 +136,9 @@ class LIFQueryPlannerService:
                     logger.warning(
                         f"No information sources found for the requested LIF fragment paths: {lif_fragment_paths}. Returning LIF records found in cache."
                     )
+                    self._emit_query_planned(
+                        statistics.OUTCOME_NO_SOURCES_AVAILABLE, lif_fragment_paths, lif_fragment_paths_not_found
+                    )
                     return lif_records
 
                 orchestrator_job_request: OrchestratorJobRequest = OrchestratorJobRequest(
@@ -120,6 +152,12 @@ class LIFQueryPlannerService:
                     )
                 except Exception:
                     logger.exception(f"Orchestrator submission failed; returning {len(lif_records)} cached records")
+                    self._emit_query_planned(
+                        statistics.OUTCOME_ORCHESTRATOR_SUBMISSION_FAILED,
+                        lif_fragment_paths,
+                        lif_fragment_paths_not_found,
+                        lif_query_plan,
+                    )
                     return lif_records
 
                 lif_query_planner_job = LIFQueryPlannerJob(
@@ -130,6 +168,13 @@ class LIFQueryPlannerService:
 
                 # Store the job in the JOB_STORE
                 JOB_STORE[lif_query_planner_job.job_id] = lif_query_planner_job
+                self._emit_query_planned(
+                    statistics.OUTCOME_ORCHESTRATED,
+                    lif_fragment_paths,
+                    lif_fragment_paths_not_found,
+                    lif_query_plan,
+                    lif_query_planner_job.job_id,
+                )
                 query_status_response = LIFQueryStatusResponse(query_id=lif_query_planner_job.job_id, status="PENDING")
                 return query_status_response
             else:
@@ -251,6 +296,13 @@ class LIFQueryPlannerService:
                 else:
                     if part_result.fragments:
                         fragments.extend([fragment for fragment in part_result.fragments if fragment])
+
+            try:
+                logger.info(
+                    statistics.format_event(statistics.build_query_completed_event(results, lif_fragment_paths))
+                )
+            except Exception:
+                logger.exception("Failed to emit query statistics")
 
             # Send the orchestration results to the LIF Cache service
             lif_query_filter: LIFQueryFilter = lif_query.filter
