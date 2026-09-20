@@ -175,7 +175,7 @@ async def do_run_query_sync(query: LIFQuery, response: Response) -> List[LIFReco
                 logger.info("Query completed successfully, retrieving results")
                 result = await service.run_query(query, first_run=False)
                 if isinstance(result, list):
-                    logger.info(f"Query completed successfully, returning results: {result}")
+                    logger.info(f"Query completed successfully, returning {len(result)} record(s)")
                     return result
                 else:
                     msg: str = f"Query completed but results are not in expected format: {result}"
@@ -215,7 +215,7 @@ async def do_run_query(query: LIFQuery, response: Response) -> List[LIFRecord] |
             return result
         else:
             response.status_code = status.HTTP_200_OK
-            logger.info(f"Query completed successfully, returning results: {result}")
+            logger.info(f"Query completed successfully, returning {len(result)} record(s)")
             return result
     except ValueError:
         raise
