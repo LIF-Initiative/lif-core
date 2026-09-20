@@ -16,6 +16,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Pull request template with comprehensive contribution guidelines
 - MIGRATION.md for tracking breaking changes and upgrade paths
 - CHANGELOG.md for tracking all notable changes
+- MDR UI: the bulk-transformation preview validates the assembled output against the target LIF
+  JSON Schema and lists any issues beneath the output pane. Type, enum and unexpected-property
+  violations are reported by default; missing required properties are opt-in via a "Check
+  completeness" toggle, because the preview is an intentionally partial document. `format` is not
+  validated, matching the runtime translator, which calls `jsonschema.validate` without a
+  `format_checker`
 
 ### Changed
 
@@ -30,6 +36,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   batch no longer produce two response entries for the same row
 - `IDENTITY_MAPPER_DB_POOL_PRE_PING` now defaults to `true` and is wired into the ECS task
   definition, replacing the connection validation lost with the startup `SELECT 1`
+- Identity Mapper storage now runs async SQLAlchemy against the C-extension `asyncmy` driver
+  (`mysql+asyncmy`) instead of sync `pymysql` behind `asyncio.to_thread`; per-request latency is
+  unchanged, but under 50 parallel GETs p95 roughly halves (≈83-239 ms vs ≈314-386 ms) with no
+  contract or status-code changes
 
 ### Deprecated
 

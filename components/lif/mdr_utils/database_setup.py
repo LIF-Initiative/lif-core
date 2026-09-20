@@ -1,6 +1,3 @@
-import psycopg2
-from psycopg2 import Error
-import mysql.connector
 import os
 import re
 from typing import AsyncGenerator
@@ -122,6 +119,23 @@ async def get_session(request: Request) -> AsyncGenerator[AsyncSession, None]:
             # given table still falls through to public for that table — the
             # clean fix (copy PG types into tenant schemas, then drop the
             # `public` fallback) is tracked as a follow-up under #949/#961.
+            #
+            # `public` is NOT a safety net for schema drift, and reading it as
+            # one costs real debugging time (#1265). Fall-through is per-OBJECT.
+            # A tenant schema that has `Attributes` but lacks a column `public`
+            # gained in a later migration resolves the table tenant-first and
+            # then errors on the missing column; it never consults public's
+            # copy. Migrations are written `ALTER TABLE public."…"`, so on
+            # 2026-09-17 all 19 tenant schemas across dev and demo were missing
+            # `Attributes.TargetEntityId` while public had it and Flyway
+            # reported Success.
+            #
+            # Concretely: `public` having a column proves nothing about the
+            # schemas this function actually routes to. Since
+            # MDR__TENANT_ROUTING__SERVICE_SCHEMA is `tenant_lif_team` in dev
+            # and demo, no ordinary caller reads public at all — it is a clone
+            # template, not a live schema. Verify a migration against
+            # information_schema per schema, not against flyway_schema_history.
             await session.execute(text(f'SET search_path TO "{tenant_schema}", public'))
         elif tenant_schema:
             logger.error("Refusing to SET search_path to invalid tenant_schema %r", tenant_schema)
@@ -135,39 +149,3 @@ async def get_session(request: Request) -> AsyncGenerator[AsyncSession, None]:
             # branch behaves as if it had a fresh connection.
             await session.execute(text("SET search_path TO public"))
         yield session
-
-
-async def get_db_connection(db_type: str):
-    # We can use
-    try:
-        match db_type:
-            case "POSTGRESQL":
-                # Connect to your PostgreSQL database
-                logger.info("DB type is POSTGRESQL")
-                connection = psycopg2.connect(
-                    user=os.environ["POSTGRESQL_USER"],
-                    password=os.environ["POSTGRESQL_PASSWORD"],
-                    host=os.environ["POSTGRESQL_HOST"],
-                    port=os.environ["POSTGRESQL_PORT"],
-                    database=os.environ["POSTGRESQL_DB"],
-                )
-                logger.info("Connection Done")
-
-            case "MYSQL":
-                logger.info("DB type is MYSQL")
-                connection = mysql.connector.connect(
-                    host=os.environ["MYSQL_HOST"],
-                    port=os.environ["MYSQL_PORT"],
-                    user=os.environ["MYSQL_USER"],
-                    password=os.environ["MYSQL_PASSWORD"],
-                    database=os.environ["MYSQL_DB"],
-                )
-                logger.info("Connection Done")
-            case _:
-                logger.info("Specified database type is not configured : %s", db_type)
-                raise Exception
-
-        return connection
-    except (Exception, Error) as error:
-        logger.error("Error while connecting DB doe the DB type: %s.  Error : %s", db_type, error)
-        raise
