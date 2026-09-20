@@ -1,4 +1,3 @@
-import asyncio
 from typing import List
 
 from lif.datatypes import IdentityMapping
@@ -23,18 +22,15 @@ class IdentityMapperSqlStorage(IdentityMapperStorage):
         Raises DataStoreException for database-related errors.
         """
         try:
-            return await asyncio.to_thread(self._get_mapping_by_id, mapping_id)
+            async with self.db_session_factory() as session:
+                async with session.begin():
+                    mapping_model: IdentityMappingModel | None = await read(session, mapping_id)
+                    if mapping_model:
+                        return IdentityMapping.model_validate(mapping_model)
+                    else:
+                        return None
         except Exception as e:
             raise DataStoreException from e
-
-    def _get_mapping_by_id(self, mapping_id: str) -> IdentityMapping | None:
-        with self.db_session_factory() as session:
-            with session.begin():
-                mapping_model: IdentityMappingModel | None = read(session, mapping_id)
-                if mapping_model:
-                    return IdentityMapping.model_validate(mapping_model)
-                else:
-                    return None
 
     async def get_mappings(self, lif_organization_id: str, lif_organization_person_id: str) -> List[IdentityMapping]:
         """
@@ -42,17 +38,14 @@ class IdentityMapperSqlStorage(IdentityMapperStorage):
         Raises DataStoreException for database-related errors.
         """
         try:
-            return await asyncio.to_thread(self._get_mappings, lif_organization_id, lif_organization_person_id)
+            async with self.db_session_factory() as session:
+                async with session.begin():
+                    mapping_models: List[IdentityMappingModel] = await read_by_lif_org_and_person(
+                        session, lif_organization_id, lif_organization_person_id
+                    )
+                    return [IdentityMapping.model_validate(mapping_model) for mapping_model in mapping_models]
         except Exception as e:
             raise DataStoreException from e
-
-    def _get_mappings(self, lif_organization_id: str, lif_organization_person_id: str) -> List[IdentityMapping]:
-        with self.db_session_factory() as session:
-            with session.begin():
-                mapping_models: List[IdentityMappingModel] = read_by_lif_org_and_person(
-                    session, lif_organization_id, lif_organization_person_id
-                )
-                return [IdentityMapping.model_validate(mapping_model) for mapping_model in mapping_models]
 
     async def save_mapping(self, identity_mapping: IdentityMapping) -> IdentityMapping:
         """
@@ -60,7 +53,7 @@ class IdentityMapperSqlStorage(IdentityMapperStorage):
         Raises DataStoreException for database-related errors.
         """
         try:
-            saved: List[IdentityMapping] = await asyncio.to_thread(self._save_mappings, [identity_mapping])
+            saved: List[IdentityMapping] = await self._save_mappings([identity_mapping])
             return saved[0]
         except ValueError:
             raise
@@ -80,24 +73,24 @@ class IdentityMapperSqlStorage(IdentityMapperStorage):
         Raises DataStoreException for database-related errors.
         """
         try:
-            return await asyncio.to_thread(self._save_mappings, identity_mappings)
+            return await self._save_mappings(identity_mappings)
         except ValueError:
             raise
         except Exception as e:
             raise DataStoreException from e
 
-    def _save_mappings(self, identity_mappings: List[IdentityMapping]) -> List[IdentityMapping]:
+    async def _save_mappings(self, identity_mappings: List[IdentityMapping]) -> List[IdentityMapping]:
         existing_by_key: dict[tuple[str, str, str, str], IdentityMappingModel] = {}
         existing_by_mapping_id: dict[str, IdentityMappingModel] = {}
-        with self.db_session_factory() as session:
-            with session.begin():
+        async with self.db_session_factory() as session:
+            async with session.begin():
                 seen_pairs: set[tuple[str, str]] = set()
                 for mapping in identity_mappings:
                     pair = (mapping.lif_organization_id, mapping.lif_organization_person_id)
                     if pair in seen_pairs:
                         continue
                     seen_pairs.add(pair)
-                    for existing in read_by_lif_org_and_person(session, pair[0], pair[1]):
+                    for existing in await read_by_lif_org_and_person(session, pair[0], pair[1]):
                         existing_by_key[self._model_key(existing)] = existing
                         existing_by_mapping_id[existing.mapping_id] = existing
 
@@ -131,8 +124,8 @@ class IdentityMapperSqlStorage(IdentityMapperStorage):
                 # (`from_identity_mapping`), which is what removes the need to flush each
                 # insert just to materialize its primary key.
                 if new_models:
-                    create_all(session, new_models)
-                session.flush()
+                    await create_all(session, new_models)
+                await session.flush()
 
                 return [IdentityMapping.model_validate(model) for model in self._dedupe(saved_models)]
 
@@ -197,28 +190,21 @@ class IdentityMapperSqlStorage(IdentityMapperStorage):
         Raises DataStoreException for database-related errors.
         """
         try:
-            return await asyncio.to_thread(
-                self._delete_mapping_for_owner, mapping_id, lif_organization_id, lif_organization_person_id
-            )
+            # Read, authorize, and delete inside ONE transaction. `session.begin()` commits
+            # when this block exits, so any ownership check placed after the block runs
+            # against an already-durable delete and cannot undo it (#1150). Returning early
+            # on a mismatch leaves the transaction with no pending delete to commit.
+            async with self.db_session_factory() as session:
+                async with session.begin():
+                    existing: IdentityMappingModel | None = await read(session, mapping_id)
+                    if existing is None:
+                        return DeleteOutcome.NOT_FOUND
+                    if (
+                        existing.lif_organization_id != lif_organization_id
+                        or existing.lif_organization_person_id != lif_organization_person_id
+                    ):
+                        return DeleteOutcome.NOT_OWNED
+                    await delete(session, existing)
+                    return DeleteOutcome.DELETED
         except Exception as e:
             raise DataStoreException from e
-
-    def _delete_mapping_for_owner(
-        self, mapping_id: str, lif_organization_id: str, lif_organization_person_id: str
-    ) -> DeleteOutcome:
-        # Read, authorize, and delete inside ONE transaction. `session.begin()` commits
-        # when this block exits, so any ownership check placed after the block runs
-        # against an already-durable delete and cannot undo it (#1150). Returning early
-        # on a mismatch leaves the transaction with no pending delete to commit.
-        with self.db_session_factory() as session:
-            with session.begin():
-                existing: IdentityMappingModel | None = read(session, mapping_id)
-                if existing is None:
-                    return DeleteOutcome.NOT_FOUND
-                if (
-                    existing.lif_organization_id != lif_organization_id
-                    or existing.lif_organization_person_id != lif_organization_person_id
-                ):
-                    return DeleteOutcome.NOT_OWNED
-                delete(session, existing)
-                return DeleteOutcome.DELETED

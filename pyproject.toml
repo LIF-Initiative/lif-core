@@ -31,7 +31,7 @@ dependencies = [
     "pydantic~=2.11",
     "pyjwt[crypto]~=2.10",
     "pymongo~=4.13",
-    "pymysql~=1.1",
+    "asyncmy~=0.2.14",
     "pyyaml~=6.0",
     "sentence-transformers~=4.1",
     "sqlalchemy~=2.0",
@@ -43,6 +43,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "aiosqlite~=0.21",
     "asyncpg~=0.30",
     "dagster-cloud~=1.11",
     "dagster-dg-cli~=1.11",
