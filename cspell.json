@@ -277,12 +277,24 @@
         "InnoDB",
         "VARCHAR",
         "utf8mb4",
+        "vitest",
         "EXPLAIN",
         "xform"
     ],
     "ignorePaths": [
         ".git/",
         "projects/mongodb/sample_data",
+        // Data mirrored from MDR, not prose: tribal names, NAICS/ISCED/IPEDS codes,
+        // and place names. Transformations are maintained via scripts/import-transformations.sh
+        // rather than edited here (#1127/#1128), so linting them gates the wrong thing.
+        // Scoped to the data files -- the READMEs beside them are hand-written prose and
+        // stay linted, which is the category the comment above says stays linted.
+        "reference_data/schemas/*.json",
+        "reference_data/transformations/*.json",
+        // Red Gate vendor boilerplate shipped with Flyway (Apache 2.0). The flagged words
+        // are database vendor names in upstream's own template.
+        "sam/mdr-database/flyway/flyway-files/flyway/conf/flyway.conf",
+        "sam/dagster-database/flyway/flyway-files/flyway/conf/flyway.conf",
         "frontends/",
         "pyproject.toml",
         "cloudformation/",
