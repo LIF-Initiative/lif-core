@@ -10,6 +10,7 @@ on:
       - cloudformation/dev-lif-query-cache.params
       - cloudformation/lif-query-cache-taskdef-includes.yml
       - components/lif/query_cache_service/**
+      - components/lif/composer/**
       - components/lif/datatypes/**
       - components/lif/logging/**
       - components/lif/mongodb_connection/**
