@@ -15,6 +15,7 @@ from lif.datatypes import (
 )
 from lif.query_planner_service import core
 from lif.exceptions.core import LIFException
+from lif.datatypes.orchestration import OrchestratorJobQueryPlanPartResults
 from lif.query_planner_service.core import OrchestratorJobResults, add_job_to_store
 
 
@@ -430,6 +431,87 @@ def test_run_post_orchestration_results(mock_post):
             ],
         },
     )
+
+
+# -------------------------------------------------------------------------
+# #1269 — person data must never reach the logs.
+# -------------------------------------------------------------------------
+def _sentinel_query() -> LIFQuery:
+    return LIFQuery(
+        filter=LIFQueryFilter(
+            root=LIFQueryPersonFilter(
+                person=LIFPersonIdentifiers(
+                    Identifier=LIFPersonIdentifier(identifier="Sentinel-1234", identifierType="School-assigned number")
+                )
+            )
+        ),
+        selected_fields=["person.name"],
+    )
+
+
+@patch("httpx.AsyncClient.post")
+def test_run_query_does_not_log_the_person_identifier(mock_post, caplog):
+    config: core.LIFQueryPlannerConfig = core.LIFQueryPlannerConfig(
+        lif_cache_url="https://api.example.com",
+        lif_orchestrator_url="https://api.example.com",
+        information_sources_config=[
+            {
+                "information_source_id": "source_1",
+                "information_source_organization": "Example Org 1",
+                "adapter_id": "lif-to-lif",
+                "ttl_hours": 24,
+                "lif_fragment_paths": ["Person.name"],
+            }
+        ],
+    )
+    service: core.LIFQueryPlannerService = core.LIFQueryPlannerService(config=config)
+
+    mock_post.side_effect = [
+        _create_mock_post_response(200, [{"person": [{}]}], "https://api.example.com/query"),
+        _create_mock_post_response(200, {"run_id": "run-1"}, "https://api.example.com/jobs"),
+    ]
+
+    with patch.object(core, "JOB_STORE", {}), caplog.at_level(logging.DEBUG):
+        asyncio.run(service.run_query(_sentinel_query(), first_run=True))
+
+    assert "Sentinel" not in caplog.text
+    # The query plan line still says which sources were planned.
+    assert "source_1" in caplog.text
+
+
+@patch("httpx.AsyncClient.post")
+def test_run_post_orchestration_results_does_not_log_person_data(mock_post, caplog):
+    config: core.LIFQueryPlannerConfig = core.LIFQueryPlannerConfig(
+        lif_cache_url="https://api.example.com",
+        lif_orchestrator_url="https://api.example.com",
+        information_sources_config=[],
+    )
+    service: core.LIFQueryPlannerService = core.LIFQueryPlannerService(config=config)
+    mock_post.return_value = _create_mock_post_response(200, {}, "https://api.example.com/save")
+
+    results = OrchestratorJobResults(
+        run_id="run-1",
+        query_plan_part_results=[
+            OrchestratorJobQueryPlanPartResults(
+                information_source_id="source_1",
+                adapter_id="lif-to-lif",
+                data_timestamp="2026-01-01T00:00:00Z",
+                person_id=LIFPersonIdentifier(identifier="Sentinel-1234", identifierType="School-assigned number"),
+                fragments=[LIFFragment(fragment_path="person.name", fragment=[{"name": [{"familyName": "Canary"}]}])],
+                error=None,
+            )
+        ],
+    )
+
+    job_store = {"run-1": core.LIFQueryPlannerJob(job_id="run-1", query=_sentinel_query(), status="PENDING")}
+    with patch.object(core, "JOB_STORE", job_store), caplog.at_level(logging.DEBUG):
+        asyncio.run(service.run_post_orchestration_results(results))
+
+    assert "Sentinel" not in caplog.text
+    assert "Canary" not in caplog.text
+    # The run id and the source are still traceable.
+    assert "run-1" in caplog.text
+    assert "source_1" in caplog.text
 
 
 def _create_mock_post_response(status_code, json_data, uri):
