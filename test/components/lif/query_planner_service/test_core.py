@@ -2,6 +2,7 @@ import asyncio
 import httpx
 import json
 import logging
+from datetime import datetime, timedelta, timezone
 from unittest.mock import patch, MagicMock, AsyncMock
 
 from lif.datatypes import (
@@ -630,9 +631,6 @@ def test_run_post_orchestration_results_emits_completed_statistics(mock_post, ca
     assert events[0]["sources"][0]["fragment_count"] == 1
     assert "Sentinel" not in caplog.text
     assert "Canary" not in caplog.text
-
-
-from datetime import datetime, timedelta, timezone
 
 
 @patch("httpx.AsyncClient.post")
