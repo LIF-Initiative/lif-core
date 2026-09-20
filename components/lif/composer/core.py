@@ -43,7 +43,18 @@ def compose_json_with_fragment_list(
     same record.
     """
     lif_record_dict = json.loads(lif_record_json)
+    compose_dict_with_fragment_list(lif_record_dict, lif_fragments, replace_existing=replace_existing)
+    return json.dumps(lif_record_dict)
 
+
+def compose_dict_with_fragment_list(
+    lif_record_dict: dict, lif_fragments: List[LIFFragment], replace_existing: bool = True
+) -> None:
+    """Compose fragments into an already-parsed record dict, in place.
+
+    Shared by the JSON- and record-level entrypoints so they cannot drift apart.
+    See compose_json_with_fragment_list for the semantics of replace_existing.
+    """
     if replace_existing:
         # Clear each distinct path once, before any items are added, so that two
         # fragments targeting the same path do not clear each other's work.
@@ -53,26 +64,31 @@ def compose_json_with_fragment_list(
     for item in lif_fragments:
         add_fragment_to_lif_record(lif_record_dict, item.fragment_path, item.fragment)
 
-    return json.dumps(lif_record_dict)
 
-
+# Both record-level entrypoints below compose on the dict rather than round-tripping through
+# JSON (Issue #10). They used to do model_dump_json() -> loads -> mutate -> dumps -> loads:
+# four full passes over the record where two will do.
+#
+# `mode="json"` rather than a plain model_dump() is deliberate. It coerces values to JSON
+# primitives exactly as model_dump_json() did, so a record composed here is value-for-value
+# what the old path produced -- a plain model_dump() would instead leave a non-JSON value
+# (a datetime, say) as a native object, which query_cache_service.save() would then write to
+# Mongo as a BSON date where it previously wrote a string. Nothing in the seed data carries
+# such a value today, so the distinction is currently theoretical, but keeping the coercion
+# means this change cannot alter what is stored.
 def compose_with_single_fragment(lif_record: LIFRecord, lif_fragment: LIFFragment) -> LIFRecord:
-    lif_record_json = lif_record.model_dump_json()
-    new_lif_record_json = compose_json_with_single_fragment(lif_record_json, lif_fragment)
-    new_lif_record_dict = json.loads(new_lif_record_json)
-    return LIFRecord(**new_lif_record_dict)
+    lif_record_dict = lif_record.model_dump(mode="json")
+    add_fragment_to_lif_record(lif_record_dict, lif_fragment.fragment_path, lif_fragment.fragment)
+    return LIFRecord(**lif_record_dict)
 
 
 def compose_with_fragment_list(
     lif_record: LIFRecord, lif_fragments: List[LIFFragment], replace_existing: bool = True
 ) -> LIFRecord:
     """Compose fragments into a record. See compose_json_with_fragment_list for semantics."""
-    lif_record_json = lif_record.model_dump_json()
-    new_lif_record_json = compose_json_with_fragment_list(
-        lif_record_json=lif_record_json, lif_fragments=lif_fragments, replace_existing=replace_existing
-    )
-    new_lif_record_dict = json.loads(new_lif_record_json)
-    return LIFRecord(**new_lif_record_dict)
+    lif_record_dict = lif_record.model_dump(mode="json")
+    compose_dict_with_fragment_list(lif_record_dict, lif_fragments, replace_existing=replace_existing)
+    return LIFRecord(**lif_record_dict)
 
 
 def adjust_fragment_path_for_root_person_list(fragment_path: str) -> str:

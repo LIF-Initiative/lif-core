@@ -2,18 +2,23 @@ import asyncio
 import httpx
 import json
 import logging
-from unittest.mock import patch, MagicMock, AsyncMock
+import pytest
+from datetime import datetime, timedelta, timezone
+from unittest.mock import patch, call, MagicMock, AsyncMock
 
 from lif.datatypes import (
     LIFFragment,
     LIFQuery,
     LIFQueryFilter,
     LIFQueryPersonFilter,
+    LIFQueryPlan,
     LIFQueryStatusResponse,
     LIFPersonIdentifier,
     LIFPersonIdentifiers,
+    LIFUpdate,
     OrchestratorJobQueryPlanPartResults,
 )
+from lif.datatypes.core import LIFUpdatePersonPayload
 from lif.query_planner_service import core, statistics
 from lif.exceptions.core import LIFException
 from lif.datatypes.orchestration import OrchestratorJobQueryPlanPartResults
@@ -632,6 +637,110 @@ def test_run_post_orchestration_results_emits_completed_statistics(mock_post, ca
     assert "Canary" not in caplog.text
 
 
+@patch("httpx.AsyncClient.post")
+def test_run_query_prunes_the_job_store_before_storing_a_new_job(mock_post):
+    query = _prune_test_query()
+
+    information_sources_config = [
+        {
+            "information_source_id": "source_1",
+            "information_source_organization": "Example Org 1",
+            "adapter_id": "lif-to-lif",
+            "ttl_hours": 24,
+            "lif_fragment_paths": ["Person.name"],
+        }
+    ]
+
+    config: core.LIFQueryPlannerConfig = core.LIFQueryPlannerConfig(
+        lif_cache_url="https://api.example.com",
+        lif_orchestrator_url="https://api.example.com",
+        information_sources_config=information_sources_config,
+    )
+    service: core.LIFQueryPlannerService = core.LIFQueryPlannerService(config=config)
+
+    mock_cache_response = _create_mock_post_response(200, [{"person": [{}]}], "https://api.example.com/query")
+    mock_post_job_response = _create_mock_post_response(200, {"run_id": "new-job"}, "https://api.example.com/jobs")
+    mock_post.side_effect = [mock_cache_response, mock_post_job_response]
+
+    # One more than the size bound, all expired, so exactly the oldest is eligible.
+    job_store = {
+        f"expired-{i}": _job_aged_hours(f"expired-{i}", core.JOB_EXPIRY_HOURS + 1)
+        for i in range(core.JOB_MAX_CACHE_SIZE + 1)
+    }
+
+    async def run_test():
+        lif_query_status_response: LIFQueryStatusResponse = await service.run_query(query, first_run=True)
+        assert lif_query_status_response.query_id == "new-job"
+
+    with patch.object(core, "JOB_STORE", job_store):
+        asyncio.run(run_test())
+        assert "expired-0" not in core.JOB_STORE
+        assert "expired-1" in core.JOB_STORE
+        assert "new-job" in core.JOB_STORE
+
+
+def test_prune_job_store_keeps_the_most_recent_entries_regardless_of_age():
+    overflow = 5
+    job_store = {
+        f"job-{i}": _job_aged_hours(f"job-{i}", core.JOB_EXPIRY_HOURS + 24)
+        for i in range(core.JOB_MAX_CACHE_SIZE + overflow)
+    }
+
+    with patch.object(core, "JOB_STORE", job_store):
+        core.prune_job_store()
+
+        assert len(core.JOB_STORE) == core.JOB_MAX_CACHE_SIZE
+        assert all(f"job-{i}" not in core.JOB_STORE for i in range(overflow))
+        assert all(f"job-{i}" in core.JOB_STORE for i in range(overflow, core.JOB_MAX_CACHE_SIZE + overflow))
+
+
+def test_prune_job_store_keeps_entries_younger_than_the_expiry_window():
+    job_store = {f"job-{i}": _job_aged_hours(f"job-{i}", 0) for i in range(core.JOB_MAX_CACHE_SIZE + 5)}
+
+    with patch.object(core, "JOB_STORE", job_store):
+        core.prune_job_store()
+
+        assert len(core.JOB_STORE) == core.JOB_MAX_CACHE_SIZE + 5
+
+
+def test_prune_job_store_removes_an_expired_pending_entry():
+    # A caller that gives up before the planner does leaves the entry PENDING forever (#572).
+    job_store = {
+        f"pending-{i}": _job_aged_hours(f"pending-{i}", core.JOB_EXPIRY_HOURS + 1, status="PENDING") for i in range(5)
+    }
+    job_store.update({f"recent-{i}": _job_aged_hours(f"recent-{i}", 0) for i in range(core.JOB_MAX_CACHE_SIZE)})
+
+    with patch.object(core, "JOB_STORE", job_store):
+        core.prune_job_store()
+
+        assert all(f"pending-{i}" not in core.JOB_STORE for i in range(5))
+        assert len(core.JOB_STORE) == core.JOB_MAX_CACHE_SIZE
+
+
+def _prune_test_query() -> LIFQuery:
+    return LIFQuery(
+        filter=LIFQueryFilter(
+            root=LIFQueryPersonFilter(
+                person=LIFPersonIdentifiers(
+                    Identifier=LIFPersonIdentifier(identifier="12345", identifierType="School-assigned number")
+                )
+            )
+        ),
+        selected_fields=["person.name"],
+    )
+
+
+def _job_aged_hours(job_id: str, hours: int, status: str = "COMPLETED") -> core.LIFQueryPlannerJob:
+    timestamp = (datetime.now(timezone.utc) - timedelta(hours=hours)).isoformat()
+    return core.LIFQueryPlannerJob(
+        job_id=job_id,
+        query=_prune_test_query(),
+        status=status,
+        created_timestamp=timestamp,
+        updated_timestamp=timestamp,
+    )
+
+
 def _create_mock_post_response(status_code, json_data, uri):
     mock_response = MagicMock()
     mock_response.status_code = status_code
@@ -643,3 +752,220 @@ def _create_mock_post_response(status_code, json_data, uri):
     else:
         mock_response.raise_for_status.return_value = None
     return mock_response
+
+
+def _make_query():
+    return LIFQuery(
+        filter=LIFQueryFilter(
+            root=LIFQueryPersonFilter(
+                person=LIFPersonIdentifiers(
+                    Identifier=LIFPersonIdentifier(identifier="12345", identifierType="School-assigned number")
+                )
+            )
+        ),
+        selected_fields=["person.name"],
+    )
+
+
+# -------------------------------------------------------------------------
+# LIFQueryPlannerConfig timeout
+# -------------------------------------------------------------------------
+def test_query_planner_config_default_query_timeout_is_300():
+    config = core.LIFQueryPlannerConfig(
+        lif_cache_url="https://api.example.com",
+        lif_orchestrator_url="https://api.example.com",
+        information_sources_config=[],
+    )
+    assert config.query_timeout_seconds == 300
+
+
+def test_query_planner_config_accepts_explicit_query_timeout():
+    config = core.LIFQueryPlannerConfig(
+        lif_cache_url="https://api.example.com",
+        lif_orchestrator_url="https://api.example.com",
+        information_sources_config=[],
+        query_timeout_seconds=120,
+    )
+    assert config.query_timeout_seconds == 120
+
+
+def test_query_planner_config_rejects_non_positive_query_timeout():
+    from pydantic import ValidationError
+
+    with pytest.raises(ValidationError):
+        core.LIFQueryPlannerConfig(
+            lif_cache_url="https://api.example.com",
+            lif_orchestrator_url="https://api.example.com",
+            information_sources_config=[],
+            query_timeout_seconds=0,
+        )
+
+
+def test_query_planner_config_default_service_request_timeout_is_10():
+    """Short by design: these are fast service-to-service calls, not the orchestration wait."""
+    config = core.LIFQueryPlannerConfig(
+        lif_cache_url="https://api.example.com",
+        lif_orchestrator_url="https://api.example.com",
+        information_sources_config=[],
+    )
+    assert config.service_request_timeout_seconds == 10
+
+
+def test_query_planner_config_rejects_non_positive_service_request_timeout():
+    from pydantic import ValidationError
+
+    with pytest.raises(ValidationError):
+        core.LIFQueryPlannerConfig(
+            lif_cache_url="https://api.example.com",
+            lif_orchestrator_url="https://api.example.com",
+            information_sources_config=[],
+            service_request_timeout_seconds=0,
+        )
+
+
+# -------------------------------------------------------------------------
+# Internal HTTP clients use the short per-request timeout, not the query budget
+# -------------------------------------------------------------------------
+@patch("httpx.AsyncClient")
+def test_query_lif_cache_uses_configured_timeout(mock_client_cls):
+    mock_client = AsyncMock()
+    mock_client.post.return_value = _create_mock_post_response(200, [], "https://api.example.com/query")
+    mock_client_cls.return_value.__aenter__ = AsyncMock(return_value=mock_client)
+    mock_client_cls.return_value.__aexit__ = AsyncMock(return_value=False)
+
+    asyncio.run(core.query_lif_cache("https://api.example.com/query", _make_query(), timeout=300))
+
+    mock_client_cls.assert_called_once_with(timeout=300)
+
+
+@patch("httpx.AsyncClient")
+def test_post_orchestrator_job_uses_configured_timeout(mock_client_cls):
+    mock_client = AsyncMock()
+    mock_client.post.return_value = _create_mock_post_response(200, {"run_id": "123"}, "https://api.example.com/jobs")
+    mock_client_cls.return_value.__aenter__ = AsyncMock(return_value=mock_client)
+    mock_client_cls.return_value.__aexit__ = AsyncMock(return_value=False)
+
+    request = core.OrchestratorJobRequest(lif_query_plan=LIFQueryPlan(root=[]), async_=True)
+    asyncio.run(core.post_orchestrator_job("https://api.example.com/jobs", request, timeout=300))
+
+    mock_client_cls.assert_called_once_with(timeout=300)
+
+
+@patch("httpx.AsyncClient")
+def test_run_query_passes_service_request_timeout_to_both_http_calls(mock_client_cls):
+    """run_query's own call sites must pass the per-request timeout, not the query budget (#571).
+
+    The two tests above call the module-level functions directly with a literal timeout, so
+    they pin the *signatures*. They stay green even if run_query hands those functions
+    self.config.query_timeout_seconds -- which is exactly the coupling this issue removed.
+    Distinct values (7 vs 123) are what make the assertion mean something.
+    """
+    config = core.LIFQueryPlannerConfig(
+        lif_cache_url="https://api.example.com/cache",
+        lif_orchestrator_url="https://api.example.com/orchestrator",
+        information_sources_config=[
+            {
+                "information_source_id": "source_1",
+                "information_source_organization": "Example Org 1",
+                "adapter_id": "lif-to-lif",
+                "ttl_hours": 24,
+                "lif_fragment_paths": ["Person.name"],
+            }
+        ],
+        query_timeout_seconds=123,
+        service_request_timeout_seconds=7,
+    )
+    service = core.LIFQueryPlannerService(config=config)
+
+    mock_client = AsyncMock()
+    mock_client.post.side_effect = [
+        _create_mock_post_response(200, [], "https://api.example.com/cache/query"),
+        _create_mock_post_response(200, {"run_id": "run-1"}, "https://api.example.com/orchestrator/jobs"),
+    ]
+    mock_client_cls.return_value.__aenter__ = AsyncMock(return_value=mock_client)
+    mock_client_cls.return_value.__aexit__ = AsyncMock(return_value=False)
+
+    # run_query registers the submitted job, so keep the mutation out of the module singleton.
+    with patch.dict(core.JOB_STORE, {}, clear=True):
+        asyncio.run(service.run_query(_make_query(), first_run=True))
+
+    # The cache read and the orchestrator submission -- both on 7, neither on the 123 budget.
+    assert mock_client_cls.call_args_list == [call(timeout=7), call(timeout=7)]
+
+
+@patch("httpx.AsyncClient")
+def test_run_update_uses_service_request_timeout_not_query_budget(mock_client_cls):
+    # Distinct values: asserting 7 rather than 123 is what pins the decoupling.
+    config = core.LIFQueryPlannerConfig(
+        lif_cache_url="https://api.example.com/cache",
+        lif_orchestrator_url="https://api.example.com/orchestrator",
+        information_sources_config=[],
+        query_timeout_seconds=123,
+        service_request_timeout_seconds=7,
+    )
+    service = core.LIFQueryPlannerService(config=config)
+
+    mock_client = AsyncMock()
+    mock_client.post.return_value = _create_mock_post_response(200, {}, "https://api.example.com/cache/update")
+    mock_client_cls.return_value.__aenter__ = AsyncMock(return_value=mock_client)
+    mock_client_cls.return_value.__aexit__ = AsyncMock(return_value=False)
+
+    update = LIFUpdate(
+        updatePerson=LIFUpdatePersonPayload(
+            filter={"Person": {"Identifier": {"identifier": "12345", "identifierType": "School-assigned number"}}},
+            input={"Person": {"Name": "Test"}},
+        )
+    )
+    asyncio.run(service.run_update(update))
+
+    mock_client_cls.assert_called_once_with(timeout=7)
+
+
+@patch("httpx.AsyncClient")
+def test_run_post_orchestration_results_uses_service_request_timeout(mock_client_cls):
+    config = core.LIFQueryPlannerConfig(
+        lif_cache_url="https://api.example.com/cache",
+        lif_orchestrator_url="https://api.example.com/orchestrator",
+        information_sources_config=[
+            {
+                "information_source_id": "source_1",
+                "information_source_organization": "Example Org 1",
+                "adapter_id": "lif-to-lif",
+                "ttl_hours": 24,
+                "lif_fragment_paths": ["Person.name"],
+            }
+        ],
+        query_timeout_seconds=123,
+        service_request_timeout_seconds=7,
+    )
+    service = core.LIFQueryPlannerService(config=config)
+
+    mock_client = AsyncMock()
+    mock_client.post.return_value = _create_mock_post_response(200, [], "https://api.example.com/cache/save")
+    mock_client_cls.return_value.__aenter__ = AsyncMock(return_value=mock_client)
+    mock_client_cls.return_value.__aexit__ = AsyncMock(return_value=False)
+
+    add_job_to_store(core.LIFQueryPlannerJob(job_id="123", status="PENDING", query=_make_query()))
+    orchestration_results = OrchestratorJobResults(
+        run_id="123",
+        query_plan_part_results=[
+            OrchestratorJobQueryPlanPartResults(
+                information_source_id="source_1",
+                adapter_id="lif_to_lif",
+                data_timestamp="2023-10-01T12:00:00Z",
+                person_id=LIFPersonIdentifier(identifier="12345", identifierType="School-assigned number"),
+                fragments=[
+                    {
+                        "fragment_path": "person.name",
+                        "fragment": [
+                            {"identifier": [{"identifier": "12345", "identifierType": "School-assigned number"}]}
+                        ],
+                    }
+                ],
+                error=None,
+            )
+        ],
+    )
+    asyncio.run(service.run_post_orchestration_results(orchestration_results))
+
+    mock_client_cls.assert_called_once_with(timeout=7)
