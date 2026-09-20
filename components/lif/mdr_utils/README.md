@@ -10,10 +10,7 @@ Utility plumbing for the MDR API: settings, database setup, logging, pagination,
 | `database_setup.py` | SQLAlchemy async engine, `get_session()` dependency, lifecycle management |
 | `logger_config.py` | `get_logger(__name__)` — MDR's logger format (note: other services use `lif.logging` with a slightly different format) |
 | `collection_utils.py` | `convert_csv_to_set` and similar CSV-string parsing helpers |
-| `error_handling.py` | Common HTTPException helpers and error envelope shapes |
 | `pagination_util.py` | Pagination helpers for list endpoints |
-| `sql_util.py`, `sql_config.yaml` | SQL query templates and config-driven query construction |
-| `yaml_util.py` | YAML loader helpers (used by SQL config and seed-data loaders) |
 
 ## Public surface
 
@@ -29,3 +26,11 @@ These three are the most-used entrypoints.
 - `bases/lif/mdr_restapi` — every endpoint, plus `core.py` (CORS / app setup)
 - `components/lif/mdr_services` — services pull `get_session` and `get_logger`
 - `components/lif/mdr_auth` — pulls `get_settings`, `get_logger`, `convert_csv_to_set`
+
+## Removed
+
+`sql_util.py`, `yaml_util.py`, `error_handling.py` and `sql_config.yaml` were a
+self-contained psycopg2 raw-SQL path with no callers anywhere in the repo, plus
+the helpers only they used. MDR queries through the SQLAlchemy async session
+(`database_setup.get_session`) instead. `database_setup.get_db_connection`, which
+only `run_sql` called, went with them. Removed in #1278.
