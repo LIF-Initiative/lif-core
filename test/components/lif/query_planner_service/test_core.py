@@ -2,6 +2,7 @@ import asyncio
 import httpx
 import json
 import logging
+from datetime import datetime, timedelta, timezone
 from unittest.mock import patch, MagicMock, AsyncMock
 
 from lif.datatypes import (
@@ -630,6 +631,110 @@ def test_run_post_orchestration_results_emits_completed_statistics(mock_post, ca
     assert events[0]["sources"][0]["fragment_count"] == 1
     assert "Sentinel" not in caplog.text
     assert "Canary" not in caplog.text
+
+
+@patch("httpx.AsyncClient.post")
+def test_run_query_prunes_the_job_store_before_storing_a_new_job(mock_post):
+    query = _prune_test_query()
+
+    information_sources_config = [
+        {
+            "information_source_id": "source_1",
+            "information_source_organization": "Example Org 1",
+            "adapter_id": "lif-to-lif",
+            "ttl_hours": 24,
+            "lif_fragment_paths": ["Person.name"],
+        }
+    ]
+
+    config: core.LIFQueryPlannerConfig = core.LIFQueryPlannerConfig(
+        lif_cache_url="https://api.example.com",
+        lif_orchestrator_url="https://api.example.com",
+        information_sources_config=information_sources_config,
+    )
+    service: core.LIFQueryPlannerService = core.LIFQueryPlannerService(config=config)
+
+    mock_cache_response = _create_mock_post_response(200, [{"person": [{}]}], "https://api.example.com/query")
+    mock_post_job_response = _create_mock_post_response(200, {"run_id": "new-job"}, "https://api.example.com/jobs")
+    mock_post.side_effect = [mock_cache_response, mock_post_job_response]
+
+    # One more than the size bound, all expired, so exactly the oldest is eligible.
+    job_store = {
+        f"expired-{i}": _job_aged_hours(f"expired-{i}", core.JOB_EXPIRY_HOURS + 1)
+        for i in range(core.JOB_MAX_CACHE_SIZE + 1)
+    }
+
+    async def run_test():
+        lif_query_status_response: LIFQueryStatusResponse = await service.run_query(query, first_run=True)
+        assert lif_query_status_response.query_id == "new-job"
+
+    with patch.object(core, "JOB_STORE", job_store):
+        asyncio.run(run_test())
+        assert "expired-0" not in core.JOB_STORE
+        assert "expired-1" in core.JOB_STORE
+        assert "new-job" in core.JOB_STORE
+
+
+def test_prune_job_store_keeps_the_most_recent_entries_regardless_of_age():
+    overflow = 5
+    job_store = {
+        f"job-{i}": _job_aged_hours(f"job-{i}", core.JOB_EXPIRY_HOURS + 24)
+        for i in range(core.JOB_MAX_CACHE_SIZE + overflow)
+    }
+
+    with patch.object(core, "JOB_STORE", job_store):
+        core.prune_job_store()
+
+        assert len(core.JOB_STORE) == core.JOB_MAX_CACHE_SIZE
+        assert all(f"job-{i}" not in core.JOB_STORE for i in range(overflow))
+        assert all(f"job-{i}" in core.JOB_STORE for i in range(overflow, core.JOB_MAX_CACHE_SIZE + overflow))
+
+
+def test_prune_job_store_keeps_entries_younger_than_the_expiry_window():
+    job_store = {f"job-{i}": _job_aged_hours(f"job-{i}", 0) for i in range(core.JOB_MAX_CACHE_SIZE + 5)}
+
+    with patch.object(core, "JOB_STORE", job_store):
+        core.prune_job_store()
+
+        assert len(core.JOB_STORE) == core.JOB_MAX_CACHE_SIZE + 5
+
+
+def test_prune_job_store_removes_an_expired_pending_entry():
+    # A caller that gives up before the planner does leaves the entry PENDING forever (#572).
+    job_store = {
+        f"pending-{i}": _job_aged_hours(f"pending-{i}", core.JOB_EXPIRY_HOURS + 1, status="PENDING") for i in range(5)
+    }
+    job_store.update({f"recent-{i}": _job_aged_hours(f"recent-{i}", 0) for i in range(core.JOB_MAX_CACHE_SIZE)})
+
+    with patch.object(core, "JOB_STORE", job_store):
+        core.prune_job_store()
+
+        assert all(f"pending-{i}" not in core.JOB_STORE for i in range(5))
+        assert len(core.JOB_STORE) == core.JOB_MAX_CACHE_SIZE
+
+
+def _prune_test_query() -> LIFQuery:
+    return LIFQuery(
+        filter=LIFQueryFilter(
+            root=LIFQueryPersonFilter(
+                person=LIFPersonIdentifiers(
+                    Identifier=LIFPersonIdentifier(identifier="12345", identifierType="School-assigned number")
+                )
+            )
+        ),
+        selected_fields=["person.name"],
+    )
+
+
+def _job_aged_hours(job_id: str, hours: int, status: str = "COMPLETED") -> core.LIFQueryPlannerJob:
+    timestamp = (datetime.now(timezone.utc) - timedelta(hours=hours)).isoformat()
+    return core.LIFQueryPlannerJob(
+        job_id=job_id,
+        query=_prune_test_query(),
+        status=status,
+        created_timestamp=timestamp,
+        updated_timestamp=timestamp,
+    )
 
 
 def _create_mock_post_response(status_code, json_data, uri):

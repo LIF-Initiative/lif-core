@@ -164,7 +164,7 @@ class LIFQueryPlannerService:
                     job_id=orchestrator_job_request_response.run_id, query=query, status="PENDING"
                 )
 
-                # prune_job_store()
+                prune_job_store()
 
                 # Store the job in the JOB_STORE
                 JOB_STORE[lif_query_planner_job.job_id] = lif_query_planner_job
