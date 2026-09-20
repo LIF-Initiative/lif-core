@@ -28,6 +28,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          # Diff-scoped cspell below needs the base ref present, not just the tip.
+          fetch-depth: 0
 
       - name: Set up uv + Python 3.13
         uses: astral-sh/setup-uv@v6
@@ -57,6 +60,55 @@ jobs:
       - name: Tests
         run: uv run pytest test
 
+      # Mirrors the cspell pre-commit hook, which had no CI counterpart -- the only gate
+      # a PR could pass while a local run failed (#1217). Runs the same hook through
+      # pre-commit so the config, version and verdict are identical, and scopes it to the
+      # PR's changed files so it agrees with what a contributor sees locally. An all-files
+      # run is not equivalent: main carries pre-existing findings in files this PR did not
+      # touch, and gating on those would fail PRs for words their author never wrote.
+      # base_ref is only populated for pull_request. On a manual workflow_dispatch it is
+      # empty and the ref becomes a bare `origin/`, which git rejects -- so scope to the
+      # diff when there is one rather than failing on a trigger this workflow declares.
+      - name: Spell check (changed files)
+        run: |
+          if [ -n "${{ github.base_ref }}" ]; then
+            uv run pre-commit run cspell --from-ref "origin/${{ github.base_ref }}" --to-ref HEAD
+          else
+            echo "No base ref (not a pull_request) -- skipping the diff-scoped spell check."
+          fi
+
+  commit-messages:
+    name: Commit messages (commitlint)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # commitlint validates a range, so it needs both ends.
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      # The commitlint pre-commit hook runs at the commit-msg stage, so it only fires on a
+      # contributor who has installed the hooks. The PR template asked authors to confirm
+      # it by hand; this checks it (#1217). Uses the repo's own commitlint.config.mjs.
+      # commitlint.config.mjs has no `extends`, only its own rules and a custom
+      # parserPreset, so @commitlint/config-conventional is never loaded -- the
+      # pre-commit hook declares no additional_dependencies either. Dropped.
+      - name: Lint commit messages
+        run: |
+          if [ -z "${{ github.base_ref }}" ]; then
+            echo "No base ref (not a pull_request) -- nothing to lint."
+            exit 0
+          fi
+          npx --yes --package @commitlint/cli@19 -- \
+            commitlint --from "origin/${{ github.base_ref }}" --to HEAD --verbose
 
   frontend:
     name: Frontend build

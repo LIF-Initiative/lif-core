@@ -74,7 +74,7 @@ services:
       context: ../
       dockerfile: projects/lif_identity_mapper_api/Dockerfile2
     environment:
-      IDENTITY_MAPPER_DB_DRIVER: ${IDENTITY_MAPPER_DB_DRIVER:-mysql+pymysql}
+      IDENTITY_MAPPER_DB_DRIVER: ${IDENTITY_MAPPER_DB_DRIVER:-mysql+asyncmy}
       IDENTITY_MAPPER_DB_USERNAME: ${IDENTITY_MAPPER_DB_USERNAME:-myuser}
       IDENTITY_MAPPER_DB_PASSWORD: ${IDENTITY_MAPPER_DB_PASSWORD:-mypass}
       IDENTITY_MAPPER_DB_HOST: ${IDENTITY_MAPPER_DB_HOST:-host.docker.internal}
