@@ -1,7 +1,9 @@
 import asyncio
-import logging
 import httpx
+import json
+import logging
 import pytest
+from datetime import datetime, timedelta, timezone
 from unittest.mock import patch, call, MagicMock, AsyncMock
 
 from lif.datatypes import (
@@ -17,7 +19,7 @@ from lif.datatypes import (
     OrchestratorJobQueryPlanPartResults,
 )
 from lif.datatypes.core import LIFUpdatePersonPayload
-from lif.query_planner_service import core
+from lif.query_planner_service import core, statistics
 from lif.exceptions.core import LIFException
 from lif.datatypes.orchestration import OrchestratorJobQueryPlanPartResults
 from lif.query_planner_service.core import OrchestratorJobResults, add_job_to_store
@@ -516,6 +518,227 @@ def test_run_post_orchestration_results_does_not_log_person_data(mock_post, capl
     # The run id and the source are still traceable.
     assert "run-1" in caplog.text
     assert "source_1" in caplog.text
+
+
+# -------------------------------------------------------------------------
+# #341 — query statistics emission.
+# -------------------------------------------------------------------------
+_FULL_CACHE_RECORD = {"person": [{"name": [{"givenName": ["John"], "familyName": "Doe"}]}]}
+
+_STATS_SOURCES = [
+    {
+        "information_source_id": "source_1",
+        "information_source_organization": "Example Org 1",
+        "adapter_id": "lif-to-lif",
+        "ttl_hours": 24,
+        "lif_fragment_paths": ["Person.name"],
+    }
+]
+
+
+def _stats_service() -> "core.LIFQueryPlannerService":
+    return core.LIFQueryPlannerService(
+        config=core.LIFQueryPlannerConfig(
+            lif_cache_url="https://api.example.com",
+            lif_orchestrator_url="https://api.example.com",
+            information_sources_config=_STATS_SOURCES,
+        )
+    )
+
+
+def _emitted_events(caplog) -> list:
+    prefix = statistics.QUERY_STATISTICS_PREFIX + " "
+    return [json.loads(line[line.index(prefix) + len(prefix) :]) for line in caplog.text.splitlines() if prefix in line]
+
+
+@patch("httpx.AsyncClient.post")
+def test_run_query_emits_orchestrated_query_statistics(mock_post, caplog):
+    mock_post.side_effect = [
+        _create_mock_post_response(200, [{"person": [{}]}], "https://api.example.com/query"),
+        _create_mock_post_response(200, {"run_id": "run-1"}, "https://api.example.com/jobs"),
+    ]
+
+    with patch.object(core, "JOB_STORE", {}), caplog.at_level(logging.INFO):
+        asyncio.run(_stats_service().run_query(_sentinel_query(), first_run=True))
+
+    events = _emitted_events(caplog)
+    assert len(events) == 1
+    assert events[0]["outcome"] == statistics.OUTCOME_ORCHESTRATED
+    assert events[0]["correlation_id"] == "run-1"
+    assert events[0]["requested_paths"] == ["Person.name"]
+    assert events[0]["sources"] == [{"information_source_id": "source_1", "adapter_id": "lif-to-lif", "path_count": 1}]
+    assert "Sentinel" not in caplog.text
+
+
+@patch("httpx.AsyncClient.post")
+def test_run_query_emits_served_from_cache_statistics(mock_post, caplog):
+    mock_post.side_effect = [_create_mock_post_response(200, [_FULL_CACHE_RECORD], "https://api.example.com/query")]
+
+    with patch.object(core, "JOB_STORE", {}), caplog.at_level(logging.INFO):
+        asyncio.run(_stats_service().run_query(_sentinel_query(), first_run=True))
+
+    events = _emitted_events(caplog)
+    assert len(events) == 1
+    assert events[0]["outcome"] == statistics.OUTCOME_SERVED_FROM_CACHE
+    assert events[0]["cache_hit"] is True
+
+
+@patch("httpx.AsyncClient.post")
+def test_sync_query_path_emits_exactly_one_planned_event(mock_post, caplog):
+    # The sync /query endpoint calls run_query twice: once with first_run=True, then again with
+    # first_run=False after polling. The second call lands on the served-from-cache branch, so
+    # without the first_run guard every orchestrated query would be counted twice (#341 gap 3).
+    mock_post.side_effect = [
+        _create_mock_post_response(200, [{"person": [{}]}], "https://api.example.com/query"),
+        _create_mock_post_response(200, {"run_id": "run-1"}, "https://api.example.com/jobs"),
+        _create_mock_post_response(200, [_FULL_CACHE_RECORD], "https://api.example.com/query"),
+    ]
+    service = _stats_service()
+
+    async def run_both():
+        await service.run_query(_sentinel_query(), first_run=True)
+        await service.run_query(_sentinel_query(), first_run=False)
+
+    with patch.object(core, "JOB_STORE", {}), caplog.at_level(logging.INFO):
+        asyncio.run(run_both())
+
+    events = _emitted_events(caplog)
+    assert len(events) == 1
+    assert events[0]["outcome"] == statistics.OUTCOME_ORCHESTRATED
+
+
+@patch("httpx.AsyncClient.post")
+def test_run_post_orchestration_results_emits_completed_statistics(mock_post, caplog):
+    mock_post.return_value = _create_mock_post_response(200, {}, "https://api.example.com/save")
+    results = OrchestratorJobResults(
+        run_id="run-1",
+        query_plan_part_results=[
+            OrchestratorJobQueryPlanPartResults(
+                information_source_id="source_1",
+                adapter_id="lif-to-lif",
+                data_timestamp="2026-01-01T00:00:00Z",
+                person_id=LIFPersonIdentifier(identifier="Sentinel-1234", identifierType="School-assigned number"),
+                fragments=[LIFFragment(fragment_path="person.name", fragment=[{"name": [{"familyName": "Canary"}]}])],
+                error=None,
+            )
+        ],
+    )
+    job_store = {"run-1": core.LIFQueryPlannerJob(job_id="run-1", query=_sentinel_query(), status="PENDING")}
+
+    with patch.object(core, "JOB_STORE", job_store), caplog.at_level(logging.INFO):
+        asyncio.run(_stats_service().run_post_orchestration_results(results))
+
+    events = [e for e in _emitted_events(caplog) if e["event"] == "query_completed"]
+    assert len(events) == 1
+    assert events[0]["fulfilled_paths"] == ["Person.name"]
+    assert events[0]["paths_not_fulfilled"] == []
+    assert events[0]["sources"][0]["fragment_count"] == 1
+    assert "Sentinel" not in caplog.text
+    assert "Canary" not in caplog.text
+
+
+@patch("httpx.AsyncClient.post")
+def test_run_query_prunes_the_job_store_before_storing_a_new_job(mock_post):
+    query = _prune_test_query()
+
+    information_sources_config = [
+        {
+            "information_source_id": "source_1",
+            "information_source_organization": "Example Org 1",
+            "adapter_id": "lif-to-lif",
+            "ttl_hours": 24,
+            "lif_fragment_paths": ["Person.name"],
+        }
+    ]
+
+    config: core.LIFQueryPlannerConfig = core.LIFQueryPlannerConfig(
+        lif_cache_url="https://api.example.com",
+        lif_orchestrator_url="https://api.example.com",
+        information_sources_config=information_sources_config,
+    )
+    service: core.LIFQueryPlannerService = core.LIFQueryPlannerService(config=config)
+
+    mock_cache_response = _create_mock_post_response(200, [{"person": [{}]}], "https://api.example.com/query")
+    mock_post_job_response = _create_mock_post_response(200, {"run_id": "new-job"}, "https://api.example.com/jobs")
+    mock_post.side_effect = [mock_cache_response, mock_post_job_response]
+
+    # One more than the size bound, all expired, so exactly the oldest is eligible.
+    job_store = {
+        f"expired-{i}": _job_aged_hours(f"expired-{i}", core.JOB_EXPIRY_HOURS + 1)
+        for i in range(core.JOB_MAX_CACHE_SIZE + 1)
+    }
+
+    async def run_test():
+        lif_query_status_response: LIFQueryStatusResponse = await service.run_query(query, first_run=True)
+        assert lif_query_status_response.query_id == "new-job"
+
+    with patch.object(core, "JOB_STORE", job_store):
+        asyncio.run(run_test())
+        assert "expired-0" not in core.JOB_STORE
+        assert "expired-1" in core.JOB_STORE
+        assert "new-job" in core.JOB_STORE
+
+
+def test_prune_job_store_keeps_the_most_recent_entries_regardless_of_age():
+    overflow = 5
+    job_store = {
+        f"job-{i}": _job_aged_hours(f"job-{i}", core.JOB_EXPIRY_HOURS + 24)
+        for i in range(core.JOB_MAX_CACHE_SIZE + overflow)
+    }
+
+    with patch.object(core, "JOB_STORE", job_store):
+        core.prune_job_store()
+
+        assert len(core.JOB_STORE) == core.JOB_MAX_CACHE_SIZE
+        assert all(f"job-{i}" not in core.JOB_STORE for i in range(overflow))
+        assert all(f"job-{i}" in core.JOB_STORE for i in range(overflow, core.JOB_MAX_CACHE_SIZE + overflow))
+
+
+def test_prune_job_store_keeps_entries_younger_than_the_expiry_window():
+    job_store = {f"job-{i}": _job_aged_hours(f"job-{i}", 0) for i in range(core.JOB_MAX_CACHE_SIZE + 5)}
+
+    with patch.object(core, "JOB_STORE", job_store):
+        core.prune_job_store()
+
+        assert len(core.JOB_STORE) == core.JOB_MAX_CACHE_SIZE + 5
+
+
+def test_prune_job_store_removes_an_expired_pending_entry():
+    # A caller that gives up before the planner does leaves the entry PENDING forever (#572).
+    job_store = {
+        f"pending-{i}": _job_aged_hours(f"pending-{i}", core.JOB_EXPIRY_HOURS + 1, status="PENDING") for i in range(5)
+    }
+    job_store.update({f"recent-{i}": _job_aged_hours(f"recent-{i}", 0) for i in range(core.JOB_MAX_CACHE_SIZE)})
+
+    with patch.object(core, "JOB_STORE", job_store):
+        core.prune_job_store()
+
+        assert all(f"pending-{i}" not in core.JOB_STORE for i in range(5))
+        assert len(core.JOB_STORE) == core.JOB_MAX_CACHE_SIZE
+
+
+def _prune_test_query() -> LIFQuery:
+    return LIFQuery(
+        filter=LIFQueryFilter(
+            root=LIFQueryPersonFilter(
+                person=LIFPersonIdentifiers(
+                    Identifier=LIFPersonIdentifier(identifier="12345", identifierType="School-assigned number")
+                )
+            )
+        ),
+        selected_fields=["person.name"],
+    )
+
+
+def _job_aged_hours(job_id: str, hours: int, status: str = "COMPLETED") -> core.LIFQueryPlannerJob:
+    timestamp = (datetime.now(timezone.utc) - timedelta(hours=hours)).isoformat()
+    return core.LIFQueryPlannerJob(
+        job_id=job_id,
+        query=_prune_test_query(),
+        status=status,
+        created_timestamp=timestamp,
+        updated_timestamp=timestamp,
+    )
 
 
 def _create_mock_post_response(status_code, json_data, uri):

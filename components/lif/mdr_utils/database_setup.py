@@ -1,6 +1,3 @@
-import psycopg2
-from psycopg2 import Error
-import mysql.connector
 import os
 import re
 from typing import AsyncGenerator
@@ -152,39 +149,3 @@ async def get_session(request: Request) -> AsyncGenerator[AsyncSession, None]:
             # branch behaves as if it had a fresh connection.
             await session.execute(text("SET search_path TO public"))
         yield session
-
-
-async def get_db_connection(db_type: str):
-    # We can use
-    try:
-        match db_type:
-            case "POSTGRESQL":
-                # Connect to your PostgreSQL database
-                logger.info("DB type is POSTGRESQL")
-                connection = psycopg2.connect(
-                    user=os.environ["POSTGRESQL_USER"],
-                    password=os.environ["POSTGRESQL_PASSWORD"],
-                    host=os.environ["POSTGRESQL_HOST"],
-                    port=os.environ["POSTGRESQL_PORT"],
-                    database=os.environ["POSTGRESQL_DB"],
-                )
-                logger.info("Connection Done")
-
-            case "MYSQL":
-                logger.info("DB type is MYSQL")
-                connection = mysql.connector.connect(
-                    host=os.environ["MYSQL_HOST"],
-                    port=os.environ["MYSQL_PORT"],
-                    user=os.environ["MYSQL_USER"],
-                    password=os.environ["MYSQL_PASSWORD"],
-                    database=os.environ["MYSQL_DB"],
-                )
-                logger.info("Connection Done")
-            case _:
-                logger.info("Specified database type is not configured : %s", db_type)
-                raise Exception
-
-        return connection
-    except (Exception, Error) as error:
-        logger.error("Error while connecting DB doe the DB type: %s.  Error : %s", db_type, error)
-        raise

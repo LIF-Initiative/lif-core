@@ -1,6 +1,6 @@
 Environment:
   - Name: IDENTITY_MAPPER_DB_DRIVER
-    Value: "mysql+pymysql"
+    Value: "mysql+asyncmy"
   - Name: IDENTITY_MAPPER_DB_USERNAME
     Value: "myuser"
   - Name: IDENTITY_MAPPER_DB_PASSWORD

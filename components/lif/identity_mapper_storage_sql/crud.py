@@ -1,35 +1,37 @@
 from typing import List
 from sqlalchemy import select
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 from lif.identity_mapper_storage_sql.model import IdentityMappingModel
 
 
-def create(session: Session, model: IdentityMappingModel) -> IdentityMappingModel:
+async def create(session: AsyncSession, model: IdentityMappingModel) -> IdentityMappingModel:
     session.add(model)
-    session.flush()
+    await session.flush()
     return model
 
 
-def create_all(session: Session, models: List[IdentityMappingModel]) -> List[IdentityMappingModel]:
+async def create_all(session: AsyncSession, models: List[IdentityMappingModel]) -> List[IdentityMappingModel]:
     """Add many models without flushing each one; the caller flushes once."""
     session.add_all(models)
     return models
 
 
-def read(session: Session, mapping_id: str) -> IdentityMappingModel | None:
+async def read(session: AsyncSession, mapping_id: str) -> IdentityMappingModel | None:
     query = select(IdentityMappingModel).where(IdentityMappingModel.mapping_id == mapping_id)
-    return session.execute(query).scalar()
+    result = await session.execute(query)
+    return result.scalar()
 
 
-def read_by_lif_org_and_person(
-    session: Session, lif_organization_id: str, lif_organization_person_id: str
+async def read_by_lif_org_and_person(
+    session: AsyncSession, lif_organization_id: str, lif_organization_person_id: str
 ) -> List[IdentityMappingModel]:
     query = select(IdentityMappingModel).where(
         IdentityMappingModel.lif_organization_id == lif_organization_id,
         IdentityMappingModel.lif_organization_person_id == lif_organization_person_id,
     )
-    return list(session.execute(query).scalars().all())
+    result = await session.execute(query)
+    return list(result.scalars().all())
 
 
-def delete(session: Session, existing: IdentityMappingModel) -> None:
-    session.delete(existing)
+async def delete(session: AsyncSession, existing: IdentityMappingModel) -> None:
+    await session.delete(existing)
