@@ -40,6 +40,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   (`mysql+asyncmy`) instead of sync `pymysql` behind `asyncio.to_thread`; per-request latency is
   unchanged, but under 50 parallel GETs p95 roughly halves (≈83-239 ms vs ≈314-386 ms) with no
   contract or status-code changes
+- **GraphQL error contract:** a non-200 from the Query Planner now surfaces as a GraphQL `errors`
+  entry instead of an empty result set, so callers can tell a backend failure from a learner with
+  genuinely no data. A genuinely empty result still returns an empty list
 
 ### Deprecated
 

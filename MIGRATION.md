@@ -29,7 +29,17 @@ compatibility. This includes:
 
 ### Breaking Changes
 
-*No breaking changes currently pending*
+#### GraphQL: a Query Planner failure is now a GraphQL error, not an empty result
+
+- **Action Required:** callers of the GraphQL API must read the `errors` entry in the response
+  to detect a backend failure. Code that treats an empty list as the only possible "no results"
+  outcome keeps working; code that relied on a failure *also* arriving as an empty list will now
+  see `data` null for the queried field plus an `errors` entry.
+- **Impact:** any GraphQL consumer. In this repo that is the semantic search MCP server (via
+  `graphql_client`) and the `lif-to-lif` adapter, which already checks `errors` and will now
+  raise when an upstream org's planner fails instead of contributing empty fragments. Learner
+  Data Export is unaffected — it calls the Query Planner directly.
+- **Related:** #1264, CHANGELOG.md "Changed", `bases/lif/api_graphql/README.md` → Error contract
 
 ### Deprecation Notices
 
