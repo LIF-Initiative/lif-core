@@ -93,8 +93,9 @@ async def test_save_mappings_rolls_back_whole_batch_on_failure(storage: Identity
         with pytest.raises(DataStoreException):
             await storage.save_mappings(mappings)
 
-    with storage.db_session_factory() as session:
-        surviving = session.execute(select(func.count()).select_from(IdentityMappingModel)).scalar()
+    async with storage.db_session_factory() as session:
+        result = await session.execute(select(func.count()).select_from(IdentityMappingModel))
+        surviving = result.scalar()
     assert surviving == 0
 
 
@@ -239,11 +240,11 @@ async def test_save_mappings_issues_one_insert_for_the_whole_batch(db_engine, st
     def record(conn, cursor, statement, parameters, context, executemany):
         statements.append(statement.strip().split()[0].upper())
 
-    event.listen(db_engine, "before_cursor_execute", record)
+    event.listen(db_engine.sync_engine, "before_cursor_execute", record)
     try:
         await storage.save_mappings([_mapping(target_system=f"sys-{i}", person_id=f"ext-{i}") for i in range(50)])
     finally:
-        event.remove(db_engine, "before_cursor_execute", record)
+        event.remove(db_engine.sync_engine, "before_cursor_execute", record)
 
     assert statements.count("SELECT") == 1
     assert statements.count("INSERT") == 1

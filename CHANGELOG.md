@@ -17,6 +17,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Pull request template with comprehensive contribution guidelines
 - MIGRATION.md for tracking breaking changes and upgrade paths
 - CHANGELOG.md for tracking all notable changes
+- MDR UI: the bulk-transformation preview validates the assembled output against the target LIF
+  JSON Schema and lists any issues beneath the output pane. Type, enum and unexpected-property
+  violations are reported by default; missing required properties are opt-in via a "Check
+  completeness" toggle, because the preview is an intentionally partial document. `format` is not
+  validated, matching the runtime translator, which calls `jsonschema.validate` without a
+  `format_checker`
 
 ### Changed
 
@@ -31,6 +37,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   batch no longer produce two response entries for the same row
 - `IDENTITY_MAPPER_DB_POOL_PRE_PING` now defaults to `true` and is wired into the ECS task
   definition, replacing the connection validation lost with the startup `SELECT 1`
+- Identity Mapper storage now runs async SQLAlchemy against the C-extension `asyncmy` driver
+  (`mysql+asyncmy`) instead of sync `pymysql` behind `asyncio.to_thread`; per-request latency is
+  unchanged, but under 50 parallel GETs p95 roughly halves (≈83-239 ms vs ≈314-386 ms) with no
+  contract or status-code changes
 
 ### Deprecated
 
@@ -43,6 +53,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   constraint as a 500 and discarding the rest of the batch
 - `IDENTITY_MAPPER_DB_CONNECT_ARGS` is parsed from JSON into a dict; the raw string was passed
   straight to SQLAlchemy, which expects a mapping
+- Identity Mapper schema adds `idx_org_person (lif_organization_id, lif_organization_person_id)`.
+  `uq_identity_mapping` exceeds InnoDB's 3072-byte key limit, so MariaDB degrades it to `USING
+  HASH` and the optimizer cannot use it, making every org/person read a full table scan. Measured
+  at 50k rows: `type=ALL` / 49758 rows / 15.3 ms becomes `type=ref` / 5 rows / ~0.05 ms. Local
+  docker-compose volumes must be recreated (`down -v`) to pick up the new DDL; dev and demo need
+  no migration, as their MariaDB datadir is ephemeral
 
 ### Security
 

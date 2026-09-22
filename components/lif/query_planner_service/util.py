@@ -10,6 +10,7 @@ from typing import List
 from jsonpath_ng import parse
 
 from lif.datatypes.core import LIFFragment, LIFQuery, LIFQueryPlan, LIFQueryPlanPart, LIFPersonIdentifier, LIFRecord
+from lif.datatypes.orchestration import OrchestratorJobResults
 from lif.lif_schema_config import (
     PERSON_DOT,
     PERSON_DOT_PASCAL,
@@ -165,10 +166,49 @@ def get_lif_fragment_paths_not_found_in_lif_record(lif_record: LIFRecord, lif_fr
             logger.info(f"Path '{path}' not found in LIFRecord.")
             not_found_paths.append(path)
         else:
-            matches_str = ", ".join([str(match.value) for match in matches])
-            logger.info(f"Matched path '{path}' with values: {matches_str}")
+            logger.info(f"Matched path '{path}' with {len(matches)} value(s).")
 
     return not_found_paths
+
+
+# -------------------------------------------------------------------------
+# Helper functions to summarize objects for logging. Both carry person data,
+# which must never reach the logs.
+# -------------------------------------------------------------------------
+def summarize_query_plan(lif_query_plan: LIFQueryPlan) -> str:
+    """
+    Summarize a LIF query plan for logging, omitting the person identifier each part carries.
+
+    Args:
+        lif_query_plan (LIFQueryPlan): The query plan to summarize.
+
+    Returns:
+        str: Information source ids, adapter ids and fragment path counts.
+    """
+    parts = [
+        f"{part.information_source_id}/{part.adapter_id} ({len(part.lif_fragment_paths or [])} path(s))"
+        for part in lif_query_plan.root
+    ]
+    return f"{len(lif_query_plan.root)} part(s): {'; '.join(parts)}"
+
+
+def summarize_orchestration_results(results: OrchestratorJobResults) -> str:
+    """
+    Summarize orchestration results for logging, omitting person identifiers and fragment payloads.
+
+    Args:
+        results (OrchestratorJobResults): The orchestration results to summarize.
+
+    Returns:
+        str: Per-source fragment counts, or the error reported for that source.
+    """
+    parts = [
+        f"{part_result.information_source_id}/{part_result.adapter_id} ("
+        + (f"error: {part_result.error}" if part_result.error else f"{len(part_result.fragments or [])} fragment(s)")
+        + ")"
+        for part_result in results.query_plan_part_results
+    ]
+    return f"{len(results.query_plan_part_results)} part result(s): {'; '.join(parts)}"
 
 
 # -------------------------------------------------------------------------
