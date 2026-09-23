@@ -11,6 +11,7 @@ on:
       - cloudformation/lif-query-planner-taskdef-includes.yml
       - components/lif/query_planner_service/**
       - components/lif/datatypes/**
+      - components/lif/lif_fragment_utils/**
       - components/lif/logging/**
       - projects/lif_query_planner_api/**
       - .github/workflows/_deploy-service.yml
