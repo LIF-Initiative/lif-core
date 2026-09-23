@@ -1,0 +1,850 @@
+{
+  "Name": "StateU LIF_Sample LDE Target Test",
+  "GroupVersion": "1.0",
+  "SourceDataModelName": "StateU LIF",
+  "SourceDataModelVersion": "1.0",
+  "TargetDataModelName": "Sample LDE Target Test",
+  "TargetDataModelVersion": "1.0",
+  "Description": "Maps every StateU LIF attribute that at least one demo test user actually populates, as seen in the record the Query Planner composes for the LDE, into the Sample LDE Target Test model. Import with POST /transformation_groups/{id}/import; the numeric '<id>:' prefixes inside every EntityIdPath are ignored, paths resolve by UniqueName.",
+  "Notes": "See docs/reference/transformations/README.md for the manual verification steps.",
+  "ActivationDate": "2026-09-16T00:00:00Z",
+  "Contributor": "LIF Initiative",
+  "ContributorOrganization": "Unicon",
+  "Transformations": [
+    {
+      "Name": "Learner.learnerKey",
+      "Expression": "{\n  \"Learner\": Person.{\n    /* Identifier is a multi-source list; the predicate picks the school-assigned\n       entry, and the parentheses around the path are required before [0] -- without\n       them [0] binds to each match individually and returns them all. */\n    \"learnerKey\": (Identifier[identifierType = \"SCHOOL_ASSIGNED_NUMBER\"].identifier)[0]\n  }\n}",
+      "ExpressionLanguage": "JSONata",
+      "Notes": "Selects a single identifier out of the multi-source LIF list rather than emitting the list.",
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Common.Identifier,17:~Common.Identifier.identifier"
+        },
+        {
+          "EntityIdPath": "17:Person,17:Common.Identifier,17:~Common.Identifier.identifierType"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:Learner,30:~Learner.learnerKey"
+      }
+    },
+    {
+      "Name": "Learner.displayName",
+      "Expression": "{\n  \"Learner\": Person.{\n    /* The same learner is reported by several sources, so Name is a list; take the\n       first of each part. (Name.firstName)[0] -- parentheses matter, see learnerKey. */\n    \"displayName\": (Name.firstName)[0] & \" \" & (Name.lastName)[0]\n  }\n}",
+      "ExpressionLanguage": "JSONata",
+      "Notes": "Two LIF attributes combined into one target attribute.",
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Person.Name,17:~Person.Name.firstName"
+        },
+        {
+          "EntityIdPath": "17:Person,17:Person.Name,17:~Person.Name.lastName"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:Learner,30:~Learner.displayName"
+      }
+    },
+    {
+      "Name": "Learner.sortableName",
+      "Expression": "{\n  \"Learner\": Person.{\n    \"sortableName\": (Name.lastName)[0] & \", \" & (Name.firstName)[0]\n  }\n}",
+      "ExpressionLanguage": "JSONata",
+      "Notes": null,
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Person.Name,17:~Person.Name.lastName"
+        },
+        {
+          "EntityIdPath": "17:Person,17:Person.Name,17:~Person.Name.firstName"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:Learner,30:~Learner.sortableName"
+      }
+    },
+    {
+      "Name": "Learner.contactEmails",
+      "Expression": "{\n  \"Learner\": Person.{\n    /* emailAddress is itself an array in LIF and Contact repeats per source, so the\n       path yields duplicates; $distinct de-duplicates and the outer [] keeps the\n       result an array even when only one address survives. */\n    \"contactEmails\": [$distinct(Contact.Email.emailAddress)]\n  }\n}",
+      "ExpressionLanguage": "JSONata",
+      "Notes": "De-duplicates across sources; the outer [] prevents a single value collapsing to a scalar.",
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Common.Contact,17:Common.Contact.Email,17:~Common.Contact.Email.emailAddress"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:Learner,30:~Learner.contactEmails"
+      }
+    },
+    {
+      "Name": "Learner.alternateIds",
+      "Expression": "{\n  \"Learner\": Person.{\n    /* Identifier.( ... ) maps over each identifier; identifierType is not populated by\n       every source, so $exists guards the concatenation instead of producing \"100001@\". */\n    \"alternateIds\": [$distinct(Identifier.(identifier & \"@\" & ($exists(identifierType) ? identifierType : \"unspecified\")))]\n  }\n}",
+      "ExpressionLanguage": "JSONata",
+      "Notes": "Collapses a repeating LIF entity into a list of scalars.",
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Common.Identifier,17:~Common.Identifier.identifier"
+        },
+        {
+          "EntityIdPath": "17:Person,17:Common.Identifier,17:~Common.Identifier.identifierType"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:Learner,30:~Learner.alternateIds"
+      }
+    },
+    {
+      "Name": "Learner.contributingSystems",
+      "Expression": "{\n  \"Learner\": Person.{\n    /* LIF stamps provenance on every fragment. Rather than repeating it on every target\n       attribute, roll the header's three provenance stamps up into one list. */\n    \"contributingSystems\": [$distinct([Name.informationSourceId, Identifier.informationSourceId, Contact.Email.informationSourceId])]\n  }\n}",
+      "ExpressionLanguage": "JSONata",
+      "Notes": "Provenance roll-up: three LIF informationSourceId attributes into one target list.",
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Person.Name,17:~Common.informationSourceId"
+        },
+        {
+          "EntityIdPath": "17:Person,17:Common.Identifier,17:~Common.informationSourceId"
+        },
+        {
+          "EntityIdPath": "17:Person,17:Common.Contact,17:Common.Contact.Email,17:~Common.informationSourceId"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:Learner,30:~Learner.contributingSystems"
+      }
+    },
+    {
+      "Name": "Learner.exportProfile",
+      "Expression": "{\n  \"Learner\": Person.{\n    \"exportProfile\": \"Sample LDE Target Test v1.0\"\n  }\n}",
+      "ExpressionLanguage": "JSONata",
+      "Notes": "Constant. Anchored on Common.Identifier.identifier only because a transformation must declare at least one source attribute.",
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Common.Identifier,17:~Common.Identifier.identifier"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:Learner,30:~Learner.exportProfile"
+      }
+    },
+    {
+      "Name": "Enrollment.courseCode",
+      "Expression": "{ \"Enrollment\": [Person.CourseLearningExperience.{ \"courseCode\": RefCourse.identifier }] }",
+      "ExpressionLanguage": "JSONata",
+      "Notes": "The [] around the mapping keeps Enrollment an array even for a learner with a single course.",
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Person.CourseLearningExperience,17:Course,17:~Course.identifier"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:Enrollment,30:~Enrollment.courseCode"
+      }
+    },
+    {
+      "Name": "Enrollment.courseTitle",
+      "Expression": "{ \"Enrollment\": [Person.CourseLearningExperience.{ \"courseTitle\": RefCourse.name }] }",
+      "ExpressionLanguage": "JSONata",
+      "Notes": null,
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Person.CourseLearningExperience,17:Course,17:~Course.name"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:Enrollment,30:~Enrollment.courseTitle"
+      }
+    },
+    {
+      "Name": "Enrollment.providerOrg",
+      "Expression": "{ \"Enrollment\": [Person.CourseLearningExperience.{ \"providerOrg\": RefCourse.informationSourceOrganization }] }",
+      "ExpressionLanguage": "JSONata",
+      "Notes": null,
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Person.CourseLearningExperience,17:Course,17:~Common.informationSourceOrganization"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:Enrollment,30:~Enrollment.providerOrg"
+      }
+    },
+    {
+      "Name": "Enrollment.startedOn",
+      "Expression": "{ \"Enrollment\": [Person.CourseLearningExperience.{ \"startedOn\": startDate }] }",
+      "ExpressionLanguage": "JSONata",
+      "Notes": null,
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Person.CourseLearningExperience,17:~Person.CourseLearningExperience.startDate"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:Enrollment,30:~Enrollment.startedOn"
+      }
+    },
+    {
+      "Name": "Enrollment.endedOn",
+      "Expression": "{ \"Enrollment\": [Person.CourseLearningExperience.{ \"endedOn\": endDate }] }",
+      "ExpressionLanguage": "JSONata",
+      "Notes": null,
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Person.CourseLearningExperience,17:~Person.CourseLearningExperience.endDate"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:Enrollment,30:~Enrollment.endedOn"
+      }
+    },
+    {
+      "Name": "Enrollment.status",
+      "Expression": "{\n  \"Enrollment\": [Person.CourseLearningExperience.{\n    /* LIF has no enrollment-status attribute in this model; derive one from the\n       presence of an end date. Test endDate for truthiness rather than\n       $exists(endDate): the composed record carries an explicit null when a\n       source does not supply the date, and $exists(null) is true. */\n    \"status\": endDate ? \"COMPLETED\" : \"IN_PROGRESS\"\n  }]\n}",
+      "ExpressionLanguage": "JSONata",
+      "Notes": "Derived value: the target has a status field the source model does not.",
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Person.CourseLearningExperience,17:~Person.CourseLearningExperience.endDate"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:Enrollment,30:~Enrollment.status"
+      }
+    },
+    {
+      "Name": "Enrollment.credentialEarned",
+      "Expression": "{\n  \"Enrollment\": [Person.CourseLearningExperience.{\n    /* RefCredentialAward.( ... ) evaluates the concatenation with the referenced award\n       as context, so the whole key collapses if the reference is absent -- no \"null [null]\". */\n    \"credentialEarned\": RefCredentialAward.(name & \" [\" & identifier & \"]\")\n  }]\n}",
+      "ExpressionLanguage": "JSONata",
+      "Notes": "Reference flattened to a single string; the target model has no credential entity of its own.",
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Person.CourseLearningExperience,17:Person.CredentialAward,17:~CredentialAward.name"
+        },
+        {
+          "EntityIdPath": "17:Person,17:Person.CourseLearningExperience,17:Person.CredentialAward,17:~Person.CredentialAward.identifier"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:Enrollment,30:~Enrollment.credentialEarned"
+      }
+    },
+    {
+      "Name": "Enrollment.credentialIssuer",
+      "Expression": "{ \"Enrollment\": [Person.CourseLearningExperience.{ \"credentialIssuer\": RefCredentialAward.informationSourceOrganization }] }",
+      "ExpressionLanguage": "JSONata",
+      "Notes": null,
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Person.CourseLearningExperience,17:Person.CredentialAward,17:~Common.informationSourceOrganization"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:Enrollment,30:~Enrollment.credentialIssuer"
+      }
+    },
+    {
+      "Name": "Enrollment.sourceSystems",
+      "Expression": "{\n  \"Enrollment\": [Person.CourseLearningExperience.{\n    \"sourceSystems\": [$distinct([informationSourceId, RefCourse.informationSourceId, RefCredentialAward.informationSourceId])]\n  }]\n}",
+      "ExpressionLanguage": "JSONata",
+      "Notes": "Provenance roll-up for the enrollment row.",
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Person.CourseLearningExperience,17:~Common.informationSourceId"
+        },
+        {
+          "EntityIdPath": "17:Person,17:Person.CourseLearningExperience,17:Course,17:~Common.informationSourceId"
+        },
+        {
+          "EntityIdPath": "17:Person,17:Person.CourseLearningExperience,17:Person.CredentialAward,17:~Common.informationSourceId"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:Enrollment,30:~Enrollment.sourceSystems"
+      }
+    },
+    {
+      "Name": "Award.awardKey",
+      "Expression": "{ \"Award\": [Person.CredentialAward.{ \"awardKey\": identifier }] }",
+      "ExpressionLanguage": "JSONata",
+      "Notes": null,
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Person.CredentialAward,17:~Person.CredentialAward.identifier"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:Award,30:~Award.awardKey"
+      }
+    },
+    {
+      "Name": "Award.awardTitle",
+      "Expression": "{ \"Award\": [Person.CredentialAward.{ \"awardTitle\": InstanceOfRefCredential.name }] }",
+      "ExpressionLanguage": "JSONata",
+      "Notes": null,
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Person.CredentialAward,17:Credential,17:~Credential.name"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:Award,30:~Award.awardTitle"
+      }
+    },
+    {
+      "Name": "Award.awardedOn",
+      "Expression": "{\n  \"Award\": [Person.CredentialAward.{\n    /* Sources disagree on format: some send \"2024-12-15\", others a full ISO timestamp.\n       Taking the first 10 characters normalizes both to a plain date. */\n    \"awardedOn\": $substring(awardIssueDate, 0, 10)\n  }]\n}",
+      "ExpressionLanguage": "JSONata",
+      "Notes": "Format normalization across sources.",
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Person.CredentialAward,17:~Person.CredentialAward.awardIssueDate"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:Award,30:~Award.awardedOn"
+      }
+    },
+    {
+      "Name": "Award.awardState",
+      "Expression": "(\n  /* Value mapping. $statusMap must be bound to a variable first: a literal object written\n     inline as a $lookup argument is re-read as a grouping expression over the current\n     context and silently yields nothing. Unmapped and absent statuses fall back to UNKNOWN. */\n  $statusMap := {\"Granted\": \"AWARDED\", \"Completed\": \"AWARDED\", \"InProgress\": \"IN_PROGRESS\", \"Revoked\": \"REVOKED\"};\n  {\n    \"Award\": [Person.CredentialAward.{\n      \"awardState\": $lookup($statusMap, awardStatus) ? $lookup($statusMap, awardStatus) : \"UNKNOWN\"\n    }]\n  }\n)",
+      "ExpressionLanguage": "JSONata",
+      "Notes": "Value mapping with a default. See the inline comment for the $lookup binding gotcha.",
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Person.CredentialAward,17:~Person.CredentialAward.awardStatus"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:Award,30:~Award.awardState"
+      }
+    },
+    {
+      "Name": "Award.recipientName",
+      "Expression": "{ \"Award\": [Person.CredentialAward.{ \"recipientName\": credentialAwardee }] }",
+      "ExpressionLanguage": "JSONata",
+      "Notes": null,
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Person.CredentialAward,17:~Person.CredentialAward.credentialAwardee"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:Award,30:~Award.recipientName"
+      }
+    },
+    {
+      "Name": "Award.credentialKey",
+      "Expression": "{ \"Award\": [Person.CredentialAward.{ \"credentialKey\": InstanceOfRefCredential.identifier }] }",
+      "ExpressionLanguage": "JSONata",
+      "Notes": null,
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Person.CredentialAward,17:Credential,17:~Credential.identifier"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:Award,30:~Award.credentialKey"
+      }
+    },
+    {
+      "Name": "Award.issuerOrg",
+      "Expression": "{ \"Award\": [Person.CredentialAward.{ \"issuerOrg\": InstanceOfRefCredential.informationSourceOrganization }] }",
+      "ExpressionLanguage": "JSONata",
+      "Notes": null,
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Person.CredentialAward,17:Credential,17:~Common.informationSourceOrganization"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:Award,30:~Award.issuerOrg"
+      }
+    },
+    {
+      "Name": "Award.sourceSystems",
+      "Expression": "{ \"Award\": [Person.CredentialAward.{ \"sourceSystems\": [$distinct([informationSourceId, InstanceOfRefCredential.informationSourceId])] }] }",
+      "ExpressionLanguage": "JSONata",
+      "Notes": "Provenance roll-up for the award row.",
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Person.CredentialAward,17:~Common.informationSourceId"
+        },
+        {
+          "EntityIdPath": "17:Person,17:Person.CredentialAward,17:Credential,17:~Common.informationSourceId"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:Award,30:~Award.sourceSystems"
+      }
+    },
+    {
+      "Name": "WorkHistory.roleKey",
+      "Expression": "{ \"WorkHistory\": [Person.EmploymentLearningExperience.{ \"roleKey\": identifier }] }",
+      "ExpressionLanguage": "JSONata",
+      "Notes": null,
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Person.EmploymentLearningExperience,17:~Person.EmploymentLearningExperience.identifier"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:WorkHistory,30:~WorkHistory.roleKey"
+      }
+    },
+    {
+      "Name": "WorkHistory.roleTitle",
+      "Expression": "{ \"WorkHistory\": [Person.EmploymentLearningExperience.{ \"roleTitle\": name }] }",
+      "ExpressionLanguage": "JSONata",
+      "Notes": null,
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Person.EmploymentLearningExperience,17:~Person.EmploymentLearningExperience.name"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:WorkHistory,30:~WorkHistory.roleTitle"
+      }
+    },
+    {
+      "Name": "WorkHistory.startedOn",
+      "Expression": "{ \"WorkHistory\": [Person.EmploymentLearningExperience.{ \"startedOn\": startDate }] }",
+      "ExpressionLanguage": "JSONata",
+      "Notes": null,
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Person.EmploymentLearningExperience,17:~Person.EmploymentLearningExperience.startDate"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:WorkHistory,30:~WorkHistory.startedOn"
+      }
+    },
+    {
+      "Name": "WorkHistory.endedOn",
+      "Expression": "{ \"WorkHistory\": [Person.EmploymentLearningExperience.{ \"endedOn\": endDate }] }",
+      "ExpressionLanguage": "JSONata",
+      "Notes": null,
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Person.EmploymentLearningExperience,17:~Person.EmploymentLearningExperience.endDate"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:WorkHistory,30:~WorkHistory.endedOn"
+      }
+    },
+    {
+      "Name": "WorkHistory.isCurrent",
+      "Expression": "{\n  \"WorkHistory\": [Person.EmploymentLearningExperience.{\n    /* Truthiness test rather than $not($exists(endDate)): the composed record\n       carries an explicit null when the role has no end date, and $exists(null)\n       is true. ($not(endDate) is also wrong -- it drops the key entirely when\n       the attribute is absent instead of yielding true.) */\n    \"isCurrent\": endDate ? false : true\n  }]\n}",
+      "ExpressionLanguage": "JSONata",
+      "Notes": "Derived boolean: the target states 'currently employed' explicitly, LIF only implies it.",
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Person.EmploymentLearningExperience,17:~Person.EmploymentLearningExperience.endDate"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:WorkHistory,30:~WorkHistory.isCurrent"
+      }
+    },
+    {
+      "Name": "WorkHistory.roleSummary",
+      "Expression": "{\n  \"WorkHistory\": [Person.EmploymentLearningExperience.{\n    /* Some sources send an explicit null rather than omitting the field, and $length(null)\n       raises -- so guard on the value itself before measuring it. */\n    \"roleSummary\": RefPosition.description ? ($length(RefPosition.description) > 240 ? $substring(RefPosition.description, 0, 237) & \"...\" : RefPosition.description) : RefPosition.description\n  }]\n}",
+      "ExpressionLanguage": "JSONata",
+      "Notes": "Truncation with a null guard; LIF position descriptions run to several paragraphs.",
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Person.EmploymentLearningExperience,17:Position,17:~Position.description"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:WorkHistory,30:~WorkHistory.roleSummary"
+      }
+    },
+    {
+      "Name": "WorkHistory.positionRef",
+      "Expression": "{ \"WorkHistory\": [Person.EmploymentLearningExperience.{ \"positionRef\": RefPosition.(name & \" [\" & identifier & \"]\") }] }",
+      "ExpressionLanguage": "JSONata",
+      "Notes": null,
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Person.EmploymentLearningExperience,17:Position,17:~Position.name"
+        },
+        {
+          "EntityIdPath": "17:Person,17:Person.EmploymentLearningExperience,17:Position,17:~Position.identifier"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:WorkHistory,30:~WorkHistory.positionRef"
+      }
+    },
+    {
+      "Name": "WorkHistory.employerOrg",
+      "Expression": "{ \"WorkHistory\": [Person.EmploymentLearningExperience.{ \"employerOrg\": RefPosition.OfferedByRefOrganization.(name & \" [\" & identifier & \"]\") }] }",
+      "ExpressionLanguage": "JSONata",
+      "Notes": "Approximate source lineage. The *ByRefOrganization references come back in the composed LIF record but Organization is not a declared entity in StateU LIF (17), so the transformation declares the owning EmploymentLearningExperience attribute instead. See #1224.",
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Person.EmploymentLearningExperience,17:Position,17:~Position.identifier"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:WorkHistory,30:~WorkHistory.employerOrg"
+      }
+    },
+    {
+      "Name": "WorkHistory.assertedByOrg",
+      "Expression": "{\n  \"WorkHistory\": [Person.EmploymentLearningExperience.{\n    /* Four LIF attributes of one organization reference collapsed into a single string.\n       organizationType is array-valued, so $join it -- plain & would stringify the array\n       as JSON (\"[\\\"Company\\\"]\"). AssertedByRefOrganization.( ... ) scopes the whole concatenation to the\n       reference so the key disappears entirely when the reference is absent. */\n    \"assertedByOrg\": AssertedByRefOrganization.(name & \" (\" & $join(organizationType, \"/\") & \") [\" & identifier & \"@\" & identificationSystem & \"]\")\n  }]\n}",
+      "ExpressionLanguage": "JSONata",
+      "Notes": "Approximate source lineage. The *ByRefOrganization references come back in the composed LIF record but Organization is not a declared entity in StateU LIF (17), so the transformation declares the owning EmploymentLearningExperience attribute instead. See #1224.",
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Person.EmploymentLearningExperience,17:~Person.EmploymentLearningExperience.identifier"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:WorkHistory,30:~WorkHistory.assertedByOrg"
+      }
+    },
+    {
+      "Name": "WorkHistory.trainingProviderOrg",
+      "Expression": "{\n  \"WorkHistory\": [Person.EmploymentLearningExperience.{\n    /* Four LIF attributes of one organization reference collapsed into a single string.\n       organizationType is array-valued, so $join it -- plain & would stringify the array\n       as JSON (\"[\\\"Company\\\"]\"). OfferedByRefOrganization.( ... ) scopes the whole concatenation to the\n       reference so the key disappears entirely when the reference is absent. */\n    \"trainingProviderOrg\": OfferedByRefOrganization.(name & \" (\" & $join(organizationType, \"/\") & \") [\" & identifier & \"@\" & identificationSystem & \"]\")\n  }]\n}",
+      "ExpressionLanguage": "JSONata",
+      "Notes": "Approximate source lineage. The *ByRefOrganization references come back in the composed LIF record but Organization is not a declared entity in StateU LIF (17), so the transformation declares the owning EmploymentLearningExperience attribute instead. See #1224.",
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Person.EmploymentLearningExperience,17:~Person.EmploymentLearningExperience.identifier"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:WorkHistory,30:~WorkHistory.trainingProviderOrg"
+      }
+    },
+    {
+      "Name": "WorkHistory.approvingOrg",
+      "Expression": "{\n  \"WorkHistory\": [Person.EmploymentLearningExperience.{\n    /* Four LIF attributes of one organization reference collapsed into a single string.\n       organizationType is array-valued, so $join it -- plain & would stringify the array\n       as JSON (\"[\\\"Company\\\"]\"). ApprovedByRefOrganization.( ... ) scopes the whole concatenation to the\n       reference so the key disappears entirely when the reference is absent. */\n    \"approvingOrg\": ApprovedByRefOrganization.(name & \" (\" & $join(organizationType, \"/\") & \") [\" & identifier & \"@\" & identificationSystem & \"]\")\n  }]\n}",
+      "ExpressionLanguage": "JSONata",
+      "Notes": "Approximate source lineage. The *ByRefOrganization references come back in the composed LIF record but Organization is not a declared entity in StateU LIF (17), so the transformation declares the owning EmploymentLearningExperience attribute instead. See #1224.",
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Person.EmploymentLearningExperience,17:~Person.EmploymentLearningExperience.identifier"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:WorkHistory,30:~WorkHistory.approvingOrg"
+      }
+    },
+    {
+      "Name": "WorkHistory.sourceSystems",
+      "Expression": "{\n  \"WorkHistory\": [Person.EmploymentLearningExperience.{\n    \"sourceSystems\": [$distinct([informationSourceId, RefPosition.informationSourceId, RefPosition.OfferedByRefOrganization.informationSourceId, AssertedByRefOrganization.informationSourceId, OfferedByRefOrganization.informationSourceId, ApprovedByRefOrganization.informationSourceId, RefCredentialAward.informationSourceId])]\n  }]\n}",
+      "ExpressionLanguage": "JSONata",
+      "Notes": "Provenance roll-up: seven LIF informationSourceId stamps into one list. Approximate source lineage. The *ByRefOrganization references come back in the composed LIF record but Organization is not a declared entity in StateU LIF (17), so the transformation declares the owning EmploymentLearningExperience attribute instead. See #1224.",
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Person.EmploymentLearningExperience,17:~Common.informationSourceId"
+        },
+        {
+          "EntityIdPath": "17:Person,17:Person.EmploymentLearningExperience,17:Position,17:~Common.informationSourceId"
+        },
+        {
+          "EntityIdPath": "17:Person,17:Person.EmploymentLearningExperience,17:Person.CredentialAward,17:~Common.informationSourceId"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:WorkHistory,30:~WorkHistory.sourceSystems"
+      }
+    },
+    {
+      "Name": "WorkHistory.sourceOrganizations",
+      "Expression": "{\n  \"WorkHistory\": [Person.EmploymentLearningExperience.{\n    \"sourceOrganizations\": [$distinct([informationSourceOrganization, RefPosition.informationSourceOrganization, RefPosition.OfferedByRefOrganization.informationSourceOrganization, AssertedByRefOrganization.informationSourceOrganization, OfferedByRefOrganization.informationSourceOrganization, ApprovedByRefOrganization.informationSourceOrganization, RefCredentialAward.informationSourceOrganization])]\n  }]\n}",
+      "ExpressionLanguage": "JSONata",
+      "Notes": "Provenance roll-up. Approximate source lineage. The *ByRefOrganization references come back in the composed LIF record but Organization is not a declared entity in StateU LIF (17), so the transformation declares the owning EmploymentLearningExperience attribute instead. See #1224.",
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Person.EmploymentLearningExperience,17:~Common.informationSourceOrganization"
+        },
+        {
+          "EntityIdPath": "17:Person,17:Person.EmploymentLearningExperience,17:Position,17:~Common.informationSourceOrganization"
+        },
+        {
+          "EntityIdPath": "17:Person,17:Person.EmploymentLearningExperience,17:Person.CredentialAward,17:~Common.informationSourceOrganization"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:WorkHistory,30:~WorkHistory.sourceOrganizations"
+      }
+    },
+    {
+      "Name": "WorkHistory.RelatedAward.title",
+      "Expression": "{\n  \"WorkHistory\": [Person.EmploymentLearningExperience.{\n    /* LIF references the award from the employment experience; the target embeds it as a\n       child object, so the fragment nests an object inside the array element. */\n    \"RelatedAward\": { \"title\": RefCredentialAward.name }\n  }]\n}",
+      "ExpressionLanguage": "JSONata",
+      "Notes": "Structural change: LIF reference becomes an embedded child entity.",
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Person.EmploymentLearningExperience,17:Person.CredentialAward,17:~CredentialAward.name"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:WorkHistory,30:WorkHistory.RelatedAward,30:~WorkHistory.RelatedAward.title"
+      }
+    },
+    {
+      "Name": "WorkHistory.RelatedAward.awardKey",
+      "Expression": "{ \"WorkHistory\": [Person.EmploymentLearningExperience.{ \"RelatedAward\": { \"awardKey\": RefCredentialAward.identifier } }] }",
+      "ExpressionLanguage": "JSONata",
+      "Notes": null,
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Person.EmploymentLearningExperience,17:Person.CredentialAward,17:~Person.CredentialAward.identifier"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:WorkHistory,30:WorkHistory.RelatedAward,30:~WorkHistory.RelatedAward.awardKey"
+      }
+    },
+    {
+      "Name": "WorkHistory.RelatedAward.externalKey",
+      "Expression": "{ \"WorkHistory\": [Person.EmploymentLearningExperience.{ \"RelatedAward\": { \"externalKey\": RefCredentialAward.id } }] }",
+      "ExpressionLanguage": "JSONata",
+      "Notes": "Approximate source lineage: RefCredentialAward.id is present in the composed record but 'id' is not a declared attribute of Person.CredentialAward in StateU LIF (17). See #1224.",
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Person.EmploymentLearningExperience,17:Person.CredentialAward,17:~Person.CredentialAward.identifier"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:WorkHistory,30:WorkHistory.RelatedAward,30:~WorkHistory.RelatedAward.externalKey"
+      }
+    },
+    {
+      "Name": "WorkHistory.RelatedAward.issuedOn",
+      "Expression": "{ \"WorkHistory\": [Person.EmploymentLearningExperience.{ \"RelatedAward\": { \"issuedOn\": $substring(RefCredentialAward.awardIssueDate, 0, 10) } }] }",
+      "ExpressionLanguage": "JSONata",
+      "Notes": "Format normalization, as for Award.awardedOn.",
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Person.EmploymentLearningExperience,17:Person.CredentialAward,17:~Person.CredentialAward.awardIssueDate"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:WorkHistory,30:WorkHistory.RelatedAward,30:~WorkHistory.RelatedAward.issuedOn"
+      }
+    },
+    {
+      "Name": "WorkHistory.RelatedAward.recipientName",
+      "Expression": "{ \"WorkHistory\": [Person.EmploymentLearningExperience.{ \"RelatedAward\": { \"recipientName\": RefCredentialAward.credentialAwardee } }] }",
+      "ExpressionLanguage": "JSONata",
+      "Notes": null,
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Person.EmploymentLearningExperience,17:Person.CredentialAward,17:~Person.CredentialAward.credentialAwardee"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:WorkHistory,30:WorkHistory.RelatedAward,30:~WorkHistory.RelatedAward.recipientName"
+      }
+    },
+    {
+      "Name": "Skill.skillName",
+      "Expression": "{ \"Skill\": [Person.Proficiency.{ \"skillName\": name }] }",
+      "ExpressionLanguage": "JSONata",
+      "Notes": null,
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Person.Proficiency,17:~Person.Proficiency.name"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:Skill,30:~Skill.skillName"
+      }
+    },
+    {
+      "Name": "Skill.skillSummary",
+      "Expression": "{\n  \"Skill\": [Person.Proficiency.{\n    /* Same null guard as WorkHistory.roleSummary: $length(null) raises, so test the value\n       before measuring it. */\n    \"skillSummary\": description ? ($length(description) > 180 ? $substring(description, 0, 177) & \"...\" : description) : description\n  }]\n}",
+      "ExpressionLanguage": "JSONata",
+      "Notes": "Truncation with a null guard.",
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Person.Proficiency,17:~Person.Proficiency.description"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:Skill,30:~Skill.skillSummary"
+      }
+    },
+    {
+      "Name": "Skill.evidenceAwardKey",
+      "Expression": "{ \"Skill\": [Person.Proficiency.{ \"evidenceAwardKey\": RefCredentialAward.identifier }] }",
+      "ExpressionLanguage": "JSONata",
+      "Notes": null,
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Person.Proficiency,17:Person.CredentialAward,17:~Person.CredentialAward.identifier"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:Skill,30:~Skill.evidenceAwardKey"
+      }
+    },
+    {
+      "Name": "Skill.evidenceIssuer",
+      "Expression": "{ \"Skill\": [Person.Proficiency.{ \"evidenceIssuer\": RefCredentialAward.informationSourceOrganization }] }",
+      "ExpressionLanguage": "JSONata",
+      "Notes": null,
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Person.Proficiency,17:Person.CredentialAward,17:~Common.informationSourceOrganization"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:Skill,30:~Skill.evidenceIssuer"
+      }
+    },
+    {
+      "Name": "Skill.sourceSystems",
+      "Expression": "{ \"Skill\": [Person.Proficiency.{ \"sourceSystems\": [$distinct([informationSourceId, RefCredentialAward.informationSourceId])] }] }",
+      "ExpressionLanguage": "JSONata",
+      "Notes": "Provenance roll-up for the skill row.",
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Person.Proficiency,17:~Common.informationSourceId"
+        },
+        {
+          "EntityIdPath": "17:Person,17:Person.Proficiency,17:Person.CredentialAward,17:~Common.informationSourceId"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:Skill,30:~Skill.sourceSystems"
+      }
+    },
+    {
+      "Name": "CareerPreference.preferenceKeys",
+      "Expression": "{ \"CareerPreference\": Person.{ \"preferenceKeys\": [$distinct(EmploymentPreferences.identifier)] } }",
+      "ExpressionLanguage": "JSONata",
+      "Notes": "Entity merge: LIF keeps EmploymentPreferences and PositionPreferences as two sibling entities; the target folds both into one CareerPreference block.",
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Person.EmploymentPreferences,17:~EmploymentPreferences.identifier"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:CareerPreference,30:~CareerPreference.preferenceKeys"
+      }
+    },
+    {
+      "Name": "CareerPreference.targetEmployers",
+      "Expression": "{ \"CareerPreference\": Person.{ \"targetEmployers\": [$distinct(EmploymentPreferences.organizationNames)] } }",
+      "ExpressionLanguage": "JSONata",
+      "Notes": "Entity merge: LIF keeps EmploymentPreferences and PositionPreferences as two sibling entities; the target folds both into one CareerPreference block.",
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Person.EmploymentPreferences,17:~Person.EmploymentPreferences.organizationNames"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:CareerPreference,30:~CareerPreference.targetEmployers"
+      }
+    },
+    {
+      "Name": "CareerPreference.employerTypes",
+      "Expression": "{ \"CareerPreference\": Person.{ \"employerTypes\": [$distinct(EmploymentPreferences.organizationTypes)] } }",
+      "ExpressionLanguage": "JSONata",
+      "Notes": "Entity merge: LIF keeps EmploymentPreferences and PositionPreferences as two sibling entities; the target folds both into one CareerPreference block. Note the source attribute's UniqueName is 'Person.employmentPreferences.organizationTypes' (lower-case 'e') in StateU LIF.",
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Person.EmploymentPreferences,17:~Person.employmentPreferences.organizationTypes"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:CareerPreference,30:~CareerPreference.employerTypes"
+      }
+    },
+    {
+      "Name": "CareerPreference.desiredRoles",
+      "Expression": "{ \"CareerPreference\": Person.{ \"desiredRoles\": [$distinct(PositionPreferences.positionTitles)] } }",
+      "ExpressionLanguage": "JSONata",
+      "Notes": "Entity merge: LIF keeps EmploymentPreferences and PositionPreferences as two sibling entities; the target folds both into one CareerPreference block.",
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Person.PositionPreferences,17:~Person.PositionPreferences.positionTitles"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:CareerPreference,30:~CareerPreference.desiredRoles"
+      }
+    },
+    {
+      "Name": "CareerPreference.desiredScheduleTypes",
+      "Expression": "{ \"CareerPreference\": Person.{ \"desiredScheduleTypes\": [$distinct(PositionPreferences.positionScheduleTypeCodes)] } }",
+      "ExpressionLanguage": "JSONata",
+      "Notes": "Entity merge: LIF keeps EmploymentPreferences and PositionPreferences as two sibling entities; the target folds both into one CareerPreference block.",
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Person.PositionPreferences,17:~Person.PositionPreferences.positionScheduleTypeCodes"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:CareerPreference,30:~CareerPreference.desiredScheduleTypes"
+      }
+    },
+    {
+      "Name": "CareerPreference.desiredOfferingTypes",
+      "Expression": "{ \"CareerPreference\": Person.{ \"desiredOfferingTypes\": [$distinct(PositionPreferences.positionOfferingTypeCodes)] } }",
+      "ExpressionLanguage": "JSONata",
+      "Notes": "Entity merge: LIF keeps EmploymentPreferences and PositionPreferences as two sibling entities; the target folds both into one CareerPreference block. Note the source attribute's UniqueName is 'Person.positionPreferences.positionOfferingTypeCodes' (lower-case 'p') in StateU LIF.",
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Person.PositionPreferences,17:~Person.positionPreferences.positionOfferingTypeCodes"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:CareerPreference,30:~CareerPreference.desiredOfferingTypes"
+      }
+    },
+    {
+      "Name": "CareerPreference.Mobility.workArrangement",
+      "Expression": "{\n  \"CareerPreference\": {\n    /* Person.PositionPreferences.{...} yields nothing for a learner with no preferences.\n       Nesting it under a literal object keeps the fragment an object either way -- the\n       translator drops any fragment that is not a dict, so a bare undefined would be\n       logged and discarded instead of simply producing no field. */\n    \"Mobility\": Person.PositionPreferences.{\n      \"workArrangement\": RemoteWork.remoteWorkIndicator ? \"REMOTE_OK\" : \"ONSITE\"\n    }\n  }\n}",
+      "ExpressionLanguage": "JSONata",
+      "Notes": "Boolean re-coded to the target's vocabulary. See the inline comment on fragment shape.",
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Person.PositionPreferences,17:Person.PositionPreferences.RemoteWork,17:~Person.PositionPreferences.RemoteWork.remoteWorkIndicator"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:CareerPreference,30:CareerPreference.Mobility,30:~CareerPreference.Mobility.workArrangement"
+      }
+    },
+    {
+      "Name": "CareerPreference.Mobility.relocationOk",
+      "Expression": "{ \"CareerPreference\": { \"Mobility\": Person.PositionPreferences.{ \"relocationOk\": Relocation.willingToRelocateIndicator } } }",
+      "ExpressionLanguage": "JSONata",
+      "Notes": null,
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Person.PositionPreferences,17:Person.PositionPreferences.Relocation,17:~Person.PositionPreferences.Relocation.willingToRelocateIndicator"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:CareerPreference,30:CareerPreference.Mobility,30:~CareerPreference.Mobility.relocationOk"
+      }
+    },
+    {
+      "Name": "CareerPreference.Mobility.travelWillingness",
+      "Expression": "{\n  \"CareerPreference\": {\n    \"Mobility\": Person.PositionPreferences.{\n      /* Two LIF attributes (a flag and a number) become one phrase; $string() is needed\n         because & will not concatenate a number. */\n      \"travelWillingness\": Travel.willingToTravelIndicator ? \"Up to \" & $string(Travel.percentage) & \"%\" : \"None\"\n    }\n  }\n}",
+      "ExpressionLanguage": "JSONata",
+      "Notes": "Two source attributes rendered as one human-readable phrase.",
+      "SourceAttributes": [
+        {
+          "EntityIdPath": "17:Person,17:Person.PositionPreferences,17:Person.PositionPreferences.Travel,17:~Person.PositionPreferences.Travel.willingToTravelIndicator"
+        },
+        {
+          "EntityIdPath": "17:Person,17:Person.PositionPreferences,17:Person.PositionPreferences.Travel,17:~Person.PositionPreferences.Travel.percentage"
+        }
+      ],
+      "TargetAttribute": {
+        "EntityIdPath": "30:CareerPreference,30:CareerPreference.Mobility,30:~CareerPreference.Mobility.travelWillingness"
+      }
+    }
+  ]
+}

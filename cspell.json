@@ -248,6 +248,7 @@
         "testpaths",
         "tsatrian",
         "uppercased",
+        "urlencode",
         "urllib",
         "urlopen",
         "uvicorn",

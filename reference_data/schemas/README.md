@@ -7,6 +7,7 @@ Canonical JSON definition of the LIF data model and the rules every implementati
 | File | Purpose |
 |---|---|
 | `lif-schema.json` | The LIF data model schema — entities, attributes, relationships, allowed value sets, and policy fields (`queryable`, `modifiable`, required-field rules) |
+| `sample-lde-target-test-model.json` | **Test artifact, not part of LIF.** Synthetic *target* model (`Sample LDE Target Test`) used to prove Learner Data Export fidelity end to end (#1224). Paired with [`../transformations/StateU-LIF_Sample-LDE-Target-Test__v1.0.json`](../transformations/StateU-LIF_Sample-LDE-Target-Test__v1.0.json); the manual steps are in [`../transformations/README.md`](../transformations/README.md) |
 
 ## Relationship to the rest of LIF
 
