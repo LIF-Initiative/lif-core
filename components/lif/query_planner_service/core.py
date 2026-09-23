@@ -25,6 +25,7 @@ from lif.datatypes import (
     LIFUpdate,
 )
 from lif.exceptions.core import LIFException
+from lif.lif_fragment_utils import adjust_lif_fragments_for_initial_orchestrator_simplification
 from lif.logging.core import get_logger
 from lif.query_planner_service.datatypes import LIFQueryPlannerConfig
 from lif.query_planner_service import statistics, util
@@ -310,7 +311,7 @@ class LIFQueryPlannerService:
 
             # Send the orchestration results to the LIF Cache service
             lif_query_filter: LIFQueryFilter = lif_query.filter
-            lif_fragments: List[LIFFragment] = util.adjust_lif_fragments_for_initial_orchestrator_simplification(
+            lif_fragments: List[LIFFragment] = adjust_lif_fragments_for_initial_orchestrator_simplification(
                 fragments, lif_fragment_paths
             )
 
