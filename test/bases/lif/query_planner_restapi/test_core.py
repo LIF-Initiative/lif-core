@@ -467,3 +467,38 @@ def test_query_records_the_client_header(caplog):
         status_code, events = _post_query(path, {"X-LIF-Client": "learner-data-export"}, caplog)
         assert status_code == 200, path
         assert [e["client"] for e in events] == ["learner-data-export"], path
+
+
+# -------------------------------------------------------------------------
+# #1271 — LIF_ORG_KEY, read once at import.
+# -------------------------------------------------------------------------
+def _org_key_in_subprocess(value: str | None) -> str:
+    """The value is read at import, so -- as with the timeouts above -- only a fresh interpreter can pin the name."""
+    child_env = dict(os.environ)
+    child_env.pop("LIF_ORG_KEY", None)
+    if value is not None:
+        child_env["LIF_ORG_KEY"] = value
+    code = "from lif.query_planner_restapi import core; print(core.config.org_key)"
+    result = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True, env=child_env, check=False)
+    assert result.returncode == 0, result.stderr
+    return result.stdout.strip().splitlines()[-1]
+
+
+def test_org_key_is_read_from_lif_org_key():
+    assert _org_key_in_subprocess("org3") == "org3"
+
+
+def test_unset_or_blank_org_key_falls_back_to_unknown():
+    # Blank is what a CloudFormation `Value:` yields when its source is missing.
+    assert _org_key_in_subprocess(None) == "unknown"
+    assert _org_key_in_subprocess("   ") == "unknown"
+
+
+@patch.dict(os.environ, _ENV)
+def test_query_statistics_through_the_endpoint_carry_the_org_key(caplog):
+    from lif.query_planner_restapi import core
+
+    with patch.object(core.config, "org_key", "org1"):
+        status_code, events = _post_query("/query", {}, caplog)
+    assert status_code == 200
+    assert [e["org_key"] for e in events] == ["org1"]

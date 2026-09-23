@@ -157,3 +157,18 @@ def test_both_events_carry_the_client_and_default_to_unknown():
     )
     completed = statistics.build_query_completed_event(_results(), requested_paths=["person.name"], client="graphql")
     assert planned["client"] == completed["client"] == "graphql"
+
+
+# -------------------------------------------------------------------------
+# #1271 — which organization's planner emitted the event.
+# -------------------------------------------------------------------------
+def test_both_events_carry_the_org_key_and_default_to_unknown():
+    planned = statistics.build_query_planned_event(statistics.OUTCOME_SERVED_FROM_CACHE, ["person.name"], [])
+    completed = statistics.build_query_completed_event(_results(), requested_paths=["person.name"])
+    assert planned["org_key"] == completed["org_key"] == statistics.ORG_KEY_UNKNOWN
+
+    planned = statistics.build_query_planned_event(
+        statistics.OUTCOME_SERVED_FROM_CACHE, ["person.name"], [], org_key="org2"
+    )
+    completed = statistics.build_query_completed_event(_results(), requested_paths=["person.name"], org_key="org2")
+    assert planned["org_key"] == completed["org_key"] == "org2"

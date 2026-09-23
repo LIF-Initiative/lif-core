@@ -38,6 +38,10 @@ CLIENT_INVALID: str = "invalid"
 # logs, and keeps the dimension's cardinality bounded.
 _CLIENT_PATTERN = re.compile(r"[a-z0-9][a-z0-9._-]{0,63}")
 
+# Organization identity (#1271). One planner runs per org, and without this every event from
+# all of them lands in one bucket. Set from LIF_ORG_KEY; "unknown" when a deployment has not.
+ORG_KEY_UNKNOWN: str = "unknown"
+
 
 def normalize_client(raw: str | None) -> str:
     """
@@ -83,6 +87,7 @@ def build_query_planned_event(
     lif_query_plan: LIFQueryPlan | None = None,
     correlation_id: str | None = None,
     client: str = CLIENT_UNKNOWN,
+    org_key: str = ORG_KEY_UNKNOWN,
 ) -> Dict:
     """
     Build the statistics event for the planning phase of a query.
@@ -94,6 +99,7 @@ def build_query_planned_event(
         lif_query_plan (LIFQueryPlan | None): The plan, when one was built.
         correlation_id (str | None): The orchestrator run id, when one was obtained.
         client (str): The caller, already reduced by `normalize_client`.
+        org_key (str): The organization this planner serves.
 
     Returns:
         Dict: The event. Contains no person data.
@@ -101,6 +107,7 @@ def build_query_planned_event(
     parts = lif_query_plan.root if lif_query_plan else []
     return {
         "event": "query_planned",
+        "org_key": org_key,
         "client": client,
         "outcome": outcome,
         "correlation_id": correlation_id,
@@ -120,7 +127,10 @@ def build_query_planned_event(
 
 
 def build_query_completed_event(
-    results: OrchestratorJobResults, requested_paths: List[str], client: str = CLIENT_UNKNOWN
+    results: OrchestratorJobResults,
+    requested_paths: List[str],
+    client: str = CLIENT_UNKNOWN,
+    org_key: str = ORG_KEY_UNKNOWN,
 ) -> Dict:
     """
     Build the statistics event for the orchestration results of a query.
@@ -129,6 +139,7 @@ def build_query_completed_event(
         results (OrchestratorJobResults): The results posted back by the Orchestrator.
         requested_paths (List[str]): LIF fragment paths the original query asked for.
         client (str): The caller of the original query, already reduced by `normalize_client`.
+        org_key (str): The organization this planner serves.
 
     Returns:
         Dict: The event. Contains no person data -- fragment paths, not fragments.
@@ -142,6 +153,7 @@ def build_query_completed_event(
     normalized_requested = {_normalize_path(path) for path in requested_paths}
     return {
         "event": "query_completed",
+        "org_key": org_key,
         "client": client,
         "correlation_id": results.run_id,
         "requested_paths": sorted(normalized_requested),

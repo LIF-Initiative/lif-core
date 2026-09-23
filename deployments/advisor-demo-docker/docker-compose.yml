@@ -214,6 +214,7 @@ services:
     container_name: lif-query-planner-org1
     environment:
       LIF_QUERY_CACHE_URL: http://lif-query-cache-org1:8001
+      LIF_ORG_KEY: org1
       LIF_ORCHESTRATOR_URL: ${LIF_ORCHESTRATOR_URL:-http://lif-orchestrator-api-org1:8005}
       LIF_QUERY_PLANNER_INFORMATION_SOURCES_CONFIG_PATH: ${LIF_QUERY_PLANNER_INFORMATION_SOURCES_CONFIG_PATH:-/opt/app/information_sources_config.yml}
       # 120, not the 300s code default -- see the ALB idle-timeout note in
@@ -234,6 +235,7 @@ services:
     container_name: lif-query-planner-org2
     environment:
       LIF_QUERY_CACHE_URL: http://lif-query-cache-org2:8001
+      LIF_ORG_KEY: org2
       LIF_QUERY_PLANNER_INFORMATION_SOURCES_CONFIG_PATH: ${LIF_QUERY_PLANNER_INFORMATION_SOURCES_CONFIG_PATH:-/opt/app/information_sources_config.yml}
       # 120, not the 300s code default -- see the ALB idle-timeout note in
       # cloudformation/lif-query-planner-taskdef-includes.yml
@@ -253,6 +255,7 @@ services:
     container_name: lif-query-planner-org3
     environment:
       LIF_QUERY_CACHE_URL: http://lif-query-cache-org3:8001
+      LIF_ORG_KEY: org3
       LIF_QUERY_PLANNER_INFORMATION_SOURCES_CONFIG_PATH: ${LIF_QUERY_PLANNER_INFORMATION_SOURCES_CONFIG_PATH:-/opt/app/information_sources_config.yml}
       # 120, not the 300s code default -- see the ALB idle-timeout note in
       # cloudformation/lif-query-planner-taskdef-includes.yml

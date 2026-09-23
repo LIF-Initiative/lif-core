@@ -702,6 +702,48 @@ def test_the_client_survives_to_the_completed_event(mock_post, caplog):
 
 
 @patch("httpx.AsyncClient.post")
+def test_both_events_carry_the_configured_org_key(mock_post, caplog):
+    """One planner runs per org; without this every org's events share one bucket (#1271)."""
+    mock_post.side_effect = [
+        _create_mock_post_response(200, [{"person": [{}]}], "https://api.example.com/query"),
+        _create_mock_post_response(200, {"run_id": "run-1"}, "https://api.example.com/jobs"),
+        _create_mock_post_response(200, {}, "https://api.example.com/save"),
+    ]
+    service = core.LIFQueryPlannerService(
+        config=core.LIFQueryPlannerConfig(
+            lif_cache_url="https://api.example.com",
+            lif_orchestrator_url="https://api.example.com",
+            information_sources_config=_STATS_SOURCES,
+            org_key="org2",
+        )
+    )
+
+    async def submit_then_complete():
+        await service.run_query(_sentinel_query(), first_run=True)
+        await service.run_post_orchestration_results(OrchestratorJobResults(run_id="run-1", query_plan_part_results=[]))
+
+    with patch.object(core, "JOB_STORE", {}), caplog.at_level(logging.INFO):
+        asyncio.run(submit_then_complete())
+
+    assert [(e["event"], e["org_key"]) for e in _emitted_events(caplog)] == [
+        ("query_planned", "org2"),
+        ("query_completed", "org2"),
+    ]
+
+
+@patch("httpx.AsyncClient.post")
+def test_a_planner_without_an_org_key_still_serves_the_query_and_emits_unknown(mock_post, caplog):
+    """A planner deployed without LIF_ORG_KEY must degrade to "unknown", not fail (#1271)."""
+    mock_post.side_effect = [_create_mock_post_response(200, [_FULL_CACHE_RECORD], "https://api.example.com/query")]
+
+    with patch.object(core, "JOB_STORE", {}), caplog.at_level(logging.INFO):
+        records = asyncio.run(_stats_service().run_query(_sentinel_query(), first_run=True))
+
+    assert len(records) == 1
+    assert [e["org_key"] for e in _emitted_events(caplog)] == [statistics.ORG_KEY_UNKNOWN]
+
+
+@patch("httpx.AsyncClient.post")
 def test_run_post_orchestration_results_emits_completed_statistics(mock_post, caplog):
     mock_post.return_value = _create_mock_post_response(200, {}, "https://api.example.com/save")
     results = OrchestratorJobResults(

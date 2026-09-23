@@ -26,6 +26,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   request header: `unknown` when absent (never a rejected query), `invalid` when not a short
   lowercase name. Learner Data Export sends `learner-data-export`, the MCP server
   `semantic-search-mcp`, and GraphQL forwards its caller's name or sends `graphql`
+- Query Planner query statistics record the organization as `org_key`, from a new optional
+  `LIF_ORG_KEY` (the stack's `OrganizationName`: `org1`/`org2`/`org3`), so the per-org planners'
+  events no longer collapse into one bucket. Unset or blank records `unknown`. Deployed
+  environments pick it up only when `aws-deploy.sh` updates the Query Planner stacks
 
 ### Changed
 

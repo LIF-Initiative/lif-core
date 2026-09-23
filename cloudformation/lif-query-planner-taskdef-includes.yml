@@ -28,6 +28,12 @@ Environment:
     Value: "10"
   - Name: LIF_QUERY_PLANNER_INFORMATION_SOURCES_CONFIG_PATH
     Value: "/opt/app/information_sources_config.yml"
+  # Which organization this planner serves, recorded in every query statistics event so the
+  # per-org planners can be told apart (#1271). The same OrganizationName that names this
+  # stack, its service and its SSM parameters, so there is one org naming scheme, not two.
+  - Name: LIF_ORG_KEY
+    Value:
+      Fn::Sub: "${OrganizationName}"
 Secrets:
   - Name: LIF_QUERY_PLANNER_INFORMATION_SOURCES_CONFIG_YAML_SSM
     ValueFrom:
