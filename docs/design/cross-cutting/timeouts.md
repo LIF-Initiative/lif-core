@@ -21,8 +21,8 @@ Outward-in. "Deployed" is the value in the task definition; "code default" is wh
 | Hop | Setting | Deployed | Code default | Source |
 |---|---|---|---|---|
 | Client → ALB | `LoadBalancerIdleTimeoutSeconds` | **150** | 150 | `cloudformation/service-common.yml` (parameter default; no `*.params` override) |
-| MCP → GraphQL | `SEMANTIC_SEARCH_SERVICE__GRAPHQL_TIMEOUT__READ` | 300 | — | `cloudformation/lif-semantic-search-taskdef-includes.yml` |
-| GraphQL → QP | `LIF_GRAPHQL_CLIENT_TIMEOUT_SECONDS` | 300 | — | `cloudformation/lif-graphql-taskdef-includes.yml` |
+| MCP → GraphQL | `SEMANTIC_SEARCH_SERVICE__GRAPHQL_TIMEOUT__READ` | 300 | 300 | `cloudformation/lif-semantic-search-taskdef-includes.yml`; `components/lif/graphql_client/core.py` |
+| GraphQL → QP | `LIF_GRAPHQL_CLIENT_TIMEOUT_SECONDS` | 300 | **20** | `cloudformation/lif-graphql-taskdef-includes.yml`; `components/lif/openapi_to_graphql/type_factory.py` |
 | LDE → QP | `QUERY_PLANNER_CLIENT_TIMEOUT_SECONDS` | **30** | 30 | `cloudformation/lif-learner-data-export-api-taskdef-includes.yml`; `components/lif/query_planner_client/core.py` |
 | QP sync poll ceiling | `LIF_QUERY_TIMEOUT_SECONDS` | **120** | **300** | `cloudformation/lif-query-planner-taskdef-includes.yml`; `bases/lif/query_planner_restapi/core.py` |
 | QP → Cache / Orchestrator (per request) | `LIF_SERVICE_REQUEST_TIMEOUT_SECONDS` | 10 | 10 | same two files |
@@ -40,6 +40,8 @@ They do not fire because the *work* underneath them is bounded first: the Query 
 Above 150 the Query Planner never gets to return its clean 408: the ALB cuts the connection first with a 504, which surfaces in the browser as a CORS error (#1050). The deployed 120 leaves ~30s of headroom for the QP's own response and the caller's hop.
 
 **This currently holds by coincidence, not by construction.** The deployed value is 120, but the code default is **300** (`DEFAULT_QUERY_TIMEOUT_SECONDS`). Drop the environment variable — a new environment, a task definition that forgets it, a local compose file — and the ceiling silently returns to 300, re-inverting the ladder with no error anywhere. Nothing enforces the relationship; only this note and the comments on both values stand between the constraint and someone undoing it.
+
+The same gap runs in the opposite direction one hop further out. `LIF_GRAPHQL_CLIENT_TIMEOUT_SECONDS` deploys 300, but its code default is **20** — `type_factory.py` falls back to `LIF_QUERY_TIMEOUT_SECONDS`, which the GraphQL task definition does not set, and then to `"20"`. Drop the variable and GraphQL (outer) gives up at 20s while the Query Planner (inner) keeps working up to its 120s ceiling, so GraphQL cuts off queries the planner was going to complete. Once #1264 lands (PR #1291) those cut-offs reach the caller as GraphQL errors rather than empty lists, so this matters more after that fix, not less. The fallback itself is marked transitional (#1203) — to be removed once every environment's task definition sets the new name — and removing it does not change the 20.
 
 The same shape appears on the export path: `TRANSLATOR_CLIENT_TIMEOUT_SECONDS` deploys 45 but defaults to **30** in code, so dropping that variable silently *shortens* the budget the 45 was chosen to provide (#1157).
 
@@ -62,7 +64,7 @@ Outward-in, and the one place the rule was already stated:
 
 A short export budget may well be the right answer, exactly as the translator's 45 is. What is missing is the sentence saying so. Until someone writes it, treat this number as open rather than settled.
 
-**The archaeology has already been done, on 2026-09-22, and came up empty — it does not need repeating.** `git log -S QUERY_PLANNER_CLIENT_TIMEOUT_SECONDS` returns exactly one commit (`db680b2`), whose message is just the issue title; #906 is a feature issue for learner data export that never discusses the number. Asked directly, the team did not have the history either. So this is not "undocumented pending someone remembering" — the reason is gone, and changing the value would need a fresh decision rather than a recovered one. It is recorded here as **found**, not resolved.
+**The archaeology has already been done, on 2026-09-22, and came up empty — it does not need repeating.** `git log -S QUERY_PLANNER_CLIENT_TIMEOUT_SECONDS` returns two commits, both #906 on the same day: `db680b2`, whose message is just the issue title, and `df8431e` ("Add tests"), which only adds tests and gives no rationale either; #906 is a feature issue for learner data export that never discusses the number. Asked directly, the team did not have the history either. So this is not "undocumented pending someone remembering" — the reason is gone, and changing the value would need a fresh decision rather than a recovered one. It is recorded here as **found**, not resolved.
 
 One consequence is not hypothetical: when a caller gives up before the planner does, the Dagster job keeps running and its `JOB_STORE` entry stays `PENDING`. #1262 addressed the accumulation (pruning at the existing call site); the abandoned work itself still happens.
 
