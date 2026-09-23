@@ -25,7 +25,7 @@ from lif.query_planner_service import util
 |---|---|
 | `core.py` | `LIFQueryPlannerService` (the planner), `LIFQueryPlannerJob` (async job state), in-memory job store helpers |
 | `datatypes.py` | Planner-specific config models (`LIFQueryPlannerConfig`, `LIFQueryPlannerInfoSourceConfig`) |
-| `util.py` | Cross-cutting helpers used by `core` |
+| `util.py` | Cross-cutting helpers used by `core` (fragment-shaping helpers now live in [`lif_fragment_utils`](../lif_fragment_utils/)) |
 
 ## Configuration
 
