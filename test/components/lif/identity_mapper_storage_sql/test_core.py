@@ -258,6 +258,9 @@ def _stale_pre_read(stale_calls: int):
     commits after it, so the create-vs-update decision is made from a stale snapshot.
     `stale_calls` bounds how many reads lie -- 1 models a race that a retry resolves,
     a large number models a collision that no retry can.
+
+    This is a proxy for the race, not a reproduction of it: no second transaction runs, so
+    the database's real isolation semantics are not exercised here.
     """
     real = storage_core.read_by_lif_org_and_person
     calls: list[int] = []
