@@ -26,9 +26,6 @@ export fidelity](https://github.com/LIF-Initiative/lif-core/issues/1224). Two ha
 | [`../schemas/sample-lde-target-test-model.json`](../schemas/sample-lde-target-test-model.json) | Target data model **Sample LDE Target Test v1.0**. Upload to MDR via `POST /datamodels/open_api_schema/upload`. |
 | [`StateU-LIF_Sample-LDE-Target-Test__v1.0.json`](StateU-LIF_Sample-LDE-Target-Test__v1.0.json) | Its transformation group. Import via `POST /transformation_groups/{id}/import`. |
 
-Guard tests for the two derived-value rules live in
-[`test/reference_data/test_lde_export_test_transformations.py`](../../test/reference_data/test_lde_export_test_transformations.py).
-
 ---
 
 ## What the target model looks like
