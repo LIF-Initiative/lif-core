@@ -11,6 +11,7 @@ on:
       - cloudformation/lif-semantic-search-taskdef-includes.yml
       - components/lif/logging/**
       - components/lif/datatypes/**
+      - components/lif/graphql_client/**
       - components/lif/openapi_schema_parser/**
       - components/lif/semantic_search_service/**
       - components/lif/string_utils/**

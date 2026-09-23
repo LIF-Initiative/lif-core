@@ -54,6 +54,13 @@ LIF_GRAPHQL_CLIENT_TIMEOUT_SECONDS = int(
     os.getenv("LIF_GRAPHQL_CLIENT_TIMEOUT_SECONDS") or os.getenv("LIF_QUERY_TIMEOUT_SECONDS") or "20"
 )
 
+# Callers name themselves to the Query Planner's statistics in this header (#1272). GraphQL
+# forwards the name it received, so a query that arrives through here -- the MCP server's --
+# keeps its origin; it names itself only when its own caller did not. Validating the value is
+# the planner's job, not this relay's.
+LIF_CLIENT_HEADER = "X-LIF-Client"
+LIF_CLIENT_NAME = "graphql"
+
 
 # === Constants ===
 
@@ -768,6 +775,19 @@ def create_input_type(
     return create_nested_input_type(type_name, schema, openapi, created_types, input_type_cache)
 
 
+def lif_client_headers(info: Any) -> Dict[str, str]:
+    """
+    The X-LIF-Client header to send the Query Planner: the incoming one, else this service's name.
+
+    Strawberry's FastAPI router puts the request in `info.context["request"]`; a schema
+    executed without one (tests, scripts) simply names itself.
+    """
+    context = info.context if isinstance(info.context, dict) else {}
+    request = context.get("request")
+    incoming = request.headers.get(LIF_CLIENT_HEADER) if request is not None else None
+    return {LIF_CLIENT_HEADER: incoming or LIF_CLIENT_NAME}
+
+
 # === Root Query Type Construction ===
 
 
@@ -822,7 +842,7 @@ def build_root_query_type(
             logger.info(f"Query: {query}")
             # Make the backend API call
             async with httpx.AsyncClient(timeout=httpx.Timeout(LIF_GRAPHQL_CLIENT_TIMEOUT_SECONDS)) as client:
-                response = await client.post(query_planner_query_url, json=query)
+                response = await client.post(query_planner_query_url, json=query, headers=lif_client_headers(info))
 
             if response.status_code == 200:
                 response_json = response.json()

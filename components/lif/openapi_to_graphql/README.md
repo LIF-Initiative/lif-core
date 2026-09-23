@@ -22,6 +22,7 @@ from lif.openapi_to_graphql import schema_tools
 - **`$ref` resolution:** MDR's `generate_openapi_schema` inlines all `$ref`s, so the `$ref` branch in `type_factory.py` exists but isn't exercised by production schemas. Don't delete it — file-based schemas (`USE_OPENAPI_DATA_MODEL_FROM_FILE=true`) still rely on it.
 - **Strawberry `info` typing:** dynamic resolvers must annotate the `info` parameter as `strawberry.types.Info` (not `object` / `Any`). Strawberry 0.297+ identifies the parameter by type, not by name.
 - **Field name preservation:** uses `strawberry.field(name=field_name)` so the wire shape preserves PascalCase entity / camelCase scalar conventions ([`docs/specs/data-model-rules.md`](../../../docs/specs/data-model-rules.md)).
+- **Caller forwarding:** the root query resolver forwards the incoming `X-LIF-Client` header to the Query Planner, or sends `graphql` when there is none, so the planner's statistics see the original caller (#1272). It reads the request from `info.context["request"]`, which Strawberry's FastAPI router provides; it does not validate the value, since the planner does.
 
 ## Used by
 - `bases/lif/api_graphql` — single consumer; the GraphQL service's whole reason for existing is this component.
