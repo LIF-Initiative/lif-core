@@ -1,4 +1,4 @@
-from functools import cache
+from functools import lru_cache
 
 from pydantic import Field
 from pydantic_settings import BaseSettings
@@ -50,12 +50,12 @@ class Settings(BaseSettings):
     mdr__invite__token_max_age_seconds: int = Field(default=7 * 24 * 60 * 60, gt=0)
 
 
-_settings = Settings()
-
-
-@cache
+@lru_cache(maxsize=1)
 def get_settings() -> Settings:
+    """Return the process-wide Settings, reading the environment on first call.
+
+    Cached rather than built at import so a test can clear it with
+    ``get_settings.cache_clear()`` after patching the environment. Four sibling
+    packages call this, so the name is part of the contract.
     """
-    Entry point to access settings (ie named environment variables)
-    """
-    return _settings
+    return Settings()

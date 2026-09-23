@@ -24,11 +24,12 @@ bash build-docker.sh
 
 ## Configuration
 
-All settings come from environment variables, parsed by `Settings` in `components/lif/mdr_utils/config.py`. Key env vars:
+Most settings come from environment variables parsed by `Settings` in `components/lif/mdr_utils/config.py`. `POSTGRESQL_*` and `SQLALCHEMY_ECHO` are the exceptions — they are read directly by `components/lif/mdr_utils/database_setup.py` at engine construction. Key env vars:
 
 | Env var | Purpose |
 |---|---|
 | `POSTGRESQL_*` | Database connection |
+| `SQLALCHEMY_ECHO` | `true` logs every SQL statement + bound params; dev-only, default `false` |
 | `MDR__AUTH__JWT_SECRET_KEY` | Signs HS256 access/refresh JWTs + workspace cookies + invite tokens |
 | `MDR__AUTH__SERVICE_API_KEY__*` | One key per internal service caller (graphql, semantic_search, translator, post_confirm, learner_data_export) |
 | `MDR__AUTH__COGNITO_*` | User pool id, region, SPA client id; empty user pool disables Cognito |
@@ -37,7 +38,7 @@ All settings come from environment variables, parsed by `Settings` in `component
 | `MDR__COOKIE__SECURE` | Set `false` for local HTTP dev; defaults to `true` for HTTPS envs |
 | `MDR__INVITE__TOKEN_MAX_AGE_SECONDS` | Invite token TTL (default 7 days) |
 
-For local development, copy `.env.example` (if present) or seed the values inline via docker-compose.
+For local development, copy `mdr-api.env.example` to `mdr-api.env` — the file this project's `docker-compose.yml` reads via `env_file` — or seed the values inline via docker-compose.
 
 ## Running locally (Docker Compose)
 
