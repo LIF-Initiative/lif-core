@@ -534,6 +534,16 @@ class TestQueryPlannerFailureReachesCaller:
         assert result.errors, "a 500 from the Query Planner was reported to the caller as success"
         assert "500" in result.errors[0].message
 
+    async def test_error_does_not_relay_the_query_planner_body(self, monkeypatch):
+        """The QP builds its error body from str(e) of arbitrary exceptions, so relaying it
+        would hand backend internals to the GraphQL caller. It belongs in the server log only."""
+        result = await self._execute(
+            monkeypatch, _FakeResponse(500, text='{"detail":"connection refused: mongodb-org1:27017"}')
+        )
+
+        assert result.errors
+        assert "mongodb-org1" not in result.errors[0].message
+
     async def test_genuinely_empty_result_is_still_an_empty_list(self, monkeypatch):
         """The other half of the contract: no data is not an error."""
         result = await self._execute(monkeypatch, _FakeResponse(200, payload=[{"person": []}]))
