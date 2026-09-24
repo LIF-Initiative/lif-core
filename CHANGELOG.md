@@ -46,6 +46,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `HASH` index; the DDL now also creates on MySQL 8, which rejected it outright. The unique key
   serves the org/person read as a leftmost prefix (`type=ref`, rows=5 at 50k rows, as before), so
   `idx_org_person` is dropped. Values longer than 191 characters in those fields are now rejected
+- **GraphQL error contract:** a non-200 from the Query Planner now surfaces as a GraphQL `errors`
+  entry instead of an empty result set, so callers can tell a backend failure from a learner with
+  genuinely no data. A genuinely empty result still returns an empty list
 
 ### Deprecated
 

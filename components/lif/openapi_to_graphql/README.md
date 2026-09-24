@@ -21,6 +21,7 @@ from lif.openapi_to_graphql import schema_tools
 
 - **`$ref` resolution:** MDR's `generate_openapi_schema` inlines all `$ref`s, so the `$ref` branch in `type_factory.py` exists but isn't exercised by production schemas. Don't delete it — file-based schemas (`USE_OPENAPI_DATA_MODEL_FROM_FILE=true`) still rely on it.
 - **Strawberry `info` typing:** dynamic resolvers must annotate the `info` parameter as `strawberry.types.Info` (not `object` / `Any`). Strawberry 0.297+ identifies the parameter by type, not by name.
+- **Backend failures raise:** the root query resolver raises on a non-200 from the Query Planner so Strawberry emits an `errors` entry, matching the update mutation. Returning `[]` made every failure indistinguishable from a learner with no data (#1264).
 - **Field name preservation:** uses `strawberry.field(name=field_name)` so the wire shape preserves PascalCase entity / camelCase scalar conventions ([`docs/specs/data-model-rules.md`](../../../docs/specs/data-model-rules.md)).
 
 ## Used by
