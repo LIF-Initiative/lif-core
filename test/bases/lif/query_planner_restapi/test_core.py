@@ -19,6 +19,7 @@ from lif.datatypes import (
     LIFQueryStatusResponse,
     LIFRecord,
 )
+import pytest
 
 _YML_PATH = os.path.dirname(__file__) + "/test_information_sources_config.yml"
 _ENV = {"LIF_QUERY_PLANNER_INFORMATION_SOURCES_CONFIG_PATH": _YML_PATH}
@@ -502,3 +503,138 @@ def test_query_statistics_through_the_endpoint_carry_the_org_key(caplog):
         status_code, events = _post_query("/query", {}, caplog)
     assert status_code == 200
     assert [e["org_key"] for e in events] == ["org1"]
+
+
+def _partial(records: list, reason: str):
+    from lif.query_planner_service.datatypes import LIFQueryPlannerPartialRecords
+
+    return LIFQueryPlannerPartialRecords(records=records, reason=reason)
+
+
+@patch.dict(os.environ, _ENV)
+def test_sync_query_marks_a_partial_answer_on_the_wire():
+    """Through TestClient, so the header is shown to survive FastAPI's response handling,
+    not just to have been set on the Response object."""
+    from fastapi.testclient import TestClient
+
+    from lif.query_planner_restapi import core
+    from lif.query_planner_service import statistics
+
+    partial = _partial([_sentinel_record()], statistics.OUTCOME_ORCHESTRATOR_SUBMISSION_FAILED)
+    with patch.object(core.service, "run_query", AsyncMock(return_value=partial)):
+        response = TestClient(core.app).post("/query", json=_sentinel_query().model_dump(mode="json"))
+
+    assert response.status_code == 200
+    assert response.headers["X-LIF-Partial"] == "orchestrator_submission_failed"
+    assert len(response.json()) == 1
+
+
+@patch.dict(os.environ, _ENV)
+def test_sync_query_leaves_a_complete_answer_unmarked():
+    from fastapi.testclient import TestClient
+
+    from lif.query_planner_restapi import core
+
+    with patch.object(core.service, "run_query", AsyncMock(return_value=[_sentinel_record()])):
+        response = TestClient(core.app).post("/query", json=_sentinel_query().model_dump(mode="json"))
+
+    assert response.status_code == 200
+    assert "X-LIF-Partial" not in response.headers
+
+
+@patch.dict(os.environ, _ENV)
+def test_sync_query_returns_503_when_submission_failed_and_nothing_was_cached():
+    """An empty answer after a failed submission is a total failure, not a partial one.
+    As a 200 it read as "no such learner", and the export API turned it into a false 404."""
+    from lif.query_planner_restapi import core
+    from lif.query_planner_service import statistics
+
+    partial = _partial([], statistics.OUTCOME_ORCHESTRATOR_SUBMISSION_FAILED)
+    with patch.object(core.service, "run_query", AsyncMock(return_value=partial)):
+        with pytest.raises(HTTPException) as exc_info:
+            asyncio.run(core.do_run_query_sync(_sentinel_query(), Response()))
+
+    assert exc_info.value.status_code == 503
+
+
+@patch.dict(os.environ, _ENV)
+def test_sync_query_keeps_an_empty_no_sources_answer_as_a_marked_200():
+    """No source configured is permanent: a retry won't help, so it stays a 200, marked."""
+    from lif.query_planner_restapi import core
+    from lif.query_planner_service import statistics
+
+    response = Response()
+    partial = _partial([], statistics.OUTCOME_NO_SOURCES_AVAILABLE)
+    with patch.object(core.service, "run_query", AsyncMock(return_value=partial)):
+        result = asyncio.run(core.do_run_query_sync(_sentinel_query(), response))
+
+    assert result == []
+    assert response.headers["X-LIF-Partial"] == "no_sources_available"
+
+
+@patch.dict(os.environ, _ENV)
+def test_async_query_marks_a_partial_answer():
+    from lif.query_planner_restapi import core
+    from lif.query_planner_service import statistics
+
+    response = Response()
+    partial = _partial([_sentinel_record()], statistics.OUTCOME_NO_SOURCES_AVAILABLE)
+    with patch.object(core.service, "run_query", AsyncMock(return_value=partial)):
+        result = asyncio.run(core.do_run_query(_sentinel_query(), response))
+
+    assert len(result) == 1
+    assert response.status_code == 200
+    assert response.headers["X-LIF-Partial"] == "no_sources_available"
+
+
+@patch.dict(os.environ, _ENV)
+def test_async_query_returns_503_when_submission_failed_and_nothing_was_cached():
+    from lif.query_planner_restapi import core
+    from lif.query_planner_service import statistics
+
+    partial = _partial([], statistics.OUTCOME_ORCHESTRATOR_SUBMISSION_FAILED)
+    with patch.object(core.service, "run_query", AsyncMock(return_value=partial)):
+        with pytest.raises(HTTPException) as exc_info:
+            asyncio.run(core.do_run_query(_sentinel_query(), Response()))
+
+    assert exc_info.value.status_code == 503
+
+
+@patch.dict(os.environ, _ENV)
+def test_sync_query_marks_an_answer_where_a_source_failed_during_orchestration():
+    """The second run_query must be told which job it follows, or a failed source reads as
+    a learner with no data for those fields."""
+    from lif.query_planner_restapi import core
+    from lif.query_planner_service.core import PARTIAL_REASON_SOURCE_FAILED
+
+    run_query = AsyncMock(
+        side_effect=[
+            LIFQueryStatusResponse(query_id="run-1", status="PENDING"),
+            _partial([_sentinel_record()], PARTIAL_REASON_SOURCE_FAILED),
+        ]
+    )
+    completed = LIFQueryStatusResponse(query_id="run-1", status="COMPLETED")
+    response = Response()
+    with (
+        patch.object(core.service, "run_query", run_query),
+        patch.object(core.service, "get_query_status", AsyncMock(return_value=completed)),
+        patch.object(core, "sleep", AsyncMock()),
+    ):
+        result = asyncio.run(core.do_run_query_sync(_sentinel_query(), response))
+
+    assert len(result) == 1
+    assert response.headers["X-LIF-Partial"] == "source_failed"
+    assert run_query.await_args_list[1].kwargs["query_id"] == "run-1"
+
+
+@patch.dict(os.environ, _ENV)
+def test_sync_query_returns_503_when_every_source_failed_and_nothing_was_cached():
+    from lif.query_planner_restapi import core
+    from lif.query_planner_service.core import PARTIAL_REASON_SOURCE_FAILED
+
+    partial = _partial([], PARTIAL_REASON_SOURCE_FAILED)
+    with patch.object(core.service, "run_query", AsyncMock(return_value=partial)):
+        with pytest.raises(HTTPException) as exc_info:
+            asyncio.run(core.do_run_query_sync(_sentinel_query(), Response()))
+
+    assert exc_info.value.status_code == 503

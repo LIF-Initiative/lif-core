@@ -1,7 +1,7 @@
 from pydantic import BaseModel, Field
 from typing import List
 
-from lif.datatypes.core import LIFQueryPlanPartTranslation
+from lif.datatypes.core import LIFQueryPlanPartTranslation, LIFRecord
 from lif.query_planner_service.statistics import ORG_KEY_UNKNOWN
 
 
@@ -60,3 +60,17 @@ class LIFQueryPlannerConfig(BaseModel):
         10, gt=0, description="Timeout in seconds for individual HTTP calls to the LIF Cache and Orchestrator."
     )
     org_key: str = Field(ORG_KEY_UNKNOWN, description="The organization this planner serves (LIF_ORG_KEY)")
+
+
+class LIFQueryPlannerPartialRecords(BaseModel):
+    """
+    Records returned by run_query when it degraded instead of answering in full (#1232).
+
+    Attributes:
+        records (List[LIFRecord]): The records found in the cache, missing some requested paths.
+        reason (str): Why the answer is partial: statistics.OUTCOME_NO_SOURCES_AVAILABLE or
+            statistics.OUTCOME_ORCHESTRATOR_SUBMISSION_FAILED.
+    """
+
+    records: List[LIFRecord] = Field(..., description="Records found in the cache")
+    reason: str = Field(..., description="Why the answer is partial")

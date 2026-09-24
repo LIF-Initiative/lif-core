@@ -27,10 +27,14 @@ from lif.datatypes import (
 from lif.exceptions.core import LIFException
 from lif.lif_fragment_utils import adjust_lif_fragments_for_initial_orchestrator_simplification
 from lif.logging.core import get_logger
-from lif.query_planner_service.datatypes import LIFQueryPlannerConfig
+from lif.query_planner_service.datatypes import LIFQueryPlannerConfig, LIFQueryPlannerPartialRecords
 from lif.query_planner_service import statistics, util
 
 logger = get_logger(__name__)
+
+# Partial-answer reason for a source that failed inside an orchestration run. Dagster swallows
+# the failure and the run still succeeds, so it is only visible in the part result (#1232).
+PARTIAL_REASON_SOURCE_FAILED: str = "source_failed"
 
 JOB_EXPIRY_HOURS: int = 1
 JOB_MAX_CACHE_SIZE: int = 200
@@ -89,18 +93,25 @@ class LIFQueryPlannerService:
     # Main function to run a query
     # -------------------------------------------------------------------------
     async def run_query(
-        self, query: LIFQuery, first_run: bool, client: str | None = None
-    ) -> List[LIFRecord] | LIFQueryStatusResponse:
+        self, query: LIFQuery, first_run: bool, client: str | None = None, query_id: str | None = None
+    ) -> List[LIFRecord] | LIFQueryStatusResponse | LIFQueryPlannerPartialRecords:
         """
         Execute a LIF query.
 
         Args:
             query (LIFQuery): Input query with filter and selected fields.
             client (str | None): The raw `X-LIF-Client` header value, or None when absent.
+            query_id (str | None): On a re-run after orchestration, the job it follows, so a
+                       source that failed during that job can be reported.
 
         Returns:
             List[LIFRecord]: List of matching LIF records (persons) from the database, with only
                        requested fields present.
+            LIFQueryPlannerPartialRecords: The cached records, with the reason, when no source can
+                       serve the missing paths or the orchestrator submission failed (#1232).
+                       Also when paths are still missing after an orchestration job in which a
+                       source failed. Paths missing after a job where every source succeeded are
+                       returned as a plain list: that most likely means the learner has no data.
 
         Raises:
             LIFException: If the query fails.
@@ -159,7 +170,9 @@ class LIFQueryPlannerService:
                         lif_fragment_paths_not_found,
                         client=client,
                     )
-                    return lif_records
+                    return LIFQueryPlannerPartialRecords(
+                        records=lif_records, reason=statistics.OUTCOME_NO_SOURCES_AVAILABLE
+                    )
 
                 orchestrator_job_request: OrchestratorJobRequest = OrchestratorJobRequest(
                     lif_query_plan=lif_query_plan,
@@ -181,7 +194,9 @@ class LIFQueryPlannerService:
                         lif_query_plan,
                         client=client,
                     )
-                    return lif_records
+                    return LIFQueryPlannerPartialRecords(
+                        records=lif_records, reason=statistics.OUTCOME_ORCHESTRATOR_SUBMISSION_FAILED
+                    )
 
                 lif_query_planner_job = LIFQueryPlannerJob(
                     job_id=orchestrator_job_request_response.run_id, query=query, status="PENDING", client=client
@@ -202,6 +217,12 @@ class LIFQueryPlannerService:
                 query_status_response = LIFQueryStatusResponse(query_id=lif_query_planner_job.job_id, status="PENDING")
                 return query_status_response
             else:
+                job: LIFQueryPlannerJob | None = JOB_STORE.get(query_id) if query_id else None
+                if job and job.failed_source_ids:
+                    logger.warning(
+                        f"Sources failed during orchestration ({job.failed_source_ids}); returning partial records."
+                    )
+                    return LIFQueryPlannerPartialRecords(records=lif_records, reason=PARTIAL_REASON_SOURCE_FAILED)
                 logger.info("Orchestrator already called, returning LIF records found so far.")
                 return lif_records
         except httpx.HTTPStatusError as e:
@@ -317,6 +338,7 @@ class LIFQueryPlannerService:
                     logger.error(
                         f"Error in orchestration part result for information source {part_result.information_source_id}: {part_result.error}"
                     )
+                    job.failed_source_ids.append(part_result.information_source_id)
                 else:
                     if part_result.fragments:
                         fragments.extend([fragment for fragment in part_result.fragments if fragment])
@@ -429,6 +451,7 @@ class LIFQueryPlannerJob(BaseModel):
         job_id (str): Unique identifier for the job.
         query (LIFQuery): The query to be executed.
         status (str): Status of the job (e.g., 'pending', 'running', 'completed').
+        failed_source_ids (List[str]): Information sources whose part failed during orchestration.
         created_timestamp (str): Timestamp of when the job was created.
         updated_timestamp (str): Timestamp of when the job was last updated.
         client (str): The caller that submitted the query, for the completion statistics event.
@@ -437,6 +460,9 @@ class LIFQueryPlannerJob(BaseModel):
     job_id: str = Field(..., description="Unique identifier for the job")
     query: LIFQuery = Field(..., description="The query to be executed")
     status: str = Field(..., description="Status of the job (e.g., 'pending', 'running', 'completed')")
+    failed_source_ids: List[str] = Field(
+        default_factory=list, description="Information sources whose part failed during orchestration"
+    )
     created_timestamp: str = Field(
         ...,
         description="Timestamp of when the job was created",

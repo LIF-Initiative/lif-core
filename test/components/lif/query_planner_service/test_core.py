@@ -23,6 +23,7 @@ from lif.query_planner_service import core, statistics
 from lif.exceptions.core import LIFException
 from lif.datatypes.orchestration import OrchestratorJobQueryPlanPartResults
 from lif.query_planner_service.core import OrchestratorJobResults, add_job_to_store
+from lif.query_planner_service.datatypes import LIFQueryPlannerPartialRecords
 
 
 def test_sample():
@@ -121,12 +122,13 @@ def test_run_query_when_no_data_sources_found_for_any_fragment_paths(mock_post):
 
     async def run_test():
         # When no information sources match the requested fragment paths, the service
-        # should return the cached LIF records (list of LIFRecord) instead of posting a job.
-        lif_records_list = await service.run_query(query, first_run=True)
-        assert lif_records_list is not None
+        # should return the cached LIF records instead of posting a job, marked partial so
+        # the caller can tell them from a complete answer (#1232).
+        result = await service.run_query(query, first_run=True)
+        assert isinstance(result, LIFQueryPlannerPartialRecords)
+        assert result.reason == statistics.OUTCOME_NO_SOURCES_AVAILABLE
         # Expect one cached record based on the mocked cache response
-        assert isinstance(lif_records_list, list)
-        assert len(lif_records_list) == 1
+        assert len(result.records) == 1
 
     asyncio.run(run_test())
     mock_post.assert_called_once()
@@ -177,10 +179,12 @@ def test_run_query_logs_failure_reason_when_orchestrator_submission_fails(mock_p
             mock_post.return_value = mock_cache_response
 
             async def run_test():
-                # The partial-degrade is preserved: cached records are returned, not a hard failure.
-                lif_records = await service.run_query(query, first_run=True)
-                assert isinstance(lif_records, list)
-                assert len(lif_records) == 1
+                # The partial-degrade is preserved: cached records are returned, not a hard failure,
+                # marked partial with the reason (#1232).
+                result = await service.run_query(query, first_run=True)
+                assert isinstance(result, LIFQueryPlannerPartialRecords)
+                assert result.reason == statistics.OUTCOME_ORCHESTRATOR_SUBMISSION_FAILED
+                assert len(result.records) == 1
 
             asyncio.run(run_test())
 
@@ -1105,3 +1109,64 @@ def test_run_post_orchestration_results_uses_service_request_timeout(mock_client
     asyncio.run(service.run_post_orchestration_results(orchestration_results))
 
     mock_client_cls.assert_called_once_with(timeout=7)
+
+
+@patch("httpx.AsyncClient.post")
+def test_run_query_after_orchestration_returns_missing_paths_unflagged(mock_post):
+    # Once orchestration has run, a path still missing most likely means the learner has no
+    # data for it, not a failure. Flagging it would mark every such learner partial (#1232).
+    mock_post.return_value = _create_mock_post_response(200, [{"person": [{}]}], "https://api.example.com/query")
+
+    result = asyncio.run(_stats_service().run_query(_sentinel_query(), first_run=False))
+
+    assert isinstance(result, list)
+    assert len(result) == 1
+
+
+@patch("httpx.AsyncClient.post")
+def test_run_post_orchestration_results_records_the_sources_that_failed(mock_post):
+    # Dagster swallows a source's final failure and the run still succeeds, so this error
+    # field is the only trace of it (measured in-process for #1232).
+    mock_post.return_value = _create_mock_post_response(200, {}, "https://api.example.com/save")
+    failed = OrchestratorJobQueryPlanPartResults(
+        information_source_id="source_2",
+        adapter_id="lif-to-lif",
+        data_timestamp=None,
+        person_id=LIFPersonIdentifier(identifier="Sentinel-1234", identifierType="School-assigned number"),
+        fragments=[],
+        error="Pipeline did not run or failed.",
+    )
+    results = OrchestratorJobResults(run_id="run-1", query_plan_part_results=[failed])
+    job_store = {"run-1": core.LIFQueryPlannerJob(job_id="run-1", query=_sentinel_query(), status="PENDING")}
+
+    with patch.object(core, "JOB_STORE", job_store):
+        asyncio.run(_stats_service().run_post_orchestration_results(results))
+
+    assert job_store["run-1"].status == "COMPLETED"
+    assert job_store["run-1"].failed_source_ids == ["source_2"]
+
+
+@patch("httpx.AsyncClient.post")
+def test_run_query_after_orchestration_marks_missing_paths_when_a_source_failed(mock_post):
+    mock_post.return_value = _create_mock_post_response(200, [{"person": [{}]}], "https://api.example.com/query")
+    job = core.LIFQueryPlannerJob(
+        job_id="run-1", query=_sentinel_query(), status="COMPLETED", failed_source_ids=["source_2"]
+    )
+
+    with patch.object(core, "JOB_STORE", {"run-1": job}):
+        result = asyncio.run(_stats_service().run_query(_sentinel_query(), first_run=False, query_id="run-1"))
+
+    assert isinstance(result, LIFQueryPlannerPartialRecords)
+    assert result.reason == core.PARTIAL_REASON_SOURCE_FAILED
+    assert len(result.records) == 1
+
+
+@patch("httpx.AsyncClient.post")
+def test_run_query_after_orchestration_without_source_failures_stays_unmarked(mock_post):
+    mock_post.return_value = _create_mock_post_response(200, [{"person": [{}]}], "https://api.example.com/query")
+    job = core.LIFQueryPlannerJob(job_id="run-1", query=_sentinel_query(), status="COMPLETED")
+
+    with patch.object(core, "JOB_STORE", {"run-1": job}):
+        result = asyncio.run(_stats_service().run_query(_sentinel_query(), first_run=False, query_id="run-1"))
+
+    assert isinstance(result, list)
