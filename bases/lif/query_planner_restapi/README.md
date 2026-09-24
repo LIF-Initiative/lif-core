@@ -21,10 +21,15 @@ The planner reads YAML at startup that describes available information sources (
 |---|---|---|
 | `LIF_QUERY_TIMEOUT_SECONDS` | `300` | Whole-query budget for the synchronous `/query` polling loop; the endpoint returns `408` once it is exceeded |
 | `LIF_SERVICE_REQUEST_TIMEOUT_SECONDS` | `10` | Per-request timeout for the planner's own HTTP calls to the Query Cache and Orchestrator, independent of the budget above |
+| `LIF_ORG_KEY` | `unknown` | The organization this planner serves, recorded as `org_key` in every query statistics event (#1271). Deployed from the stack's `OrganizationName` (`org1`/`org2`/`org3`) in `cloudformation/lif-query-planner-taskdef-includes.yml`; unset or blank records `unknown` rather than failing |
 
 **Deployed config sets `LIF_QUERY_TIMEOUT_SECONDS` to `120`, not the code default.** The planner has no load balancer of its own, but every externally reachable caller of `/query` sits behind the shared ALB, whose idle timeout is 150s (`LoadBalancerIdleTimeoutSeconds` in `cloudformation/service-common.yml`). Above 150 the planner never gets to return its `408` — the ALB cuts the connection first with a 504, which surfaces in the browser as a CORS error (#1050). Raising the budget past 150 means raising the ALB idle timeout with it.
 
 A **malformed** value for either timeout — `"120s"`, or `0` — stops the service at startup with a message naming the variable, per the convention decided in #1179. Unset or empty falls back to the code default.
+
+## Caller identity
+
+`POST /query` and `POST /query_async` read an optional `X-LIF-Client` header naming the caller, and every query statistics event (`LIF_QUERY_STATISTICS` log lines, #341) records it as `client` (#1272). It is optional by design: a missing header is recorded as `unknown`, never a rejected query, so the planner works standalone. A value that is not a short lowercase name (`[a-z0-9][a-z0-9._-]{0,63}`) is recorded as `invalid` rather than as itself, which keeps free text and any person data out of the logs. The in-repo callers send `learner-data-export` (`query_planner_client`) and `graphql`; GraphQL forwards its own caller's name instead when it has one, so MCP traffic arrives as `semantic-search-mcp`.
 
 ## Composes
 - `datatypes` — `LIFQuery`, `LIFRecord`, `LIFUpdate`, planner-side types

@@ -8,7 +8,6 @@ import sys
 import unittest
 from unittest.mock import AsyncMock, MagicMock, patch
 
-import pytest
 from fastapi import HTTPException, Response
 
 from lif.datatypes import (
@@ -20,6 +19,7 @@ from lif.datatypes import (
     LIFQueryStatusResponse,
     LIFRecord,
 )
+import pytest
 
 _YML_PATH = os.path.dirname(__file__) + "/test_information_sources_config.yml"
 _ENV = {"LIF_QUERY_PLANNER_INFORMATION_SOURCES_CONFIG_PATH": _YML_PATH}
@@ -425,8 +425,86 @@ def test_async_query_endpoint_does_not_log_returned_records(caplog):
 
 
 # -------------------------------------------------------------------------
-# #1232 — a partial answer must be distinguishable from a complete one.
+# #1272 — the optional X-LIF-Client header, through the real HTTP layer.
 # -------------------------------------------------------------------------
+_FULL_CACHE_RECORD = {"person": [{"name": [{"givenName": ["John"], "familyName": "Doe"}]}]}
+
+
+def _statistics_events(caplog) -> list:
+    from lif.query_planner_service import statistics
+
+    prefix = statistics.QUERY_STATISTICS_PREFIX + " "
+    return [json.loads(line[line.index(prefix) + len(prefix) :]) for line in caplog.text.splitlines() if prefix in line]
+
+
+def _post_query(path: str, headers: dict, caplog) -> tuple[int, list]:
+    """POST a query through the app with the real service; only the planner's own outbound calls are faked."""
+    from fastapi.testclient import TestClient
+
+    from lif.query_planner_restapi import core
+
+    cache_response = MagicMock(status_code=200)
+    cache_response.json.return_value = [_FULL_CACHE_RECORD]
+    cache_response.raise_for_status.return_value = None
+    body = _make_query().model_dump(mode="json", by_alias=True)
+    with patch("httpx.AsyncClient.post", AsyncMock(return_value=cache_response)), caplog.at_level(logging.INFO):
+        response = TestClient(core.app).post(path, json=body, headers=headers)
+    return response.status_code, _statistics_events(caplog)
+
+
+@patch.dict(os.environ, _ENV)
+def test_query_without_the_client_header_succeeds_and_still_emits_statistics(caplog):
+    for path in ["/query", "/query_async"]:
+        caplog.clear()
+        status_code, events = _post_query(path, {}, caplog)
+        assert status_code == 200, path
+        assert [e["client"] for e in events] == ["unknown"], path
+
+
+@patch.dict(os.environ, _ENV)
+def test_query_records_the_client_header(caplog):
+    for path in ["/query", "/query_async"]:
+        caplog.clear()
+        status_code, events = _post_query(path, {"X-LIF-Client": "learner-data-export"}, caplog)
+        assert status_code == 200, path
+        assert [e["client"] for e in events] == ["learner-data-export"], path
+
+
+# -------------------------------------------------------------------------
+# #1271 — LIF_ORG_KEY, read once at import.
+# -------------------------------------------------------------------------
+def _org_key_in_subprocess(value: str | None) -> str:
+    """The value is read at import, so -- as with the timeouts above -- only a fresh interpreter can pin the name."""
+    child_env = dict(os.environ)
+    child_env.pop("LIF_ORG_KEY", None)
+    if value is not None:
+        child_env["LIF_ORG_KEY"] = value
+    code = "from lif.query_planner_restapi import core; print(core.config.org_key)"
+    result = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True, env=child_env, check=False)
+    assert result.returncode == 0, result.stderr
+    return result.stdout.strip().splitlines()[-1]
+
+
+def test_org_key_is_read_from_lif_org_key():
+    assert _org_key_in_subprocess("org3") == "org3"
+
+
+def test_unset_or_blank_org_key_falls_back_to_unknown():
+    # Blank is what a CloudFormation `Value:` yields when its source is missing.
+    assert _org_key_in_subprocess(None) == "unknown"
+    assert _org_key_in_subprocess("   ") == "unknown"
+
+
+@patch.dict(os.environ, _ENV)
+def test_query_statistics_through_the_endpoint_carry_the_org_key(caplog):
+    from lif.query_planner_restapi import core
+
+    with patch.object(core.config, "org_key", "org1"):
+        status_code, events = _post_query("/query", {}, caplog)
+    assert status_code == 200
+    assert [e["org_key"] for e in events] == ["org1"]
+
+
 def _partial(records: list, reason: str):
     from lif.query_planner_service.datatypes import LIFQueryPlannerPartialRecords
 

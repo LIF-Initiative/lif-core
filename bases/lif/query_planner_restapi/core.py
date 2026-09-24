@@ -2,10 +2,10 @@ import os
 import yaml
 from datetime import datetime
 from pathlib import Path
-from typing import List
+from typing import Annotated, List
 
 from asyncio import sleep
-from fastapi import FastAPI, HTTPException, Response, status
+from fastapi import FastAPI, Header, HTTPException, Response, status
 
 from lif.datatypes import (
     OrchestratorJobResults,
@@ -77,6 +77,9 @@ LIF_ORCHESTRATOR_URL = os.getenv("LIF_ORCHESTRATOR_URL", "http://localhost:8005"
 INFORMATION_SOURCES_CONFIG_PATH = os.getenv(
     "LIF_QUERY_PLANNER_INFORMATION_SOURCES_CONFIG_PATH", "./information_sources_config.yml"
 )
+# Which organization this planner serves, for the query statistics (#1271). Optional: unset or
+# empty -- a standalone planner, or a task definition not yet redeployed -- records "unknown".
+LIF_ORG_KEY: str = os.getenv("LIF_ORG_KEY", "").strip() or statistics.ORG_KEY_UNKNOWN
 
 
 def load_information_sources_yaml_config(file_path: str):
@@ -154,6 +157,7 @@ config = LIFQueryPlannerConfig(
     information_sources_config=load_information_sources_yaml_config(INFORMATION_SOURCES_CONFIG_PATH),
     query_timeout_seconds=LIF_QUERY_TIMEOUT_SECONDS,
     service_request_timeout_seconds=LIF_SERVICE_REQUEST_TIMEOUT_SECONDS,
+    org_key=LIF_ORG_KEY,
 )
 service: LIFQueryPlannerService = LIFQueryPlannerService(config)
 
@@ -168,14 +172,16 @@ def root() -> dict:
 # temporary, and will be removed soon.
 # -------------------------------------------------------------------------
 @app.post("/query", status_code=status.HTTP_200_OK, response_model=List[LIFRecord])
-async def do_run_query_sync(query: LIFQuery, response: Response) -> List[LIFRecord]:
+async def do_run_query_sync(
+    query: LIFQuery, response: Response, client: Annotated[str | None, Header(alias=statistics.CLIENT_HEADER)] = None
+) -> List[LIFRecord]:
     logger.info("CALL RECEIVED TO /query (sync) API")
     try:
         # Counted from before the first run_query: that call makes the cache read and the
         # orchestrator submission, so starting the clock after it left those round trips
         # outside the budget entirely (#571).
         start_time = datetime.now()
-        result = await service.run_query(query, first_run=True)
+        result = await service.run_query(query, first_run=True, client=client)
         if isinstance(result, LIFQueryStatusResponse):
             logger.info("Query is still processing, entering polling loop")
             delay_in_seconds: int = MIN_POLLING_DELAY_SECONDS
@@ -197,7 +203,7 @@ async def do_run_query_sync(query: LIFQuery, response: Response) -> List[LIFReco
                 result = await service.get_query_status(result.query_id)
             if result.status == "COMPLETED":
                 logger.info("Query completed successfully, retrieving results")
-                result = await service.run_query(query, first_run=False, query_id=result.query_id)
+                result = await service.run_query(query, first_run=False, client=client, query_id=result.query_id)
                 if isinstance(result, LIFQueryPlannerPartialRecords):
                     return respond_to_partial_records(result, response)
                 if isinstance(result, list):
@@ -231,10 +237,12 @@ async def do_run_query_sync(query: LIFQuery, response: Response) -> List[LIFReco
 # to /query in the future.
 # -------------------------------------------------------------------------
 @app.post("/query_async", response_model=List[LIFRecord] | LIFQueryStatusResponse)
-async def do_run_query(query: LIFQuery, response: Response) -> List[LIFRecord] | LIFQueryStatusResponse:
+async def do_run_query(
+    query: LIFQuery, response: Response, client: Annotated[str | None, Header(alias=statistics.CLIENT_HEADER)] = None
+) -> List[LIFRecord] | LIFQueryStatusResponse:
     logger.info("CALL RECEIVED TO /query_async API")
     try:
-        result = await service.run_query(query, first_run=True)
+        result = await service.run_query(query, first_run=True, client=client)
         if isinstance(result, LIFQueryStatusResponse):
             response.status_code = status.HTTP_202_ACCEPTED
             response.headers["Location"] = f"/query/{result.query_id}/status"
