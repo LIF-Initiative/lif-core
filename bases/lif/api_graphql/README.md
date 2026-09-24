@@ -9,6 +9,13 @@ FastAPI + Strawberry GraphQL base that converts an OpenAPI schema (loaded from t
 ## Auth
 API-key authentication via `ApiKeyAuthMiddleware`. Configured by `GRAPHQL_AUTH__API_KEYS` env var (`key1:client1,key2:client2`). When unset, auth is disabled — fine for local dev, never for deployed envs.
 
+## Error contract
+
+A non-200 from the Query Planner is reported as a GraphQL `errors` entry with `data` null for
+the queried field — **not** as an empty result set. Callers must therefore treat an empty list
+as "this learner has no data" and read `errors` to detect a backend failure; before #1264 the
+two were indistinguishable, so a 408 timeout looked like a successful empty response.
+
 ## Composes
 - `api_key_auth` — middleware
 - `lif_schema_config` — env-driven config

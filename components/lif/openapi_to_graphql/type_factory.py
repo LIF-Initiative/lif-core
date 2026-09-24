@@ -885,9 +885,14 @@ def build_root_query_type(
                 # print(f"Result objects: {result_objs}")
                 return result_objs
             else:
-                # Log error if the backend request fails
+                # Raise rather than return []: a bare empty list is indistinguishable from a
+                # learner who genuinely has no data, so every backend failure looked like a
+                # successful empty result to the caller (#1264). Strawberry turns this into a
+                # GraphQL `errors` entry, matching what the update mutation below already does.
+                # The body stays in the log only: the QP builds it from str(e), and Strawberry
+                # relays the exception message to the caller verbatim.
                 logger.error(f"Query failed: {response.status_code} {response.text}")
-                return []
+                raise Exception(f"Query failed: {response.status_code}")
 
         is_nested_list: bool = type_class._name == "List"
         return_type = type_class if is_nested_list else List[type_class]

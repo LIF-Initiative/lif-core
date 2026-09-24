@@ -14,6 +14,13 @@ Environment:
   - Name: LIF_TRANSLATOR_BASE_URL
     Value:
       Fn::Sub: "http://translator-org1.lif.${EnvironmentName}.aws:8007"
+  # 30s, and it is NOT recorded whether that is deliberate (#1263). It arrived in
+  # db680b2 (#906), which gave this client and the translator client the same round
+  # 30 in one commit; the translator was later argued up to 45 for a concrete
+  # reason (#1157), this one was never revisited. The planner polls to 120s, so LDE
+  # gives up first -- by the outward-in rule below that is an inversion, though a
+  # short export budget may well be correct. Treat as open, not settled.
+  # See docs/design/cross-cutting/timeouts.md.
   - Name: QUERY_PLANNER_CLIENT_TIMEOUT_SECONDS
     Value: "30"
   # 45s, not 30 (#1157). A CLR/OB3 export evaluates 32 JSONata expressions over the
