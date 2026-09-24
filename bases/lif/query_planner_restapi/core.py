@@ -72,6 +72,9 @@ LIF_ORCHESTRATOR_URL = os.getenv("LIF_ORCHESTRATOR_URL", "http://localhost:8005"
 INFORMATION_SOURCES_CONFIG_PATH = os.getenv(
     "LIF_QUERY_PLANNER_INFORMATION_SOURCES_CONFIG_PATH", "./information_sources_config.yml"
 )
+# Which organization this planner serves, for the query statistics (#1271). Optional: unset or
+# empty -- a standalone planner, or a task definition not yet redeployed -- records "unknown".
+LIF_ORG_KEY: str = os.getenv("LIF_ORG_KEY", "").strip() or statistics.ORG_KEY_UNKNOWN
 
 
 def load_information_sources_yaml_config(file_path: str):
@@ -131,6 +134,7 @@ config = LIFQueryPlannerConfig(
     information_sources_config=load_information_sources_yaml_config(INFORMATION_SOURCES_CONFIG_PATH),
     query_timeout_seconds=LIF_QUERY_TIMEOUT_SECONDS,
     service_request_timeout_seconds=LIF_SERVICE_REQUEST_TIMEOUT_SECONDS,
+    org_key=LIF_ORG_KEY,
 )
 service: LIFQueryPlannerService = LIFQueryPlannerService(config)
 

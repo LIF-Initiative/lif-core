@@ -73,7 +73,13 @@ class LIFQueryPlannerService:
             logger.info(
                 statistics.format_event(
                     statistics.build_query_planned_event(
-                        outcome, requested_paths, paths_not_in_cache, lif_query_plan, correlation_id, client
+                        outcome,
+                        requested_paths,
+                        paths_not_in_cache,
+                        lif_query_plan,
+                        correlation_id,
+                        client,
+                        self.config.org_key,
                     )
                 )
             )
@@ -318,7 +324,9 @@ class LIFQueryPlannerService:
             try:
                 logger.info(
                     statistics.format_event(
-                        statistics.build_query_completed_event(results, lif_fragment_paths, job.client)
+                        statistics.build_query_completed_event(
+                            results, lif_fragment_paths, job.client, self.config.org_key
+                        )
                     )
                 )
             except Exception:
