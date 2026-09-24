@@ -10,6 +10,7 @@ these builders take fragment paths and plan/result metadata rather than the quer
 """
 
 import json
+import re
 from typing import Dict, List
 
 from lif.datatypes.core import LIFQueryPlan
@@ -25,6 +26,35 @@ OUTCOME_SERVED_FROM_CACHE: str = "served_from_cache"
 OUTCOME_NO_SOURCES_AVAILABLE: str = "no_sources_available"
 OUTCOME_ORCHESTRATOR_SUBMISSION_FAILED: str = "orchestrator_submission_failed"
 OUTCOME_ORCHESTRATED: str = "orchestrated"
+
+# Caller identity (#1272). Callers name themselves in this optional request header; a missing
+# header is "unknown", never a rejected query, so the planner keeps working standalone (ADR 0004).
+CLIENT_HEADER: str = "X-LIF-Client"
+CLIENT_UNKNOWN: str = "unknown"
+CLIENT_INVALID: str = "invalid"
+# A short lowercase name, nothing else. The value is caller-supplied and lands in a statistics
+# dimension, so anything outside this shape is recorded as "invalid" rather than as itself:
+# that keeps free text -- and any person data a caller might put there (#1269) -- out of the
+# logs, and keeps the dimension's cardinality bounded.
+_CLIENT_PATTERN = re.compile(r"[a-z0-9][a-z0-9._-]{0,63}")
+
+
+def normalize_client(raw: str | None) -> str:
+    """
+    Reduce a caller-supplied `X-LIF-Client` value to a safe statistics dimension.
+
+    Args:
+        raw (str | None): The header value as received, or None when absent.
+
+    Returns:
+        str: The value itself when it is a well-formed client name, CLIENT_UNKNOWN when it is
+            absent or empty, and CLIENT_INVALID otherwise.
+    """
+    if not raw:
+        return CLIENT_UNKNOWN
+    if _CLIENT_PATTERN.fullmatch(raw):
+        return raw
+    return CLIENT_INVALID
 
 
 def _normalize_path(path: str) -> str:
@@ -52,6 +82,7 @@ def build_query_planned_event(
     paths_not_in_cache: List[str],
     lif_query_plan: LIFQueryPlan | None = None,
     correlation_id: str | None = None,
+    client: str = CLIENT_UNKNOWN,
 ) -> Dict:
     """
     Build the statistics event for the planning phase of a query.
@@ -62,6 +93,7 @@ def build_query_planned_event(
         paths_not_in_cache (List[str]): Of those, the ones the cache could not answer.
         lif_query_plan (LIFQueryPlan | None): The plan, when one was built.
         correlation_id (str | None): The orchestrator run id, when one was obtained.
+        client (str): The caller, already reduced by `normalize_client`.
 
     Returns:
         Dict: The event. Contains no person data.
@@ -69,6 +101,7 @@ def build_query_planned_event(
     parts = lif_query_plan.root if lif_query_plan else []
     return {
         "event": "query_planned",
+        "client": client,
         "outcome": outcome,
         "correlation_id": correlation_id,
         "requested_paths": sorted(_normalize_path(path) for path in requested_paths),
@@ -86,13 +119,16 @@ def build_query_planned_event(
     }
 
 
-def build_query_completed_event(results: OrchestratorJobResults, requested_paths: List[str]) -> Dict:
+def build_query_completed_event(
+    results: OrchestratorJobResults, requested_paths: List[str], client: str = CLIENT_UNKNOWN
+) -> Dict:
     """
     Build the statistics event for the orchestration results of a query.
 
     Args:
         results (OrchestratorJobResults): The results posted back by the Orchestrator.
         requested_paths (List[str]): LIF fragment paths the original query asked for.
+        client (str): The caller of the original query, already reduced by `normalize_client`.
 
     Returns:
         Dict: The event. Contains no person data -- fragment paths, not fragments.
@@ -106,6 +142,7 @@ def build_query_completed_event(results: OrchestratorJobResults, requested_paths
     normalized_requested = {_normalize_path(path) for path in requested_paths}
     return {
         "event": "query_completed",
+        "client": client,
         "correlation_id": results.run_id,
         "requested_paths": sorted(normalized_requested),
         "fulfilled_paths": sorted(fulfilled_paths),

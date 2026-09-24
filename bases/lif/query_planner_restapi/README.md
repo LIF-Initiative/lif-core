@@ -24,6 +24,10 @@ The planner reads YAML at startup that describes available information sources (
 
 A **malformed** value for either timeout — `"120s"`, or `0` — stops the service at startup with a message naming the variable, per the convention decided in #1179. Unset or empty falls back to the code default.
 
+## Caller identity
+
+`POST /query` and `POST /query_async` read an optional `X-LIF-Client` header naming the caller, and every query statistics event (`LIF_QUERY_STATISTICS` log lines, #341) records it as `client` (#1272). It is optional by design: a missing header is recorded as `unknown`, never a rejected query, so the planner works standalone. A value that is not a short lowercase name (`[a-z0-9][a-z0-9._-]{0,63}`) is recorded as `invalid` rather than as itself, which keeps free text and any person data out of the logs. The in-repo callers send `learner-data-export` (`query_planner_client`) and `graphql`; GraphQL forwards its own caller's name instead when it has one, so MCP traffic arrives as `semantic-search-mcp`.
+
 ## Composes
 - `datatypes` — `LIFQuery`, `LIFRecord`, `LIFUpdate`, planner-side types
 - `exceptions`

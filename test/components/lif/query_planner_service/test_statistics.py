@@ -117,3 +117,43 @@ def test_build_query_completed_event_matches_paths_across_the_casing_boundary():
 
     assert event["fulfilled_paths"] == ["Person.name"]
     assert event["paths_not_fulfilled"] == []
+
+
+# -------------------------------------------------------------------------
+# #1272 — the caller, from the optional X-LIF-Client header.
+# -------------------------------------------------------------------------
+def test_normalize_client_treats_a_missing_or_empty_header_as_unknown():
+    assert statistics.normalize_client(None) == statistics.CLIENT_UNKNOWN
+    assert statistics.normalize_client("") == statistics.CLIENT_UNKNOWN
+
+
+def test_normalize_client_keeps_a_well_formed_name():
+    for name in ["graphql", "learner-data-export", "semantic-search-mcp", "org1.lde_v2", "a" * 64]:
+        assert statistics.normalize_client(name) == name
+
+
+def test_normalize_client_records_anything_else_as_invalid_rather_than_as_itself():
+    # Each of these would otherwise land verbatim in a statistics dimension: free text, a
+    # person identifier smuggled into the header (#1269), a log-line injection, unbounded length.
+    for raw in [
+        "GraphQL",
+        "-leading-dash",
+        "a" * 65,
+        "Sentinel-1234 john.doe@example.edu",
+        'graphql"} {"injected": true',
+        "graphql\nLIF_QUERY_STATISTICS {}",
+        " ",
+    ]:
+        assert statistics.normalize_client(raw) == statistics.CLIENT_INVALID, raw
+
+
+def test_both_events_carry_the_client_and_default_to_unknown():
+    planned = statistics.build_query_planned_event(statistics.OUTCOME_SERVED_FROM_CACHE, ["person.name"], [])
+    completed = statistics.build_query_completed_event(_results(), requested_paths=["person.name"])
+    assert planned["client"] == completed["client"] == statistics.CLIENT_UNKNOWN
+
+    planned = statistics.build_query_planned_event(
+        statistics.OUTCOME_SERVED_FROM_CACHE, ["person.name"], [], client="graphql"
+    )
+    completed = statistics.build_query_completed_event(_results(), requested_paths=["person.name"], client="graphql")
+    assert planned["client"] == completed["client"] == "graphql"

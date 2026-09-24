@@ -421,3 +421,49 @@ def test_async_query_endpoint_does_not_log_returned_records(caplog):
     assert "Bellwether" not in caplog.text
     assert "Sentinel" not in caplog.text
     assert "Query completed successfully" in caplog.text
+
+
+# -------------------------------------------------------------------------
+# #1272 — the optional X-LIF-Client header, through the real HTTP layer.
+# -------------------------------------------------------------------------
+_FULL_CACHE_RECORD = {"person": [{"name": [{"givenName": ["John"], "familyName": "Doe"}]}]}
+
+
+def _statistics_events(caplog) -> list:
+    from lif.query_planner_service import statistics
+
+    prefix = statistics.QUERY_STATISTICS_PREFIX + " "
+    return [json.loads(line[line.index(prefix) + len(prefix) :]) for line in caplog.text.splitlines() if prefix in line]
+
+
+def _post_query(path: str, headers: dict, caplog) -> tuple[int, list]:
+    """POST a query through the app with the real service; only the planner's own outbound calls are faked."""
+    from fastapi.testclient import TestClient
+
+    from lif.query_planner_restapi import core
+
+    cache_response = MagicMock(status_code=200)
+    cache_response.json.return_value = [_FULL_CACHE_RECORD]
+    cache_response.raise_for_status.return_value = None
+    body = _make_query().model_dump(mode="json", by_alias=True)
+    with patch("httpx.AsyncClient.post", AsyncMock(return_value=cache_response)), caplog.at_level(logging.INFO):
+        response = TestClient(core.app).post(path, json=body, headers=headers)
+    return response.status_code, _statistics_events(caplog)
+
+
+@patch.dict(os.environ, _ENV)
+def test_query_without_the_client_header_succeeds_and_still_emits_statistics(caplog):
+    for path in ["/query", "/query_async"]:
+        caplog.clear()
+        status_code, events = _post_query(path, {}, caplog)
+        assert status_code == 200, path
+        assert [e["client"] for e in events] == ["unknown"], path
+
+
+@patch.dict(os.environ, _ENV)
+def test_query_records_the_client_header(caplog):
+    for path in ["/query", "/query_async"]:
+        caplog.clear()
+        status_code, events = _post_query(path, {"X-LIF-Client": "learner-data-export"}, caplog)
+        assert status_code == 200, path
+        assert [e["client"] for e in events] == ["learner-data-export"], path

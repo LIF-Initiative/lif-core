@@ -22,6 +22,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   completeness" toggle, because the preview is an intentionally partial document. `format` is not
   validated, matching the runtime translator, which calls `jsonschema.validate` without a
   `format_checker`
+- Query Planner query statistics record the caller as `client`, from an optional `X-LIF-Client`
+  request header: `unknown` when absent (never a rejected query), `invalid` when not a short
+  lowercase name. Learner Data Export sends `learner-data-export`, the MCP server
+  `semantic-search-mcp`, and GraphQL forwards its caller's name or sends `graphql`
 
 ### Changed
 
