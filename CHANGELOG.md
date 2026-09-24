@@ -40,6 +40,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   (`mysql+asyncmy`) instead of sync `pymysql` behind `asyncio.to_thread`; per-request latency is
   unchanged, but under 50 parallel GETs p95 roughly halves (≈83-239 ms vs ≈314-386 ms) with no
   contract or status-code changes
+- Identity Mapper schema narrows `lif_organization_id`, `lif_organization_person_id` and
+  `target_system_id` from `VARCHAR(255)` to `VARCHAR(191)`, so `uq_identity_mapping` (2692 bytes,
+  was 3460) fits InnoDB's 3072-byte key limit and is a real B-tree instead of a silently degraded
+  `HASH` index; the DDL now also creates on MySQL 8, which rejected it outright. The unique key
+  serves the org/person read as a leftmost prefix (`type=ref`, rows=5 at 50k rows, as before), so
+  `idx_org_person` is dropped. Values longer than 191 characters in those fields are now rejected
+- **GraphQL error contract:** a non-200 from the Query Planner now surfaces as a GraphQL `errors`
+  entry instead of an empty result set, so callers can tell a backend failure from a learner with
+  genuinely no data. A genuinely empty result still returns an empty list
 
 ### Deprecated
 
@@ -57,7 +66,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   HASH` and the optimizer cannot use it, making every org/person read a full table scan. Measured
   at 50k rows: `type=ALL` / 49758 rows / 15.3 ms becomes `type=ref` / 5 rows / ~0.05 ms. Local
   docker-compose volumes must be recreated (`down -v`) to pick up the new DDL; dev and demo need
-  no migration, as their MariaDB datadir is ephemeral
+  no migration, as their MariaDB datadir is ephemeral. Superseded by the #1258 entry under Changed, which drops this index
 
 ### Security
 
