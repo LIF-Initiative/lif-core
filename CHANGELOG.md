@@ -27,9 +27,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Query Planner `/query` and `/query_async` mark an answer served from cache without the
   requested fields with an `X-LIF-Partial` header (`no_sources_available` or
-  `orchestrator_submission_failed`), so a partial answer can be told apart from a complete one. When
-  the orchestrator submission fails and nothing was cached, they now return `503` instead of an
-  empty `200`
+  `orchestrator_submission_failed`; on `/query` also `source_failed`, for a source that failed during
+  the orchestration run), so a partial answer can be told apart from a complete one. When a
+  transient failure leaves nothing to return, they now return `503` instead of an empty `200`
 - Identity Mapper `save_mappings` is now all-or-nothing: a single transaction with a single commit,
   so a mid-batch failure rolls back the entire batch instead of leaving partial saves; storage DB
   work is offloaded off the FastAPI event loop via `asyncio.to_thread`, and per-request delete/read

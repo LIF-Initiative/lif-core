@@ -18,7 +18,7 @@ from lif.datatypes import (
 from lif.exceptions.core import LIFException
 from lif.logging.core import get_logger
 from lif.query_planner_service import statistics
-from lif.query_planner_service.core import LIFQueryPlannerService
+from lif.query_planner_service.core import PARTIAL_REASON_SOURCE_FAILED, LIFQueryPlannerService
 from lif.query_planner_service.datatypes import (
     LIFQueryPlannerConfig,
     LIFQueryPlannerInfoSourceConfig,
@@ -135,11 +135,15 @@ def respond_to_partial_records(partial: LIFQueryPlannerPartialRecords, response:
     Return a partial answer's records, marking the response so the caller can tell it from a
     complete one (#1232).
 
-    An empty answer after a failed submission is a total failure rather than a partial one, so
-    it becomes a 503: as a 200 it read as "no such learner".
+    An empty answer after a transient failure (the submission, or a source during orchestration)
+    is a total failure rather than a partial one, so it becomes a 503: as a 200 it read as "no
+    such learner".
     """
-    if not partial.records and partial.reason == statistics.OUTCOME_ORCHESTRATOR_SUBMISSION_FAILED:
-        raise HTTPException(status_code=503, detail="Orchestrator submission failed and no cached records were found")
+    if not partial.records and partial.reason in (
+        statistics.OUTCOME_ORCHESTRATOR_SUBMISSION_FAILED,
+        PARTIAL_REASON_SOURCE_FAILED,
+    ):
+        raise HTTPException(status_code=503, detail=f"No records found and the query failed: {partial.reason}")
     response.headers[PARTIAL_RESPONSE_HEADER] = partial.reason
     return partial.records
 
@@ -193,7 +197,9 @@ async def do_run_query_sync(query: LIFQuery, response: Response) -> List[LIFReco
                 result = await service.get_query_status(result.query_id)
             if result.status == "COMPLETED":
                 logger.info("Query completed successfully, retrieving results")
-                result = await service.run_query(query, first_run=False)
+                result = await service.run_query(query, first_run=False, query_id=result.query_id)
+                if isinstance(result, LIFQueryPlannerPartialRecords):
+                    return respond_to_partial_records(result, response)
                 if isinstance(result, list):
                     logger.info(f"Query completed successfully, returning {len(result)} record(s)")
                     return result

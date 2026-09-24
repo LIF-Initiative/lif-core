@@ -520,3 +520,43 @@ def test_async_query_returns_503_when_submission_failed_and_nothing_was_cached()
             asyncio.run(core.do_run_query(_sentinel_query(), Response()))
 
     assert exc_info.value.status_code == 503
+
+
+@patch.dict(os.environ, _ENV)
+def test_sync_query_marks_an_answer_where_a_source_failed_during_orchestration():
+    """The second run_query must be told which job it follows, or a failed source reads as
+    a learner with no data for those fields."""
+    from lif.query_planner_restapi import core
+    from lif.query_planner_service.core import PARTIAL_REASON_SOURCE_FAILED
+
+    run_query = AsyncMock(
+        side_effect=[
+            LIFQueryStatusResponse(query_id="run-1", status="PENDING"),
+            _partial([_sentinel_record()], PARTIAL_REASON_SOURCE_FAILED),
+        ]
+    )
+    completed = LIFQueryStatusResponse(query_id="run-1", status="COMPLETED")
+    response = Response()
+    with (
+        patch.object(core.service, "run_query", run_query),
+        patch.object(core.service, "get_query_status", AsyncMock(return_value=completed)),
+        patch.object(core, "sleep", AsyncMock()),
+    ):
+        result = asyncio.run(core.do_run_query_sync(_sentinel_query(), response))
+
+    assert len(result) == 1
+    assert response.headers["X-LIF-Partial"] == "source_failed"
+    assert run_query.await_args_list[1].kwargs["query_id"] == "run-1"
+
+
+@patch.dict(os.environ, _ENV)
+def test_sync_query_returns_503_when_every_source_failed_and_nothing_was_cached():
+    from lif.query_planner_restapi import core
+    from lif.query_planner_service.core import PARTIAL_REASON_SOURCE_FAILED
+
+    partial = _partial([], PARTIAL_REASON_SOURCE_FAILED)
+    with patch.object(core.service, "run_query", AsyncMock(return_value=partial)):
+        with pytest.raises(HTTPException) as exc_info:
+            asyncio.run(core.do_run_query_sync(_sentinel_query(), Response()))
+
+    assert exc_info.value.status_code == 503
