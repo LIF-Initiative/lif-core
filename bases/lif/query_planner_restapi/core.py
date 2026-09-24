@@ -17,13 +17,19 @@ from lif.datatypes import (
 )
 from lif.exceptions.core import LIFException
 from lif.logging.core import get_logger
+from lif.query_planner_service import statistics
 from lif.query_planner_service.core import LIFQueryPlannerService
-from lif.query_planner_service.datatypes import LIFQueryPlannerConfig, LIFQueryPlannerInfoSourceConfig
+from lif.query_planner_service.datatypes import (
+    LIFQueryPlannerConfig,
+    LIFQueryPlannerInfoSourceConfig,
+    LIFQueryPlannerPartialRecords,
+)
 
 MIN_POLLING_DELAY_SECONDS: int = 1
 MAX_POLLING_DELAY_SECONDS: int = 16
 DEFAULT_QUERY_TIMEOUT_SECONDS: int = 300
 DEFAULT_SERVICE_REQUEST_TIMEOUT_SECONDS: int = 10
+PARTIAL_RESPONSE_HEADER: str = "X-LIF-Partial"
 
 
 # Defined above the constants rather than with the other helpers because the reads below
@@ -124,6 +130,20 @@ def load_information_sources_yaml_config(file_path: str):
         raise LIFException(msg) from e
 
 
+def respond_to_partial_records(partial: LIFQueryPlannerPartialRecords, response: Response) -> List[LIFRecord]:
+    """
+    Return a partial answer's records, marking the response so the caller can tell it from a
+    complete one (#1232).
+
+    An empty answer after a failed submission is a total failure rather than a partial one, so
+    it becomes a 503: as a 200 it read as "no such learner".
+    """
+    if not partial.records and partial.reason == statistics.OUTCOME_ORCHESTRATOR_SUBMISSION_FAILED:
+        raise HTTPException(status_code=503, detail="Orchestrator submission failed and no cached records were found")
+    response.headers[PARTIAL_RESPONSE_HEADER] = partial.reason
+    return partial.records
+
+
 config = LIFQueryPlannerConfig(
     lif_cache_url=LIF_CACHE_URL,
     lif_orchestrator_url=LIF_ORCHESTRATOR_URL,
@@ -187,6 +207,8 @@ async def do_run_query_sync(query: LIFQuery, response: Response) -> List[LIFReco
                     msg += f" - {result.error_message}"
                 logger.error(msg)
                 raise HTTPException(status_code=500, detail=msg)
+        elif isinstance(result, LIFQueryPlannerPartialRecords):
+            return respond_to_partial_records(result, response)
         else:
             return result
     except ValueError:
@@ -213,6 +235,8 @@ async def do_run_query(query: LIFQuery, response: Response) -> List[LIFRecord] |
             response.headers["Retry-After"] = "5"  # seconds to wait before polling
             logger.info(f"Query is still processing, returning status response: {result}")
             return result
+        elif isinstance(result, LIFQueryPlannerPartialRecords):
+            return respond_to_partial_records(result, response)
         else:
             response.status_code = status.HTTP_200_OK
             logger.info(f"Query completed successfully, returning {len(result)} record(s)")

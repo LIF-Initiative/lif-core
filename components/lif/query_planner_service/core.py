@@ -27,7 +27,7 @@ from lif.datatypes import (
 from lif.exceptions.core import LIFException
 from lif.lif_fragment_utils import adjust_lif_fragments_for_initial_orchestrator_simplification
 from lif.logging.core import get_logger
-from lif.query_planner_service.datatypes import LIFQueryPlannerConfig
+from lif.query_planner_service.datatypes import LIFQueryPlannerConfig, LIFQueryPlannerPartialRecords
 from lif.query_planner_service import statistics, util
 
 logger = get_logger(__name__)
@@ -81,7 +81,9 @@ class LIFQueryPlannerService:
 
     # Main function to run a query
     # -------------------------------------------------------------------------
-    async def run_query(self, query: LIFQuery, first_run: bool) -> List[LIFRecord] | LIFQueryStatusResponse:
+    async def run_query(
+        self, query: LIFQuery, first_run: bool
+    ) -> List[LIFRecord] | LIFQueryStatusResponse | LIFQueryPlannerPartialRecords:
         """
         Execute a LIF query.
 
@@ -91,6 +93,10 @@ class LIFQueryPlannerService:
         Returns:
             List[LIFRecord]: List of matching LIF records (persons) from the database, with only
                        requested fields present.
+            LIFQueryPlannerPartialRecords: The cached records, with the reason, when no source can
+                       serve the missing paths or the orchestrator submission failed (#1232).
+                       Paths still missing after orchestration are returned as a plain list:
+                       that most likely means the learner has no data for them.
 
         Raises:
             LIFException: If the query fails.
@@ -142,7 +148,9 @@ class LIFQueryPlannerService:
                     self._emit_query_planned(
                         statistics.OUTCOME_NO_SOURCES_AVAILABLE, lif_fragment_paths, lif_fragment_paths_not_found
                     )
-                    return lif_records
+                    return LIFQueryPlannerPartialRecords(
+                        records=lif_records, reason=statistics.OUTCOME_NO_SOURCES_AVAILABLE
+                    )
 
                 orchestrator_job_request: OrchestratorJobRequest = OrchestratorJobRequest(
                     lif_query_plan=lif_query_plan,
@@ -163,7 +171,9 @@ class LIFQueryPlannerService:
                         lif_fragment_paths_not_found,
                         lif_query_plan,
                     )
-                    return lif_records
+                    return LIFQueryPlannerPartialRecords(
+                        records=lif_records, reason=statistics.OUTCOME_ORCHESTRATOR_SUBMISSION_FAILED
+                    )
 
                 lif_query_planner_job = LIFQueryPlannerJob(
                     job_id=orchestrator_job_request_response.run_id, query=query, status="PENDING"

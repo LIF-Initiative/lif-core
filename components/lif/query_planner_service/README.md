@@ -15,6 +15,7 @@ from lif.query_planner_service.core import (
 from lif.query_planner_service.datatypes import (
     LIFQueryPlannerConfig,
     LIFQueryPlannerInfoSourceConfig,
+    LIFQueryPlannerPartialRecords,
 )
 from lif.query_planner_service import util
 ```
@@ -24,7 +25,7 @@ from lif.query_planner_service import util
 | File | Contents |
 |---|---|
 | `core.py` | `LIFQueryPlannerService` (the planner), `LIFQueryPlannerJob` (async job state), in-memory job store helpers |
-| `datatypes.py` | Planner-specific config models (`LIFQueryPlannerConfig`, `LIFQueryPlannerInfoSourceConfig`) |
+| `datatypes.py` | Planner-specific config models (`LIFQueryPlannerConfig`, `LIFQueryPlannerInfoSourceConfig`) and `LIFQueryPlannerPartialRecords`, which `run_query` returns in place of a plain list when it answers from cache without the requested fields (#1232) |
 | `util.py` | Cross-cutting helpers used by `core` (fragment-shaping helpers now live in [`lif_fragment_utils`](../lif_fragment_utils/)) |
 
 ## Configuration

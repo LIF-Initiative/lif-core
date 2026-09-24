@@ -1,7 +1,7 @@
 from pydantic import BaseModel, Field
 from typing import List
 
-from lif.datatypes.core import LIFQueryPlanPartTranslation
+from lif.datatypes.core import LIFQueryPlanPartTranslation, LIFRecord
 
 
 class LIFQueryPlannerInfoSourceConfig(BaseModel):
@@ -56,3 +56,17 @@ class LIFQueryPlannerConfig(BaseModel):
     service_request_timeout_seconds: int = Field(
         10, gt=0, description="Timeout in seconds for individual HTTP calls to the LIF Cache and Orchestrator."
     )
+
+
+class LIFQueryPlannerPartialRecords(BaseModel):
+    """
+    Records returned by run_query when it degraded instead of answering in full (#1232).
+
+    Attributes:
+        records (List[LIFRecord]): The records found in the cache, missing some requested paths.
+        reason (str): Why the answer is partial: statistics.OUTCOME_NO_SOURCES_AVAILABLE or
+            statistics.OUTCOME_ORCHESTRATOR_SUBMISSION_FAILED.
+    """
+
+    records: List[LIFRecord] = Field(..., description="Records found in the cache")
+    reason: str = Field(..., description="Why the answer is partial")

@@ -8,6 +8,7 @@ import sys
 import unittest
 from unittest.mock import AsyncMock, MagicMock, patch
 
+import pytest
 from fastapi import HTTPException, Response
 
 from lif.datatypes import (
@@ -421,3 +422,101 @@ def test_async_query_endpoint_does_not_log_returned_records(caplog):
     assert "Bellwether" not in caplog.text
     assert "Sentinel" not in caplog.text
     assert "Query completed successfully" in caplog.text
+
+
+# -------------------------------------------------------------------------
+# #1232 — a partial answer must be distinguishable from a complete one.
+# -------------------------------------------------------------------------
+def _partial(records: list, reason: str):
+    from lif.query_planner_service.datatypes import LIFQueryPlannerPartialRecords
+
+    return LIFQueryPlannerPartialRecords(records=records, reason=reason)
+
+
+@patch.dict(os.environ, _ENV)
+def test_sync_query_marks_a_partial_answer_on_the_wire():
+    """Through TestClient, so the header is shown to survive FastAPI's response handling,
+    not just to have been set on the Response object."""
+    from fastapi.testclient import TestClient
+
+    from lif.query_planner_restapi import core
+    from lif.query_planner_service import statistics
+
+    partial = _partial([_sentinel_record()], statistics.OUTCOME_ORCHESTRATOR_SUBMISSION_FAILED)
+    with patch.object(core.service, "run_query", AsyncMock(return_value=partial)):
+        response = TestClient(core.app).post("/query", json=_sentinel_query().model_dump(mode="json"))
+
+    assert response.status_code == 200
+    assert response.headers["X-LIF-Partial"] == "orchestrator_submission_failed"
+    assert len(response.json()) == 1
+
+
+@patch.dict(os.environ, _ENV)
+def test_sync_query_leaves_a_complete_answer_unmarked():
+    from fastapi.testclient import TestClient
+
+    from lif.query_planner_restapi import core
+
+    with patch.object(core.service, "run_query", AsyncMock(return_value=[_sentinel_record()])):
+        response = TestClient(core.app).post("/query", json=_sentinel_query().model_dump(mode="json"))
+
+    assert response.status_code == 200
+    assert "X-LIF-Partial" not in response.headers
+
+
+@patch.dict(os.environ, _ENV)
+def test_sync_query_returns_503_when_submission_failed_and_nothing_was_cached():
+    """An empty answer after a failed submission is a total failure, not a partial one.
+    As a 200 it read as "no such learner", and the export API turned it into a false 404."""
+    from lif.query_planner_restapi import core
+    from lif.query_planner_service import statistics
+
+    partial = _partial([], statistics.OUTCOME_ORCHESTRATOR_SUBMISSION_FAILED)
+    with patch.object(core.service, "run_query", AsyncMock(return_value=partial)):
+        with pytest.raises(HTTPException) as exc_info:
+            asyncio.run(core.do_run_query_sync(_sentinel_query(), Response()))
+
+    assert exc_info.value.status_code == 503
+
+
+@patch.dict(os.environ, _ENV)
+def test_sync_query_keeps_an_empty_no_sources_answer_as_a_marked_200():
+    """No source configured is permanent: a retry won't help, so it stays a 200, marked."""
+    from lif.query_planner_restapi import core
+    from lif.query_planner_service import statistics
+
+    response = Response()
+    partial = _partial([], statistics.OUTCOME_NO_SOURCES_AVAILABLE)
+    with patch.object(core.service, "run_query", AsyncMock(return_value=partial)):
+        result = asyncio.run(core.do_run_query_sync(_sentinel_query(), response))
+
+    assert result == []
+    assert response.headers["X-LIF-Partial"] == "no_sources_available"
+
+
+@patch.dict(os.environ, _ENV)
+def test_async_query_marks_a_partial_answer():
+    from lif.query_planner_restapi import core
+    from lif.query_planner_service import statistics
+
+    response = Response()
+    partial = _partial([_sentinel_record()], statistics.OUTCOME_NO_SOURCES_AVAILABLE)
+    with patch.object(core.service, "run_query", AsyncMock(return_value=partial)):
+        result = asyncio.run(core.do_run_query(_sentinel_query(), response))
+
+    assert len(result) == 1
+    assert response.status_code == 200
+    assert response.headers["X-LIF-Partial"] == "no_sources_available"
+
+
+@patch.dict(os.environ, _ENV)
+def test_async_query_returns_503_when_submission_failed_and_nothing_was_cached():
+    from lif.query_planner_restapi import core
+    from lif.query_planner_service import statistics
+
+    partial = _partial([], statistics.OUTCOME_ORCHESTRATOR_SUBMISSION_FAILED)
+    with patch.object(core.service, "run_query", AsyncMock(return_value=partial)):
+        with pytest.raises(HTTPException) as exc_info:
+            asyncio.run(core.do_run_query(_sentinel_query(), Response()))
+
+    assert exc_info.value.status_code == 503
