@@ -370,9 +370,6 @@ import diagnostics (re-scope first), **#1142** document the endpoint and round-t
 
 ### Phase 1 — one converter (write this first)
 
-"Converter" rather than "translator" throughout — LIF already has a Translator service, and this
-is a different thing.
-
 There are **five** hand-written conversions between file-shaped data and database rows:
 
 | Direction | Code |
