@@ -11,6 +11,8 @@ Identity mappings are scoped per `{org_id}/{person_id}`:
 
 A refused `DELETE` answers `404` whether no mapping has that ID or the mapping exists but belongs to a different organization or person. The two are deliberately indistinguishable, so a caller cannot probe IDs to discover which ones are real (#1177); the not-owned case is logged at the server instead.
 
+A `POST` that collides with a concurrent save of the same natural key (organization, person, target system, identifier type) is retried once inside the storage layer. If the retry collides too, it answers `409` with a message saying the request may be retried, rather than the `500` given for a datastore failure, and carries no correlation UUID (#1261).
+
 Plus exception handlers translating `DataNotFoundException`, `LIFException`, and validation errors into stable HTTP responses.
 
 ## Storage

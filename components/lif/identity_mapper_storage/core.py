@@ -18,6 +18,15 @@ class DeleteOutcome(Enum):
     NOT_OWNED = "NOT_OWNED"
 
 
+class IdentityMappingConflictException(Exception):
+    """A save collided with a concurrent write of the same natural key, and the retry did too.
+
+    Raised instead of DataStoreException so the API can answer 409 -- the caller's own
+    concurrent traffic caused it and a fresh attempt will very likely succeed -- rather than
+    the 500 it gives for a datastore outage (#1261).
+    """
+
+
 class IdentityMapperStorage(Protocol):
     async def get_mapping_by_id(self, mapping_id: str) -> IdentityMapping | None:
         """

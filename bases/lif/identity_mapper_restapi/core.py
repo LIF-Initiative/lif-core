@@ -11,7 +11,7 @@ from sqlalchemy.ext.asyncio import async_sessionmaker
 from lif.datatypes import IdentityMapping
 from lif.exceptions.core import DataNotFoundException, LIFException
 from lif.identity_mapper_service.core import IdentityMapperService
-from lif.identity_mapper_storage.core import IdentityMapperStorage
+from lif.identity_mapper_storage.core import IdentityMapperStorage, IdentityMappingConflictException
 from lif.identity_mapper_storage_sql.core import IdentityMapperSqlStorage
 from lif.identity_mapper_storage_sql.db import dispose_db_engine, get_db_session_factory, initialize_database
 from lif.logging.core import get_logger
@@ -121,6 +121,20 @@ async def data_not_found_exception_handler(request: Request, exc: DataNotFoundEx
 async def value_error_exception_handler(request: Request, exc: ValueError):
     logger.warning(f"Value error for {request.method} {request.url.path}: {exc}")
     return JSONResponse(status_code=400, content={"status_code": "400", "path": request.url.path, "message": str(exc)})
+
+
+@app.exception_handler(IdentityMappingConflictException)
+async def identity_mapping_conflict_exception_handler(request: Request, exc: IdentityMappingConflictException):
+    # A lost race is expected and self-describing, so no correlation UUID (#1261).
+    logger.warning(f"Identity mapping save conflicted for {request.method} {request.url.path}: {exc}")
+    return JSONResponse(
+        status_code=409,
+        content={
+            "status_code": "409",
+            "path": request.url.path,
+            "message": "The save collided with a concurrent write of the same mapping. The request may be retried.",
+        },
+    )
 
 
 @app.exception_handler(LIFException)

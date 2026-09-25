@@ -33,6 +33,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Identity Mapper `POST .../mappings` answers `409` when a natural-key collision with a concurrent
+  save survives the one retry, instead of the generic `500` with a correlation UUID, so a caller can
+  tell a retryable conflict from a datastore failure
 - Query Planner `/query` and `/query_async` mark an answer served from cache without the
   requested fields with an `X-LIF-Partial` header (`no_sources_available` or
   `orchestrator_submission_failed`; on `/query` also `source_failed`, for a source that failed during
