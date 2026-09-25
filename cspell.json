@@ -281,7 +281,12 @@
         "utf8mb4",
         "vitest",
         "EXPLAIN",
-        "xform"
+        "xform",
+        "conftest",
+        "demoable",
+        "demoability",
+        "runbook",
+        "runbooks"
     ],
     "ignorePaths": [
         ".git/",
