@@ -33,6 +33,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- The GraphQL update mutation no longer relays the Query Planner's error body to the caller: a failed
+  `update<Root>` now reports `Mutation failed: <status>`, with the body in the server log only,
+  matching the query path since #1291
 - Query Planner `/query` and `/query_async` mark an answer served from cache without the
   requested fields with an `X-LIF-Partial` header (`no_sources_available` or
   `orchestrator_submission_failed`; on `/query` also `source_failed`, for a source that failed during

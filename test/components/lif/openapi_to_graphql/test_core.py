@@ -550,3 +550,34 @@ class TestQueryPlannerFailureReachesCaller:
 
         assert not result.errors
         assert result.data == {"person": []}
+
+
+class TestMutationFailureDoesNotLeakBody:
+    """The update mutation's counterpart of the query-path fix above (Issue #1309)."""
+
+    UPDATE_MUTATION = 'mutation { updatePerson(filter: {name: "x"}, input: {name: "y"}) { name } }'
+
+    async def _execute(self, monkeypatch, response):
+        monkeypatch.setattr(type_factory, "input_type_cache", {})
+        openapi = _empty_openapi(
+            {"Person": {"type": "array", "properties": {"name": _make_scalar_field(queryable=True, mutable=True)}}}
+        )
+        schema = await generate_graphql_schema(
+            openapi=openapi,
+            root_type_name="Person",
+            query_planner_query_url="http://localhost:9999/query",
+            query_planner_update_url="http://localhost:9999/update",
+        )
+        monkeypatch.setattr(type_factory.httpx, "AsyncClient", _FakeAsyncClient(response))
+        return await schema.execute(self.UPDATE_MUTATION)
+
+    async def test_error_does_not_relay_the_query_planner_body(self, monkeypatch):
+        """The QP's /update builds its 500 body from str(e), so relaying it would hand backend
+        internals to the GraphQL caller. The status code is enough to tell the call failed."""
+        result = await self._execute(
+            monkeypatch, _FakeResponse(500, text='{"detail":"connection refused: mongodb-org1:27017"}')
+        )
+
+        assert result.errors, "a 500 from the Query Planner was reported to the caller as success"
+        assert "500" in result.errors[0].message
+        assert "mongodb-org1" not in result.errors[0].message

@@ -16,6 +16,10 @@ the queried field — **not** as an empty result set. Callers must therefore tre
 as "this learner has no data" and read `errors` to detect a backend failure; before #1264 the
 two were indistinguishable, so a 408 timeout looked like a successful empty response.
 
+The message carries only the status (`Query failed: 408`, `Mutation failed: 500`). The Query
+Planner's error body can contain backend internals, so it goes to the server log and is never
+relayed to the caller (#1291 for queries, #1309 for the update mutation).
+
 ## Composes
 - `api_key_auth` — middleware
 - `lif_schema_config` — env-driven config

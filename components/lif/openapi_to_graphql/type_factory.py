@@ -987,8 +987,10 @@ def build_root_mutation_type(
             else:
                 raise Exception("Mutation succeeded but response missing object.")
         else:
+            # The body stays in the log only, as on the query path above (#1309): the QP builds
+            # it from str(e), and Strawberry relays the exception message to the caller verbatim.
             logger.error(f"Mutation failed: {response.status_code} {response.text}")
-            raise Exception(f"Mutation failed: {response.status_code}: {response.text}")
+            raise Exception(f"Mutation failed: {response.status_code}")
 
     update_resolver.__annotations__ = {
         "self": Any,
