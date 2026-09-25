@@ -32,7 +32,7 @@ async def test_graphql_query_with_api_key(mock_post):
     assert result == {"data": {"person": []}}
     mock_post.assert_called_once()
     call_kwargs = mock_post.call_args
-    assert call_kwargs.kwargs["headers"] == {"X-API-Key": "test-key-123"}
+    assert call_kwargs.kwargs["headers"] == {"X-LIF-Client": "semantic-search-mcp", "X-API-Key": "test-key-123"}
 
 
 @patch("lif.graphql_client.core._post")
@@ -47,7 +47,7 @@ async def test_graphql_query_without_api_key(mock_post):
 
     assert result == {"data": {"person": []}}
     call_kwargs = mock_post.call_args
-    assert call_kwargs.kwargs["headers"] == {}
+    assert call_kwargs.kwargs["headers"] == {"X-LIF-Client": "semantic-search-mcp"}
 
 
 @patch("lif.graphql_client.core._post")
@@ -62,7 +62,7 @@ async def test_graphql_query_env_var_fallback(mock_post):
 
     assert result == {"data": {"person": []}}
     call_kwargs = mock_post.call_args
-    assert call_kwargs.kwargs["headers"] == {"X-API-Key": "env-key-456"}
+    assert call_kwargs.kwargs["headers"] == {"X-LIF-Client": "semantic-search-mcp", "X-API-Key": "env-key-456"}
 
 
 @patch("lif.graphql_client.core._post")
@@ -93,7 +93,7 @@ async def test_graphql_mutation_with_api_key(mock_post):
 
     assert result == {"data": {"updatePerson": {}}}
     call_kwargs = mock_post.call_args
-    assert call_kwargs.kwargs["headers"] == {"X-API-Key": "test-key-123"}
+    assert call_kwargs.kwargs["headers"] == {"X-LIF-Client": "semantic-search-mcp", "X-API-Key": "test-key-123"}
 
 
 @patch("lif.graphql_client.core._post")
@@ -133,19 +133,19 @@ async def test_graphql_query_custom_timeout(mock_post):
 
 def test_build_headers_with_key():
     headers = core._build_headers(api_key="my-key")
-    assert headers == {"X-API-Key": "my-key"}
+    assert headers == {"X-LIF-Client": "semantic-search-mcp", "X-API-Key": "my-key"}
 
 
 def test_build_headers_without_key():
     with mock.patch.object(core, "LIF_GRAPHQL_API_KEY", ""):
         headers = core._build_headers(api_key="")
-        assert headers == {}
+        assert headers == {"X-LIF-Client": "semantic-search-mcp"}
 
 
 def test_build_headers_env_var_fallback():
     with mock.patch.object(core, "LIF_GRAPHQL_API_KEY", "env-key"):
         headers = core._build_headers(api_key="")
-        assert headers == {"X-API-Key": "env-key"}
+        assert headers == {"X-LIF-Client": "semantic-search-mcp", "X-API-Key": "env-key"}
 
 
 def test_graphql_client_exception():

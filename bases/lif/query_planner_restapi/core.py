@@ -2,10 +2,10 @@ import os
 import yaml
 from datetime import datetime
 from pathlib import Path
-from typing import List
+from typing import Annotated, List
 
 from asyncio import sleep
-from fastapi import FastAPI, HTTPException, Response, status
+from fastapi import FastAPI, Header, HTTPException, Response, status
 
 from lif.datatypes import (
     OrchestratorJobResults,
@@ -17,12 +17,57 @@ from lif.datatypes import (
 )
 from lif.exceptions.core import LIFException
 from lif.logging.core import get_logger
-from lif.query_planner_service.core import LIFQueryPlannerService
-from lif.query_planner_service.datatypes import LIFQueryPlannerConfig, LIFQueryPlannerInfoSourceConfig
+from lif.query_planner_service import statistics
+from lif.query_planner_service.core import PARTIAL_REASON_SOURCE_FAILED, LIFQueryPlannerService
+from lif.query_planner_service.datatypes import (
+    LIFQueryPlannerConfig,
+    LIFQueryPlannerInfoSourceConfig,
+    LIFQueryPlannerPartialRecords,
+)
 
 MIN_POLLING_DELAY_SECONDS: int = 1
 MAX_POLLING_DELAY_SECONDS: int = 16
-MAX_QUERY_TIMEOUT_SECONDS: int = 60
+DEFAULT_QUERY_TIMEOUT_SECONDS: int = 300
+DEFAULT_SERVICE_REQUEST_TIMEOUT_SECONDS: int = 10
+PARTIAL_RESPONSE_HEADER: str = "X-LIF-Partial"
+
+
+# Defined above the constants rather than with the other helpers because the reads below
+# happen at import time.
+def _env_int(name: str, default: int, *, minimum: int | None = None) -> int:
+    """Parse an integer environment variable, failing loudly on a malformed value.
+
+    Convention decided in #1179: a present-but-malformed value stops the service with a
+    message naming the variable. The alternative -- fall back to the default with a
+    warning -- leaves the service looking healthy while ignoring what the operator set,
+    and the divergence surfaces later as a mystery.
+
+    An unset *or empty* value still takes the default. An empty string is what a
+    CloudFormation `Value:` entry yields when its source is missing, so treating that as
+    fatal would make the service brittle to unrelated template changes.
+
+    Local to this base pending the shared helper #1179 will add; the semantics are meant
+    to match that helper exactly so the swap is mechanical.
+    """
+    raw = os.environ.get(name)
+    if raw is None or raw.strip() == "":
+        return default
+    try:
+        value = int(raw.strip())
+    except ValueError as exc:
+        raise RuntimeError(
+            f"{name}={raw!r} is not an integer. Set it to a whole number of seconds, "
+            f"or unset it to use the default ({default})."
+        ) from exc
+    if minimum is not None and value < minimum:
+        raise RuntimeError(f"{name}={value} is below the minimum of {minimum}.")
+    return value
+
+
+LIF_QUERY_TIMEOUT_SECONDS: int = _env_int("LIF_QUERY_TIMEOUT_SECONDS", DEFAULT_QUERY_TIMEOUT_SECONDS, minimum=1)
+LIF_SERVICE_REQUEST_TIMEOUT_SECONDS: int = _env_int(
+    "LIF_SERVICE_REQUEST_TIMEOUT_SECONDS", DEFAULT_SERVICE_REQUEST_TIMEOUT_SECONDS, minimum=1
+)
 
 app = FastAPI()
 logger = get_logger(__name__)
@@ -32,6 +77,9 @@ LIF_ORCHESTRATOR_URL = os.getenv("LIF_ORCHESTRATOR_URL", "http://localhost:8005"
 INFORMATION_SOURCES_CONFIG_PATH = os.getenv(
     "LIF_QUERY_PLANNER_INFORMATION_SOURCES_CONFIG_PATH", "./information_sources_config.yml"
 )
+# Which organization this planner serves, for the query statistics (#1271). Optional: unset or
+# empty -- a standalone planner, or a task definition not yet redeployed -- records "unknown".
+LIF_ORG_KEY: str = os.getenv("LIF_ORG_KEY", "").strip() or statistics.ORG_KEY_UNKNOWN
 
 
 def load_information_sources_yaml_config(file_path: str):
@@ -85,10 +133,31 @@ def load_information_sources_yaml_config(file_path: str):
         raise LIFException(msg) from e
 
 
+def respond_to_partial_records(partial: LIFQueryPlannerPartialRecords, response: Response) -> List[LIFRecord]:
+    """
+    Return a partial answer's records, marking the response so the caller can tell it from a
+    complete one (#1232).
+
+    An empty answer after a transient failure (the submission, or a source during orchestration)
+    is a total failure rather than a partial one, so it becomes a 503: as a 200 it read as "no
+    such learner".
+    """
+    if not partial.records and partial.reason in (
+        statistics.OUTCOME_ORCHESTRATOR_SUBMISSION_FAILED,
+        PARTIAL_REASON_SOURCE_FAILED,
+    ):
+        raise HTTPException(status_code=503, detail=f"No records found and the query failed: {partial.reason}")
+    response.headers[PARTIAL_RESPONSE_HEADER] = partial.reason
+    return partial.records
+
+
 config = LIFQueryPlannerConfig(
     lif_cache_url=LIF_CACHE_URL,
     lif_orchestrator_url=LIF_ORCHESTRATOR_URL,
     information_sources_config=load_information_sources_yaml_config(INFORMATION_SOURCES_CONFIG_PATH),
+    query_timeout_seconds=LIF_QUERY_TIMEOUT_SECONDS,
+    service_request_timeout_seconds=LIF_SERVICE_REQUEST_TIMEOUT_SECONDS,
+    org_key=LIF_ORG_KEY,
 )
 service: LIFQueryPlannerService = LIFQueryPlannerService(config)
 
@@ -103,29 +172,42 @@ def root() -> dict:
 # temporary, and will be removed soon.
 # -------------------------------------------------------------------------
 @app.post("/query", status_code=status.HTTP_200_OK, response_model=List[LIFRecord])
-async def do_run_query_sync(query: LIFQuery, response: Response) -> List[LIFRecord]:
+async def do_run_query_sync(
+    query: LIFQuery, response: Response, client: Annotated[str | None, Header(alias=statistics.CLIENT_HEADER)] = None
+) -> List[LIFRecord]:
     logger.info("CALL RECEIVED TO /query (sync) API")
     try:
-        result = await service.run_query(query, first_run=True)
+        # Counted from before the first run_query: that call makes the cache read and the
+        # orchestrator submission, so starting the clock after it left those round trips
+        # outside the budget entirely (#571).
+        start_time = datetime.now()
+        result = await service.run_query(query, first_run=True, client=client)
         if isinstance(result, LIFQueryStatusResponse):
             logger.info("Query is still processing, entering polling loop")
-            start_time = datetime.now()
             delay_in_seconds: int = MIN_POLLING_DELAY_SECONDS
             while result.status == "PENDING":
                 # Wait for the query to complete
-                if (datetime.now() - start_time).seconds > 300:
-                    raise HTTPException(status_code=408, detail="Query timed out")
-                logger.info(f"Query still pending, waiting for {delay_in_seconds} seconds before polling again")
-                await sleep(delay_in_seconds)
+                remaining_seconds = config.query_timeout_seconds - (datetime.now() - start_time).total_seconds()
+                if remaining_seconds <= 0:
+                    raise HTTPException(
+                        status_code=408, detail=f"Query timed out after {config.query_timeout_seconds} seconds"
+                    )
+                # Clamped to what is left: an unclamped sleep runs past the deadline by up to
+                # one whole MAX_POLLING_DELAY_SECONDS before the next check can fire.
+                wait_seconds = min(delay_in_seconds, remaining_seconds)
+                logger.info(f"Query still pending, waiting for {wait_seconds} seconds before polling again")
+                await sleep(wait_seconds)
                 delay_in_seconds = (
                     delay_in_seconds * 2 if delay_in_seconds < MAX_POLLING_DELAY_SECONDS else MAX_POLLING_DELAY_SECONDS
                 )
                 result = await service.get_query_status(result.query_id)
             if result.status == "COMPLETED":
                 logger.info("Query completed successfully, retrieving results")
-                result = await service.run_query(query, first_run=False)
+                result = await service.run_query(query, first_run=False, client=client, query_id=result.query_id)
+                if isinstance(result, LIFQueryPlannerPartialRecords):
+                    return respond_to_partial_records(result, response)
                 if isinstance(result, list):
-                    logger.info(f"Query completed successfully, returning results: {result}")
+                    logger.info(f"Query completed successfully, returning {len(result)} record(s)")
                     return result
                 else:
                     msg: str = f"Query completed but results are not in expected format: {result}"
@@ -137,6 +219,8 @@ async def do_run_query_sync(query: LIFQuery, response: Response) -> List[LIFReco
                     msg += f" - {result.error_message}"
                 logger.error(msg)
                 raise HTTPException(status_code=500, detail=msg)
+        elif isinstance(result, LIFQueryPlannerPartialRecords):
+            return respond_to_partial_records(result, response)
         else:
             return result
     except ValueError:
@@ -153,19 +237,23 @@ async def do_run_query_sync(query: LIFQuery, response: Response) -> List[LIFReco
 # to /query in the future.
 # -------------------------------------------------------------------------
 @app.post("/query_async", response_model=List[LIFRecord] | LIFQueryStatusResponse)
-async def do_run_query(query: LIFQuery, response: Response) -> List[LIFRecord] | LIFQueryStatusResponse:
+async def do_run_query(
+    query: LIFQuery, response: Response, client: Annotated[str | None, Header(alias=statistics.CLIENT_HEADER)] = None
+) -> List[LIFRecord] | LIFQueryStatusResponse:
     logger.info("CALL RECEIVED TO /query_async API")
     try:
-        result = await service.run_query(query, first_run=True)
+        result = await service.run_query(query, first_run=True, client=client)
         if isinstance(result, LIFQueryStatusResponse):
             response.status_code = status.HTTP_202_ACCEPTED
             response.headers["Location"] = f"/query/{result.query_id}/status"
             response.headers["Retry-After"] = "5"  # seconds to wait before polling
             logger.info(f"Query is still processing, returning status response: {result}")
             return result
+        elif isinstance(result, LIFQueryPlannerPartialRecords):
+            return respond_to_partial_records(result, response)
         else:
             response.status_code = status.HTTP_200_OK
-            logger.info(f"Query completed successfully, returning results: {result}")
+            logger.info(f"Query completed successfully, returning {len(result)} record(s)")
             return result
     except ValueError:
         raise

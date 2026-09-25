@@ -12,7 +12,6 @@ dependencies = [
     "fastapi~=0.115",
     "httpx~=0.28",
     "pydantic~=2.11",
-    "pymysql~=1.1",
     "sqlalchemy~=2.0",
     "uvicorn~=0.34",
 ]

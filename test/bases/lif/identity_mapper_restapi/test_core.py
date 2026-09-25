@@ -3,6 +3,7 @@ import pytest_asyncio
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy import create_engine, event
 from sqlalchemy.exc import OperationalError
+from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 from unittest.mock import AsyncMock, MagicMock, patch
@@ -29,21 +30,28 @@ def get_client() -> AsyncClient:
 
 
 class _UnhealthySession:
-    def __enter__(self):
+    """Async session whose execute() fails the way an unreachable database does."""
+
+    async def __aenter__(self):
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
         return False
 
-    def execute(self, *args, **kwargs):
+    async def execute(self, *args, **kwargs):
         raise OperationalError("SELECT 1", {}, Exception("database is down"))
 
 
-@pytest.fixture()
-def db_session_factory():
-    engine = create_engine("sqlite://", connect_args={"check_same_thread": False}, poolclass=StaticPool)
-    yield sessionmaker(autocommit=False, autoflush=False, bind=engine)
-    engine.dispose()
+@pytest_asyncio.fixture
+async def db_session_factory():
+    """An async factory -- the type get_db_session_factory() actually returns (#1199).
+
+    The sync sessionmaker this fixture used to yield could not catch the /health
+    breakage, because the service never receives a sync factory in production.
+    """
+    engine = create_async_engine("sqlite+aiosqlite://", poolclass=StaticPool)
+    yield async_sessionmaker(expire_on_commit=False, autoflush=False, bind=engine)
+    await engine.dispose()
 
 
 @pytest.fixture()
@@ -62,7 +70,8 @@ async def test_health_returns_200_and_ran_a_real_query_when_database_reachable(
     def record_statement(conn, cursor, statement, parameters, context, executemany):
         executed_statements.append(statement)
 
-    event.listen(db_session_factory.kw["bind"], "before_cursor_execute", record_statement)
+    sync_engine = db_session_factory.kw["bind"].sync_engine
+    event.listen(sync_engine, "before_cursor_execute", record_statement)
     try:
         async with get_client() as client:
             with patch.object(core, "get_db_session_factory", return_value=db_session_factory):
@@ -71,7 +80,7 @@ async def test_health_returns_200_and_ran_a_real_query_when_database_reachable(
         assert response.json() == {"status": "ok"}
         assert any("SELECT 1" in statement for statement in executed_statements)
     finally:
-        event.remove(db_session_factory.kw["bind"], "before_cursor_execute", record_statement)
+        event.remove(sync_engine, "before_cursor_execute", record_statement)
 
 
 @pytest.mark.asyncio
@@ -85,6 +94,23 @@ async def test_health_returns_503_when_session_factory_raises(
             response = await client.get("/health")
         assert response.status_code == 503
         assert response.json() == {"status": "unhealthy"}
+
+
+@pytest.mark.asyncio
+@patch("lif.identity_mapper_restapi.core.initialize", mock_initialize)
+@patch("lif.identity_mapper_restapi.core.shutdown", mock_shutdown)
+async def test_health_does_not_report_a_wiring_mistake_as_unhealthy(mock_initialize, mock_shutdown):
+    """A sync factory is a wiring bug, not an unreachable database (#1199).
+
+    /health caught bare Exception, so handing it the sync sessionmaker from #1234 turned a
+    TypeError into a permanent 503 "unhealthy" -- the task never reached steady state and
+    the log blamed the database. Only SQLAlchemyError is a 503 now, so this surfaces loudly.
+    """
+    sync_factory = sessionmaker(bind=create_engine("sqlite://", poolclass=StaticPool))
+    async with get_client() as client:
+        with patch.object(core, "get_db_session_factory", return_value=sync_factory):
+            with pytest.raises(TypeError, match="does not support the asynchronous context manager protocol"):
+                await client.get("/health")
 
 
 @pytest.mark.asyncio

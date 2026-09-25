@@ -5,8 +5,6 @@ services:
     container_name: Metadata-Repository-API
     build:
       context: ./
-    # volumes:
-    #   - ../service/config_files:/usr/src/service/config_files
     env_file:
       - mdr-api.env 
     ports:
