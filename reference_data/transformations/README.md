@@ -5,13 +5,13 @@
 | `Ed-Fi-v5_StateU-LIF__v1.0.json` | Ed-Fi v5 → StateU LIF | [`scripts/import-transformations.sh`](../../scripts/import-transformations.sh) |
 | `StateU-LIF_CLR-v2-Open-Badges-v3__v1.0.json` | StateU LIF → CLR v2 / Open Badges v3 | same |
 | `StateU-LIF_Ed-Fi-v5-v1.0__v1.0.json` | StateU LIF → Ed-Fi v5 | same |
-| [`StateU-LIF_Sample-LDE-Target-Test__v1.0.json`](StateU-LIF_Sample-LDE-Target-Test__v1.0.json) | **Test artifact.** StateU LIF → Sample LDE Target Test, 56 rules | `POST /transformation_groups/{id}/import` — see below |
+| [`test/StateU-LIF_Sample-LDE-Target-Test__v1.0.json`](test/StateU-LIF_Sample-LDE-Target-Test__v1.0.json) | **Test artifact.** StateU LIF → Sample LDE Target Test, 56 rules | `POST /transformation_groups/{id}/import` — see below |
 
-> **`import-transformations.sh` does not load the last one.** It globs `*.json` in this directory
-> and posts each match to `POST /transformation_groups/`, which requires numeric
-> `SourceDataModelId` / `TargetDataModelId`. This group deliberately carries model *names*
-> instead, so that endpoint answers **422** and the script exits 1. Until the script learns to
-> skip it, either pass the other three explicitly or expect that one failure line.
+> **Why the test artifact sits in `test/`.** It carries model *names* rather than the numeric
+> `SourceDataModelId` / `TargetDataModelId` that `POST /transformation_groups/` requires, so that
+> endpoint answers **422** for it. `import-transformations.sh` globs `*.json` in this directory
+> only — not recursively — so keeping the file one level down leaves the script's exit status
+> meaningful. Load it with the portable `/import` flow below.
 
 ---
 
@@ -24,7 +24,7 @@ export fidelity](https://github.com/LIF-Initiative/lif-core/issues/1224). Two ha
 | File | What it is |
 |---|---|
 | [`../schemas/sample-lde-target-test-model.json`](../schemas/sample-lde-target-test-model.json) | Target data model **Sample LDE Target Test v1.0**. Upload to MDR via `POST /datamodels/open_api_schema/upload`. |
-| [`StateU-LIF_Sample-LDE-Target-Test__v1.0.json`](StateU-LIF_Sample-LDE-Target-Test__v1.0.json) | Its transformation group. Import via `POST /transformation_groups/{id}/import`. |
+| [`test/StateU-LIF_Sample-LDE-Target-Test__v1.0.json`](test/StateU-LIF_Sample-LDE-Target-Test__v1.0.json) | Its transformation group. Import via `POST /transformation_groups/{id}/import`. |
 
 ---
 
@@ -71,7 +71,8 @@ expression; `$length(null)` raises; `&` stringifies an array as JSON).
 ## Manual steps
 
 Ports below are the local `deployments/advisor-demo-docker` stack; swap in an environment's
-URLs and its MDR key to run elsewhere. `changeme3` is the local MDR service key.
+URLs and its MDR key to run elsewhere. `changeme3` is the local MDR service key — the
+compose default from `deployments/advisor-demo-docker/docker-compose.yml`, not a real credential.
 
 **1 — Upload the target model.** Returns the new model's `Id`.
 
@@ -81,7 +82,7 @@ curl -s -X POST -H "X-API-Key: changeme3" \
   -F "data_model_name=Sample LDE Target Test" \
   -F "data_model_version=1.0" \
   -F "data_model_type=SourceSchema" \
-  -F "contributor_organization=Unicon" \
+  -F "contributor_organization=StateU" \
   -F "state=Draft" \
   http://localhost:8012/datamodels/open_api_schema/upload
 ```
@@ -102,7 +103,7 @@ Expect `"ImportedTransformationCount": 56, "SkippedTransformationCount": 0`.
 
 ```bash
 curl -s -X POST -H "X-API-Key: changeme3" -H "Content-Type: application/json" \
-  --data @reference_data/transformations/StateU-LIF_Sample-LDE-Target-Test__v1.0.json \
+  --data @reference_data/transformations/test/StateU-LIF_Sample-LDE-Target-Test__v1.0.json \
   "http://localhost:8012/transformation_groups/30/import?version=1.0"
 ```
 
@@ -126,7 +127,7 @@ curl -s -G http://localhost:8013/exports \
   --data-urlencode "learnerId=100004" \
   --data-urlencode "dataModelName=Sample LDE Target Test" \
   --data-urlencode "dataModelVersion=1.0" \
-  --data-urlencode "dataModelContributorOrganization=Unicon"
+  --data-urlencode "dataModelContributorOrganization=StateU"
 ```
 
 **7 — Read the translator's counters**, which are the actual pass/fail signal (#1174):
