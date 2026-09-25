@@ -33,6 +33,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Identity Mapper `POST .../mappings` rejects a field wider than its database column with a `422`
+  naming the field, instead of a `500` from MariaDB's `Data too long`
 - Query Planner `/query` and `/query_async` mark an answer served from cache without the
   requested fields with an `X-LIF-Partial` header (`no_sources_available` or
   `orchestrator_submission_failed`; on `/query` also `source_failed`, for a source that failed during
