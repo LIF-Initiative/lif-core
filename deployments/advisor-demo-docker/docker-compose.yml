@@ -539,7 +539,13 @@ services:
       retries: 3
       start_period: 10s
     depends_on:
-      - lif-mdr-database
+      lif-mdr-database:
+        condition: service_started
+      # Wait for the baseline + migrations, not just for Postgres to start. Without this,
+      # `docker compose up lif-mdr-app` starts MDR against an empty database (#1316).
+      # restore.sh is one-shot and exits 0 on re-runs too, so repeat `up`s still start.
+      lif-mdr-database-restore:
+        condition: service_completed_successfully
 
 
 
