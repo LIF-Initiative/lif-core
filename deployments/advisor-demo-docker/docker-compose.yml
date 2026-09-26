@@ -515,6 +515,10 @@ services:
       MDR__AUTH__SERVICE_API_KEY__GRAPHQL: ${MDR__AUTH__SERVICE_API_KEY__GRAPHQL:-changeme1}
       MDR__AUTH__SERVICE_API_KEY__SEMANTIC_SEARCH: ${MDR__AUTH__SERVICE_API_KEY__SEMANTIC_SEARCH:-changeme2}
       MDR__AUTH__SERVICE_API_KEY__TRANSLATOR: ${MDR__AUTH__SERVICE_API_KEY__TRANSLATOR:-changeme3}
+      # Passed through so a deployer can override them; unset, MDR fell back to these same
+      # built-in defaults with no way to change them from .env (#1316).
+      MDR__AUTH__SERVICE_API_KEY__POST_CONFIRM: ${MDR__AUTH__SERVICE_API_KEY__POST_CONFIRM:-changeme5}
+      MDR__AUTH__SERVICE_API_KEY__LEARNER_DATA_EXPORT: ${MDR__AUTH__SERVICE_API_KEY__LEARNER_DATA_EXPORT:-changeme6}
       MDR__AUTH__METHODS_TO_REQUIRE_AUTH: ${MDR__AUTH__METHODS_TO_REQUIRE_AUTH:-GET,POST,PUT,DELETE}
       MDR__AUTH__ACCESS_TOKEN_EXPIRE_MINUTES: ${MDR__AUTH__ACCESS_TOKEN_EXPIRE_MINUTES:-30}
       MDR__AUTH__REFRESH_TOKEN_EXPIRE_DAYS: ${MDR__AUTH__REFRESH_TOKEN_EXPIRE_DAYS:-7}
@@ -525,6 +529,8 @@ services:
       MDR__COOKIE__SECURE: ${MDR__COOKIE__SECURE:-false}
       MDR__INVITE__TOKEN_MAX_AGE_SECONDS: ${MDR__INVITE__TOKEN_MAX_AGE_SECONDS:-604800}
       LIF_DEMO_USER_PASSWORD: ${LIF_DEMO_USER_PASSWORD:?set it in your .env - no default, see issue 1191}
+      # Configured logins that replace the demo personas; see scripts/hash-mdr-password.py (#1316).
+      MDR__AUTH__LOCAL_USERS: ${MDR__AUTH__LOCAL_USERS:-}
     ports:
       - "8012:8012"
     networks:
@@ -539,7 +545,13 @@ services:
       retries: 3
       start_period: 10s
     depends_on:
-      - lif-mdr-database
+      lif-mdr-database:
+        condition: service_started
+      # Wait for the baseline + migrations, not just for Postgres to start. Without this,
+      # `docker compose up lif-mdr-app` starts MDR against an empty database (#1316).
+      # restore.sh is one-shot and exits 0 on re-runs too, so repeat `up`s still start.
+      lif-mdr-database-restore:
+        condition: service_completed_successfully
 
 
 
