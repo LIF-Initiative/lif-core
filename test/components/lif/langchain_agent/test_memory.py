@@ -205,14 +205,15 @@ def test_trims_llm_input_to_fit_within_token_budget():
     untrimmed = summary + conversation[-2:]
     # Guard the guard: the untrimmed list has to genuinely exceed the budget, or this
     # test would pass just as well with the trim removed. It sat at 96 tokens against a
-    # budget of 100 when first written, and so proved nothing.
-    assert count_tokens_approximately(untrimmed) > budget
+    # budget of 100 when first written, and so proved nothing. The budget covers what
+    # follows the summary, and the summary's own size is added on top.
+    assert count_tokens_approximately(untrimmed) > budget + count_tokens_approximately(summary)
 
     hook = make_pre_model_hook(_summarizer_returning(summary), 2, budget, logging.getLogger("test"))
 
     llm_input = hook({"messages": conversation, "context": {}})["llm_input_messages"]
 
-    assert count_tokens_approximately(llm_input) <= budget
+    assert count_tokens_approximately(llm_input[1:]) <= budget
     assert llm_input != untrimmed, "expected the list to be trimmed, not passed through"
     assert isinstance(llm_input[0], SystemMessage)
     assert llm_input[-1] is conversation[-1]
@@ -239,7 +240,7 @@ def test_falls_back_to_untrimmed_list_when_trim_is_empty(caplog):
         llm_input = hook({"messages": conversation, "context": {}})["llm_input_messages"]
 
     assert llm_input == summary + conversation[-2:]
-    assert "empty message list" in caplog.text
+    assert "no HumanMessage" in caplog.text
 
 
 def test_safe_trim_preserves_system_message_and_latest_human_message():
@@ -264,3 +265,73 @@ def test_safe_trim_keeps_tool_call_tail_within_budget():
 
     assert trimmed == messages
     assert tool_result in trimmed
+
+
+# --- Review of #1148: the deployed budgets, and where a cut may start -----------------
+#
+# Every deployment sets LIF_ADVISOR_TRIMMED_MESSAGES_SIZE=384 and MAX_SUMMARY_SIZE=1024.
+# With the budget covering the whole list, a summary over ~380 tokens left only the
+# summary: non-empty, so no fallback, and the model never saw the user's question.
+
+
+def _summary_of(tokens: int) -> SystemMessage:
+    message = SystemMessage("word " * tokens)
+    assert count_tokens_approximately([message]) >= tokens
+    return message
+
+
+def test_summary_larger_than_the_budget_still_keeps_the_latest_question():
+    turn = [HumanMessage("What courses did I take?"), AIMessage("You took Algebra."), HumanMessage("And my grades?")]
+    messages = [_summary_of(880), *turn]
+
+    trimmed = _safe_trim_messages(messages, max_tokens=384, logger=logging.getLogger("test"))
+
+    assert trimmed[-1] is turn[-1], "the current question must reach the model"
+    assert trimmed == messages
+
+
+def test_an_oversized_tool_result_does_not_reduce_the_input_to_the_summary():
+    """A normal GraphQL result (~1,600 tokens) is larger than the whole budget. Sending
+    too much beats sending the model a summary with no question to answer."""
+    tool_call_ai = AIMessage(content="", tool_calls=[{"name": "lif_query", "args": {}, "id": "call_1"}])
+    tool_result = ToolMessage(content="x" * 6_400, tool_call_id="call_1")
+    messages = [_summary_of(100), HumanMessage("List my courses."), tool_call_ai, tool_result]
+
+    trimmed = _safe_trim_messages(messages, max_tokens=384, logger=logging.getLogger("test"))
+
+    assert any(isinstance(m, HumanMessage) for m in trimmed)
+    assert trimmed != messages[:1]
+
+
+def test_a_cut_never_starts_the_kept_history_on_an_orphan_tool_message():
+    """OpenAI rejects a `tool` message that does not follow the assistant message carrying
+    its `tool_calls`. Every budget, including the ones that cut between the two, must keep
+    each ToolMessage's AIMessage with it."""
+    tool_call_ai = AIMessage(content="", tool_calls=[{"name": "lif_query", "args": {"q": "x"}, "id": "call_9"}])
+    messages = [
+        SystemMessage("summary " * 30),
+        HumanMessage("q1 " * 40),
+        tool_call_ai,
+        ToolMessage("r " * 120, tool_call_id="call_9"),
+        AIMessage("answer " * 20),
+        HumanMessage("q2"),
+    ]
+
+    for budget in range(1, count_tokens_approximately(messages) + 1):
+        trimmed = _safe_trim_messages(messages, max_tokens=budget, logger=logging.getLogger("test"))
+        for i, message in enumerate(trimmed):
+            if isinstance(message, ToolMessage):
+                assert tool_call_ai in trimmed[:i], f"orphan ToolMessage at budget {budget}: {trimmed}"
+
+
+def test_a_long_summary_does_not_use_up_the_budget_for_the_current_turn():
+    """The budget covers what follows the summary. Counting the summary against it would
+    leave nothing for the turn, and the list would fall back untrimmed instead of shedding
+    the older exchange."""
+    older = [HumanMessage("older question " * 60), AIMessage("older answer " * 60)]
+    latest = HumanMessage("And my grades?")
+    messages = [_summary_of(880), *older, latest]
+
+    trimmed = _safe_trim_messages(messages, max_tokens=100, logger=logging.getLogger("test"))
+
+    assert trimmed == [messages[0], latest]

@@ -11,7 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Advisor API: trim summarized conversation context to fit within `LIF_ADVISOR_TRIMMED_MESSAGES_SIZE` before sending it to the LLM (issue #212)
+- Advisor API: trim summarized conversation context before sending it to the LLM, keeping the summary
+  and fitting the messages after it within `LIF_ADVISOR_TRIMMED_MESSAGES_SIZE`. The kept history
+  starts on a user message, and a turn too large for the budget is sent untrimmed rather than
+  without the user's question (issue #212)
 - Unique indexes added for ValueSets and ValueSetValues
 - Minor adjustments to data to comply with uniqueness indexes
 - Pull request template with comprehensive contribution guidelines
