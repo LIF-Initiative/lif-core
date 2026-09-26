@@ -4,6 +4,7 @@ from uuid import uuid4
 
 from fastapi import FastAPI, Request, status
 from fastapi.responses import JSONResponse
+from pydantic import Field
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import async_sessionmaker
@@ -14,7 +15,36 @@ from lif.identity_mapper_service.core import IdentityMapperService
 from lif.identity_mapper_storage.core import IdentityMapperStorage, IdentityMappingConflictException
 from lif.identity_mapper_storage_sql.core import IdentityMapperSqlStorage
 from lif.identity_mapper_storage_sql.db import dispose_db_engine, get_db_session_factory, initialize_database
+from lif.identity_mapper_storage_sql.model import IdentityMappingModel
 from lif.logging.core import get_logger
+
+
+def _column_width(name: str) -> int:
+    return IdentityMappingModel.__table__.c[name].type.length
+
+
+class IdentityMappingRequest(IdentityMapping):
+    """An IdentityMapping as the save endpoint accepts it: each field no wider than its column.
+
+    Without these limits an oversized value reached MariaDB and came back as a 500 (strict mode,
+    1406 Data too long); with them it is a 422 naming the field (#1300). Enforced here rather than
+    on the shared `datatypes` DTO, which a dozen projects package for a class only this service
+    uses. The widths are read from the SQLAlchemy model, which mirrors 02-ddl.sql.
+    """
+
+    lif_organization_id: str = Field(
+        ..., max_length=_column_width("lif_organization_id"), description="LIF Organization ID"
+    )
+    lif_organization_person_id: str = Field(
+        ..., max_length=_column_width("lif_organization_person_id"), description="LIF Organization Person ID"
+    )
+    target_system_id: str = Field(..., max_length=_column_width("target_system_id"), description="Target System ID")
+    target_system_person_id_type: str = Field(
+        ..., max_length=_column_width("target_system_person_id_type"), description="Type of Target System Person ID"
+    )
+    target_system_person_id: str = Field(
+        ..., max_length=_column_width("target_system_person_id"), description="Target System Person ID"
+    )
 
 
 storage: IdentityMapperStorage | None = None
@@ -79,11 +109,15 @@ async def check_health() -> JSONResponse:
     status_code=status.HTTP_200_OK,
     response_model=List[IdentityMapping],
 )
-async def do_save_mappings(org_id: str, person_id: str, mappings: List[IdentityMapping]) -> List[IdentityMapping]:
+async def do_save_mappings(
+    org_id: str, person_id: str, mappings: List[IdentityMappingRequest]
+) -> List[IdentityMapping]:
     logger.info(f"CALL RECEIVED TO (POST) /organizations/{org_id}/persons/{person_id}/mappings API")
     if service is None:
         raise RuntimeError("Service is not initialized")
-    mappings_created: List[IdentityMapping] = await service.save_mappings(org_id, person_id, mappings)
+    # Hand the service plain DTOs: IdentityMappingRequest exists only to validate the body.
+    to_save = [IdentityMapping(**mapping.model_dump()) for mapping in mappings]
+    mappings_created: List[IdentityMapping] = await service.save_mappings(org_id, person_id, to_save)
     logger.info(f"Mappings saved successfully for person {person_id} in organization {org_id}")
     return mappings_created
 
