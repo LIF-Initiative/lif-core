@@ -1,11 +1,12 @@
-from unittest.mock import patch
+from unittest.mock import AsyncMock, patch
 
 import pytest
 from sqlalchemy import event, func, select
+from sqlalchemy.exc import IntegrityError, OperationalError
 
 from lif.datatypes import IdentityMapping
 from lif.exceptions.core import DataStoreException
-from lif.identity_mapper_storage.core import DeleteOutcome
+from lif.identity_mapper_storage.core import DeleteOutcome, IdentityMappingConflictException
 from lif.identity_mapper_storage_sql import core as storage_core
 from lif.identity_mapper_storage_sql.core import IdentityMapperSqlStorage
 from lif.identity_mapper_storage_sql.model import IdentityMappingModel
@@ -309,15 +310,48 @@ async def test_save_mappings_retries_only_once_when_the_collision_persists(stora
     """
     A collision that survives the retry is not a race, so it must surface rather than loop.
     Asserting the pre-read ran exactly twice is what pins the bound: an unbounded retry
-    passes the `raises` check too.
+    passes the `raises` check too. It surfaces as a conflict, not a datastore failure, so the
+    API can answer 409 rather than 500 (#1261).
     """
     await storage.save_mappings([_mapping(target_system="sys-1", person_id="ext-racer")])
 
     patcher, calls = _stale_pre_read(stale_calls=99)
     with patcher:
-        with pytest.raises(DataStoreException):
+        with pytest.raises(IdentityMappingConflictException):
             await storage.save_mappings([_mapping(target_system="sys-1", person_id="ext-1")])
 
     assert len(calls) == 2
     fetched = await storage.get_mappings("org-1", "person-1")
     assert [(m.target_system_id, m.target_system_person_id) for m in fetched] == [("sys-1", "ext-racer")]
+
+
+@pytest.mark.asyncio
+async def test_save_mapping_surfaces_a_persistent_collision_as_a_conflict(storage: IdentityMapperSqlStorage):
+    """The single-mapping path has its own broad `except`, which must not swallow the conflict."""
+    await storage.save_mappings([_mapping(target_system="sys-1", person_id="ext-racer")])
+
+    patcher, _ = _stale_pre_read(stale_calls=99)
+    with patcher:
+        with pytest.raises(IdentityMappingConflictException):
+            await storage.save_mapping(_mapping(target_system="sys-1", person_id="ext-1"))
+
+
+@pytest.mark.asyncio
+async def test_save_mappings_non_integrity_error_on_retry_is_datastore_exception(storage: IdentityMapperSqlStorage):
+    """
+    Only an IntegrityError on the retry is a conflict. Any other failure there is a datastore
+    error and must stay a 500, so the 409 cannot widen to cover an outage (#1261). The other
+    tests pass with the retry's `except IntegrityError` widened to `except Exception`; this
+    one does not.
+    """
+    attempt = AsyncMock(
+        side_effect=[
+            IntegrityError("INSERT", {}, Exception("uq_identity_mapping")),
+            OperationalError("INSERT", {}, Exception("connection lost")),
+        ]
+    )
+    with patch.object(storage, "_save_mappings_once", attempt):
+        with pytest.raises(DataStoreException) as info:
+            await storage.save_mappings([_mapping()])
+    assert not isinstance(info.value, IdentityMappingConflictException)
+    assert attempt.await_count == 2

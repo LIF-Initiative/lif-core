@@ -33,6 +33,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Identity Mapper `POST .../mappings` answers `409` when a natural-key collision with a concurrent
+  save survives the one retry, instead of the generic `500` with a correlation UUID, so a caller can
+  tell a retryable conflict from a datastore failure
 - The GraphQL update mutation no longer relays the Query Planner's error body to the caller: a failed
   `update<Root>` now reports `Mutation failed: <status>`, with the body in the server log only,
   matching the query path since #1291
