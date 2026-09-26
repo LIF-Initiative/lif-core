@@ -16,14 +16,70 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Pull request template with comprehensive contribution guidelines
 - MIGRATION.md for tracking breaking changes and upgrade paths
 - CHANGELOG.md for tracking all notable changes
+- MDR UI: the bulk-transformation preview validates the assembled output against the target LIF
+  JSON Schema and lists any issues beneath the output pane. Type, enum and unexpected-property
+  violations are reported by default; missing required properties are opt-in via a "Check
+  completeness" toggle, because the preview is an intentionally partial document. `format` is not
+  validated, matching the runtime translator, which calls `jsonschema.validate` without a
+  `format_checker`
+- Query Planner query statistics record the caller as `client`, from an optional `X-LIF-Client`
+  request header: `unknown` when absent (never a rejected query), `invalid` when not a short
+  lowercase name. Learner Data Export sends `learner-data-export`, the MCP server
+  `semantic-search-mcp`, and GraphQL forwards its caller's name or sends `graphql`
+- Query Planner query statistics record the organization as `org_key`, from a new optional
+  `LIF_ORG_KEY` (the stack's `OrganizationName`: `org1`/`org2`/`org3`), so the per-org planners'
+  events no longer collapse into one bucket. Unset or blank records `unknown`. Deployed
+  environments pick it up only when `aws-deploy.sh` updates the Query Planner stacks
 
 ### Changed
+
+- Query Planner `/query` and `/query_async` mark an answer served from cache without the
+  requested fields with an `X-LIF-Partial` header (`no_sources_available` or
+  `orchestrator_submission_failed`; on `/query` also `source_failed`, for a source that failed during
+  the orchestration run), so a partial answer can be told apart from a complete one. When a
+  transient failure leaves nothing to return, they now return `503` instead of an empty `200`
+- Identity Mapper `save_mappings` is now all-or-nothing: a single transaction with a single commit,
+  so a mid-batch failure rolls back the entire batch instead of leaving partial saves; storage DB
+  work is offloaded off the FastAPI event loop via `asyncio.to_thread`, and per-request delete/read
+  round trips are reduced
+- Identity Mapper `save_mappings` stages all inserts and flushes once instead of flushing per row;
+  the mapping id is generated in Python rather than by the column default. Measured against MariaDB,
+  a 500-mapping batch goes from 12801 ms to 159 ms (~80x) and from 501 SQL statements to 2
+- Identity Mapper `save_mappings` returns one entry per persisted row, so duplicate keys in one
+  batch no longer produce two response entries for the same row
+- `IDENTITY_MAPPER_DB_POOL_PRE_PING` now defaults to `true` and is wired into the ECS task
+  definition, replacing the connection validation lost with the startup `SELECT 1`
+- Identity Mapper storage now runs async SQLAlchemy against the C-extension `asyncmy` driver
+  (`mysql+asyncmy`) instead of sync `pymysql` behind `asyncio.to_thread`; per-request latency is
+  unchanged, but under 50 parallel GETs p95 roughly halves (≈83-239 ms vs ≈314-386 ms) with no
+  contract or status-code changes
+- Identity Mapper schema narrows `lif_organization_id`, `lif_organization_person_id` and
+  `target_system_id` from `VARCHAR(255)` to `VARCHAR(191)`, so `uq_identity_mapping` (2692 bytes,
+  was 3460) fits InnoDB's 3072-byte key limit and is a real B-tree instead of a silently degraded
+  `HASH` index; the DDL now also creates on MySQL 8, which rejected it outright. The unique key
+  serves the org/person read as a leftmost prefix (`type=ref`, rows=5 at 50k rows, as before), so
+  `idx_org_person` is dropped. Values longer than 191 characters in those fields are now rejected
+- **GraphQL error contract:** a non-200 from the Query Planner now surfaces as a GraphQL `errors`
+  entry instead of an empty result set, so callers can tell a backend failure from a learner with
+  genuinely no data. A genuinely empty result still returns an empty list
 
 ### Deprecated
 
 ### Removed
 
 ### Fixed
+
+- Identity Mapper `save_mappings` rejects a `mapping_id` the caller does not own, or one that
+  disagrees with the target system fields sent with it, as a 400 instead of failing the unique
+  constraint as a 500 and discarding the rest of the batch
+- `IDENTITY_MAPPER_DB_CONNECT_ARGS` is parsed from JSON into a dict; the raw string was passed
+  straight to SQLAlchemy, which expects a mapping
+- Identity Mapper schema adds `idx_org_person (lif_organization_id, lif_organization_person_id)`.
+  `uq_identity_mapping` exceeds InnoDB's 3072-byte key limit, so MariaDB degrades it to `USING
+  HASH` and the optimizer cannot use it, making every org/person read a full table scan. Measured
+  at 50k rows: `type=ALL` / 49758 rows / 15.3 ms becomes `type=ref` / 5 rows / ~0.05 ms. Local
+  docker-compose volumes must be recreated (`down -v`) to pick up the new DDL; dev and demo need
+  no migration, as their MariaDB datadir is ephemeral. Superseded by the #1258 entry under Changed, which drops this index
 
 ### Security
 

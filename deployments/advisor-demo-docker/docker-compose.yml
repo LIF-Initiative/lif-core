@@ -23,7 +23,7 @@ x-lif-identity-mapper-api-build-template: &lif-identity-mapper-api-build-templat
     dockerfile: projects/lif_identity_mapper_api/Dockerfile2
 
 x-lif-identity-mapper-api-environment-template: &lif-identity-mapper-api-environment-template
-  IDENTITY_MAPPER_DB_DRIVER: ${IDENTITY_MAPPER_DB_DRIVER:-mysql+pymysql}
+  IDENTITY_MAPPER_DB_DRIVER: ${IDENTITY_MAPPER_DB_DRIVER:-mysql+asyncmy}
   IDENTITY_MAPPER_DB_USERNAME: ${IDENTITY_MAPPER_DB_USERNAME:-myuser}
   IDENTITY_MAPPER_DB_PASSWORD: ${IDENTITY_MAPPER_DB_PASSWORD:-mypass}
   IDENTITY_MAPPER_DB_PORT: ${IDENTITY_MAPPER_DB_PORT:-3306}
@@ -53,7 +53,7 @@ x-lif-graphql-api-build-template: &lif-graphql-api-build-template
     dockerfile: projects/lif_graphql_api/Dockerfile2
 
 x-lif-graphql-api-environment-template: &lif-graphql-api-environment-template
-  LIF_QUERY_TIMEOUT_SECONDS: ${LIF_QUERY_TIMEOUT_SECONDS:-300}
+  LIF_GRAPHQL_CLIENT_TIMEOUT_SECONDS: ${LIF_GRAPHQL_CLIENT_TIMEOUT_SECONDS:-300}
   LIF_GRAPHQL_ROOT_TYPE_NAME: ${LIF_GRAPHQL_ROOT_TYPE_NAME:-Person}
   LIF_MDR_API_URL: ${LIF_MDR_API_URL:-http://lif-mdr-api:8012}
   LIF_MDR_API_AUTH_TOKEN: ${LIF_GRAPHQL__LIF_MDR_API_AUTH_TOKEN:-changeme1}
@@ -214,9 +214,13 @@ services:
     container_name: lif-query-planner-org1
     environment:
       LIF_QUERY_CACHE_URL: http://lif-query-cache-org1:8001
+      LIF_ORG_KEY: org1
       LIF_ORCHESTRATOR_URL: ${LIF_ORCHESTRATOR_URL:-http://lif-orchestrator-api-org1:8005}
       LIF_QUERY_PLANNER_INFORMATION_SOURCES_CONFIG_PATH: ${LIF_QUERY_PLANNER_INFORMATION_SOURCES_CONFIG_PATH:-/opt/app/information_sources_config.yml}
+      # 120, not the 300s code default -- see the ALB idle-timeout note in
+      # cloudformation/lif-query-planner-taskdef-includes.yml
       LIF_QUERY_TIMEOUT_SECONDS: ${LIF_QUERY_TIMEOUT_SECONDS:-120}
+      LIF_SERVICE_REQUEST_TIMEOUT_SECONDS: ${LIF_SERVICE_REQUEST_TIMEOUT_SECONDS:-10}
     ports:
       - "8002:8002"
     depends_on:
@@ -231,8 +235,12 @@ services:
     container_name: lif-query-planner-org2
     environment:
       LIF_QUERY_CACHE_URL: http://lif-query-cache-org2:8001
+      LIF_ORG_KEY: org2
       LIF_QUERY_PLANNER_INFORMATION_SOURCES_CONFIG_PATH: ${LIF_QUERY_PLANNER_INFORMATION_SOURCES_CONFIG_PATH:-/opt/app/information_sources_config.yml}
+      # 120, not the 300s code default -- see the ALB idle-timeout note in
+      # cloudformation/lif-query-planner-taskdef-includes.yml
       LIF_QUERY_TIMEOUT_SECONDS: ${LIF_QUERY_TIMEOUT_SECONDS:-120}
+      LIF_SERVICE_REQUEST_TIMEOUT_SECONDS: ${LIF_SERVICE_REQUEST_TIMEOUT_SECONDS:-10}
     ports:
       - "8102:8002"
     depends_on:
@@ -247,8 +255,12 @@ services:
     container_name: lif-query-planner-org3
     environment:
       LIF_QUERY_CACHE_URL: http://lif-query-cache-org3:8001
+      LIF_ORG_KEY: org3
       LIF_QUERY_PLANNER_INFORMATION_SOURCES_CONFIG_PATH: ${LIF_QUERY_PLANNER_INFORMATION_SOURCES_CONFIG_PATH:-/opt/app/information_sources_config.yml}
+      # 120, not the 300s code default -- see the ALB idle-timeout note in
+      # cloudformation/lif-query-planner-taskdef-includes.yml
       LIF_QUERY_TIMEOUT_SECONDS: ${LIF_QUERY_TIMEOUT_SECONDS:-120}
+      LIF_SERVICE_REQUEST_TIMEOUT_SECONDS: ${LIF_SERVICE_REQUEST_TIMEOUT_SECONDS:-10}
     ports:
       - "8202:8002"
     depends_on:
@@ -266,7 +278,6 @@ services:
     environment:
       <<: *lif-graphql-api-environment-template
       LIF_QUERY_PLANNER_URL: http://lif-query-planner-org1:8002
-      LIF_QUERY_TIMEOUT_SECONDS: ${LIF_QUERY_TIMEOUT:-60}
     depends_on:
       lif-query-planner-org1:
         condition: service_started
@@ -425,7 +436,8 @@ services:
       LIF_ADVISOR_MAX_CONVERSATION_SIZE: ${LIF_ADVISOR_MAX_CONVERSATION_SIZE:-2048}
       LIF_ADVISOR_MAX_SUMMARY_SIZE: ${LIF_ADVISOR_MAX_SUMMARY_SIZE:-1024}
       OPENAI_API_KEY: ${OPENAI_API_KEY}
-      LIF_DEMO_USER_PASSWORD: ${LIF_DEMO_USER_PASSWORD:-changeme}
+      LIF_DEMO_USER_PASSWORD: ${LIF_DEMO_USER_PASSWORD:?set it in your .env - no default, see issue 1191}
+      SECRET_KEY: ${SECRET_KEY:?signs the Advisor JWTs; set it in your .env - no default, see issue 1191}
       CONFIG_KEY_STORE: ${CONFIG_KEY_STORE:-/etc/keys}
     ports:
       - "8004:8004"
@@ -494,6 +506,7 @@ services:
       POSTGRESQL_HOST: ${LIF_MDR__API__DATABASE_HOST:-lif-mdr-database}
       POSTGRESQL_PORT: ${LIF_MDR__API__DATABASE_PORT:-5432}
       POSTGRESQL_DB: ${LIF_MDR__API__DATABASE_DBNAME:-LIF}
+      SQLALCHEMY_ECHO: ${SQLALCHEMY_ECHO:-false}
       CORS_ALLOW_ORIGINS: ${CORS_ALLOW_ORIGINS:-http://localhost:3000,http://localhost:5173,http://localhost:8080,https://mdr.lif.unicon.net,https://mdr.demo.lif.unicon.net/}
       CORS_ALLOW_CREDENTIALS: ${CORS_ALLOW_CREDENTIALS:-true}
       CORS_ALLOW_METHODS: ${CORS_ALLOW_METHODS:-GET,POST,PUT,DELETE,OPTIONS,PATCH}
@@ -511,7 +524,7 @@ services:
       # not be marked Secure (browsers drop Secure cookies on plaintext).
       MDR__COOKIE__SECURE: ${MDR__COOKIE__SECURE:-false}
       MDR__INVITE__TOKEN_MAX_AGE_SECONDS: ${MDR__INVITE__TOKEN_MAX_AGE_SECONDS:-604800}
-      LIF_DEMO_USER_PASSWORD: ${LIF_DEMO_USER_PASSWORD:-changeme}
+      LIF_DEMO_USER_PASSWORD: ${LIF_DEMO_USER_PASSWORD:?set it in your .env - no default, see issue 1191}
     ports:
       - "8012:8012"
     networks:
@@ -535,6 +548,7 @@ services:
       context: ../../frontends/mdr-frontend
       args:
         LIF_MDR_API_URL: ${LIF_MDR_API_URL:-http://localhost:8012} # Web client needs to access the API outside the container
+        LDE_API_URL: ${LDE_API_URL:-http://localhost:8013} # Web client needs to access the API outside the container
     container_name: lif-mdr-app
     ports:
       - "5173:80"

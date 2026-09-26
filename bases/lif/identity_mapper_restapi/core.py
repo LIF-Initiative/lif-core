@@ -4,7 +4,9 @@ from uuid import uuid4
 
 from fastapi import FastAPI, Request, status
 from fastapi.responses import JSONResponse
-from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy import text
+from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.ext.asyncio import async_sessionmaker
 
 from lif.datatypes import IdentityMapping
 from lif.exceptions.core import DataNotFoundException, LIFException
@@ -21,27 +23,55 @@ service: IdentityMapperService | None = None
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    initialize()
+    await initialize()
     yield
-    shutdown()
+    await shutdown()
 
 
-def initialize():
-    initialize_database()
-    session_factory: sessionmaker[Session] = get_db_session_factory()
+async def initialize():
+    await initialize_database()
+    session_factory: async_sessionmaker = get_db_session_factory()
     global storage
     global service
     storage = IdentityMapperSqlStorage(session_factory)
     service = IdentityMapperService(storage=storage)
 
 
-def shutdown():
-    dispose_db_engine()
+async def shutdown():
+    await dispose_db_engine()
 
 
 app = FastAPI(lifespan=lifespan)
 logger = get_logger(__name__)
 logger.info("Identity Mapper REST API service initialized successfully")
+
+
+async def database_roundtrip() -> None:
+    session_factory: async_sessionmaker = get_db_session_factory()
+    async with session_factory() as session:
+        await session.execute(text("SELECT 1"))
+
+
+@app.get("/health")
+async def check_health() -> JSONResponse:
+    """
+    Liveness check against the real database.
+
+    Runs a SELECT 1 through the async session factory so a hung or unreachable database
+    reports unhealthy instead of stalling the loop — and the container HEALTHCHECK / load
+    balancer can restart the task. The driver is async (#1199), so this awaits the round
+    trip directly rather than offloading a blocking call to a thread.
+
+    Only database errors become 503. A wiring mistake raises out to the global handler as
+    a 500 instead: reporting it as "database unreachable" is what hid the sync/async
+    session mismatch behind a permanently unhealthy task (#1234 + #1199).
+    """
+    try:
+        await database_roundtrip()
+    except SQLAlchemyError as e:
+        logger.error(f"Health check failed, database unreachable: {e}")
+        return JSONResponse(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, content={"status": "unhealthy"})
+    return JSONResponse(status_code=status.HTTP_200_OK, content={"status": "ok"})
 
 
 @app.post(

@@ -8,7 +8,7 @@ Authenticated HTTP client for calling the LIF GraphQL API. Wraps the boilerplate
 from lif.graphql_client import graphql_query, graphql_mutation, GraphQLClientException
 ```
 
-Both functions send `X-API-Key` from `LIF_GRAPHQL_API_KEY` (when set) as the auth header — see CLAUDE.md § "GraphQL API Key Authentication" for the server-side configuration.
+Both functions send `X-API-Key` from `LIF_GRAPHQL_API_KEY` (when set) as the auth header — see CLAUDE.md § "GraphQL API Key Authentication" for the server-side configuration. They also always send `X-LIF-Client: semantic-search-mcp`, which GraphQL forwards so the Query Planner's statistics can tell this traffic apart (#1272).
 
 | Function | Purpose |
 |---|---|

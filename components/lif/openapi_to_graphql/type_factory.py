@@ -45,7 +45,21 @@ from lif.string_utils import (
 logger = get_logger(__name__)
 
 
-LIF_QUERY_TIMEOUT_SECONDS = int(os.getenv("LIF_QUERY_TIMEOUT_SECONDS", "20"))
+# TRANSITIONAL (#1203): fall back to the old shared name while deployed task definitions
+# still carry it. CI builds and redeploys the image on merge but never updates the
+# CloudFormation stack -- `aws-deploy.sh` does, by hand -- so without this fallback the new
+# image would read an unset variable and silently drop from the deployed 300s to the 20s
+# default. Remove the fallback once every environment's taskdef sets the new name.
+LIF_GRAPHQL_CLIENT_TIMEOUT_SECONDS = int(
+    os.getenv("LIF_GRAPHQL_CLIENT_TIMEOUT_SECONDS") or os.getenv("LIF_QUERY_TIMEOUT_SECONDS") or "20"
+)
+
+# Callers name themselves to the Query Planner's statistics in this header (#1272). GraphQL
+# forwards the name it received, so a query that arrives through here -- the MCP server's --
+# keeps its origin; it names itself only when its own caller did not. Validating the value is
+# the planner's job, not this relay's.
+LIF_CLIENT_HEADER = "X-LIF-Client"
+LIF_CLIENT_NAME = "graphql"
 
 
 # === Constants ===
@@ -761,6 +775,19 @@ def create_input_type(
     return create_nested_input_type(type_name, schema, openapi, created_types, input_type_cache)
 
 
+def lif_client_headers(info: Any) -> Dict[str, str]:
+    """
+    The X-LIF-Client header to send the Query Planner: the incoming one, else this service's name.
+
+    Strawberry's FastAPI router puts the request in `info.context["request"]`; a schema
+    executed without one (tests, scripts) simply names itself.
+    """
+    context = info.context if isinstance(info.context, dict) else {}
+    request = context.get("request")
+    incoming = request.headers.get(LIF_CLIENT_HEADER) if request is not None else None
+    return {LIF_CLIENT_HEADER: incoming or LIF_CLIENT_NAME}
+
+
 # === Root Query Type Construction ===
 
 
@@ -814,8 +841,8 @@ def build_root_query_type(
 
             logger.info(f"Query: {query}")
             # Make the backend API call
-            async with httpx.AsyncClient(timeout=httpx.Timeout(LIF_QUERY_TIMEOUT_SECONDS)) as client:
-                response = await client.post(query_planner_query_url, json=query)
+            async with httpx.AsyncClient(timeout=httpx.Timeout(LIF_GRAPHQL_CLIENT_TIMEOUT_SECONDS)) as client:
+                response = await client.post(query_planner_query_url, json=query, headers=lif_client_headers(info))
 
             if response.status_code == 200:
                 response_json = response.json()
@@ -858,9 +885,14 @@ def build_root_query_type(
                 # print(f"Result objects: {result_objs}")
                 return result_objs
             else:
-                # Log error if the backend request fails
+                # Raise rather than return []: a bare empty list is indistinguishable from a
+                # learner who genuinely has no data, so every backend failure looked like a
+                # successful empty result to the caller (#1264). Strawberry turns this into a
+                # GraphQL `errors` entry, matching what the update mutation below already does.
+                # The body stays in the log only: the QP builds it from str(e), and Strawberry
+                # relays the exception message to the caller verbatim.
                 logger.error(f"Query failed: {response.status_code} {response.text}")
-                return []
+                raise Exception(f"Query failed: {response.status_code}")
 
         is_nested_list: bool = type_class._name == "List"
         return_type = type_class if is_nested_list else List[type_class]

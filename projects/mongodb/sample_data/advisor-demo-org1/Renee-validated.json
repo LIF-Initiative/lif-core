@@ -3,562 +3,642 @@
     {
       "Name": [
         {
-          "informationSourceId": "Org1",
           "lastName": "Green",
           "firstName": "Renee",
+          "informationSourceId": "Org1",
           "informationSourceOrganization": "State University",
           "identifier": "name-renee-green-org1-001"
         }
       ],
       "Proficiency": [
         {
-          "informationSourceId": "Org1",
           "name": "Accounts Receivable",
           "description": "Accounts Receivable is a specialized skill that involves managing the company's outstanding payments from customers for goods or services provided. The main tasks involved in Accounts Receivable are invoicing customers, tracking payments, maintaining customer records, and following up on overdue invoices. Effective management of Accounts Receivable is essential for maintaining cash flow and ensuring the financial health of the company. It requires a strong attention to detail, excellent organizational skills, and effective communication abilities.",
+          "informationSourceId": "Org1",
           "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
+            "id": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
             "informationSourceId": "Org1",
-            "informationSourceOrganization": "Org1"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org1-001",
+            "name": "Proficiency Certificate"
           },
           "informationSourceOrganization": "State University",
           "identifier": "proficiency-accounts-receivable-org1-001"
         },
         {
-          "informationSourceId": "Org1",
           "name": "Adaptability",
           "description": "Adaptability is a common skill that involves the ability to change and adjust to new situations, tasks, and environments. It is the capacity to be flexible and open-minded in response to changes in work routines, expectations, and demands. Adaptability is valued in the workplace because it allows individuals to quickly and efficiently adapt to new circumstances, problems, and challenges. This skill can be developed and improved over time, and it can be a valuable asset for personal and professional growth.",
+          "informationSourceId": "Org1",
           "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
+            "id": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
             "informationSourceId": "Org1",
-            "informationSourceOrganization": "Org1"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org1-001",
+            "name": "Proficiency Certificate"
           },
           "informationSourceOrganization": "State University",
           "identifier": "proficiency-adaptability-org1-002"
         },
         {
-          "informationSourceId": "Org1",
           "name": "Spreadsheets",
           "description": "Spreadsheets is a software application used for organizing, analyzing and manipulating data in a tabular format. It is commonly used for financial and numerical analysis, budgeting, project management, and other tasks that require the use of tables or charts. Common spreadsheet software includes Microsoft Excel, Google Sheets, and Apple Numbers. Proficiency in using spreadsheets is a valuable skill in many job roles, particularly those that involve data analysis, finance, or administration.",
+          "informationSourceId": "Org1",
           "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
+            "id": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
             "informationSourceId": "Org1",
-            "informationSourceOrganization": "Org1"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org1-001",
+            "name": "Proficiency Certificate"
           },
           "informationSourceOrganization": "State University",
           "identifier": "proficiency-spreadsheets-org1-003"
         },
         {
-          "informationSourceId": "Org1",
           "name": "Customer Service",
           "description": "Customer service is a necessary and common skill in almost every field and industry. It involves effectively communicating with customers to understand their needs, answering their questions or concerns, and providing them with excellent support and service. A successful customer service representative must be patient, empathetic, and knowledgeable about their products or services. Strong customer service skills can lead to increased customer satisfaction, loyalty, and business success.",
+          "informationSourceId": "Org1",
           "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
+            "id": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
             "informationSourceId": "Org1",
-            "informationSourceOrganization": "Org1"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org1-001",
+            "name": "Proficiency Certificate"
           },
           "informationSourceOrganization": "State University",
           "identifier": "proficiency-customer-service-org1-004"
         },
         {
-          "informationSourceId": "Org1",
           "name": "Conflict Resolution",
           "description": "Conflict Resolution is a specialized skill that involves finding solutions to disputes and disagreements between individuals or groups. It involves active listening, empathy, and effective communication to understand the needs and concerns of each party involved in the conflict. A successful conflict resolution requires a neutral and objective approach to finding a mutually beneficial solution that satisfies all parties involved.",
+          "informationSourceId": "Org1",
           "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
+            "id": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
             "informationSourceId": "Org1",
-            "informationSourceOrganization": "Org1"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org1-001",
+            "name": "Proficiency Certificate"
           },
           "informationSourceOrganization": "State University",
           "identifier": "proficiency-conflict-resolution-org1-005"
         },
         {
-          "informationSourceId": "Org1",
           "name": "Creativity",
           "description": "Creativity is a skill that is not limited to certain individuals or professions. Everyone has the ability to be creative in their own way, and it can be improved through practice and exploration. Being creative means generating unique and innovative solutions to problems or tasks, as well as expressing oneself in new and original ways. It is a vital skill in many fields and can enhance personal and professional growth.",
+          "informationSourceId": "Org1",
           "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
+            "id": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
             "informationSourceId": "Org1",
-            "informationSourceOrganization": "Org1"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org1-001",
+            "name": "Proficiency Certificate"
           },
           "informationSourceOrganization": "State University",
           "identifier": "proficiency-creativity-org1-006"
         },
         {
-          "informationSourceId": "Org1",
           "name": "Web Design",
           "description": "Web design involves creating and designing websites that are visually appealing, user-friendly, and optimized for performance. It requires a specialized skill set that includes knowledge of graphic design, coding languages, and user experience. A good web designer must be able to create a website that effectively conveys information, engages users, and drives conversions.",
+          "informationSourceId": "Org1",
           "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
+            "id": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
             "informationSourceId": "Org1",
-            "informationSourceOrganization": "Org1"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org1-001",
+            "name": "Proficiency Certificate"
           },
           "informationSourceOrganization": "State University",
           "identifier": "proficiency-web-design-org1-007"
         },
         {
-          "informationSourceId": "Org1",
           "name": "Logic Synthesis of Circuits",
           "description": "Logic synthesis is the process of translating a high-level design or behavior description of a digital circuit into a low-level implementation using a specific technology, such as field-programmable gate arrays (FPGAs) or application-specific integrated circuits (ASICs). It involves optimizing the circuit for specific design constraints and technology limitations, such as area, power, and timing. Logic synthesis is a specialized skill that requires expertise in digital design, computer architecture, and optimization techniques.",
+          "informationSourceId": "Org1",
           "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
+            "id": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
             "informationSourceId": "Org1",
-            "informationSourceOrganization": "Org1"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org1-001",
+            "name": "Proficiency Certificate"
           },
           "informationSourceOrganization": "State University",
           "identifier": "proficiency-logic-synthesis-of-circuits-org1-008"
         },
         {
-          "informationSourceId": "Org1",
           "name": "Digital Marketing",
           "description": "Digital marketing is a specialized skill that involves promoting a brand, product or service through various digital channels such as search engines, social media, email, and online advertising. It requires knowledge of consumer behavior, search engine algorithms, web analytics, and content marketing strategies. Effective digital marketing can help businesses reach a wider audience, increase brand awareness, drive traffic to their website, and generate leads or sales. It is a dynamic field that requires constant adaptation to changes in technology and consumer behavior.",
+          "informationSourceId": "Org1",
           "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
+            "id": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
             "informationSourceId": "Org1",
-            "informationSourceOrganization": "Org1"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org1-001",
+            "name": "Proficiency Certificate"
           },
           "informationSourceOrganization": "State University",
           "identifier": "proficiency-digital-marketing-org1-009"
         },
         {
-          "informationSourceId": "Org1",
           "name": "Digital Storytelling",
           "description": "Digital Storytelling is a specialized skill that involves using digital tools to create a compelling narrative or story. It requires a combination of technical skills and creativity to bring together images, audio, and video in a way that engages the audience and communicates a message effectively. Digital storytelling is a powerful way to share experiences, educate others, and create meaningful connections between people, and is commonly used in marketing, education, advocacy, and other fields.",
+          "informationSourceId": "Org1",
           "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
+            "id": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
             "informationSourceId": "Org1",
-            "informationSourceOrganization": "Org1"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org1-001",
+            "name": "Proficiency Certificate"
           },
           "informationSourceOrganization": "State University",
           "identifier": "proficiency-digital-storytelling-org1-010"
         },
         {
-          "informationSourceId": "Org1",
           "name": "E-Commerce",
           "description": "E-commerce is the process of buying and selling goods and services online. It is a specialized skill that involves various aspects such as website design, digital marketing, inventory management, order fulfillment, and customer service. It requires a thorough understanding of the online marketplace, consumer behavior, and technology platforms. E-commerce professionals need to be skilled in various areas to succeed in this industry.",
+          "informationSourceId": "Org1",
           "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
+            "id": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
             "informationSourceId": "Org1",
-            "informationSourceOrganization": "Org1"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org1-001",
+            "name": "Proficiency Certificate"
           },
           "informationSourceOrganization": "State University",
           "identifier": "proficiency-e-commerce-org1-011"
         },
         {
-          "informationSourceId": "Org1",
           "name": "Electronic Billing",
           "description": "Electronic billing is a specialized skill that involves generating and transmitting electronic invoices and payments between businesses and their clients. It requires knowledge of electronic data interchange (EDI) standards, software systems, and financial accounting practices. The goal of electronic billing is to reduce costs, increase efficiency, and improve accuracy in the billing process. Skilled professionals in electronic billing are in high demand and play a critical role in the success of businesses that rely on digital invoicing and payments.",
+          "informationSourceId": "Org1",
           "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
+            "id": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
             "informationSourceId": "Org1",
-            "informationSourceOrganization": "Org1"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org1-001",
+            "name": "Proficiency Certificate"
           },
           "informationSourceOrganization": "State University",
           "identifier": "proficiency-electronic-billing-org1-012"
         },
         {
-          "informationSourceId": "Org1",
           "name": "Front Office",
           "description": "Front Office is a specialized skill that involves the management and coordination of all activities that take place at the front desk or reception area of an organization. This includes handling guest inquiries, reservations, check-ins and check-outs, billing and payments, and providing general information about the organization. Front Office personnel must have excellent communication and organizational skills, be able to handle high-stress situations, and maintain a professional and welcoming demeanor at all times. In essence, front office is responsible for creating a positive first impression of the organization and ensuring that guests have a seamless and enjoyable experience.",
+          "informationSourceId": "Org1",
           "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
+            "id": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
             "informationSourceId": "Org1",
-            "informationSourceOrganization": "Org1"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org1-001",
+            "name": "Proficiency Certificate"
           },
           "informationSourceOrganization": "State University",
           "identifier": "proficiency-front-office-org1-013"
         },
         {
-          "informationSourceId": "Org1",
           "name": "General Administrative Support",
+          "informationSourceId": "Org1",
           "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
+            "id": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
             "informationSourceId": "Org1",
-            "informationSourceOrganization": "Org1"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org1-001",
+            "name": "Proficiency Certificate"
           },
           "informationSourceOrganization": "State University",
           "identifier": "proficiency-general-administrative-support-org1-014"
         },
         {
-          "informationSourceId": "Org1",
           "name": "Hospitality Service",
           "description": "Hospitality service is a specialized skill that involves providing excellent customer service, anticipating and meeting guests' needs, and creating a welcoming and comfortable atmosphere for them. It requires a combination of communication, interpersonal, and problem-solving skills, as well as knowledge of the industry and its trends. The goal of hospitality service is to ensure that guests feel valued and satisfied, and ultimately, to create a memorable experience that will encourage them to return in the future.",
+          "informationSourceId": "Org1",
           "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
+            "id": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
             "informationSourceId": "Org1",
-            "informationSourceOrganization": "Org1"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org1-001",
+            "name": "Proficiency Certificate"
           },
           "informationSourceOrganization": "State University",
           "identifier": "proficiency-hospitality-service-org1-015"
         },
         {
-          "informationSourceId": "Org1",
           "name": "Interpersonal Communications",
           "description": "Interpersonal communication is the process of exchanging information, feelings, and meaning through verbal and nonverbal interactions. It is an essential skill that involves the ability to listen actively, speak clearly, and empathize with others. Effective interpersonal communication promotes strong relationships, enhances understanding, and fosters mutual respect between individuals. It is a common skill that is used in personal, social, and professional contexts.",
+          "informationSourceId": "Org1",
           "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
+            "id": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
             "informationSourceId": "Org1",
-            "informationSourceOrganization": "Org1"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org1-001",
+            "name": "Proficiency Certificate"
           },
           "informationSourceOrganization": "State University",
           "identifier": "proficiency-interpersonal-communications-org1-016"
         },
         {
-          "informationSourceId": "Org1",
           "name": "Interpersonal Skills",
+          "informationSourceId": "Org1",
           "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
+            "id": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
             "informationSourceId": "Org1",
-            "informationSourceOrganization": "Org1"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org1-001",
+            "name": "Proficiency Certificate"
           },
           "informationSourceOrganization": "State University",
           "identifier": "proficiency-interpersonal-skills-org1-017"
         },
         {
-          "informationSourceId": "Org1",
           "name": "Problem Solving",
           "description": "Problem solving is the process of identifying, analyzing and resolving problems that can arise in any situation. It is a common skill that is required in many different industries and situations, and involves identifying the root cause of a problem, generating possible solutions, evaluating those solutions and implementing the best one. Successful problem solving involves critical thinking, creativity and communication skills. Learning how to effectively solve problems can help individuals and organizations to more efficiently achieve their goals and objectives.",
+          "informationSourceId": "Org1",
           "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
+            "id": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
             "informationSourceId": "Org1",
-            "informationSourceOrganization": "Org1"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org1-001",
+            "name": "Proficiency Certificate"
           },
           "informationSourceOrganization": "State University",
           "identifier": "proficiency-problem-solving-org1-018"
         },
         {
-          "informationSourceId": "Org1",
           "name": "Personal Attributes Questionnaires",
           "description": "The Personal Attributes Questionnaire (PAQ) is a specialized skill used in the field of industrial-organizational psychology to assess an individual's personal characteristics and traits. The PAQ is a standardized test that measures individual differences in personality traits such as motivation, leadership, social skills, and work ethic. This tool is often used by employers in the hiring process to identify individuals who possess the qualities and characteristics necessary to excel in a particular position. Professionals who administer this assessment must have a thorough understanding of assessment procedures and standards to ensure accurate and reliable results.",
+          "informationSourceId": "Org1",
           "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
+            "id": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
             "informationSourceId": "Org1",
-            "informationSourceOrganization": "Org1"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org1-001",
+            "name": "Proficiency Certificate"
           },
           "informationSourceOrganization": "State University",
           "identifier": "proficiency-personal-attributes-questionna-org1-019"
         },
         {
-          "informationSourceId": "Org1",
           "name": "Phone Support",
           "description": "Phone support is a specialized skill that involves providing assistance and solutions to customers over the phone. It requires effective communication, problem-solving abilities, and technical knowledge to resolve issues efficiently and satisfactorily. A phone support agent must be patient, empathetic, and able to handle challenging situations to ensure a positive customer experience. Successful phone support relies on understanding the customer's needs, diagnosing problems accurately, and providing clear guidance to resolve issues effectively.",
+          "informationSourceId": "Org1",
           "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
+            "id": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
             "informationSourceId": "Org1",
-            "informationSourceOrganization": "Org1"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org1-001",
+            "name": "Proficiency Certificate"
           },
           "informationSourceOrganization": "State University",
           "identifier": "proficiency-phone-support-org1-020"
         },
         {
-          "informationSourceId": "Org1",
           "name": "Passionate",
+          "informationSourceId": "Org1",
           "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
+            "id": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
             "informationSourceId": "Org1",
-            "informationSourceOrganization": "Org1"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org1-001",
+            "name": "Proficiency Certificate"
           },
           "informationSourceOrganization": "State University",
           "identifier": "proficiency-passionate-org1-021"
         },
         {
-          "informationSourceId": "Org1",
           "name": "Telephone Call Reception Management",
           "description": "Text Kernel Skill",
+          "informationSourceId": "Org1",
           "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
+            "id": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
             "informationSourceId": "Org1",
-            "informationSourceOrganization": "Org1"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org1-001",
+            "name": "Proficiency Certificate"
           },
           "informationSourceOrganization": "State University",
           "identifier": "proficiency-telephone-call-reception-manag-org1-022"
         },
         {
-          "informationSourceId": "Org1",
           "name": "Healthcare Electronic Billing",
           "description": "Text Kernel Skill",
+          "informationSourceId": "Org1",
           "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
+            "id": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
             "informationSourceId": "Org1",
-            "informationSourceOrganization": "Org1"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org1-001",
+            "name": "Proficiency Certificate"
           },
           "informationSourceOrganization": "State University",
           "identifier": "proficiency-healthcare-electronic-billing-org1-023"
         },
         {
-          "informationSourceId": "Org1",
           "name": "Thought Leadership",
           "description": "Thought Leadership is the ability to lead, inspire and influence others by providing innovative and insightful ideas and perspectives in a particular field or industry. It requires a combination of expertise, strategic thinking, and effective communication skills to establish oneself as a thought leader in a specific niche. Thought leaders often publish articles, speak at conferences, engage with their audience on social media, and demonstrate their expertise in other ways to establish credibility and influence.",
+          "informationSourceId": "Org1",
           "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
+            "id": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
             "informationSourceId": "Org1",
-            "informationSourceOrganization": "Org1"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org1-001",
+            "name": "Proficiency Certificate"
           },
           "informationSourceOrganization": "State University",
           "identifier": "proficiency-thought-leadership-org1-024"
         },
         {
-          "informationSourceId": "Org1",
           "name": "Oral Communication",
+          "informationSourceId": "Org1",
           "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
+            "id": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
             "informationSourceId": "Org1",
-            "informationSourceOrganization": "Org1"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org1-001",
+            "name": "Proficiency Certificate"
           },
           "informationSourceOrganization": "State University",
           "identifier": "proficiency-oral-communication-org1-025"
         },
         {
-          "informationSourceId": "Org1",
           "name": "Written Communication",
+          "informationSourceId": "Org1",
           "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
+            "id": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
             "informationSourceId": "Org1",
-            "informationSourceOrganization": "Org1"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org1-001",
+            "name": "Proficiency Certificate"
           },
           "informationSourceOrganization": "State University",
           "identifier": "proficiency-written-communication-org1-026"
         },
         {
-          "informationSourceId": "Org1",
           "name": "Customer Support",
           "description": "Customer support is a specialized skill that involves providing assistance, guidance and solutions to customers who may have inquiries, problems or complaints. It requires strong communication skills, patience, empathy and problem-solving abilities. Customer support is crucial for ensuring customer satisfaction and loyalty, and it is a key aspect of many businesses' success.",
+          "informationSourceId": "Org1",
           "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
+            "id": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
             "informationSourceId": "Org1",
-            "informationSourceOrganization": "Org1"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org1-001",
+            "name": "Proficiency Certificate"
           },
           "informationSourceOrganization": "State University",
           "identifier": "proficiency-customer-support-org1-027"
         },
         {
-          "informationSourceId": "Org1",
           "name": "Communications",
           "description": "Communication is a vital skill that involves exchanging information through speaking, writing or non-verbal means. It is crucial for building relationships, conveying ideas, clarifying misunderstandings, and achieving goals. Effective communication requires active listening, clear and concise expression, empathy, and persuasion skills. It is applicable in all aspects of life, including personal relationships, social interactions, and professional settings.",
+          "informationSourceId": "Org1",
           "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
+            "id": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
             "informationSourceId": "Org1",
-            "informationSourceOrganization": "Org1"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org1-001",
+            "name": "Proficiency Certificate"
           },
           "informationSourceOrganization": "State University",
           "identifier": "proficiency-communications-org1-028"
         },
         {
-          "informationSourceId": "Org1",
           "name": "Influencing Skills",
           "description": "Influencing skills refer to the ability to persuade or convince others to support an idea, decision or action. This involves understanding the perspectives and needs of others, communicating effectively, building trust and rapport, and using various techniques such as negotiation and persuasion to achieve the desired outcome. Influencing skills are commonly required in various personal and professional settings, such as leadership, sales, marketing, and teamwork.",
+          "informationSourceId": "Org1",
           "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
+            "id": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
             "informationSourceId": "Org1",
-            "informationSourceOrganization": "Org1"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org1-001",
+            "name": "Proficiency Certificate"
           },
           "informationSourceOrganization": "State University",
           "identifier": "proficiency-influencing-skills-org1-029"
         },
         {
-          "informationSourceId": "Org1",
           "name": "Goal Oriented",
+          "informationSourceId": "Org1",
           "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
+            "id": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
             "informationSourceId": "Org1",
-            "informationSourceOrganization": "Org1"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org1-001",
+            "name": "Proficiency Certificate"
           },
           "informationSourceOrganization": "State University",
           "identifier": "proficiency-goal-oriented-org1-030"
         },
         {
-          "informationSourceId": "Org1",
           "name": "Teamwork",
           "description": "Teamwork is the ability to work effectively and harmoniously with others towards a common goal. It involves being cooperative, communicative, and collaborative, as well as being able to contribute to and participate in group decision-making processes. Teamwork is a valued skill in many workplaces and is essential for successful project completion and overall business success.",
+          "informationSourceId": "Org1",
           "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
+            "id": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
             "informationSourceId": "Org1",
-            "informationSourceOrganization": "Org1"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org1-001",
+            "name": "Proficiency Certificate"
           },
           "informationSourceOrganization": "State University",
           "identifier": "proficiency-teamwork-org1-031"
         },
         {
-          "informationSourceId": "Org1",
           "name": "Persuasive Communication",
           "description": "Persuasive communication refers to the ability to convince others to take a certain course of action or persuade them to believe in a particular idea or viewpoint. This skill is commonly used in various settings such as politics, advertising, sales, and public speaking. Effective persuasive communication involves understanding the audience, identifying their needs and values, presenting compelling arguments, using persuasive techniques such as storytelling and emotional appeals, and addressing potential objections. It is a valuable skill to have in personal and professional life as it can lead to successful negotiations, increased influence, and improved relationships.",
+          "informationSourceId": "Org1",
           "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
+            "id": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
             "informationSourceId": "Org1",
-            "informationSourceOrganization": "Org1"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org1-001",
+            "name": "Proficiency Certificate"
           },
           "informationSourceOrganization": "State University",
           "identifier": "proficiency-persuasive-communication-org1-032"
         },
         {
-          "informationSourceId": "Org1",
           "name": "Analytical Techniques",
           "description": "Analytical techniques involve the use of specialized skills and methods to analyze data and information. These techniques enable individuals to identify patterns, trends, and relationships in data, as well as to draw insights and make informed decisions. Such skills require a deep understanding of statistics, data modeling, and visualization techniques, as well as the ability to apply critical thinking and logic to complex problems. Effective use of analytical techniques can help businesses and organizations to improve their operations, identify new opportunities, and make informed decisions based on data-driven insights.",
+          "informationSourceId": "Org1",
           "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
+            "id": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
             "informationSourceId": "Org1",
-            "informationSourceOrganization": "Org1"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org1-001",
+            "name": "Proficiency Certificate"
           },
           "informationSourceOrganization": "State University",
           "identifier": "proficiency-analytical-techniques-org1-033"
         },
         {
-          "informationSourceId": "Org1",
           "name": "Client Services",
           "description": "Client services is a specialized skill that involves providing high-quality customer service and support to clients or customers. This includes communication, problem-solving, customer satisfaction, relationship management, and ensuring that clients' needs are met. It involves understanding the client's goals, expectations, and preferences to develop a strategy that can lead to better outcomes and maintain long-term relationships. It is important to provide efficient and reliable assistance to clients to ensure their trust and loyalty.",
+          "informationSourceId": "Org1",
           "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
+            "id": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
             "informationSourceId": "Org1",
-            "informationSourceOrganization": "Org1"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org1-001",
+            "name": "Proficiency Certificate"
           },
           "informationSourceOrganization": "State University",
           "identifier": "proficiency-client-services-org1-034"
         },
         {
-          "informationSourceId": "Org1",
           "name": "Stress Management",
           "description": "Stress management is the ability to cope with stressors and challenges in a healthy manner. It involves a range of techniques and strategies, such as mindfulness, exercise, and time management, that help individuals reduce stress and maintain a sense of balance and wellbeing. Effective stress management can improve mental and physical health, enhance productivity and performance, and lead to overall greater satisfaction with life.",
+          "informationSourceId": "Org1",
           "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
+            "id": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
             "informationSourceId": "Org1",
-            "informationSourceOrganization": "Org1"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org1-001",
+            "name": "Proficiency Certificate"
           },
           "informationSourceOrganization": "State University",
           "identifier": "proficiency-stress-management-org1-035"
         },
         {
-          "informationSourceId": "Org1",
           "name": "Bookkeeping",
           "description": "Bookkeeping is the process of recording and organizing financial transactions for a business or organization. It involves keeping accurate records of income and expenses, creating financial statements, and reconciling accounts. Bookkeeping requires specialized skills such as attention to detail, analytical skills, and proficiency in accounting software. It is essential for businesses to maintain an accurate record of their finances to make informed decisions, stay compliant with tax laws, and monitor business performance.",
+          "informationSourceId": "Org1",
           "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
+            "id": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
             "informationSourceId": "Org1",
-            "informationSourceOrganization": "Org1"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org1-001",
+            "name": "Proficiency Certificate"
           },
           "informationSourceOrganization": "State University",
           "identifier": "proficiency-bookkeeping-org1-036"
         },
         {
-          "informationSourceId": "Org1",
           "name": "Customer Billing",
+          "informationSourceId": "Org1",
           "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
+            "id": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
             "informationSourceId": "Org1",
-            "informationSourceOrganization": "Org1"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org1-001",
+            "name": "Proficiency Certificate"
           },
           "informationSourceOrganization": "State University",
           "identifier": "proficiency-customer-billing-org1-037"
         },
         {
-          "informationSourceId": "Org1",
           "name": "Billing",
           "description": "Billing is the process of generating invoices or bills for goods or services provided by a business to its clients or customers. It involves gathering all the necessary information related to the transaction, calculating costs, and creating accurate invoices. Effective billing requires specialized knowledge of accounting principles, billing software, and legal and regulatory compliance. It is an important aspect of business operations as it ensures timely payment and helps maintain financial stability.",
+          "informationSourceId": "Org1",
           "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
+            "id": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
             "informationSourceId": "Org1",
-            "informationSourceOrganization": "Org1"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org1-001",
+            "name": "Proficiency Certificate"
           },
           "informationSourceOrganization": "State University",
           "identifier": "proficiency-billing-org1-038"
         },
         {
-          "informationSourceId": "Org1",
           "name": "Learning Agility",
           "description": "Learning Agility is a skill that refers to an individual's ability to rapidly learn and adapt to new situations or tasks that they have no prior experience with. It is the ability to learn from experience, and apply those lessons to new or unfamiliar situations. Those who possess strong learning agility can quickly acclimate to new environments, learn new skills, and adapt to changing circumstances with ease. It is considered a crucial skill in today's fast-paced, ever-changing work environment and is highly valued by employers.",
+          "informationSourceId": "Org1",
           "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
+            "id": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
             "informationSourceId": "Org1",
-            "informationSourceOrganization": "Org1"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org1-001",
+            "name": "Proficiency Certificate"
           },
           "informationSourceOrganization": "State University",
           "identifier": "proficiency-learning-agility-org1-039"
         },
         {
-          "informationSourceId": "Org1",
           "name": "Medical Coding",
+          "informationSourceId": "Org1",
           "RefCredentialAward": {
-            "identifier": "cred-proficiency-certificate-001",
+            "id": "cred-proficiency-certificate-001",
             "awardIssueDate": "2024-12-15T10:00:00Z",
             "credentialAwardee": "Renee Green",
             "informationSourceId": "Org1",
-            "informationSourceOrganization": "Org1"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-proficiency-certificate-0-org1-001",
+            "name": "Proficiency Certificate"
           },
           "informationSourceOrganization": "State University",
           "identifier": "proficiency-medical-coding-org1-040"
@@ -568,27 +648,34 @@
         {
           "Email": [
             {
-              "informationSourceId": "Org1",
               "emailAddress": [
                 "Rgreen11Fdemo@stateu.edu"
-              ]
+              ],
+              "informationSourceId": "Org1",
+              "informationSourceOrganization": "State University",
+              "identifier": "email-renee-green-org1-001"
             }
           ],
           "Address": [
             {
-              "informationSourceId": "Org1",
               "addressCity": "Escondido",
               "countryCode": "US",
               "addressState": "California",
-              "addressPostalCode": "92025"
+              "addressPostalCode": "92025",
+              "informationSourceId": "Org1",
+              "addressStreet": "300 N Broadway",
+              "informationSourceOrganization": "State University",
+              "identifier": "address-renee-green-org1-001"
             }
           ],
           "Telephone": [
             {
-              "informationSourceId": "Org1",
               "telephoneNumber": [
                 "+13331234567"
-              ]
+              ],
+              "informationSourceId": "Org1",
+              "informationSourceOrganization": "State University",
+              "identifier": "telephone-renee-green-org1-001"
             }
           ],
           "informationSourceId": "Org1",
@@ -607,18 +694,14 @@
       "CourseLearningExperience": [
         {
           "AssertedByRefOrganization": {
-            "informationSourceId": "Org1",
             "name": "State University",
             "identificationSystem": "State University SIS",
             "organizationType": [],
+            "informationSourceId": "Org1",
             "informationSourceOrganization": "State University",
             "identifier": "organization-state-university-org1-001"
           },
           "RefCourse": {
-            "informationSourceId": "Org1",
-            "informationSourceOrganization": "Org1",
-            "identifier": "CS651",
-            "name": "Computer Science 651",
             "Identifier": [
               {
                 "identifier": "CS651",
@@ -626,9 +709,14 @@
                 "identifierVerification": [
                   "Academic Records"
                 ],
-                "informationSourceId": "Org1"
+                "informationSourceId": "Org1",
+                "informationSourceOrganization": "State University"
               }
-            ]
+            ],
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "name": "Course CS651",
+            "identifier": "course-cs651-org1-legacy-001"
           },
           "OfferedByRefOrganization": {
             "identificationSystem": "stateu-state-university-id",
@@ -642,14 +730,17 @@
           },
           "informationSourceId": "Org1",
           "RefCredentialAward": {
+            "id": "23016863-b70f-4014-a4c9-e5d6bd7823fe",
+            "awardIssueDate": "2021-07-28T23:28:14Z",
+            "credentialAwardee": "Renee Green",
             "informationSourceId": "Org1",
-            "informationSourceOrganization": "Org1",
-            "identifier": "f5d42e6a-d6bd-4a34-a910-dfd12adbb708",
-            "awardIssueDate": "2021-03-24",
-            "credentialAwardee": "Renee Green"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-23016863-b70f-4014-a4c9-e5d6bd-org1-001",
+            "name": "Course CS651 Credential Award"
           },
           "informationSourceOrganization": "State University",
-          "identifier": "courselearningexperience-org1-001"
+          "identifier": "courselearningexperience-org1-001",
+          "name": "Course CS651"
         },
         {
           "OfferedByRefOrganization": {
@@ -664,30 +755,17 @@
           },
           "informationSourceId": "Org1",
           "RefCredentialAward": {
+            "id": "0579b255-3106-4855-bf66-d9d1a64bc1f8",
+            "awardIssueDate": "2024-11-06",
+            "credentialAwardee": "Renee Green",
             "informationSourceId": "Org1",
-            "informationSourceOrganization": "Org1",
-            "identifier": "3cc9234a-4a0c-4171-846b-77d28d9aceb0",
-            "awardIssueDate": "2022-02-15T19:22:24Z",
-            "credentialAwardee": "Renee Green"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-0579b255-3106-4855-bf66-d9d1a6-org1-001",
+            "name": "State University Course Credential Award"
           },
           "informationSourceOrganization": "State University",
           "identifier": "courselearningexperience-org1-002",
-          "RefCourse": {
-            "informationSourceId": "Org1",
-            "informationSourceOrganization": "State University",
-            "identifier": "COURSE002",
-            "name": "Course 2",
-            "Identifier": [
-              {
-                "identifier": "COURSE002",
-                "identifierType": "Course Code",
-                "identifierVerification": [
-                  "Academic Records"
-                ],
-                "informationSourceId": "Org1"
-              }
-            ]
-          }
+          "name": "State University Course"
         },
         {
           "OfferedByRefOrganization": {
@@ -702,92 +780,614 @@
           },
           "informationSourceId": "Org1",
           "RefCredentialAward": {
+            "id": "9b7c972a-49bb-4d8c-80e2-286070e4fe78",
+            "awardIssueDate": "2020-09-10",
+            "credentialAwardee": "Renee Green",
             "informationSourceId": "Org1",
-            "informationSourceOrganization": "Org1",
-            "identifier": "c9efcc1d-e6af-492f-8a1b-04006feadce3",
-            "awardIssueDate": "2022-01-13",
-            "credentialAwardee": "Renee Green"
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-9b7c972a-49bb-4d8c-80e2-286070-org1-001",
+            "name": "State University Course Credential Award"
           },
           "informationSourceOrganization": "State University",
           "identifier": "courselearningexperience-org1-003",
+          "name": "State University Course"
+        },
+        {
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "courselearningexperience-hit101-org1-101",
+          "name": "Medical Terminology",
+          "type": "Postsecondary course",
+          "startDate": "2018-08-27",
+          "enrollmentStatusType": "Completed",
+          "courseTotal": "3",
+          "creditUnitType": "Semester credit hours",
+          "courseSectionNumber": "HIT101-01",
+          "institution": "State University",
+          "department": "Health Information Technology",
+          "currentlyAttendingIndicator": "false",
           "RefCourse": {
+            "name": "Medical Terminology",
+            "identifier": "course-hit101-org1-001",
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University"
+          },
+          "OfferedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-org1-005",
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University"
+          },
+          "AssertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-org1-005",
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University"
+          },
+          "endDate": "2018-12-14",
+          "experienceGrade": "A",
+          "experienceNumericalGrade": "4.0",
+          "goodStandingIndicator": "true",
+          "courseGradeStatusCode": "Final"
+        },
+        {
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "courselearningexperience-mbc110-org1-102",
+          "name": "Medical Coding I (ICD-10-CM)",
+          "type": "Postsecondary course",
+          "startDate": "2019-01-14",
+          "enrollmentStatusType": "Completed",
+          "courseTotal": "3",
+          "creditUnitType": "Semester credit hours",
+          "courseSectionNumber": "MBC110-01",
+          "institution": "State University",
+          "department": "Health Information Technology",
+          "currentlyAttendingIndicator": "false",
+          "RefCourse": {
+            "name": "Medical Coding I (ICD-10-CM)",
+            "identifier": "course-mbc110-org1-001",
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University"
+          },
+          "OfferedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-org1-005",
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University"
+          },
+          "AssertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-org1-005",
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University"
+          },
+          "endDate": "2019-05-10",
+          "experienceGrade": "A-",
+          "experienceNumericalGrade": "3.7",
+          "goodStandingIndicator": "true",
+          "courseGradeStatusCode": "Final"
+        },
+        {
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "courselearningexperience-mbc120-org1-103",
+          "name": "Health Insurance and Reimbursement",
+          "type": "Postsecondary course",
+          "startDate": "2019-08-26",
+          "enrollmentStatusType": "Completed",
+          "courseTotal": "3",
+          "creditUnitType": "Semester credit hours",
+          "courseSectionNumber": "MBC120-01",
+          "institution": "State University",
+          "department": "Health Information Technology",
+          "currentlyAttendingIndicator": "false",
+          "RefCourse": {
+            "name": "Health Insurance and Reimbursement",
+            "identifier": "course-mbc120-org1-001",
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University"
+          },
+          "OfferedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-org1-005",
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University"
+          },
+          "AssertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-org1-005",
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University"
+          },
+          "endDate": "2019-12-13",
+          "experienceGrade": "B+",
+          "experienceNumericalGrade": "3.3",
+          "goodStandingIndicator": "true",
+          "courseGradeStatusCode": "Final"
+        },
+        {
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "courselearningexperience-hit210-org1-104",
+          "name": "Healthcare Data and Revenue Cycle",
+          "type": "Postsecondary course",
+          "startDate": "2025-01-13",
+          "enrollmentStatusType": "In Progress",
+          "courseTotal": "3",
+          "creditUnitType": "Semester credit hours",
+          "courseSectionNumber": "HIT210-01",
+          "institution": "State University",
+          "department": "Health Information Technology",
+          "currentlyAttendingIndicator": "true",
+          "RefCourse": {
+            "name": "Healthcare Data and Revenue Cycle",
+            "identifier": "course-hit210-org1-001",
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University"
+          },
+          "OfferedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-org1-005",
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University"
+          },
+          "AssertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-org1-005",
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University"
+          }
+        }
+      ],
+      "EmploymentLearningExperience": [
+        {
+          "name": "Billing Specialist",
+          "endDate": "2024-11",
+          "RefPosition": {
+            "informationSourceId": "Org1",
+            "name": "Referenced Employment Experience",
+            "informationSourceOrganization": "State University",
+            "identifier": "position-referenced-employment-experien-org1-001"
+          },
+          "startDate": "2023-01",
+          "AssertedByRefOrganization": {
+            "identificationSystem": "stateu-employing-organization-id",
+            "name": "Employing Organization",
+            "organizationType": [
+              "Company"
+            ],
             "informationSourceId": "Org1",
             "informationSourceOrganization": "State University",
-            "identifier": "COURSE003",
-            "name": "Course 3",
-            "Identifier": [
-              {
-                "identifier": "COURSE003",
-                "identifierType": "Course Code",
-                "identifierVerification": [
-                  "Academic Records"
-                ],
-                "informationSourceId": "Org1"
-              }
-            ]
-          }
+            "identifier": "organization-employing-organization-org1-001"
+          },
+          "OfferedByRefOrganization": {
+            "identificationSystem": "stateu-training-provider-id",
+            "name": "Training Provider",
+            "organizationType": [
+              "Training Organization"
+            ],
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-training-provider-org1-001"
+          },
+          "ApprovedByRefOrganization": {
+            "identificationSystem": "stateu-approving-authority-id",
+            "name": "Approving Authority",
+            "organizationType": [
+              "Regulatory Body"
+            ],
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-approving-authority-org1-001"
+          },
+          "informationSourceId": "Org1",
+          "RefCredentialAward": {
+            "id": "cred-employment-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Renee Green",
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-employment-certificate-00-org1-001",
+            "name": "Employment Certificate"
+          },
+          "informationSourceOrganization": "State University",
+          "identifier": "employmentlearningexperience-billing-specialist-org1-001"
+        },
+        {
+          "name": "Billing Associate",
+          "endDate": "2022-10",
+          "RefPosition": {
+            "informationSourceId": "Org1",
+            "name": "Referenced Employment Experience",
+            "informationSourceOrganization": "State University",
+            "identifier": "position-referenced-employment-experien-org1-001"
+          },
+          "startDate": "2020-01",
+          "AssertedByRefOrganization": {
+            "identificationSystem": "stateu-employing-organization-id",
+            "name": "Employing Organization",
+            "organizationType": [
+              "Company"
+            ],
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-employing-organization-org1-001"
+          },
+          "OfferedByRefOrganization": {
+            "identificationSystem": "stateu-training-provider-id",
+            "name": "Training Provider",
+            "organizationType": [
+              "Training Organization"
+            ],
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-training-provider-org1-001"
+          },
+          "ApprovedByRefOrganization": {
+            "identificationSystem": "stateu-approving-authority-id",
+            "name": "Approving Authority",
+            "organizationType": [
+              "Regulatory Body"
+            ],
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-approving-authority-org1-001"
+          },
+          "informationSourceId": "Org1",
+          "RefCredentialAward": {
+            "id": "cred-employment-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Renee Green",
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-employment-certificate-00-org1-001",
+            "name": "Employment Certificate"
+          },
+          "informationSourceOrganization": "State University",
+          "identifier": "employmentlearningexperience-billing-associate-org1-002"
+        },
+        {
+          "name": "Customer Service Representative",
+          "endDate": "2019-11",
+          "RefPosition": {
+            "informationSourceId": "Org1",
+            "name": "Referenced Employment Experience",
+            "informationSourceOrganization": "State University",
+            "identifier": "position-referenced-employment-experien-org1-001"
+          },
+          "startDate": "2014-06",
+          "AssertedByRefOrganization": {
+            "identificationSystem": "stateu-employing-organization-id",
+            "name": "Employing Organization",
+            "organizationType": [
+              "Company"
+            ],
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-employing-organization-org1-001"
+          },
+          "OfferedByRefOrganization": {
+            "identificationSystem": "stateu-training-provider-id",
+            "name": "Training Provider",
+            "organizationType": [
+              "Training Organization"
+            ],
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-training-provider-org1-001"
+          },
+          "ApprovedByRefOrganization": {
+            "identificationSystem": "stateu-approving-authority-id",
+            "name": "Approving Authority",
+            "organizationType": [
+              "Regulatory Body"
+            ],
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-approving-authority-org1-001"
+          },
+          "informationSourceId": "Org1",
+          "RefCredentialAward": {
+            "id": "cred-employment-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Renee Green",
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-employment-certificate-00-org1-001",
+            "name": "Employment Certificate"
+          },
+          "informationSourceOrganization": "State University",
+          "identifier": "employmentlearningexperience-customer-service-representativ-org1-003"
+        },
+        {
+          "name": "Receptionist",
+          "endDate": "2014-05",
+          "RefPosition": {
+            "informationSourceId": "Org1",
+            "name": "Referenced Employment Experience",
+            "informationSourceOrganization": "State University",
+            "identifier": "position-referenced-employment-experien-org1-001"
+          },
+          "startDate": "2012-05",
+          "AssertedByRefOrganization": {
+            "identificationSystem": "stateu-employing-organization-id",
+            "name": "Employing Organization",
+            "organizationType": [
+              "Company"
+            ],
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-employing-organization-org1-001"
+          },
+          "OfferedByRefOrganization": {
+            "identificationSystem": "stateu-training-provider-id",
+            "name": "Training Provider",
+            "organizationType": [
+              "Training Organization"
+            ],
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-training-provider-org1-001"
+          },
+          "ApprovedByRefOrganization": {
+            "identificationSystem": "stateu-approving-authority-id",
+            "name": "Approving Authority",
+            "organizationType": [
+              "Regulatory Body"
+            ],
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "organization-approving-authority-org1-001"
+          },
+          "informationSourceId": "Org1",
+          "RefCredentialAward": {
+            "id": "cred-employment-certificate-001",
+            "awardIssueDate": "2024-12-15T10:00:00Z",
+            "credentialAwardee": "Renee Green",
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University",
+            "identifier": "credentialaward-cred-employment-certificate-00-org1-001",
+            "name": "Employment Certificate"
+          },
+          "informationSourceOrganization": "State University",
+          "identifier": "employmentlearningexperience-receptionist-org1-004"
         }
       ],
       "informationSourceId": "Org1",
       "CredentialAward": [
         {
-          "informationSourceId": "Org1",
-          "informationSourceOrganization": "Org1",
-          "identifier": "cred-proficiency-certificate-001",
+          "id": "cred-proficiency-certificate-001",
           "awardIssueDate": "2024-12-15T10:00:00Z",
           "credentialAwardee": "Renee Green",
-          "InstanceOfRefCredential": {
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialaward-cred-proficiency-certificate-0-org1-001",
+          "name": "State University Credential"
+        },
+        {
+          "id": "23016863-b70f-4014-a4c9-e5d6bd7823fe",
+          "awardIssueDate": "2021-07-28T23:28:14Z",
+          "credentialAwardee": "Renee Green",
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialaward-23016863-b70f-4014-a4c9-e5d6bd-org1-002",
+          "name": "State University Credential"
+        },
+        {
+          "id": "0579b255-3106-4855-bf66-d9d1a64bc1f8",
+          "awardIssueDate": "2024-11-06",
+          "credentialAwardee": "Renee Green",
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialaward-0579b255-3106-4855-bf66-d9d1a6-org1-003",
+          "name": "State University Credential"
+        },
+        {
+          "id": "9b7c972a-49bb-4d8c-80e2-286070e4fe78",
+          "awardIssueDate": "2020-09-10",
+          "credentialAwardee": "Renee Green",
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialaward-9b7c972a-49bb-4d8c-80e2-286070-org1-004",
+          "name": "State University Credential"
+        },
+        {
+          "id": "cred-employment-certificate-001",
+          "awardIssueDate": "2024-12-15T10:00:00Z",
+          "credentialAwardee": "Renee Green",
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "credentialaward-cred-employment-certificate-00-org1-005",
+          "name": "State University Credential"
+        }
+      ],
+      "ProgramLearningExperience": [
+        {
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "programlearningexperience-medical-billing-coding-cert-org1-001",
+          "name": "Medical Billing and Coding Certificate",
+          "type": "Certificate program",
+          "participationStatus": "Completed",
+          "startDate": "2018-08-27",
+          "endDate": "2019-05-10",
+          "RefProgram": {
+            "name": "Medical Billing and Coding Certificate",
+            "identifier": "program-medical-billing-coding-cert-org1-001",
             "informationSourceId": "Org1",
-            "informationSourceOrganization": "Org1",
-            "identifier": "cred-proficiency-certificate-001",
-            "name": "Credential Award 1"
+            "informationSourceOrganization": "State University"
+          },
+          "OfferedByRefOrganization": {
+            "name": "Training Provider",
+            "identifier": "organization-training-provider-org1-007",
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University"
+          },
+          "AssertedByRefOrganization": {
+            "name": "Training Provider",
+            "identifier": "organization-training-provider-org1-007",
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University"
           }
         },
         {
           "informationSourceId": "Org1",
-          "informationSourceOrganization": "Org1",
-          "identifier": "f5d42e6a-d6bd-4a34-a910-dfd12adbb708",
-          "awardIssueDate": "2021-03-24",
-          "credentialAwardee": "Renee Green",
-          "InstanceOfRefCredential": {
+          "informationSourceOrganization": "State University",
+          "identifier": "programlearningexperience-aas-hit-org1-002",
+          "name": "Associate of Applied Science in Health Information Technology",
+          "type": "Associate degree program",
+          "participationStatus": "In Progress",
+          "startDate": "2024-08-26",
+          "RefProgram": {
+            "name": "Associate of Applied Science in Health Information Technology",
+            "identifier": "program-aas-hit-org1-002",
             "informationSourceId": "Org1",
-            "informationSourceOrganization": "Org1",
-            "identifier": "f5d42e6a-d6bd-4a34-a910-dfd12adbb708",
-            "name": "Credential Award 2"
+            "informationSourceOrganization": "State University"
+          },
+          "OfferedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-org1-005",
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University"
+          },
+          "AssertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-org1-005",
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University"
+          }
+        }
+      ],
+      "AssessmentLearningExperience": [
+        {
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "assessmentlearningexperience-cpc-org1-001",
+          "name": "Certified Professional Coder (CPC) Examination",
+          "type": "Professional certification assessment",
+          "startDate": "2019-06-22",
+          "endDate": "2019-06-22",
+          "offeredBy": "American Academy of Professional Coders (AAPC)",
+          "scoreValue": "84",
+          "scoreType": "Percentage (0-100)",
+          "resultDataType": "xsd:integer",
+          "gradeStatus": "Final",
+          "completionStatus": "Completed",
+          "timeAssessed": "2019-06-22",
+          "RefAssessment": {
+            "identifier": "assessment-cpc-org1-001",
+            "name": "Certified Professional Coder (CPC) Examination",
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University"
+          },
+          "RefProficiency": {
+            "name": "Medical Coding",
+            "identifier": "proficiency-medical-coding-org1-040",
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University"
+          },
+          "OfferedByRefOrganization": {
+            "name": "American Academy of Professional Coders (AAPC)",
+            "identifier": "organization-aapc-org1-012",
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University"
           }
         },
         {
           "informationSourceId": "Org1",
-          "informationSourceOrganization": "Org1",
-          "identifier": "3cc9234a-4a0c-4171-846b-77d28d9aceb0",
-          "awardIssueDate": "2022-02-15T19:22:24Z",
-          "credentialAwardee": "Renee Green",
-          "InstanceOfRefCredential": {
+          "informationSourceOrganization": "State University",
+          "identifier": "assessmentlearningexperience-cbcs-org1-002",
+          "name": "Certified Billing and Coding Specialist (CBCS) Examination",
+          "type": "Professional certification assessment",
+          "startDate": "2020-02-08",
+          "endDate": "2020-02-08",
+          "offeredBy": "National Healthcareer Association (NHA)",
+          "scoreValue": "437",
+          "scoreType": "Scaled score (200-500)",
+          "resultDataType": "xsd:integer",
+          "gradeStatus": "Final",
+          "completionStatus": "Completed",
+          "timeAssessed": "2020-02-08",
+          "RefAssessment": {
+            "identifier": "assessment-cbcs-org1-002",
+            "name": "Certified Billing and Coding Specialist (CBCS) Examination",
             "informationSourceId": "Org1",
-            "informationSourceOrganization": "Org1",
-            "identifier": "3cc9234a-4a0c-4171-846b-77d28d9aceb0",
-            "name": "Credential Award 3"
+            "informationSourceOrganization": "State University"
+          },
+          "RefProficiency": {
+            "name": "Billing",
+            "identifier": "proficiency-billing-org1-038",
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University"
+          },
+          "OfferedByRefOrganization": {
+            "name": "National Healthcareer Association (NHA)",
+            "identifier": "organization-nha-org1-013",
+            "informationSourceId": "Org1",
+            "informationSourceOrganization": "State University"
           }
-        },
+        }
+      ],
+      "Birth": [
         {
           "informationSourceId": "Org1",
-          "informationSourceOrganization": "Org1",
-          "identifier": "c9efcc1d-e6af-492f-8a1b-04006feadce3",
-          "awardIssueDate": "2022-01-13",
-          "credentialAwardee": "Renee Green",
-          "InstanceOfRefCredential": {
-            "informationSourceId": "Org1",
-            "informationSourceOrganization": "Org1",
-            "identifier": "c9efcc1d-e6af-492f-8a1b-04006feadce3",
-            "name": "Credential Award 4"
-          }
+          "informationSourceOrganization": "State University",
+          "identifier": "birth-org1-001",
+          "birthDate": "1989-04-17",
+          "cityOfBirth": "San Diego",
+          "stateOfBirth": "California"
+        }
+      ],
+      "SexAndGender": [
+        {
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "sexandgender-org1-001",
+          "sex": "Female",
+          "gender": "Female",
+          "pronouns": "she/her"
+        }
+      ],
+      "Residency": [
+        {
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "residency-org1-001",
+          "localType": "In-State",
+          "countyFIPSCode": "06073",
+          "dateEffective": "2012-01-01",
+          "doNotPublishIndicator": "false"
+        }
+      ],
+      "Language": [
+        {
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "language-english-org1-001",
+          "name": "English",
+          "iSO639_2LangCode": "eng",
+          "iSO639_3LangCode": "eng",
+          "languageType": "Primary"
+        }
+      ],
+      "Demographics": [
+        {
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "demographics-org1-001",
+          "highestLevelEducation": "SomeCollegeButNoDegree",
+          "usCitizenship": "true",
+          "economicDisadvantage": "false",
+          "homeless": "false",
+          "militaryActiveStatus": "false",
+          "militaryVeteranStatus": "false"
         }
       ]
     }
   ],
   "Course": [
     {
-      "informationSourceId": "Org1",
       "Identifier": [
         {
           "identifier": "CS651",
@@ -799,12 +1399,82 @@
           "informationSourceOrganization": "State University"
         }
       ],
-      "informationSourceOrganization": "State University"
+      "informationSourceId": "Org1",
+      "informationSourceOrganization": "State University",
+      "name": "Course CS651",
+      "identifier": "course-cs651-org1-legacy-001"
+    },
+    {
+      "informationSourceId": "Org1",
+      "informationSourceOrganization": "State University",
+      "name": "Medical Terminology",
+      "identifier": "course-hit101-org1-001",
+      "Identifier": [
+        {
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "HIT101",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ]
+        }
+      ]
+    },
+    {
+      "informationSourceId": "Org1",
+      "informationSourceOrganization": "State University",
+      "name": "Medical Coding I (ICD-10-CM)",
+      "identifier": "course-mbc110-org1-001",
+      "Identifier": [
+        {
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "MBC110",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ]
+        }
+      ]
+    },
+    {
+      "informationSourceId": "Org1",
+      "informationSourceOrganization": "State University",
+      "name": "Health Insurance and Reimbursement",
+      "identifier": "course-mbc120-org1-001",
+      "Identifier": [
+        {
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "MBC120",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ]
+        }
+      ]
+    },
+    {
+      "informationSourceId": "Org1",
+      "informationSourceOrganization": "State University",
+      "name": "Healthcare Data and Revenue Cycle",
+      "identifier": "course-hit210-org1-001",
+      "Identifier": [
+        {
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "HIT210",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ]
+        }
+      ]
     }
   ],
   "Organization": [
     {
-      "informationSourceId": "Org1",
       "name": "State University",
       "description": "State University (StateU) is an accredited online university offering online bachelor's and master's degree programs. The programs are competency-based, student-focused, online, nonprofit university.",
       "Contact": [
@@ -816,7 +1486,9 @@
               "addressState": "Texas",
               "addressStreet": "632 East Hwy 3",
               "addressPostalCode": "75001",
-              "informationSourceId": "Org1"
+              "informationSourceId": "Org1",
+              "informationSourceOrganization": "State University",
+              "identifier": "address-state-university-org1-001"
             }
           ],
           "Email": [
@@ -824,7 +1496,9 @@
               "emailAddress": [
                 "credentials@stateu.edu"
               ],
-              "informationSourceId": "Org1"
+              "informationSourceId": "Org1",
+              "informationSourceOrganization": "State University",
+              "identifier": "email-state-university-org1-001"
             }
           ],
           "websiteAddress": "https://www.stateu.edu/",
@@ -833,7 +1507,9 @@
               "telephoneNumber": [
                 "111-222-3333"
               ],
-              "informationSourceId": "Org1"
+              "informationSourceId": "Org1",
+              "informationSourceOrganization": "State University",
+              "identifier": "telephone-state-university-org1-001"
             }
           ],
           "informationSourceId": "Org1",
@@ -864,25 +1540,37 @@
       ],
       "identificationSystem": "State University SIS",
       "organizationType": [],
-      "informationSourceOrganization": "State University"
+      "informationSourceId": "Org1",
+      "informationSourceOrganization": "State University",
+      "identifier": "organization-state-university-org1-001"
     },
     {
       "identificationSystem": "stateu-employing-organization-id",
-      "name": "Tech Solutions Inc",
+      "name": "Corporate Partner",
       "organizationType": [
         "Company"
       ],
       "informationSourceId": "Org1",
       "informationSourceOrganization": "State University",
-      "identifier": "organization-tech-solutions-inc-org1-002"
+      "identifier": "organization-corporate-partner-org1-002"
     },
     {
+      "identificationSystem": "stateu-employing-organization-id",
+      "name": "Employing Organization",
+      "organizationType": [
+        "Company"
+      ],
       "informationSourceId": "Org1",
+      "informationSourceOrganization": "State University",
+      "identifier": "organization-employing-organization-org1-003"
+    },
+    {
       "name": "State University",
       "identificationSystem": "State University SIS",
       "organizationType": [],
+      "informationSourceId": "Org1",
       "informationSourceOrganization": "State University",
-      "identifier": "organization-state-university-org1-003"
+      "identifier": "organization-state-university-org1-004"
     },
     {
       "identificationSystem": "stateu-state-university-id",
@@ -892,8 +1580,315 @@
       ],
       "informationSourceId": "Org1",
       "informationSourceOrganization": "State University",
-      "identifier": "organization-state-university-org1-004"
+      "identifier": "organization-state-university-org1-005"
+    },
+    {
+      "name": "NewSocial Media Company",
+      "informationSourceId": "Org1",
+      "informationSourceOrganization": "State University",
+      "identifier": "organization-newsocial-media-company-org1-006"
+    },
+    {
+      "identificationSystem": "stateu-training-provider-id",
+      "name": "Training Provider",
+      "organizationType": [
+        "Training Organization"
+      ],
+      "informationSourceId": "Org1",
+      "informationSourceOrganization": "State University",
+      "identifier": "organization-training-provider-org1-007"
+    },
+    {
+      "name": "Escondido Medical Clinic",
+      "informationSourceId": "Org1",
+      "informationSourceOrganization": "State University",
+      "identifier": "organization-escondido-medical-clinic-org1-008"
+    },
+    {
+      "name": "MyHealth Medical Billing",
+      "informationSourceId": "Org1",
+      "informationSourceOrganization": "State University",
+      "identifier": "organization-myhealth-medical-billing-org1-009"
+    },
+    {
+      "name": "Nice Stay Hotel",
+      "informationSourceId": "Org1",
+      "informationSourceOrganization": "State University",
+      "identifier": "organization-nice-stay-hotel-org1-010"
+    },
+    {
+      "identificationSystem": "stateu-approving-authority-id",
+      "name": "Approving Authority",
+      "organizationType": [
+        "Regulatory Body"
+      ],
+      "informationSourceId": "Org1",
+      "informationSourceOrganization": "State University",
+      "identifier": "organization-approving-authority-org1-011"
+    },
+    {
+      "informationSourceId": "Org1",
+      "informationSourceOrganization": "State University",
+      "name": "American Academy of Professional Coders (AAPC)",
+      "description": "Professional association that issues the Certified Professional Coder (CPC) credential.",
+      "identificationSystem": "aapc-org-id",
+      "identifier": "organization-aapc-org1-012"
+    },
+    {
+      "informationSourceId": "Org1",
+      "informationSourceOrganization": "State University",
+      "name": "National Healthcareer Association (NHA)",
+      "description": "Certification body for allied-health credentials including the Certified Billing and Coding Specialist (CBCS).",
+      "identificationSystem": "nha-org-id",
+      "identifier": "organization-nha-org1-013"
     }
   ],
-  "informationSourceId": "Org1"
+  "informationSourceId": "Org1",
+  "Assessment": [
+    {
+      "informationSourceId": "Org1",
+      "informationSourceOrganization": "State University",
+      "identifier": "assessment-cpc-org1-001",
+      "name": "Certified Professional Coder (CPC) Examination",
+      "shortName": "CPC",
+      "provider": "American Academy of Professional Coders (AAPC)",
+      "type": "Professional certification examination",
+      "description": "Certification exam validating proficiency in medical coding using CPT, ICD-10-CM, and HCPCS Level II.",
+      "purpose": "Professional certification",
+      "assessmentLevel": "AudLevel:PostSecondaryLevel",
+      "scoreMetricType": "Percentage (0-100)",
+      "deliveryType": "Online proctored / test center",
+      "methodType": "Multiple choice",
+      "AssessmentPerformanceLevel": [
+        {
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "assessmentperformancelevel-cpc-pass-org1-001",
+          "label": "Pass",
+          "performanceLowerLevel": "70",
+          "performanceUpperLevel": "100",
+          "descriptiveFeedback": "A score of 70% or higher earns the CPC credential."
+        }
+      ],
+      "DemonstratesRefCompetency": {
+        "name": "Medical Coding",
+        "identifier": "competency-medical-coding-org1-001",
+        "informationSourceId": "Org1",
+        "informationSourceOrganization": "State University"
+      },
+      "AwardedByRefOrganization": {
+        "name": "American Academy of Professional Coders (AAPC)",
+        "identifier": "organization-aapc-org1-012",
+        "informationSourceId": "Org1",
+        "informationSourceOrganization": "State University"
+      },
+      "OfferedByRefOrganization": {
+        "name": "American Academy of Professional Coders (AAPC)",
+        "identifier": "organization-aapc-org1-012",
+        "informationSourceId": "Org1",
+        "informationSourceOrganization": "State University"
+      }
+    },
+    {
+      "informationSourceId": "Org1",
+      "informationSourceOrganization": "State University",
+      "identifier": "assessment-cbcs-org1-002",
+      "name": "Certified Billing and Coding Specialist (CBCS) Examination",
+      "shortName": "CBCS",
+      "provider": "National Healthcareer Association (NHA)",
+      "type": "Professional certification examination",
+      "description": "Certification exam validating medical billing and coding specialist competency.",
+      "purpose": "Professional certification",
+      "assessmentLevel": "AudLevel:PostSecondaryLevel",
+      "scoreMetricType": "Scaled score (200-500)",
+      "deliveryType": "Online proctored / test center",
+      "methodType": "Multiple choice",
+      "AssessmentPerformanceLevel": [
+        {
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "assessmentperformancelevel-cbcs-pass-org1-002",
+          "label": "Pass",
+          "performanceLowerLevel": "390",
+          "performanceUpperLevel": "500",
+          "descriptiveFeedback": "A scaled score of 390 or higher earns the credential."
+        }
+      ],
+      "DemonstratesRefCompetency": {
+        "name": "Claims and Billing",
+        "identifier": "competency-claims-billing-org1-002",
+        "informationSourceId": "Org1",
+        "informationSourceOrganization": "State University"
+      },
+      "AwardedByRefOrganization": {
+        "name": "National Healthcareer Association (NHA)",
+        "identifier": "organization-nha-org1-013",
+        "informationSourceId": "Org1",
+        "informationSourceOrganization": "State University"
+      },
+      "OfferedByRefOrganization": {
+        "name": "National Healthcareer Association (NHA)",
+        "identifier": "organization-nha-org1-013",
+        "informationSourceId": "Org1",
+        "informationSourceOrganization": "State University"
+      }
+    }
+  ],
+  "CompetencyFramework": [
+    {
+      "informationSourceId": "Org1",
+      "informationSourceOrganization": "State University",
+      "name": "Medical Billing & Coding Competency Framework",
+      "description": "Competency framework for medical billing, coding, and revenue-cycle roles, aligned to O*NET Medical Records Specialists and Billing Clerks.",
+      "uri": "https://stateu.edu/frameworks/medical-billing-coding/v1",
+      "publisher": "State University",
+      "creator": "State University",
+      "publicationStatus": "Published",
+      "publicationDate": "2022-04-01",
+      "version": "1.0",
+      "identifier": "competencyframework-medical-billing-coding-org1-001",
+      "Competency": [
+        {
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "name": "Medical Coding",
+          "code": "MBC-01",
+          "statement": "Assigns accurate ICD-10-CM, CPT, and HCPCS codes from clinical documentation.",
+          "identifier": "competency-medical-coding-org1-001",
+          "CompetencyAlignments": [
+            {
+              "informationSourceId": "Org1",
+              "informationSourceOrganization": "State University",
+              "identifier": "competencyalignment-onet-mrs-org1-001",
+              "alignmentType": "majorAlignment",
+              "alignsToUri": "https://www.onetonline.org/link/summary/29-2072.00",
+              "alignsToText": "Medical Records Specialists",
+              "alignsToType": "O*NET-SOC Occupation"
+            }
+          ]
+        },
+        {
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "name": "Claims and Billing",
+          "code": "MBC-02",
+          "statement": "Prepares, submits, and follows up on insurance claims and patient statements.",
+          "identifier": "competency-claims-billing-org1-002",
+          "CompetencyAlignments": [
+            {
+              "informationSourceId": "Org1",
+              "informationSourceOrganization": "State University",
+              "identifier": "competencyalignment-onet-billing-org1-002",
+              "alignmentType": "minorAlignment",
+              "alignsToUri": "https://www.onetonline.org/link/summary/43-3021.00",
+              "alignsToText": "Billing and Posting Clerks",
+              "alignsToType": "O*NET-SOC Occupation"
+            }
+          ]
+        },
+        {
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "name": "Revenue Cycle Management",
+          "code": "MBC-03",
+          "statement": "Manages accounts receivable and the end-to-end revenue cycle to optimize collections.",
+          "identifier": "competency-revenue-cycle-org1-003"
+        },
+        {
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "name": "Healthcare Compliance",
+          "code": "MBC-04",
+          "statement": "Applies HIPAA and payer rules to protect patient data and ensure compliant billing.",
+          "identifier": "competency-healthcare-compliance-org1-004"
+        },
+        {
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "name": "Customer Service",
+          "code": "MBC-05",
+          "statement": "Resolves patient and payer inquiries with professionalism and empathy.",
+          "identifier": "competency-customer-service-org1-005"
+        }
+      ],
+      "Association": [
+        {
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "association-coding-child-of-claims-org1-001",
+          "competencyAssociationType": "isChildOf",
+          "competencyAssociationOriginName": "Medical Coding",
+          "competencyAssociationOriginUri": "urn:lif:competency:competency-medical-coding-org1-001",
+          "competencyAssociationDestinationName": "Claims and Billing",
+          "competencyAssociationDestinationUri": "urn:lif:competency:competency-claims-billing-org1-002"
+        },
+        {
+          "informationSourceId": "Org1",
+          "informationSourceOrganization": "State University",
+          "identifier": "association-compliance-related-coding-org1-002",
+          "competencyAssociationType": "isRelatedTo",
+          "competencyAssociationOriginName": "Healthcare Compliance",
+          "competencyAssociationOriginUri": "urn:lif:competency:competency-healthcare-compliance-org1-004",
+          "competencyAssociationDestinationName": "Medical Coding",
+          "competencyAssociationDestinationUri": "urn:lif:competency:competency-medical-coding-org1-001"
+        }
+      ]
+    }
+  ],
+  "Program": [
+    {
+      "informationSourceId": "Org1",
+      "informationSourceOrganization": "State University",
+      "name": "Medical Billing and Coding Certificate",
+      "description": "Postsecondary certificate preparing students for medical billing and coding roles and industry certification.",
+      "identifier": "program-medical-billing-coding-cert-org1-001",
+      "programIdentifierSystem": "training-provider-program-id",
+      "instructionalProgramCode": "51.0713",
+      "instructionalProgramUse": "CIP 2020",
+      "creditsRequired": "30",
+      "creditUnitTypeDescription": "Semester credit hours",
+      "postSecondaryProgramLevel": "Postsecondary Certificate (less than 1 year)",
+      "deliveryType": "In-person and online",
+      "DemonstratesRefCompetency": {
+        "name": "Medical Coding",
+        "identifier": "competency-medical-coding-org1-001",
+        "informationSourceId": "Org1",
+        "informationSourceOrganization": "State University"
+      },
+      "OfferedByRefOrganization": {
+        "name": "Training Provider",
+        "identifier": "organization-training-provider-org1-007",
+        "informationSourceId": "Org1",
+        "informationSourceOrganization": "State University"
+      }
+    },
+    {
+      "informationSourceId": "Org1",
+      "informationSourceOrganization": "State University",
+      "name": "Associate of Applied Science in Health Information Technology",
+      "description": "Two-year associate degree in health information technology and management.",
+      "identifier": "program-aas-hit-org1-002",
+      "programIdentifierSystem": "State University SIS",
+      "instructionalProgramCode": "51.0707",
+      "instructionalProgramUse": "CIP 2020",
+      "creditsRequired": "60",
+      "creditUnitTypeDescription": "Semester credit hours",
+      "postSecondaryProgramLevel": "Associate's Degree",
+      "normalTimeCompletion": "2",
+      "normalTimeCompletionUnits": "Years",
+      "deliveryType": "Online",
+      "DemonstratesRefCompetency": {
+        "name": "Revenue Cycle Management",
+        "identifier": "competency-revenue-cycle-org1-003",
+        "informationSourceId": "Org1",
+        "informationSourceOrganization": "State University"
+      },
+      "OfferedByRefOrganization": {
+        "name": "State University",
+        "identifier": "organization-state-university-org1-005",
+        "informationSourceId": "Org1",
+        "informationSourceOrganization": "State University"
+      }
+    }
+  ]
 }

@@ -35,6 +35,25 @@ ATTRIBUTE_ASSOCIATION_FIELDS = [
 ]
 
 
+def embedded_property_key(relationship, entity_name):
+    """The property key an Embedded child is stored under in its parent's schema.
+
+    Single source of truth for a rule that used to be written out by hand in
+    ``find_children`` and assumed-away in ``add_ref``. The key is
+    ``Relationship + EntityName``, except when the relationship is absent or is a
+    structural ``has*`` / ``relevant*`` name, where it collapses to the bare entity
+    name.
+
+    ``add_ref`` navigates schemas that ``find_children`` built, so both must spell
+    the key the same way. They did not, and a named Embedded ancestor made
+    ``add_ref`` look up a key that was never written -- an uncaught ``KeyError``
+    surfacing as a bare 500 (#1252).
+    """
+    if relationship is not None and not (relationship.startswith("has") or relationship.startswith("relevant")):
+        return relationship + entity_name
+    return entity_name
+
+
 async def find_children(
     tree,
     parent,
@@ -47,6 +66,7 @@ async def find_children(
     include_entity_md,
     public_only,
     full_export,
+    property_key_map=None,
 ):
     if parent in tree:
         parent_properties = parent_schema["properties"]
@@ -72,16 +92,16 @@ async def find_children(
             child_associations = child_association_result.scalars().all()
 
             for child_association in child_associations:
-                entity_name = ""
-                if child_association.Relationship is not None and not (
-                    child_association.Relationship.startswith("has")
-                    or child_association.Relationship.startswith("relevant")
-                ):
-                    entity_name = child_association.Relationship
-
                 entity_data = await get_entity_by_id(session=session, id=x)
 
-                entity_name = entity_name + entity_data.Name
+                # Shared with add_ref's chain walks so the two cannot drift apart (#1252).
+                entity_name = embedded_property_key(child_association.Relationship, entity_data.Name)
+
+                # Record what was actually written, rather than re-deriving it later:
+                # add_ref navigates this exact structure, and a key recorded at the point
+                # of writing cannot disagree with it (#1252).
+                if property_key_map is not None and entity_name != entity_data.Name:
+                    property_key_map[(parent, x)] = entity_name
 
                 parent_properties[entity_name] = {}
                 parent_properties[entity_name]["type"] = "array" if entity_data.Array == "Yes" else "object"
@@ -263,6 +283,7 @@ async def find_children(
                     include_entity_md=include_entity_md,
                     public_only=public_only,
                     full_export=full_export,
+                    property_key_map=property_key_map,
                 )
 
 
@@ -316,16 +337,62 @@ async def find_ancestors(session, child_id, data_model_type, data_model_id, incl
             ancestors.append([parent_id])
         else:
             for parent_ancestor_line in parent_ancestors:
-                parent_ancestor_line.reverse()  # Reverse to start from root
+                # The recursive call already returns each line ordered root -> parent, so the
+                # parent id appends straight onto the end. Reversing here scrambled any line
+                # longer than one element, which made add_ref look for a nested entity name at
+                # the top level of components.schemas and raise a KeyError. A single-element
+                # line was unaffected, which is why this only surfaced for a Reference whose
+                # target sits three or more levels deep.
                 parent_ancestor_line.append(parent_id)
-                logger.debug(f"parent_ancestor_line after reverse: {parent_ancestor_line}")
+                logger.debug(f"parent_ancestor_line: {parent_ancestor_line}")
                 ancestors.append(parent_ancestor_line)
 
     return ancestors
 
 
+def _entity_name(df_entity, entity_id):
+    """Resolve an entity id to its name, or 400 instead of raising a raw IndexError.
+
+    ``df[df["Id"] == x]["Name"].unique().tolist()[0]`` raises ``IndexError`` when the
+    id is absent, which was uncaught and surfaced as a bare 500 -- the same shape of
+    failure as #1252 with a different trigger.
+    """
+    names = (df_entity[df_entity["Id"] == entity_id])["Name"].unique().tolist()
+    if not names:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Entity {entity_id} is referenced by an association but is not in the data model's entity set.",
+        )
+    return names[0]
+
+
+def _resolve_property_key(df_entity, property_key_map, parent_id, entity_id, default=None):
+    """The schema property key for ``entity_id`` when nested under ``parent_id``.
+
+    Falls back to the bare entity name, which is what the key rule yields whenever the
+    association carries no name -- so an absent map entry and an unnamed relationship
+    are the same answer, not a silent divergence (#1252).
+    """
+    if entity_id is None:
+        return default
+    if property_key_map and parent_id is not None:
+        key = property_key_map.get((parent_id, entity_id))
+        if key is not None:
+            return key
+    return default if default is not None else _entity_name(df_entity, entity_id)
+
+
 async def add_ref(
-    parent_ancestors, child_ancestors, df_entity, parent_entity_name, child_entity_name, openapi_spec, key
+    parent_ancestors,
+    child_ancestors,
+    df_entity,
+    parent_entity_name,
+    child_entity_name,
+    openapi_spec,
+    key,
+    property_key_map=None,
+    parent_entity_id=None,
+    child_entity_id=None,
 ):
     """
     Inline the schema for a referenced child entity under the parent's OpenAPI schema entry.
@@ -354,11 +421,23 @@ async def add_ref(
     schema_container = openapi_spec["components"]["schemas"]
     referenced_schema = None
     if len(child_ancestors) == 1 and len(child_ancestors[0]) > 0:
-        for index, child_ancestor_id in enumerate(child_ancestors[0]):
+        chain = child_ancestors[0]
+        for index, child_ancestor_id in enumerate(chain):
             logger.info(f"child_ancestor_id : {child_ancestor_id}")
-            entity_name = (df_entity[df_entity["Id"] == child_ancestor_id])["Name"].unique().tolist()[0]
+            # index 0 is a root entity, which is a top-level schema keyed by its bare
+            # name. Every later hop is an Embedded child, so it carries whatever key
+            # find_children wrote (#1252).
+            previous_id = chain[index - 1] if index > 0 else None
+            entity_name = _resolve_property_key(df_entity, property_key_map, previous_id, child_ancestor_id)
             schema_container = schema_container[entity_name]["properties"]
-    referenced_schema = schema_container[child_entity_name]
+    child_key = _resolve_property_key(
+        df_entity,
+        property_key_map,
+        child_ancestors[0][-1] if child_ancestors and child_ancestors[0] else None,
+        child_entity_id,
+        default=child_entity_name,
+    )
+    referenced_schema = schema_container[child_key]
     ref_data = deepcopy(referenced_schema)
     properties = ref_data.get("properties")
     if isinstance(properties, dict):
@@ -382,14 +461,19 @@ async def add_ref(
         openapi_spec["components"]["schemas"][parent_entity_name]["properties"][key] = ref_data
     else:
         for ancestor_line in parent_ancestors:
-            # Getting root property
-            root_property = (df_entity[df_entity["Id"] == ancestor_line[0]])["Name"].unique().tolist()[0]
+            # Getting root property -- a root is a top-level schema, keyed by bare name.
+            root_property = _entity_name(df_entity, ancestor_line[0])
             logger.info(f"root_property : {root_property}")
             current_dict = openapi_spec["components"]["schemas"][root_property]
-            for parent_ancestors_id in ancestor_line[1:]:  # Skip the root property
-                sub_root = (df_entity[df_entity["Id"] == parent_ancestors_id])["Name"].unique().tolist()[0]
+            for position, parent_ancestors_id in enumerate(ancestor_line[1:], start=1):  # Skip the root property
+                sub_root = _resolve_property_key(
+                    df_entity, property_key_map, ancestor_line[position - 1], parent_ancestors_id
+                )
                 current_dict = current_dict["properties"][sub_root]
-            current_dict = current_dict["properties"][parent_entity_name]
+            parent_key = _resolve_property_key(
+                df_entity, property_key_map, ancestor_line[-1], parent_entity_id, default=parent_entity_name
+            )
+            current_dict = current_dict["properties"][parent_key]
             current_dict["properties"][key] = ref_data
 
 
@@ -566,6 +650,10 @@ async def generate_openapi_schema(
         top_level_entity_names.append(parent_entity_name)
     logger.info(f"top_level_entity_names : {top_level_entity_names}")
 
+    # Keys that find_children actually writes for named Embedded children, so the
+    # add_ref walks below navigate the structure that exists rather than the bare
+    # entity names they used to assume (#1252).
+    property_key_map = {}
     for parent in top_level_parents:
         parent_entity = await get_entity_by_id(session=session, id=parent)
         openapi_spec["components"]["schemas"][parent_entity.Name] = {}
@@ -725,6 +813,7 @@ async def generate_openapi_schema(
             include_entity_md=include_entity_md,
             public_only=public_only,
             full_export=full_export,
+            property_key_map=property_key_map,
         )
 
     # logger.info("openapi_spec ----------- ")
@@ -775,6 +864,7 @@ async def generate_openapi_schema(
     # Convert the result into a pandas DataFrame
     df_inter_entity_links = pd.DataFrame(inter_entity_associations, columns=column_names)
     logger.info(f" df_inter_entity_links : {df_inter_entity_links}")
+    logger.info(f" named embedded property keys : {len(property_key_map)}")
     refs = 0
     for index, row in df_inter_entity_links.iterrows():
         logger.info(" ------------------------------------------------- ")
@@ -785,8 +875,8 @@ async def generate_openapi_schema(
         if "Placement" in row:
             placement = row["Placement"]
 
-        parent_entity_name = (df_entity[df_entity["Id"] == parent_id])["Name"].unique().tolist()[0]
-        child_entity_name = (df_entity[df_entity["Id"] == child_id])["Name"].unique().tolist()[0]
+        parent_entity_name = _entity_name(df_entity, parent_id)
+        child_entity_name = _entity_name(df_entity, child_id)
         logger.info(f"parent_id : {parent_id}")
         logger.info(f"child_id : {child_id}")
         logger.info(f" parent_entity_name : {parent_entity_name}")
@@ -818,6 +908,9 @@ async def generate_openapi_schema(
             child_entity_name=child_entity_name,
             openapi_spec=openapi_spec,
             key=key,
+            property_key_map=property_key_map,
+            parent_entity_id=parent_id,
+            child_entity_id=child_id,
         )
 
     if "Common" in openapi_spec["components"]["schemas"]:

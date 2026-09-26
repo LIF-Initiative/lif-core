@@ -16,6 +16,7 @@ For a full overview of architecture, build commands, schema conventions, and dep
 
 | If you need… | Go to |
 |---|---|
+| **How much you may change — scope, verification, stop-and-ask** | [`agent-behavioral-guidelines.md`](agent-behavioral-guidelines.md) |
 | Repo-wide guidance (build, test, schema, deployment) | [`CLAUDE.md`](CLAUDE.md) |
 | Documentation structure, layer rules, where docs go | [`docs/README.md`](docs/README.md) |
 | Curated list of every doc in the repo | [`docs/INDEX.md`](docs/INDEX.md) |
@@ -39,7 +40,9 @@ For a full overview of architecture, build commands, schema conventions, and dep
 
 ## Conventions for agents writing code
 
-These are summarized from `CLAUDE.md`; see that file for the authoritative version.
+**Scope discipline comes first** — see [`agent-behavioral-guidelines.md`](agent-behavioral-guidelines.md): touch only what the task requires, don't "improve" adjacent code, and stop and ask before Flyway migrations, shared `components/lif/` bricks, live-env/promotion paths, or `reference_data/transformations/`.
+
+The rest are summarized from `CLAUDE.md`; see that file for the authoritative version.
 
 - **Commit messages** follow `Issue #XXX: Brief description`. Multi-issue: `Issue #123, Issue #456: Description`.
 - **PR commits append, don't force-push** on PRs under review. Force-pushes invalidate reviewer "viewed" state and break inline-comment threading. See [`feedback_pr_commit_style`](https://docs.anthropic.com/en/docs/claude-code/memory) memory for the rule and rationale.
