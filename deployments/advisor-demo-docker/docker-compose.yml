@@ -650,6 +650,9 @@ services:
       DAGSTER_POSTGRES_USER: 'postgres_user'
       DAGSTER_POSTGRES_PASSWORD: 'postgres_password'
       DAGSTER_POSTGRES_DB: 'postgres_db'
+      # gRPC's default c-ares resolver intermittently stalls ~5s resolving dagster-code-location,
+      # which made ~5-10% of job submissions take ~5.5s (#1294). The system resolver does not.
+      GRPC_DNS_RESOLVER: native
     volumes: # Make docker client accessible so we can terminate containers from the webserver
       - /var/run/docker.sock:/var/run/docker.sock
       - /tmp/io_manager_storage:/tmp/io_manager_storage
@@ -676,6 +679,9 @@ services:
       DAGSTER_POSTGRES_USER: 'postgres_user'
       DAGSTER_POSTGRES_PASSWORD: 'postgres_password'
       DAGSTER_POSTGRES_DB: 'postgres_db'
+      # gRPC's default c-ares resolver intermittently stalls ~5s resolving dagster-code-location,
+      # which made ~5-10% of job submissions take ~5.5s (#1294). The system resolver does not.
+      GRPC_DNS_RESOLVER: native
     volumes: # Make docker client accessible so we can launch containers using host docker
       - /var/run/docker.sock:/var/run/docker.sock
       - /tmp/io_manager_storage:/tmp/io_manager_storage
