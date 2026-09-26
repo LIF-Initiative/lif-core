@@ -1,7 +1,8 @@
-from unittest.mock import patch
+from unittest.mock import AsyncMock, patch
 
 import pytest
 from sqlalchemy import event, func, select
+from sqlalchemy.exc import IntegrityError, OperationalError
 
 from lif.datatypes import IdentityMapping
 from lif.exceptions.core import DataStoreException
@@ -333,3 +334,24 @@ async def test_save_mapping_surfaces_a_persistent_collision_as_a_conflict(storag
     with patcher:
         with pytest.raises(IdentityMappingConflictException):
             await storage.save_mapping(_mapping(target_system="sys-1", person_id="ext-1"))
+
+
+@pytest.mark.asyncio
+async def test_save_mappings_non_integrity_error_on_retry_is_datastore_exception(storage: IdentityMapperSqlStorage):
+    """
+    Only an IntegrityError on the retry is a conflict. Any other failure there is a datastore
+    error and must stay a 500, so the 409 cannot widen to cover an outage (#1261). The other
+    tests pass with the retry's `except IntegrityError` widened to `except Exception`; this
+    one does not.
+    """
+    attempt = AsyncMock(
+        side_effect=[
+            IntegrityError("INSERT", {}, Exception("uq_identity_mapping")),
+            OperationalError("INSERT", {}, Exception("connection lost")),
+        ]
+    )
+    with patch.object(storage, "_save_mappings_once", attempt):
+        with pytest.raises(DataStoreException) as info:
+            await storage.save_mappings([_mapping()])
+    assert not isinstance(info.value, IdentityMappingConflictException)
+    assert attempt.await_count == 2
