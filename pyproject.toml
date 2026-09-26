@@ -31,7 +31,7 @@ dependencies = [
     "pydantic~=2.11",
     "pyjwt[crypto]~=2.10",
     "pymongo~=4.13",
-    "pymysql~=1.1",
+    "asyncmy~=0.2.14",
     "pyyaml~=6.0",
     "sentence-transformers~=4.1",
     "sqlalchemy~=2.0",
@@ -43,6 +43,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "aiosqlite~=0.21",
     "asyncpg~=0.30",
     "dagster-cloud~=1.11",
     "dagster-dg-cli~=1.11",
@@ -87,6 +88,7 @@ asyncio_mode = "auto"
 "components/lif/query_cache_read_store_in_memory" = "lif/query_cache_read_store_in_memory"
 "components/lif/query_cache_service" = "lif/query_cache_service"
 "components/lif/query_planner_service" = "lif/query_planner_service"
+"components/lif/lif_fragment_utils" = "lif/lif_fragment_utils"
 "components/lif/logging" = "lif/logging"
 "bases/lif/api_graphql" = "lif/api_graphql"
 "components/lif/openapi_to_graphql" = "lif/openapi_to_graphql"

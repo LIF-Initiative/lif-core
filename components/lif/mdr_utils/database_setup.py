@@ -1,6 +1,3 @@
-import psycopg2
-from psycopg2 import Error
-import mysql.connector
 import os
 import re
 from typing import AsyncGenerator
@@ -47,10 +44,18 @@ def _redact_url(url: str) -> str:
         return "<unparseable-url>"
 
 
+def _echo_from_env() -> bool:
+    """True only when SQLALCHEMY_ECHO is set to ``true`` (case-insensitive); default off (#956)."""
+    return os.getenv("SQLALCHEMY_ECHO", "false").lower() == "true"
+
+
 DATABASE_URL = f"postgresql+asyncpg://{os.getenv('POSTGRESQL_USER')}:{os.getenv('POSTGRESQL_PASSWORD')}@{os.getenv('POSTGRESQL_HOST')}:{os.getenv('POSTGRESQL_PORT')}/{os.getenv('POSTGRESQL_DB')}"
 logger.info("DATABASE_URL : %s", _redact_url(DATABASE_URL))
+# SQLAlchemy echo emits every SQL statement + bound parameters at INFO
+# level (#956). Dev-only debugging aid — keep off in deployed envs.
+SQLALCHEMY_ECHO = _echo_from_env()
 # Create an async engine
-engine = create_async_engine(DATABASE_URL, echo=True)
+engine = create_async_engine(DATABASE_URL, echo=SQLALCHEMY_ECHO)
 
 # Create an async sessionmaker
 # ty-ignore: Legacy sessionmaker(class_=AsyncSession); async_sessionmaker is the modern API.
@@ -152,39 +157,3 @@ async def get_session(request: Request) -> AsyncGenerator[AsyncSession, None]:
             # branch behaves as if it had a fresh connection.
             await session.execute(text("SET search_path TO public"))
         yield session
-
-
-async def get_db_connection(db_type: str):
-    # We can use
-    try:
-        match db_type:
-            case "POSTGRESQL":
-                # Connect to your PostgreSQL database
-                logger.info("DB type is POSTGRESQL")
-                connection = psycopg2.connect(
-                    user=os.environ["POSTGRESQL_USER"],
-                    password=os.environ["POSTGRESQL_PASSWORD"],
-                    host=os.environ["POSTGRESQL_HOST"],
-                    port=os.environ["POSTGRESQL_PORT"],
-                    database=os.environ["POSTGRESQL_DB"],
-                )
-                logger.info("Connection Done")
-
-            case "MYSQL":
-                logger.info("DB type is MYSQL")
-                connection = mysql.connector.connect(
-                    host=os.environ["MYSQL_HOST"],
-                    port=os.environ["MYSQL_PORT"],
-                    user=os.environ["MYSQL_USER"],
-                    password=os.environ["MYSQL_PASSWORD"],
-                    database=os.environ["MYSQL_DB"],
-                )
-                logger.info("Connection Done")
-            case _:
-                logger.info("Specified database type is not configured : %s", db_type)
-                raise Exception
-
-        return connection
-    except (Exception, Error) as error:
-        logger.error("Error while connecting DB doe the DB type: %s.  Error : %s", db_type, error)
-        raise

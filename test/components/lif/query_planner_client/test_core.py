@@ -59,6 +59,13 @@ async def test_query_sent_as_json_body():
     assert mock_client.post.call_args[1]["json"] == _QUERY
 
 
+async def test_query_names_this_caller_to_the_query_planner():
+    mock_cls, mock_client = _make_http_mock(200, [])
+    with mock.patch("lif.query_planner_client.core.httpx.AsyncClient", mock_cls):
+        await fetch_query_from_query_planner(_BASE_URL, _QUERY)
+    assert mock_client.post.call_args[1]["headers"]["X-LIF-Client"] == "learner-data-export"
+
+
 async def test_non_200_raises_query_planner_exception():
     mock_cls, _ = _make_http_mock(500)
     with mock.patch("lif.query_planner_client.core.httpx.AsyncClient", mock_cls):

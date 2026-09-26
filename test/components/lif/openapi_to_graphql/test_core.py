@@ -9,6 +9,7 @@ from typing import Optional
 
 import strawberry
 
+from lif.openapi_to_graphql import type_factory
 from lif.openapi_to_graphql.core import generate_graphql_schema
 from lif.openapi_to_graphql.type_factory import (
     build_root_mutation_type,
@@ -455,3 +456,97 @@ class TestGraphQLClientTimeoutEnvReads:
 
     def test_default_is_20(self):
         assert self._timeout_in_subprocess({}) == 20
+
+
+# === Query Planner failures must reach the caller (Issue #1264) ===
+
+
+class _FakeResponse:
+    def __init__(self, status_code, payload=None, text=""):
+        self.status_code = status_code
+        self._payload = payload
+        self.text = text
+
+    def json(self):
+        return self._payload
+
+
+class _FakeAsyncClient:
+    """Stands in for httpx.AsyncClient so the resolver's POST returns a canned response."""
+
+    def __init__(self, response):
+        self._response = response
+
+    def __call__(self, *args, **kwargs):
+        return self
+
+    async def __aenter__(self):
+        return self
+
+    async def __aexit__(self, *args):
+        return False
+
+    async def post(self, *args, **kwargs):
+        return self._response
+
+
+class TestQueryPlannerFailureReachesCaller:
+    """A non-200 from the Query Planner must be distinguishable from an empty result set.
+
+    Before #1264 the resolver logged the failure and returned [], so a 408 and a learner
+    with genuinely no data were byte-identical over the wire.
+    """
+
+    PERSON_QUERY = '{ person(filter: {name: "x"}) { name } }'
+
+    async def _schema(self, monkeypatch):
+        # type_factory.input_type_cache is module-level and keyed by type name only, so a
+        # PersonInput built by an earlier test in the same process would be reused here.
+        monkeypatch.setattr(type_factory, "input_type_cache", {})
+        # Person is an array at the root, matching the bundled schema — build_root_query_type
+        # relies on that to decide the resolver's return type.
+        openapi = _empty_openapi(
+            {"Person": {"type": "array", "properties": {"name": _make_scalar_field(queryable=True)}}}
+        )
+        return await generate_graphql_schema(
+            openapi=openapi,
+            root_type_name="Person",
+            query_planner_query_url="http://localhost:9999/query",
+            query_planner_update_url="http://localhost:9999/update",
+        )
+
+    async def _execute(self, monkeypatch, response):
+        schema = await self._schema(monkeypatch)
+        monkeypatch.setattr(type_factory.httpx, "AsyncClient", _FakeAsyncClient(response))
+        return await schema.execute(self.PERSON_QUERY)
+
+    async def test_timeout_surfaces_as_a_graphql_error(self, monkeypatch):
+        result = await self._execute(
+            monkeypatch, _FakeResponse(408, text='{"detail":"Query timed out after 120 seconds"}')
+        )
+
+        assert result.errors, "a 408 from the Query Planner was reported to the caller as success"
+        assert "408" in result.errors[0].message
+
+    async def test_server_error_surfaces_as_a_graphql_error(self, monkeypatch):
+        result = await self._execute(monkeypatch, _FakeResponse(500, text='{"detail":"boom"}'))
+
+        assert result.errors, "a 500 from the Query Planner was reported to the caller as success"
+        assert "500" in result.errors[0].message
+
+    async def test_error_does_not_relay_the_query_planner_body(self, monkeypatch):
+        """The QP builds its error body from str(e) of arbitrary exceptions, so relaying it
+        would hand backend internals to the GraphQL caller. It belongs in the server log only."""
+        result = await self._execute(
+            monkeypatch, _FakeResponse(500, text='{"detail":"connection refused: mongodb-org1:27017"}')
+        )
+
+        assert result.errors
+        assert "mongodb-org1" not in result.errors[0].message
+
+    async def test_genuinely_empty_result_is_still_an_empty_list(self, monkeypatch):
+        """The other half of the contract: no data is not an error."""
+        result = await self._execute(monkeypatch, _FakeResponse(200, payload=[{"person": []}]))
+
+        assert not result.errors
+        assert result.data == {"person": []}

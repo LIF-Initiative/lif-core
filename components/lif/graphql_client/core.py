@@ -12,13 +12,18 @@ LIF_GRAPHQL_API_KEY = os.getenv("LIF_GRAPHQL_API_KEY", "")
 GRAPHQL_TIMEOUT_READ = float(os.getenv("SEMANTIC_SEARCH_SERVICE__GRAPHQL_TIMEOUT__READ", "300"))
 
 
+# Names this caller in the Query Planner's query statistics; GraphQL forwards it (#1272).
+LIF_CLIENT_NAME = "semantic-search-mcp"
+
+
 def _build_headers(api_key: str = "") -> dict:
-    """Build request headers, including X-API-Key if provided."""
+    """Build request headers: X-LIF-Client always, X-API-Key if provided."""
+    headers = {"X-LIF-Client": LIF_CLIENT_NAME}
     if not api_key:
         api_key = LIF_GRAPHQL_API_KEY
     if api_key:
-        return {"X-API-Key": api_key}
-    return {}
+        headers["X-API-Key"] = api_key
+    return headers
 
 
 async def _post(url: str, json: dict, headers: dict, timeout: httpx.Timeout | None = None) -> httpx.Response:
