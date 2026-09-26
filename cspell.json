@@ -281,7 +281,8 @@
         "utf8mb4",
         "vitest",
         "EXPLAIN",
-        "xform"
+        "xform",
+        "tolower"
     ],
     "ignorePaths": [
         ".git/",
