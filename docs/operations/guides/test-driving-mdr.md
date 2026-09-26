@@ -96,7 +96,7 @@ Naming `lif-mdr-app` starts only the MDR slice. Compose follows its dependencies
 ```bash
 curl -s localhost:8012/health-check
 curl -s -X POST localhost:8012/login -H 'content-type: application/json' \
-  -d '{"username":"alice@example.org","password":"<her password>"}'
+  -d '{"username":"alice@example.org","password":"<password for alice>"}'
 ```
 
 The sign-in returns an `access_token`. Pass it as `Authorization: Bearer <token>`, for example to `GET /datamodels/`, which should list the seeded data models. Then open the UI on port 5173 and sign in with the same credentials.
