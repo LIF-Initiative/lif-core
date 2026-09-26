@@ -18,6 +18,7 @@ on:
       - components/lif/logging/**
       - projects/lif_identity_mapper_api/**
       - .github/workflows/_deploy-service.yml
+      - components/lif/exceptions/**
 
 permissions:
   id-token: write

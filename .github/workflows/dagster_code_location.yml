@@ -25,6 +25,7 @@ on:
       - components/lif/logging/**
       - components/lif/query_planner_service/**
       - orchestrators/dagster/lif-orchestrator/**
+      - components/lif/lif_schema_config/**
 
 jobs:
 

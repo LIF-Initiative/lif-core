@@ -280,6 +280,7 @@
         "InnoDB",
         "VARCHAR",
         "utf8mb4",
+        "unauditable",
         "vitest",
         "EXPLAIN",
         "xform"
