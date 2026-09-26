@@ -116,6 +116,7 @@
         "fastapi",
         "fastmcp",
         "firstname",
+        "getaddrinfo",
         "getenv",
         "fromjson",
         "frontends",
