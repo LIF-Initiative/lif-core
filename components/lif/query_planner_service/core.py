@@ -25,11 +25,16 @@ from lif.datatypes import (
     LIFUpdate,
 )
 from lif.exceptions.core import LIFException
+from lif.lif_fragment_utils import adjust_lif_fragments_for_initial_orchestrator_simplification
 from lif.logging.core import get_logger
-from lif.query_planner_service.datatypes import LIFQueryPlannerConfig
+from lif.query_planner_service.datatypes import LIFQueryPlannerConfig, LIFQueryPlannerPartialRecords
 from lif.query_planner_service import statistics, util
 
 logger = get_logger(__name__)
+
+# Partial-answer reason for a source that failed inside an orchestration run. Dagster swallows
+# the failure and the run still succeeds, so it is only visible in the part result (#1232).
+PARTIAL_REASON_SOURCE_FAILED: str = "source_failed"
 
 JOB_EXPIRY_HOURS: int = 1
 JOB_MAX_CACHE_SIZE: int = 200
@@ -63,6 +68,7 @@ class LIFQueryPlannerService:
         paths_not_in_cache: List[str],
         lif_query_plan: LIFQueryPlan | None = None,
         correlation_id: str | None = None,
+        client: str = statistics.CLIENT_UNKNOWN,
     ) -> None:
         """
         Emit the planning-phase statistics event. Never raises -- statistics must not fail a query.
@@ -71,7 +77,13 @@ class LIFQueryPlannerService:
             logger.info(
                 statistics.format_event(
                     statistics.build_query_planned_event(
-                        outcome, requested_paths, paths_not_in_cache, lif_query_plan, correlation_id
+                        outcome,
+                        requested_paths,
+                        paths_not_in_cache,
+                        lif_query_plan,
+                        correlation_id,
+                        client,
+                        self.config.org_key,
                     )
                 )
             )
@@ -80,20 +92,32 @@ class LIFQueryPlannerService:
 
     # Main function to run a query
     # -------------------------------------------------------------------------
-    async def run_query(self, query: LIFQuery, first_run: bool) -> List[LIFRecord] | LIFQueryStatusResponse:
+    async def run_query(
+        self, query: LIFQuery, first_run: bool, client: str | None = None, query_id: str | None = None
+    ) -> List[LIFRecord] | LIFQueryStatusResponse | LIFQueryPlannerPartialRecords:
         """
         Execute a LIF query.
 
         Args:
             query (LIFQuery): Input query with filter and selected fields.
+            client (str | None): The raw `X-LIF-Client` header value, or None when absent.
+            query_id (str | None): On a re-run after orchestration, the job it follows, so a
+                       source that failed during that job can be reported.
 
         Returns:
             List[LIFRecord]: List of matching LIF records (persons) from the database, with only
                        requested fields present.
+            LIFQueryPlannerPartialRecords: The cached records, with the reason, when no source can
+                       serve the missing paths or the orchestrator submission failed (#1232).
+                       Also when paths are still missing after an orchestration job in which a
+                       source failed. Paths missing after a job where every source succeeded are
+                       returned as a plain list: that most likely means the learner has no data.
 
         Raises:
             LIFException: If the query fails.
         """
+        # Reduced here, at the service boundary, so no raw header value reaches a log line.
+        client = statistics.normalize_client(client)
         try:
             # Send the query to the LIF Cache service
             lif_records: List[LIFRecord] = await query_lif_cache(
@@ -119,7 +143,9 @@ class LIFQueryPlannerService:
                 # Guarded on first_run: the sync /query path calls run_query twice, and the
                 # second call lands here once the orchestrator has filled the cache (#341 gap 3).
                 if first_run:
-                    self._emit_query_planned(statistics.OUTCOME_SERVED_FROM_CACHE, lif_fragment_paths, [])
+                    self._emit_query_planned(
+                        statistics.OUTCOME_SERVED_FROM_CACHE, lif_fragment_paths, [], client=client
+                    )
                 return lif_records
             logger.info(f"LIF Record does not contain all requested fields, missing: {lif_fragment_paths_not_found}")
 
@@ -139,9 +165,14 @@ class LIFQueryPlannerService:
                         f"No information sources found for the requested LIF fragment paths: {lif_fragment_paths}. Returning LIF records found in cache."
                     )
                     self._emit_query_planned(
-                        statistics.OUTCOME_NO_SOURCES_AVAILABLE, lif_fragment_paths, lif_fragment_paths_not_found
+                        statistics.OUTCOME_NO_SOURCES_AVAILABLE,
+                        lif_fragment_paths,
+                        lif_fragment_paths_not_found,
+                        client=client,
                     )
-                    return lif_records
+                    return LIFQueryPlannerPartialRecords(
+                        records=lif_records, reason=statistics.OUTCOME_NO_SOURCES_AVAILABLE
+                    )
 
                 orchestrator_job_request: OrchestratorJobRequest = OrchestratorJobRequest(
                     lif_query_plan=lif_query_plan,
@@ -161,11 +192,14 @@ class LIFQueryPlannerService:
                         lif_fragment_paths,
                         lif_fragment_paths_not_found,
                         lif_query_plan,
+                        client=client,
                     )
-                    return lif_records
+                    return LIFQueryPlannerPartialRecords(
+                        records=lif_records, reason=statistics.OUTCOME_ORCHESTRATOR_SUBMISSION_FAILED
+                    )
 
                 lif_query_planner_job = LIFQueryPlannerJob(
-                    job_id=orchestrator_job_request_response.run_id, query=query, status="PENDING"
+                    job_id=orchestrator_job_request_response.run_id, query=query, status="PENDING", client=client
                 )
 
                 prune_job_store()
@@ -178,10 +212,17 @@ class LIFQueryPlannerService:
                     lif_fragment_paths_not_found,
                     lif_query_plan,
                     lif_query_planner_job.job_id,
+                    client,
                 )
                 query_status_response = LIFQueryStatusResponse(query_id=lif_query_planner_job.job_id, status="PENDING")
                 return query_status_response
             else:
+                job: LIFQueryPlannerJob | None = JOB_STORE.get(query_id) if query_id else None
+                if job and job.failed_source_ids:
+                    logger.warning(
+                        f"Sources failed during orchestration ({job.failed_source_ids}); returning partial records."
+                    )
+                    return LIFQueryPlannerPartialRecords(records=lif_records, reason=PARTIAL_REASON_SOURCE_FAILED)
                 logger.info("Orchestrator already called, returning LIF records found so far.")
                 return lif_records
         except httpx.HTTPStatusError as e:
@@ -297,20 +338,25 @@ class LIFQueryPlannerService:
                     logger.error(
                         f"Error in orchestration part result for information source {part_result.information_source_id}: {part_result.error}"
                     )
+                    job.failed_source_ids.append(part_result.information_source_id)
                 else:
                     if part_result.fragments:
                         fragments.extend([fragment for fragment in part_result.fragments if fragment])
 
             try:
                 logger.info(
-                    statistics.format_event(statistics.build_query_completed_event(results, lif_fragment_paths))
+                    statistics.format_event(
+                        statistics.build_query_completed_event(
+                            results, lif_fragment_paths, job.client, self.config.org_key
+                        )
+                    )
                 )
             except Exception:
                 logger.exception("Failed to emit query statistics")
 
             # Send the orchestration results to the LIF Cache service
             lif_query_filter: LIFQueryFilter = lif_query.filter
-            lif_fragments: List[LIFFragment] = util.adjust_lif_fragments_for_initial_orchestrator_simplification(
+            lif_fragments: List[LIFFragment] = adjust_lif_fragments_for_initial_orchestrator_simplification(
                 fragments, lif_fragment_paths
             )
 
@@ -405,13 +451,18 @@ class LIFQueryPlannerJob(BaseModel):
         job_id (str): Unique identifier for the job.
         query (LIFQuery): The query to be executed.
         status (str): Status of the job (e.g., 'pending', 'running', 'completed').
+        failed_source_ids (List[str]): Information sources whose part failed during orchestration.
         created_timestamp (str): Timestamp of when the job was created.
         updated_timestamp (str): Timestamp of when the job was last updated.
+        client (str): The caller that submitted the query, for the completion statistics event.
     """
 
     job_id: str = Field(..., description="Unique identifier for the job")
     query: LIFQuery = Field(..., description="The query to be executed")
     status: str = Field(..., description="Status of the job (e.g., 'pending', 'running', 'completed')")
+    failed_source_ids: List[str] = Field(
+        default_factory=list, description="Information sources whose part failed during orchestration"
+    )
     created_timestamp: str = Field(
         ...,
         description="Timestamp of when the job was created",
@@ -422,6 +473,8 @@ class LIFQueryPlannerJob(BaseModel):
         description="Timestamp of when the job was last updated",
         default_factory=lambda: datetime.now(timezone.utc).isoformat(),
     )
+    # The orchestrator's results callback carries no caller, so the job remembers it (#1272).
+    client: str = Field(statistics.CLIENT_UNKNOWN, description="The caller that submitted the query")
 
 
 # -------------------------------------------------------------------------

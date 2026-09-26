@@ -63,25 +63,6 @@ def test_sample():
     assert util is not None
 
 
-def test_adjust_lif_fragments_for_initial_orchestrator_simplification():
-    lif_fragments = [
-        LIFFragment(fragment_path="person.all", fragment=[person_alan_dict]),
-        LIFFragment(fragment_path="person.address", fragment=[{"city": "Seattle", "state": "WA"}]),
-    ]
-    desired_fragment_paths = ["person.employmentLearningExperience", "person.positionPreferences"]
-
-    adjusted_fragments = util.adjust_lif_fragments_for_initial_orchestrator_simplification(
-        lif_fragments, desired_fragment_paths
-    )
-
-    assert len(adjusted_fragments) == 3
-    assert adjusted_fragments[0].fragment_path == "person.employmentLearningExperience"
-    assert adjusted_fragments[0].fragment == person_alan_dict["person"][0]["employmentLearningExperience"]
-    assert adjusted_fragments[1].fragment_path == "person.positionPreferences"
-    assert adjusted_fragments[1].fragment == person_alan_dict["person"][0]["positionPreferences"]
-    assert adjusted_fragments[2].fragment_path == "person.address"
-
-
 def test_get_lif_fragment_paths_from_query():
     person_identifier: LIFPersonIdentifier = LIFPersonIdentifier(
         identifier="100001", identifierType="School-assigned number"

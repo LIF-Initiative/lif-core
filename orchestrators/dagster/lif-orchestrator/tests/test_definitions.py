@@ -5,19 +5,15 @@ in pyproject.toml and can be imported without errors.
 """
 
 
-def test_query_planner_util_imports():
-    """Test that query_planner_service.util imports work.
+def test_lif_fragment_utils_imports():
+    """Test that lif_fragment_utils imports work.
 
     This test verifies that lif_schema_config is included as a brick,
-    since query_planner_service.util imports from it.
+    since lif_fragment_utils imports from it.
     """
-    from lif.query_planner_service.util import (
-        adjust_lif_fragments_for_initial_orchestrator_simplification,
-        create_lif_query_plan_from_information_sources_config,
-    )
+    from lif.lif_fragment_utils import adjust_lif_fragments_for_initial_orchestrator_simplification
 
     assert adjust_lif_fragments_for_initial_orchestrator_simplification is not None
-    assert create_lif_query_plan_from_information_sources_config is not None
 
 
 def test_lif_schema_config_imports():
