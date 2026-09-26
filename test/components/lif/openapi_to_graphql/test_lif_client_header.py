@@ -46,10 +46,7 @@ class _CapturingAsyncClient:
         return _CapturingResponse()
 
 
-async def _schema(monkeypatch):
-    # type_factory.input_type_cache is module-level and keyed by type name only, so a
-    # PersonInput built by another test in the same process would be reused here.
-    monkeypatch.setattr(type_factory, "input_type_cache", {})
+async def _schema():
     openapi = {
         "components": {
             "schemas": {
@@ -72,7 +69,7 @@ async def _schema(monkeypatch):
 
 async def _app(monkeypatch) -> FastAPI:
     app = FastAPI()
-    app.include_router(GraphQLRouter(await _schema(monkeypatch), prefix="/graphql"))
+    app.include_router(GraphQLRouter(await _schema(), prefix="/graphql"))
     return app
 
 
@@ -103,7 +100,7 @@ async def test_relays_a_malformed_name_unchanged_for_the_planner_to_reject(monke
 
 
 async def test_a_schema_executed_without_a_request_still_names_itself(monkeypatch):
-    schema = await _schema(monkeypatch)
+    schema = await _schema()
     fake = _CapturingAsyncClient()
     monkeypatch.setattr(type_factory.httpx, "AsyncClient", fake)
     result = await schema.execute(PERSON_QUERY)

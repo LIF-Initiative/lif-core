@@ -351,6 +351,63 @@ async def test_do_save_mappings_datastore_exception(mock_initialize, mock_shutdo
             )
 
 
+# The column widths from projects/lif_identity_mapper_mariadb/02-ddl.sql after #1258. Pinned here
+# as literals so a change to a column width shows up as a deliberate test change (#1300).
+FIELD_WIDTHS = [
+    ("lif_organization_id", 191),
+    ("lif_organization_person_id", 191),
+    ("target_system_id", 191),
+    ("target_system_person_id_type", 100),
+    ("target_system_person_id", 255),
+]
+
+
+def _mapping_with(field: str, value: str) -> dict:
+    mapping = {
+        "mapping_id": None,
+        "lif_organization_id": "org1",
+        "lif_organization_person_id": "person1",
+        "target_system_id": "ext_org1",
+        "target_system_person_id_type": "School-assigned number",
+        "target_system_person_id": "ext_person1",
+    }
+    mapping[field] = value
+    return mapping
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("field,width", FIELD_WIDTHS)
+@patch("lif.identity_mapper_restapi.core.initialize", mock_initialize)
+@patch("lif.identity_mapper_restapi.core.shutdown", mock_shutdown)
+async def test_do_save_mappings_rejects_a_value_wider_than_its_column(field, width):
+    """One character over the column width is a 422 naming the field, not a 500 from the database (#1300)."""
+    async with get_client() as client:
+        with patch.object(core.service, "save_mappings", new_callable=AsyncMock) as mock_save_mappings:
+            response = await client.post(
+                "/organizations/org1/persons/person1/mappings", json=[_mapping_with(field, "x" * (width + 1))]
+            )
+
+    assert response.status_code == 422
+    assert [error["loc"] for error in response.json()["detail"]] == [["body", 0, field]]
+    mock_save_mappings.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("field,width", FIELD_WIDTHS)
+@patch("lif.identity_mapper_restapi.core.initialize", mock_initialize)
+@patch("lif.identity_mapper_restapi.core.shutdown", mock_shutdown)
+async def test_do_save_mappings_accepts_a_value_exactly_as_wide_as_its_column(field, width):
+    """The service receives the plain IdentityMapping DTO; the request model only validates."""
+    mapping = _mapping_with(field, "x" * width)
+    async with get_client() as client:
+        with patch.object(core.service, "save_mappings", new_callable=AsyncMock) as mock_save_mappings:
+            mock_save_mappings.return_value = []
+            response = await client.post("/organizations/org1/persons/person1/mappings", json=[mapping])
+
+    assert response.status_code == 200
+    mock_save_mappings.assert_awaited_once_with("org1", "person1", [core.IdentityMapping(**mapping)])
+
+
 @pytest.mark.asyncio
 @patch("lif.identity_mapper_restapi.core.initialize", mock_initialize)
 @patch("lif.identity_mapper_restapi.core.shutdown", mock_shutdown)
