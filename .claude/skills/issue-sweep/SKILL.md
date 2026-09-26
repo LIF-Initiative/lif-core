@@ -21,6 +21,14 @@ gh issue list --state open --limit 200 --json number,title,labels,updatedAt \
   ${FILTER:+--label "$FILTER"}        # or --search "$FILTER"
 gh pr list --state merged --limit 60 --json number,title,mergedAt,closingIssuesReferences
 ```
+Commit evidence is gated on `main` in Phase 2, so bring local `main` current first. A stale `main`
+fails the ancestor check for genuinely merged work and yields a false `open`. The canonical remote
+is `origin` in a direct clone and `upstream` in a fork clone; match it by URL:
+```bash
+REMOTE=$(git remote -v | awk 'tolower($2) ~ /lif-initiative\/lif-core/ && /\(fetch\)/ {print $1; exit}')
+if [ "$(git branch --show-current)" = main ]; then git pull --ff-only "$REMOTE" main
+else git fetch "$REMOTE" main:main; fi   # refuses a non-fast-forward, which is what you want
+```
 Surface the count and the **stalest** issues (oldest `updatedAt`) — those are the richest closure source. Note this repo's convention: merged PRs and `Tracker:`-prefixed commits often reference the resolving issue (`#NNN → PR #MMM`), so resolution evidence usually lives in a merged PR body, a commit `--grep`, or the presence of the named code.
 
 > **Scope deliberately — this sweep is expensive.** Each issue costs ~75K tokens (two judges, each running ~30 `gh`/`git`/`grep` calls). A full open-issue sweep of a large repo (lif-core has 300+ open) is ~20M+ tokens. **Default to a label filter or the stalest ~10–20 issues**, not all-open, unless the user explicitly asks for the whole backlog. Always report the scope you swept (Phase 3) so "nothing else to close" isn't read as "swept everything."
@@ -46,7 +54,7 @@ const VERDICT = {
   type: 'object',
   properties: {
     status: { type: 'string', enum: ['resolved', 'open', 'uncertain'] },
-    evidence: { type: 'string', description: 'merged PR #, commit SHA, file/symbol, or why still open' },
+    evidence: { type: 'string', description: 'merged PR #, commit SHA confirmed on main, file/symbol, or why still open' },
     confidence: { type: 'string', enum: ['high', 'medium', 'low'] },
   },
   required: ['status', 'evidence', 'confidence'],
@@ -145,6 +153,6 @@ Build a table from the Workflow result:
 ## Rules
 
 - **Evidence or it didn't resolve.** `resolved` requires a concrete merged PR #, commit SHA, or named shipped symbol — never a vibe.
-- **A cited commit must be an ancestor of `main`.** Scope commit searches to `main` explicitly (`git log main --grep …`), and run `git merge-base --is-ancestor <sha> main` on any SHA before believing it. A bare `git log --grep` searches from HEAD, so a sweep run from a feature branch — or an agent that "widens" an empty search with `--all` — reads work-in-progress as shipped. This is the single most likely way the sweep produces a false `resolved`; verified live against open issue #722 on 2026-08-19.
+- **A cited commit must be an ancestor of `main`.** Scope commit searches to `main` explicitly (`git log main --grep …`), and run `git merge-base --is-ancestor <sha> main` on any SHA before believing it. A bare `git log --grep` searches from HEAD, so a sweep run from a feature branch — or an agent that "widens" an empty search with `--all` — reads work-in-progress as shipped. This is the single most likely way the sweep produces a false `resolved`; first seen 2026-08-19 on #722 (since closed), whose commits sat on a branch that was never merged.
 - **Stale ≠ resolved.** An old `updatedAt` flags an issue *to check*, not to close.
 - **Never auto-close.** The close-list is a proposal; the user decides.
