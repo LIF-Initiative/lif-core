@@ -31,6 +31,7 @@ def generate_graphql_root_types(
     queryable_fields_per_type = {}
     input_types = {}
     mutable_input_types = {}
+    input_type_cache = {}  # Per build: keyed by type name alone, so it must not outlive this schema (#1293)
     mutable_input_type_cache = {}  # Add a separate cache for mutable input types
 
     # First, create all GraphQL types
@@ -39,7 +40,7 @@ def generate_graphql_root_types(
 
     # Then, create input/filter types and mutable input types
     for type_name, schema in schemas.items():
-        input_class = create_input_type(type_name, schema, openapi, created_types)
+        input_class = create_input_type(type_name, schema, openapi, created_types, input_type_cache)
         if input_class:
             input_types[type_name] = input_class
 

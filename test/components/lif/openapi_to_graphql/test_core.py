@@ -499,10 +499,7 @@ class TestQueryPlannerFailureReachesCaller:
 
     PERSON_QUERY = '{ person(filter: {name: "x"}) { name } }'
 
-    async def _schema(self, monkeypatch):
-        # type_factory.input_type_cache is module-level and keyed by type name only, so a
-        # PersonInput built by an earlier test in the same process would be reused here.
-        monkeypatch.setattr(type_factory, "input_type_cache", {})
+    async def _schema(self):
         # Person is an array at the root, matching the bundled schema — build_root_query_type
         # relies on that to decide the resolver's return type.
         openapi = _empty_openapi(
@@ -516,7 +513,7 @@ class TestQueryPlannerFailureReachesCaller:
         )
 
     async def _execute(self, monkeypatch, response):
-        schema = await self._schema(monkeypatch)
+        schema = await self._schema()
         monkeypatch.setattr(type_factory.httpx, "AsyncClient", _FakeAsyncClient(response))
         return await schema.execute(self.PERSON_QUERY)
 
@@ -550,3 +547,36 @@ class TestQueryPlannerFailureReachesCaller:
 
         assert not result.errors
         assert result.data == {"person": []}
+
+
+# === Input types belong to one schema build (Issue #1293) ===
+
+
+class TestInputTypesArePerSchemaBuild:
+    """The filter input cache used to be module-level and keyed by type name alone, so the
+    second schema built in a process silently reused the first one's PersonInput."""
+
+    INPUT_FIELDS_QUERY = '{ __type(name: "PersonInput") { inputFields { name } } }'
+
+    @staticmethod
+    async def _schema_with_queryable(field_name):
+        openapi = _empty_openapi(
+            {"Person": {"type": "array", "properties": {field_name: _make_scalar_field(queryable=True)}}}
+        )
+        return await generate_graphql_schema(
+            openapi=openapi,
+            root_type_name="Person",
+            query_planner_query_url="http://localhost:9999/query",
+            query_planner_update_url="http://localhost:9999/update",
+        )
+
+    async def _input_fields(self, schema):
+        result = await schema.execute(self.INPUT_FIELDS_QUERY)
+        return {field["name"] for field in result.data["__type"]["inputFields"]}
+
+    async def test_second_build_gets_input_types_from_its_own_definition(self):
+        first = await self._schema_with_queryable("alpha")
+        second = await self._schema_with_queryable("beta")
+
+        assert await self._input_fields(first) == {"alpha"}
+        assert await self._input_fields(second) == {"beta"}
