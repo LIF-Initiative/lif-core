@@ -33,6 +33,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Identity Mapper `POST .../mappings` rejects a field wider than its database column with a `422`
+  naming the field, instead of a `500` from MariaDB's `Data too long`
 - `graphql_client` raises `GraphQLClientException` when a `200` response carries GraphQL `errors`,
   including alongside partial `data`, instead of returning the body as a success. The semantic search
   MCP tools `lif_query` and `lif_mutation` therefore report a GraphQL failure as a tool error rather
