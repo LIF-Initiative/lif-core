@@ -26,13 +26,18 @@ from lif.mdr_restapi import (
 from lif.mdr_utils.config import get_settings
 import os
 
+from lif.mdr_restapi.local_users import parse_local_users, verify_password
 from lif.mdr_utils.logger_config import get_logger
 from pydantic import BaseModel
 
 logger = get_logger(__name__)
 
+# Configured logins (#1316). When set, they replace the demo personas below, so the
+# shared demo password is only required when none are configured.
+LOCAL_USERS = parse_local_users(os.environ.get("MDR__AUTH__LOCAL_USERS", ""))
+
 _demo_password = os.environ.get("LIF_DEMO_USER_PASSWORD")
-if _demo_password is None or not _demo_password.strip():
+if not LOCAL_USERS and (_demo_password is None or not _demo_password.strip()):
     # No fallback on purpose: a default password is a developer convenience that
     # makes insecurity the default. See #1191. (#1179 will consolidate this and
     # the other required-env guards into one shared helper.)
@@ -41,7 +46,7 @@ if _demo_password is None or not _demo_password.strip():
         "no safe default. In AWS it is supplied from SSM via the service's "
         "taskdef-includes; locally, export it or set it in your .env."
     )
-DEMO_USER_PASSWORD = _demo_password.strip()
+DEMO_USER_PASSWORD = (_demo_password or "").strip()
 
 app = FastAPI(title="LIF Metadata Repository API", description="API for the LIF Metadata Repository", version="1.0.0")
 
@@ -362,6 +367,20 @@ app.add_middleware(
 def find_user(username: str, password: str) -> Dict[str, Any] | None:
     """Find user by username and verify password against the shared demo password."""
     logger.info(f"Looking for user: {username}")
+    if LOCAL_USERS:
+        stored = LOCAL_USERS.get(username)
+        if stored is None or not verify_password(password, stored):
+            logger.warning(f"Login failed for configured user {username}")
+            return None
+        # Configured users carry no persona details; the UI falls back to the username.
+        return {
+            "username": username,
+            "firstname": "",
+            "lastname": "",
+            "identifier": "",
+            "identifier_type": "",
+            "identifier_type_enum": "",
+        }
     for user in users_db:
         if user["username"] == username:
             logger.info(f"Found user {username}, verifying password...")

@@ -525,6 +525,8 @@ services:
       MDR__COOKIE__SECURE: ${MDR__COOKIE__SECURE:-false}
       MDR__INVITE__TOKEN_MAX_AGE_SECONDS: ${MDR__INVITE__TOKEN_MAX_AGE_SECONDS:-604800}
       LIF_DEMO_USER_PASSWORD: ${LIF_DEMO_USER_PASSWORD:?set it in your .env - no default, see issue 1191}
+      # Configured logins that replace the demo personas; see scripts/hash-mdr-password.py (#1316).
+      MDR__AUTH__LOCAL_USERS: ${MDR__AUTH__LOCAL_USERS:-}
     ports:
       - "8012:8012"
     networks:
