@@ -5,8 +5,8 @@ each hash with ``python3 scripts/hash-mdr-password.py``. When the variable is se
 these users replace the built-in demo personas, and ``LIF_DEMO_USER_PASSWORD`` is
 no longer needed.
 
-Hashes are scrypt, stored as ``scrypt:<n>:<r>:<p>:<salt>:<key>`` with unpadded
-URL-safe base64. That alphabet has no ``$``, ``,`` or ``=``, so a value pastes into
+Hashes are scrypt, stored as ``scrypt:<n>:<r>:<p>:<salt>:<key>``, with salt and key in
+URL-safe base64 without padding. That alphabet has no ``$``, ``,`` or ``=``, so a value pastes into
 a ``.env`` file without quoting or Compose interpolation surprises.
 
 Standard library only: ``scripts/hash-mdr-password.py`` loads this file by path so
@@ -18,7 +18,7 @@ import hashlib
 import hmac
 import secrets
 
-_N, _R, _P = 2**14, 8, 1  # 16 MiB per hash, inside OpenSSL's default 32 MiB maxmem
+_N, _R, _P = 2**14, 8, 1  # 16 MiB per hash, inside OpenSSL's default 32 MiB memory limit
 _KEY_LEN = 32
 
 
