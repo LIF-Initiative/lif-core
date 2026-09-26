@@ -92,6 +92,7 @@
 - [`load-testing.md`](operations/guides/load-testing.md) — Load testing notes for LIF services.
 - [`mdr-ui-e2e-playwright.md`](operations/guides/mdr-ui-e2e-playwright.md) — Driving the MDR UI end-to-end with Playwright: scratchpad setup, Cognito hosted-UI login automation + the duplicate-responsive-input gotcha, persisting login state, when to prefer the API instead.
 - [`self-serve-registration-walkthrough.md`](operations/guides/self-serve-registration-walkthrough.md) — End-to-end walkthrough of the #884 self-serve flow (register → workspace → invite → switch); tester checklist + admin/operator notes for verifying it on dev or demo.
+- [`test-driving-mdr.md`](operations/guides/test-driving-mdr.md) — Run MDR alone on any Docker host (no AWS/Cognito): configured scrypt-hashed logins, `.env` secrets template, TLS/URL notes (#1316).
 - [`testing.md`](operations/guides/testing.md) — Unit/integration test principles, sample data orgs, the 6 test users, service-layer testing order.
 
 ### `docs/operations/proposals/` — Proposed work
