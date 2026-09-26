@@ -12,9 +12,11 @@ import httpx
 from pydantic import BaseModel, Field
 
 from lif.datatypes import (
+    OrchestratorJob,
     OrchestratorJobRequest,
     OrchestratorJobRequestResponse,
     OrchestratorJobResults,
+    OrchestratorJobStatus,
     LIFFragment,
     LIFQuery,
     LIFQueryFilter,
@@ -259,6 +261,7 @@ class LIFQueryPlannerService:
             if query_id not in JOB_STORE:
                 raise ValueError(f"Invalid query ID: {query_id}")
             job: LIFQueryPlannerJob = JOB_STORE[query_id]
+            await self._fail_job_if_its_run_failed(job)
             return LIFQueryStatusResponse(query_id=query_id, status=job.status, error_message=job.error_message)
         except ValueError as e:
             raise e
@@ -292,9 +295,32 @@ class LIFQueryPlannerService:
         job: LIFQueryPlannerJob | None = JOB_STORE.get(query_id)
         if job is None:
             raise ValueError(f"Invalid query ID: {query_id}")
+        await self._fail_job_if_its_run_failed(job)
         if job.status != LIFQueryStatus.COMPLETED:
             return LIFQueryStatusResponse(query_id=query_id, status=job.status, error_message=job.error_message)
         return await self.run_query(job.query, first_run=False, client=job.client, query_id=query_id)
+
+    async def _fail_job_if_its_run_failed(self, job: "LIFQueryPlannerJob") -> None:
+        """
+        Mark a PENDING job FAILED when the orchestrator reports its run failed (#1113).
+
+        A run that dies before its callback, including one whose callback POST fails, left the
+        job PENDING until the caller's timeout. Only an explicit FAILED counts: the orchestrator
+        answers 404 for every error, a Dagster outage included, so an unanswered or unclear
+        check leaves the job as it was rather than failing it.
+        """
+        if job.status != LIFQueryStatus.PENDING:
+            return
+        try:
+            async with httpx.AsyncClient(timeout=self.config.service_request_timeout_seconds) as client:
+                response = await client.get(f"{self.lif_orchestrator_post_url}/{job.job_id}")
+            response.raise_for_status()
+            run = OrchestratorJob(**response.json())
+        except Exception as e:
+            logger.warning(f"Could not check orchestration run {job.job_id} ({type(e).__name__}); leaving it PENDING")
+            return
+        if run.status == OrchestratorJobStatus.FAILED:
+            _mark_job_failed(job, "The orchestration run failed")
 
     # Main function to run an update
     # -------------------------------------------------------------------------
@@ -408,10 +434,10 @@ class LIFQueryPlannerService:
             job.status = LIFQueryStatus.COMPLETED
             JOB_STORE[run_id] = job
         except httpx.HTTPStatusError as e:
-            _mark_job_failed(pending_job, e)
+            _mark_job_failed(pending_job, f"Processing the orchestration results failed ({type(e).__name__})")
             raise e
         except Exception as e:
-            _mark_job_failed(pending_job, e)
+            _mark_job_failed(pending_job, f"Processing the orchestration results failed ({type(e).__name__})")
             msg = f"LIF Query Planner error: {e}"
             logger.exception(msg)
             raise LIFException(msg) from e
@@ -552,13 +578,14 @@ def add_job_to_store(job: LIFQueryPlannerJob) -> None:
     JOB_STORE[job.job_id] = job
 
 
-def _mark_job_failed(job: LIFQueryPlannerJob | None, error: Exception) -> None:
+def _mark_job_failed(job: LIFQueryPlannerJob | None, reason: str) -> None:
     """Mark a job FAILED so a poller learns now instead of waiting for its timeout (#1107).
 
-    The message reaches API callers through the status and result endpoints, so it names the
-    failure type without echoing the exception text, which may carry learner data (#1269).
+    The reason reaches API callers through the status and result endpoints, so callers pass a
+    fixed description (at most an exception's type), never exception text, which may carry
+    learner data (#1269).
     """
     if job is None:
         return
     job.status = LIFQueryStatus.FAILED
-    job.error_message = f"Processing the orchestration results failed ({type(error).__name__})"
+    job.error_message = reason
