@@ -182,7 +182,7 @@ class LIFAIAgent:
         total_cost = 0.0
 
         message = message.strip()
-        response = self.reframe_query_with_identifiers(message, identifier, identifier_type, greeting)
+        response = await self.reframe_query_with_identifiers(message, identifier, identifier_type, greeting)
         message = response.get("content", "").strip()
 
         # Add tokens and cost from the reframed query generation
@@ -243,10 +243,14 @@ class LIFAIAgent:
         logger.info(f"Tokens: {total_input_tokens + total_output_tokens + total_cached_tokens} Cost: {cost}")
         return total_tokens, cost
 
-    def reframe_query_with_identifiers(
+    async def reframe_query_with_identifiers(
         self, query: str, identifier: str, identifier_type: str, greeting: str
     ) -> dict[str, Any]:
-        """Reframes the query with identifier info."""
+        """Reframes the query with identifier info.
+
+        Async so the LLM call does not block the event loop: the Advisor runs one uvicorn
+        worker, and a blocking call here stalls every other conversation (#1106).
+        """
         try:
             base_dir = os.path.dirname(__file__)
             prompt_path = os.path.join(base_dir, "prompts", "prompt_template_query.txt")
@@ -257,7 +261,7 @@ class LIFAIAgent:
             )
             # ty-ignore: langchain/langgraph stubs are narrower than the runtime API.
             llm = ChatOpenAI(model=LLM_MODEL_NAME)  # ty: ignore[invalid-argument-type]
-            response = llm.invoke(prompt)
+            response = await llm.ainvoke(prompt)
             tokens, cost = self.calculate_tokens_and_cost([response])
             return {"content": response.content, "tokens": tokens, "cost": cost}
         except Exception:
