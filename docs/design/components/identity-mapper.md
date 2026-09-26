@@ -44,6 +44,8 @@ Version 1.0.0
 
 [Performance Report](#performance-report)
 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Async SQLAlchemy + asyncmy (issue #1199)](#async-sqlalchemy--asyncmy-issue-1199)
+
 [Possible Future Roadmap Items](#possible-future-roadmap-items)
 
 # Overview
@@ -351,9 +353,78 @@ Wall time is equivalent between the two approaches. Root cause: `pymysql` is pur
 work is **GIL-bound** — the event loop was never the throughput ceiling. The value of `to_thread` is
 therefore **event-loop non-starvation** (the *Concurrency* requirement): DB latency no longer blocks
 the single event loop, so slow or latent DB queries (or mixed async work such as the query planner's
-HTTP calls) no longer stall unrelated requests. True single-host throughput needs a follow-up:
-async SQLAlchemy with a C-extension async MariaDB driver (`asyncmy`/`aiomysql`), matching the MDR
-brick's async pattern.
+HTTP calls) no longer stall unrelated requests. The follow-up called out below is now implemented —
+async SQLAlchemy against the C-extension `asyncmy` driver — see
+[Async SQLAlchemy + asyncmy (issue #1199)](#async-sqlalchemy--asyncmy-issue-1199).
+
+### Async SQLAlchemy + asyncmy (issue #1199)
+
+The follow-up identified above is implemented. The storage brick now runs async SQLAlchemy
+(`create_async_engine` / `async_sessionmaker`,
+`components/lif/identity_mapper_storage_sql/db.py`) against the C-extension MariaDB driver
+**`asyncmy`** (`mysql+asyncmy`), and every storage method awaits its `AsyncSession` directly — the
+five `asyncio.to_thread` hops are gone (`components/lif/identity_mapper_storage_sql/core.py`).
+Driver selection is `IDENTITY_MAPPER_DB_DRIVER` (default `mysql+asyncmy` in the dev/demo compose
+files and the CloudFormation taskdef include). `pymysql` is removed; `aiosqlite` was added to the
+dev dependency group so the unit suite runs on async in-memory sqlite.
+
+**Why `asyncmy` and not `aiomysql`.** Issue #1199 names the two as interchangeable options. They are
+not. `aiomysql` wraps pure-Python `pymysql`, so it removes the `to_thread` boilerplate but keeps the
+GIL-bound core — the throughput objective that motivated the change would not have materialized.
+`asyncmy` is a Cython extension with a first-class SQLAlchemy 2.0 dialect (`mysql+asyncmy`) and
+publishes cp313 wheels, so no compiler is needed in the runtime image. Anyone revisiting this
+should not treat the two as equivalent.
+
+**The service now requires an *async* driver, and says so.** `create_async_engine` rejects a sync
+one outright, but its message (`The asyncio extension requires an async driver to be used. The
+loaded 'pymysql' is not async`) names neither the environment variable nor the value to set.
+`validate_db_environment` therefore checks the configured driver first and fails with:
+
+> `IDENTITY_MAPPER_DB_DRIVER is 'mysql+pymysql', a synchronous driver. This service uses async
+> SQLAlchemy and requires an async driver. Set it to 'mysql+asyncmy'. A deployed task definition or
+> compose file still carrying the old value needs updating (see issue #1199).`
+
+This matters because the image and the task definition deploy on different schedules: CI rebuilds
+and redeploys the image on merge, while `cloudformation/lif-identity-mapper-taskdef-includes.yml`
+is applied only by a manual `aws-deploy.sh`. An environment that gets the new image first fails
+fast and legibly rather than crash-looping on a cryptic error. Any environment setting
+`IDENTITY_MAPPER_DB_DRIVER` explicitly must be moved to `mysql+asyncmy`.
+
+A/B validation 2026-09-13, single host, same mariadb container (MariaDB 10.11, production DDL), the
+`asyncmy` worktree measured back to back against current main (`pymysql` + `to_thread`) in the same
+sitting. Sequential per-request latency is a wash — moving to the async driver does not change it:
+
+| operation | `asyncmy` (ms) | `pymysql` + `to_thread` (ms) |
+|---|---|---|
+| POST save n=1 | 5.1 | 4.0 |
+| POST save n=100 | 16.5 | 12.5 |
+| POST save n=500 | 47.8 | 55.6 |
+| GET n=500 | 6.4 | 13.1 |
+| DELETE n=500 | 2071 | 1767 |
+
+Under **50 parallel GETs** the asyncmy stack is reproducibly faster — six rounds across two sittings,
+each pair measured on the same machine/DB:
+
+| round | `asyncmy` wall / p50 / p95 (ms) | `pymysql` + `to_thread` wall / p50 / p95 (ms) |
+|---|---|---|
+| 1 | 1271 / 133 / 152 | 1517 / 225 / 347 |
+| 2 | 1215 / 52 / 83 | 1485 / 216 / 326 |
+| 3 | 1333 / 161 / 239 | 1521 / 241 / 363 |
+| 4 | 1251 / 96 / 130 | 1488 / 258 / 386 |
+| 5 | 1324 / 195 / 211 | 1430 / 237 / 314 |
+| 6 | 1245 / 143 / 162 | 1484 / 228 / 366 |
+
+p95 roughly **halves** (≈83–239 ms vs ≈314–386 ms), p50 improves ~20–60%, wall ~12–15%. Both
+stacks pool at `IDENTITY_MAPPER_DB_POOL_SIZE` (`10`), so the tail improvement is the driver + async
+path, not pool headroom. Absolute wall figures differ from the 2026-08-16/09-01 runs because host
+and container differed; deltas here are same-sitting and therefore comparable.
+
+Live correctness on the mariadb container held unchanged: batch create assigns IDs; re-POST upserts
+and preserves `mapping_id`; duplicate keys last-wins; DELETE 204 / missing 404; cross-org
+`mapping_id` → 400. Only driver and session plumbing changed — no route, status code, error
+contract, or datatype changes. The unit suite runs on async sqlite (`sqlite+aiosqlite`); the
+single-INSERT-per-batch assertion (`test_save_mappings_issues_one_insert_for_the_whole_batch`)
+still holds.
 
 ### Table-size sweep (record-count half, issue #1219)
 
@@ -388,10 +459,86 @@ same DDL with 240-byte key columns is created as `BTREE`; at the original width 
 batch-size tables above therefore cannot show this: at near-zero row counts a sequential scan fits in
 cache and looks every bit like the "one indexed SELECT" the code review assumed.
 
-**Verdict.** The *number of identity mapping records* half of the requirement is **not met at 1M
-rows under the current schema** — POST and GET degrade ~25 ms → ~1.1 s. The reads are point queries
-and the workload is fine; `uq_identity_mapping` just is not a usable index. The fix — narrow the key
-columns or charset so the unique key is a real B-tree, with a migration for existing tables — is
-tracked in issue [#1231](https://github.com/LIF-Initiative/lif-core/issues/1231) rather than fixed
-here. Re-run this sweep (`--seeds 0,10000,100000,1000000 --batch 100`) once that lands to confirm
-the curve returns to flat.
+**Verdict.** The *number of identity mapping records* half of the requirement was **not met at 1M
+rows under the schema as measured** — POST and GET degrade ~25 ms → ~1.1 s. The reads are point
+queries and the workload is fine; `uq_identity_mapping` just is not a usable index. The read path
+is fixed in [#1231](https://github.com/LIF-Initiative/lif-core/issues/1231), and the unique key
+itself in [#1258](https://github.com/LIF-Initiative/lif-core/issues/1258). See below.
+
+### Resolution (#1231) — the read path
+
+`read_by_lif_org_and_person` — the GET handler and the save pre-read, and the only
+table-size-sensitive read — now has a dedicated B-tree of its own:
+
+```sql
+INDEX idx_org_person (lif_organization_id, lif_organization_person_id)
+```
+
+Measured on a clean `mariadb:10.11` at 50,000 rows after `ANALYZE TABLE`, against the production
+DDL:
+
+| DDL | `EXPLAIN` (2-column lookup) | per-lookup |
+|---|---|---|
+| before | `type=ALL`, `key=NULL`, rows=49758 | 15.3 ms |
+| after | `type=ref`, `key=idx_org_person`, rows=5 | ~0.05 ms |
+
+Two things worth carrying forward:
+
+- **The penalty was never only at 1M.** The index was unusable at *every* table size; what grows
+  with row count is just what the full scan costs. At 10k–100k the scan hides inside HTTP overhead,
+  which is why the curve above reads as flat-then-knee.
+- **`uq_identity_mapping` was left `HASH` here, deliberately** (since resolved by #1258, below). Narrowing the key columns to
+  `VARCHAR(191)` would have made it a real B-tree (verified: 2692 bytes, `BTREE`, `type=ref`) and
+  would additionally make the DDL portable to MySQL 8, which rejects it outright today. That was
+  weighed against the additive index and not taken here, because it changes a column-width contract
+  for no measured read gain — the two fixes time identically. The constraint still enforces
+  uniqueness correctly; it is simply never read through. It remains open work, tracked in
+  [#1258](https://github.com/LIF-Initiative/lif-core/issues/1258), which also has to decide whether
+  `idx_org_person` then becomes redundant.
+
+`idx_org_person` was 2 × 255 chars × 4 bytes (utf8mb4) = **3060 bytes, 12 bytes under the same
+3072-byte limit** that broke `uq_identity_mapping` (#1258 removed both the index and the margin). Widening either column, or adding a third to
+this index, silently degrades it to `HASH` as well. `02-ddl.sql` carries this warning inline.
+
+**Verifying it, and the trap in doing so.** `EXPLAIN` on an empty or tiny table reports `key=NULL`
+whether or not a usable index exists, because the optimizer prefers a scan there — indistinguishable
+from the bug. Check `SHOW INDEX` for `Index_type = BTREE`, on a **populated** table, and do not
+validate in either direction against an empty one.
+
+No migration is required in dev or demo: ECS mounts EFS at `/mnt/efs`, not `/var/lib/mysql`, so the
+MariaDB datadir is ephemeral and `docker-entrypoint-initdb.d` replays `02-ddl.sql` on every task
+start. Local docker-compose *does* use named volumes (`mariadb_data_org{1,2,3}`), which hold only
+sample seed data, so pick the new schema up with:
+
+```bash
+docker compose -f deployments/advisor-demo-docker/docker-compose.yml down -v
+```
+
+### Resolution (#1258) — the unique key
+
+`lif_organization_id`, `lif_organization_person_id` and `target_system_id` are narrowed to
+`VARCHAR(191)` (`target_system_person_id_type` stays 100), so `uq_identity_mapping` is
+(191 × 3 + 100) × 4 = **2692 bytes** and MariaDB builds it as a real `BTREE`. Because the org/person
+read filters on the key's first two columns, the key serves it as a leftmost prefix, and
+`idx_org_person` is dropped.
+
+Measured on a clean `mariadb:10.11` (10.11.19) at 50,000 rows after `ANALYZE TABLE`:
+
+| DDL | `uq_identity_mapping` | org/person read (`EXPLAIN`) | 4-column lookup |
+|---|---|---|---|
+| before (#1231) | `HASH` | `type=ref`, `key=idx_org_person`, rows=5 | `key=idx_org_person`, rows=5 |
+| after | `BTREE` | `type=ref`, `key=uq_identity_mapping`, rows=5 | `type=const`, rows=1 |
+
+The in-place `ALTER TABLE ... MODIFY ..., DROP INDEX IF EXISTS idx_org_person` (in `MIGRATION.md`)
+was run on a populated table built from the old DDL: 50,000 rows and an identical row checksum
+before and after, key flipped to `BTREE`, and a second run succeeded. On `mysql:8` (8.4.11) the old
+DDL fails with `ERROR 1071 Specified key was too long` and the new one creates cleanly. Both engines
+run in strict mode, so a value over 191 characters is rejected (`1406 Data too long`), not
+truncated.
+
+`test_model.py` now guards the byte width directly: it sums the key's `VARCHAR` widths from
+`02-ddl.sql` and fails over 3072, which is the one regression SQLite-backed tests could not
+otherwise see.
+
+Re-run this sweep (`--seeds 0,10000,100000,1000000 --batch 100`) to confirm the end-to-end curve
+returns to flat at 1M.

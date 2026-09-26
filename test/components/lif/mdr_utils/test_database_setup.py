@@ -15,7 +15,7 @@ import pytest
 from fastapi import HTTPException
 
 from lif.mdr_utils import database_setup
-from lif.mdr_utils.database_setup import _redact_url, get_session
+from lif.mdr_utils.database_setup import _echo_from_env, _redact_url, get_session
 
 
 class TestRedactUrl:
@@ -56,6 +56,26 @@ class TestRedactUrl:
         # documents the "no exception" guarantee.
         assert _redact_url("") == ""
         assert _redact_url("not-a-url") == "not-a-url"
+
+
+class TestEchoToggle:
+    """#956 — SQLAlchemy echo must default to off and only come on via an
+    explicit `SQLALCHEMY_ECHO=true`. The parse logic lives in
+    `_echo_from_env` (consumed by engine construction at import), so test
+    the predicate directly instead of reloading the module."""
+
+    def test_echo_off_by_default(self, monkeypatch):
+        monkeypatch.delenv("SQLALCHEMY_ECHO", raising=False)
+        assert _echo_from_env() is False
+
+    @pytest.mark.parametrize("value", ["true", "TRUE", "True"])
+    def test_echo_on_when_env_is_true(self, monkeypatch, value):
+        monkeypatch.setenv("SQLALCHEMY_ECHO", value)
+        assert _echo_from_env() is True
+
+    def test_echo_off_for_any_other_value(self, monkeypatch):
+        monkeypatch.setenv("SQLALCHEMY_ECHO", "1")
+        assert _echo_from_env() is False
 
 
 def _make_request(tenant_schema):

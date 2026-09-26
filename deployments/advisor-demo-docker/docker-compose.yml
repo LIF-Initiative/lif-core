@@ -23,7 +23,7 @@ x-lif-identity-mapper-api-build-template: &lif-identity-mapper-api-build-templat
     dockerfile: projects/lif_identity_mapper_api/Dockerfile2
 
 x-lif-identity-mapper-api-environment-template: &lif-identity-mapper-api-environment-template
-  IDENTITY_MAPPER_DB_DRIVER: ${IDENTITY_MAPPER_DB_DRIVER:-mysql+pymysql}
+  IDENTITY_MAPPER_DB_DRIVER: ${IDENTITY_MAPPER_DB_DRIVER:-mysql+asyncmy}
   IDENTITY_MAPPER_DB_USERNAME: ${IDENTITY_MAPPER_DB_USERNAME:-myuser}
   IDENTITY_MAPPER_DB_PASSWORD: ${IDENTITY_MAPPER_DB_PASSWORD:-mypass}
   IDENTITY_MAPPER_DB_PORT: ${IDENTITY_MAPPER_DB_PORT:-3306}
@@ -214,9 +214,13 @@ services:
     container_name: lif-query-planner-org1
     environment:
       LIF_QUERY_CACHE_URL: http://lif-query-cache-org1:8001
+      LIF_ORG_KEY: org1
       LIF_ORCHESTRATOR_URL: ${LIF_ORCHESTRATOR_URL:-http://lif-orchestrator-api-org1:8005}
       LIF_QUERY_PLANNER_INFORMATION_SOURCES_CONFIG_PATH: ${LIF_QUERY_PLANNER_INFORMATION_SOURCES_CONFIG_PATH:-/opt/app/information_sources_config.yml}
+      # 120, not the 300s code default -- see the ALB idle-timeout note in
+      # cloudformation/lif-query-planner-taskdef-includes.yml
       LIF_QUERY_TIMEOUT_SECONDS: ${LIF_QUERY_TIMEOUT_SECONDS:-120}
+      LIF_SERVICE_REQUEST_TIMEOUT_SECONDS: ${LIF_SERVICE_REQUEST_TIMEOUT_SECONDS:-10}
     ports:
       - "8002:8002"
     depends_on:
@@ -231,8 +235,12 @@ services:
     container_name: lif-query-planner-org2
     environment:
       LIF_QUERY_CACHE_URL: http://lif-query-cache-org2:8001
+      LIF_ORG_KEY: org2
       LIF_QUERY_PLANNER_INFORMATION_SOURCES_CONFIG_PATH: ${LIF_QUERY_PLANNER_INFORMATION_SOURCES_CONFIG_PATH:-/opt/app/information_sources_config.yml}
+      # 120, not the 300s code default -- see the ALB idle-timeout note in
+      # cloudformation/lif-query-planner-taskdef-includes.yml
       LIF_QUERY_TIMEOUT_SECONDS: ${LIF_QUERY_TIMEOUT_SECONDS:-120}
+      LIF_SERVICE_REQUEST_TIMEOUT_SECONDS: ${LIF_SERVICE_REQUEST_TIMEOUT_SECONDS:-10}
     ports:
       - "8102:8002"
     depends_on:
@@ -247,8 +255,12 @@ services:
     container_name: lif-query-planner-org3
     environment:
       LIF_QUERY_CACHE_URL: http://lif-query-cache-org3:8001
+      LIF_ORG_KEY: org3
       LIF_QUERY_PLANNER_INFORMATION_SOURCES_CONFIG_PATH: ${LIF_QUERY_PLANNER_INFORMATION_SOURCES_CONFIG_PATH:-/opt/app/information_sources_config.yml}
+      # 120, not the 300s code default -- see the ALB idle-timeout note in
+      # cloudformation/lif-query-planner-taskdef-includes.yml
       LIF_QUERY_TIMEOUT_SECONDS: ${LIF_QUERY_TIMEOUT_SECONDS:-120}
+      LIF_SERVICE_REQUEST_TIMEOUT_SECONDS: ${LIF_SERVICE_REQUEST_TIMEOUT_SECONDS:-10}
     ports:
       - "8202:8002"
     depends_on:
@@ -494,6 +506,7 @@ services:
       POSTGRESQL_HOST: ${LIF_MDR__API__DATABASE_HOST:-lif-mdr-database}
       POSTGRESQL_PORT: ${LIF_MDR__API__DATABASE_PORT:-5432}
       POSTGRESQL_DB: ${LIF_MDR__API__DATABASE_DBNAME:-LIF}
+      SQLALCHEMY_ECHO: ${SQLALCHEMY_ECHO:-false}
       CORS_ALLOW_ORIGINS: ${CORS_ALLOW_ORIGINS:-http://localhost:3000,http://localhost:5173,http://localhost:8080,https://mdr.lif.unicon.net,https://mdr.demo.lif.unicon.net/}
       CORS_ALLOW_CREDENTIALS: ${CORS_ALLOW_CREDENTIALS:-true}
       CORS_ALLOW_METHODS: ${CORS_ALLOW_METHODS:-GET,POST,PUT,DELETE,OPTIONS,PATCH}
@@ -637,6 +650,9 @@ services:
       DAGSTER_POSTGRES_USER: 'postgres_user'
       DAGSTER_POSTGRES_PASSWORD: 'postgres_password'
       DAGSTER_POSTGRES_DB: 'postgres_db'
+      # gRPC's default c-ares resolver intermittently stalls ~5s resolving dagster-code-location,
+      # which made ~5-10% of job submissions take ~5.5s (#1294). The system resolver does not.
+      GRPC_DNS_RESOLVER: native
     volumes: # Make docker client accessible so we can terminate containers from the webserver
       - /var/run/docker.sock:/var/run/docker.sock
       - /tmp/io_manager_storage:/tmp/io_manager_storage
@@ -663,6 +679,9 @@ services:
       DAGSTER_POSTGRES_USER: 'postgres_user'
       DAGSTER_POSTGRES_PASSWORD: 'postgres_password'
       DAGSTER_POSTGRES_DB: 'postgres_db'
+      # gRPC's default c-ares resolver intermittently stalls ~5s resolving dagster-code-location,
+      # which made ~5-10% of job submissions take ~5.5s (#1294). The system resolver does not.
+      GRPC_DNS_RESOLVER: native
     volumes: # Make docker client accessible so we can launch containers using host docker
       - /var/run/docker.sock:/var/run/docker.sock
       - /tmp/io_manager_storage:/tmp/io_manager_storage

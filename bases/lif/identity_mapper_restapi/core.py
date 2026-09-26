@@ -1,12 +1,13 @@
-import asyncio
 from contextlib import asynccontextmanager
 from typing import List
 from uuid import uuid4
 
 from fastapi import FastAPI, Request, status
 from fastapi.responses import JSONResponse
+from pydantic import Field
 from sqlalchemy import text
-from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.ext.asyncio import async_sessionmaker
 
 from lif.datatypes import IdentityMapping
 from lif.exceptions.core import DataNotFoundException, LIFException
@@ -14,7 +15,36 @@ from lif.identity_mapper_service.core import IdentityMapperService
 from lif.identity_mapper_storage.core import IdentityMapperStorage
 from lif.identity_mapper_storage_sql.core import IdentityMapperSqlStorage
 from lif.identity_mapper_storage_sql.db import dispose_db_engine, get_db_session_factory, initialize_database
+from lif.identity_mapper_storage_sql.model import IdentityMappingModel
 from lif.logging.core import get_logger
+
+
+def _column_width(name: str) -> int:
+    return IdentityMappingModel.__table__.c[name].type.length
+
+
+class IdentityMappingRequest(IdentityMapping):
+    """An IdentityMapping as the save endpoint accepts it: each field no wider than its column.
+
+    Without these limits an oversized value reached MariaDB and came back as a 500 (strict mode,
+    1406 Data too long); with them it is a 422 naming the field (#1300). Enforced here rather than
+    on the shared `datatypes` DTO, which a dozen projects package for a class only this service
+    uses. The widths are read from the SQLAlchemy model, which mirrors 02-ddl.sql.
+    """
+
+    lif_organization_id: str = Field(
+        ..., max_length=_column_width("lif_organization_id"), description="LIF Organization ID"
+    )
+    lif_organization_person_id: str = Field(
+        ..., max_length=_column_width("lif_organization_person_id"), description="LIF Organization Person ID"
+    )
+    target_system_id: str = Field(..., max_length=_column_width("target_system_id"), description="Target System ID")
+    target_system_person_id_type: str = Field(
+        ..., max_length=_column_width("target_system_person_id_type"), description="Type of Target System Person ID"
+    )
+    target_system_person_id: str = Field(
+        ..., max_length=_column_width("target_system_person_id"), description="Target System Person ID"
+    )
 
 
 storage: IdentityMapperStorage | None = None
@@ -23,22 +53,22 @@ service: IdentityMapperService | None = None
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    initialize()
+    await initialize()
     yield
-    shutdown()
+    await shutdown()
 
 
-def initialize():
-    initialize_database()
-    session_factory: sessionmaker[Session] = get_db_session_factory()
+async def initialize():
+    await initialize_database()
+    session_factory: async_sessionmaker = get_db_session_factory()
     global storage
     global service
     storage = IdentityMapperSqlStorage(session_factory)
     service = IdentityMapperService(storage=storage)
 
 
-def shutdown():
-    dispose_db_engine()
+async def shutdown():
+    await dispose_db_engine()
 
 
 app = FastAPI(lifespan=lifespan)
@@ -46,10 +76,10 @@ logger = get_logger(__name__)
 logger.info("Identity Mapper REST API service initialized successfully")
 
 
-def database_roundtrip() -> None:
-    session_factory: sessionmaker[Session] = get_db_session_factory()
-    with session_factory() as session:
-        session.execute(text("SELECT 1"))
+async def database_roundtrip() -> None:
+    session_factory: async_sessionmaker = get_db_session_factory()
+    async with session_factory() as session:
+        await session.execute(text("SELECT 1"))
 
 
 @app.get("/health")
@@ -57,13 +87,18 @@ async def check_health() -> JSONResponse:
     """
     Liveness check against the real database.
 
-    Runs a SELECT 1 through the session factory (off the event loop, like the mapping
-    handlers) so a hung or unreachable database reports unhealthy instead of stalling the
-    loop — and the container HEALTHCHECK / load balancer can restart the task.
+    Runs a SELECT 1 through the async session factory so a hung or unreachable database
+    reports unhealthy instead of stalling the loop — and the container HEALTHCHECK / load
+    balancer can restart the task. The driver is async (#1199), so this awaits the round
+    trip directly rather than offloading a blocking call to a thread.
+
+    Only database errors become 503. A wiring mistake raises out to the global handler as
+    a 500 instead: reporting it as "database unreachable" is what hid the sync/async
+    session mismatch behind a permanently unhealthy task (#1234 + #1199).
     """
     try:
-        await asyncio.to_thread(database_roundtrip)
-    except Exception as e:
+        await database_roundtrip()
+    except SQLAlchemyError as e:
         logger.error(f"Health check failed, database unreachable: {e}")
         return JSONResponse(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, content={"status": "unhealthy"})
     return JSONResponse(status_code=status.HTTP_200_OK, content={"status": "ok"})
@@ -74,11 +109,15 @@ async def check_health() -> JSONResponse:
     status_code=status.HTTP_200_OK,
     response_model=List[IdentityMapping],
 )
-async def do_save_mappings(org_id: str, person_id: str, mappings: List[IdentityMapping]) -> List[IdentityMapping]:
+async def do_save_mappings(
+    org_id: str, person_id: str, mappings: List[IdentityMappingRequest]
+) -> List[IdentityMapping]:
     logger.info(f"CALL RECEIVED TO (POST) /organizations/{org_id}/persons/{person_id}/mappings API")
     if service is None:
         raise RuntimeError("Service is not initialized")
-    mappings_created: List[IdentityMapping] = await service.save_mappings(org_id, person_id, mappings)
+    # Hand the service plain DTOs: IdentityMappingRequest exists only to validate the body.
+    to_save = [IdentityMapping(**mapping.model_dump()) for mapping in mappings]
+    mappings_created: List[IdentityMapping] = await service.save_mappings(org_id, person_id, to_save)
     logger.info(f"Mappings saved successfully for person {person_id} in organization {org_id}")
     return mappings_created
 

@@ -68,6 +68,7 @@
 
 - [`schema-loading.md`](design/cross-cutting/schema-loading.md) — Schema loading pattern (MDR-at-startup, no silent file fallback), `SchemaStateManager`, PascalCase/camelCase convention, Strawberry GraphQL implementation details.
 - [`self-serve-tenant-auth.md`](design/cross-cutting/self-serve-tenant-auth.md) — Self-serve tenant onboarding narrative: Cognito sign-up → post-confirmation Lambda → schema-per-tenant provisioning → workspace selection cookie → invite tokens (#882/#883/#884).
+- [`timeouts.md`](design/cross-cutting/timeouts.md) — The timeout ladders on the retrieval and export paths, the outward-in rule they follow, and the constraints that must hold when any one value is changed.
 
 *Other planned topics: `auth.md` (all-service auth model), `polylith-conventions.md`.*
 
