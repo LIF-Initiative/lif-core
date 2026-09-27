@@ -24,6 +24,7 @@ from lif.openapi_to_graphql import schema_tools
 - **Backend failures raise:** the root query resolver raises on a non-200 from the Query Planner so Strawberry emits an `errors` entry, matching the update mutation. Returning `[]` made every failure indistinguishable from a learner with no data (#1264).
 - **Field name preservation:** uses `strawberry.field(name=field_name)` so the wire shape preserves PascalCase entity / camelCase scalar conventions ([`docs/specs/data-model-rules.md`](../../../docs/specs/data-model-rules.md)).
 - **Caller forwarding:** the root query resolver forwards the incoming `X-LIF-Client` header to the Query Planner, or sends `graphql` when there is none, so the planner's statistics see the original caller (#1272). It reads the request from `info.context["request"]`, which Strawberry's FastAPI router provides; it does not validate the value, since the planner does.
+- **Query Planner API key:** both resolvers send `LIF_QUERY_PLANNER_API_KEY` as `X-API-Key` when it is set, and no key header otherwise (#1108). It is read once at import.
 
 ## Used by
 - `bases/lif/api_graphql` — single consumer; the GraphQL service's whole reason for existing is this component.

@@ -17,7 +17,7 @@ from lif.lif_fragment_utils import adjust_lif_fragments_for_initial_orchestrator
 register_demo_adapters()
 
 QUERY_PLANNER_RESULTS_BASE_URL = os.getenv("LIF_QUERY_PLANNER_RESULTS_BASE_URL")
-QUERY_PLANNER_RESULTS_TOKEN = os.getenv("LIF_QUERY_PLANNER_RESULTS_TOKEN")
+QUERY_PLANNER_API_KEY = os.getenv("LIF_QUERY_PLANNER_API_KEY")
 
 TRANSLATOR_BASE_URL = os.getenv("LIF_TRANSLATOR_BASE_URL")
 TRANSLATOR_TOKEN = os.getenv("LIF_TRANSLATOR_TOKEN")
@@ -254,8 +254,8 @@ def send_results_to_query_planner(
 
     endpoint = f"{QUERY_PLANNER_RESULTS_BASE_URL}/orchestration/results"
     headers = {"Content-Type": "application/json", "User-Agent": "LIF-Orchestrator"}
-    if QUERY_PLANNER_RESULTS_TOKEN:
-        headers["Authorization"] = f"Bearer {QUERY_PLANNER_RESULTS_TOKEN}"
+    if QUERY_PLANNER_API_KEY:
+        headers["X-API-Key"] = QUERY_PLANNER_API_KEY
 
     response = requests.post(endpoint, json=job_results.model_dump(), headers=headers)
     if not response.ok:

@@ -18,3 +18,4 @@ The middleware no-ops when `<PREFIX>__API_KEYS` is unset, making local dev simpl
 
 ## Used by
 - `bases/lif/api_graphql` — the GraphQL service's only auth path
+- `bases/lif/query_planner_restapi` — the Query Planner's inbound auth (`QUERY_PLANNER_AUTH`, #1108)

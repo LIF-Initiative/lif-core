@@ -7,6 +7,7 @@ from typing import Annotated, List
 from asyncio import sleep
 from fastapi import FastAPI, Header, HTTPException, Response, status
 
+from lif.api_key_auth import ApiKeyAuthMiddleware, ApiKeyConfig
 from lif.datatypes import (
     OrchestratorJobResults,
     LIFQuery,
@@ -71,6 +72,17 @@ LIF_SERVICE_REQUEST_TIMEOUT_SECONDS: int = _env_int(
 
 app = FastAPI()
 logger = get_logger(__name__)
+
+# Inbound API key auth (#1108). Set QUERY_PLANNER_AUTH__API_KEYS="key1:client1,key2:client2"
+# to enforce it; unset, the planner stays open, so callers can start sending keys first.
+# `/` is always public: it is the ALB health check path in every query-planner params file.
+auth_config = ApiKeyConfig.from_environment(prefix="QUERY_PLANNER_AUTH")
+auth_config.public_paths.add("/")
+if auth_config.is_enabled:
+    app.add_middleware(ApiKeyAuthMiddleware, config=auth_config)
+    logger.info("API key authentication enabled for the Query Planner")
+else:
+    logger.info("API key authentication not configured (QUERY_PLANNER_AUTH__API_KEYS not set)")
 
 LIF_CACHE_URL = os.getenv("LIF_QUERY_CACHE_URL", "http://localhost:8001")
 LIF_ORCHESTRATOR_URL = os.getenv("LIF_ORCHESTRATOR_URL", "http://localhost:8005")

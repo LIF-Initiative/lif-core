@@ -38,8 +38,16 @@ def _make_query() -> LIFQuery:
     )
 
 
-def _import_core_in_subprocess(env: dict[str, str | None]) -> subprocess.CompletedProcess:
-    """Import the base in a fresh interpreter and print the timeouts its config ended up with.
+_PRINT_TIMEOUTS = (
+    "import json;"
+    "from lif.query_planner_restapi import core;"
+    "print(json.dumps([core.config.query_timeout_seconds, core.config.service_request_timeout_seconds]))"
+)
+
+
+def _import_core_in_subprocess(env: dict[str, str | None], code: str = _PRINT_TIMEOUTS) -> subprocess.CompletedProcess:
+    """Import the base in a fresh interpreter and run `code` -- by default, print the timeouts
+    its config ended up with.
 
     The env reads happen at module import, so nothing in-process can cover the variable
     *names*: by the time any test runs, `core` is already in sys.modules holding whatever it
@@ -58,11 +66,6 @@ def _import_core_in_subprocess(env: dict[str, str | None]) -> subprocess.Complet
         else:
             child_env[name] = value
 
-    code = (
-        "import json;"
-        "from lif.query_planner_restapi import core;"
-        "print(json.dumps([core.config.query_timeout_seconds, core.config.service_request_timeout_seconds]))"
-    )
     return subprocess.run([sys.executable, "-c", code], capture_output=True, text=True, env=child_env, check=False)
 
 
@@ -120,6 +123,42 @@ class TestQueryPlannerTimeoutEnvReads(unittest.TestCase):
         self.assertIn("RuntimeError", result.stderr)
         self.assertIn("LIF_SERVICE_REQUEST_TIMEOUT_SECONDS", result.stderr)
         self.assertNotIn("ValidationError", result.stderr)
+
+
+class TestQueryPlannerApiKeyAuth(unittest.TestCase):
+    """#1108: the planner enforces X-API-Key only when QUERY_PLANNER_AUTH__API_KEYS is set.
+
+    The middleware is chosen at import, so each case runs in a fresh interpreter (see
+    `_import_core_in_subprocess`). The child prints the status codes of: the ALB health check
+    (`GET /`), a query with no key, a query with a valid key, and the orchestrator's results
+    callback with no key. A request that gets past auth fails body validation (422), which is
+    all these need -- the point is only whether it was a 401.
+    """
+
+    _PRINT_STATUSES = (
+        "import json;"
+        "from fastapi.testclient import TestClient;"
+        "from lif.query_planner_restapi import core;"
+        "c = TestClient(core.app);"
+        "print(json.dumps(["
+        "c.get('/').status_code,"
+        "c.post('/query', json={}).status_code,"
+        "c.post('/query', json={}, headers={'X-API-Key': 'k1'}).status_code,"
+        "c.post('/orchestration/results', json={}).status_code,"
+        "]))"
+    )
+
+    def _statuses(self, api_keys: str | None) -> list[int]:
+        result = _import_core_in_subprocess({"QUERY_PLANNER_AUTH__API_KEYS": api_keys}, code=self._PRINT_STATUSES)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        return json.loads(result.stdout.strip().splitlines()[-1])
+
+    def test_configured_keys_are_enforced_but_the_health_check_stays_public(self):
+        self.assertEqual(self._statuses("k1:graphql"), [200, 401, 422, 401])
+
+    def test_unset_keys_leave_the_planner_open(self):
+        """The rollout depends on this: callers send keys before the planner has any."""
+        self.assertEqual(self._statuses(None), [200, 422, 422, 422])
 
 
 class TestEnvInt(unittest.TestCase):
