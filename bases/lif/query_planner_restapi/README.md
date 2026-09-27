@@ -33,6 +33,14 @@ Setting `QUERY_PLANNER_AUTH__API_KEYS` (`"key1:client1,key2:client2"`) makes eve
 
 The in-repo callers send `LIF_QUERY_PLANNER_API_KEY` as `X-API-Key` when it is set: GraphQL (queries and mutations), `query_planner_client` (LDE), and the Dagster job's results callback to `/orchestration/results`. Provisioning the keys (SSM, task definitions, compose) is separate rollout work, still open under #1108.
 
+**Rollout order matters.** Provision every caller's key before the planner enforces:
+
+1. Deploy the callers with `LIF_QUERY_PLANNER_API_KEY` set. This is harmless against an open planner.
+2. Create the SSM parameters. A taskdef secret that points at a parameter that doesn't exist yet fails task start.
+3. Last, set `QUERY_PLANNER_AUTH__API_KEYS` on the planner. This is the step that starts enforcement.
+
+If the planner enforces before the Dagster callback has its key, the callback gets a 401 and fails the run. Every query that needs the orchestrator then ends in the 408. Taskdef changes reach dev and demo only on a stack redeploy (#1288).
+
 ## Caller identity
 
 `POST /query` and `POST /query_async` read an optional `X-LIF-Client` header naming the caller, and every query statistics event (`LIF_QUERY_STATISTICS` log lines, #341) records it as `client` (#1272). It is optional by design: a missing header is recorded as `unknown`, never a rejected query, so the planner works standalone. A value that is not a short lowercase name (`[a-z0-9][a-z0-9._-]{0,63}`) is recorded as `invalid` rather than as itself, which keeps free text and any person data out of the logs. The in-repo callers send `learner-data-export` (`query_planner_client`) and `graphql`; GraphQL forwards its own caller's name instead when it has one, so MCP traffic arrives as `semantic-search-mcp`.
