@@ -285,6 +285,7 @@
         "VARCHAR",
         "utf8mb4",
         "vitest",
+        "lockfiles",
         "EXPLAIN",
         "xform",
         "tolower"
