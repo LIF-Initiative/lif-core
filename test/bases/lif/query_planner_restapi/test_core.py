@@ -19,6 +19,7 @@ from lif.datatypes import (
     LIFQueryStatusResponse,
     LIFRecord,
 )
+import pytest
 
 _YML_PATH = os.path.dirname(__file__) + "/test_information_sources_config.yml"
 _ENV = {"LIF_QUERY_PLANNER_INFORMATION_SOURCES_CONFIG_PATH": _YML_PATH}
@@ -421,3 +422,219 @@ def test_async_query_endpoint_does_not_log_returned_records(caplog):
     assert "Bellwether" not in caplog.text
     assert "Sentinel" not in caplog.text
     assert "Query completed successfully" in caplog.text
+
+
+# -------------------------------------------------------------------------
+# #1272 — the optional X-LIF-Client header, through the real HTTP layer.
+# -------------------------------------------------------------------------
+_FULL_CACHE_RECORD = {"person": [{"name": [{"givenName": ["John"], "familyName": "Doe"}]}]}
+
+
+def _statistics_events(caplog) -> list:
+    from lif.query_planner_service import statistics
+
+    prefix = statistics.QUERY_STATISTICS_PREFIX + " "
+    return [json.loads(line[line.index(prefix) + len(prefix) :]) for line in caplog.text.splitlines() if prefix in line]
+
+
+def _post_query(path: str, headers: dict, caplog) -> tuple[int, list]:
+    """POST a query through the app with the real service; only the planner's own outbound calls are faked."""
+    from fastapi.testclient import TestClient
+
+    from lif.query_planner_restapi import core
+
+    cache_response = MagicMock(status_code=200)
+    cache_response.json.return_value = [_FULL_CACHE_RECORD]
+    cache_response.raise_for_status.return_value = None
+    body = _make_query().model_dump(mode="json", by_alias=True)
+    with patch("httpx.AsyncClient.post", AsyncMock(return_value=cache_response)), caplog.at_level(logging.INFO):
+        response = TestClient(core.app).post(path, json=body, headers=headers)
+    return response.status_code, _statistics_events(caplog)
+
+
+@patch.dict(os.environ, _ENV)
+def test_query_without_the_client_header_succeeds_and_still_emits_statistics(caplog):
+    for path in ["/query", "/query_async"]:
+        caplog.clear()
+        status_code, events = _post_query(path, {}, caplog)
+        assert status_code == 200, path
+        assert [e["client"] for e in events] == ["unknown"], path
+
+
+@patch.dict(os.environ, _ENV)
+def test_query_records_the_client_header(caplog):
+    for path in ["/query", "/query_async"]:
+        caplog.clear()
+        status_code, events = _post_query(path, {"X-LIF-Client": "learner-data-export"}, caplog)
+        assert status_code == 200, path
+        assert [e["client"] for e in events] == ["learner-data-export"], path
+
+
+# -------------------------------------------------------------------------
+# #1271 — LIF_ORG_KEY, read once at import.
+# -------------------------------------------------------------------------
+def _org_key_in_subprocess(value: str | None) -> str:
+    """The value is read at import, so -- as with the timeouts above -- only a fresh interpreter can pin the name."""
+    child_env = dict(os.environ)
+    child_env.pop("LIF_ORG_KEY", None)
+    if value is not None:
+        child_env["LIF_ORG_KEY"] = value
+    code = "from lif.query_planner_restapi import core; print(core.config.org_key)"
+    result = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True, env=child_env, check=False)
+    assert result.returncode == 0, result.stderr
+    return result.stdout.strip().splitlines()[-1]
+
+
+def test_org_key_is_read_from_lif_org_key():
+    assert _org_key_in_subprocess("org3") == "org3"
+
+
+def test_unset_or_blank_org_key_falls_back_to_unknown():
+    # Blank is what a CloudFormation `Value:` yields when its source is missing.
+    assert _org_key_in_subprocess(None) == "unknown"
+    assert _org_key_in_subprocess("   ") == "unknown"
+
+
+@patch.dict(os.environ, _ENV)
+def test_query_statistics_through_the_endpoint_carry_the_org_key(caplog):
+    from lif.query_planner_restapi import core
+
+    with patch.object(core.config, "org_key", "org1"):
+        status_code, events = _post_query("/query", {}, caplog)
+    assert status_code == 200
+    assert [e["org_key"] for e in events] == ["org1"]
+
+
+def _partial(records: list, reason: str):
+    from lif.query_planner_service.datatypes import LIFQueryPlannerPartialRecords
+
+    return LIFQueryPlannerPartialRecords(records=records, reason=reason)
+
+
+@patch.dict(os.environ, _ENV)
+def test_sync_query_marks_a_partial_answer_on_the_wire():
+    """Through TestClient, so the header is shown to survive FastAPI's response handling,
+    not just to have been set on the Response object."""
+    from fastapi.testclient import TestClient
+
+    from lif.query_planner_restapi import core
+    from lif.query_planner_service import statistics
+
+    partial = _partial([_sentinel_record()], statistics.OUTCOME_ORCHESTRATOR_SUBMISSION_FAILED)
+    with patch.object(core.service, "run_query", AsyncMock(return_value=partial)):
+        response = TestClient(core.app).post("/query", json=_sentinel_query().model_dump(mode="json"))
+
+    assert response.status_code == 200
+    assert response.headers["X-LIF-Partial"] == "orchestrator_submission_failed"
+    assert len(response.json()) == 1
+
+
+@patch.dict(os.environ, _ENV)
+def test_sync_query_leaves_a_complete_answer_unmarked():
+    from fastapi.testclient import TestClient
+
+    from lif.query_planner_restapi import core
+
+    with patch.object(core.service, "run_query", AsyncMock(return_value=[_sentinel_record()])):
+        response = TestClient(core.app).post("/query", json=_sentinel_query().model_dump(mode="json"))
+
+    assert response.status_code == 200
+    assert "X-LIF-Partial" not in response.headers
+
+
+@patch.dict(os.environ, _ENV)
+def test_sync_query_returns_503_when_submission_failed_and_nothing_was_cached():
+    """An empty answer after a failed submission is a total failure, not a partial one.
+    As a 200 it read as "no such learner", and the export API turned it into a false 404."""
+    from lif.query_planner_restapi import core
+    from lif.query_planner_service import statistics
+
+    partial = _partial([], statistics.OUTCOME_ORCHESTRATOR_SUBMISSION_FAILED)
+    with patch.object(core.service, "run_query", AsyncMock(return_value=partial)):
+        with pytest.raises(HTTPException) as exc_info:
+            asyncio.run(core.do_run_query_sync(_sentinel_query(), Response()))
+
+    assert exc_info.value.status_code == 503
+
+
+@patch.dict(os.environ, _ENV)
+def test_sync_query_keeps_an_empty_no_sources_answer_as_a_marked_200():
+    """No source configured is permanent: a retry won't help, so it stays a 200, marked."""
+    from lif.query_planner_restapi import core
+    from lif.query_planner_service import statistics
+
+    response = Response()
+    partial = _partial([], statistics.OUTCOME_NO_SOURCES_AVAILABLE)
+    with patch.object(core.service, "run_query", AsyncMock(return_value=partial)):
+        result = asyncio.run(core.do_run_query_sync(_sentinel_query(), response))
+
+    assert result == []
+    assert response.headers["X-LIF-Partial"] == "no_sources_available"
+
+
+@patch.dict(os.environ, _ENV)
+def test_async_query_marks_a_partial_answer():
+    from lif.query_planner_restapi import core
+    from lif.query_planner_service import statistics
+
+    response = Response()
+    partial = _partial([_sentinel_record()], statistics.OUTCOME_NO_SOURCES_AVAILABLE)
+    with patch.object(core.service, "run_query", AsyncMock(return_value=partial)):
+        result = asyncio.run(core.do_run_query(_sentinel_query(), response))
+
+    assert len(result) == 1
+    assert response.status_code == 200
+    assert response.headers["X-LIF-Partial"] == "no_sources_available"
+
+
+@patch.dict(os.environ, _ENV)
+def test_async_query_returns_503_when_submission_failed_and_nothing_was_cached():
+    from lif.query_planner_restapi import core
+    from lif.query_planner_service import statistics
+
+    partial = _partial([], statistics.OUTCOME_ORCHESTRATOR_SUBMISSION_FAILED)
+    with patch.object(core.service, "run_query", AsyncMock(return_value=partial)):
+        with pytest.raises(HTTPException) as exc_info:
+            asyncio.run(core.do_run_query(_sentinel_query(), Response()))
+
+    assert exc_info.value.status_code == 503
+
+
+@patch.dict(os.environ, _ENV)
+def test_sync_query_marks_an_answer_where_a_source_failed_during_orchestration():
+    """The second run_query must be told which job it follows, or a failed source reads as
+    a learner with no data for those fields."""
+    from lif.query_planner_restapi import core
+    from lif.query_planner_service.core import PARTIAL_REASON_SOURCE_FAILED
+
+    run_query = AsyncMock(
+        side_effect=[
+            LIFQueryStatusResponse(query_id="run-1", status="PENDING"),
+            _partial([_sentinel_record()], PARTIAL_REASON_SOURCE_FAILED),
+        ]
+    )
+    completed = LIFQueryStatusResponse(query_id="run-1", status="COMPLETED")
+    response = Response()
+    with (
+        patch.object(core.service, "run_query", run_query),
+        patch.object(core.service, "get_query_status", AsyncMock(return_value=completed)),
+        patch.object(core, "sleep", AsyncMock()),
+    ):
+        result = asyncio.run(core.do_run_query_sync(_sentinel_query(), response))
+
+    assert len(result) == 1
+    assert response.headers["X-LIF-Partial"] == "source_failed"
+    assert run_query.await_args_list[1].kwargs["query_id"] == "run-1"
+
+
+@patch.dict(os.environ, _ENV)
+def test_sync_query_returns_503_when_every_source_failed_and_nothing_was_cached():
+    from lif.query_planner_restapi import core
+    from lif.query_planner_service.core import PARTIAL_REASON_SOURCE_FAILED
+
+    partial = _partial([], PARTIAL_REASON_SOURCE_FAILED)
+    with patch.object(core.service, "run_query", AsyncMock(return_value=partial)):
+        with pytest.raises(HTTPException) as exc_info:
+            asyncio.run(core.do_run_query_sync(_sentinel_query(), Response()))
+
+    assert exc_info.value.status_code == 503

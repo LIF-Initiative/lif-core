@@ -10,6 +10,9 @@ logger = get_logger(__name__)
 # Default timeout for Query Planner client API calls (in seconds)
 DEFAULT_QUERY_PLANNER_CLIENT_TIMEOUT_SECONDS = 30
 
+# Names this caller in the Query Planner's query statistics (#1272).
+LIF_CLIENT_HEADERS = {"X-LIF-Client": "learner-data-export"}
+
 
 def _get_query_planner_timeout_seconds() -> int:
     return int(os.getenv("QUERY_PLANNER_CLIENT_TIMEOUT_SECONDS", str(DEFAULT_QUERY_PLANNER_CLIENT_TIMEOUT_SECONDS)))
@@ -39,7 +42,7 @@ async def fetch_query_from_query_planner(base_url: str, query: dict) -> list[dic
 
     try:
         async for client in _get_query_planner_client():
-            response = await client.post(url, json=query)
+            response = await client.post(url, json=query, headers=LIF_CLIENT_HEADERS)
     except httpx.TimeoutException as e:
         msg = f"Query Planner request timed out due to: {e}"
         logger.error(msg)

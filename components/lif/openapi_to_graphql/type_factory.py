@@ -54,13 +54,18 @@ LIF_GRAPHQL_CLIENT_TIMEOUT_SECONDS = int(
     os.getenv("LIF_GRAPHQL_CLIENT_TIMEOUT_SECONDS") or os.getenv("LIF_QUERY_TIMEOUT_SECONDS") or "20"
 )
 
+# Callers name themselves to the Query Planner's statistics in this header (#1272). GraphQL
+# forwards the name it received, so a query that arrives through here -- the MCP server's --
+# keeps its origin; it names itself only when its own caller did not. Validating the value is
+# the planner's job, not this relay's.
+LIF_CLIENT_HEADER = "X-LIF-Client"
+LIF_CLIENT_NAME = "graphql"
+
 
 # === Constants ===
 
 # Use centralized type mappings from lif_schema_config
 DATATYPE_MAP = XSD_TO_PYTHON
-
-input_type_cache: Dict[str, Optional[Type[Any]]] = {}
 
 
 # === Reference Resolution ===
@@ -752,7 +757,11 @@ def create_nested_input_type(
 
 
 def create_input_type(
-    type_name: str, schema: dict, openapi: dict, created_types: Dict[str, Type[Any]]
+    type_name: str,
+    schema: dict,
+    openapi: dict,
+    created_types: Dict[str, Type[Any]],
+    input_type_cache: Dict[str, Optional[Type[Any]]],
 ) -> Optional[Type[Any]]:
     """Creates a nested filter input type for a given schema, or None if none is queryable.
 
@@ -761,11 +770,26 @@ def create_input_type(
         schema (dict): The JSON schema.
         openapi (dict): The OpenAPI document.
         created_types (dict): Dictionary of created types.
+        input_type_cache (dict): Cache of input types for this schema build. Keyed by type name
+            alone, so it must not outlive the build (#1293).
 
     Returns:
         Optional[type]: Strawberry input type, or None if nothing queryable.
     """
     return create_nested_input_type(type_name, schema, openapi, created_types, input_type_cache)
+
+
+def lif_client_headers(info: Any) -> Dict[str, str]:
+    """
+    The X-LIF-Client header to send the Query Planner: the incoming one, else this service's name.
+
+    Strawberry's FastAPI router puts the request in `info.context["request"]`; a schema
+    executed without one (tests, scripts) simply names itself.
+    """
+    context = info.context if isinstance(info.context, dict) else {}
+    request = context.get("request")
+    incoming = request.headers.get(LIF_CLIENT_HEADER) if request is not None else None
+    return {LIF_CLIENT_HEADER: incoming or LIF_CLIENT_NAME}
 
 
 # === Root Query Type Construction ===
@@ -822,7 +846,7 @@ def build_root_query_type(
             logger.info(f"Query: {query}")
             # Make the backend API call
             async with httpx.AsyncClient(timeout=httpx.Timeout(LIF_GRAPHQL_CLIENT_TIMEOUT_SECONDS)) as client:
-                response = await client.post(query_planner_query_url, json=query)
+                response = await client.post(query_planner_query_url, json=query, headers=lif_client_headers(info))
 
             if response.status_code == 200:
                 response_json = response.json()
@@ -865,9 +889,14 @@ def build_root_query_type(
                 # print(f"Result objects: {result_objs}")
                 return result_objs
             else:
-                # Log error if the backend request fails
+                # Raise rather than return []: a bare empty list is indistinguishable from a
+                # learner who genuinely has no data, so every backend failure looked like a
+                # successful empty result to the caller (#1264). Strawberry turns this into a
+                # GraphQL `errors` entry, matching what the update mutation below already does.
+                # The body stays in the log only: the QP builds it from str(e), and Strawberry
+                # relays the exception message to the caller verbatim.
                 logger.error(f"Query failed: {response.status_code} {response.text}")
-                return []
+                raise Exception(f"Query failed: {response.status_code}")
 
         is_nested_list: bool = type_class._name == "List"
         return_type = type_class if is_nested_list else List[type_class]
@@ -962,8 +991,10 @@ def build_root_mutation_type(
             else:
                 raise Exception("Mutation succeeded but response missing object.")
         else:
+            # The body stays in the log only, as on the query path above (#1309): the QP builds
+            # it from str(e), and Strawberry relays the exception message to the caller verbatim.
             logger.error(f"Mutation failed: {response.status_code} {response.text}")
-            raise Exception(f"Mutation failed: {response.status_code}: {response.text}")
+            raise Exception(f"Mutation failed: {response.status_code}")
 
     update_resolver.__annotations__ = {
         "self": Any,
