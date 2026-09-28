@@ -89,7 +89,9 @@ curl -s -X POST -H "X-API-Key: changeme3" \
 
 **2 — Create an empty seed group.** `POST /transformation_groups/{id}/import` derives the
 source and target models from an existing group, so one has to exist first. Use
-`SourceDataModelId` = StateU LIF and `TargetDataModelId` = the `Id` from step 1.
+`SourceDataModelId` = StateU LIF and `TargetDataModelId` = the `Id` from step 1. The ids below
+are one local database's values — substitute your own. Keep the `Id` from the response (also
+returned in the `Location` header); step 3 needs it.
 
 ```bash
 curl -s -X POST -H "X-API-Key: changeme3" -H "Content-Type: application/json" \
@@ -99,12 +101,14 @@ curl -s -X POST -H "X-API-Key: changeme3" -H "Content-Type: application/json" \
 ```
 
 **3 — Import the transformation group** against the seed group's id, into version `1.0`.
-Expect `"ImportedTransformationCount": 56, "SkippedTransformationCount": 0`.
+`<seed group id>` is the `Id` from step 2's response — a *transformation group* id, not the
+data model id used above. Expect `"ImportedTransformationCount": 56,
+"SkippedTransformationCount": 0`.
 
 ```bash
 curl -s -X POST -H "X-API-Key: changeme3" -H "Content-Type: application/json" \
   --data @reference_data/transformations/test/StateU-LIF_Sample-LDE-Target-Test__v1.0.json \
-  "http://localhost:8012/transformation_groups/30/import?version=1.0"
+  "http://localhost:8012/transformation_groups/<seed group id>/import?version=1.0"
 ```
 
 Any rule that did not land is listed in `SkippedTransformations` with a reason — that list is
