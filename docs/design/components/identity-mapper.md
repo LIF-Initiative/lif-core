@@ -459,10 +459,86 @@ same DDL with 240-byte key columns is created as `BTREE`; at the original width 
 batch-size tables above therefore cannot show this: at near-zero row counts a sequential scan fits in
 cache and looks every bit like the "one indexed SELECT" the code review assumed.
 
-**Verdict.** The *number of identity mapping records* half of the requirement is **not met at 1M
-rows under the current schema** — POST and GET degrade ~25 ms → ~1.1 s. The reads are point queries
-and the workload is fine; `uq_identity_mapping` just is not a usable index. The fix — narrow the key
-columns or charset so the unique key is a real B-tree, with a migration for existing tables — is
-tracked in issue [#1231](https://github.com/LIF-Initiative/lif-core/issues/1231) rather than fixed
-here. Re-run this sweep (`--seeds 0,10000,100000,1000000 --batch 100`) once that lands to confirm
-the curve returns to flat.
+**Verdict.** The *number of identity mapping records* half of the requirement was **not met at 1M
+rows under the schema as measured** — POST and GET degrade ~25 ms → ~1.1 s. The reads are point
+queries and the workload is fine; `uq_identity_mapping` just is not a usable index. The read path
+is fixed in [#1231](https://github.com/LIF-Initiative/lif-core/issues/1231), and the unique key
+itself in [#1258](https://github.com/LIF-Initiative/lif-core/issues/1258). See below.
+
+### Resolution (#1231) — the read path
+
+`read_by_lif_org_and_person` — the GET handler and the save pre-read, and the only
+table-size-sensitive read — now has a dedicated B-tree of its own:
+
+```sql
+INDEX idx_org_person (lif_organization_id, lif_organization_person_id)
+```
+
+Measured on a clean `mariadb:10.11` at 50,000 rows after `ANALYZE TABLE`, against the production
+DDL:
+
+| DDL | `EXPLAIN` (2-column lookup) | per-lookup |
+|---|---|---|
+| before | `type=ALL`, `key=NULL`, rows=49758 | 15.3 ms |
+| after | `type=ref`, `key=idx_org_person`, rows=5 | ~0.05 ms |
+
+Two things worth carrying forward:
+
+- **The penalty was never only at 1M.** The index was unusable at *every* table size; what grows
+  with row count is just what the full scan costs. At 10k–100k the scan hides inside HTTP overhead,
+  which is why the curve above reads as flat-then-knee.
+- **`uq_identity_mapping` was left `HASH` here, deliberately** (since resolved by #1258, below). Narrowing the key columns to
+  `VARCHAR(191)` would have made it a real B-tree (verified: 2692 bytes, `BTREE`, `type=ref`) and
+  would additionally make the DDL portable to MySQL 8, which rejects it outright today. That was
+  weighed against the additive index and not taken here, because it changes a column-width contract
+  for no measured read gain — the two fixes time identically. The constraint still enforces
+  uniqueness correctly; it is simply never read through. It remains open work, tracked in
+  [#1258](https://github.com/LIF-Initiative/lif-core/issues/1258), which also has to decide whether
+  `idx_org_person` then becomes redundant.
+
+`idx_org_person` was 2 × 255 chars × 4 bytes (utf8mb4) = **3060 bytes, 12 bytes under the same
+3072-byte limit** that broke `uq_identity_mapping` (#1258 removed both the index and the margin). Widening either column, or adding a third to
+this index, silently degrades it to `HASH` as well. `02-ddl.sql` carries this warning inline.
+
+**Verifying it, and the trap in doing so.** `EXPLAIN` on an empty or tiny table reports `key=NULL`
+whether or not a usable index exists, because the optimizer prefers a scan there — indistinguishable
+from the bug. Check `SHOW INDEX` for `Index_type = BTREE`, on a **populated** table, and do not
+validate in either direction against an empty one.
+
+No migration is required in dev or demo: ECS mounts EFS at `/mnt/efs`, not `/var/lib/mysql`, so the
+MariaDB datadir is ephemeral and `docker-entrypoint-initdb.d` replays `02-ddl.sql` on every task
+start. Local docker-compose *does* use named volumes (`mariadb_data_org{1,2,3}`), which hold only
+sample seed data, so pick the new schema up with:
+
+```bash
+docker compose -f deployments/advisor-demo-docker/docker-compose.yml down -v
+```
+
+### Resolution (#1258) — the unique key
+
+`lif_organization_id`, `lif_organization_person_id` and `target_system_id` are narrowed to
+`VARCHAR(191)` (`target_system_person_id_type` stays 100), so `uq_identity_mapping` is
+(191 × 3 + 100) × 4 = **2692 bytes** and MariaDB builds it as a real `BTREE`. Because the org/person
+read filters on the key's first two columns, the key serves it as a leftmost prefix, and
+`idx_org_person` is dropped.
+
+Measured on a clean `mariadb:10.11` (10.11.19) at 50,000 rows after `ANALYZE TABLE`:
+
+| DDL | `uq_identity_mapping` | org/person read (`EXPLAIN`) | 4-column lookup |
+|---|---|---|---|
+| before (#1231) | `HASH` | `type=ref`, `key=idx_org_person`, rows=5 | `key=idx_org_person`, rows=5 |
+| after | `BTREE` | `type=ref`, `key=uq_identity_mapping`, rows=5 | `type=const`, rows=1 |
+
+The in-place `ALTER TABLE ... MODIFY ..., DROP INDEX IF EXISTS idx_org_person` (in `MIGRATION.md`)
+was run on a populated table built from the old DDL: 50,000 rows and an identical row checksum
+before and after, key flipped to `BTREE`, and a second run succeeded. On `mysql:8` (8.4.11) the old
+DDL fails with `ERROR 1071 Specified key was too long` and the new one creates cleanly. Both engines
+run in strict mode, so a value over 191 characters is rejected (`1406 Data too long`), not
+truncated.
+
+`test_model.py` now guards the byte width directly: it sums the key's `VARCHAR` widths from
+`02-ddl.sql` and fails over 3072, which is the one regression SQLite-backed tests could not
+otherwise see.
+
+Re-run this sweep (`--seeds 0,10000,100000,1000000 --batch 100`) to confirm the end-to-end curve
+returns to flat at 1M.
