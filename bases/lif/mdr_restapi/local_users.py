@@ -27,7 +27,9 @@ def _b64encode(raw: bytes) -> str:
 
 
 def _b64decode(text: str) -> bytes:
-    return base64.urlsafe_b64decode(text + "=" * (-len(text) % 4))
+    # validate=True: the lenient default silently drops characters outside the alphabet,
+    # so a mangled salt decoded to something and every login quietly failed.
+    return base64.b64decode(text + "=" * (-len(text) % 4), altchars=b"-_", validate=True)
 
 
 def hash_password(password: str) -> str:
@@ -64,5 +66,15 @@ def parse_local_users(raw: str) -> dict[str, str]:
             )
         if username in users:
             raise ValueError(f"MDR__AUTH__LOCAL_USERS lists {username!r} more than once")
+        # The right shape can still carry values scrypt rejects (n not a power of 2, p=0, an
+        # empty key, n over the memory limit), which would otherwise surface as a 500 on every
+        # login. One trial verification catches all of them at startup.
+        try:
+            verify_password("", stored)
+        except ValueError as e:  # binascii.Error, from a bad salt or key, is a ValueError
+            raise ValueError(
+                f"MDR__AUTH__LOCAL_USERS hash for {username!r} is not usable ({e}); "
+                "generate one with scripts/hash-mdr-password.py"
+            ) from e
         users[username] = stored
     return users

@@ -59,6 +59,29 @@ def test_parse_rejects_malformed_entries(raw, message):
         parse_local_users(raw)
 
 
+def _with_field(index: int, value: str) -> str:
+    fields = ALICE_HASH.split(":")
+    fields[index] = value
+    return ":".join(fields)
+
+
+@pytest.mark.parametrize(
+    "stored",
+    [
+        _with_field(1, "1000"),  # n not a power of 2
+        _with_field(1, "32768"),  # n over OpenSSL's memory limit
+        _with_field(3, "0"),  # p = 0
+        _with_field(4, "!!!"),  # salt not base64
+        _with_field(5, ""),  # empty key
+    ],
+)
+def test_parse_rejects_hashes_that_have_the_right_shape_but_cannot_verify(stored):
+    # Each of these used to pass startup and then fail at every login: a 500, or for the
+    # bad salt a silent lockout (#1323 review).
+    with pytest.raises(ValueError, match="alice"):
+        parse_local_users(f"alice={stored}")
+
+
 @pytest.fixture
 async def login_client():
     async with AsyncClient(transport=ASGITransport(app=core.app), base_url="http://test") as client:
@@ -87,6 +110,20 @@ async def test_configured_users_replace_the_demo_personas(login_client):
     # ...and is locked out once any are.
     with mock.patch.object(core, "LOCAL_USERS", {"alice@example.org": ALICE_HASH}):
         assert (await login_client.post("/login", json=persona)).status_code == 401
+
+
+async def test_unknown_username_costs_the_same_scrypt_as_a_known_one(login_client):
+    # Returning early for an unknown username made login time reveal which usernames
+    # exist (#1323 review). Both paths must run exactly one verification.
+    with (
+        mock.patch.object(core, "LOCAL_USERS", {"alice@example.org": ALICE_HASH}),
+        mock.patch.object(core, "verify_password", wraps=core.verify_password) as verify,
+    ):
+        for username in ("alice@example.org", "nobody@example.org"):
+            verify.reset_mock()
+            response = await login_client.post("/login", json={"username": username, "password": "wrong"})
+            assert response.status_code == 401
+            assert verify.call_count == 1, username
 
 
 def _import_core(**env_overrides: str) -> subprocess.CompletedProcess:

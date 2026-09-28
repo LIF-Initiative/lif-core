@@ -26,7 +26,7 @@ from lif.mdr_restapi import (
 from lif.mdr_utils.config import get_settings
 import os
 
-from lif.mdr_restapi.local_users import parse_local_users, verify_password
+from lif.mdr_restapi.local_users import hash_password, parse_local_users, verify_password
 from lif.mdr_utils.logger_config import get_logger
 from pydantic import BaseModel
 
@@ -35,6 +35,9 @@ logger = get_logger(__name__)
 # Configured logins (#1316). When set, they replace the demo personas below, so the
 # shared demo password is only required when none are configured.
 LOCAL_USERS = parse_local_users(os.environ.get("MDR__AUTH__LOCAL_USERS", ""))
+# Verified against for an unknown username, so a login costs one scrypt either way and its
+# timing doesn't reveal which usernames exist.
+_UNKNOWN_USER_HASH = hash_password("")
 
 _demo_password = os.environ.get("LIF_DEMO_USER_PASSWORD")
 if not LOCAL_USERS and (_demo_password is None or not _demo_password.strip()):
@@ -369,7 +372,8 @@ def find_user(username: str, password: str) -> Dict[str, Any] | None:
     logger.info(f"Looking for user: {username}")
     if LOCAL_USERS:
         stored = LOCAL_USERS.get(username)
-        if stored is None or not verify_password(password, stored):
+        matched = verify_password(password, stored or _UNKNOWN_USER_HASH)
+        if stored is None or not matched:
             logger.warning(f"Login failed for configured user {username}")
             return None
         # Configured users carry no persona details; the UI falls back to the username.
