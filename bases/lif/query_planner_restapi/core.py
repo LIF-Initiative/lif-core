@@ -308,7 +308,7 @@ async def do_get_query_status(query_id: str) -> LIFQueryStatusResponse:
     try:
         return await service.get_query_status(query_id)
     except ValueError:
-        raise HTTPException(status_code=400, detail="Invalid job ID")
+        raise HTTPException(status_code=404, detail="Unknown query ID")
     except Exception as e:
         logger.error(f"Error retrieving job status: {e}")
         raise HTTPException(status_code=500, detail=str(e))
