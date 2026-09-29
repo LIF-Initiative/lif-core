@@ -358,6 +358,11 @@ class LIFQueryPlannerService:
             # Verify the Job status is 'PENDING'
             if job.status != LIFQueryStatus.PENDING:
                 raise LIFException(f"Job with ID {run_id} is not in 'PENDING' status, current status: {job.status}")
+            # Claim the job before the first await, so a second callback for the same run is
+            # rejected here instead of racing this one to set the final status.
+            if job.results_claimed:
+                raise LIFException(f"Job with ID {run_id} is already processing orchestration results.")
+            job.results_claimed = True
             # From here on a failure belongs to this job (#1107): see the except blocks below.
             pending_job = job
 
@@ -490,6 +495,7 @@ class LIFQueryPlannerJob(BaseModel):
         query (LIFQuery): The query to be executed.
         status (LIFQueryStatus): Status of the job.
         error_message (str | None): Why the job failed, when its status is FAILED.
+        results_claimed (bool): Set by the first callback to process this job's results; internal.
         failed_source_ids (List[str]): Information sources whose part failed during orchestration.
         created_timestamp (str): Timestamp of when the job was created.
         updated_timestamp (str): Timestamp of when the job was last updated.
@@ -500,6 +506,7 @@ class LIFQueryPlannerJob(BaseModel):
     query: LIFQuery = Field(..., description="The query to be executed")
     status: LIFQueryStatus = Field(..., description="Status of the job")
     error_message: str | None = Field(None, description="Why the job failed, when its status is FAILED")
+    results_claimed: bool = Field(False, description="Set by the first callback to process this job's results")
     failed_source_ids: List[str] = Field(
         default_factory=list, description="Information sources whose part failed during orchestration"
     )
