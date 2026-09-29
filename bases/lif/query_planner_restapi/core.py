@@ -214,7 +214,10 @@ async def do_run_query_sync(
                 delay_in_seconds = (
                     delay_in_seconds * 2 if delay_in_seconds < MAX_POLLING_DELAY_SECONDS else MAX_POLLING_DELAY_SECONDS
                 )
-                result = await service.get_query_status(result.query_id)
+                # The status check can ask the orchestrator, so it gets only what is left of the budget.
+                result = await service.get_query_status(
+                    result.query_id, time_budget_seconds=remaining_seconds - wait_seconds
+                )
             if result.status == "COMPLETED":
                 logger.info("Query completed successfully, retrieving results")
                 result = await service.run_query(query, first_run=False, client=client, query_id=result.query_id)

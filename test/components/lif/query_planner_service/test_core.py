@@ -1450,3 +1450,39 @@ def test_a_run_check_during_a_callbacks_save_leaves_the_outcome_to_the_callback(
     assert polled[0].status == LIFQueryStatus.PENDING
     assert job_store["run-1"].status == LIFQueryStatus.COMPLETED
     assert job_store["run-1"].error_message is None
+
+
+@pytest.mark.parametrize(
+    "time_budget_seconds, expected_timeout",
+    [
+        (None, 10),  # the /status endpoint: the full per-request timeout
+        (3.5, 3.5),  # the sync loop with less left than that
+        (60, 10),  # never more than the per-request timeout
+    ],
+)
+@patch("httpx.AsyncClient.get")
+def test_the_run_check_is_bounded_by_the_callers_remaining_budget(mock_get, time_budget_seconds, expected_timeout):
+    """#1330 review: the check's GET was bounded only by the full per-request timeout, so a sync
+    /query facing an orchestrator that never answered overran its budget by that much (11.04s
+    against a 3s budget). A missing timeout would let a hung orchestrator hang the caller."""
+    mock_get.return_value = _orchestrator_run("run-1", "RUNNING")
+    service = _stats_service()
+    service.config.service_request_timeout_seconds = 10
+
+    with (
+        patch.object(core, "JOB_STORE", _pending_store()),
+        patch.object(core.httpx, "AsyncClient", wraps=httpx.AsyncClient) as client_class,
+    ):
+        asyncio.run(service.get_query_status("run-1", time_budget_seconds=time_budget_seconds))
+
+    assert client_class.call_args.kwargs["timeout"] == expected_timeout
+
+
+@pytest.mark.parametrize("time_budget_seconds", [0, -0.5])
+@patch("httpx.AsyncClient.get")
+def test_no_budget_left_skips_the_run_check(mock_get, time_budget_seconds):
+    with patch.object(core, "JOB_STORE", _pending_store()):
+        status = asyncio.run(_stats_service().get_query_status("run-1", time_budget_seconds=time_budget_seconds))
+
+    assert status.status == LIFQueryStatus.PENDING
+    mock_get.assert_not_called()

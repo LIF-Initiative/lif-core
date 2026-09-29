@@ -243,12 +243,14 @@ class LIFQueryPlannerService:
     # -------------------------------------------------------------------------
     # Main function to get the status of a query
     # -------------------------------------------------------------------------
-    async def get_query_status(self, query_id: str) -> LIFQueryStatusResponse:
+    async def get_query_status(self, query_id: str, time_budget_seconds: float | None = None) -> LIFQueryStatusResponse:
         """
         Get the status of a query by its ID.
 
         Args:
             query_id (str): The ID of the query.
+            time_budget_seconds (float | None): What is left of the caller's own deadline, which
+                caps the orchestrator check below the per-request timeout. None: no cap.
 
         Returns:
             LIFQueryStatusResponse: The status of the query.
@@ -261,7 +263,7 @@ class LIFQueryPlannerService:
             if query_id not in JOB_STORE:
                 raise ValueError(f"Invalid query ID: {query_id}")
             job: LIFQueryPlannerJob = JOB_STORE[query_id]
-            await self._fail_job_if_its_run_failed(job)
+            await self._fail_job_if_its_run_failed(job, time_budget_seconds)
             return LIFQueryStatusResponse(query_id=query_id, status=job.status, error_message=job.error_message)
         except ValueError as e:
             raise e
@@ -300,7 +302,9 @@ class LIFQueryPlannerService:
             return LIFQueryStatusResponse(query_id=query_id, status=job.status, error_message=job.error_message)
         return await self.run_query(job.query, first_run=False, client=job.client, query_id=query_id)
 
-    async def _fail_job_if_its_run_failed(self, job: "LIFQueryPlannerJob") -> None:
+    async def _fail_job_if_its_run_failed(
+        self, job: "LIFQueryPlannerJob", time_budget_seconds: float | None = None
+    ) -> None:
         """
         Mark a PENDING job FAILED when the orchestrator reports its run failed (#1113).
 
@@ -308,11 +312,19 @@ class LIFQueryPlannerService:
         job PENDING until the caller's timeout. Only an explicit FAILED counts: the orchestrator
         answers 404 for every error, a Dagster outage included, so an unanswered or unclear
         check leaves the job as it was rather than failing it.
+
+        A sync /query passes what is left of its deadline, so the check can't carry it past
+        LIF_QUERY_TIMEOUT_SECONDS; with nothing left, there is no check at all.
         """
         if job.status != LIFQueryStatus.PENDING:
             return
+        timeout = self.config.service_request_timeout_seconds
+        if time_budget_seconds is not None:
+            if time_budget_seconds <= 0:
+                return
+            timeout = min(timeout, time_budget_seconds)
         try:
-            async with httpx.AsyncClient(timeout=self.config.service_request_timeout_seconds) as client:
+            async with httpx.AsyncClient(timeout=timeout) as client:
                 response = await client.get(f"{self.lif_orchestrator_post_url}/{job.job_id}")
             response.raise_for_status()
             run = OrchestratorJob(**response.json())
