@@ -35,8 +35,8 @@ The in-repo callers send `LIF_QUERY_PLANNER_API_KEY` as `X-API-Key` when it is s
 
 **Rollout order matters.** Provision every caller's key before the planner enforces:
 
-1. Deploy the callers with `LIF_QUERY_PLANNER_API_KEY` set. This is harmless against an open planner.
-2. Create the SSM parameters. A taskdef secret that points at a parameter that doesn't exist yet fails task start.
+1. Create the SSM parameters. A taskdef secret that points at a parameter that doesn't exist yet fails task start.
+2. Deploy the callers with `LIF_QUERY_PLANNER_API_KEY` set. This is harmless against an open planner.
 3. Last, set `QUERY_PLANNER_AUTH__API_KEYS` on the planner. This is the step that starts enforcement.
 
 If the planner enforces before the Dagster callback has its key, the callback gets a 401 and fails the run. Every query that needs the orchestrator then ends in the 408. Taskdef changes reach dev and demo only on a stack redeploy (#1288).
