@@ -5,6 +5,11 @@ The mutation resolver sent no headers at all before this, so once the planner en
 every `update*` mutation would 401 -- the case a query-only test would miss.
 """
 
+import json
+import os
+import subprocess
+import sys
+
 from lif.openapi_to_graphql import type_factory
 from lif.openapi_to_graphql.core import generate_graphql_schema
 
@@ -59,3 +64,17 @@ async def test_no_key_is_sent_when_none_is_configured(monkeypatch):
     monkeypatch.setattr(type_factory, "LIF_QUERY_PLANNER_API_KEY", "")
     assert "X-API-Key" not in await _headers_sent_to_the_planner(monkeypatch, PERSON_QUERY)
     assert "X-API-Key" not in await _headers_sent_to_the_planner(monkeypatch, PERSON_MUTATION)
+
+
+def test_the_key_is_read_from_lif_query_planner_api_key_and_stripped():
+    """The tests above patch the module constant, so they can't catch a renamed variable or a lost
+    `.strip()`. The env read happens at import, hence a fresh interpreter."""
+    code = (
+        "import json;"
+        "from lif.openapi_to_graphql import type_factory;"
+        "print(json.dumps(type_factory.query_planner_auth_headers()))"
+    )
+    env = {**os.environ, "LIF_QUERY_PLANNER_API_KEY": " qp-key\n"}
+    result = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True, env=env, check=False)
+    assert result.returncode == 0, result.stderr
+    assert json.loads(result.stdout.strip().splitlines()[-1]) == {"X-API-Key": "qp-key"}

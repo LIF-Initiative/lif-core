@@ -81,6 +81,11 @@ auth_config.public_paths.add("/")
 if auth_config.is_enabled:
     app.add_middleware(ApiKeyAuthMiddleware, config=auth_config)
     logger.info("API key authentication enabled for the Query Planner")
+elif os.getenv("QUERY_PLANNER_AUTH__API_KEYS", "").strip():
+    # Set but unparseable (e.g. a key with no ":name") -- the planner is open, so say so loudly.
+    logger.warning(
+        "QUERY_PLANNER_AUTH__API_KEYS is set but has no valid key:name entries; API key authentication is NOT enabled"
+    )
 else:
     logger.info("API key authentication not configured (QUERY_PLANNER_AUTH__API_KEYS not set)")
 

@@ -160,6 +160,15 @@ class TestQueryPlannerApiKeyAuth(unittest.TestCase):
         """The rollout depends on this: callers send keys before the planner has any."""
         self.assertEqual(self._statuses(None), [200, 422, 422, 422])
 
+    def test_malformed_keys_leave_the_planner_open_and_say_so(self):
+        """A value with no `:name` parses to no keys; the log must not claim the variable is unset."""
+        result = _import_core_in_subprocess({"QUERY_PLANNER_AUTH__API_KEYS": "k1"}, code=self._PRINT_STATUSES)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(json.loads(result.stdout.strip().splitlines()[-1]), [200, 422, 422, 422])
+        output = result.stdout + result.stderr
+        self.assertIn("set but has no valid key:name entries", output)
+        self.assertNotIn("not set", output)
+
 
 class TestEnvInt(unittest.TestCase):
     """`_env_int`'s branch table, in-process because it takes no import to exercise.
