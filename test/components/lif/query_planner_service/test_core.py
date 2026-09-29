@@ -1405,3 +1405,48 @@ def test_the_first_callback_claims_the_job_and_a_concurrent_second_one_is_reject
     assert saves == 1
     assert job_store["run-1"].status == final_status
     assert (job_store["run-1"].error_message is None) == (final_status == LIFQueryStatus.COMPLETED)
+
+
+@patch("httpx.AsyncClient.get")
+def test_a_callback_that_completes_the_job_during_the_run_check_is_not_overwritten(mock_get):
+    """#1330 review: the check awaited the orchestrator, then marked FAILED without looking
+    again. A run can report FAILED after its callback was processed, when the callback's own
+    response was lost, so the job ended FAILED after pollers had seen COMPLETED."""
+    job_store = _pending_store()
+
+    def callback_completes_meanwhile(*args, **kwargs):
+        job_store["run-1"].status = LIFQueryStatus.COMPLETED
+        return _orchestrator_run("run-1", "FAILED")
+
+    mock_get.side_effect = callback_completes_meanwhile
+
+    with patch.object(core, "JOB_STORE", job_store):
+        status = asyncio.run(_stats_service().get_query_status("run-1"))
+
+    assert status.status == LIFQueryStatus.COMPLETED
+    assert job_store["run-1"].error_message is None
+
+
+def test_a_run_check_during_a_callbacks_save_leaves_the_outcome_to_the_callback():
+    """#1330 review: a poll that marked FAILED while a callback awaited its save was then
+    overwritten to COMPLETED, keeping the FAILED error_message, after a sync /query that polled
+    in between had already answered 500. The claimed job is now the callback's to finish."""
+    job_store = _pending_store()
+    service = _stats_service()
+    polled = []
+
+    async def save_with_a_poll_in_the_middle(*args, **kwargs):
+        # The callback has claimed the job and is awaiting this save.
+        polled.append(await service.get_query_status("run-1"))
+        return _create_mock_post_response(200, {}, "https://api.example.com/save")
+
+    with (
+        patch.object(core, "JOB_STORE", job_store),
+        patch("httpx.AsyncClient.post", side_effect=save_with_a_poll_in_the_middle),
+        patch("httpx.AsyncClient.get", return_value=_orchestrator_run("run-1", "FAILED")),
+    ):
+        asyncio.run(service.run_post_orchestration_results(_results_for("run-1")))
+
+    assert polled[0].status == LIFQueryStatus.PENDING
+    assert job_store["run-1"].status == LIFQueryStatus.COMPLETED
+    assert job_store["run-1"].error_message is None

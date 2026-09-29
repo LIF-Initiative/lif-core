@@ -319,7 +319,13 @@ class LIFQueryPlannerService:
         except Exception as e:
             logger.warning(f"Could not check orchestration run {job.job_id} ({type(e).__name__}); leaving it PENDING")
             return
-        if run.status == OrchestratorJobStatus.FAILED:
+        # Look again after the await: a callback may have claimed or finished the job meanwhile,
+        # and its outcome wins over the run's status.
+        if (
+            run.status == OrchestratorJobStatus.FAILED
+            and job.status == LIFQueryStatus.PENDING
+            and not job.results_claimed
+        ):
             _mark_job_failed(job, "The orchestration run failed")
 
     # Main function to run an update
