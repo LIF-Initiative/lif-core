@@ -283,8 +283,10 @@ async def do_get_query_result(query_id: str, response: Response) -> List[LIFReco
     except ValueError:
         raise HTTPException(status_code=404, detail="Unknown query ID")
     except Exception as e:
+        # The log keeps the message for operators; the caller gets none of it, since a cache
+        # failure's message carries the cache's response body (as #1291 and #1309 did for GraphQL).
         logger.error(f"Error retrieving query result: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail="Error retrieving query result")
     if isinstance(result, LIFQueryStatusResponse):
         if result.status == LIFQueryStatus.FAILED:
             msg = f"Query failed with status: {result.status}"

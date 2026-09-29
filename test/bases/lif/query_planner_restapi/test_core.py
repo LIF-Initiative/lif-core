@@ -19,6 +19,7 @@ from lif.datatypes import (
     LIFQueryStatusResponse,
     LIFRecord,
 )
+from lif.exceptions.core import LIFException
 import pytest
 
 _YML_PATH = os.path.dirname(__file__) + "/test_information_sources_config.yml"
@@ -720,6 +721,23 @@ def test_query_result_for_an_unknown_job_is_a_404():
             asyncio.run(core.do_get_query_result("missing", Response()))
 
     assert exc_info.value.status_code == 404
+
+
+@patch.dict(os.environ, _ENV)
+def test_query_result_error_does_not_relay_the_backend_message(caplog):
+    """#1329 review: a cache failure's message carries the cache's response body, and the 500
+    relayed it to the caller -- the pattern #1291 and #1309 removed from GraphQL. Operators
+    still get it in the log."""
+    from lif.query_planner_restapi import core
+
+    leaky = LIFException('LIF Cache query HTTP error: 500 - {"detail": "auth failed for sentinel-user host=10.0.3.17"}')
+    with patch.object(core.service, "get_query_result", AsyncMock(side_effect=leaky)):
+        with pytest.raises(HTTPException) as exc_info:
+            asyncio.run(core.do_get_query_result("run-1", Response()))
+
+    assert exc_info.value.status_code == 500
+    assert "sentinel-user" not in exc_info.value.detail
+    assert "sentinel-user" in caplog.text
 
 
 @patch.dict(os.environ, _ENV)
