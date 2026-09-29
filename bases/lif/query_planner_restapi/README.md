@@ -6,7 +6,7 @@ FastAPI base for the LIF Query Planner: takes a `LIFQuery` and decides *how* to 
 - `POST /query`              — synchronous query; polls internally and returns `List[LIFRecord]`
 - `POST /query_async`        — async query; returns records (cache hit), or `202` with a `LIFQueryStatusResponse` and a `Location: /query/{query_id}`
 - `GET  /query/{query_id}`   — the async query's result: `200` with the records once `COMPLETED`, `202` while `PENDING`, `500` if `FAILED`, `404` for an unknown ID
-- `GET  /query/{query_id}/status` — the async query's status: `PENDING`, `COMPLETED` or `FAILED`
+- `GET  /query/{query_id}/status` — the async query's status: `PENDING`, `COMPLETED` or `FAILED`; `404` for an unknown ID
 - `POST /update`             — apply a `LIFUpdate`
 - `POST /orchestration/results` — callback endpoint for the Orchestrator to report back when an async job finishes
 - `GET  /`                   — sanity ping

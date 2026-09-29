@@ -753,6 +753,18 @@ def test_query_status_reports_a_failed_job():
 
 
 @patch.dict(os.environ, _ENV)
+def test_query_status_for_an_unknown_job_is_a_404():
+    """#1329 review: GET /query/{id} answered 404 for an unknown ID while /status answered 400."""
+    from lif.query_planner_restapi import core
+
+    with patch.object(core.service, "get_query_status", AsyncMock(side_effect=ValueError("Invalid query ID"))):
+        with pytest.raises(HTTPException) as exc_info:
+            asyncio.run(core.do_get_query_status("missing"))
+
+    assert exc_info.value.status_code == 404
+
+
+@patch.dict(os.environ, _ENV)
 def test_sync_query_fails_fast_when_the_job_fails():
     """Before #1107 nothing produced FAILED, so this branch was unreachable and a failed
     callback left the caller waiting for the 408."""
@@ -761,6 +773,9 @@ def test_sync_query_fails_fast_when_the_job_fails():
     pending = LIFQueryStatusResponse(query_id="run-1", status="PENDING")
     failed = LIFQueryStatusResponse(query_id="run-1", status="FAILED", error_message="processing failed")
     with (
+        # With sleep mocked, a regression that kept polling on FAILED would otherwise spin until
+        # the real 300s default; this makes it a quick 408 instead of a hung run.
+        patch.object(core.config, "query_timeout_seconds", 1),
         patch.object(core.service, "run_query", AsyncMock(return_value=pending)),
         patch.object(core.service, "get_query_status", AsyncMock(return_value=failed)),
         patch.object(core, "sleep", AsyncMock()),
