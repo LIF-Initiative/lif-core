@@ -98,11 +98,11 @@ Retrieval runs through the Semantic Search MCP server for schema-leaf retrieval 
 
 ### Performance
 
-(Investigation in progress — see [LLM Invocation Tuning Study](#llm-invocation-tuning-study-issue-715-spike-2026-08-21).) The reframe is a synchronous blocking call on the event loop of a single uvicorn worker, and tool responses saturate ~2k tokens/query for k≥50. Streaming the responses is tracked in [`advisor-streaming.md`](../../operations/proposals/advisor-streaming.md) (#970).
+(Investigation in progress — see [LLM Invocation Tuning Study](#llm-invocation-tuning-study-issue-715-spike-2026-08-21).) The reframe is awaited (`ainvoke`), so it no longer blocks the event loop of the single uvicorn worker (#1106), and tool responses saturate ~2k tokens/query for k≥50. Streaming the responses is tracked in [`advisor-streaming.md`](../../operations/proposals/advisor-streaming.md) (#970).
 
 ### Concurrency
 
-The component should serve concurrent conversations from its single uvicorn worker. Per-user conversation state is kept in process via the `InMemorySaver` and the conversation registry; the blocking reframe call constrains throughput until the streaming work (above) lands.
+The component should serve concurrent conversations from its single uvicorn worker. Per-user conversation state is kept in process via the `InMemorySaver` and the conversation registry; since #1106 the reframe call no longer blocks other conversations while it waits on OpenAI.
 
 ### High Availability
 
@@ -133,8 +133,8 @@ The service follows today's no-server-side-streaming, request/response design: e
 
 - `bases/lif/advisor_restapi/core.py` — FastAPI app, session/user helpers, per-user conversation registry.
 - `components/lif/langchain_agent/core.py` — `LIFAIAgent`: builds MCP toolset + one LangGraph react agent per task type (`LIF_ADVISOR_AGENT_TASKS`) sharing an `InMemorySaver`; each turn **reframes** the user query (identifier-preserving rewrite) before invoking the agent. Memory summarization knobs `LIF_ADVISOR_MESSAGES_TO_KEEP` / `_TRIMMED_MESSAGES_SIZE` / `_MAX_CONVERSATION_SIZE` / `_MAX_SUMMARY_SIZE` (`core.py:45-48`).
-- Two `ChatOpenAI` call sites: agent model (`core.py:123`, `temperature=0.0`) and reframer model (`core.py:259`, temperature unset → OpenAI server default 1.0). See tuning study below.
-- Single uvicorn worker; the reframe is a synchronous blocking call on the event loop — tracked with streaming work in [`advisor-streaming.md`](../../operations/proposals/advisor-streaming.md) (#970).
+- Two `ChatOpenAI` call sites: agent model (`core.py:123`, `temperature=0.0`) and reframer model (`core.py:263`, temperature unset → OpenAI server default 1.0). See tuning study below.
+- Single uvicorn worker; the reframe is awaited, so it does not block the event loop (#1106). Streaming the responses is tracked in [`advisor-streaming.md`](../../operations/proposals/advisor-streaming.md) (#970).
 
 ## Workflow Model
 

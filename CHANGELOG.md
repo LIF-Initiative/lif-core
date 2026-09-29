@@ -33,6 +33,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Advisor API: the query reframe before each agent turn awaits the LLM instead of blocking, so
+  concurrent conversations (and a logout's background summary) no longer wait on each other's
+  reframe on the single uvicorn worker (issue #1106)
 - The GraphQL update mutation no longer relays the Query Planner's error body to the caller: a failed
   `update<Root>` now reports `Mutation failed: <status>`, with the body in the server log only,
   matching the query path since #1291
