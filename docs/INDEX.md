@@ -45,6 +45,8 @@
 - [`composer/0001-implement-as-module-component.md`](design/adr/composer/0001-implement-as-module-component.md) — Composer: implement as module component.
 - [`composer/0002-use-hierarchical-dot-path-for-fragment-paths.md`](design/adr/composer/0002-use-hierarchical-dot-path-for-fragment-paths.md) — Composer: hierarchical dot-path for fragment paths.
 - [`data_model/0001-field-naming-and-source-standard-normalization.md`](design/adr/data_model/0001-field-naming-and-source-standard-normalization.md) — Data model: field naming & source-standard normalization (Proposed).
+- [`data_model/0002-lif-variants-freeze-the-overlay-model.md`](design/adr/data_model/0002-lif-variants-freeze-the-overlay-model.md) — Data model: freeze the Org LIF / Partner LIF overlay model; a LIF variant becomes a Source Schema plus a mapping (Accepted).
+- [`data_model/0003-references-between-shared-entities.md`](design/adr/data_model/0003-references-between-shared-entities.md) — Data model: references are part of the model and its output: explicit schema refs, JSON-LD `@id` in records, layered organization identifiers (Accepted).
 - [`general/auth.md`](design/adr/general/auth.md) — ADR 0001: API and User Auth (Proposed).
 - [`general/0002-lif-control-plane-vs-mdr-host.md`](design/adr/general/0002-lif-control-plane-vs-mdr-host.md) — ADR 0002 (Proposed): identity + developer-key control plane belongs in a dedicated LIF service, not MDR; MDR is the interim host via portable bricks + signed-token offline validation (#1000/#1041).
 - [`general/0003-advisor-queries-query-planner-directly.md`](design/adr/general/0003-advisor-queries-query-planner-directly.md) — ADR 0003: Advisor/MCP retrieval talks to the Query Planner directly; GraphQL is an external query facade, not an internal waypoint (Proposed).
@@ -58,6 +60,7 @@
 - [`metadata_repository/0006-reverse-translation.md`](design/adr/metadata_repository/0006-reverse-translation.md) — MDR: reverse translation.
 - [`metadata_repository/0007-query-planner-integration.md`](design/adr/metadata_repository/0007-query-planner-integration.md) — MDR: query planner integration.
 - [`metadata_repository/0008-data-model-use-cases.md`](design/adr/metadata_repository/0008-data-model-use-cases.md) — MDR: data model use cases.
+- [`metadata_repository/0009-mapping-identity-and-cardinality.md`](design/adr/metadata_repository/0009-mapping-identity-and-cardinality.md) — MDR: a mapping is identified by (group, target path); one target per mapping, one mapping per target (Accepted).
 - [`orchestrator/0001-orchestrator-for-demo.md`](design/adr/orchestrator/0001-orchestrator-for-demo.md) — Orchestrator: design for demo deployment.
 - [`translator/0001-initialization-vs-mdr-dependency.md`](design/adr/translator/0001-initialization-vs-mdr-dependency.md) — Translator: initialization vs MDR dependency.
 - [`translator/0002-query-translation.md`](design/adr/translator/0002-query-translation.md) — Translator: query translation approach.

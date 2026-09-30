@@ -5,6 +5,8 @@ Date: 2026-01-19
 ## Status
 Proposed
 
+Amended in part by [data_model/0002](../data_model/0002-lif-variants-freeze-the-overlay-model.md) (the *Org LIF* and *Partner LIF* overlay is frozen) and [0009](0009-mapping-identity-and-cardinality.md) (mapping identity and cardinality).
+
 ## Context
 Recent testing of the **MDR** has revealed some questions on Data Model behavior [#790](https://github.com/LIF-Initiative/lif-core/issues/790). As discussions occurred to determine issue resolution, it was noted there was a lack of documented requirements around **MDR** Data Models. This ADR aims to specify requirements of the **MDR** _Data Models_, how existing _Entities_, _Attributes_, and _Value Sets_ are associated, and the behavior of transformations.
 
