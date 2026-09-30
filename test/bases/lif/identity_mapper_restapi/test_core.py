@@ -12,6 +12,9 @@ from lif.exceptions.core import DataNotFoundException, DataStoreException
 from lif.identity_mapper_restapi import core
 from lif.identity_mapper_service.core import IdentityMapperService
 from lif.identity_mapper_storage.core import DeleteOutcome
+from lif.identity_mapper_storage_sql import core as storage_core
+from lif.identity_mapper_storage_sql.core import IdentityMapperSqlStorage
+from lif.identity_mapper_storage_sql.db import Base
 
 
 @pytest_asyncio.fixture
@@ -349,6 +352,115 @@ async def test_do_save_mappings_datastore_exception(mock_initialize, mock_shutdo
             mock_save_mappings.assert_awaited_once_with(
                 org_id, person_id, [core.IdentityMapping(**m) for m in new_mappings]
             )
+
+
+# The column widths from projects/lif_identity_mapper_mariadb/02-ddl.sql after #1258. Pinned here
+# as literals so a change to a column width shows up as a deliberate test change (#1300).
+FIELD_WIDTHS = [
+    ("lif_organization_id", 191),
+    ("lif_organization_person_id", 191),
+    ("target_system_id", 191),
+    ("target_system_person_id_type", 100),
+    ("target_system_person_id", 255),
+]
+
+
+def _mapping_with(field: str, value: str) -> dict:
+    mapping = {
+        "mapping_id": None,
+        "lif_organization_id": "org1",
+        "lif_organization_person_id": "person1",
+        "target_system_id": "ext_org1",
+        "target_system_person_id_type": "School-assigned number",
+        "target_system_person_id": "ext_person1",
+    }
+    mapping[field] = value
+    return mapping
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("field,width", FIELD_WIDTHS)
+@patch("lif.identity_mapper_restapi.core.initialize", mock_initialize)
+@patch("lif.identity_mapper_restapi.core.shutdown", mock_shutdown)
+async def test_do_save_mappings_rejects_a_value_wider_than_its_column(field, width):
+    """One character over the column width is a 422 naming the field, not a 500 from the database (#1300)."""
+    async with get_client() as client:
+        with patch.object(core.service, "save_mappings", new_callable=AsyncMock) as mock_save_mappings:
+            response = await client.post(
+                "/organizations/org1/persons/person1/mappings", json=[_mapping_with(field, "x" * (width + 1))]
+            )
+
+    assert response.status_code == 422
+    assert [error["loc"] for error in response.json()["detail"]] == [["body", 0, field]]
+    mock_save_mappings.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("field,width", FIELD_WIDTHS)
+@patch("lif.identity_mapper_restapi.core.initialize", mock_initialize)
+@patch("lif.identity_mapper_restapi.core.shutdown", mock_shutdown)
+async def test_do_save_mappings_accepts_a_value_exactly_as_wide_as_its_column(field, width):
+    """The service receives the plain IdentityMapping DTO; the request model only validates."""
+    mapping = _mapping_with(field, "x" * width)
+    async with get_client() as client:
+        with patch.object(core.service, "save_mappings", new_callable=AsyncMock) as mock_save_mappings:
+            mock_save_mappings.return_value = []
+            response = await client.post("/organizations/org1/persons/person1/mappings", json=[mapping])
+
+    assert response.status_code == 200
+    mock_save_mappings.assert_awaited_once_with("org1", "person1", [core.IdentityMapping(**mapping)])
+
+
+@pytest.mark.asyncio
+@patch("lif.identity_mapper_restapi.core.initialize", mock_initialize)
+@patch("lif.identity_mapper_restapi.core.shutdown", mock_shutdown)
+async def test_do_save_mappings_persistent_collision_returns_409(mock_initialize, mock_shutdown, db_session_factory):
+    """
+    A natural-key collision that survives the storage retry answers 409, not the generic 500 (#1261).
+
+    Runs through the real service and SQL storage rather than a mocked service, because the
+    ways this breaks sit between the layers: the storage brick's broad `except` swallowing the
+    conflict into a DataStoreException, or the exception reaching the LIFException handler's
+    500 instead of its own. A test that stops at the exception type passes in both cases.
+    """
+    org_id = "org1"
+    person_id = "person1"
+    mapping = {
+        "mapping_id": None,
+        "lif_organization_id": org_id,
+        "lif_organization_person_id": person_id,
+        "target_system_id": "ext_org1",
+        "target_system_person_id_type": "School-assigned number",
+        "target_system_person_id": "ext_person1",
+    }
+    async with db_session_factory.kw["bind"].begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+    storage = IdentityMapperSqlStorage(db_session_factory)
+    await storage.save_mappings([core.IdentityMapping(**{**mapping, "target_system_person_id": "ext_racer"})])
+
+    # Every pre-read misses the committed row, so both attempts insert into the existing key.
+    reads: list[int] = []
+
+    async def stale_read(*args, **kwargs):
+        reads.append(1)
+        return []
+
+    with (
+        patch.object(core, "service", IdentityMapperService(storage=storage)),
+        patch.object(storage_core, "read_by_lif_org_and_person", side_effect=stale_read),
+    ):
+        async with get_client() as client:
+            response = await client.post(f"/organizations/{org_id}/persons/{person_id}/mappings", json=[mapping])
+
+    assert response.status_code == 409
+    response_json = response.json()
+    assert response_json["status_code"] == "409"
+    assert response_json["path"] == f"/organizations/{org_id}/persons/{person_id}/mappings"
+    assert "retried" in response_json["message"]
+    # An expected, self-describing outcome: no correlation UUID for an operator to chase.
+    assert "code" not in response_json
+    # Still exactly one retry before the 409 (#1260's bound).
+    assert len(reads) == 2
 
 
 @pytest.mark.asyncio

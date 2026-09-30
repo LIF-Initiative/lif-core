@@ -8,6 +8,8 @@ Storage interface for `IdentityMapping`s. Defines the abstract contract that the
 from lif.identity_mapper_storage.core import IdentityMapperStorage
 ```
 
+`IdentityMappingConflictException` (same module) is what an implementation raises when a save's natural-key collision survives its retry, so the API can answer `409` instead of `500` (#1261).
+
 `IdentityMapperStorage` is the abstract base class. Concrete implementations live in sibling bricks; the only one in tree is [`identity_mapper_storage_sql`](../identity_mapper_storage_sql/) (SQLAlchemy/MariaDB).
 
 The split exists so the identity mapper service can be tested against an in-memory or fake implementation without spinning up a database — and so a future swap to a different backend (Postgres, Redis, etc.) wouldn't require touching service logic.
