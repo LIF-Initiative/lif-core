@@ -109,6 +109,55 @@ async def test_graphql_mutation_http_error_raises_exception(mock_post):
         )
 
 
+# A GraphQL server answers 200 even when the body carries `errors` (#1292): the GraphQL API
+# reports a Query Planner failure that way since #1264, so a 2xx alone is not success.
+@patch("lif.graphql_client.core._post")
+async def test_graphql_query_raises_on_errors_in_a_200_body(mock_post):
+    mock_post.return_value = _create_mock_response(
+        200, {"data": None, "errors": [{"message": "Query failed: 500"}]}, "http://localhost:8000/graphql"
+    )
+
+    with pytest.raises(GraphQLClientException, match="Query failed: 500"):
+        await core.graphql_query(query="{ person { Name { firstName } } }", url="http://localhost:8000/graphql")
+
+
+@patch("lif.graphql_client.core._post")
+async def test_graphql_query_raises_on_errors_even_with_partial_data(mock_post):
+    """Partial success is not returned: a nested field that failed would otherwise read as absent data."""
+    mock_post.return_value = _create_mock_response(
+        200,
+        {"data": {"person": [{"Name": None}]}, "errors": [{"message": "Cannot resolve Name"}]},
+        "http://localhost:8000/graphql",
+    )
+
+    with pytest.raises(GraphQLClientException, match="Cannot resolve Name"):
+        await core.graphql_query(query="{ person { Name { firstName } } }", url="http://localhost:8000/graphql")
+
+
+@patch("lif.graphql_client.core._post")
+async def test_graphql_query_returns_a_body_with_empty_errors(mock_post):
+    mock_post.return_value = _create_mock_response(
+        200, {"data": {"person": []}, "errors": []}, "http://localhost:8000/graphql"
+    )
+
+    result = await core.graphql_query(query="{ person { Name { firstName } } }", url="http://localhost:8000/graphql")
+
+    assert result == {"data": {"person": []}, "errors": []}
+
+
+@patch("lif.graphql_client.core._post")
+async def test_graphql_mutation_raises_on_errors_in_a_200_body(mock_post):
+    mock_post.return_value = _create_mock_response(
+        200, {"data": None, "errors": [{"message": "Mutation failed: 500"}]}, "http://localhost:8000/graphql"
+    )
+
+    with pytest.raises(GraphQLClientException, match="Mutation failed: 500"):
+        await core.graphql_mutation(
+            query="mutation { updatePerson(filter: {}, input: {}) { Name { firstName } } }",
+            url="http://localhost:8000/graphql",
+        )
+
+
 @patch("lif.graphql_client.core._post")
 async def test_graphql_query_uses_default_url(mock_post):
     mock_post.return_value = _create_mock_response(200, {"data": {"person": []}}, core.LIF_GRAPHQL_API_URL)

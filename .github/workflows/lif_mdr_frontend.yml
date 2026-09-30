@@ -61,5 +61,9 @@ jobs:
       run: |
         aws s3 sync --delete dist s3://${{ env.ENV_NAME }}-mdr-${{ env.AWS_ACCOUNT_ID }}-${{ env.AWS_REGION }}
         id=$(aws ssm get-parameter --name "/${{ env.ENV_NAME }}/mdr/DistributionId" --query "Parameter.Value" --output text)
-        aws cloudfront create-invalidation --distribution-id $id --paths "/"
+        # Invalidate "/*", not "/". `s3 sync --delete` replaces the whole
+        # object set, and stable-named files (index.html, robots.txt) keep
+        # serving from the edge cache otherwise. Hashed asset filenames
+        # cache-bust themselves; these do not.
+        aws cloudfront create-invalidation --distribution-id $id --paths "/*"
 

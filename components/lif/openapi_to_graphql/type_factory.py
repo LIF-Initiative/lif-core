@@ -67,8 +67,6 @@ LIF_CLIENT_NAME = "graphql"
 # Use centralized type mappings from lif_schema_config
 DATATYPE_MAP = XSD_TO_PYTHON
 
-input_type_cache: Dict[str, Optional[Type[Any]]] = {}
-
 
 # === Reference Resolution ===
 
@@ -759,7 +757,11 @@ def create_nested_input_type(
 
 
 def create_input_type(
-    type_name: str, schema: dict, openapi: dict, created_types: Dict[str, Type[Any]]
+    type_name: str,
+    schema: dict,
+    openapi: dict,
+    created_types: Dict[str, Type[Any]],
+    input_type_cache: Dict[str, Optional[Type[Any]]],
 ) -> Optional[Type[Any]]:
     """Creates a nested filter input type for a given schema, or None if none is queryable.
 
@@ -768,6 +770,8 @@ def create_input_type(
         schema (dict): The JSON schema.
         openapi (dict): The OpenAPI document.
         created_types (dict): Dictionary of created types.
+        input_type_cache (dict): Cache of input types for this schema build. Keyed by type name
+            alone, so it must not outlive the build (#1293).
 
     Returns:
         Optional[type]: Strawberry input type, or None if nothing queryable.
@@ -987,8 +991,10 @@ def build_root_mutation_type(
             else:
                 raise Exception("Mutation succeeded but response missing object.")
         else:
+            # The body stays in the log only, as on the query path above (#1309): the QP builds
+            # it from str(e), and Strawberry relays the exception message to the caller verbatim.
             logger.error(f"Mutation failed: {response.status_code} {response.text}")
-            raise Exception(f"Mutation failed: {response.status_code}: {response.text}")
+            raise Exception(f"Mutation failed: {response.status_code}")
 
     update_resolver.__annotations__ = {
         "self": Any,
