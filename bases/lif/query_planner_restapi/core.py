@@ -11,6 +11,7 @@ from lif.datatypes import (
     OrchestratorJobResults,
     LIFQuery,
     LIFQueryPlanPartTranslation,
+    LIFQueryStatus,
     LIFQueryStatusResponse,
     LIFRecord,
     LIFUpdate,
@@ -151,6 +152,18 @@ def respond_to_partial_records(partial: LIFQueryPlannerPartialRecords, response:
     return partial.records
 
 
+def respond_accepted(status_response: LIFQueryStatusResponse, response: Response) -> LIFQueryStatusResponse:
+    """
+    A 202 for a query still in progress, pointing the caller at GET /query/{id}, where the
+    records appear once it completes. Fetching them there never re-runs the query, so it
+    cannot submit a second orchestration the way re-POSTing the query did (#1327).
+    """
+    response.status_code = status.HTTP_202_ACCEPTED
+    response.headers["Location"] = f"/query/{status_response.query_id}"
+    response.headers["Retry-After"] = "5"  # seconds to wait before polling
+    return status_response
+
+
 config = LIFQueryPlannerConfig(
     lif_cache_url=LIF_CACHE_URL,
     lif_orchestrator_url=LIF_ORCHESTRATOR_URL,
@@ -168,8 +181,9 @@ def root() -> dict:
 
 
 # -------------------------------------------------------------------------
-# Query endpoint - synchronous-only version that handles polling. This is
-# temporary, and will be removed soon.
+# Query endpoint - synchronous: polls internally and answers with the records.
+# Supported for the callers that need one request and one 200 with
+# List[LIFRecord]: the GraphQL resolver and LDE's query_planner_client (#1107).
 # -------------------------------------------------------------------------
 @app.post("/query", status_code=status.HTTP_200_OK, response_model=List[LIFRecord])
 async def do_run_query_sync(
@@ -233,8 +247,9 @@ async def do_run_query_sync(
 
 
 # -------------------------------------------------------------------------
-# Query endpoint - temporarily using path /query_async, but will be changed
-# to /query in the future.
+# Query endpoint - asynchronous: answers from the cache, or 202 with a query ID.
+# The supported async contract, with GET /query/{id} and
+# GET /query/{id}/status (#1107).
 # -------------------------------------------------------------------------
 @app.post("/query_async", response_model=List[LIFRecord] | LIFQueryStatusResponse)
 async def do_run_query(
@@ -244,11 +259,8 @@ async def do_run_query(
     try:
         result = await service.run_query(query, first_run=True, client=client)
         if isinstance(result, LIFQueryStatusResponse):
-            response.status_code = status.HTTP_202_ACCEPTED
-            response.headers["Location"] = f"/query/{result.query_id}/status"
-            response.headers["Retry-After"] = "5"  # seconds to wait before polling
             logger.info(f"Query is still processing, returning status response: {result}")
-            return result
+            return respond_accepted(result, response)
         elif isinstance(result, LIFQueryPlannerPartialRecords):
             return respond_to_partial_records(result, response)
         else:
@@ -263,13 +275,37 @@ async def do_run_query(
         raise HTTPException(status_code=500, detail=str(e))
 
 
+@app.get("/query/{query_id}", response_model=List[LIFRecord] | LIFQueryStatusResponse)
+async def do_get_query_result(query_id: str, response: Response) -> List[LIFRecord] | LIFQueryStatusResponse:
+    logger.info(f"CALL RECEIVED TO /query/{query_id} API")
+    try:
+        result = await service.get_query_result(query_id)
+    except ValueError:
+        raise HTTPException(status_code=404, detail="Unknown query ID")
+    except Exception as e:
+        # The log keeps the message for operators; the caller gets none of it, since a cache
+        # failure's message carries the cache's response body (as #1291 and #1309 did for GraphQL).
+        logger.error(f"Error retrieving query result: {e}")
+        raise HTTPException(status_code=500, detail="Error retrieving query result")
+    if isinstance(result, LIFQueryStatusResponse):
+        if result.status == LIFQueryStatus.FAILED:
+            msg = f"Query failed with status: {result.status}"
+            if result.error_message:
+                msg += f" - {result.error_message}"
+            raise HTTPException(status_code=500, detail=msg)
+        return respond_accepted(result, response)
+    if isinstance(result, LIFQueryPlannerPartialRecords):
+        return respond_to_partial_records(result, response)
+    return result
+
+
 @app.get("/query/{query_id}/status")
 async def do_get_query_status(query_id: str) -> LIFQueryStatusResponse:
     logger.info(f"CALL RECEIVED TO /query/{query_id}/status API")
     try:
         return await service.get_query_status(query_id)
     except ValueError:
-        raise HTTPException(status_code=400, detail="Invalid job ID")
+        raise HTTPException(status_code=404, detail="Unknown query ID")
     except Exception as e:
         logger.error(f"Error retrieving job status: {e}")
         raise HTTPException(status_code=500, detail=str(e))

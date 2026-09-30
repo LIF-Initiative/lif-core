@@ -41,6 +41,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Query Planner async contract (issue #1107): `GET /query/{query_id}` returns a completed async
+  query's records without re-running it, so a client no longer has to re-POST the query, which
+  submitted a new orchestration whenever a requested field was still missing (issue #1327). A
+  `/query_async` `202` now points `Location` at it. Query status is a `LIFQueryStatus` enum
+  (`PENDING`, `COMPLETED`, `FAILED`), and a job whose orchestration callback can't be processed
+  is marked `FAILED`, so pollers (including the sync `/query`) fail fast instead of timing out.
+  `GET /query/{query_id}/status` answers an unknown ID with `404`, not `400`, matching the result
+  endpoint
 - The GraphQL update mutation no longer relays the Query Planner's error body to the caller: a failed
   `update<Root>` now reports `Mutation failed: <status>`, with the body in the server log only,
   matching the query path since #1291

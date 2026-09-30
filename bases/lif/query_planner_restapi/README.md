@@ -3,12 +3,15 @@
 FastAPI base for the LIF Query Planner: takes a `LIFQuery` and decides *how* to fulfill it — which data sources to hit, which fragments come from cache vs. fresh orchestration, how to route the result through any required translations. The GraphQL API delegates to the Query Planner; the planner in turn calls the Query Cache and Orchestrator.
 
 ## Endpoints
-- `POST /query`              — synchronous query; returns `List[LIFRecord]`
-- `POST /query_async`        — async variant; returns either records (cache hit) or a `LIFQueryStatusResponse` to poll
-- `GET  /query/{query_id}/status` — poll status of an in-flight async query
+- `POST /query`              — synchronous query; polls internally and returns `List[LIFRecord]`
+- `POST /query_async`        — async query; returns records (cache hit), or `202` with a `LIFQueryStatusResponse` and a `Location: /query/{query_id}`
+- `GET  /query/{query_id}`   — the async query's result: `200` with the records once `COMPLETED`, `202` while `PENDING`, `500` if `FAILED`, `404` for an unknown ID
+- `GET  /query/{query_id}/status` — the async query's status: `PENDING`, `COMPLETED` or `FAILED`; `404` for an unknown ID
 - `POST /update`             — apply a `LIFUpdate`
 - `POST /orchestration/results` — callback endpoint for the Orchestrator to report back when an async job finishes
 - `GET  /`                   — sanity ping
+
+**The async contract (#1107).** A client POSTs to `/query_async`, and on a `202` polls the `Location` it was given until it gets the records. It should not re-POST the query: a new POST is a new query, and when a requested field is still missing after orchestration it submits a new orchestration run (#1327). A job becomes `FAILED` when its orchestration callback can't be processed (for example, the Query Cache rejects the save); `error_message` names the failure type only, never its details. A run that dies without calling back stays `PENDING` until it is pruned (#1113 tracks detecting that). Both `/query` and `/query_async` are supported: `/query` serves the callers that need one request and one `200` (the GraphQL resolver and LDE's `query_planner_client`).
 
 The sync `/query` polling loop backs off between `MIN_POLLING_DELAY_SECONDS` (1) and `MAX_POLLING_DELAY_SECONDS` (16) seconds, and returns `408` once `LIF_QUERY_TIMEOUT_SECONDS` is exceeded.
 

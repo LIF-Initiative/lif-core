@@ -19,6 +19,7 @@ from lif.datatypes import (
     LIFQuery,
     LIFQueryFilter,
     LIFQueryPlan,
+    LIFQueryStatus,
     LIFQueryStatusResponse,
     LIFPersonIdentifier,
     LIFRecord,
@@ -199,7 +200,10 @@ class LIFQueryPlannerService:
                     )
 
                 lif_query_planner_job = LIFQueryPlannerJob(
-                    job_id=orchestrator_job_request_response.run_id, query=query, status="PENDING", client=client
+                    job_id=orchestrator_job_request_response.run_id,
+                    query=query,
+                    status=LIFQueryStatus.PENDING,
+                    client=client,
                 )
 
                 prune_job_store()
@@ -214,7 +218,9 @@ class LIFQueryPlannerService:
                     lif_query_planner_job.job_id,
                     client,
                 )
-                query_status_response = LIFQueryStatusResponse(query_id=lif_query_planner_job.job_id, status="PENDING")
+                query_status_response = LIFQueryStatusResponse(
+                    query_id=lif_query_planner_job.job_id, status=LIFQueryStatus.PENDING
+                )
                 return query_status_response
             else:
                 job: LIFQueryPlannerJob | None = JOB_STORE.get(query_id) if query_id else None
@@ -253,15 +259,42 @@ class LIFQueryPlannerService:
             if query_id not in JOB_STORE:
                 raise ValueError(f"Invalid query ID: {query_id}")
             job: LIFQueryPlannerJob = JOB_STORE[query_id]
-            if job.status == "PENDING" or job.status == "COMPLETED":
-                return LIFQueryStatusResponse(query_id=query_id, status=job.status)
-            else:
-                raise LIFException(f"Query with ID {query_id} is in an unknown state: {job.status}")
+            return LIFQueryStatusResponse(query_id=query_id, status=job.status, error_message=job.error_message)
         except ValueError as e:
             raise e
         except Exception as e:
             logger.exception(f"Error retrieving query status: {e}")
             raise LIFException(f"Error retrieving query status: {e}") from e
+
+    # -------------------------------------------------------------------------
+    # Main function to get the result of a completed async query
+    # -------------------------------------------------------------------------
+    async def get_query_result(
+        self, query_id: str
+    ) -> List[LIFRecord] | LIFQueryStatusResponse | LIFQueryPlannerPartialRecords:
+        """
+        Get the result of an async query by its ID, without submitting a new orchestration.
+
+        Before this existed, the only way to get a completed job's records was to POST the
+        query again, which submits a new orchestration whenever a requested field is still
+        missing from the cache (#1327). The job already holds its query, so the records are
+        read back through the same path the sync /query uses after polling.
+
+        Args:
+            query_id (str): The ID of the query.
+
+        Returns:
+            The records (or a partial) for a COMPLETED job; otherwise its status.
+
+        Raises:
+            ValueError: If the query ID is unknown (never issued, or pruned).
+        """
+        job: LIFQueryPlannerJob | None = JOB_STORE.get(query_id)
+        if job is None:
+            raise ValueError(f"Invalid query ID: {query_id}")
+        if job.status != LIFQueryStatus.COMPLETED:
+            return LIFQueryStatusResponse(query_id=query_id, status=job.status, error_message=job.error_message)
+        return await self.run_query(job.query, first_run=False, client=job.client, query_id=query_id)
 
     # Main function to run an update
     # -------------------------------------------------------------------------
@@ -312,6 +345,7 @@ class LIFQueryPlannerService:
             f"{util.summarize_orchestration_results(results)}"
         )
 
+        pending_job: LIFQueryPlannerJob | None = None
         try:
             # Get the Run ID from the results
             run_id = results.run_id
@@ -322,8 +356,15 @@ class LIFQueryPlannerService:
                 raise LIFException(f"Job with ID {run_id} not found in JOB_STORE.")
 
             # Verify the Job status is 'PENDING'
-            if job.status != "PENDING":
+            if job.status != LIFQueryStatus.PENDING:
                 raise LIFException(f"Job with ID {run_id} is not in 'PENDING' status, current status: {job.status}")
+            # Claim the job before the first await, so a second callback for the same run is
+            # rejected here instead of racing this one to set the final status.
+            if job.results_claimed:
+                raise LIFException(f"Job with ID {run_id} is already processing orchestration results.")
+            job.results_claimed = True
+            # From here on a failure belongs to this job (#1107): see the except blocks below.
+            pending_job = job
 
             # Get the LIF Query from the Job
             lif_query: LIFQuery = job.query
@@ -369,11 +410,13 @@ class LIFQueryPlannerService:
             response.raise_for_status()
 
             # Update the associated Job status to 'COMPLETED'
-            job.status = "COMPLETED"
+            job.status = LIFQueryStatus.COMPLETED
             JOB_STORE[run_id] = job
         except httpx.HTTPStatusError as e:
+            _mark_job_failed(pending_job, e)
             raise e
         except Exception as e:
+            _mark_job_failed(pending_job, e)
             msg = f"LIF Query Planner error: {e}"
             logger.exception(msg)
             raise LIFException(msg) from e
@@ -450,7 +493,9 @@ class LIFQueryPlannerJob(BaseModel):
     Attributes:
         job_id (str): Unique identifier for the job.
         query (LIFQuery): The query to be executed.
-        status (str): Status of the job (e.g., 'pending', 'running', 'completed').
+        status (LIFQueryStatus): Status of the job.
+        error_message (str | None): Why the job failed, when its status is FAILED.
+        results_claimed (bool): Set by the first callback to process this job's results; internal.
         failed_source_ids (List[str]): Information sources whose part failed during orchestration.
         created_timestamp (str): Timestamp of when the job was created.
         updated_timestamp (str): Timestamp of when the job was last updated.
@@ -459,7 +504,9 @@ class LIFQueryPlannerJob(BaseModel):
 
     job_id: str = Field(..., description="Unique identifier for the job")
     query: LIFQuery = Field(..., description="The query to be executed")
-    status: str = Field(..., description="Status of the job (e.g., 'pending', 'running', 'completed')")
+    status: LIFQueryStatus = Field(..., description="Status of the job")
+    error_message: str | None = Field(None, description="Why the job failed, when its status is FAILED")
+    results_claimed: bool = Field(False, description="Set by the first callback to process this job's results")
     failed_source_ids: List[str] = Field(
         default_factory=list, description="Information sources whose part failed during orchestration"
     )
@@ -510,3 +557,15 @@ def prune_job_store() -> None:
 # -------------------------------------------------------------------------
 def add_job_to_store(job: LIFQueryPlannerJob) -> None:
     JOB_STORE[job.job_id] = job
+
+
+def _mark_job_failed(job: LIFQueryPlannerJob | None, error: Exception) -> None:
+    """Mark a job FAILED so a poller learns now instead of waiting for its timeout (#1107).
+
+    The message reaches API callers through the status and result endpoints, so it names the
+    failure type without echoing the exception text, which may carry learner data (#1269).
+    """
+    if job is None:
+        return
+    job.status = LIFQueryStatus.FAILED
+    job.error_message = f"Processing the orchestration results failed ({type(error).__name__})"

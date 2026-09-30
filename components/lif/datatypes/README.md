@@ -6,7 +6,7 @@ Core Pydantic models that flow through the LIF data plane. Every service that ha
 
 | File | Contents |
 |---|---|
-| `core.py` | `LIFRecord`, `LIFPerson`, `LIFFragment`, `LIFQuery`, `LIFQueryFilter`, `LIFUpdate`, `LIFQueryPlan*`, `LIFPersonIdentifier(s)`, `LIFQueryStatusResponse`, `LIFQueryPlanPartTranslation`, `HealthCheckResponse`, `TargetTransformationDataModel(s)DTO` |
+| `core.py` | `LIFRecord`, `LIFPerson`, `LIFFragment`, `LIFQuery`, `LIFQueryFilter`, `LIFUpdate`, `LIFQueryPlan*`, `LIFPersonIdentifier(s)`, `LIFQueryStatus`, `LIFQueryStatusResponse`, `LIFQueryPlanPartTranslation`, `HealthCheckResponse`, `TargetTransformationDataModel(s)DTO` |
 | `identity_mapping.py` | `IdentityMapping` |
 | `mdr_sql_model.py` | SQLModel-style classes used by MDR persistence |
 | `orchestration.py` | `OrchestratorJob`, `OrchestratorJobDefinition`, `OrchestratorJobRequest`, request/response wrappers |

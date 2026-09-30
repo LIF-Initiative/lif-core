@@ -7,6 +7,7 @@ from datetime import datetime, timedelta, timezone
 from unittest.mock import patch, call, MagicMock, AsyncMock
 
 from lif.datatypes import (
+    LIFQueryStatus,
     LIFFragment,
     LIFQuery,
     LIFQueryFilter,
@@ -1170,3 +1171,148 @@ def test_run_query_after_orchestration_without_source_failures_stays_unmarked(mo
         result = asyncio.run(_stats_service().run_query(_sentinel_query(), first_run=False, query_id="run-1"))
 
     assert isinstance(result, list)
+
+
+# -------------------------------------------------------------------------
+# #1107 / #1327 — the async contract: fetching a completed job's result, and FAILED.
+# -------------------------------------------------------------------------
+@patch("httpx.AsyncClient.post")
+def test_get_query_result_for_a_completed_job_does_not_orchestrate_again(mock_post):
+    """#1327: a completed job whose learner still lacks a requested field must return what
+    the cache holds. Re-running the query from scratch would submit a new orchestration."""
+    mock_post.return_value = _create_mock_post_response(200, [{"person": [{}]}], "https://api.example.com/query")
+    job_store = {
+        "run-1": core.LIFQueryPlannerJob(job_id="run-1", query=_sentinel_query(), status=LIFQueryStatus.COMPLETED)
+    }
+
+    with patch.object(core, "JOB_STORE", job_store):
+        result = asyncio.run(_stats_service().get_query_result("run-1"))
+
+    assert isinstance(result, list)
+    assert len(result) == 1
+    # Only the cache read: no second POST to the orchestrator, and no new job.
+    assert mock_post.call_count == 1
+    assert list(job_store) == ["run-1"]
+
+
+@patch("httpx.AsyncClient.post")
+def test_get_query_result_for_a_pending_job_returns_its_status(mock_post):
+    job_store = {"run-1": core.LIFQueryPlannerJob(job_id="run-1", query=_sentinel_query(), status="PENDING")}
+
+    with patch.object(core, "JOB_STORE", job_store):
+        result = asyncio.run(_stats_service().get_query_result("run-1"))
+
+    assert result == LIFQueryStatusResponse(query_id="run-1", status=LIFQueryStatus.PENDING)
+    mock_post.assert_not_called()
+
+
+def test_get_query_result_for_an_unknown_job_is_a_value_error():
+    with patch.object(core, "JOB_STORE", {}):
+        with pytest.raises(ValueError):
+            asyncio.run(_stats_service().get_query_result("missing"))
+
+
+def _results_for(run_id: str) -> OrchestratorJobResults:
+    part = OrchestratorJobQueryPlanPartResults(
+        information_source_id="source_1",
+        adapter_id="lif-to-lif",
+        data_timestamp=None,
+        person_id=LIFPersonIdentifier(identifier="Sentinel-1234", identifierType="School-assigned number"),
+        fragments=[],
+        error=None,
+    )
+    return OrchestratorJobResults(run_id=run_id, query_plan_part_results=[part])
+
+
+@patch("httpx.AsyncClient.post")
+def test_a_callback_that_cannot_save_its_results_marks_the_job_failed(mock_post):
+    """Before #1107 the job stayed PENDING, so the caller polled until the 408."""
+    mock_post.return_value = _create_mock_post_response(500, {}, "https://api.example.com/save")
+    job_store = {"run-1": core.LIFQueryPlannerJob(job_id="run-1", query=_sentinel_query(), status="PENDING")}
+
+    with patch.object(core, "JOB_STORE", job_store):
+        with pytest.raises(Exception):
+            asyncio.run(_stats_service().run_post_orchestration_results(_results_for("run-1")))
+        status = asyncio.run(_stats_service().get_query_status("run-1"))
+
+    assert job_store["run-1"].status == LIFQueryStatus.FAILED
+    assert status.status == LIFQueryStatus.FAILED
+    assert status.error_message
+
+
+@patch("httpx.AsyncClient.post")
+def test_a_callback_for_a_job_that_is_not_pending_does_not_mark_it_failed(mock_post):
+    """A duplicate callback is rejected, but it must not turn a finished job into a failure."""
+    job_store = {
+        "run-1": core.LIFQueryPlannerJob(job_id="run-1", query=_sentinel_query(), status=LIFQueryStatus.COMPLETED)
+    }
+
+    with patch.object(core, "JOB_STORE", job_store):
+        with pytest.raises(LIFException):
+            asyncio.run(_stats_service().run_post_orchestration_results(_results_for("run-1")))
+
+    assert job_store["run-1"].status == LIFQueryStatus.COMPLETED
+    mock_post.assert_not_called()
+
+
+@patch("httpx.AsyncClient.post")
+def test_a_failed_job_does_not_echo_the_exception_text_to_callers(mock_post):
+    """The failure can carry learner data, as this one does, and error_message is returned by
+    the status and result endpoints (#1269)."""
+    job_store = {"run-1": core.LIFQueryPlannerJob(job_id="run-1", query=_sentinel_query(), status="PENDING")}
+    leaky = ValueError("could not adjust the fragment for Sentinel-1234")
+
+    with (
+        patch.object(core, "JOB_STORE", job_store),
+        patch.object(core, "adjust_lif_fragments_for_initial_orchestrator_simplification", side_effect=leaky),
+    ):
+        with pytest.raises(LIFException):
+            asyncio.run(_stats_service().run_post_orchestration_results(_results_for("run-1")))
+
+    assert job_store["run-1"].status == LIFQueryStatus.FAILED
+    assert "Sentinel-1234" not in job_store["run-1"].error_message
+    assert "ValueError" in job_store["run-1"].error_message
+
+
+async def _two_overlapping_callbacks(first_save_ok: bool, second_save_ok: bool):
+    """Two callbacks for one run, the first's cache save slower than the second's. Each save's
+    outcome is set per call; returns both callbacks' results (value or exception)."""
+    outcomes = iter([(0.05, first_save_ok), (0.0, second_save_ok)])
+
+    async def save(*args, **kwargs):
+        delay, ok = next(outcomes)
+        await asyncio.sleep(delay)
+        return _create_mock_post_response(200 if ok else 500, {}, "https://api.example.com/save")
+
+    service = _stats_service()
+    with patch("httpx.AsyncClient.post", side_effect=save) as mock_post:
+        results = await asyncio.gather(
+            service.run_post_orchestration_results(_results_for("run-1")),
+            service.run_post_orchestration_results(_results_for("run-1")),
+            return_exceptions=True,
+        )
+    return results, mock_post.call_count
+
+
+@pytest.mark.parametrize(
+    "first_save_ok, second_save_ok, final_status",
+    [
+        (True, False, LIFQueryStatus.COMPLETED),  # before the claim: the late failure won, ending FAILED
+        (False, True, LIFQueryStatus.FAILED),  # before the claim: ended COMPLETED with a FAILED error_message
+    ],
+)
+def test_the_first_callback_claims_the_job_and_a_concurrent_second_one_is_rejected(
+    first_save_ok, second_save_ok, final_status
+):
+    """#1329 review: both callbacks used to pass the PENDING check before either awaited its
+    save, so whichever finished last decided the final status. Now the first one to arrive
+    claims the job, and only its outcome counts."""
+    job_store = {"run-1": core.LIFQueryPlannerJob(job_id="run-1", query=_sentinel_query(), status="PENDING")}
+
+    with patch.object(core, "JOB_STORE", job_store):
+        results, saves = asyncio.run(_two_overlapping_callbacks(first_save_ok, second_save_ok))
+
+    assert isinstance(results[1], LIFException)
+    assert saves == 1
+    assert job_store["run-1"].status == final_status
+    assert (job_store["run-1"].error_message is None) == (final_status == LIFQueryStatus.COMPLETED)

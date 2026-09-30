@@ -19,6 +19,7 @@ from lif.datatypes import (
     LIFQueryStatusResponse,
     LIFRecord,
 )
+from lif.exceptions.core import LIFException
 import pytest
 
 _YML_PATH = os.path.dirname(__file__) + "/test_information_sources_config.yml"
@@ -638,3 +639,149 @@ def test_sync_query_returns_503_when_every_source_failed_and_nothing_was_cached(
             asyncio.run(core.do_run_query_sync(_sentinel_query(), Response()))
 
     assert exc_info.value.status_code == 503
+
+
+# -------------------------------------------------------------------------
+# #1107 / #1327 — the async contract.
+# -------------------------------------------------------------------------
+@patch.dict(os.environ, _ENV)
+def test_async_query_accepted_points_the_caller_at_the_result():
+    from lif.query_planner_restapi import core
+
+    response = Response()
+    pending = LIFQueryStatusResponse(query_id="run-1", status="PENDING")
+    with patch.object(core.service, "run_query", AsyncMock(return_value=pending)):
+        result = asyncio.run(core.do_run_query(_sentinel_query(), response))
+
+    assert result == pending
+    assert response.status_code == 202
+    assert response.headers["Location"] == "/query/run-1"
+    assert response.headers["Retry-After"] == "5"
+
+
+@patch.dict(os.environ, _ENV)
+def test_query_result_returns_the_records_of_a_completed_job():
+    from lif.query_planner_restapi import core
+
+    response = Response()
+    with patch.object(core.service, "get_query_result", AsyncMock(return_value=[_sentinel_record()])):
+        result = asyncio.run(core.do_get_query_result("run-1", response))
+
+    assert len(result) == 1
+    assert response.status_code == 200
+
+
+@patch.dict(os.environ, _ENV)
+def test_query_result_marks_a_partial_answer():
+    from lif.query_planner_restapi import core
+    from lif.query_planner_service.core import PARTIAL_REASON_SOURCE_FAILED
+
+    response = Response()
+    partial = _partial([_sentinel_record()], PARTIAL_REASON_SOURCE_FAILED)
+    with patch.object(core.service, "get_query_result", AsyncMock(return_value=partial)):
+        result = asyncio.run(core.do_get_query_result("run-1", response))
+
+    assert len(result) == 1
+    assert response.headers["X-LIF-Partial"] == "source_failed"
+
+
+@patch.dict(os.environ, _ENV)
+def test_query_result_for_a_pending_job_is_accepted_and_points_back_at_itself():
+    from lif.query_planner_restapi import core
+
+    response = Response()
+    pending = LIFQueryStatusResponse(query_id="run-1", status="PENDING")
+    with patch.object(core.service, "get_query_result", AsyncMock(return_value=pending)):
+        result = asyncio.run(core.do_get_query_result("run-1", response))
+
+    assert result == pending
+    assert response.status_code == 202
+    assert response.headers["Location"] == "/query/run-1"
+
+
+@patch.dict(os.environ, _ENV)
+def test_query_result_for_a_failed_job_is_a_500():
+    from lif.query_planner_restapi import core
+
+    failed = LIFQueryStatusResponse(query_id="run-1", status="FAILED", error_message="processing failed")
+    with patch.object(core.service, "get_query_result", AsyncMock(return_value=failed)):
+        with pytest.raises(HTTPException) as exc_info:
+            asyncio.run(core.do_get_query_result("run-1", Response()))
+
+    assert exc_info.value.status_code == 500
+    assert "processing failed" in exc_info.value.detail
+
+
+@patch.dict(os.environ, _ENV)
+def test_query_result_for_an_unknown_job_is_a_404():
+    from lif.query_planner_restapi import core
+
+    with patch.object(core.service, "get_query_result", AsyncMock(side_effect=ValueError("Invalid query ID"))):
+        with pytest.raises(HTTPException) as exc_info:
+            asyncio.run(core.do_get_query_result("missing", Response()))
+
+    assert exc_info.value.status_code == 404
+
+
+@patch.dict(os.environ, _ENV)
+def test_query_result_error_does_not_relay_the_backend_message(caplog):
+    """#1329 review: a cache failure's message carries the cache's response body, and the 500
+    relayed it to the caller -- the pattern #1291 and #1309 removed from GraphQL. Operators
+    still get it in the log."""
+    from lif.query_planner_restapi import core
+
+    leaky = LIFException('LIF Cache query HTTP error: 500 - {"detail": "auth failed for sentinel-user host=10.0.3.17"}')
+    with patch.object(core.service, "get_query_result", AsyncMock(side_effect=leaky)):
+        with pytest.raises(HTTPException) as exc_info:
+            asyncio.run(core.do_get_query_result("run-1", Response()))
+
+    assert exc_info.value.status_code == 500
+    assert "sentinel-user" not in exc_info.value.detail
+    assert "sentinel-user" in caplog.text
+
+
+@patch.dict(os.environ, _ENV)
+def test_query_status_reports_a_failed_job():
+    from lif.query_planner_restapi import core
+
+    failed = LIFQueryStatusResponse(query_id="run-1", status="FAILED", error_message="processing failed")
+    with patch.object(core.service, "get_query_status", AsyncMock(return_value=failed)):
+        result = asyncio.run(core.do_get_query_status("run-1"))
+
+    assert result.status == "FAILED"
+    assert result.error_message == "processing failed"
+
+
+@patch.dict(os.environ, _ENV)
+def test_query_status_for_an_unknown_job_is_a_404():
+    """#1329 review: GET /query/{id} answered 404 for an unknown ID while /status answered 400."""
+    from lif.query_planner_restapi import core
+
+    with patch.object(core.service, "get_query_status", AsyncMock(side_effect=ValueError("Invalid query ID"))):
+        with pytest.raises(HTTPException) as exc_info:
+            asyncio.run(core.do_get_query_status("missing"))
+
+    assert exc_info.value.status_code == 404
+
+
+@patch.dict(os.environ, _ENV)
+def test_sync_query_fails_fast_when_the_job_fails():
+    """Before #1107 nothing produced FAILED, so this branch was unreachable and a failed
+    callback left the caller waiting for the 408."""
+    from lif.query_planner_restapi import core
+
+    pending = LIFQueryStatusResponse(query_id="run-1", status="PENDING")
+    failed = LIFQueryStatusResponse(query_id="run-1", status="FAILED", error_message="processing failed")
+    with (
+        # With sleep mocked, a regression that kept polling on FAILED would otherwise spin until
+        # the real 300s default; this makes it a quick 408 instead of a hung run.
+        patch.object(core.config, "query_timeout_seconds", 1),
+        patch.object(core.service, "run_query", AsyncMock(return_value=pending)),
+        patch.object(core.service, "get_query_status", AsyncMock(return_value=failed)),
+        patch.object(core, "sleep", AsyncMock()),
+    ):
+        with pytest.raises(HTTPException) as exc_info:
+            asyncio.run(core.do_run_query_sync(_sentinel_query(), Response()))
+
+    assert exc_info.value.status_code == 500
+    assert "processing failed" in exc_info.value.detail

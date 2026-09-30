@@ -1,4 +1,5 @@
 import warnings
+from enum import StrEnum
 from typing import Any, Dict, List
 
 from pydantic import BaseModel, ConfigDict, Field, RootModel, field_validator
@@ -116,18 +117,32 @@ class LIFQuery(BaseModel):
         return value
 
 
+class LIFQueryStatus(StrEnum):
+    """
+    Status of an async LIF query (#1107).
+
+    A StrEnum, so a value serializes and formats as its bare name ("PENDING"), exactly as the
+    free-form string it replaces did. "Partial" is deliberately not a status here: a partial
+    answer is marked on the response (X-LIF-Partial), and in-flight fragments belong to #1112.
+    """
+
+    PENDING = "PENDING"
+    COMPLETED = "COMPLETED"
+    FAILED = "FAILED"
+
+
 class LIFQueryStatusResponse(BaseModel):
     """
     Pydantic model for a LIF Query Results Status Response.
 
     Attributes:
         query_id (str): Query ID for the query.
-        status (str): Status of the query (e.g., 'PENDING').
+        status (LIFQueryStatus): Status of the query.
         error_message (str | None): Error message if the query failed.
     """
 
     query_id: str = Field(..., description="Query ID for the query")
-    status: str = Field(..., description="Status of the query (e.g., 'PENDING', 'COMPLETED)")
+    status: LIFQueryStatus = Field(..., description="Status of the query: PENDING, COMPLETED or FAILED")
     error_message: str | None = Field(None, description="Error message if the query failed")
 
 
