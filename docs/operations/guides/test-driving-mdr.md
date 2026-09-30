@@ -19,6 +19,20 @@ It runs as a single schema: tenant routing is off by default, so every request u
 - Docker with Compose v2
 - `git`
 - `python3`, standard library only, to generate password hashes
+- For a reachable deployment: a Linux VM with about 2 vCPUs, 2 GB of RAM and 20 GB of disk (see [Sizing](#sizing)), and two DNS names you control
+
+## Sizing
+
+Measured on the MDR slice built from a fresh clone (2026-09-30, Docker Engine 29.7):
+
+| | Memory | Disk |
+|---|---|---|
+| Running, idle | about 200 MiB in total: API 149, Postgres 39, UI 9 | |
+| Running, after 40 parallel list calls and 10 full-schema generations | about 230 MiB: API 153, Postgres 69, UI 9 | |
+| Building with `--no-cache` | about 550 MiB above idle at the peak | |
+| Images after the build | | about 1.4 GB: API 618 MB, Postgres 671 MB, UI 80 MB, plus the 387 MB Node build image and the build cache |
+
+**2 vCPUs, 2 GB of RAM and 20 GB of disk leaves comfortable headroom.** That is a recommendation from these numbers, not a measured minimum. The build took about 16 seconds on a 10-core machine that already had the base images. On a fresh VM, downloading the base images and dependencies dominates the first build.
 
 ## 1. Get the code
 
@@ -105,9 +119,79 @@ A wrong password, or a demo persona once `MDR__AUTH__LOCAL_USERS` is set, gets `
 
 ## Running on a reachable host
 
-- **Put TLS in front.** The containers speak plain HTTP. Terminate HTTPS at a reverse proxy (Caddy, nginx, or your cloud's load balancer) that forwards to ports 5173 and 8012, and firewall those ports and 5445 from everything but the proxy.
-- **Set the public API URL before building.** The UI calls whatever `LIF_MDR_API_URL` was at build time. The default is `http://localhost:8012`, which only works in a browser on the same machine. After changing it, run `docker compose build lif-mdr-app` and start the slice again.
-- **Allow the UI's origin.** `CORS_ALLOW_ORIGINS` must include the URL the UI is served from, or the browser blocks its API calls.
+Serve the MDR over HTTPS from a reverse proxy on the same host, and keep every container port on loopback. These steps use Caddy, which obtains and renews its certificates by itself. Any reverse proxy works the same way.
+
+**1. DNS and firewall.** Point two hostnames at the VM, one for the UI and one for the API: for example `mdr.example.org` and `mdr-api.example.org`. In your provider's firewall (a security group, network firewall rule or equivalent), allow inbound TCP 80 and 443 only. Caddy needs port 80 to obtain its certificates.
+
+**2. Publish the containers on loopback only.** Docker's published ports bypass host firewalls such as `ufw`, so a host rule alone does not hide ports 5173, 8012 and 5445. Save this as `deployments/advisor-demo-docker/docker-compose.override.yml`. Compose loads it automatically, and `!override` replaces each port list instead of adding to it:
+
+```yaml
+services:
+  lif-mdr-app:
+    ports: !override
+      - "127.0.0.1:5173:80"
+  lif-mdr-api:
+    ports: !override
+      - "127.0.0.1:8012:8012"
+  lif-mdr-database:
+    ports: !override
+      - "127.0.0.1:5445:5432"
+```
+
+**3. Point the build and CORS at the public names**, in `.env`:
+
+```bash
+LIF_MDR_API_URL=https://mdr-api.example.org
+CORS_ALLOW_ORIGINS=https://mdr.example.org
+```
+
+The UI calls whatever `LIF_MDR_API_URL` was at build time. The default is `http://localhost:8012`, which only works in a browser on the same machine. After changing it, rebuild with `docker compose up -d --build lif-mdr-app`. The LDE service reads `CORS_ALLOW_ORIGINS` too.
+
+**4. Install Caddy on the host** ([install guide](https://caddyserver.com/docs/install)), give it this `/etc/caddy/Caddyfile`, and reload it with `sudo systemctl reload caddy`:
+
+```
+mdr.example.org {
+	reverse_proxy localhost:5173
+}
+
+mdr-api.example.org {
+	reverse_proxy localhost:8012
+}
+```
+
+**5. Check it from outside the VM.** `curl -s https://mdr-api.example.org/health-check` should answer, and `https://mdr.example.org` should show the sign-in form. The direct ports should not answer at all: `curl --max-time 5 http://<vm-ip>:8012/health-check` should time out or be refused.
+
+### Rehearsing the HTTPS setup on one machine
+
+You can run the same setup without DNS or a VM: names under `.localhost` resolve to loopback, and Caddy's `local_certs` issues certificates from its own CA instead of Let's Encrypt. This was verified on Docker Desktop for macOS. On Linux, `host.docker.internal` does not reach ports bound to `127.0.0.1`, so run Caddy on the host (or with `--network host`) and proxy to `localhost:5173` and `localhost:8012` instead. The Linux variant has not been verified.
+
+1. In `.env`, set `LIF_MDR_API_URL=https://mdr-api.localhost:8443` and `CORS_ALLOW_ORIGINS=https://mdr.localhost:8443`, then start the slice as in step 4.
+2. Save this as `Caddyfile`:
+
+   ```
+   {
+   	local_certs
+   }
+
+   mdr.localhost:8443 {
+   	reverse_proxy host.docker.internal:5173
+   }
+
+   mdr-api.localhost:8443 {
+   	reverse_proxy host.docker.internal:8012
+   }
+   ```
+
+3. Run Caddy and fetch its root certificate:
+
+   ```bash
+   docker run -d --name mdr-caddy -p 8443:8443 -v "$PWD/Caddyfile:/etc/caddy/Caddyfile:ro" caddy:2
+   # Caddy creates its CA a moment after it starts, so wait for the file.
+   until docker cp mdr-caddy:/data/caddy/pki/authorities/local/root.crt ./caddy-root.crt 2>/dev/null; do sleep 1; done
+   curl --cacert caddy-root.crt https://mdr-api.localhost:8443/health-check
+   ```
+
+Browsers won't trust that certificate unless you install `caddy-root.crt` as a trusted root, so use `curl --cacert` for the checks or accept the browser warning.
 
 ## Data lifetime
 
