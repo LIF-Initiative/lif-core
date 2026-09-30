@@ -289,9 +289,13 @@ invalidate_cloudfront() {
     }
 
     log_info "Invalidating CloudFront distribution $distribution_id..."
+    # Invalidate "/*", not "/". `s3 sync --delete` replaces the whole object
+    # set, and stable-named files (index.html, robots.txt) keep serving from
+    # the edge cache otherwise. Hashed asset filenames cache-bust themselves;
+    # these do not. Same fix as .github/workflows/lif_mdr_frontend.yml (#1155).
     if ! aws cloudfront create-invalidation \
         --distribution-id "$distribution_id" \
-        --paths "/" > /dev/null; then
+        --paths "/*" > /dev/null; then
         log_warn "CloudFront invalidation failed — content is deployed but may be cached"
         return 0
     fi
