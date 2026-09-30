@@ -1,7 +1,8 @@
 from pydantic import BaseModel, Field
 from typing import List
 
-from lif.datatypes.core import LIFQueryPlanPartTranslation
+from lif.datatypes.core import LIFQueryPlanPartTranslation, LIFRecord
+from lif.query_planner_service.statistics import ORG_KEY_UNKNOWN
 
 
 class LIFQueryPlannerInfoSourceConfig(BaseModel):
@@ -40,6 +41,8 @@ class LIFQueryPlannerConfig(BaseModel):
             orchestration wait happens in the polling loop rather than in these calls. Short but
             not free: the orchestrator submission blocks on Dagster resolving the job and writing
             a run before it returns a run_id, so it is not a cheap enqueue. See #572.
+        org_key (str): The organization this planner serves, recorded in every query statistics
+            event so the per-org planners can be told apart (#1271).
     """
 
     lif_cache_url: str = Field(..., description="URL of the LIF Cache service")
@@ -56,3 +59,18 @@ class LIFQueryPlannerConfig(BaseModel):
     service_request_timeout_seconds: int = Field(
         10, gt=0, description="Timeout in seconds for individual HTTP calls to the LIF Cache and Orchestrator."
     )
+    org_key: str = Field(ORG_KEY_UNKNOWN, description="The organization this planner serves (LIF_ORG_KEY)")
+
+
+class LIFQueryPlannerPartialRecords(BaseModel):
+    """
+    Records returned by run_query when it degraded instead of answering in full (#1232).
+
+    Attributes:
+        records (List[LIFRecord]): The records found in the cache, missing some requested paths.
+        reason (str): Why the answer is partial: statistics.OUTCOME_NO_SOURCES_AVAILABLE or
+            statistics.OUTCOME_ORCHESTRATOR_SUBMISSION_FAILED.
+    """
+
+    records: List[LIFRecord] = Field(..., description="Records found in the cache")
+    reason: str = Field(..., description="Why the answer is partial")
