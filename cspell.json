@@ -294,7 +294,9 @@
         "lockfiles",
         "EXPLAIN",
         "xform",
-        "tolower"
+        "tolower",
+        "dklen",
+        "altchars"
     ],
     "ignorePaths": [
         ".git/",
