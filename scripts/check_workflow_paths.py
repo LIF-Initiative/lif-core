@@ -20,6 +20,13 @@ brick watches only part of it, which is a gap rather than coverage. An earlier v
 of this script treated the relationship as symmetric and so reported two real gaps as
 covered.
 
+What a workflow builds decides what it must watch. Most deploy workflows build their
+project's default image, which packages every brick in `[tool.polylith.bricks]`. A
+workflow that names a Dockerfile builds that file instead, and when the file copies no
+brick source -- `dagster.yml` builds `Dockerfile.dagster`, a `pip install` plus two YAML
+files -- the project's bricks are not in its image and watching them only forces
+rebuilds nobody needs (#1274 review).
+
 A workflow that cannot be audited is reported, never skipped. Silently dropping one
 would let a project rename disable the check while the summary still claimed full
 coverage -- drift disabling the drift detector.
@@ -37,7 +44,6 @@ import sys
 import tomllib
 
 REPO = pathlib.Path(__file__).resolve().parent.parent
-WORKFLOW_DIR = REPO / ".github" / "workflows"
 
 # Workflows that deploy a project. Matched by content (they name a `projects/<name>`
 # directory) rather than by filename, so a new deploy workflow is audited whatever it
@@ -57,14 +63,41 @@ def workflow_paths(text: str) -> list[str]:
     return re.findall(r"-\s*(\S+)", match.group(1)) if match else []
 
 
-def project_bricks(project: str) -> list[str] | None:
+def project_bricks(project: str, repo: pathlib.Path) -> list[str] | None:
     """Repo-relative brick paths for a project, or None when it cannot be read."""
-    pyproject = REPO / "projects" / project / "pyproject.toml"
+    pyproject = repo / "projects" / project / "pyproject.toml"
     if not pyproject.exists():
         return None
     data = tomllib.loads(pyproject.read_text())
     bricks = (data.get("tool", {}).get("polylith", {}) or {}).get("bricks", {}) or {}
     return [re.sub(r"^(\.\./)+", "", key) for key in bricks]
+
+
+def dockerfile_packages_bricks(dockerfile: pathlib.Path) -> bool:
+    """True when a COPY/ADD brings brick source into the image.
+
+    Brick source is `bases/`, `components/`, the whole build context, or a built wheel
+    (which carries the bricks without copying them). A COPY in a form this doesn't parse
+    counts as packaging: getting that wrong only asks for coverage that isn't needed,
+    where the opposite mistake would silently stop auditing the workflow.
+    """
+    for line in dockerfile.read_text().splitlines():
+        parts = line.split()
+        if not parts or parts[0].upper() not in ("COPY", "ADD"):
+            continue
+        args = parts[1:]
+        if any(arg.startswith("--from") for arg in args):
+            continue  # copies from an earlier stage, which is audited on its own lines
+        args = [arg for arg in args if not arg.startswith("--")]
+        if args and args[0].startswith("["):
+            return True
+        for source in args[:-1]:
+            source = source.rstrip("/")
+            if source in (".", "bases", "components") or source.startswith(("bases/", "components/")):
+                return True
+            if source.endswith(".whl") or "/dist" in source:
+                return True
+    return False
 
 
 def covered(brick: str, paths: list[str]) -> bool:
@@ -76,13 +109,20 @@ def covered(brick: str, paths: list[str]) -> bool:
     return False
 
 
-def audit() -> tuple[list[tuple[str, str, list[str], list[str]]], list[tuple[str, str]], list[str]]:
-    """Return (rows, unauditable, not_projects). rows are (workflow, project, bricks, missing)."""
+def audit(
+    repo: pathlib.Path = REPO,
+) -> tuple[list[tuple[str, str, list[str], list[str]]], list[tuple[str, str]], list[str], list[tuple[str, str]]]:
+    """Return (rows, unauditable, not_projects, brick_free).
+
+    rows are (workflow, project, bricks, missing); brick_free are (workflow, dockerfile)
+    for a workflow whose named image packages no bricks.
+    """
     rows: list[tuple[str, str, list[str], list[str]]] = []
     unauditable: list[tuple[str, str]] = []
     not_projects: list[str] = []
+    brick_free: list[tuple[str, str]] = []
 
-    for workflow in sorted(WORKFLOW_DIR.glob("*.yml")):
+    for workflow in sorted((repo / ".github" / "workflows").glob("*.yml")):
         if workflow.name in NOT_DEPLOY_WORKFLOWS:
             continue
         text = workflow.read_text()
@@ -98,7 +138,15 @@ def audit() -> tuple[list[tuple[str, str, list[str], list[str]]], list[tuple[str
         for project in projects:
             if project in NO_BRICK_PROJECTS:
                 continue
-            bricks = project_bricks(project)
+            named = sorted(set(re.findall(rf"projects/{project}/Dockerfile[A-Za-z0-9_.-]*", text)))
+            absent = [d for d in named if not (repo / d).is_file()]
+            if absent:
+                unauditable.extend((workflow.name, f"{d} not found") for d in absent)
+                continue
+            if named and not any(dockerfile_packages_bricks(repo / d) for d in named):
+                brick_free.extend((workflow.name, d) for d in named)
+                continue
+            bricks = project_bricks(project, repo)
             if bricks is None:
                 unauditable.append((workflow.name, f"projects/{project}/pyproject.toml not found"))
                 continue
@@ -106,11 +154,11 @@ def audit() -> tuple[list[tuple[str, str, list[str], list[str]]], list[tuple[str
                 unauditable.append((workflow.name, f"projects/{project} declares no [tool.polylith.bricks]"))
                 continue
             rows.append((workflow.name, project, bricks, [b for b in bricks if not covered(b, workflow_paths(text))]))
-    return rows, unauditable, not_projects
+    return rows, unauditable, not_projects, brick_free
 
 
 def main() -> int:
-    rows, unauditable, not_projects = audit()
+    rows, unauditable, not_projects, brick_free = audit()
     if not rows:
         print("check_workflow_paths: no deploy workflows found -- has the layout changed?")
         return 1
@@ -129,6 +177,9 @@ def main() -> int:
 
     if show_all and not_projects:
         print(f"  (not Polylith project deploys, so nothing to check: {', '.join(not_projects)})")
+    if show_all and brick_free:
+        listed = ", ".join(f"{name} builds {dockerfile}" for name, dockerfile in brick_free)
+        print(f"  (images that package no bricks, so nothing to check: {listed})")
 
     for name, reason in unauditable:
         failures += 1
