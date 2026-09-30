@@ -15,7 +15,7 @@ Throughout, two terms do a lot of work:
 
 - **Portable file** — the JSON a user exports and re-imports. Portable means no reference in it is
   a database row ID, because row IDs mean nothing in another install. Most things are identified by
-  name; mappings have no usable name, so they get a generated key that travels with them
+  name; mappings have no usable name, so they are identified by the target field they write
   (Decision 3).
 - **Anchor** — the data model an import is aimed at, named by the request (a URL or form field),
   never read from the file.
@@ -73,9 +73,13 @@ reference.
 | `GET /import_export/export/{id}` for a **PartnerLIF** | the base-model lookup filters on `Type == "OrgLIF"`, so a PartnerLIF finds nothing and the result is used anyway → `AttributeError` | [`datamodel_service.py:413-421`](../../../components/lif/mdr_services/datamodel_service.py#L413-L421) |
 
 The first two are **#1210** and **#1211** (each an export endpoint returning 500); PR #1212 fixes
-#1210. The third is untracked and currently hidden behind #1210, which fails first — so PR #1212
-will expose it. Seed model 18 (`Org2 LIF`) triggers it. None of the three has a regression test,
-and both tracked ones were reported by an outside contributor rather than caught in CI.
+#1210. The third was untracked when this plan was written and is now **#1321**, filed ahead of the
+other proposed tickets because it is currently hidden behind #1210 — which fails first, so PR #1212
+exposes it on merge. Seed model 18 (`Org2 LIF`) triggers it, and #1321 adds a second entry point
+this table missed: `GET /datamodels/base/{id}` hits the same lookup with no type guard at all, so
+it 500s for a PartnerLIF id and for any id that does not exist, where a 404 is correct. None of the
+three has a regression test, and the two originally tracked were reported by an outside contributor
+rather than caught in CI.
 
 ### Database IDs in import files — one bug, four times
 
@@ -150,21 +154,32 @@ half. So inclusions and value mappings get separate tickets in separate phases.
 Goal 3 has no backing code at all. **#17** (backend: update a schema by upload) and **#18**
 (frontend button for it) describe the flow but predate this work.
 
-### C. Seven of nine mapping groups cannot be exported
+### C. Seven of nine mapping groups cannot be exported — and mostly they should not
 
 [`transformation_endpoint.py:234-246`](../../../bases/lif/mdr_restapi/transformation_endpoint.py#L234-L246)
 exports only JSONata rules. A group with none returns **400 — "There are no valid transformations
 to export for this group / version. Please add a transformation to this group's version and retry
 the export."** Only groups 25 and 26 export today.
 
-The filter is real and wrong, but it is not why the other seven fail. Measured on active rows,
-**six of the nine groups are empty** (12, 15, 16, 22, 23, 24 have no live rules at all) and return
-the same 400 from the `total_count == 0` check whether the filter exists or not. Only **group 3**
-is blocked by the filter itself — one rule, written in `LIF_Pseudo_Code`.
+Measured on active rows, the seven split into two groups that have nothing to do with each other:
 
-So removing the filter takes exportable groups from 2 to 3, not to 9. The remaining six are empty;
-getting them to export means *putting mappings in them* — authoring seed or test data — which is a
-content task, not a code fix.
+- **Six are simply empty** — 12, 15, 16, 22, 23 and 24 have no live rules at all, and return the
+  same 400 from the `total_count == 0` check whether the filter exists or not. Getting them to
+  export means *putting mappings in them* — authoring content, not fixing code.
+- **One, group 3, is filtered out** — its single rule is written in `LIF_Pseudo_Code`.
+
+**The filter is correct.** Non-JSONata rules are not supported transformations; `LIF_Pseudo_Code`
+is the column default, so it is what a rule gets when nobody picked a language, which makes those
+rows drafts rather than executable mappings (Decision 4). Group 3 should not export, and removing
+the filter would produce a file that cannot be executed on the other side.
+
+**The defect is the error message, not the filter.** All three cases — empty group, non-JSONata
+rules, some of each — return one 400 that says "add a transformation and retry", which is wrong
+advice for a group that already has one. It should name the real reason: this group's rules are
+not JSONata, and only JSONata is portable.
+
+So the exportable count stays at 2 out of 9, and that is the correct number. What changes is that
+a user is told why.
 
 > *Superseded theory, kept so it is not retried:* export looked like it should crash on a null
 > path (2,693 of 2,746 rows have one). It does not — those rows are soft-deleted and never reach
@@ -212,22 +227,61 @@ so do `valueset_service.py:216,250` and `transformation_service.py:1595,1603`.
 
 Three consequences:
 
-1. **A three-deep model cannot be exported at all** — the export record has exactly two slots,
-   parent and child. There is nowhere to put a grandparent. It needs an ancestor *list*.
-2. **Exporting any PartnerLIF fails** — the third row in the table above.
+1. **The export record bundles the parent, and should not** — it has exactly two slots,
+   `BaseDataModel` and `ExtendedDataModel`
+   ([`import_export_dto.py:41-43`](../../../components/lif/mdr_dto/import_export_dto.py#L41-L43)),
+   so a three-deep model has nowhere to put its grandparent. The fix is to drop the bundle, not to
+   widen it — see below.
+2. **Exporting any PartnerLIF fails** — the third row in the table above. Now filed as
+   **#1321**, which found a second entry point for the same bug: `GET /datamodels/base/{id}`
+   500s for any id that is not a live OrgLIF, where a 404 is the right answer.
 3. **Name lookups must search the whole chain**, which is what `get_base_model_ids` already does
    and no import/export code calls.
 
 None of the 21 seed models is three deep, which is why this stayed invisible — and why the test
 matrix needs a three-deep fixture.
 
-### F. A mapping may have more than one target, and export keeps only the last
+**One file per model, imported in order — drop the parent slot.** Raised in review: if A is the
+parent of B and B of C, why not export `a.json`, `b.json` and `c.json` and import them in that
+order? That is right, and the bundled parent slot turns out to be dead weight already:
 
-Export assigns the target by plain overwrite (`transformation_service.py:1195`), so a second target
-silently disappears. Nothing prevents a second one: there is no uniqueness rule on mapping
-attributes, and an `OutputAttributesCount` column exists. Of the six live mappings, five have
-exactly one target and one (transformation 1189, group 3) has none — a sample, not a rule. Under
-Decision 4 (lossless) this is a defect.
+- **Import never reads it.** `POST /import/` takes `ImportDataModelDTO`, a different shape
+  entirely — the two-slot `DataModelExportDTO` is an export-only structure, so the bundled parent
+  is written and never consumed.
+- **The resolution rule says the same thing.** Ancestors resolve from the *target database's* own
+  parent chain, never from the file. A copy of the parent in the file has no one to talk to.
+- **A flat export already exists.** `GET /export/multiple/` returns
+  `List[SingleDataModelExportDTO]` — no parent slot, no nesting.
+- **The slot is the sole cause of #1321.** `get_base_model_for_given_orglif` exists only to fill
+  it, and that lookup is what 500s on a PartnerLIF.
+
+So the export record does not need an ancestor list. Each model exports standalone and names the
+parent it extends by the three-field model identity (name, version, organization); import resolves
+that name against what is already installed and refuses if the parent is missing. Depth stops
+mattering — a chain of any length is just N files imported parent-first — and a whole category of
+bundling bugs disappears with the slot. Ordering the files is the importer's job under **#1333**, and
+`/export/multiple/` is the shape to build on.
+
+### F. Targets are unowned, and export keeps only the last one it sees
+
+Two separate problems sit on the target side, and Decision 3 depends on telling them apart.
+
+**Export drops all but one target of a mapping.** `transformation_service.py:1195` assigns the
+target by plain overwrite while looping over a mapping's attribute rows, so a mapping that writes
+two fields exports as if it wrote one. Nothing stops it having two: there is no uniqueness rule on
+mapping attributes, and an `OutputAttributesCount` column exists. Under Decision 4 this is
+straightforward data loss and export has to carry the full set.
+
+**Nothing says a target field belongs to one mapping.** Two mappings in the same group can both
+write `Person.Name.firstName`, and today nothing rejects that — on export one wins by row order,
+and which one is arbitrary. This is the one Decision 3 turns into a rule: **within a group, each
+target field is written by exactly one mapping.** A source may feed many targets — that fan-out is
+normal, and 15 source paths in the reference transforms already do it — but a mapping records a
+single source, so many-to-one is not a declarable shape (Decision 3).
+
+Of the six live mappings in the database, five have exactly one target and one (transformation
+1189, group 3) has none — a sample too small to conclude anything from, which is why the rule was
+measured against the 185 mappings in the reference transforms instead (Decision 3).
 
 ---
 
@@ -238,60 +292,295 @@ Decision 4 (lossless) this is a defect.
 | **#1252** — export 500 on a nested embedded parent | Fixed and **already closed** on GitHub; the two functions now agree on naming ([`schema_generation_service.py:355-400`](../../../components/lif/mdr_services/schema_generation_service.py#L355-L400)). | **None — listed so it is not re-opened** |
 | **#717** — fetch the schema from MDR instead of a file | Done. Services load from MDR at startup, with a documented dev-only file fallback. | **Close as stale** |
 | **#746** — enforce unique names on anything exportable | Mostly done in the database: 8 uniqueness rules already cover models, entities, attributes, value sets, values, mapping groups and both link tables. | **Re-scope** to the one gap: mapping names |
-| **#1063** — round-trip test matrix | One bullet ("make sure it runs in CI, not skipped") is already true: CI run `35801872026` ran the round-trip test against real Postgres, 861 passed, zero skipped. | **Drop that bullet**, keep the rest |
+| **#1063** — round-trip test matrix | The "fail loud, not skip" bullet *happens* to hold — CI run `35801872026` ran the round-trip test against real Postgres, 861 passed, zero skipped — but nothing guarantees it. | **Keep all bullets**; re-scope that one to "fail, don't skip" (below) |
 
-The last one matters: **the database-backed test harness goal 4 needs already exists and already
-runs in CI.** The JSON-import suite extends `conftest.py` rather than building anything new.
+The last one matters twice over.
+
+**The database-backed test harness goal 4 needs already exists and already runs in CI.** The
+JSON-import suite extends `conftest.py` rather than building anything new.
+
+**But it runs there by accident, so #1063's bullet stays.** The fixture calls `pytest.skip` when
+it cannot start a server ([`conftest.py:34-37`](../../../test/bases/lif/mdr_restapi/conftest.py#L34-L37)):
+
+```python
+try:
+    postgresql = testing.postgresql.Postgresql()
+except RuntimeError as e:
+    pytest.skip(f"PostgreSQL not available locally: {e}")
+```
+
+`pr-ci.yml` runs on `ubuntu-latest` and has no `postgres` service and no install step — a
+repo-wide search for `postgres` across `.github/workflows/` returns nothing. The round-trip test
+gets a database purely because the runner image ships with PostgreSQL. If that changes, every
+one of these tests turns green by skipping and the portability guarantee goes silently unproven,
+which is exactly the failure the bullet was written about.
+
+So re-scope rather than drop: **skip locally, fail when `CI` is set.** Gate the `pytest.skip` on
+`os.environ.get("CI")` and raise instead when it is, so a missing database is a red build and not
+a quiet pass. Cheap, and it makes the "already true" claim above actually enforced.
 
 ---
 
 ## Decisions
 
-**1. Close #768 and #775; open one replacement.**
-#768 (accept a default model ID and an ID map on upload) and #775 (list the model IDs found in an
-upload) both exist to cope with IDs in files. Neither survives: the anchor comes from the request,
-and the upload endpoint already takes the parent model as a form field. Replace them with a
-**preflight preview** — before an import runs, show which models the file refers to and what would
-be created, updated and **deleted**.
+Five decisions, all made here. Each one below states the options that were weighed, the evidence,
+and the call. They shape three tickets — NEW-J (D1), NEW-I (D3) and NEW-F (D5) — so they need to
+hold before those get estimated.
 
-**2. Keep the round-trip proof; defer the migration slimming.**
+| # | Question | Decision |
+|---|---|---|
+| **1** | What does an import do to content the file omits? | **1a** — mirror, with a preflight preview |
+| **2** | Does this epic pull seed data out of the migrations? | **No** — prove the round trip, defer the slimming |
+| **3** | What identifies a mapping across installs? | **3b** — `(group, target path)` |
+| **4** | Must a round trip be lossless? | **Yes**, for JSONata expressions |
+| **5** | How far does the ancestor chain investment go? | **5a** — one helper, full chain everywhere |
+
+---
+
+### 1. What does an import do to content the file omits?
+
+**Decision: 1a — the file is authoritative, with a preflight preview and a confirm step.**
+
+#17 already specifies that an upload removes anything absent from the file. That makes "uploading
+the wrong file" a mass delete: every name misses, so everything present is removed. The options:
+
+| Option | Behavior | Cost |
+|---|---|---|
+| **1a — Mirror, with preflight** ✅ | File is authoritative; absent means delete. A **preflight preview** shows what would be created, updated and **deleted**, and the user confirms. | NEW-J, plus the confirm step in the UI |
+| **1b — Additive only** | Import creates and updates, never deletes. Deletion stays an explicit UI action. | Cheapest; but "edit by upload" can no longer remove a field, so a round trip is not a true mirror |
+| **1c — Per-import mode** | The request says `merge` or `replace`. | Both paths to build and test; two behaviors to document |
+
+**Why 1a.** Goal 3 is edit-by-upload, and 1b cannot do it — a file that can add a field but never
+remove one is not an editing interface, it is an append interface, and the round-trip proof in
+Phase 6 would not be comparing like with like. 1c buys back that ability at the price of two
+behaviors to build, test and explain, and the merge half would still be the unsafe one when
+someone picks it by mistake. The danger in 1a is not deletion itself, it is deletion nobody
+looked at — so the preview is the mitigation, and it is worth building once for the one path that needs it.
+
+**Two constraints that hold regardless.** Deletion is limited to the anchor — an element that
+resolved from an *ancestor* is never deleted by an edit to the child model. And the hazard noted
+above is real until export is complete: a round-trip edit of an OrgLIF today would delete its
+entire inclusion set (206 rows for model 17, 94 for model 18), which is why delete-on-import must
+not ship before export emits every element kind.
+
+**The preview has to cross into mappings.** A schema upload can break mappings that the file
+never mentions, because a mapping binds to schema elements **by row ID**:
+`TransformationAttributes.AttributeId` and `.EntityId` are foreign keys into `Attributes` and
+`Entities` ([`mdr_sql_model.py:350-366`](../../../components/lif/datatypes/mdr_sql_model.py#L350-L366)).
+Two ways an edit-by-upload damages them:
+
+- **Removing an attribute that a mapping uses.** Under 1a, an attribute absent from the file is
+  deleted — and `delete_attribute` is a hard `session.delete`, which clears
+  `EntityAttributeAssociation` rows but not `TransformationAttributes`
+  ([`attribute_service.py:214-239`](../../../components/lif/mdr_services/attribute_service.py#L214-L239)).
+  So the delete hits the foreign key and surfaces as a **500 carrying a raw database error**. With
+  per-row commits (NEW-H) that can also leave the model half-imported.
+- **Renaming a target attribute.** The foreign key still resolves, so nothing errors — but the
+  mapping's identity under Decision 3 has changed, and the denormalized `EntityIdPath` string on
+  the mapping row still spells the old name. The breakage is silent.
+
+**The preflight must report mapping impact, and the import must not proceed unnoticed.**
+The rule: an import that would delete or rename schema elements which mappings depend on lists
+those mappings, with counts, and requires explicit confirmation; if a mapping would be left
+referencing something that no longer exists, it is **blocked**, not warned. That is a cheap
+addition to NEW-J — it is the same diff the preview already computes, followed one foreign key
+further — and without it "edit by upload" can quietly break transformation logic that the uploaded
+file says nothing about. This is also why NEW-H (import in a single transaction) is not optional:
+the preview's promise is only as good as the ability to roll the whole thing back.
+
+**Either way:** #768 (accept a default model ID and an ID map on upload) and #775 (list the model
+IDs found in an upload) close. Both exist only to cope with IDs in files; the anchor comes from the
+request and the upload endpoint already takes the parent model as a form field. NEW-J replaces
+them.
+
+---
+
+### 2. Keep the round-trip proof; defer the migration slimming — *settled (scope)*
+
 `backup.sql` should track the latest migration. Actually pulling seed data out of the migrations is
 a **separate effort** after portability lands. This epic still proves the end state — export the
 shipped content, import it into an empty install, assert the result matches — without removing
 anything from the migrations. Same guarantee, no migration surgery, and the follow-on effort
 inherits a working extractor.
 
-**3. Identify a mapping by a generated portable key.**
-Names cannot do it: **nothing enforces mapping-name uniqueness** — that absence is exactly the
-#746 remainder — and names are editable, so a name is not an identity. (The seed data does hold
-118 duplicate (group, name) pairs, but every one is soft-deleted version history; on active rows
-there are zero, so do not lean on that figure.) Target path cannot do it either — a mapping may
-have several sources and, per Gap F, possibly several targets.
+---
 
-Add a `PortableKey` column to mappings: a random UUID, generated in **Python at creation**, written
-into exports, and **preserved on import rather than regenerated**. That last point is the whole
-mechanism. It stays stable through any edit to paths or expressions, which a content-derived hash
-would not — editing a source path would change the hash, and the import would delete and recreate
-the row instead of updating it, losing its notes and history.
+### 3. What identifies a mapping across installs?
 
-Details: generate in application code, not SQL — the key must be **preserved on import**, so
-application code owns it either way, and a SQL default invites someone to regenerate it. Make the
-key unique **per group**, so cloning a group into a new version can keep keys and let you diff versions. Backfill with `WHERE "PortableKey" IS NULL` so the migration can be replayed safely.
-When no key is present (hand-written files, older exports), fall back to matching on target plus sorted sources — as a readable tuple, not a hash.
+**Decision: 3b — a mapping is identified by its target, as `(group, target path)`.**
 
-Only mappings need this. Entities, attributes and value sets already have a portable identity in
-their unique name; mappings are the outlier, which is what #1140 ran into.
+Entities, attributes and value sets already have a portable identity in their unique name.
+Mappings are the outlier — which is what #1140 ran into.
 
-**4. A round trip must be lossless.**
-So **#1062** (relationship names dropped when a reference is exported) carries the names rather
-than documenting the loss. Two knock-ons: **#1026** (replace the guessed `Ref` naming convention
-with an explicit marker) becomes **required**, since a name cannot survive in a format that drops
-it — and Gap F becomes a defect rather than a curiosity.
+**The name cannot do it.** Nothing enforces mapping-name uniqueness — that absence
+is exactly the #746 remainder — and names are editable, so a name is not an identity. (The seed
+data does hold 118 duplicate (group, name) pairs, but every one is soft-deleted version history;
+on active rows there are zero, so do not lean on that figure.)
 
-**5. Follow the ancestor chain everywhere**, not just in import/export. One shared helper replaces
-the two copies of `get_base_model_ids` — keeping the `jinja_translation_service` version, which is
-the corrected and tested one — with a cycle guard added, and every name lookup takes the full
-chain.
+| Option | Identity | Schema change |
+|---|---|---|
+| **3a — Generated `PortableKey`** | A random UUID on each mapping, written into exports and **preserved on import rather than regenerated** | New column + backfill migration |
+| **3b — `(group, target path)`** ✅ | The target field names the mapping; sources and expression are content | None — but needs a uniqueness rule |
+
+**3a in detail.** Generate the UUID in **Python at creation**, not SQL — the key must be preserved
+on import, so application code owns it either way, and a SQL default invites someone to regenerate
+it. Unique **per group**, so cloning a group into a new version can keep keys and let you diff
+versions. Backfill with `WHERE "PortableKey" IS NULL` so the migration replays safely. Where no key
+is present (hand-written files, older exports), fall back to target plus sorted sources — as a
+readable tuple, not a hash. It stays stable through any edit to paths or expressions, which a
+content-derived hash would not.
+
+**3b in detail** (raised in review, and the option chosen). Identity is `(group, target path)`,
+resting on one rule: **within a group, no two mappings write the same target field.** That keeps
+identity stable through source and expression edits — the same requirement 3a is built for — with
+no generated key and no migration. Where a value needs a fallback, the JSONata expression handles
+it with `??`, `?:` and `$exists()` — the expression is free to read what it likes; it is the
+recorded source *binding* that stays single.
+
+**What the rule does and does not constrain.** It constrains *targets*, not sources:
+
+- **One source → many targets is fine.** The same source path may feed any number of target
+  fields; each is its own mapping with its own target, so each has its own identity. Fan-out is
+  normal and stays supported.
+- **Many sources → one target is not supported.** A mapping records **one** source attribute. The
+  JSONata expression may of course navigate and read whatever it needs, but the recorded source
+  binding is single — so "combine five attributes into one field" is not a shape a mapping can
+  declare.
+- **A mapping that writes several targets is fine.** Its identity is then its *set* of targets —
+  and because no target is written twice in a group, that set is unique, so any member of it finds
+  the mapping. Export has to carry all of them, which is the first half of Gap F.
+- **Two mappings writing the same target in one group is rejected.** It was already broken, just
+  silently (see Gap F).
+
+**The data says the same thing.** Of the 183 well-formed mappings, **179 record exactly one
+source.** All four exceptions are unfinished drafts, and in every one the expression reads only a
+single source anyway — the extra bindings are annotations nobody wired up:
+
+| Mapping | Sources recorded | What the expression actually reads |
+|---|---|---|
+| 1634 `StudentEducationOrganizationAssociation.Race` | 5 race attributes | `Culture.americanIndianOrAlaskan` only |
+| 1636 `{Multiple}.Sex` | `sex`, `gender` | `SexAndGender.sex` only |
+| 1653 `Address.Period` | `dateEffective`, `dateExpired` | `dateEffective` only |
+| 1578 `achievement.name / description` | `name`, `description` | `name` only |
+
+Two of those four write to placeholder targets (`{Multiple}`, `name / description`) that are not
+real fields. So many-to-one is not an established pattern the rule would break — it is a way of
+leaving a note on a half-written rule, and a single-source binding makes that impossible to
+confuse with a finished mapping.
+
+**The cost of 3b: renaming a target field.** A rename does **not** require a new schema version —
+a target field can be renamed in place. When that happens the mapping's identity changes with it,
+so an import sees the old target gone and a new one arrived, and processes it as a delete plus a
+create rather than an edit. Anything held on the row and not in the file — notes, contributor,
+dates — does not survive that.
+
+This is the real price of 3b and it is accepted rather than argued away. Two things keep it small:
+renaming a target field is rare and deliberate, and under Decision 1 the preflight preview shows
+it as an explicit delete-and-create before anything is written, so it is visible rather than
+silent. A generated key (3a) would have survived it in place — that is 3a's one genuine advantage,
+and it costs a column, a migration and a backfill to buy.
+
+**Measured, because the rule is only as good as the data.** Across the three versioned transforms
+in [`reference_data/transformations/`](../../../reference_data/transformations/) — 185 mappings in
+groups 29, 49 and 50 — every well-formed mapping already satisfies it:
+
+| Group | Mappings | Distinct target paths | Duplicates |
+|---|---|---|---|
+| 29 (`Ed-Fi-v5 → StateU-LIF`) | 83 | 83 | 0 |
+| 49 (`StateU-LIF → Ed-Fi-v5`) | 70 | 70 | 0 |
+| 50 (`StateU-LIF → CLR v2/OB v3`) | 30 | 30 | 0 |
+
+The only two exceptions are target-**less**: transformations 1671 and 1672 in group 50
+(`AchievementSubject.activityStartDate` and `.result`) — the same two malformed CLR rules behind
+**#1144**, which the rule would have rejected at authoring time.
+
+**What 3b requires us to enforce.** Gap F: export assigns the target by plain overwrite
+(`transformation_service.py:1195`), and nothing today stops two mappings in a group from claiming
+the same target field — when they do, one is silently dropped on export and the winner depends on
+row order. 3b turns that from a silent data-loss defect into a rejected write, and it would have
+caught #1144's two rules at authoring time. So the uniqueness rule on `(group, target path)` is
+part of this decision, not a separate one.
+
+**Why 3b over 3a.** Both give identity that survives source and expression edits, which is the
+requirement. 3b gets there with no migration, no backfill and no new column, and its key is
+readable — a human looking at a diff sees `Person.Name.firstName`, not a UUID. The rule it depends
+on is one the data already keeps (183 of 183 well-formed mappings) and one we want enforced for its
+own sake. 3a's advantage is surviving a target rename in place; under 3b a rename means a
+a target rename costs a delete-and-create, which is the trade-off accepted above. Both need the
+#746 remainder either way.
+
+---
+
+### 4. A round trip must be lossless
+
+**Decision: yes — for everything the system supports.** Export a model, import it, and the result
+matches what you started with. Anything that cannot survive that trip is a defect, not a
+documented limitation.
+
+**One scope limit, stated up front: lossless applies to JSONata expressions.** JSONata and
+`LIF_Pseudo_Code` are the two values of `ExpressionLanguageType`
+([`mdr_sql_model.py:26-28`](../../../components/lif/datatypes/mdr_sql_model.py#L26-L28)), and only
+JSONata is executable — `LIF_Pseudo_Code` is the column default, so it is what a rule gets when
+nobody chose a language. Those rules are drafts, not transformations, and carrying them across
+installs is not something this epic owes anyone. A round trip is lossless for JSONata; a
+non-JSONata rule is refused, clearly and by name.
+
+Two things follow from the decision:
+
+- **#1062 — keep the relationship's name.** When one entity points at another, the link has a
+  name: `hasManager`, `relevantCourse`. The schema generator writes that link as a property called
+  `Ref` + the target entity — so `hasManager` between Person and Employee is exported as
+  `RefEmployee`, and the word `hasManager` is nowhere in the file
+  ([`schema_generation_service.py:802`](../../../components/lif/mdr_services/schema_generation_service.py#L802)).
+  Re-import it and the link comes back with no name at all. #1062 asks whether to fix that or
+  write the loss down as intended; Decision 4 picks fixing it — the exported file has to carry the
+  name so the same link comes back on the other side.
+- **#1026 — say which property is a reference, instead of guessing from its name.** Today the
+  reader recognizes a reference by spotting the `Ref` prefix, which is why #1062's name had to be
+  crammed into the property name in the first place. An explicit marker gives the name somewhere
+  to live, so this stops being optional: **#1062 cannot be fixed without it.**
+
+And Gap F stops being a curiosity: two mappings writing the same target, with one silently
+dropped, is data loss on a supported path.
+
+---
+
+### 5. How far does the ancestor chain investment go?
+
+**Decision: 5a — one shared helper, and every name lookup walks the full chain.**
+
+Gap E establishes the facts: the chain is unbounded, uncapped and cycle-capable — and **exactly
+one function in the codebase actually walks it to the root.** That is `get_base_model_ids`, and
+no import or export code calls it. Everywhere else that resolves a name looks at the anchor and
+its immediate parent and stops: both name-lookup helpers, `valueset_service.py:216,250`, and
+`transformation_service.py:1595,1603`. So on a two-deep model the shortcut is indistinguishable
+from the real thing, and on a three-deep model those lookups silently cannot see the
+grandparent. The question is how much to invest in fixing that.
+
+| Option | Scope | Cost |
+|---|---|---|
+| **5a — Full chain everywhere** ✅ | One shared helper replaces both copies of `get_base_model_ids`, with a cycle guard; every name lookup takes the full chain | NEW-F as written; touches `valueset_service`, `transformation_service` and both name-lookup helpers |
+| **5b — Full chain in import/export only** | The converter walks the chain; the one-hop helpers stay as they are | Smaller blast radius, but the same bug stays reachable from the other callers |
+| **5c — Cap the depth at one, and enforce it** | Make today's implicit assumption true: reject creating a model whose parent itself has a parent | Cheapest; forecloses deeper extension hierarchies |
+
+**Why 5a.** Name resolution is the whole portability mechanism — a reference in model C resolves by
+searching C, then B, then A, nearest winning. If some lookups walk the chain and others stop at the
+first parent, the same file imports differently depending on which code path reads it, which is the
+class of bug this plan exists to retire. 5b leaves that inconsistency in place deliberately, and
+the one-hop helpers (`valueset_service.py:216,250`, `transformation_service.py:1595,1603`) are
+exactly the ones import and export call into. 5c is cheap but decides a product question by
+accident: nothing says two-level extension is the intended ceiling, and enforcing it would make
+today's oversight permanent. The blast radius of 5a is also smaller than it looks — see Sizing.
+
+**Two fixes this includes.** Keep the `jinja_translation_service` copy of `get_base_model_ids` and
+delete the other. It tests `is not None` where the `jinja_helper_service` copy tests truthiness —
+which matters because **model ID 0 is a real model**, and a truthiness test reads it as "no parent"
+and stops. Its regression test walks 7 → 0 → 2 → root and asserts the chain comes back as
+`[7, 0, 2]`; under the truthiness version the same walk returns `[7]`, silently losing two
+ancestors ([`test_jinja_translation_service.py:24-29`](../../../test/components/lif/mdr_services/test_jinja_translation_service.py#L24-L29)).
+The `jinja_helper_service` copy has no callers. Neither has a **cycle guard**, and one is needed:
+an unconstrained self-reference plus a free-typed parent number in the UI means a model can be made
+its own ancestor, which hangs the walk.
 
 ---
 
@@ -349,12 +638,12 @@ cannot export a reference set you cannot export.
 
 | Phase | Work | Demo |
 |---|---|---|
-| **0 — Unblock** | #1210, #1211, **NEW-C** | All three export failures gone, including PartnerLIF. |
-| **1 — One converter** | **NEW-B** | *Not demoable* — a written contract. Gates everything, so keep it short. |
-| **2 — Export writes the portable file** | #1008, #1026, #1062, **NEW-A**, **NEW-F** | Export a BaseLIF, a PartnerLIF and a three-deep OrgLIF; inclusions present, no database IDs. |
+| **0 — Unblock** | #1210, #1211, **#1321** | All three export failures gone, including PartnerLIF. |
+| **1 — One converter** | **#1333** | *Not demoable* — a written contract. Gates everything, so keep it short. |
+| **2 — Export writes the portable file** | #1008, #1026, #1062, **NEW-A**, **NEW-F** | Export a BaseLIF, a PartnerLIF, and each model of a three-deep chain as its own file; inclusions present, no database IDs. |
 | **3 — Import reads it** | #762, #763, #764, #765, **NEW-H**, preflight preview | Import into a second install with different IDs; references intact. |
 | **4 — Edit by import** | #17, #18 | Change a field in the file, re-import, watch it **update** instead of duplicating. |
-| **5 — Mappings** | #1140, #1141, #1142, #1138, #891, #773, #774, **NEW-E**, **NEW-K** | Export group 3 (blocked by the filter today), round-trip one end to end, and carry value mappings across. |
+| **5 — Mappings** | #1140, #1141, #1142, #1138, #891, #773, #774, **NEW-E**, **NEW-K** | Round-trip a mapping group end to end, carry value mappings across, and show a clear refusal for a group that has no JSONata. |
 | **6 — Prove the round trip** | **NEW-D** | Export the shipped content, import into an empty install, assert it matches. **The epic's done-test.** |
 | **7 — Keep it working** | #1063, **NEW-G** | Matrix green in CI across all four model types and a three-deep chain. |
 
@@ -366,7 +655,8 @@ entities by name instead of by the file's IDs.
 Mapping tickets in Phase 5: **#1140** edit an existing mapping version on import, **#1141**
 import diagnostics (re-scope first), **#1142** document the endpoint and round-trip contract,
 **#1138** two conflicting copies of the same mapping-group record, **#891** more export tests,
-**#773** import/export buttons in the mappings UI, **#774** a delete-group control.
+**#773** import/export buttons in the mappings UI, **#774** a delete-group control. Mapping
+portability is JSONata-only throughout, per Decision 4.
 
 ### Phase 1 — one converter (write this first)
 
@@ -449,15 +739,13 @@ export failure is exactly a type-name check (`Type == "OrgLIF"`) standing in for
 | ID | Title | Why |
 |---|---|---|
 | **NEW-A** | Export base-model inclusions | Gap A; also fixes `clone_datamodel` |
-| **NEW-B** | Design: portable file format + the single converter | Phase 1 contract |
-| **NEW-C** | Fix the PartnerLIF export failure | Gap E; sibling of #1210/#1211, exposed by PR #1212 |
 | **NEW-D** | Round-trip proof: export shipped content → import to empty install → compare | Decision 2 |
-| **NEW-E** | Export non-JSONata mapping groups | Gap C; unblocks 7 of 9 groups |
-| **NEW-F** | One ancestor-chain helper; every lookup uses the full chain | Gap E, Decision 5 |
+| **NEW-E** | Say why a group cannot be exported | Gap C; one 400 covers three different causes, and tells the user to do the wrong thing |
+| **NEW-F** | One ancestor-chain helper, with a cycle guard; every lookup uses the full chain | Gap E, Decision 5 |
 | **NEW-G** | JSON-file import test suite (MDR only) | Goal 4; extends `conftest.py` |
 | **NEW-H** | Import in a single transaction | Per-row commits can leave a half-imported model |
-| **NEW-I** | Add `PortableKey` to mappings, with backfill | Decision 3 |
-| **NEW-J** | Preflight preview: what an import would create, update and delete | Decision 1, replaces #768/#775 |
+| **NEW-I** | Enforce one mapping per target field within a group | Decision 3; makes `(group, target path)` a usable identity, and closes the #746 remainder |
+| **NEW-J** | Preflight preview: what an import would create, update and delete — including the mappings it would break | Decision 1; replaces #768/#775 |
 | **NEW-K** | Carry value mappings as peer-model references | Gap A; every one is cross-model, so it needs the third reference kind |
 
 ---
@@ -468,8 +756,8 @@ Most are 1–3 days and demoable on their own. Three are not, and are flagged ra
 
 | Ticket | Why not demoable | What to do |
 |---|---|---|
-| **NEW-B** | A design document shows nothing | Keep it to one sitting; demo its first consumer instead |
-| **#746** (remainder) | A uniqueness rule only demos as a rejected duplicate | Pair with Decision 3, which it supports |
+| **#1333** | A design document shows nothing | Keep it to one sitting; demo its first consumer instead |
+| **#746** (remainder) | A uniqueness rule only demos as a rejected duplicate | Pair with NEW-I, which needs it |
 | **NEW-D** (extractor half) | Invisible until the comparison runs | Pair the two halves |
 
 **NEW-F is narrower than it looks.** It changes shared code, but `mdr_services` is packaged by
@@ -501,27 +789,35 @@ round trip that had no tests at all.
 
 ---
 
-## Considered and rejected: moving MDR to a document store
+## Out of scope for this epic: moving MDR to a document store
 
 If the exported files are the contract, should MDR store documents (MongoDB) instead of rows?
-Recorded so it is not re-proposed each time export hurts.
+That is **#1132**'s question, and it stays there. The narrow claim here is only that **portability
+does not need it** — not that the move is wrong.
 
-1. **The constraint defeats the change.** Exported files must stay identical. If the file format is
-   fixed, the storage engine is by definition hidden behind it — the migration cannot move what
-   this epic cares about.
-2. **It would weaken the foundation.** Name uniqueness (#746) is enforced today by 8 database
-   rules. In a document store those become application checks, racy under concurrent import — right
-   as we start depending on them. Tenant separation is equally Postgres-specific.
-3. **It would obscure the confusing part.** Extensions and inclusions are an overlay *between*
-   models, not nesting. A document is a tree; flattening an OrgLIF into one loses
-   owned-vs-inherited-vs-overriding, which is exactly the information an export must keep. The
-   document must carry the overlay anyway — at which point it is a serialization of the relational
-   structure, not an escape from it.
+1. **The file format hides the storage engine, so swapping it changes nothing here.** Exported
+   files have to come out the same either way. Once the format is fixed, what sits behind it is
+   invisible to the thing this epic is trying to fix.
+2. **Portability is solvable on Postgres.** Everything in this plan — name-based references, the
+   ancestor chain, a stable mapping identity, a lossless round trip — is reachable without
+   touching the storage layer, which is what the phases above lay out.
 
-MongoDB already serves the query cache here, which is the opposite kind of problem: opaque blobs,
-expiry, no cross-record rules. MDR metadata is a graph with inheritance and hard uniqueness rules.
+> *Superseded reasoning, kept so it is not repeated:* an earlier draft argued that the 8 name-
+> uniqueness rules behind #746 would degrade into racy application checks in a document store.
+> That is wrong — MongoDB has unique indexes and partial unique indexes, so those rules port. The
+> argument is withdrawn. It was never load-bearing: the conclusion rests on points 1 and 2 above —
+> the format hides the engine, and Postgres is sufficient — neither of which depends on it.
 
-**The valuable half was kept** and is now Phase 1: a file-shaped conversion layer over SQL.
+One genuinely open question belongs on **#1132**, not here: extensions and inclusions are an
+overlay *between* models, not nesting, and a document is a tree. Flattening an OrgLIF into one
+loses owned-vs-inherited-vs-overriding, which is exactly what an export must keep — so a document
+model would have to carry the overlay explicitly. Whether that is a cost or a clarification is a
+storage-layer design call, and it would have to reckon with the ancestor chain that Decision 5
+keeps.
+
+**The valuable half was kept** and is now Phase 1: a file-shaped conversion layer over SQL. It is
+also the thing that would make #1132 tractable later — once the file is the contract, the storage
+engine underneath it is replaceable.
 
 ---
 
