@@ -295,7 +295,8 @@
         "EXPLAIN",
         "xform",
         "tolower",
-        "dklen"
+        "dklen",
+        "altchars"
     ],
     "ignorePaths": [
         ".git/",
