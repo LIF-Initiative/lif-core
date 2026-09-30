@@ -76,6 +76,8 @@ Tear down with `docker compose down -v` (the `-v` also drops seeded volumes).
 
 > **Note on MDR migrations in compose:** local compose replays every `V1.*.sql` through `psql` without Flyway history tracking, so migrations must be idempotent. This and other build/runtime gotchas are documented in [`deployment.md` → MDR Schema Migrations](deployment.md#mdr-schema-migrations-v12). Read that section before customizing the database.
 
+> **Just evaluating the MDR?** [`test-driving-mdr.md`](test-driving-mdr.md) brings up only the MDR slice on any Docker host, with logins you configure and no AWS.
+
 ### Cloud / multi-org
 
 See the **🚧 Gap** note in [Step 1](#step-1-choose-your-deployment-shape). Until a portable reference exists, use [`deployment.md`](deployment.md) and [`demo-environment-update.md`](demo-environment-update.md) as the worked example of a cloud deployment and adapt the `{env}.aws` config, CloudFormation params, and `aws-deploy.sh` to your own accounts.
