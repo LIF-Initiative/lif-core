@@ -315,9 +315,13 @@ class LIFQueryPlannerService:
         check leaves the job as it was rather than failing it.
 
         A sync /query passes what is left of its deadline, so the check can't carry it past
-        LIF_QUERY_TIMEOUT_SECONDS; with nothing left, there is no check at all.
+        LIF_QUERY_TIMEOUT_SECONDS; with nothing left, there is no check at all. The timeout
+        bounds the whole GET: httpx's own timeouts apply per phase and reset on every chunk
+        received, so on their own an orchestrator that keeps trickling bytes could hold it longer.
+
+        A job a callback has claimed is the callback's to finish, so it isn't checked.
         """
-        if job.status != LIFQueryStatus.PENDING:
+        if job.status != LIFQueryStatus.PENDING or job._results_claimed:
             return
         timeout = self.config.service_request_timeout_seconds
         if time_budget_seconds is not None:
@@ -326,7 +330,9 @@ class LIFQueryPlannerService:
             timeout = min(timeout, time_budget_seconds)
         try:
             async with httpx.AsyncClient(timeout=timeout) as client:
-                response = await client.get(f"{self.lif_orchestrator_post_url}/{job.job_id}")
+                response = await asyncio.wait_for(
+                    client.get(f"{self.lif_orchestrator_post_url}/{job.job_id}"), timeout=timeout
+                )
             response.raise_for_status()
             run = OrchestratorJob(**response.json())
         except Exception as e:

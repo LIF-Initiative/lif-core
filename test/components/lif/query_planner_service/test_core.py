@@ -1526,3 +1526,36 @@ def test_the_results_claim_is_never_serialized():
 
     assert "results_claimed" not in job.model_dump()
     assert "results_claimed" not in core.LIFQueryPlannerJob.model_json_schema()["properties"]
+
+
+def test_the_run_check_is_a_hard_deadline_even_when_the_orchestrator_keeps_trickling():
+    """#1330 review: httpx timeouts are per phase and reset on every chunk, so an orchestrator
+    sending a header line every 0.5s held a 3s budget for 23.20s. The GET stands in for that
+    here: it outlasts the budget without ever tripping httpx's own timeout."""
+
+    async def trickling_get(*args, **kwargs):
+        await asyncio.sleep(5)
+        return _orchestrator_run("run-1", "FAILED")
+
+    job_store = _pending_store()
+    with patch.object(core, "JOB_STORE", job_store), patch("httpx.AsyncClient.get", side_effect=trickling_get):
+        started = datetime.now()
+        status = asyncio.run(_stats_service().get_query_status("run-1", time_budget_seconds=0.2))
+        elapsed = (datetime.now() - started).total_seconds()
+
+    assert elapsed < 1
+    assert status.status == LIFQueryStatus.PENDING
+
+
+@patch("httpx.AsyncClient.get")
+def test_the_run_check_skips_the_orchestrator_for_a_claimed_job(mock_get):
+    """#1330 review: a claimed job is the callback's to finish, so the check's answer would be
+    discarded anyway."""
+    job_store = _pending_store()
+    job_store["run-1"]._results_claimed = True
+
+    with patch.object(core, "JOB_STORE", job_store):
+        status = asyncio.run(_stats_service().get_query_status("run-1"))
+
+    assert status.status == LIFQueryStatus.PENDING
+    mock_get.assert_not_called()
