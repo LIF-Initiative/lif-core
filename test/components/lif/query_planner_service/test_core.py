@@ -1486,3 +1486,43 @@ def test_no_budget_left_skips_the_run_check(mock_get, time_budget_seconds):
 
     assert status.status == LIFQueryStatus.PENDING
     mock_get.assert_not_called()
+
+
+def test_a_callback_cancelled_mid_save_releases_its_claim():
+    """#1329 review: CancelledError bypasses `except Exception`, so a callback cancelled during
+    its cache save left the job claimed and PENDING, and every later callback was rejected.
+    The sync caller then waited out its 408."""
+    job_store = {"run-1": core.LIFQueryPlannerJob(job_id="run-1", query=_sentinel_query(), status="PENDING")}
+
+    async def scenario():
+        save_started = asyncio.Event()
+
+        async def hanging_save(*args, **kwargs):
+            save_started.set()
+            await asyncio.Event().wait()
+
+        service = _stats_service()
+        with patch("httpx.AsyncClient.post", side_effect=hanging_save):
+            callback = asyncio.create_task(service.run_post_orchestration_results(_results_for("run-1")))
+            await save_started.wait()
+            callback.cancel()
+            with pytest.raises(asyncio.CancelledError):
+                await callback
+        assert job_store["run-1"].status == LIFQueryStatus.PENDING
+
+        ok = _create_mock_post_response(200, {}, "https://api.example.com/save")
+        with patch("httpx.AsyncClient.post", return_value=ok):
+            await service.run_post_orchestration_results(_results_for("run-1"))
+
+    with patch.object(core, "JOB_STORE", job_store):
+        asyncio.run(scenario())
+
+    assert job_store["run-1"].status == LIFQueryStatus.COMPLETED
+
+
+def test_the_results_claim_is_never_serialized():
+    """#1329 review: the claim is internal, so it is a private attribute rather than a field."""
+    job = core.LIFQueryPlannerJob(job_id="run-1", query=_sentinel_query(), status="PENDING")
+
+    assert "results_claimed" not in job.model_dump()
+    assert "results_claimed" not in core.LIFQueryPlannerJob.model_json_schema()["properties"]

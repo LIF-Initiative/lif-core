@@ -5,11 +5,12 @@ This component provides a service that accepts LIF queries
 and returns query results.
 """
 
+import asyncio
 from datetime import datetime, timezone
 from typing import Dict, List
 
 import httpx
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, PrivateAttr
 
 from lif.datatypes import (
     OrchestratorJob,
@@ -336,7 +337,7 @@ class LIFQueryPlannerService:
         if (
             run.status == OrchestratorJobStatus.FAILED
             and job.status == LIFQueryStatus.PENDING
-            and not job.results_claimed
+            and not job._results_claimed
         ):
             _mark_job_failed(job, "The orchestration run failed")
 
@@ -404,9 +405,9 @@ class LIFQueryPlannerService:
                 raise LIFException(f"Job with ID {run_id} is not in 'PENDING' status, current status: {job.status}")
             # Claim the job before the first await, so a second callback for the same run is
             # rejected here instead of racing this one to set the final status.
-            if job.results_claimed:
+            if job._results_claimed:
                 raise LIFException(f"Job with ID {run_id} is already processing orchestration results.")
-            job.results_claimed = True
+            job._results_claimed = True
             # From here on a failure belongs to this job (#1107): see the except blocks below.
             pending_job = job
 
@@ -456,6 +457,12 @@ class LIFQueryPlannerService:
             # Update the associated Job status to 'COMPLETED'
             job.status = LIFQueryStatus.COMPLETED
             JOB_STORE[run_id] = job
+        except asyncio.CancelledError:
+            # Not an Exception, so the blocks below never see it. Release the claim so a later
+            # callback for this run can still complete the job instead of being rejected.
+            if pending_job is not None and pending_job.status == LIFQueryStatus.PENDING:
+                pending_job._results_claimed = False
+            raise
         except httpx.HTTPStatusError as e:
             _mark_job_failed(pending_job, f"Processing the orchestration results failed ({type(e).__name__})")
             raise e
@@ -539,7 +546,6 @@ class LIFQueryPlannerJob(BaseModel):
         query (LIFQuery): The query to be executed.
         status (LIFQueryStatus): Status of the job.
         error_message (str | None): Why the job failed, when its status is FAILED.
-        results_claimed (bool): Set by the first callback to process this job's results; internal.
         failed_source_ids (List[str]): Information sources whose part failed during orchestration.
         created_timestamp (str): Timestamp of when the job was created.
         updated_timestamp (str): Timestamp of when the job was last updated.
@@ -550,7 +556,6 @@ class LIFQueryPlannerJob(BaseModel):
     query: LIFQuery = Field(..., description="The query to be executed")
     status: LIFQueryStatus = Field(..., description="Status of the job")
     error_message: str | None = Field(None, description="Why the job failed, when its status is FAILED")
-    results_claimed: bool = Field(False, description="Set by the first callback to process this job's results")
     failed_source_ids: List[str] = Field(
         default_factory=list, description="Information sources whose part failed during orchestration"
     )
@@ -566,6 +571,9 @@ class LIFQueryPlannerJob(BaseModel):
     )
     # The orchestrator's results callback carries no caller, so the job remembers it (#1272).
     client: str = Field(statistics.CLIENT_UNKNOWN, description="The caller that submitted the query")
+    # Set by the first callback to process this job's results (#1107). Private, so it is never
+    # serialized and pollers can't see it.
+    _results_claimed: bool = PrivateAttr(False)
 
 
 # -------------------------------------------------------------------------
