@@ -4,7 +4,7 @@ from pydantic import BaseModel
 
 from datetime import datetime
 
-from lif.datatypes.mdr_sql_model import DataModelType, StateType
+from lif.mdr_sql_model.core import DataModelType, StateType
 from lif.mdr_dto.attribute_dto import AttributeDTO
 from lif.mdr_dto.entity_dto import ChildEntityDTO, EntityDTO
 

@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import List, Optional
 
-from lif.datatypes.mdr_sql_model import ExpressionLanguageType
+from lif.mdr_sql_model.core import ExpressionLanguageType
 from pydantic import BaseModel
 
 

@@ -3,7 +3,7 @@ requires = ["hatchling", "hatch-polylith-bricks"]
 build-backend = "hatchling.build"
 
 [project]
-name = "dagster_docker_compose"
+name = "dagster_oss_ecs"
 version = "0.1.0"
 
 requires-python = ">=3.13,<3.14"
