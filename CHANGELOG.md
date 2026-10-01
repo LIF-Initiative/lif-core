@@ -33,6 +33,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Query Planner: reading a `PENDING` async job's status or result asks the Orchestrator for its run,
+  and marks the job `FAILED` when the run has failed, instead of leaving it `PENDING` until the
+  caller's timeout (issue #1113)
 - Query Planner async contract (issue #1107): `GET /query/{query_id}` returns a completed async
   query's records without re-running it, so a client no longer has to re-POST the query, which
   submitted a new orchestration whenever a requested field was still missing (issue #1327). A

@@ -1195,8 +1195,10 @@ def test_get_query_result_for_a_completed_job_does_not_orchestrate_again(mock_po
     assert list(job_store) == ["run-1"]
 
 
+@patch("httpx.AsyncClient.get")
 @patch("httpx.AsyncClient.post")
-def test_get_query_result_for_a_pending_job_returns_its_status(mock_post):
+def test_get_query_result_for_a_pending_job_returns_its_status(mock_post, mock_get):
+    mock_get.return_value = _orchestrator_run("run-1", "RUNNING")
     job_store = {"run-1": core.LIFQueryPlannerJob(job_id="run-1", query=_sentinel_query(), status="PENDING")}
 
     with patch.object(core, "JOB_STORE", job_store):
@@ -1210,6 +1212,13 @@ def test_get_query_result_for_an_unknown_job_is_a_value_error():
     with patch.object(core, "JOB_STORE", {}):
         with pytest.raises(ValueError):
             asyncio.run(_stats_service().get_query_result("missing"))
+
+
+def _orchestrator_run(run_id: str, status: str) -> MagicMock:
+    """What the orchestrator's GET /jobs/{job_id} answers."""
+    return _create_mock_post_response(
+        200, {"job_id": run_id, "status": status, "metadata": {}}, f"https://api.example.com/jobs/{run_id}"
+    )
 
 
 def _results_for(run_id: str) -> OrchestratorJobResults:
@@ -1274,6 +1283,86 @@ def test_a_failed_job_does_not_echo_the_exception_text_to_callers(mock_post):
     assert "ValueError" in job_store["run-1"].error_message
 
 
+# -------------------------------------------------------------------------
+# #1113 — a pending job whose orchestration run has died.
+# -------------------------------------------------------------------------
+def _pending_store() -> dict:
+    return {"run-1": core.LIFQueryPlannerJob(job_id="run-1", query=_sentinel_query(), status="PENDING")}
+
+
+@patch("httpx.AsyncClient.get")
+def test_a_pending_job_whose_run_failed_is_reported_failed(mock_get):
+    """A run that fails before its callback (the callback POST itself failing fails the run)
+    left the job PENDING until the caller's timeout."""
+    mock_get.return_value = _orchestrator_run("run-1", "FAILED")
+    job_store = _pending_store()
+
+    with patch.object(core, "JOB_STORE", job_store):
+        status = asyncio.run(_stats_service().get_query_status("run-1"))
+
+    assert status.status == LIFQueryStatus.FAILED
+    assert status.error_message
+    assert job_store["run-1"].status == LIFQueryStatus.FAILED
+    assert mock_get.call_args.args[0] == "https://api.example.com/jobs/run-1"
+
+
+@patch("httpx.AsyncClient.get")
+def test_get_query_result_reports_a_dead_run_as_failed(mock_get):
+    mock_get.return_value = _orchestrator_run("run-1", "FAILED")
+
+    with patch.object(core, "JOB_STORE", _pending_store()):
+        result = asyncio.run(_stats_service().get_query_result("run-1"))
+
+    assert result.status == LIFQueryStatus.FAILED
+
+
+@pytest.mark.parametrize("run_status", ["STARTING", "RUNNING", "COMPLETED"])
+@patch("httpx.AsyncClient.get")
+def test_a_pending_job_whose_run_has_not_failed_stays_pending(mock_get, run_status):
+    """COMPLETED too: the run finishes by posting its callback, which may still be in flight."""
+    mock_get.return_value = _orchestrator_run("run-1", run_status)
+
+    with patch.object(core, "JOB_STORE", _pending_store()):
+        status = asyncio.run(_stats_service().get_query_status("run-1"))
+
+    assert status.status == LIFQueryStatus.PENDING
+
+
+@patch("httpx.AsyncClient.get")
+def test_a_404_from_the_orchestrator_does_not_fail_the_job(mock_get):
+    """The orchestrator answers 404 for every error, a Dagster outage included, so a 404 is
+    not evidence that the run failed."""
+    mock_get.return_value = _create_mock_post_response(404, {"detail": "x"}, "https://api.example.com/jobs/run-1")
+
+    with patch.object(core, "JOB_STORE", _pending_store()):
+        status = asyncio.run(_stats_service().get_query_status("run-1"))
+
+    assert status.status == LIFQueryStatus.PENDING
+
+
+@patch("httpx.AsyncClient.get")
+def test_an_unreachable_orchestrator_does_not_fail_the_job(mock_get):
+    mock_get.side_effect = httpx.ConnectError("connection refused")
+
+    with patch.object(core, "JOB_STORE", _pending_store()):
+        status = asyncio.run(_stats_service().get_query_status("run-1"))
+
+    assert status.status == LIFQueryStatus.PENDING
+
+
+@patch("httpx.AsyncClient.get")
+def test_a_job_that_is_not_pending_is_not_checked_with_the_orchestrator(mock_get):
+    job_store = {
+        "run-1": core.LIFQueryPlannerJob(job_id="run-1", query=_sentinel_query(), status=LIFQueryStatus.COMPLETED)
+    }
+
+    with patch.object(core, "JOB_STORE", job_store):
+        status = asyncio.run(_stats_service().get_query_status("run-1"))
+
+    assert status.status == LIFQueryStatus.COMPLETED
+    mock_get.assert_not_called()
+
+
 async def _two_overlapping_callbacks(first_save_ok: bool, second_save_ok: bool):
     """Two callbacks for one run, the first's cache save slower than the second's. Each save's
     outcome is set per call; returns both callbacks' results (value or exception)."""
@@ -1318,6 +1407,87 @@ def test_the_first_callback_claims_the_job_and_a_concurrent_second_one_is_reject
     assert (job_store["run-1"].error_message is None) == (final_status == LIFQueryStatus.COMPLETED)
 
 
+@patch("httpx.AsyncClient.get")
+def test_a_callback_that_completes_the_job_during_the_run_check_is_not_overwritten(mock_get):
+    """#1330 review: the check awaited the orchestrator, then marked FAILED without looking
+    again. A run can report FAILED after its callback was processed, when the callback's own
+    response was lost, so the job ended FAILED after pollers had seen COMPLETED."""
+    job_store = _pending_store()
+
+    def callback_completes_meanwhile(*args, **kwargs):
+        job_store["run-1"].status = LIFQueryStatus.COMPLETED
+        return _orchestrator_run("run-1", "FAILED")
+
+    mock_get.side_effect = callback_completes_meanwhile
+
+    with patch.object(core, "JOB_STORE", job_store):
+        status = asyncio.run(_stats_service().get_query_status("run-1"))
+
+    assert status.status == LIFQueryStatus.COMPLETED
+    assert job_store["run-1"].error_message is None
+
+
+def test_a_run_check_during_a_callbacks_save_leaves_the_outcome_to_the_callback():
+    """#1330 review: a poll that marked FAILED while a callback awaited its save was then
+    overwritten to COMPLETED, keeping the FAILED error_message, after a sync /query that polled
+    in between had already answered 500. The claimed job is now the callback's to finish."""
+    job_store = _pending_store()
+    service = _stats_service()
+    polled = []
+
+    async def save_with_a_poll_in_the_middle(*args, **kwargs):
+        # The callback has claimed the job and is awaiting this save.
+        polled.append(await service.get_query_status("run-1"))
+        return _create_mock_post_response(200, {}, "https://api.example.com/save")
+
+    with (
+        patch.object(core, "JOB_STORE", job_store),
+        patch("httpx.AsyncClient.post", side_effect=save_with_a_poll_in_the_middle),
+        patch("httpx.AsyncClient.get", return_value=_orchestrator_run("run-1", "FAILED")),
+    ):
+        asyncio.run(service.run_post_orchestration_results(_results_for("run-1")))
+
+    assert polled[0].status == LIFQueryStatus.PENDING
+    assert job_store["run-1"].status == LIFQueryStatus.COMPLETED
+    assert job_store["run-1"].error_message is None
+
+
+@pytest.mark.parametrize(
+    "time_budget_seconds, expected_timeout",
+    [
+        (None, 10),  # the /status endpoint: the full per-request timeout
+        (3.5, 3.5),  # the sync loop with less left than that
+        (60, 10),  # never more than the per-request timeout
+    ],
+)
+@patch("httpx.AsyncClient.get")
+def test_the_run_check_is_bounded_by_the_callers_remaining_budget(mock_get, time_budget_seconds, expected_timeout):
+    """#1330 review: the check's GET was bounded only by the full per-request timeout, so a sync
+    /query facing an orchestrator that never answered overran its budget by that much (11.04s
+    against a 3s budget). A missing timeout would let a hung orchestrator hang the caller."""
+    mock_get.return_value = _orchestrator_run("run-1", "RUNNING")
+    service = _stats_service()
+    service.config.service_request_timeout_seconds = 10
+
+    with (
+        patch.object(core, "JOB_STORE", _pending_store()),
+        patch.object(core.httpx, "AsyncClient", wraps=httpx.AsyncClient) as client_class,
+    ):
+        asyncio.run(service.get_query_status("run-1", time_budget_seconds=time_budget_seconds))
+
+    assert client_class.call_args.kwargs["timeout"] == expected_timeout
+
+
+@pytest.mark.parametrize("time_budget_seconds", [0, -0.5])
+@patch("httpx.AsyncClient.get")
+def test_no_budget_left_skips_the_run_check(mock_get, time_budget_seconds):
+    with patch.object(core, "JOB_STORE", _pending_store()):
+        status = asyncio.run(_stats_service().get_query_status("run-1", time_budget_seconds=time_budget_seconds))
+
+    assert status.status == LIFQueryStatus.PENDING
+    mock_get.assert_not_called()
+
+
 def test_a_callback_cancelled_mid_save_releases_its_claim():
     """#1329 review: CancelledError bypasses `except Exception`, so a callback cancelled during
     its cache save left the job claimed and PENDING, and every later callback was rejected.
@@ -1356,3 +1526,36 @@ def test_the_results_claim_is_never_serialized():
 
     assert "results_claimed" not in job.model_dump()
     assert "results_claimed" not in core.LIFQueryPlannerJob.model_json_schema()["properties"]
+
+
+def test_the_run_check_is_a_hard_deadline_even_when_the_orchestrator_keeps_trickling():
+    """#1330 review: httpx timeouts are per phase and reset on every chunk, so an orchestrator
+    sending a header line every 0.5s held a 3s budget for 23.20s. The GET stands in for that
+    here: it outlasts the budget without ever tripping httpx's own timeout."""
+
+    async def trickling_get(*args, **kwargs):
+        await asyncio.sleep(5)
+        return _orchestrator_run("run-1", "FAILED")
+
+    job_store = _pending_store()
+    with patch.object(core, "JOB_STORE", job_store), patch("httpx.AsyncClient.get", side_effect=trickling_get):
+        started = datetime.now()
+        status = asyncio.run(_stats_service().get_query_status("run-1", time_budget_seconds=0.2))
+        elapsed = (datetime.now() - started).total_seconds()
+
+    assert elapsed < 1
+    assert status.status == LIFQueryStatus.PENDING
+
+
+@patch("httpx.AsyncClient.get")
+def test_the_run_check_skips_the_orchestrator_for_a_claimed_job(mock_get):
+    """#1330 review: a claimed job is the callback's to finish, so the check's answer would be
+    discarded anyway."""
+    job_store = _pending_store()
+    job_store["run-1"]._results_claimed = True
+
+    with patch.object(core, "JOB_STORE", job_store):
+        status = asyncio.run(_stats_service().get_query_status("run-1"))
+
+    assert status.status == LIFQueryStatus.PENDING
+    mock_get.assert_not_called()

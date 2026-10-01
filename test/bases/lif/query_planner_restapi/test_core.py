@@ -280,6 +280,35 @@ class TestQueryPlannerSyncQueryTimeout(unittest.TestCase):
         self.assertEqual(slept, [1, 2, 4, 3])
         self.assertEqual(sum(slept), 10)
 
+    def test_each_status_check_is_given_what_is_left_of_the_budget(self):
+        """#1330 review: the status check now asks the orchestrator, so it must not be allowed
+        the full per-request timeout on top of the loop's budget."""
+        from lif.query_planner_restapi import core
+
+        pending = LIFQueryStatusResponse(query_id="123", status="PENDING")
+        clock = self._ManualClock(dt.datetime(2026, 1, 1, 12, 0, 0))
+
+        async def advancing_sleep(seconds):
+            clock.advance(seconds)
+
+        get_query_status = AsyncMock(return_value=pending)
+
+        async def _run():
+            with (
+                patch.object(core.config, "query_timeout_seconds", 10),
+                patch.object(core.service, "run_query", AsyncMock(return_value=pending)),
+                patch.object(core.service, "get_query_status", get_query_status),
+                patch.object(core, "datetime", clock),
+                patch.object(core, "sleep", new=advancing_sleep),
+            ):
+                return await core.do_run_query_sync(query=_make_query(), response=MagicMock())
+
+        with self.assertRaises(HTTPException):
+            asyncio.run(_run())
+        # Sleeps of 1, 2, 4 and 3 (see the test above) leave 9, 7, 3 and then 0 seconds.
+        budgets = [c.kwargs["time_budget_seconds"] for c in get_query_status.call_args_list]
+        self.assertEqual(budgets, [9, 7, 3, 0])
+
     def test_sync_query_polls_past_timeout_and_returns_408(self):
         from lif.query_planner_restapi import core
 
