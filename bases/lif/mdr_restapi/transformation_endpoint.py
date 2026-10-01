@@ -5,15 +5,18 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response,
 from fastapi.encoders import jsonable_encoder
 from lif.mdr_dto.transformation_dto import (
     CreateTransformationDTO,
-    CreateTransformationGroupDTO,
     CreateTransformationWithTransformationGroupDTO,
     TransformationDTO,
-    TransformationGroupDTO,
     TransformationListDTO,
     UpdateTransformationDTO,
+)
+from lif.mdr_dto.transformation_group_dto import (
+    CreateTransformationGroupDTO,
+    ImportTransformationGroupRequestDTO,
+    ImportTransformationGroupResultDTO,
+    TransformationGroupDTO,
     UpdateTransformationGroupDTO,
 )
-from lif.mdr_dto.transformation_group_dto import ImportTransformationGroupRequestDTO, ImportTransformationGroupResultDTO
 from lif.mdr_services import tag_service, transformation_service
 from lif.mdr_utils.database_setup import get_session
 from lif.mdr_utils.logger_config import get_logger
@@ -369,14 +372,10 @@ async def get_all_transformations_for_an_attribute(
 
 
 @router.post("/", response_model=TransformationGroupDTO, status_code=status.HTTP_201_CREATED)
-async def create_transformation_group_with_transformations(
+async def create_transformation_group(
     data: CreateTransformationGroupDTO, response: Response, session: AsyncSession = Depends(get_session)
 ):
-    transformation_group = await transformation_service.create_transformation_group(
-        session,
-        # ty-ignore: Duplicate DTO definitions (transformation_dto vs transformation_group_dto) — see #1138.
-        data,  # ty: ignore[invalid-argument-type]
-    )
+    transformation_group = await transformation_service.create_transformation_group(session, data)
     # Set the Location header with the new entity association ID
     response.headers["Location"] = f"/transformation_groups/{transformation_group.Id}"
     return transformation_group
@@ -387,7 +386,7 @@ async def create_transformation_group_with_transformations(
     response_model=TransformationGroupDTO,
     status_code=status.HTTP_201_CREATED,
 )
-async def create_transformation_group_with_transformations(
+async def add_transformations_to_group(
     data: List[CreateTransformationWithTransformationGroupDTO],
     response: Response,
     transformation_group_id: int,
@@ -399,20 +398,17 @@ async def create_transformation_group_with_transformations(
     return transformation_group
 
 
-@router.put("/{transformation_group_id}", response_model=TransformationGroupDTO)
-async def update_transformation(
+# exclude_unset: PUT never sets Transformations, so omit it rather than send "Transformations": null to
+# clients that merge the response over their local state.
+@router.put("/{transformation_group_id}", response_model=TransformationGroupDTO, response_model_exclude_unset=True)
+async def update_transformation_group(
     transformation_group_id: int, data: UpdateTransformationGroupDTO, session: AsyncSession = Depends(get_session)
 ):
-    return await transformation_service.update_transformation_group(
-        session,
-        transformation_group_id,
-        # ty-ignore: Duplicate DTO definitions (transformation_dto vs transformation_group_dto) — see #1138.
-        data,  # ty: ignore[invalid-argument-type]
-    )
+    return await transformation_service.update_transformation_group(session, transformation_group_id, data)
 
 
 @router.delete("/{transformation_group_id}")
-async def delete_transformation(transformation_group_id: int, session: AsyncSession = Depends(get_session)):
+async def delete_transformation_group(transformation_group_id: int, session: AsyncSession = Depends(get_session)):
     return await transformation_service.soft_delete_transformation_group(session, transformation_group_id)
 
 

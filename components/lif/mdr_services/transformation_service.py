@@ -1389,16 +1389,6 @@ async def update_transformation_group(
     session.add(transformation_group)
     await session.commit()
 
-    if data.Transformations:
-        transformation_list: List[TransformationDTO] = []
-        for transformation in data.Transformations:
-            transformation.TransformationGroupId = transformation_group_id
-            updated_transformation_dto = await update_transformation(
-                session=session, transformation_id=transformation.Id, data=transformation
-            )
-            transformation_list.append(updated_transformation_dto)
-        transformation_group_dto.Transformations = transformation_list
-
     return transformation_group_dto
 
 
