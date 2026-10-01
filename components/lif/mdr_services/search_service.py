@@ -12,7 +12,8 @@ from lif.datatypes.mdr_sql_model import (
 from lif.mdr_dto.attribute_dto import AttributeDTO
 from lif.mdr_dto.datamodel_dto import DataModelDTO
 from lif.mdr_dto.entity_dto import EntityDTO
-from lif.mdr_dto.transformation_dto import TransformationDTO, TransformationGroupDTO
+from lif.mdr_dto.transformation_dto import TransformationDTO
+from lif.mdr_dto.transformation_group_dto import TransformationGroupDTO
 from lif.mdr_dto.value_set_values_dto import ValueSetValueDTO
 from lif.mdr_dto.valueset_dto import ValueSetDTO
 from lif.mdr_services.transformation_service import get_transformation_by_id, get_transformation_group_by_id

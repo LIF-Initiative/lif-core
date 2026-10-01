@@ -2,8 +2,8 @@ from datetime import datetime
 from typing import List, Optional
 
 from lif.datatypes.mdr_sql_model import ExpressionLanguageType
-from lif.mdr_dto.transformation_dto import CreateTransformationDTO, TransformationDTO, UpdateTransformationDTO
-from pydantic import BaseModel
+from lif.mdr_dto.transformation_dto import TransformationDTO
+from pydantic import BaseModel, field_validator
 
 
 class DataModelRefDTO(BaseModel):
@@ -42,7 +42,7 @@ class TransformationGroupDTO(BaseModel):
 class CreateTransformationGroupDTO(BaseModel):
     SourceDataModelId: int
     TargetDataModelId: int
-    Name: Optional[str] = None
+    Name: str
     GroupVersion: str
     Description: Optional[str] = None
     Notes: Optional[str] = None
@@ -51,8 +51,15 @@ class CreateTransformationGroupDTO(BaseModel):
     DeprecationDate: Optional[datetime] = None  # New column
     Contributor: Optional[str] = None  # New column
     ContributorOrganization: Optional[str] = None  # New column
-    Transformations: Optional[List[CreateTransformationDTO]] = None
     Tags: Optional[str] = None
+
+    @field_validator("Name")
+    @classmethod
+    def name_must_not_be_blank(cls, value: str) -> str:
+        # Reject empty and whitespace-only names; the value itself is stored unchanged.
+        if not value.strip():
+            raise ValueError("Name must not be empty or only whitespace")
+        return value
 
     class Config:
         orm_mode = True
@@ -72,21 +79,11 @@ class UpdateTransformationGroupDTO(BaseModel):
     DeprecationDate: Optional[datetime] = None
     Contributor: Optional[str] = None
     ContributorOrganization: Optional[str] = None
-    Transformations: Optional[List[UpdateTransformationDTO]] = None
     Tags: Optional[str] = None
 
     class Config:
         orm_mode = True
         from_attributes = True  # This enables the use of `from_orm`
-
-
-class TransformationListDTO(BaseModel):
-    SourceTransformations: List[TransformationDTO]
-    TargetTransformations: List[TransformationDTO]
-
-    class Config:
-        orm_mode = True
-        from_attributes = True
 
 
 class ImportTransformationAttributeDTO(BaseModel):

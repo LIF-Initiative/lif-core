@@ -822,6 +822,177 @@ async def test_get_transformation_groups_exportable(async_client_mdr, mdr_api_he
     assert group["TargetDataModel"] is None
 
 
+@pytest.mark.asyncio
+async def test_update_transformation_group_metadata_only_omits_transformations(async_client_mdr, mdr_api_headers):
+    """A metadata-only PUT must not send "Transformations": null — the MDR frontend merges the PUT
+    response over its local group state, so a null would wipe its transformation list (#1138)."""
+
+    test_case_name = inspect.currentframe().f_code.co_name
+    dataset = await DatasetTransformDeepLiteralAttribute.prepare(
+        async_client_mdr=async_client_mdr,
+        source_data_model_name=f"{test_case_name}_source",
+        target_data_model_name=f"{test_case_name}_target",
+        transformation_group_name=f"{test_case_name}_transform_group",
+    )
+
+    response = await async_client_mdr.put(
+        f"/transformation_groups/{dataset.transformation_group_id}",
+        headers=mdr_api_headers,
+        json={"Description": "updated by test"},
+    )
+    assert response.status_code == 200, response.text
+    assert response.json()["Description"] == "updated by test"
+    assert "Transformations" not in response.json()
+
+
+@pytest.mark.asyncio
+async def test_update_transformation_group_ignores_nested_transformations(async_client_mdr, mdr_api_headers):
+    """PUT on a group updates only the group: nested Transformations are not part of
+    UpdateTransformationGroupDTO and are ignored (#1138). Transformations are updated individually."""
+
+    test_case_name = inspect.currentframe().f_code.co_name
+    dataset = await DatasetTransformDeepLiteralAttribute.prepare(
+        async_client_mdr=async_client_mdr,
+        source_data_model_name=f"{test_case_name}_source",
+        target_data_model_name=f"{test_case_name}_target",
+        transformation_group_name=f"{test_case_name}_transform_group",
+    )
+    expression = '{ "User": { "Skills": { "Genre": Person.Courses.Grade } } }'
+    transformation = await create_transformation(
+        async_client_mdr=async_client_mdr,
+        transformation_group_id=dataset.transformation_group_id,
+        source_parent_entity_id=dataset.source_parent_entity_id,
+        source_attribute_id=dataset.source_attribute_id,
+        source_entity_path=dataset.source_entity_id_path,
+        target_parent_entity_id=dataset.target_parent_entity_id,
+        target_attribute_id=dataset.target_attribute_id,
+        target_entity_path=dataset.target_entity_id_path,
+        mapping_expression=expression,
+        transformation_name="User.Skills.Genre",
+    )
+
+    response = await async_client_mdr.put(
+        f"/transformation_groups/{dataset.transformation_group_id}",
+        headers=mdr_api_headers,
+        json={"Description": "updated by test", "Transformations": [{"Id": transformation["Id"], "Expression": "$"}]},
+    )
+    assert response.status_code == 200, response.text
+
+    response = await async_client_mdr.get(
+        f"/transformation_groups/transformations/{transformation['Id']}", headers=mdr_api_headers
+    )
+    assert response.status_code == 200, response.text
+    assert response.json()["Expression"] == expression
+
+
+@pytest.mark.asyncio
+async def test_add_transformations_to_group_returns_transformations(async_client_mdr, mdr_api_headers):
+    """The add_transformation response carries the created transformations (#1138: the endpoint's
+    response model used to be a duplicate TransformationGroupDTO without that field)."""
+
+    test_case_name = inspect.currentframe().f_code.co_name
+    dataset = await DatasetTransformDeepLiteralAttribute.prepare(
+        async_client_mdr=async_client_mdr,
+        source_data_model_name=f"{test_case_name}_source",
+        target_data_model_name=f"{test_case_name}_target",
+        transformation_group_name=f"{test_case_name}_transform_group",
+    )
+
+    response = await async_client_mdr.post(
+        f"/transformation_groups/add_transformation/{dataset.transformation_group_id}",
+        headers=mdr_api_headers,
+        json=[
+            {
+                "Name": "User.Skills.Genre",
+                "Expression": '{ "User": { "Skills": { "Genre": Person.Courses.Grade } } }',
+                "ExpressionLanguage": "JSONata",
+                "SourceAttributes": [
+                    {
+                        "AttributeId": dataset.source_attribute_id,
+                        "AttributeType": "Source",
+                        "EntityIdPath": dataset.source_entity_id_path,
+                        "EntityId": dataset.source_parent_entity_id,
+                    }
+                ],
+                "TargetAttribute": {
+                    "AttributeId": dataset.target_attribute_id,
+                    "AttributeType": "Target",
+                    "EntityIdPath": dataset.target_entity_id_path,
+                    "EntityId": dataset.target_parent_entity_id,
+                },
+            }
+        ],
+    )
+    assert response.status_code == 201, response.text
+    assert [t["Name"] for t in response.json()["Transformations"]] == ["User.Skills.Genre"]
+
+
+@pytest.mark.asyncio
+async def test_create_transformation_group_ignores_nested_transformations(async_client_mdr, mdr_api_headers):
+    """POST /transformation_groups/ creates only the group: nested Transformations are not part of
+    CreateTransformationGroupDTO and are ignored (#1138). Use /{id}/import to bring transformations."""
+
+    test_case_name = inspect.currentframe().f_code.co_name
+    dataset = await DatasetTransformDeepLiteralAttribute.prepare(
+        async_client_mdr=async_client_mdr,
+        source_data_model_name=f"{test_case_name}_source",
+        target_data_model_name=f"{test_case_name}_target",
+        transformation_group_name=f"{test_case_name}_transform_group",
+    )
+
+    response = await async_client_mdr.post(
+        "/transformation_groups/",
+        headers=mdr_api_headers,
+        json={
+            "SourceDataModelId": dataset.source_data_model_id,
+            "TargetDataModelId": dataset.target_data_model_id,
+            "Name": f"{test_case_name}_v2",
+            "GroupVersion": "2.0",
+            "Transformations": [{"Name": "ignored", "Expression": "$", "ExpressionLanguage": "JSONata"}],
+        },
+    )
+    assert response.status_code == 201, response.text
+    new_group_id = response.json()["Id"]
+
+    response = await async_client_mdr.get(
+        f"/transformation_groups/{new_group_id}", headers=mdr_api_headers, params={"pagination": "false"}
+    )
+    assert response.status_code == 200, response.text
+    assert response.json()["total"] == 0
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    ("case", "name_field"), [("missing", {}), ("empty", {"Name": ""}), ("spaces", {"Name": "   "})]
+)
+async def test_create_transformation_group_requires_name(async_client_mdr, mdr_api_headers, case, name_field):
+    """Name is NOT NULL in the database, so a create without it is rejected with 422 at validation
+    rather than failing at insert time with an unhandled IntegrityError (500). An empty Name is
+    or whitespace-only Name is rejected the same way, so a nameless group cannot be stored."""
+
+    # Suffix per case: both cases share the session database, and data model names must be unique.
+    test_case_name = f"{inspect.currentframe().f_code.co_name}_{case}"
+    dataset = await DatasetTransformDeepLiteralAttribute.prepare(
+        async_client_mdr=async_client_mdr,
+        source_data_model_name=f"{test_case_name}_source",
+        target_data_model_name=f"{test_case_name}_target",
+        transformation_group_name=f"{test_case_name}_transform_group",
+    )
+
+    response = await async_client_mdr.post(
+        "/transformation_groups/",
+        headers=mdr_api_headers,
+        json={
+            "SourceDataModelId": dataset.source_data_model_id,
+            "TargetDataModelId": dataset.target_data_model_id,
+            "GroupVersion": "2.0",
+            **name_field,
+        },
+    )
+    assert response.status_code == 422, response.text
+    assert [error["loc"] for error in response.json()["detail"]] == [["body", "Name"]]
+
+
 # --- Import transformation group (#772) -------------------------------------------------------
 
 
