@@ -19,6 +19,8 @@ A design pass across the agent, API, frontend, and deployment layers surfaced th
 
 1. **Shared ALB `idle_timeout = 30s`** (`cloudformation/service-common.yml:338`). The ALB idle timeout measures the gap *between bytes*, not total duration. Once tokens flush every few hundred ms the clock keeps resetting, so a long stream survives — **but** if time-to-first-token (reframe + first tool calls) exceeds 30s, the ALB drops the connection *before the first chunk*, producing intermittent failures. Mitigations below (immediate `start` chunk + raise the timeout).
 2. **`reframe_query_with_identifiers` is a synchronous `llm.invoke`** (`components/lif/langchain_agent/core.py:266`) running on a **single uvicorn worker** (`projects/lif_advisor_api/Dockerfile2:49`, `MinCount/MaxCount=1`). Today this is hidden; under streaming a blocking call **stalls the event loop and every concurrent stream**. This is a pre-existing latent concurrency bug that streaming promotes to critical — fixing it (make async or `run_in_threadpool`) is part of this work.
+
+   > **Note (2026-09-30):** fixed outside #970, as a standalone precursor: #1106 makes the reframe non-blocking. This risk and open decision 2 no longer apply.
 3. **`fetch` bypasses the axios auth interceptor.** The streaming client must use `fetch` (not axios), so the 401→refresh→retry logic in `frontends/lif_advisor_app/src/utils/axios.ts:25-51` does not apply. We must share the refresh logic between the interceptor and the fetch path.
 
 ## Wire protocol: NDJSON
@@ -114,7 +116,7 @@ Log per stream: **time-to-first-token** (the early-warning for the ALB-idle prob
 ## Open decisions
 
 1. **ALB idle timeout** — raise the shared knob to ~120s (recommended) vs. rely solely on the immediate `start`-chunk keepalive.
-2. **Reframe fix scope** — fix the blocking `llm.invoke` inside #970 (recommended) vs. split as a standalone precursor PR (it's an independently shippable latent bug).
+2. **Reframe fix scope** — fix the blocking `llm.invoke` inside #970 (recommended) vs. split as a standalone precursor PR (it's an independently shippable latent bug). *Settled: split out as #1106.*
 3. **Final-usage source** — aggregate `on_chat_model_end` agent-node messages (recommended, no extra round-trip) vs. LangGraph's `aget_state` (the async `get_state`) to read the final assembled messages, mirroring how `ask_agent` reads `ainvoke`'s result.
 
 ## Out of scope / related
