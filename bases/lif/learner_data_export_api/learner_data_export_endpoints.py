@@ -3,9 +3,9 @@ from typing import Annotated, Any, Dict
 
 from fastapi import APIRouter, HTTPException, Query, Request
 from lif.datatypes.core import TargetTransformationDataModelDTO, TargetTransformationDataModelsDTO
-from lif.datatypes.mdr_consumer import MdrRetrieveDataModelsDTO
 from lif.lif_schema_config.core import LIFSchemaConfig
 from lif.mdr_client.core import MDRClientException, fetch_data_models_from_mdr, get_transformation_groups_from_mdr
+from lif.mdr_dto.mdr_consumer_dto import MdrRetrieveDataModelsDTO
 from lif.mdr_utils.logger_config import get_logger
 from lif.query_planner_client import QueryPlannerException, fetch_query_from_query_planner
 from lif.translator_client import TranslatorException, translate_learner_data

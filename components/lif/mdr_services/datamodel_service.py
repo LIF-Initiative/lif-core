@@ -1,7 +1,7 @@
 from typing import List, Optional
 
 from fastapi import HTTPException
-from lif.datatypes.mdr_sql_model import (
+from lif.mdr_sql_model.core import (
     AccessType,
     DataModel,
     DataModelType,
