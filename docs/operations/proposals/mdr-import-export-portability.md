@@ -51,6 +51,8 @@ not share a code path. The first is how references are stored — and there are 
 | **Attribute pointing at an entity** | `Attribute.DataType = 'entity'` plus `Attribute.TargetEntityId` | 109 entity-typed attributes |
 | Attribute pointing at a value set | `Attribute.ValueSetId` | 2,285 |
 | Entity ↔ attribute membership | `EntityAttributeAssociation` (many-to-many) | 2,544 |
+| **Link added by an extension** | `ExtendedByDataModelId` on `EntityAssociation` / `EntityAttributeAssociation` — the extension adds a link between elements it does not own | 16 + 167 |
+| **Element exposed by an extension** | `ExtInclusionsFromBaseDM` row carrying `LevelOfAccess` / `Queryable` / `Modifiable` | 300 |
 
 The third row is the newest and the least handled. `TargetEntityId` was added in `V1.6` precisely
 because `DataType = 'entity'` said an attribute referred to *some* entity without saying which; the
@@ -130,14 +132,48 @@ soft-deleted. Mapping work is much smaller than the raw row counts suggest.
 
 Base-model inclusions (300 live rows) and value mappings (2,347) appear **nowhere** in
 `import_export_service.py` — not in export, and not in `clone_datamodel` either. The epic treats
-`clone_datamodel` as the reference implementation for ID remapping; it is, for what it covers, but
-it is **itself incomplete for extended models**.
+`clone_datamodel` as the reference implementation for ID remapping. **It is not a sound one** —
+measured against a live database, not just read:
+
+- `clone_transformations` returns from inside its loop over groups
+  ([`import_export_service.py:664`](../../../components/lif/mdr_services/import_export_service.py#L664)),
+  so only the first group's rules are cloned. Cloning model 17 copied 6 groups and **0 of their 5
+  live rules**, because the first group happened to be empty.
+- `clone_transformation_attributes` never sets `TransformationAttribute.EntityId`, which is
+  `NOT NULL` — any clone that does reach a rule's attributes fails on insert.
+- It drops `Relationship`, `Placement` and `ExtendedByDataModelId` from entity associations,
+  `ExtendedByDataModelId` from entity-attribute links, `TargetEntityId` from attributes, and
+  `ContributorOrganization` (declared required) from the model.
+
+Treat it as a checklist of what a copy must cover, not as code to imitate. Once the converter
+exists, clone becomes export-then-import through it.
 
 An exported OrgLIF or PartnerLIF therefore loses its entire inclusion set — the thing that makes it
 an extension (206 rows for model 17, 94 for model 18). Biggest correctness hole in the schema half.
 
-**But the two tables need different fixes.** Inclusions fit the anchor-plus-ancestors rule
-(models 17 and 18 include elements of model 1, their parent). Value mappings do not. Measured on
+**Inclusions are not only "from the base".** Despite the table name, an inclusion row is the
+visibility record for *every* element an extended model exposes, and it carries `LevelOfAccess`,
+`Queryable` and `Modifiable`. The schema generator returns 404 when one is missing
+([`schema_generation_service.py:146-164`](../../../components/lif/mdr_services/schema_generation_service.py#L146-L164)).
+Of the 300 live rows:
+
+| Inclusion points at | Model 17 | Model 18 |
+|---|---|---|
+| The parent (model 1) | 138 | 49 |
+| The model's own elements | 67 | 21 |
+| A model outside the ancestor chain | 1 (model 16) | 24 (22 in model 17, 2 in model 25) |
+
+So the file must carry inclusion flags on owned elements too, and 25 rows reference a model that
+is neither the anchor nor an ancestor — the same peer-model problem value mappings have (below).
+Whether an extension may include a *sibling's* elements (18 including 17's) is a product question
+the format has to answer, not infer.
+
+**Attribute-level `Constraints`** (a separate table from `DataModelConstraints`) are handled by none
+of the five conversions. The table has 0 rows today, so nothing is lost yet — but it is an element
+kind the format must define.
+
+**But the two tables need different fixes.** Inclusions mostly fit the anchor-plus-ancestors rule
+(most rows point at model 1, the parent, or at the model itself). Value mappings do not. Measured on
 active rows: **all 2,347 are cross-model, none are same-model.** Sources are ten SourceSchemas
 (2, 3, 4, 7, 9, 10, 12, 14, 15, 25); targets are BaseLIF model 1 and PartnerLIF model 18. A
 SourceSchema has no parent and appears in nobody's ancestor chain, so a value mapping's source end
@@ -146,6 +182,11 @@ is **neither the anchor nor an ancestor**.
 That needs a third kind of reference in the file format — a **peer-model reference**, resolved by
 the three-field model identity — and it behaves like the mapping half of the epic, not the schema
 half. So inclusions and value mappings get separate tickets in separate phases.
+
+Value mappings are also **not really grouped**: only 2 of the 2,347 set `TransformationGroupId`
+(and one of those two points at a deleted group). They are value-set-to-value-set links, so which
+file carries them — the schema file, the mapping file, or a file of their own — is for NEW-K to
+settle.
 
 ### B. There is no update path for schemas
 
@@ -437,6 +478,12 @@ no generated key and no migration. Where a value needs a fallback, the JSONata e
 it with `??`, `?:` and `$exists()` — the expression is free to read what it likes; it is the
 recorded source *binding* that stays single.
 
+**"Group" here means the group's portable identity, not its name.** The database's only rule on
+groups is `ux_transformationsgroup_model_id_version_active` on `(GroupVersion, SourceDataModelId,
+TargetDataModelId)` — `Name` is not in it. Across installs a group is therefore identified by
+(source model identity, target model identity, `GroupVersion`), each model identity being the
+three-field `(Name, DataModelVersion, ContributorOrganization)`.
+
 **What the rule does and does not constrain.** It constrains *targets*, not sources:
 
 - **One source → many targets is fine.** The same source path may feed any number of target
@@ -602,6 +649,18 @@ model as a form field, never from the file. Using the same rule for schemas give
 the epic **one** portability rule instead of two. The only change needed is Decision 5: these
 helpers currently see a single parent.
 
+Two caveats on "proven":
+
+- `get_unique_entity` decides whether to search the parent with a type-name check
+  (`data_model_type == OrgLIF or PartnerLIF`,
+  [`entity_service.py:608`](../../../components/lif/mdr_services/entity_service.py#L608)) — the
+  same proxy behind #1321 — so it has to move to the structural test along with the chain walk.
+- Not every shipped path fits the rule. `1:Credential,1:Credential.Image,16:~image.id` (group 50,
+  model 17 → CLR) ends in a segment owned by model 16, which is not in model 17's ancestor chain,
+  so anchor-plus-ancestors cannot resolve it. It is the path-level twin of the 25 inclusion rows
+  that point outside the chain (Gap A). The format either supports a peer-model segment explicitly
+  or refuses it by name — it must not resolve it by accident.
+
 ### Model identity is a safety check, not a lookup key
 
 **#17** specifies that an upload removes anything absent from the file. So **uploading the wrong
@@ -686,19 +745,33 @@ It must settle:
   (what every value mapping needs, since a SourceSchema is in nobody's ancestor chain). The first
   two resolve by unique name; the third by the three-field model identity, which otherwise serves
   only as a safety check.
-- **Which kinds of element can be inherited.** The type has four members — attribute, entity,
-  constraint and mapping — but the shipped data only ever uses the first two, and the column has no
-  foreign key. Handle all four rather than inferring scope from the seed data.
+- **Which kinds of element can be inherited.** Inclusions use `ElementType`
+  ([`mdr_sql_model.py:38-42`](../../../components/lif/datatypes/mdr_sql_model.py#L38-L42)), which
+  has four members — attribute, entity, constraint and transformation — but the shipped data only
+  ever uses the first two, and `IncludedElementId` has no foreign key. Handle all four rather than
+  inferring scope from the seed data. Not to be confused with `DatamodelElementType` (six members,
+  used by `DataModelConstraints.ElementId`, also no foreign key, 0 rows), which the format must
+  also cover.
 - **Per-element origin** — owned here, inherited, or overriding an ancestor. Extensions are an
   overlay *between* models, not nesting; flattening loses that, and it is exactly what makes an
-  extended model portable.
+  extended model portable. The overlay has three parts: the inclusion row and its flags (on owned
+  elements too — Gap A), the `ExtendedByDataModelId` links an extension adds between elements it
+  does not own, and elements the extension owns outright.
 - **Embedded vs pointed-at references** — the explicit marker from #1026, carrying relationship
   names per Decision 4.
 - **A format version**, so today's files still read when the format changes.
 - **The same-name ambiguity** that forced mappings and entity-attribute links out of the import
-  record.
+  record. `import_datamodel` keys entities and attributes by `Name`
+  ([`import_export_service.py:219,241`](../../../components/lif/mdr_services/import_export_service.py#L219)),
+  but `Name` is not unique — attributes hold 234 duplicate `(model, Name)` pairs. What the database
+  enforces is `UniqueName` per model (`uq_attributes_uniquename_datamodelid_active`,
+  `uq_entities_uniquename_datamodelid_active`), a dotted path such as `Assessment.identifier`. Keying
+  on `UniqueName` removes the ambiguity rather than working around it.
+- **Element keys for everything else**, taken from the database's own unique rules: value sets by
+  `Name` within the model, values by `ValueName` within their value set, groups as in Decision 3.
 - **Mapping path format** — paths still carry a source-database model ID that the importer throws
-  away. Drop it or document it as advisory.
+  away. Drop it or document it as advisory, and decide what happens to a segment outside the
+  anchor's chain (see "How a referenced model resolves").
 
 ### Key the converter off structure, not the type name
 
@@ -706,10 +779,19 @@ Asked whether a LIF install with **no** BaseLIF, or with **two**, would break th
 Checked: it would not — and the reason is worth building on.
 
 Every type branch in the conversion code is really a **binary**: `Type in ["OrgLIF","PartnerLIF"]`
-versus everything else. That is 15 of the 16 branches in the schema generator and all 10 in the
-upload reader. What the code is actually asking each time is *"does this model have a parent?"* —
-and the type name is only a proxy for it, guaranteed by the creation rule that gives OrgLIF and
-PartnerLIF a parent and denies BaseLIF and SourceSchema one.
+versus everything else. That is all 12 branches in the schema generator and all 8 in the upload
+reader (16 and 10 *lines* mention the type names; the rest are comments). The same proxy appears
+19 more times in the services those two call — 6 in `attribute_service.py` and 13 in
+`entity_service.py`, including both name-lookup helpers (`get_unique_attribute:161`,
+`get_unique_entity:608`) that mapping import resolves paths through. What the code is actually
+asking each time is *"does this model have a parent?"* — and the type name is only a proxy for it,
+guaranteed by the creation rule that gives OrgLIF and PartnerLIF a parent and denies BaseLIF and
+SourceSchema one.
+
+The proxy does not mean the branches are *simple*. Several do not test parentage at all once
+inside: they scope by "has an inclusion row for this model" and turn a missing row into a 404.
+Swapping the condition is safe for new converter code; retrofitting it into the generator is not a
+mechanical find-and-replace.
 
 Two places already use the structural test directly rather than the proxy:
 `search_service.py:37,47` splits models on `BaseDataModelId` being null or not, and
@@ -738,10 +820,10 @@ export failure is exactly a type-name check (`Type == "OrgLIF"`) standing in for
 
 | ID | Title | Why |
 |---|---|---|
-| **NEW-A** | Export base-model inclusions | Gap A; also fixes `clone_datamodel` |
+| **NEW-A** | Export inclusion flags for every element an extended model exposes — owned, inherited and out-of-chain | Gap A; also fixes `clone_datamodel` |
 | **NEW-D** | Round-trip proof: export shipped content → import to empty install → compare | Decision 2 |
 | **NEW-E** | Say why a group cannot be exported | Gap C; one 400 covers three different causes, and tells the user to do the wrong thing |
-| **NEW-F** | One ancestor-chain helper, with a cycle guard; every lookup uses the full chain | Gap E, Decision 5 |
+| **NEW-F** | One ancestor-chain helper, with a cycle guard; every lookup uses the full chain | Gap E, Decision 5. #1333 builds the helper (its three-deep round trip needs it); NEW-F moves the other callers onto it |
 | **NEW-G** | JSON-file import test suite (MDR only) | Goal 4; extends `conftest.py` |
 | **NEW-H** | Import in a single transaction | Per-row commits can leave a half-imported model |
 | **NEW-I** | Enforce one mapping per target field within a group | Decision 3; makes `(group, target path)` a usable identity, and closes the #746 remainder |
@@ -756,7 +838,7 @@ Most are 1–3 days and demoable on their own. Three are not, and are flagged ra
 
 | Ticket | Why not demoable | What to do |
 |---|---|---|
-| **#1333** | A design document shows nothing | Keep it to one sitting; demo its first consumer instead |
+| **#1333** | A spec, a converter with no endpoint, and its round-trip suite show nothing to a user | Demo its first consumer instead; the file-in → rows → file-out suite is the evidence |
 | **#746** (remainder) | A uniqueness rule only demos as a rejected duplicate | Pair with NEW-I, which needs it |
 | **NEW-D** (extractor half) | Invisible until the comparison runs | Pair the two halves |
 
@@ -767,6 +849,24 @@ deploy path filters (#1171 — shared code changes that deploy workflows don't r
 
 **#1141 must be re-scoped before it is estimated** — several items already shipped in #1136, one
 was replaced by a simpler rule, and one shipped with different behavior than its plan describes.
+
+---
+
+## Bugs found during Phase 1 research — file outside the epic
+
+Found while grounding #1333 (`main` @ `3ef6d84`) and reproduced against the `backup.sql` seed on a live Postgres. None
+blocks portability, so each is its own ticket rather than epic scope.
+
+| Bug | Where | Reproduced |
+|---|---|---|
+| A PartnerLIF's OpenAPI schema includes attributes it never included, and its full-metadata export 404s | The inclusion filter in `get_attributes_with_association_metadata_for_entity` has no `ExtDataModelId` condition ([`attribute_service.py:469-473`](../../../components/lif/mdr_services/attribute_service.py#L469-L473)), so an inclusion by *any* extension counts. | Model 18: 48 attributes pass the filter without a model-18 inclusion. Attribute 800 (`Credential.expirationDate`, included only by model 17) appears in model 18's schema; with `include_attr_md=True` generation returns 404 "Inclusion not found for Attribute ID 800". |
+| Cloning a model copies only the first group's rules | `return` inside the group loop ([`import_export_service.py:664`](../../../components/lif/mdr_services/import_export_service.py#L664)) | Cloning model 17's groups: 6 groups copied, 0 of 5 live rules. |
+| Updating a value mapping can create a duplicate within a group | The duplicate-check query for the known-group branch is built but never executed ([`value_mapping_service.py:192-208`](../../../components/lif/mdr_services/value_mapping_service.py#L192-L208)) | Two mappings in group 25; updating one onto the other's pair succeeded, leaving two live rows for the same pair and group. |
+
+Also noted, not a bug: `generate_openapi_schema` applies `public_only` to `ext_inclusions_query`
+instead of `inclusions_query` at `schema_generation_service.py:681,709`. The reassigned variable is
+never used again and the attribute list is already filtered upstream, so it has no effect — dead
+code to delete when the generator is next touched.
 
 ---
 
