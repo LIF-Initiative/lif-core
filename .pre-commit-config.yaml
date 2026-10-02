@@ -39,4 +39,10 @@ repos:
         types: [python]
         pass_filenames: false
         always_run: true
+      - id: check-workflow-paths
+        name: deploy workflows watch every packaged brick
+        entry: uv run python scripts/check_workflow_paths.py
+        language: system
+        pass_filenames: false
+        files: ^(\.github/workflows/|projects/[^/]+/pyproject\.toml$)
 
