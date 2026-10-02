@@ -299,7 +299,9 @@
         "demoable",
         "demoability",
         "runbook",
-        "runbooks"
+        "runbooks",
+        "dklen",
+        "altchars"
     ],
     "ignorePaths": [
         ".git/",
