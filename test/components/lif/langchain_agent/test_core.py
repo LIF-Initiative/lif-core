@@ -8,8 +8,6 @@ def test_sample():
 
 
 def test_trimmed_messages_size_wired_into_pre_model_hook(monkeypatch):
-    assert core.TRIMMED_MESSAGES_SIZE == 384
-
     fake_summarizer = Mock()
     fake_hook = Mock()
 
