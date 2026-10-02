@@ -169,8 +169,8 @@ Whether an extension may include a *sibling's* elements (18 including 17's) is a
 the format has to answer, not infer.
 
 **Attribute-level `Constraints`** (a separate table from `DataModelConstraints`) are handled by none
-of the five conversions. The table has 0 rows today, so nothing is lost yet — but it is an element
-kind the format must define.
+of the conversions. That is not a gap: the table has no service, endpoint or UI and 0 rows, and
+the format deliberately does not carry it (Phase 1, "Which kinds of element the format carries").
 
 **But the two tables need different fixes.** Inclusions mostly fit the anchor-plus-ancestors rule
 (most rows point at model 1, the parent, or at the model itself). Value mappings do not. Measured on
@@ -719,7 +719,8 @@ portability is JSONata-only throughout, per Decision 4.
 
 ### Phase 1 — one converter (write this first)
 
-There are **five** hand-written conversions between file-shaped data and database rows:
+There are **seven** hand-written conversions between file-shaped data and database rows — five for
+schemas, two for mapping groups:
 
 | Direction | Code |
 |---|---|
@@ -728,6 +729,31 @@ There are **five** hand-written conversions between file-shaped data and databas
 | rows → export record | `get_export_dto` / `export_datamodel` |
 | import record → rows | `import_datamodel` |
 | rows → rows (clone) | `clone_datamodel` |
+| rows → mapping file | `get_paginated_transformations_for_a_group(make_exportable=True)` |
+| mapping file → rows | `import_transformation_group` |
+
+Two more readers never write rows but interpret the same rows by their own rules:
+
+- the **OpenAPI generator** (first row above) re-derives schema structure from rows itself — the
+  source of #1252 and #1334;
+- the **Translator** reads mapping expressions through
+  `GET /transformation_groups/transformations_for_data_models/`, whose query
+  ([`get_paginated_all_transformations`](../../../components/lif/mdr_services/transformation_service.py#L614))
+  filters neither `ExpressionLanguage` nor `GroupVersion` — so it merges every live group version for
+  a model pair and receives `LIF_Pseudo_Code` expressions too, where export means one version,
+  JSONata only.
+
+The Translator's behavior is a **defect**, not a difference of opinion: it should read only the
+latest version of a group, and only JSONata rules. Both halves reproduce on the seed — adding a
+`2.0` group for pair 2 → 17 makes the read return rules from `1.0` and `2.0` together, and pair 4 →
+1 returns group 3's `LIF_Pseudo_Code` rule — and the first is reachable today without hand-editing:
+mapping import defaults to creating the next major version alongside the existing one
+(`_next_major_group_version`). Filed as #1350 (see "Bugs found during Phase 1 research").
+
+Both should eventually read through the converter's model, so the rules live in one place. Neither
+migration is Phase 1 work, but it constrains Phase 1: the portable model must carry what those
+readers need — inclusion flags, value `Value`s, relationship names, group version, expression
+language. (The Jinja generator stays out of scope — see "Out of scope".)
 
 **Every defect in this epic is two of them disagreeing.** #1026 and #1062 are the first two (one
 bakes the reference into a property name and drops the relationship; the other guesses it back).
@@ -736,7 +762,7 @@ dropping inclusions differently. That is why fixing endpoints one at a time has 
 
 So Phase 1 makes the file the contract and the database an implementation detail, with exactly one
 two-way converter between them. Export, import, upload, edit-by-upload, clone and the reference set
-all become callers. One converter is also round-trip testable, a far stronger gate than testing
+all become callers. One converter is also round-trip testable, a far stronger check than testing
 endpoints.
 
 It must settle:
@@ -745,13 +771,27 @@ It must settle:
   (what every value mapping needs, since a SourceSchema is in nobody's ancestor chain). The first
   two resolve by unique name; the third by the three-field model identity, which otherwise serves
   only as a safety check.
-- **Which kinds of element can be inherited.** Inclusions use `ElementType`
-  ([`mdr_sql_model.py:38-42`](../../../components/lif/datatypes/mdr_sql_model.py#L38-L42)), which
-  has four members — attribute, entity, constraint and transformation — but the shipped data only
-  ever uses the first two, and `IncludedElementId` has no foreign key. Handle all four rather than
-  inferring scope from the seed data. Not to be confused with `DatamodelElementType` (six members,
-  used by `DataModelConstraints.ElementId`, also no foreign key, 0 rows), which the format must
-  also cover.
+- **Which kinds of element the format carries — decided.** v1 carries **Entity and Attribute
+  inclusions only**. It does not carry Constraint or Transformation inclusions,
+  `DataModelConstraints`, or the attribute-level `Constraints` table; a file containing any of them
+  is refused by name. The decision rests on the *code*, not the seed data (per "How to read this"):
+  - **Constraint / Transformation inclusions.** `ElementType`
+    ([`mdr_sql_model.py:38-42`](../../../components/lif/datatypes/mdr_sql_model.py#L38-L42))
+    allows them, but the UI only ever creates Entity and Attribute inclusions (every
+    `tmplCreateInclusion` call in `ModelExplorer.tsx`, guarded at `:1026`), upload only creates
+    those two, `POST /inclusions/` does not check that such an element exists
+    ([`inclusions_service.py:91-96`](../../../components/lif/mdr_services/inclusions_service.py#L91-L96)),
+    and nothing reads them — every inclusion query filters to Entity or Attribute.
+  - **`DataModelConstraints`** (`DatamodelElementType`, six members). API CRUD exists
+    (`/datamodel_constraints`), but no UI path creates or shows one (`getModelConstraints` has no
+    caller; `List.tsx`'s `showConstraints` is never passed), `ConstraintType` is free text nothing
+    interprets, and the table has 0 rows.
+  - **Attribute `Constraints`.** A model class only — no service, endpoint or UI — and 0 rows.
+  - Both constraint tables trace to roadmap items that were never built, in
+    [`mdr.md:199-202`](../../design/components/mdr.md) ("model constraints": excluding elements
+    from an org model; org-specific validation rules). Exclusion is done today by *not* including
+    an element. If either is built later, a new format version adds it. The #1333 spec carries this
+    as historical context so the question is not re-opened.
 - **Per-element origin** — owned here, inherited, or overriding an ancestor. Extensions are an
   overlay *between* models, not nesting; flattening loses that, and it is exactly what makes an
   extended model portable. The overlay has three parts: the inclusion row and its flags (on owned
@@ -862,6 +902,7 @@ blocks portability, so each is its own ticket rather than epic scope.
 | A PartnerLIF's OpenAPI schema includes attributes it never included, and its full-metadata export 404s | The inclusion filter in `get_attributes_with_association_metadata_for_entity` has no `ExtDataModelId` condition ([`attribute_service.py:469-473`](../../../components/lif/mdr_services/attribute_service.py#L469-L473)), so an inclusion by *any* extension counts. | Model 18: 48 attributes pass the filter without a model-18 inclusion. Attribute 800 (`Credential.expirationDate`, included only by model 17) appears in model 18's schema; with `include_attr_md=True` generation returns 404 "Inclusion not found for Attribute ID 800". |
 | Cloning a model copies only the first group's rules | `return` inside the group loop ([`import_export_service.py:664`](../../../components/lif/mdr_services/import_export_service.py#L664)) | Cloning model 17's groups: 6 groups copied, 0 of 5 live rules. |
 | Updating a value mapping can create a duplicate within a group | The duplicate-check query for the known-group branch is built but never executed ([`value_mapping_service.py:192-208`](../../../components/lif/mdr_services/value_mapping_service.py#L192-L208)) | Two mappings in group 25; updating one onto the other's pair succeeded, leaving two live rows for the same pair and group. |
+| The Translator merges every live version of a group and evaluates non-JSONata rules as JSONata (#1350) | `get_paginated_all_transformations` filters neither `GroupVersion` nor `ExpressionLanguage` ([`transformation_service.py:614`](../../../components/lif/mdr_services/transformation_service.py#L614)); the Translator then compiles every expression as JSONata, skipping (and counting) any that fail ([`translator/utils.py:44-49`](../../../components/lif/translator/utils.py#L44-L49), [`core.py:51-62`](../../../components/lif/translator/core.py#L51-L62)) | With a `2.0` group added for pair 2 → 17, the read returned rules from `1.0` and `2.0`; pair 4 → 1 returned group 3's `LIF_Pseudo_Code` rule. |
 
 Also noted, not a bug: `generate_openapi_schema` applies `public_only` to `ext_inclusions_query`
 instead of `inclusions_query` at `schema_generation_service.py:681,709`. The reassigned variable is
