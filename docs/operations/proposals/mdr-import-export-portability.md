@@ -308,17 +308,17 @@ bundling bugs disappears with the slot. Ordering the files is the importer's job
 Two separate problems sit on the target side, and Decision 3 depends on telling them apart.
 
 **Export drops all but one target of a mapping.** `transformation_service.py:1195` assigns the
-target by plain overwrite while looping over a mapping's attribute rows, so a mapping that writes
-two fields exports as if it wrote one. Nothing stops it having two: there is no uniqueness rule on
-mapping attributes, and an `OutputAttributesCount` column exists. Under Decision 4 this is
-straightforward data loss and export has to carry the full set.
+target by plain overwrite while looping over a mapping's attribute rows, so a mapping stored with
+two target rows exports as if it had one. Nothing stops it having two: there is no uniqueness rule
+on mapping attributes, and an `OutputAttributesCount` column exists. Decision 3 settles this by
+rule rather than by widening export: **a mapping has exactly one target**, so a second target row
+is rejected at write time, and export's single slot becomes correct by construction.
 
 **Nothing says a target field belongs to one mapping.** Two mappings in the same group can both
 write `Person.Name.firstName`, and today nothing rejects that — on export one wins by row order,
-and which one is arbitrary. This is the one Decision 3 turns into a rule: **within a group, each
-target field is written by exactly one mapping.** A source may feed many targets — that fan-out is
-normal, and 15 source paths in the reference transforms already do it — but a mapping records a
-single source, so many-to-one is not a declarable shape (Decision 3).
+and which one is arbitrary. Decision 3 turns this into a rule: **within a group, each target field
+is written by exactly one mapping.** Sources are unconstrained by it — one source may feed many
+targets, and one mapping may read many sources (Decision 3).
 
 Of the six live mappings in the database, five have exactly one target and one (transformation
 1189, group 3) has none — a sample too small to conclude anything from, which is why the rule was
@@ -364,66 +364,91 @@ a quiet pass. Cheap, and it makes the "already true" claim above actually enforc
 
 ## Decisions
 
-Five decisions, all made here. Each one below states the options that were weighed, the evidence,
-and the call. They shape three tickets — NEW-J (D1), NEW-I (D3) and NEW-F (D5) — so they need to
-hold before those get estimated.
+Five decisions. Each one below states the options that were weighed, the evidence, and the call.
+They were **settled in review on 2026-09-30** (PR #1315); where that review changed this
+document's earlier call, the earlier reasoning is kept, marked *superseded*, so it is not re-argued.
+They shape three tickets — NEW-J (D1), NEW-I (D3) and NEW-F (D5).
 
 | # | Question | Decision |
 |---|---|---|
-| **1** | What does an import do to content the file omits? | **1a** — mirror, with a preflight preview |
-| **2** | Does this epic pull seed data out of the migrations? | **No** — prove the round trip, defer the slimming |
-| **3** | What identifies a mapping across installs? | **3b** — `(group, target path)` |
+| **1** | What does an import do to content the file omits? | **1c** — explicit mode (**merge** by default, or **replace**), with an always-on preflight preview |
+| **2** | What is in near-term scope? | **Fixes and design** — the export 500s, #1338's dependency blocking, the converter contract (#1333), #1142. The round-trip proof and migration slimming move to a later phase |
+| **3** | What identifies a mapping across installs? | **3b** — `(group, target path)`: exactly one target per mapping; sources are content; in-place renames of a depended-on field are blocked |
 | **4** | Must a round trip be lossless? | **Yes**, for JSONata expressions |
-| **5** | How far does the ancestor chain investment go? | **5a** — one helper, full chain everywhere |
+| **5** | How far does the ancestor chain investment go? | **5b** — the chain walk stays local to import/export; no new investment in extensions and inclusions |
+
+**Where the decisions are recorded.** The decisions local to import/export — D1's modes and
+preview, D4, the converter, D2's scope — live in the living import/export guide this proposal
+becomes once promoted into `docs/design/cross-cutting/`. Three reach past import/export and get
+ADRs, opened in a separate PR so this one is not blocked on them: **mapping identity** (D3), **the
+overlay direction** (D5; amends [`metadata_repository/0004-value-set-and-value-inclusions.md`](../../design/adr/metadata_repository/0004-value-set-and-value-inclusions.md)), and **the reference model**.
 
 ---
 
 ### 1. What does an import do to content the file omits?
 
-**Decision: 1a — the file is authoritative, with a preflight preview and a confirm step.**
+**Decision: 1c — the caller picks the mode, and every import shows the preflight preview first.**
 
-#17 already specifies that an upload removes anything absent from the file. That makes "uploading
-the wrong file" a mass delete: every name misses, so everything present is removed. The options:
+- **merge** *(the default)* — create and update only. Nothing absent from the file is touched.
+- **replace** — the file is authoritative: anything absent is deleted. The deletions are listed in
+  the preview and must be confirmed.
+
+**A replace is blocked, not warned,** where a delete or rename would leave a mapping dangling
+(#1338; see below).
+
+#17 specifies that an upload removes anything absent from the file. That makes "uploading the wrong
+file" a mass delete: every name misses, so everything present is removed. The options:
 
 | Option | Behavior | Cost |
 |---|---|---|
-| **1a — Mirror, with preflight** ✅ | File is authoritative; absent means delete. A **preflight preview** shows what would be created, updated and **deleted**, and the user confirms. | NEW-J, plus the confirm step in the UI |
+| **1a — Mirror, with preflight** | File is authoritative; absent means delete. A **preflight preview** shows what would be created, updated and **deleted**, and the user confirms. | NEW-J, plus the confirm step in the UI |
 | **1b — Additive only** | Import creates and updates, never deletes. Deletion stays an explicit UI action. | Cheapest; but "edit by upload" can no longer remove a field, so a round trip is not a true mirror |
-| **1c — Per-import mode** | The request says `merge` or `replace`. | Both paths to build and test; two behaviors to document |
+| **1c — Per-import mode** ✅ | The request says `merge` or `replace`; the preview runs either way. | Both paths to build and test; two behaviors to document |
 
-**Why 1a.** Goal 3 is edit-by-upload, and 1b cannot do it — a file that can add a field but never
-remove one is not an editing interface, it is an append interface, and the round-trip proof in
-Phase 6 would not be comparing like with like. 1c buys back that ability at the price of two
-behaviors to build, test and explain, and the merge half would still be the unsafe one when
-someone picks it by mistake. The danger in 1a is not deletion itself, it is deletion nobody
-looked at — so the preview is the mitigation, and it is worth building once for the one path that needs it.
+**Why 1c.** It is 1a plus a safe default. Goal 3 (edit-by-upload) needs a mode that can remove a
+field, which 1b cannot do — `replace` is that mode, and it is exactly 1a. But making the
+destructive behavior the *default* means a wrong file is a mass delete unless someone reads the
+preview carefully; with `merge` as the default, the worst a wrong file does is add or update, and a
+deletion only ever happens when someone asked for it by name *and* confirmed the list.
 
-**Two constraints that hold regardless.** Deletion is limited to the anchor — an element that
-resolved from an *ancestor* is never deleted by an edit to the child model. And the hazard noted
-above is real until export is complete: a round-trip edit of an OrgLIF today would delete its
-entire inclusion set (206 rows for model 17, 94 for model 18), which is why delete-on-import must
-not ship before export emits every element kind.
+> *Superseded — kept so it is not re-argued:* this section originally chose **1a**, on the grounds
+> that 1c's two behaviors cost more to build and explain and that "the merge half would still be
+> the unsafe one when someone picks it by mistake." Review reversed the second point: `merge` is
+> the *safe* half, since it never deletes, so defaulting to it is what makes a mistaken pick cheap.
+
+**Two constraints that hold regardless.** Deletion (in `replace`) is limited to the anchor — an
+element that resolved from an *ancestor* is never deleted by an edit to the child model. And the
+hazard noted below is real until export is complete: a `replace` of an OrgLIF today would delete
+its entire inclusion set (206 rows for model 17, 94 for model 18), which is why `replace` must not
+ship before export emits every element kind.
 
 **The preview has to cross into mappings.** A schema upload can break mappings that the file
 never mentions, because a mapping binds to schema elements **by row ID**:
 `TransformationAttributes.AttributeId` and `.EntityId` are foreign keys into `Attributes` and
 `Entities` ([`mdr_sql_model.py:350-366`](../../../components/lif/datatypes/mdr_sql_model.py#L350-L366)).
-Two ways an edit-by-upload damages them:
+Two ways an edit-by-upload damages them — both silent, which is **#1338**:
 
-- **Removing an attribute that a mapping uses.** Under 1a, an attribute absent from the file is
-  deleted — and `delete_attribute` is a hard `session.delete`, which clears
-  `EntityAttributeAssociation` rows but not `TransformationAttributes`
-  ([`attribute_service.py:214-239`](../../../components/lif/mdr_services/attribute_service.py#L214-L239)).
-  So the delete hits the foreign key and surfaces as a **500 carrying a raw database error**. With
-  per-row commits (NEW-H) that can also leave the model half-imported.
-- **Renaming a target attribute.** The foreign key still resolves, so nothing errors — but the
-  mapping's identity under Decision 3 has changed, and the denormalized `EntityIdPath` string on
-  the mapping row still spells the old name. The breakage is silent.
+- **Removing an attribute that a mapping uses.** In `replace`, an attribute absent from the file is
+  deleted. The API's delete is `soft_delete_attribute`
+  ([`attribute_endpoints.py:67-69`](../../../bases/lif/mdr_restapi/attribute_endpoints.py#L67-L69)),
+  which **soft-deletes every mapping that uses the attribute** along with its association and
+  inclusion rows
+  ([`attribute_service.py:242-326`](../../../components/lif/mdr_services/attribute_service.py#L242-L326)).
+  Nothing errors; the mappings just disappear.
+- **Renaming an attribute a mapping depends on.** The foreign key still resolves, so nothing errors
+  — but the denormalized `EntityIdPath` string on the mapping row and the JSONata expression, which
+  spells field names inline, both still use the old name. Under Decision 3 a renamed target also
+  changes the mapping's identity. The breakage is silent.
+
+> *Superseded — kept so it is not re-argued:* this section originally said the delete "hits the
+> foreign key and surfaces as a 500 carrying a raw database error," citing the hard
+> `delete_attribute`. That function has no callers; the API uses the soft delete above, which
+> cascades instead of failing. Silent loss is worse than a 500, which is why the rule below blocks.
 
 **The preflight must report mapping impact, and the import must not proceed unnoticed.**
 The rule: an import that would delete or rename schema elements which mappings depend on lists
-those mappings, with counts, and requires explicit confirmation; if a mapping would be left
-referencing something that no longer exists, it is **blocked**, not warned. That is a cheap
+those mappings, with counts; if a mapping would be left referencing something that no longer
+exists, or would silently lose its binding, the import is **blocked**, not warned. That is a cheap
 addition to NEW-J — it is the same diff the preview already computes, followed one foreign key
 further — and without it "edit by upload" can quietly break transformation logic that the uploaded
 file says nothing about. This is also why NEW-H (import in a single transaction) is not optional:
@@ -436,19 +461,40 @@ them.
 
 ---
 
-### 2. Keep the round-trip proof; defer the migration slimming — *settled (scope)*
+### 2. Near-term scope: fixes and design
 
-`backup.sql` should track the latest migration. Actually pulling seed data out of the migrations is
-a **separate effort** after portability lands. This epic still proves the end state — export the
-shipped content, import it into an empty install, assert the result matches — without removing
-anything from the migrations. Same guarantee, no migration surgery, and the follow-on effort
-inherits a working extractor.
+**Decision: the near term is the fixes and the design; the proofs come later.**
+
+| Near term | Later phase |
+|---|---|
+| The three export 500s — #1210, #1211, #1321 | The round-trip proof over the shipped content (NEW-D, Phase 6) |
+| #1338's dependency blocking — the rule D1 and D3 depend on | Pulling seed data out of the migrations (Goal 2) |
+| The converter contract — #1333 | |
+| Documenting the endpoint and the round-trip contract — #1142 | |
+
+D4 (lossless) still stands: it is the requirement the round-trip proof will be held to when it
+runs. `backup.sql` should still track the latest migration.
+
+> *Superseded — kept so it is not re-argued:* this section originally kept the round-trip proof in
+> this epic and deferred only the migration slimming ("same guarantee, no migration surgery, and
+> the follow-on effort inherits a working extractor"). Review moved the proof out of the near term
+> too, so the epic's first deliverables are the fixes and the contract the proof will depend on.
 
 ---
 
 ### 3. What identifies a mapping across installs?
 
-**Decision: 3b — a mapping is identified by its target, as `(group, target path)`.**
+**Decision: 3b — a mapping is identified by its target, as `(group, target path)`,** with three
+clarifications from review:
+
+1. **Exactly one target per mapping**, and no target field produced by two mappings in a group. An
+   expression that writes beyond its declared target is a validation error — that is the #1144
+   failure.
+2. **Multiple sources are supported, and are content, not identity.** The declared source set must
+   list every field the expression reads.
+3. **In-place renames of a field a mapping depends on are blocked**, with the dependent mappings
+   listed. A rename goes through a new schema version or an explicit re-point. That is #1338's fix,
+   and it settles the cost of 3b named below.
 
 Entities, attributes and value sets already have a portable identity in their unique name.
 Mappings are the outlier — which is what #1140 ran into.
@@ -472,11 +518,10 @@ readable tuple, not a hash. It stays stable through any edit to paths or express
 content-derived hash would not.
 
 **3b in detail** (raised in review, and the option chosen). Identity is `(group, target path)`,
-resting on one rule: **within a group, no two mappings write the same target field.** That keeps
-identity stable through source and expression edits — the same requirement 3a is built for — with
-no generated key and no migration. Where a value needs a fallback, the JSONata expression handles
-it with `??`, `?:` and `$exists()` — the expression is free to read what it likes; it is the
-recorded source *binding* that stays single.
+resting on one rule: **within a group, mappings and target fields correspond one-to-one.** That
+keeps identity stable through source and expression edits — the same requirement 3a is built for —
+with no generated key and no migration. Where a value needs a fallback, the JSONata expression
+handles it with `??`, `?:` and `$exists()`.
 
 **"Group" here means the group's portable identity, not its name.** The database's only rule on
 groups is `ux_transformationsgroup_model_id_version_active` on `(GroupVersion, SourceDataModelId,
@@ -484,24 +529,27 @@ TargetDataModelId)` — `Name` is not in it. Across installs a group is therefor
 (source model identity, target model identity, `GroupVersion`), each model identity being the
 three-field `(Name, DataModelVersion, ContributorOrganization)`.
 
-**What the rule does and does not constrain.** It constrains *targets*, not sources:
+**What the rule does and does not constrain.** It constrains *targets*; sources are content:
 
 - **One source → many targets is fine.** The same source path may feed any number of target
   fields; each is its own mapping with its own target, so each has its own identity. Fan-out is
-  normal and stays supported.
-- **Many sources → one target is not supported.** A mapping records **one** source attribute. The
-  JSONata expression may of course navigate and read whatever it needs, but the recorded source
-  binding is single — so "combine five attributes into one field" is not a shape a mapping can
-  declare.
-- **A mapping that writes several targets is fine.** Its identity is then its *set* of targets —
-  and because no target is written twice in a group, that set is unique, so any member of it finds
-  the mapping. Export has to carry all of them, which is the first half of Gap F.
+  normal and stays supported — 15 source paths in the reference transforms already do it.
+- **Many sources → one target is fine.** A mapping may declare several sources, and import already
+  saves every entry in `SourceAttributes`
+  ([`transformation_service.py:282`](../../../components/lif/mdr_services/transformation_service.py#L282),
+  [`:314`](../../../components/lif/mdr_services/transformation_service.py#L314)). The declared set
+  must list every field the expression reads. Changing the sources is an edit to the mapping, not a
+  new mapping.
+- **A mapping writes exactly one target.** An expression that writes beyond its declared target is
+  a validation error.
 - **Two mappings writing the same target in one group is rejected.** It was already broken, just
   silently (see Gap F).
 
-**The data says the same thing.** Of the 183 well-formed mappings, **179 record exactly one
-source.** All four exceptions are unfinished drafts, and in every one the expression reads only a
-single source anyway — the extra bindings are annotations nobody wired up:
+**The data.** #1296's test group (`StateU-LIF_Sample-LDE-Target-Test__v1.0.json`) has **13 real
+multi-source mappings** out of 56 — for example `Learner.displayName`, which binds
+`Person.Name.firstName` and `Person.Name.lastName` and whose expression reads both. In groups 29,
+49 and 50, 179 of the 183 well-formed mappings record one source; the four exceptions are unfinished
+drafts whose expressions read only one of their declared sources:
 
 | Mapping | Sources recorded | What the expression actually reads |
 |---|---|---|
@@ -510,22 +558,31 @@ single source anyway — the extra bindings are annotations nobody wired up:
 | 1653 `Address.Period` | `dateEffective`, `dateExpired` | `dateEffective` only |
 | 1578 `achievement.name / description` | `name`, `description` | `name` only |
 
-Two of those four write to placeholder targets (`{Multiple}`, `name / description`) that are not
-real fields. So many-to-one is not an established pattern the rule would break — it is a way of
-leaving a note on a half-written rule, and a single-source binding makes that impossible to
-confuse with a finished mapping.
+Under clarification 2 those four are invalid in the *other* direction — they declare sources the
+expression never reads — so they get fixed or refused, not grandfathered.
 
-**The cost of 3b: renaming a target field.** A rename does **not** require a new schema version —
-a target field can be renamed in place. When that happens the mapping's identity changes with it,
-so an import sees the old target gone and a new one arrived, and processes it as a delete plus a
-create rather than an edit. Anything held on the row and not in the file — notes, contributor,
-dates — does not survive that.
+> *Superseded — kept so it is not re-argued:* this section originally said many sources → one
+> target "is not supported" and that a mapping records one source, on the strength of the 179 of
+> 183. That measurement was right for groups 29, 49 and 50 but too narrow a sample: #1296's group
+> has 13 genuine multi-source rules, and import already stores every declared source. Likewise "a
+> mapping that writes several targets is fine (identity is its target set)" is replaced by exactly
+> one target per mapping.
 
-This is the real price of 3b and it is accepted rather than argued away. Two things keep it small:
-renaming a target field is rare and deliberate, and under Decision 1 the preflight preview shows
-it as an explicit delete-and-create before anything is written, so it is visible rather than
-silent. A generated key (3a) would have survived it in place — that is 3a's one genuine advantage,
-and it costs a column, a migration and a backfill to buy.
+**How the two content rules are checked — open, for NEW-I.** Both need to know what an expression
+reads and writes. The JSONata library parses an expression into an AST (`Jsonata(...).ast`), so a
+static check is possible for literal paths and literal object keys, but not for computed keys,
+wildcards (`*`, `**`) or `$lookup`. Writing beyond the target can also be checked at run time, by
+comparing each fragment's keys to the declared target path. Which combination to use — and what to
+do with an expression the static check cannot see through — is NEW-I's to settle.
+
+**The cost of 3b: renaming a target field — settled by blocking it.** A target field can be renamed
+in place, with no new schema version. Left alone, that would change the mapping's identity: an
+import would see the old target gone and a new one arrived, and process it as a delete plus a
+create, losing notes, contributor and dates. Clarification 3 closes this off: an in-place rename of
+a field any mapping depends on is **blocked**, with the dependent mappings listed, and goes through
+a new schema version or an explicit re-point instead. A generated key (3a) would have survived the
+rename in place — that was 3a's one genuine advantage, and it costs a column, a migration and a
+backfill to buy.
 
 **Measured, because the rule is only as good as the data.** Across the three versioned transforms
 in [`reference_data/transformations/`](../../../reference_data/transformations/) — 185 mappings in
@@ -552,9 +609,8 @@ part of this decision, not a separate one.
 requirement. 3b gets there with no migration, no backfill and no new column, and its key is
 readable — a human looking at a diff sees `Person.Name.firstName`, not a UUID. The rule it depends
 on is one the data already keeps (183 of 183 well-formed mappings) and one we want enforced for its
-own sake. 3a's advantage is surviving a target rename in place; under 3b a rename means a
-a target rename costs a delete-and-create, which is the trade-off accepted above. Both need the
-#746 remainder either way.
+own sake. 3a's advantage is surviving a target rename in place; under 3b an in-place rename of a
+depended-on field is blocked instead (clarification 3). Both need the #746 remainder either way.
 
 ---
 
@@ -594,7 +650,14 @@ dropped, is data loss on a supported path.
 
 ### 5. How far does the ancestor chain investment go?
 
-**Decision: 5a — one shared helper, and every name lookup walks the full chain.**
+**Decision: 5b — where import/export has to walk the ancestor chain, it does so locally; no new
+investment in extensions and inclusions.**
+
+The direction for a later phase is to **replace the overlay model**: a variant becomes a source
+schema plus a mapping to the target LIF model, rather than an extension of it with inclusions. That
+is an ADR (amending `metadata_repository/0004`), not part of this epic. Until then, live overlay
+bugs such as #1321 still get fixed, but the one-hop helpers outside import/export are left as they
+are.
 
 Gap E establishes the facts: the chain is unbounded, uncapped and cycle-capable — and **exactly
 one function in the codebase actually walks it to the root.** That is `get_base_model_ids`, and
@@ -606,28 +669,40 @@ grandparent. The question is how much to invest in fixing that.
 
 | Option | Scope | Cost |
 |---|---|---|
-| **5a — Full chain everywhere** ✅ | One shared helper replaces both copies of `get_base_model_ids`, with a cycle guard; every name lookup takes the full chain | NEW-F as written; touches `valueset_service`, `transformation_service` and both name-lookup helpers |
-| **5b — Full chain in import/export only** | The converter walks the chain; the one-hop helpers stay as they are | Smaller blast radius, but the same bug stays reachable from the other callers |
+| **5a — Full chain everywhere** | One shared helper replaces both copies of `get_base_model_ids`, with a cycle guard; every name lookup takes the full chain | NEW-F as originally written; touches `valueset_service`, `transformation_service` and both name-lookup helpers |
+| **5b — Full chain in import/export only** ✅ | The converter walks the chain; the one-hop helpers stay as they are | Smaller blast radius, but the same bug stays reachable from the other callers |
 | **5c — Cap the depth at one, and enforce it** | Make today's implicit assumption true: reject creating a model whose parent itself has a parent | Cheapest; forecloses deeper extension hierarchies |
 
-**Why 5a.** Name resolution is the whole portability mechanism — a reference in model C resolves by
-searching C, then B, then A, nearest winning. If some lookups walk the chain and others stop at the
-first parent, the same file imports differently depending on which code path reads it, which is the
-class of bug this plan exists to retire. 5b leaves that inconsistency in place deliberately, and
-the one-hop helpers (`valueset_service.py:216,250`, `transformation_service.py:1595,1603`) are
-exactly the ones import and export call into. 5c is cheap but decides a product question by
-accident: nothing says two-level extension is the intended ceiling, and enforcing it would make
-today's oversight permanent. The blast radius of 5a is also smaller than it looks — see Sizing.
+**Why 5b.** 5a invests across MDR in a model — extensions plus inclusions — whose replacement is
+the stated direction, so spending on it outside import/export would be spending on something
+slated to go. What portability itself needs is narrower: the *converter* must resolve a reference
+in model C by searching C, then B, then A, nearest winning, and refuse a cycle. Keeping that walk
+local to import/export gives the converter correct behavior on a chain of any depth without
+touching the rest of MDR. The cost is known and accepted: the one-hop helpers elsewhere still
+cannot see a grandparent, so a three-deep model behaves differently in import/export than in the
+UI. **Consequence for the converter:** it resolves names with its own chain-aware lookup and does
+not call `get_unique_entity` / `get_unique_attribute` or the other one-hop helpers. 5c is cheap but
+decides a product question by accident: nothing says two-level extension is the intended ceiling.
 
-**Two fixes this includes.** Keep the `jinja_translation_service` copy of `get_base_model_ids` and
-delete the other. It tests `is not None` where the `jinja_helper_service` copy tests truthiness —
-which matters because **model ID 0 is a real model**, and a truthiness test reads it as "no parent"
-and stops. Its regression test walks 7 → 0 → 2 → root and asserts the chain comes back as
-`[7, 0, 2]`; under the truthiness version the same walk returns `[7]`, silently losing two
-ancestors ([`test_jinja_translation_service.py:24-29`](../../../test/components/lif/mdr_services/test_jinja_translation_service.py#L24-L29)).
-The `jinja_helper_service` copy has no callers. Neither has a **cycle guard**, and one is needed:
-an unconstrained self-reference plus a free-typed parent number in the UI means a model can be made
-its own ancestor, which hangs the walk.
+> *Superseded — kept so it is not re-argued:* this section originally chose **5a**, arguing that if
+> some lookups walk the chain and others stop at the first parent, "the same file imports
+> differently depending on which code path reads it." That holds only if import/export reuses the
+> one-hop helpers; under 5b it does not, so import/export is self-consistent, and the remaining
+> inconsistency is between import/export and the rest of MDR — accepted while the overlay model's
+> future is open.
+
+**Two facts the local walk must respect** (from the two existing copies of `get_base_model_ids`;
+consolidating those copies is no longer in scope under 5b):
+
+- **Model ID 0 is a real model.** The `jinja_translation_service` copy tests `is not None`; the
+  `jinja_helper_service` copy tests truthiness, so it reads ID 0 as "no parent" and stops. The
+  former's regression test walks 7 → 0 → 2 → root and asserts `[7, 0, 2]`; under the truthiness
+  version the same walk returns `[7]`, silently losing two ancestors
+  ([`test_jinja_translation_service.py:24-29`](../../../test/components/lif/mdr_services/test_jinja_translation_service.py#L24-L29)).
+  The `jinja_helper_service` copy has no callers.
+- **A cycle is possible.** Neither copy has a cycle guard, and one is needed: an unconstrained
+  self-reference plus a free-typed parent number in the UI means a model can be made its own
+  ancestor, which hangs the walk.
 
 ---
 
@@ -646,15 +721,17 @@ strips and ignores the model-ID prefix in each path, then delegates to
 [`get_unique_entity`](../../../components/lif/mdr_services/entity_service.py#L603-L619), which
 prefers the anchor's own row over an inherited one. The upload endpoint likewise takes the parent
 model as a form field, never from the file. Using the same rule for schemas gives both halves of
-the epic **one** portability rule instead of two. The only change needed is Decision 5: these
-helpers currently see a single parent.
+the epic **one** portability rule instead of two. What changes is *who* does the lookup: under
+Decision 5 (5b) the converter resolves names with its own chain-aware lookup rather than these
+helpers, which see a single parent.
 
 Two caveats on "proven":
 
 - `get_unique_entity` decides whether to search the parent with a type-name check
   (`data_model_type == OrgLIF or PartnerLIF`,
   [`entity_service.py:608`](../../../components/lif/mdr_services/entity_service.py#L608)) — the
-  same proxy behind #1321 — so it has to move to the structural test along with the chain walk.
+  same proxy behind #1321. Under 5b the converter does not call it, so the converter's own lookup is
+  where the structural test lives; the helper itself is left as is.
 - Not every shipped path fits the rule. `1:Credential,1:Credential.Image,16:~image.id` (group 50,
   model 17 → CLR) ends in a segment owned by model 16, which is not in model 17's ancestor chain,
   so anchor-plus-ancestors cannot resolve it. It is the path-level twin of the 25 inclusion rows
@@ -663,9 +740,11 @@ Two caveats on "proven":
 
 ### Model identity is a safety check, not a lookup key
 
-**#17** specifies that an upload removes anything absent from the file. So **uploading the wrong
-file is a mass delete** — every name misses, so everything present is removed. The file must carry
-its source model's identity, and import must refuse on mismatch.
+**#17** specifies that an upload removes anything absent from the file — under Decision 1 that is
+the `replace` mode. In `replace`, **uploading the wrong file is a mass delete** — every name misses,
+so everything present is removed. (In the default `merge` it is a mass *create*, which is merely
+untidy.) Either way the file must carry its source model's identity, and import must refuse on
+mismatch.
 
 - **Identity is three fields, not two**: name, version *and* contributing organization. Name plus
   version is unique across today's 21 models only by luck — the base model is literally named `LIF`
@@ -680,29 +759,33 @@ its source model's identity, and import must refuse on mismatch.
 
 ### A hazard to watch while the work is in flight
 
-#17 deletes anything absent from the uploaded file. Until export emits every kind of element, a
-round-trip edit of an OrgLIF would **delete its entire inclusion set** — 206 rows for model 17, 94
-for model 18.
+`replace` deletes anything absent from the uploaded file. Until export emits every kind of element,
+a round-trip `replace` of an OrgLIF would **delete its entire inclusion set** — 206 rows for model
+17, 94 for model 18.
 
 Every element kind is in scope, so this is not a permanent constraint and the import/export flow
 should stay clean rather than carry a partial-emission switch. Noted only because the phases may
-run in parallel: **do not ship delete-on-import before export is complete.**
+run in parallel: **do not ship `replace` before export is complete.** `merge` is safe to ship
+earlier.
 
 ---
 
 ## Plan
+
+**Near term (Decision 2): Phase 0, #1338, Phase 1 and #1142.** Everything else below is a later
+phase, including the round-trip proof (Phase 6).
 
 Phases 2–3 and 5 can run in parallel once Phase 1 lands. Phase 6 needs 2 and 5 finished — you
 cannot export a reference set you cannot export.
 
 | Phase | Work | Demo |
 |---|---|---|
-| **0 — Unblock** | #1210, #1211, **#1321** | All three export failures gone, including PartnerLIF. |
-| **1 — One converter** | **#1333** | *Not demoable* — a written contract. Gates everything, so keep it short. |
+| **0 — Unblock** *(near term)* | #1210, #1211, **#1321**, plus **#1338**'s dependency blocking | All three export failures gone, including PartnerLIF; deleting or renaming a field a mapping uses is refused with the mappings listed. |
+| **1 — One converter** *(near term)* | **#1333**, and **#1142** (document the endpoint and the round-trip contract) | *Not demoable* — a spec, the converter and its round-trip suite. Everything after depends on it; demo its first consumer instead. |
 | **2 — Export writes the portable file** | #1008, #1026, #1062, **NEW-A**, **NEW-F** | Export a BaseLIF, a PartnerLIF, and each model of a three-deep chain as its own file; inclusions present, no database IDs. |
 | **3 — Import reads it** | #762, #763, #764, #765, **NEW-H**, preflight preview | Import into a second install with different IDs; references intact. |
 | **4 — Edit by import** | #17, #18 | Change a field in the file, re-import, watch it **update** instead of duplicating. |
-| **5 — Mappings** | #1140, #1141, #1142, #1138, #891, #773, #774, **NEW-E**, **NEW-K** | Round-trip a mapping group end to end, carry value mappings across, and show a clear refusal for a group that has no JSONata. |
+| **5 — Mappings** | #1140, #1141, #1138, #891, #773, #774, **NEW-E**, **NEW-I**, **NEW-K** | Round-trip a mapping group end to end, carry value mappings across, and show a clear refusal for a group that has no JSONata. |
 | **6 — Prove the round trip** | **NEW-D** | Export the shipped content, import into an empty install, assert it matches. **The epic's done-test.** |
 | **7 — Keep it working** | #1063, **NEW-G** | Matrix green in CI across all four model types and a three-deep chain. |
 
@@ -712,10 +795,10 @@ relationship names on export, **#762**–**#765** look up attributes, value sets
 entities by name instead of by the file's IDs.
 
 Mapping tickets in Phase 5: **#1140** edit an existing mapping version on import, **#1141**
-import diagnostics (re-scope first), **#1142** document the endpoint and round-trip contract,
-**#1138** two conflicting copies of the same mapping-group record, **#891** more export tests,
-**#773** import/export buttons in the mappings UI, **#774** a delete-group control. Mapping
-portability is JSONata-only throughout, per Decision 4.
+import diagnostics (re-scope first), **#1138** two conflicting copies of the same mapping-group
+record, **#891** more export tests, **#773** import/export buttons in the mappings UI, **#774** a
+delete-group control. Mapping portability is JSONata-only throughout, per Decision 4. (**#1142**,
+documenting the endpoint and the round-trip contract, moved to the near term under Decision 2.)
 
 ### Phase 1 — one converter (write this first)
 
@@ -863,11 +946,11 @@ export failure is exactly a type-name check (`Type == "OrgLIF"`) standing in for
 | **NEW-A** | Export inclusion flags for every element an extended model exposes — owned, inherited and out-of-chain | Gap A; also fixes `clone_datamodel` |
 | **NEW-D** | Round-trip proof: export shipped content → import to empty install → compare | Decision 2 |
 | **NEW-E** | Say why a group cannot be exported | Gap C; one 400 covers three different causes, and tells the user to do the wrong thing |
-| **NEW-F** | One ancestor-chain helper, with a cycle guard; every lookup uses the full chain | Gap E, Decision 5. #1333 builds the helper (its three-deep round trip needs it); NEW-F moves the other callers onto it |
+| **NEW-F** | Ancestor-chain walk local to import/export, with a cycle guard and ID 0 handled | Gap E, Decision 5 (5b). Built inside the #1333 converter, which its three-deep round trip needs; the one-hop helpers elsewhere are **not** moved onto it |
 | **NEW-G** | JSON-file import test suite (MDR only) | Goal 4; extends `conftest.py` |
 | **NEW-H** | Import in a single transaction | Per-row commits can leave a half-imported model |
-| **NEW-I** | Enforce one mapping per target field within a group | Decision 3; makes `(group, target path)` a usable identity, and closes the #746 remainder |
-| **NEW-J** | Preflight preview: what an import would create, update and delete — including the mappings it would break | Decision 1; replaces #768/#775 |
+| **NEW-I** | Enforce Decision 3's mapping rules: exactly one target per mapping, one mapping per target field within a group, declared sources cover every field the expression reads, no writes beyond the target | Decision 3; makes `(group, target path)` a usable identity, and closes the #746 remainder. Must settle how the content rules are checked (static AST, run time, or both) |
+| **NEW-J** | Import modes (`merge` default, `replace`) with an always-on preflight preview: what would be created, updated and — in `replace` — deleted, including the mappings it would break; blocked where a mapping would dangle | Decision 1; builds on #1338's blocking; replaces #768/#775 |
 | **NEW-K** | Carry value mappings as peer-model references | Gap A; every one is cross-model, so it needs the third reference kind |
 
 ---
@@ -882,10 +965,10 @@ Most are 1–3 days and demoable on their own. Three are not, and are flagged ra
 | **#746** (remainder) | A uniqueness rule only demos as a rejected duplicate | Pair with NEW-I, which needs it |
 | **NEW-D** (extractor half) | Invisible until the comparison runs | Pair the two halves |
 
-**NEW-F is narrower than it looks.** It changes shared code, but `mdr_services` is packaged by
-exactly one project (`lif_mdr_api`) and imported by exactly one service (`mdr_restapi`) — so the
-risk is many call sites inside MDR, not a silent break in another service. Still worth checking the
-deploy path filters (#1171 — shared code changes that deploy workflows don't rebuild).
+**NEW-F shrank under Decision 5.** As 5a it would have touched many call sites across MDR; as 5b
+it is a local walk inside the converter, so it costs nothing outside #1333. `mdr_services` is
+packaged by exactly one project (`lif_mdr_api`) either way — still worth checking the deploy path
+filters for anything shared (#1171 — shared code changes that deploy workflows don't rebuild).
 
 **#1141 must be re-scoped before it is estimated** — several items already shipped in #1136, one
 was replaced by a simpler rule, and one shipped with different behavior than its plan describes.
@@ -953,8 +1036,8 @@ One genuinely open question belongs on **#1132**, not here: extensions and inclu
 overlay *between* models, not nesting, and a document is a tree. Flattening an OrgLIF into one
 loses owned-vs-inherited-vs-overriding, which is exactly what an export must keep — so a document
 model would have to carry the overlay explicitly. Whether that is a cost or a clarification is a
-storage-layer design call, and it would have to reckon with the ancestor chain that Decision 5
-keeps.
+storage-layer design call, and it would have to reckon with the ancestor chain — and with
+Decision 5's stated direction of replacing the overlay model altogether.
 
 **The valuable half was kept** and is now Phase 1: a file-shaped conversion layer over SQL. It is
 also the thing that would make #1132 tractable later — once the file is the contract, the storage
