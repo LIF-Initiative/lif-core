@@ -173,6 +173,7 @@ async def export_multiple_datamodel(session: AsyncSession, ids: list[int]):
             transformations,
             entity_associations,
             entity_attribute_associations,
+            data_model_constraints,
         ) = await get_export_dto(session=session, data_model_id=data_model.Id)
         data_model_dto = SingleDataModelExportDTO(
             DataModel=data_model,
@@ -182,6 +183,7 @@ async def export_multiple_datamodel(session: AsyncSession, ids: list[int]):
             Transformations=transformations,
             EntityAssociation=entity_associations,
             EntityAttributeAssociation=entity_attribute_associations,
+            DataModelConstraints=data_model_constraints,
         )
         data_model_list.append(data_model_dto)
     return data_model_list
