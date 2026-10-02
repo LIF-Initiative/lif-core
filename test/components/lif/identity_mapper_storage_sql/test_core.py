@@ -355,3 +355,19 @@ async def test_save_mappings_non_integrity_error_on_retry_is_datastore_exception
             await storage.save_mappings([_mapping()])
     assert not isinstance(info.value, IdentityMappingConflictException)
     assert attempt.await_count == 2
+
+
+@pytest.mark.asyncio
+async def test_save_mappings_does_not_retry_a_first_attempt_outage(storage: IdentityMapperSqlStorage):
+    """
+    Only an IntegrityError means a racing write invalidated the pre-read (#1216). Any other
+    failure on the first attempt is not a race, so it surfaces at once instead of retrying.
+    The other tests pass with the first attempt's `except IntegrityError` widened to
+    `except Exception`; this one does not (#1312 review).
+    """
+    attempt = AsyncMock(side_effect=OperationalError("INSERT", {}, Exception("connection lost")))
+    with patch.object(storage, "_save_mappings_once", attempt):
+        with pytest.raises(DataStoreException) as info:
+            await storage.save_mappings([_mapping()])
+    assert not isinstance(info.value, IdentityMappingConflictException)
+    assert attempt.await_count == 1
