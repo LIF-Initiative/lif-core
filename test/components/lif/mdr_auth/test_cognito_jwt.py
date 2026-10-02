@@ -1,15 +1,12 @@
 """Tests for Cognito JWT validation in the MDR auth middleware.
 
 Verifies that:
-- Cognito RS256 tokens (with kid) are validated via JWKS
+- MDR refuses a Cognito pool configured without an SPA client id
 - Legacy HS256 tokens (no kid) continue to work
-- API key auth is unaffected
-- Invalid/expired tokens are rejected
 - The middleware routes to the correct validation path based on JWT header
 """
 
 import time
-from unittest import mock
 
 import jwt as pyjwt
 import pytest
@@ -56,90 +53,32 @@ def _make_cognito_id_token(
     return pyjwt.encode(payload, _private_key, algorithm="RS256", headers={"kid": "test-key-id"})
 
 
-def _make_cognito_access_token(
-    sub: str = "cognito-sub-123", client_id: str = TEST_CLIENT_ID, exp_offset: int = 3600
-) -> str:
-    """Create a signed Cognito-style access token for testing."""
-    payload = {
-        "sub": sub,
-        "client_id": client_id,
-        "iss": TEST_ISSUER,
-        "token_use": "access",
-        "iat": int(time.time()),
-        "exp": int(time.time()) + exp_offset,
-    }
-    return pyjwt.encode(payload, _private_key, algorithm="RS256", headers={"kid": "test-key-id"})
+class TestValidateCognitoConfig:
+    """MDR refuses to start with a Cognito pool but no SPA client id.
 
+    cognito_auth skips the client check when client_id is empty, which would
+    accept tokens from *any* app client in the pool. MDR must fail loudly
+    instead (#548).
+    """
 
-@pytest.fixture(autouse=True)
-def _enable_cognito(monkeypatch):
-    """Enable Cognito auth and mock the JWKS client for all tests in this module."""
-    import lif.mdr_auth.core as auth_module
+    def test_pool_without_client_id_raises(self):
+        from lif.cognito_auth import CognitoAuthConfig
+        from lif.mdr_auth.core import _validate_cognito_config
 
-    monkeypatch.setattr(auth_module, "COGNITO_USER_POOL_ID", TEST_USER_POOL_ID)
-    monkeypatch.setattr(auth_module, "COGNITO_REGION", TEST_REGION)
-    monkeypatch.setattr(auth_module, "COGNITO_SPA_CLIENT_ID", TEST_CLIENT_ID)
-    monkeypatch.setattr(auth_module, "COGNITO_ENABLED", True)
+        with pytest.raises(RuntimeError, match="MDR__AUTH__COGNITO_SPA_CLIENT_ID"):
+            _validate_cognito_config(CognitoAuthConfig(user_pool_id=TEST_USER_POOL_ID, client_id=""))
 
-    # Mock PyJWKClient to return our test public key
-    mock_jwk_client = mock.MagicMock()
-    mock_signing_key = mock.MagicMock()
-    mock_signing_key.key = _public_key
-    mock_jwk_client.get_signing_key_from_jwt.return_value = mock_signing_key
+    def test_pool_with_client_id_passes(self):
+        from lif.cognito_auth import CognitoAuthConfig
+        from lif.mdr_auth.core import _validate_cognito_config
 
-    monkeypatch.setattr(auth_module, "_cognito_jwk_client", mock_jwk_client)
-    monkeypatch.setattr(auth_module, "_get_cognito_jwk_client", lambda: mock_jwk_client)
+        _validate_cognito_config(CognitoAuthConfig(user_pool_id=TEST_USER_POOL_ID, client_id=TEST_CLIENT_ID))
 
+    def test_disabled_config_passes(self):
+        from lif.cognito_auth import CognitoAuthConfig
+        from lif.mdr_auth.core import _validate_cognito_config
 
-class TestDecodeCognitoJwt:
-    """Tests for the decode_cognito_jwt function."""
-
-    def test_valid_id_token(self):
-        from lif.mdr_auth.core import decode_cognito_jwt
-
-        token = _make_cognito_id_token(email="alice@example.com", groups=["eval-alice"])
-        payload = decode_cognito_jwt(token)
-
-        assert payload["email"] == "alice@example.com"
-        assert payload["token_use"] == "id"
-        assert payload["cognito:groups"] == ["eval-alice"]
-
-    def test_valid_access_token(self):
-        from lif.mdr_auth.core import decode_cognito_jwt
-
-        token = _make_cognito_access_token(sub="user-sub-456")
-        payload = decode_cognito_jwt(token)
-
-        assert payload["sub"] == "user-sub-456"
-        assert payload["token_use"] == "access"
-
-    def test_expired_token_raises(self):
-        from lif.mdr_auth.core import decode_cognito_jwt
-
-        token = _make_cognito_id_token(exp_offset=-60)
-        with pytest.raises(pyjwt.ExpiredSignatureError):
-            decode_cognito_jwt(token)
-
-    def test_wrong_audience_raises(self):
-        from lif.mdr_auth.core import decode_cognito_jwt
-
-        token = _make_cognito_id_token(aud="wrong-client-id")
-        with pytest.raises(pyjwt.InvalidTokenError, match="audience"):
-            decode_cognito_jwt(token)
-
-    def test_wrong_issuer_raises(self):
-        from lif.mdr_auth.core import decode_cognito_jwt
-
-        token = _make_cognito_id_token(iss="https://evil.example.com")
-        with pytest.raises(pyjwt.InvalidIssuerError):
-            decode_cognito_jwt(token)
-
-    def test_wrong_client_id_on_access_token_raises(self):
-        from lif.mdr_auth.core import decode_cognito_jwt
-
-        token = _make_cognito_access_token(client_id="wrong-client")
-        with pytest.raises(pyjwt.InvalidTokenError, match="client_id"):
-            decode_cognito_jwt(token)
+        _validate_cognito_config(CognitoAuthConfig())
 
 
 class TestAuthMiddlewareTokenRouting:

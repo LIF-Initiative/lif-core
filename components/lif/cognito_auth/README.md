@@ -32,6 +32,12 @@ the JWT strategy and the developer-key validator (signed-token offline verify,
 #1033/#1038, ADR 0002) as the other. The composite lives at the base (composition
 is a base concern); this brick just provides the Cognito strategy.
 
+## Consumers
+
+- `bases/lif/learner_data_export_api` — composite mode, via `authenticate_request`.
+- `components/lif/mdr_auth` (packaged by `lif_mdr_api`) — calls `decode_cognito_jwt` with
+  a config built from MDR settings (#548).
+
 ## Requirements
 
 **Consumers MUST depend on `pyjwt[crypto]`, not plain `pyjwt`.** Cognito tokens are

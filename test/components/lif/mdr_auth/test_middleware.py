@@ -13,6 +13,7 @@ from cryptography.hazmat.primitives.asymmetric import rsa
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 from httpx import ASGITransport, AsyncClient
+from lif.cognito_auth import CognitoAuthConfig
 from lif.mdr_auth.core import AuthMiddleware, create_access_token
 
 # ---- RSA key pair for test Cognito tokens ----
@@ -76,11 +77,14 @@ def _create_test_app() -> FastAPI:
 @pytest.fixture(autouse=True)
 def _enable_cognito(monkeypatch):
     """Enable Cognito auth and mock the JWKS client for all tests."""
+    import lif.cognito_auth.core as cognito_core
     import lif.mdr_auth.core as auth_module
 
-    monkeypatch.setattr(auth_module, "COGNITO_USER_POOL_ID", TEST_USER_POOL_ID)
-    monkeypatch.setattr(auth_module, "COGNITO_REGION", TEST_REGION)
-    monkeypatch.setattr(auth_module, "COGNITO_SPA_CLIENT_ID", TEST_CLIENT_ID)
+    monkeypatch.setattr(
+        auth_module,
+        "COGNITO_CONFIG",
+        CognitoAuthConfig(user_pool_id=TEST_USER_POOL_ID, region=TEST_REGION, client_id=TEST_CLIENT_ID),
+    )
     monkeypatch.setattr(auth_module, "COGNITO_ENABLED", True)
 
     mock_jwk_client = mock.MagicMock()
@@ -88,8 +92,7 @@ def _enable_cognito(monkeypatch):
     mock_signing_key.key = _public_key
     mock_jwk_client.get_signing_key_from_jwt.return_value = mock_signing_key
 
-    monkeypatch.setattr(auth_module, "_cognito_jwk_client", mock_jwk_client)
-    monkeypatch.setattr(auth_module, "_get_cognito_jwk_client", lambda: mock_jwk_client)
+    monkeypatch.setattr(cognito_core, "_get_jwk_client", lambda config: mock_jwk_client)
 
 
 @pytest.fixture
