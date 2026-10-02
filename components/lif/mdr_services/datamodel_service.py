@@ -411,13 +411,15 @@ async def get_partner_extensions_for_data_model(
 
 
 async def get_base_model_for_given_orglif(session: AsyncSession, extended_data_model_id: int):
-    # Start with the base query
+    # Any live extension (OrgLIF or PartnerLIF): keyed on having a base model, not on the type name
     query = select(DataModel).where(
-        DataModel.Id == extended_data_model_id, DataModel.Type == "OrgLIF", DataModel.Deleted == False
+        DataModel.Id == extended_data_model_id, DataModel.BaseDataModelId != None, DataModel.Deleted == False
     )
     # Execute the query
     result = await session.execute(query)
     extended_data_model = result.scalars().first()
+    if extended_data_model is None:
+        raise HTTPException(status_code=404, detail=f"No extension data model with ID {extended_data_model_id}")
     return await get_datamodel_by_id(session=session, id=extended_data_model.BaseDataModelId)
 
 
