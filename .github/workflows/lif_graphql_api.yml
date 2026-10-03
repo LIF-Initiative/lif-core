@@ -15,6 +15,9 @@ on:
       - components/lif/logging/**
       - projects/lif_graphql_api/**
       - .github/workflows/_deploy-service.yml
+      - components/lif/api_key_auth/**
+      - components/lif/exceptions/**
+      - components/lif/lif_schema_config/**
 
 permissions:
   id-token: write
