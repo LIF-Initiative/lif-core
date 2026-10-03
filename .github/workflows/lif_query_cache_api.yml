@@ -17,6 +17,8 @@ on:
       - components/lif/exceptions/**
       - projects/lif_query_cache_api/**
       - .github/workflows/_deploy-service.yml
+      - components/lif/composer/**
+      - components/lif/lif_schema_config/**
 
 permissions:
   id-token: write

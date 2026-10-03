@@ -56,6 +56,8 @@ jobs:
 
       - name: Per-project lockfiles are current
         run: uv run python scripts/check_project_locks.py
+      - name: Deploy-workflow paths cover packaged bricks
+        run: uv run python scripts/check_workflow_paths.py
 
       - name: Tests
         run: uv run pytest test

@@ -159,7 +159,7 @@ Read by the Advisor itself — `langchain_agent/core.py:31-48`, `advisor_restapi
 | `LIF_ADVISOR_AGENT_TASKS` | `load_profile,continue_conversation,save_interaction_summary` | Agent task types; `ValueError` if unset |
 | `LIF_ADVISOR_LLM_MODEL_NAME` | `gpt-4.1-mini` | Chat model for both `ChatOpenAI` sites (no Python fallback — `None` if unset). **Setting this in a compose `.env` has no effect** — see the note below. |
 | `LIF_ADVISOR_MESSAGES_TO_KEEP` | `4` | Turns kept before summarization |
-| `LIF_ADVISOR_TRIMMED_MESSAGES_SIZE` | `384` | Trimmed message window |
+| `LIF_ADVISOR_TRIMMED_MESSAGES_SIZE` | `384` | Token budget for the messages after the summary; the summary is added on top (`langchain_agent/memory.py`, #212) |
 | `LIF_ADVISOR_MAX_CONVERSATION_SIZE` | `2048` | Conversation size cap (Python fallback is `384`) |
 | `LIF_ADVISOR_MAX_SUMMARY_SIZE` | `1024` | Summarized-reminder size cap (Python fallback is `128`) |
 
