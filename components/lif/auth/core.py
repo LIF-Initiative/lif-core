@@ -1,9 +1,9 @@
 import os
-from datetime import datetime, timedelta, timezone
+from datetime import timedelta
 
-import jwt
 from fastapi import HTTPException, Security
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from lif.auth_utils.hs256 import decode_hs256, encode_hs256
 
 
 # --- JWT Settings ---
@@ -32,7 +32,6 @@ def _require_env(name: str) -> str:
 
 
 SECRET_KEY: str = _require_env("SECRET_KEY")
-ALGORITHM: str = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
 REFRESH_TOKEN_EXPIRE_DAYS: int = 7
 
@@ -42,39 +41,22 @@ security = HTTPBearer()
 # --- Token Utilities ---
 def create_access_token(data: dict) -> str:
     """Create a JWT access token with expiration."""
-    to_encode = data.copy()
-    expire = datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    to_encode.update({"exp": expire})
-    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return encode_hs256(data, SECRET_KEY, timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
 
 
 def create_refresh_token(data: dict) -> str:
     """Create a JWT refresh token with expiration."""
-    to_encode = data.copy()
-    expire = datetime.now(timezone.utc) + timedelta(days=REFRESH_TOKEN_EXPIRE_DAYS)
-    to_encode.update({"exp": expire})
-    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return encode_hs256(data, SECRET_KEY, timedelta(days=REFRESH_TOKEN_EXPIRE_DAYS))
 
 
 def decode_jwt(token: str) -> dict:
     """Decode a JWT token and return the payload."""
-    try:
-        return jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-    except jwt.ExpiredSignatureError:
-        raise HTTPException(status_code=401, detail="Token has expired")
-    except jwt.InvalidTokenError:
-        raise HTTPException(status_code=401, detail="Could not validate credentials")
+    return decode_hs256(token, SECRET_KEY)
 
 
 async def get_current_user(credentials: HTTPAuthorizationCredentials = Security(security)) -> str:
     """Decode JWT and return the username (subject) if valid."""
-    try:
-        payload = jwt.decode(credentials.credentials, SECRET_KEY, algorithms=[ALGORITHM])
-        username = payload.get("sub")
-        if not username:
-            raise HTTPException(status_code=401, detail="Invalid authentication credentials")
-        return username
-    except jwt.ExpiredSignatureError:
-        raise HTTPException(status_code=401, detail="Token has expired")
-    except jwt.InvalidTokenError:
-        raise HTTPException(status_code=401, detail="Could not validate credentials")
+    username = decode_jwt(credentials.credentials).get("sub")
+    if not username:
+        raise HTTPException(status_code=401, detail="Invalid authentication credentials")
+    return username

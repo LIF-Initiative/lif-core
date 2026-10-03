@@ -3,12 +3,13 @@ Core authentication module with JWT token handling, API key support, and Cognito
 """
 
 import uuid
-from datetime import datetime, timedelta, timezone
+from datetime import timedelta
 from typing import Any, Dict, Optional
 
 import jwt
 from fastapi import HTTPException, Request, status
 from fastapi.responses import JSONResponse
+from lif.auth_utils.hs256 import decode_hs256, encode_hs256
 from lif.cognito_auth import CognitoAuthConfig, decode_cognito_jwt
 from lif.cognito_auth.core import _require_crypto
 from lif.mdr_auth.workspace_cookie import COOKIE_NAME, decode_workspace_cookie
@@ -25,7 +26,6 @@ settings = get_settings()
 
 # JWT configuration
 SECRET_KEY = settings.mdr__auth__jwt_secret_key
-ALGORITHM = "HS256"
 
 API_KEY_HEADER_NAME = "X-API-Key"
 # Recommended to use hard-to-guess names for the API keys.
@@ -80,48 +80,22 @@ PUBLIC_ALLOWLIST_STARTS_WITH: set[str] = convert_csv_to_set(settings.mdr__auth__
 
 def create_access_token(data: Dict[str, Any], expires_delta: Optional[timedelta] = None) -> str:
     """Create JWT access token"""
-    to_encode = data.copy()
-    if expires_delta:
-        expire = datetime.now(timezone.utc) + expires_delta
-    else:
-        expire = datetime.now(timezone.utc) + timedelta(minutes=settings.mdr__auth__access_token_expire_minutes)
-
-    to_encode.update({"exp": expire, "type": "access"})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-    return encoded_jwt
+    expires_delta = expires_delta or timedelta(minutes=settings.mdr__auth__access_token_expire_minutes)
+    return encode_hs256({**data, "type": "access"}, SECRET_KEY, expires_delta)
 
 
 def create_refresh_token(data: Dict[str, Any]) -> str:
     """Create JWT refresh token"""
-    to_encode = data.copy()
-    expire = datetime.now(timezone.utc) + timedelta(days=settings.mdr__auth__refresh_token_expire_days)
-    to_encode.update(
-        {
-            "exp": expire,
-            "type": "refresh",
-            "jti": str(uuid.uuid4()),  # JWT ID for token tracking
-        }
+    return encode_hs256(
+        {**data, "type": "refresh", "jti": str(uuid.uuid4())},  # jti: JWT ID for token tracking
+        SECRET_KEY,
+        timedelta(days=settings.mdr__auth__refresh_token_expire_days),
     )
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-    return encoded_jwt
 
 
 def decode_jwt(token: str) -> Dict[str, Any]:
     """Decode and validate JWT token"""
-    try:
-        return jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-    except jwt.ExpiredSignatureError as error:
-        logger.warning("Auth Bearer token has expired")
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail="Token has expired", headers={"WWW-Authenticate": "Bearer"}
-        ) from error
-    except jwt.InvalidTokenError as error:
-        logger.warning("Auth Bearer token is invalid")
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Could not validate credentials",
-            headers={"WWW-Authenticate": "Bearer"},
-        ) from error
+    return decode_hs256(token, SECRET_KEY)
 
 
 def _is_public_path(path: str) -> bool:

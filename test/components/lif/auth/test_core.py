@@ -42,6 +42,7 @@ def test_decode_expired_token_401():
         core.decode_jwt(token)
     assert exc.value.status_code == 401
     assert exc.value.detail == "Token has expired"
+    assert exc.value.headers == {"WWW-Authenticate": "Bearer"}
 
 
 def test_decode_wrong_secret_401():
