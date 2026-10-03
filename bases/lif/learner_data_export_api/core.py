@@ -8,6 +8,7 @@ from starlette.requests import Request
 from starlette.responses import JSONResponse
 
 from lif.api_key_auth import ApiKeyAuthMiddleware, ApiKeyConfig
+from lif.auth_utils import DEFAULT_PUBLIC_PATH_PREFIXES, DEFAULT_PUBLIC_PATHS, is_public_path
 from lif.cognito_auth import CognitoAuthConfig, authenticate_request
 from lif.learner_data_export_api import learner_data_export_endpoints
 from lif.logging import get_logger
@@ -53,11 +54,11 @@ class CompositeAuthMiddleware(BaseHTTPMiddleware):
     ) -> None:
         super().__init__(app)
         self.strategies = strategies
-        self.public_paths = public_paths or {"/health", "/health-check"}
-        self.public_prefixes = public_prefixes or {"/docs", "/openapi.json"}
+        self.public_paths = public_paths or set(DEFAULT_PUBLIC_PATHS)
+        self.public_prefixes = public_prefixes or set(DEFAULT_PUBLIC_PATH_PREFIXES)
 
     def _is_public(self, path: str) -> bool:
-        return path in self.public_paths or any(path.startswith(p) for p in self.public_prefixes)
+        return is_public_path(path, self.public_paths, self.public_prefixes)
 
     async def dispatch(self, request: Request, call_next):
         if self._is_public(request.url.path):

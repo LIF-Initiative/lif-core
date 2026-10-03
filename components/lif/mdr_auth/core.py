@@ -9,7 +9,7 @@ from typing import Any, Dict, Optional
 import jwt
 from fastapi import HTTPException, Request, status
 from fastapi.responses import JSONResponse
-from lif.auth_utils import API_KEY_HEADER, extract_bearer_token
+from lif.auth_utils import API_KEY_HEADER, extract_bearer_token, is_public_path
 from lif.auth_utils.hs256 import decode_hs256, encode_hs256
 from lif.cognito_auth import CognitoAuthConfig, decode_cognito_jwt
 from lif.cognito_auth.core import _require_crypto
@@ -99,7 +99,7 @@ def decode_jwt(token: str) -> Dict[str, Any]:
 
 
 def _is_public_path(path: str) -> bool:
-    return path in PUBLIC_ALLOWLIST_EXACT or any(path.startswith(prefix) for prefix in PUBLIC_ALLOWLIST_STARTS_WITH)
+    return is_public_path(path, PUBLIC_ALLOWLIST_EXACT, PUBLIC_ALLOWLIST_STARTS_WITH)
 
 
 def _extract_api_key(request: Request) -> Optional[str]:
