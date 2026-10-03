@@ -21,7 +21,7 @@ Evidence gathered for the decision:
 
 - Across the three versioned transformation groups in `reference_data/transformations/` (185 mappings), every well-formed mapping has a distinct target within its group. The only collisions are two mappings that declare no target at all, the two rules behind the malformed export in #1144.
 - The #1296 test group (56 rules, written to exercise combines, merges and de-duplication) has one target per rule and no shared targets. 13 of its rules read several sources.
-- Across the full seed history, 1 of 1,368 mappings ever declared two targets, and it is soft-deleted. No live mapping has more than one.
+- Across the full seed history, 1 of 1,378 mappings ever declared two targets, and it is soft-deleted. No live mapping has more than one.
 - Import already saves every declared source attribute, one row per source.
 - Renaming an attribute in place silently breaks the mappings that use it: the stored `EntityIdPath` and the JSONata expression keep the old name (#1338).
 
