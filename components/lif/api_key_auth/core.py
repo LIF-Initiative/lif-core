@@ -27,11 +27,10 @@ from typing import Dict, Set
 
 from fastapi import Request
 from fastapi.responses import JSONResponse
+from lif.auth_utils import API_KEY_HEADER
 from starlette.middleware.base import BaseHTTPMiddleware
 
 logger = logging.getLogger(__name__)
-
-API_KEY_HEADER = "X-API-Key"
 
 
 @dataclass

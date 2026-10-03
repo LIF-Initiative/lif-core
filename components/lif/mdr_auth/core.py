@@ -9,6 +9,7 @@ from typing import Any, Dict, Optional
 import jwt
 from fastapi import HTTPException, Request, status
 from fastapi.responses import JSONResponse
+from lif.auth_utils import API_KEY_HEADER, extract_bearer_token
 from lif.auth_utils.hs256 import decode_hs256, encode_hs256
 from lif.cognito_auth import CognitoAuthConfig, decode_cognito_jwt
 from lif.cognito_auth.core import _require_crypto
@@ -27,7 +28,6 @@ settings = get_settings()
 # JWT configuration
 SECRET_KEY = settings.mdr__auth__jwt_secret_key
 
-API_KEY_HEADER_NAME = "X-API-Key"
 # Recommended to use hard-to-guess names for the API keys.
 API_KEYS = {
     settings.mdr__auth__service_api_key__graphql: "graphql-service",
@@ -102,18 +102,8 @@ def _is_public_path(path: str) -> bool:
     return path in PUBLIC_ALLOWLIST_EXACT or any(path.startswith(prefix) for prefix in PUBLIC_ALLOWLIST_STARTS_WITH)
 
 
-def _extract_bearer_token(request: Request) -> Optional[str]:
-    auth_header = request.headers.get("Authorization")
-    if not auth_header:
-        return None
-    parts = auth_header.split()
-    if len(parts) == 2 and parts[0].lower() == "bearer":
-        return parts[1]
-    return None
-
-
 def _extract_api_key(request: Request) -> Optional[str]:
-    return request.headers.get(API_KEY_HEADER_NAME)
+    return request.headers.get(API_KEY_HEADER)
 
 
 def _verify_api_key(api_key: Optional[str]) -> Optional[str]:
@@ -162,7 +152,7 @@ class AuthMiddleware(BaseHTTPMiddleware):
 
             if getattr(request.state, "principal", None) is None:
                 # Fall back to Bearer token authentication
-                credentials = _extract_bearer_token(request)
+                credentials = extract_bearer_token(request)
                 if not credentials:
                     logger.warning("Auth blocked due to no credentials provided")
                     return _build_unauthorized(detail="Authentication required: Provide either Bearer token or API key")

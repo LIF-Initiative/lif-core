@@ -46,6 +46,13 @@ def test_authenticate_returns_claims_for_valid_token(monkeypatch):
     assert authenticate_request(_req("Bearer good.token"), cfg) == {"sub": "user-1", "token_use": "access"}
 
 
+def test_authenticate_accepts_case_insensitive_bearer_scheme(monkeypatch):
+    # RFC 7235: the auth scheme is case-insensitive (shared extract_bearer_token, #548).
+    cfg = CognitoAuthConfig(user_pool_id="us-east-1_ABC")
+    monkeypatch.setattr(core, "decode_cognito_jwt", lambda token, config: {"sub": token})
+    assert authenticate_request(_req("bearer good.token"), cfg) == {"sub": "good.token"}
+
+
 def test_authenticate_returns_none_for_invalid_token(monkeypatch):
     cfg = CognitoAuthConfig(user_pool_id="us-east-1_ABC")
 

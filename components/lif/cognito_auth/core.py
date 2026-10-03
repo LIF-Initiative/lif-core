@@ -24,13 +24,12 @@ from typing import Any, Optional
 
 import jwt
 import jwt.algorithms  # ensure the submodule is imported for `jwt.algorithms.has_crypto`
+from lif.auth_utils import extract_bearer_token
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 
 logger = logging.getLogger(__name__)
-
-_BEARER_PREFIX = "Bearer "
 
 # Cache PyJWKClient per (region, pool) so JWKS keys are fetched once per process.
 _jwk_clients: dict[tuple[str, str], jwt.PyJWKClient] = {}
@@ -126,20 +125,13 @@ def decode_cognito_jwt(token: str, config: CognitoAuthConfig) -> dict[str, Any]:
     return payload
 
 
-def _extract_bearer(request: Request) -> Optional[str]:
-    header = request.headers.get("Authorization", "")
-    if header.startswith(_BEARER_PREFIX):
-        return header[len(_BEARER_PREFIX) :].strip() or None
-    return None
-
-
 def authenticate_request(request: Request, config: CognitoAuthConfig) -> Optional[dict[str, Any]]:
     """Composable strategy: return the Cognito claims for a valid Bearer JWT, else ``None``.
 
     Never raises — a composite (e.g. LDE's "signed key OR Cognito JWT" dispatch)
     calls this and falls through to the next strategy on ``None``.
     """
-    token = _extract_bearer(request)
+    token = extract_bearer_token(request)
     if not token:
         return None
     try:
