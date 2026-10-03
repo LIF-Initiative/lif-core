@@ -5,6 +5,8 @@ Date: 2026-01-19
 ## Status
 Proposed
 
+Amended in part by [data_model/0002](../data_model/0002-lif-variants-freeze-the-overlay-model.md) (the *Org LIF* and *Partner LIF* overlay is frozen) and [0009](0009-mapping-identity-and-cardinality.md) (mapping identity and cardinality, and the ID-based import under *Data Portability*).
+
 ## Context
 Recent testing of the **MDR** has revealed some questions on Data Model behavior [#790](https://github.com/LIF-Initiative/lif-core/issues/790). As discussions occurred to determine issue resolution, it was noted there was a lack of documented requirements around **MDR** Data Models. This ADR aims to specify requirements of the **MDR** _Data Models_, how existing _Entities_, _Attributes_, and _Value Sets_ are associated, and the behavior of transformations.
 
@@ -52,6 +54,8 @@ _Values_ directly reference their _Value Set_ and cannot be associated to other 
 **Data Portability**
 
 All models and transformations can be exported from a LIF system and imported into another LIF system. While database IDs show up in the exports, they are used in the scope of that specific export (as opposed to being leveraged in the import process to avoid duplicate entries). The partial exception to this are _Data Model_ IDs. On import, the caller specifies a default _Data Model_ ID, along with a mapping of _Data Model_ IDs to provide the context in which to import the _Entities__, _Attributes_, etc.
+
+> **Amended by [0009](0009-mapping-identity-and-cardinality.md) and [data_model/0003](../data_model/0003-references-between-shared-entities.md).** Import no longer takes a default _Data Model_ ID or a map of _Data Model_ IDs. Files carry no database IDs: models, transformation groups and mappings are identified by name and version (0009, Decision 1), and a row ID is never a reference (data_model/0003). The model an upload attaches to comes from the request. This closes #768 and #775, which existed only to cope with IDs in files; see the [portability plan](../../../operations/proposals/mdr-import-export-portability.md) (#1223).
 
 In order to maintain portable data:
 
