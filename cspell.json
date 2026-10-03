@@ -296,6 +296,11 @@
         "EXPLAIN",
         "xform",
         "tolower",
+        "conftest",
+        "demoable",
+        "demoability",
+        "runbook",
+        "runbooks",
         "dklen",
         "altchars"
     ],
