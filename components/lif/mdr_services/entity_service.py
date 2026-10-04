@@ -279,6 +279,15 @@ async def get_list_of_entities_for_data_model(
     public_only: bool = False,
     check_base: bool = True,
 ):
+    """List a data model's entities.
+
+    For an OrgLIF or PartnerLIF, `check_base=True` (the default) returns the entities the model
+    includes from its base model; `check_base=False` returns only the entities the model owns
+    (`DataModelId == data_model_id`), which is what export wants.
+
+    `partner_only`, `org_ext_only` and `public_only` filter that inclusion path only. They are
+    ignored for a BaseLIF or SourceSchema, and when `check_base=False`.
+    """
     # Check for data model id and for extension
     data_model_id_list: List[int] = []
     data_model = await check_datamodel_by_id(session=session, id=data_model_id)
