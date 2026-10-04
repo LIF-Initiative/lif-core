@@ -306,7 +306,10 @@
         "runbook",
         "runbooks",
         "dklen",
-        "altchars"
+        "altchars",
+        "behaviour",
+        "readback",
+        "Writey"
     ],
     "ignorePaths": [
         ".git/",
