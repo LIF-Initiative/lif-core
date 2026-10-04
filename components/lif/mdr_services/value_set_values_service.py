@@ -1,6 +1,6 @@
 from typing import List
 from fastapi import HTTPException
-from lif.datatypes.mdr_sql_model import ValueSet, ValueSetValue, ValueSetValueMapping
+from lif.mdr_sql_model.core import ValueSet, ValueSetValue, ValueSetValueMapping
 from lif.mdr_dto.value_set_values_dto import CreateValueSetValueDTO, UpdateValueSetValueDTO, ValueSetValueDTO
 from lif.mdr_services.helper_service import check_datamodel_by_id
 from lif.mdr_utils.logger_config import get_logger

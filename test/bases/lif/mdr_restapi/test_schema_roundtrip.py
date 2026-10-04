@@ -14,7 +14,7 @@ entity. Before #756 the reference was silently dropped on upload.
 
 from sqlmodel import select
 
-from lif.datatypes.mdr_sql_model import DataModel, DataModelType, Entity, EntityAssociation, EntityPlacementType
+from lif.mdr_sql_model.core import DataModel, DataModelType, Entity, EntityAssociation, EntityPlacementType
 from lif.mdr_services.schema_generation_service import generate_openapi_schema
 from lif.mdr_services.schema_upload_service import create_data_model_from_openapi_schema
 
@@ -94,7 +94,7 @@ async def test_reference_survives_generate_then_upload(test_db_session):
 
     # The reference association must have been recreated, parent->child, with its relationship.
     by_name = {e.Name: e.Id for e in entities}
-    assocs = (
+    associations = (
         (
             await session.execute(
                 select(EntityAssociation)
@@ -105,8 +105,8 @@ async def test_reference_survives_generate_then_upload(test_db_session):
         .scalars()
         .all()
     )
-    references = [a for a in assocs if a.Placement == EntityPlacementType.Reference]
-    assert len(references) == 1, [(a.Placement, a.Relationship) for a in assocs]
+    references = [a for a in associations if a.Placement == EntityPlacementType.Reference]
+    assert len(references) == 1, [(a.Placement, a.Relationship) for a in associations]
     ref = references[0]
     assert ref.ParentEntityId == by_name["Person"]
     assert ref.ChildEntityId == by_name["Organization"]

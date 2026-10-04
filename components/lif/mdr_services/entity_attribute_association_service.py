@@ -1,13 +1,7 @@
 from typing import List, Optional, Sequence, Tuple
 
 from fastapi import HTTPException
-from lif.datatypes.mdr_sql_model import (
-    Attribute,
-    DataModelType,
-    Entity,
-    EntityAttributeAssociation,
-    ExtInclusionsFromBaseDM,
-)
+from lif.mdr_sql_model.core import Attribute, DataModelType, Entity, EntityAttributeAssociation, ExtInclusionsFromBaseDM
 from lif.mdr_dto.entity_attribute_association_dto import (
     CreateEntityAttributeAssociationDTO,
     EntityAttributeAssociationDTO,
