@@ -603,7 +603,7 @@ def dict_to_dataclass(cls: Any, data: Any) -> Any:
         if isinstance(data, dict):  # Defensive: treat dict as [dict]
             data = [data]
         if isinstance(data, bool):
-            logger.warning(f"dict_to_dataclass: Expected a list or dict for {cls}, got bool: {data}. Skipping.")
+            logger.warning(f"dict_to_dataclass: Expected a list or dict for {cls}, got bool. Skipping.")
             return []
         if not isinstance(data, list):
             raise TypeError(f"Expected a list or dict for {cls}, got {type(data)}: {data}")
@@ -613,7 +613,10 @@ def dict_to_dataclass(cls: Any, data: Any) -> Any:
                 converted = dict_to_dataclass(resolved_item_type, item)
                 result.append(converted)
             except Exception as exc:
-                logger.warning(f"dict_to_dataclass: Failed to parse list item {item}: {exc}. Skipping.")
+                logger.warning(
+                    f"dict_to_dataclass: Failed to parse a {type(item).__name__} list item for {cls}: "
+                    f"{type(exc).__name__}. Skipping."
+                )
         return result
 
     # Check if this is a type we can handle
@@ -667,7 +670,8 @@ def dict_to_dataclass(cls: Any, data: Any) -> Any:
             return actual_cls(**instance_data)
         except Exception as exc:
             logger.warning(
-                f"dict_to_dataclass: Failed to instantiate {cls} with {instance_data}: {exc}. Returning None."
+                f"dict_to_dataclass: Failed to instantiate {cls} with fields {sorted(instance_data)}: "
+                f"{type(exc).__name__}. Returning None."
             )
             return None
 
@@ -843,14 +847,17 @@ def build_root_query_type(
             filter_wrapped = {root_query_name: filter_dict} if filter_dict else None
             query = {"filter": filter_wrapped, "selected_fields": list(selected_fields)}
 
-            logger.info(f"Query: {query}")
+            logger.info(
+                f"Query: {root_query_name}, filter on {sorted(filter_dict or {})}, "
+                f"{len(selected_fields)} selected field(s)"
+            )
             # Make the backend API call
             async with httpx.AsyncClient(timeout=httpx.Timeout(LIF_GRAPHQL_CLIENT_TIMEOUT_SECONDS)) as client:
                 response = await client.post(query_planner_query_url, json=query, headers=lif_client_headers(info))
 
             if response.status_code == 200:
                 response_json = response.json()
-                logger.info(f"Response: {response_json}")
+                logger.info(f"Response: {len(response_json)} item(s)")
                 # Convert all keys to snake_case for Python
                 response_snake = dict_keys_to_snake(response_json)
 
@@ -960,7 +967,10 @@ def build_root_mutation_type(
 
         root_mutation_name = info.field_name
         payload = {root_mutation_name: {"filter": filter_wrapped, "input": input_wrapped}}
-        logger.info(f"Update mutation payload: {payload}")
+        logger.info(
+            f"Update mutation: {root_mutation_name}, filter on {sorted(filter_dict or {})}, "
+            f"input {sorted(input_dict or {})}"
+        )
 
         async with httpx.AsyncClient() as client:
             response = await client.post(query_planner_update_url, json=payload)
@@ -984,7 +994,10 @@ def build_root_mutation_type(
                     elif isinstance(people, dict):
                         obj_data = people
             else:
-                logger.warning("Unexpected mutation response shape: %s", response_snake)
+                logger.warning(
+                    "Unexpected mutation response shape: %s",
+                    sorted(response_snake) if isinstance(response_snake, dict) else type(response_snake).__name__,
+                )
 
             if obj_data:
                 return dict_to_dataclass(type_class, obj_data)
