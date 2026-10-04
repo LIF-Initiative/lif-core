@@ -23,6 +23,9 @@ in ADR 0004: bare capability in a component, composed at the edges.
   so a composite can fall through to another strategy.
 - `CognitoAuthMiddleware` — optional standalone Cognito-only middleware.
 
+Bearer extraction (the scheme is case-insensitive) and the default public paths come from
+[`auth_utils`](../auth_utils/).
+
 ## Composition (the LDE case, #1034)
 
 LDE stays **bare on `api_key_auth`** by default. When developer keys + Cognito are
