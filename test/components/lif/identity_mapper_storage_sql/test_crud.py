@@ -1,3 +1,5 @@
+import pytest
+
 from lif.identity_mapper_storage_sql import crud
 from lif.identity_mapper_storage_sql.model import IdentityMappingModel
 
@@ -12,38 +14,43 @@ def _model(org="org-1", person="person-1", target_system="sys-1", person_id="ext
     return model
 
 
-def test_create_and_read_by_id(session):
-    created = crud.create(session, _model())
+@pytest.mark.asyncio
+async def test_create_and_read_by_id(session):
+    created = await crud.create(session, _model())
     assert created.mapping_id
-    fetched = crud.read(session, created.mapping_id)
+    fetched = await crud.read(session, created.mapping_id)
     assert fetched is not None
     assert fetched.target_system_person_id == "ext-1"
 
 
-def test_read_returns_none_for_missing(session):
-    assert crud.read(session, "missing") is None
+@pytest.mark.asyncio
+async def test_read_returns_none_for_missing(session):
+    assert await crud.read(session, "missing") is None
 
 
-def test_read_by_lif_org_and_person(session):
-    crud.create(session, _model(target_system="sys-1"))
-    crud.create(session, _model(target_system="sys-2"))
-    crud.create(session, _model(org="org-2"))
-    results = crud.read_by_lif_org_and_person(session, "org-1", "person-1")
+@pytest.mark.asyncio
+async def test_read_by_lif_org_and_person(session):
+    await crud.create(session, _model(target_system="sys-1"))
+    await crud.create(session, _model(target_system="sys-2"))
+    await crud.create(session, _model(org="org-2"))
+    results = await crud.read_by_lif_org_and_person(session, "org-1", "person-1")
     assert len(results) == 2
     assert {r.target_system_id for r in results} == {"sys-1", "sys-2"}
 
 
-def test_delete_removes_row(session):
-    model = crud.create(session, _model())
-    crud.delete(session, model)
-    session.flush()
-    assert crud.read(session, model.mapping_id) is None
+@pytest.mark.asyncio
+async def test_delete_removes_row(session):
+    model = await crud.create(session, _model())
+    await crud.delete(session, model)
+    await session.flush()
+    assert await crud.read(session, model.mapping_id) is None
 
 
-def test_create_all_defers_the_flush(session):
+@pytest.mark.asyncio
+async def test_create_all_defers_the_flush(session):
     """The batch save relies on staging every insert and flushing once."""
     models = [_model(target_system="sys-1"), _model(target_system="sys-2")]
-    crud.create_all(session, models)
-    session.flush()
-    results = crud.read_by_lif_org_and_person(session, "org-1", "person-1")
+    await crud.create_all(session, models)
+    await session.flush()
+    results = await crud.read_by_lif_org_and_person(session, "org-1", "person-1")
     assert {r.target_system_id for r in results} == {"sys-1", "sys-2"}

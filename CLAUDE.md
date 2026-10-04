@@ -161,6 +161,7 @@ GraphQL org1 accepts API keys managed in AWS SSM. The server validates incoming 
 
 - Environments: `dev` (uses `:latest` image tags, single-org) and `demo` (pinned version tags, multi-org), manually promoted from dev. Config in `{env}.aws` files and `cloudformation/{env}-*.params`.
 - Deploy with `aws-deploy.sh`; promote images with `scripts/release-demo.sh`. **Deploy sequentially** — parallel runs cause SSO login conflicts.
+- **Applying a migration is a manual step** — merging does not apply it. See [`docs/operations/guides/applying-mdr-migrations.md`](docs/operations/guides/applying-mdr-migrations.md).
 - **MDR migrations (V1.2+) must be idempotent** (`CREATE OR REPLACE`, `IF NOT EXISTS`) — local docker-compose replays every `V1.*.sql` through `psql` without Flyway history tracking.
 - **PEP 440 `~=` gotcha**: `~=0.275` means `< 1.0`, not `< 0.276`; use `~=0.275.0` to pin a minor range. (Caused a prod crash via Docker wheel resolution.)
 

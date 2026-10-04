@@ -29,7 +29,39 @@ compatibility. This includes:
 
 ### Breaking Changes
 
-*No breaking changes currently pending*
+#### Identity Mapper: three key columns narrowed from 255 to 191 characters
+
+- **Action Required:** a local docker-compose MariaDB volume keeps the old schema, because
+  `02-ddl.sql` only runs on an empty datadir. Either recreate the volumes
+  (`docker compose -f deployments/advisor-demo-docker/docker-compose.yml down -v`) or apply the
+  change in place, which keeps existing rows and is safe to re-run:
+
+  ```sql
+  ALTER TABLE identity_mappings
+    MODIFY lif_organization_id        VARCHAR(191) NOT NULL,
+    MODIFY lif_organization_person_id VARCHAR(191) NOT NULL,
+    MODIFY target_system_id           VARCHAR(191) NOT NULL,
+    DROP INDEX IF EXISTS idx_org_person;
+  ```
+
+  dev and demo need nothing: their MariaDB datadir is ephemeral, so every task start replays the
+  new DDL.
+- **Impact:** a mapping whose `lif_organization_id`, `lif_organization_person_id` or
+  `target_system_id` is longer than 191 characters is now rejected (previously 255). No value in
+  the repo's sample data is longer than 22.
+- **Related:** #1258, CHANGELOG.md "Changed", `docs/design/components/identity-mapper.md`
+
+#### GraphQL: a Query Planner failure is now a GraphQL error, not an empty result
+
+- **Action Required:** callers of the GraphQL API must read the `errors` entry in the response
+  to detect a backend failure. Code that treats an empty list as the only possible "no results"
+  outcome keeps working; code that relied on a failure *also* arriving as an empty list will now
+  see `data` null for the queried field plus an `errors` entry.
+- **Impact:** any GraphQL consumer. In this repo that is the semantic search MCP server (via
+  `graphql_client`) and the `lif-to-lif` adapter, which already checks `errors` and will now
+  raise when an upstream org's planner fails instead of contributing empty fragments. Learner
+  Data Export is unaffected — it calls the Query Planner directly.
+- **Related:** #1264, CHANGELOG.md "Changed", `bases/lif/api_graphql/README.md` → Error contract
 
 ### Deprecation Notices
 

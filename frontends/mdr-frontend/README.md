@@ -48,3 +48,9 @@ npm install
 export VITE_API_URL=http://localhost:8099
 npm run dev
 ```
+
+Tests (vitest):
+```
+npm install
+npm test
+```

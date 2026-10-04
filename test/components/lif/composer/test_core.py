@@ -1,6 +1,12 @@
+import datetime
 import json
 
-from lif.composer.core import compose_with_fragment_list, compose_with_single_fragment
+from lif.composer.core import (
+    compose_json_with_fragment_list,
+    compose_json_with_single_fragment,
+    compose_with_fragment_list,
+    compose_with_single_fragment,
+)
 from lif.datatypes.core import LIFFragment, LIFRecord
 
 
@@ -334,3 +340,70 @@ def test_an_already_duplicated_record_collapses_on_the_next_compose():
 
     assert healed.person[0]["identifier"] == [identifier_1_dict, identifier_2_dict]
     assert healed.person[0]["employmentLearningExperience"] == [employment_learning_experience_1_dict]
+
+
+def test_compose_with_fragment_list_matches_the_json_entrypoint():
+    """The record- and JSON-level entrypoints must stay value-for-value identical.
+
+    Issue #10 moved the record-level functions off the JSON round-trip and onto a shared
+    dict-level helper; this pins the two entrypoints together so they cannot drift.
+    """
+    lif_record_json = {
+        "person": [
+            {
+                "foo": "foo",
+                "employmentLearningExperience": [employment_learning_experience_3_dict],
+                "identifier": [identifier_1_dict],
+            }
+        ]
+    }
+    lif_fragments = [
+        LIFFragment(fragment_path="person.identifier", fragment=[identifier_2_dict]),
+        LIFFragment(fragment_path="person.identifier", fragment=[identifier_3_dict]),
+        LIFFragment(
+            fragment_path="person.employmentLearningExperience", fragment=[employment_learning_experience_4_dict]
+        ),
+    ]
+
+    via_record = compose_with_fragment_list(LIFRecord(**lif_record_json), lif_fragments)
+    via_json = json.loads(compose_json_with_fragment_list(json.dumps(lif_record_json), lif_fragments))
+
+    assert via_record.model_dump() == via_json
+
+
+def test_compose_with_single_fragment_matches_the_json_entrypoint():
+    lif_record_json = {"person": [{"foo": "foo", "identifier": [identifier_1_dict]}]}
+    lif_fragment = LIFFragment(fragment_path="person.identifier", fragment=[identifier_2_dict])
+
+    via_record = compose_with_single_fragment(LIFRecord(**lif_record_json), lif_fragment)
+    via_json = json.loads(compose_json_with_single_fragment(json.dumps(lif_record_json), lif_fragment))
+
+    assert via_record.model_dump() == via_json
+
+
+def test_compose_coerces_values_to_json_primitives():
+    """Composing must not change the stored type of a non-JSON-primitive value.
+
+    The record-level functions dump with mode="json" precisely so that a value like a
+    datetime stays the ISO string the old JSON round-trip produced. A plain model_dump()
+    would leave it a datetime, which query_cache_service.save() would write to Mongo as a
+    BSON date where it previously wrote a string.
+    """
+    lif_record = LIFRecord(**{"person": [{"when": datetime.datetime(2026, 1, 2, 3, 4, 5), "identifier": []}]})
+
+    composed = compose_with_fragment_list(
+        lif_record, [LIFFragment(fragment_path="person.identifier", fragment=[identifier_1_dict])]
+    )
+
+    assert composed.person[0]["when"] == "2026-01-02T03:04:05"
+
+
+def test_compose_with_fragment_list_does_not_mutate_the_input_record():
+    """Replacing clears lists in the working copy; it must not reach the caller's record."""
+    lif_record = LIFRecord(**{"person": [{"identifier": [identifier_1_dict]}]})
+
+    compose_with_fragment_list(
+        lif_record, [LIFFragment(fragment_path="person.identifier", fragment=[identifier_2_dict])]
+    )
+
+    assert lif_record.person[0]["identifier"] == [identifier_1_dict]

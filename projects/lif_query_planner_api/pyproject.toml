@@ -27,6 +27,7 @@ packages = ["lif"]
 [tool.polylith.bricks]
 "../../bases/lif/query_planner_restapi" = "lif/query_planner_restapi"
 "../../components/lif/query_planner_service" = "lif/query_planner_service"
+"../../components/lif/lif_fragment_utils" = "lif/lif_fragment_utils"
 "../../components/lif/datatypes" = "lif/datatypes"
 "../../components/lif/exceptions" = "lif/exceptions"
 "../../components/lif/logging" = "lif/logging"

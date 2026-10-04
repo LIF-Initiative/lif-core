@@ -1,0 +1,669 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Machine-Readable Schema for Sample LDE Target Test",
+    "version": "1.0",
+    "description": "Synthetic target data model for exercising the Learner Data Export end to end (issue #1224). Deliberately structured unlike StateU LIF: flat rows instead of nested LIF fragments, references flattened into strings, the two LIF preference entities merged, and provenance rolled up into per-row lists."
+  },
+  "paths": {},
+  "components": {
+    "schemas": {
+      "Learner": {
+        "type": "object",
+        "Name": "Learner",
+        "UniqueName": "Learner",
+        "Description": "Single flattened learner header: identity, naming and provenance rolled up from Person.Name / Common.Identifier / Common.Contact.",
+        "Required": "No",
+        "Array": "No",
+        "Extension": false,
+        "EntityAssociationPlacement": "Embedded",
+        "properties": {
+          "learnerKey": {
+            "ValueSetId": null,
+            "Name": "learnerKey",
+            "UniqueName": "Learner.learnerKey",
+            "Description": "The learner's school-assigned number, selected out of the identifier list.",
+            "DataType": "string",
+            "Required": "No",
+            "Array": "No",
+            "Extension": false
+          },
+          "displayName": {
+            "ValueSetId": null,
+            "Name": "displayName",
+            "UniqueName": "Learner.displayName",
+            "Description": "First and last name concatenated for display.",
+            "DataType": "string",
+            "Required": "No",
+            "Array": "No",
+            "Extension": false
+          },
+          "sortableName": {
+            "ValueSetId": null,
+            "Name": "sortableName",
+            "UniqueName": "Learner.sortableName",
+            "Description": "Last, First form for sorting.",
+            "DataType": "string",
+            "Required": "No",
+            "Array": "No",
+            "Extension": false
+          },
+          "contactEmails": {
+            "ValueSetId": null,
+            "Name": "contactEmails",
+            "UniqueName": "Learner.contactEmails",
+            "Description": "Distinct e-mail addresses across every contributing source.",
+            "DataType": "string",
+            "Required": "No",
+            "Array": "Yes",
+            "Extension": false
+          },
+          "alternateIds": {
+            "ValueSetId": null,
+            "Name": "alternateIds",
+            "UniqueName": "Learner.alternateIds",
+            "Description": "Every identifier the learner is known by, rendered as value@type.",
+            "DataType": "string",
+            "Required": "No",
+            "Array": "Yes",
+            "Extension": false
+          },
+          "contributingSystems": {
+            "ValueSetId": null,
+            "Name": "contributingSystems",
+            "UniqueName": "Learner.contributingSystems",
+            "Description": "Distinct informationSourceId values behind the learner header.",
+            "DataType": "string",
+            "Required": "No",
+            "Array": "Yes",
+            "Extension": false
+          },
+          "exportProfile": {
+            "ValueSetId": null,
+            "Name": "exportProfile",
+            "UniqueName": "Learner.exportProfile",
+            "Description": "Constant stamp identifying the target profile that produced this document.",
+            "DataType": "string",
+            "Required": "No",
+            "Array": "No",
+            "Extension": false
+          }
+        }
+      },
+      "Enrollment": {
+        "type": "array",
+        "Name": "Enrollment",
+        "UniqueName": "Enrollment",
+        "Description": "One row per course the learner took, with the resulting credential folded in as text instead of a reference.",
+        "Required": "No",
+        "Array": "Yes",
+        "Extension": false,
+        "EntityAssociationPlacement": "Embedded",
+        "properties": {
+          "courseCode": {
+            "ValueSetId": null,
+            "Name": "courseCode",
+            "UniqueName": "Enrollment.courseCode",
+            "Description": "Course identifier from the referenced Course.",
+            "DataType": "string",
+            "Required": "No",
+            "Array": "No",
+            "Extension": false
+          },
+          "courseTitle": {
+            "ValueSetId": null,
+            "Name": "courseTitle",
+            "UniqueName": "Enrollment.courseTitle",
+            "Description": "Course name from the referenced Course.",
+            "DataType": "string",
+            "Required": "No",
+            "Array": "No",
+            "Extension": false
+          },
+          "providerOrg": {
+            "ValueSetId": null,
+            "Name": "providerOrg",
+            "UniqueName": "Enrollment.providerOrg",
+            "Description": "Organization that supplied the course record.",
+            "DataType": "string",
+            "Required": "No",
+            "Array": "No",
+            "Extension": false
+          },
+          "startedOn": {
+            "ValueSetId": null,
+            "Name": "startedOn",
+            "UniqueName": "Enrollment.startedOn",
+            "Description": "Course start date.",
+            "DataType": "string",
+            "Required": "No",
+            "Array": "No",
+            "Extension": false
+          },
+          "endedOn": {
+            "ValueSetId": null,
+            "Name": "endedOn",
+            "UniqueName": "Enrollment.endedOn",
+            "Description": "Course end date.",
+            "DataType": "string",
+            "Required": "No",
+            "Array": "No",
+            "Extension": false
+          },
+          "status": {
+            "ValueSetId": null,
+            "Name": "status",
+            "UniqueName": "Enrollment.status",
+            "Description": "COMPLETED / IN_PROGRESS, derived from whether an end date is present.",
+            "DataType": "string",
+            "Required": "No",
+            "Array": "No",
+            "Extension": false
+          },
+          "credentialEarned": {
+            "ValueSetId": null,
+            "Name": "credentialEarned",
+            "UniqueName": "Enrollment.credentialEarned",
+            "Description": "Credential award resulting from the course, as title [key].",
+            "DataType": "string",
+            "Required": "No",
+            "Array": "No",
+            "Extension": false
+          },
+          "credentialIssuer": {
+            "ValueSetId": null,
+            "Name": "credentialIssuer",
+            "UniqueName": "Enrollment.credentialIssuer",
+            "Description": "Organization behind the resulting credential award.",
+            "DataType": "string",
+            "Required": "No",
+            "Array": "No",
+            "Extension": false
+          },
+          "sourceSystems": {
+            "ValueSetId": null,
+            "Name": "sourceSystems",
+            "UniqueName": "Enrollment.sourceSystems",
+            "Description": "Distinct sources behind this enrollment row.",
+            "DataType": "string",
+            "Required": "No",
+            "Array": "Yes",
+            "Extension": false
+          }
+        }
+      },
+      "Award": {
+        "type": "array",
+        "Name": "Award",
+        "UniqueName": "Award",
+        "Description": "One row per credential award, with the referenced Credential flattened into the row and the award status re-coded.",
+        "Required": "No",
+        "Array": "Yes",
+        "Extension": false,
+        "EntityAssociationPlacement": "Embedded",
+        "properties": {
+          "awardKey": {
+            "ValueSetId": null,
+            "Name": "awardKey",
+            "UniqueName": "Award.awardKey",
+            "Description": "Credential award identifier.",
+            "DataType": "string",
+            "Required": "No",
+            "Array": "No",
+            "Extension": false
+          },
+          "awardTitle": {
+            "ValueSetId": null,
+            "Name": "awardTitle",
+            "UniqueName": "Award.awardTitle",
+            "Description": "Name of the credential the award instantiates.",
+            "DataType": "string",
+            "Required": "No",
+            "Array": "No",
+            "Extension": false
+          },
+          "awardedOn": {
+            "ValueSetId": null,
+            "Name": "awardedOn",
+            "UniqueName": "Award.awardedOn",
+            "Description": "Award date normalized to YYYY-MM-DD.",
+            "DataType": "string",
+            "Required": "No",
+            "Array": "No",
+            "Extension": false
+          },
+          "awardState": {
+            "ValueSetId": null,
+            "Name": "awardState",
+            "UniqueName": "Award.awardState",
+            "Description": "Award status re-coded to the target's own vocabulary.",
+            "DataType": "string",
+            "Required": "No",
+            "Array": "No",
+            "Extension": false
+          },
+          "recipientName": {
+            "ValueSetId": null,
+            "Name": "recipientName",
+            "UniqueName": "Award.recipientName",
+            "Description": "Awardee name as asserted by the issuing system.",
+            "DataType": "string",
+            "Required": "No",
+            "Array": "No",
+            "Extension": false
+          },
+          "credentialKey": {
+            "ValueSetId": null,
+            "Name": "credentialKey",
+            "UniqueName": "Award.credentialKey",
+            "Description": "Identifier of the underlying credential definition.",
+            "DataType": "string",
+            "Required": "No",
+            "Array": "No",
+            "Extension": false
+          },
+          "issuerOrg": {
+            "ValueSetId": null,
+            "Name": "issuerOrg",
+            "UniqueName": "Award.issuerOrg",
+            "Description": "Organization behind the credential definition.",
+            "DataType": "string",
+            "Required": "No",
+            "Array": "No",
+            "Extension": false
+          },
+          "sourceSystems": {
+            "ValueSetId": null,
+            "Name": "sourceSystems",
+            "UniqueName": "Award.sourceSystems",
+            "Description": "Distinct sources behind this award row.",
+            "DataType": "string",
+            "Required": "No",
+            "Array": "Yes",
+            "Extension": false
+          }
+        }
+      },
+      "WorkHistory": {
+        "type": "array",
+        "Name": "WorkHistory",
+        "UniqueName": "WorkHistory",
+        "Description": "One row per employment experience. The three LIF organization roles (asserting / training / approving) are each collapsed to a single descriptive string.",
+        "Required": "No",
+        "Array": "Yes",
+        "Extension": false,
+        "EntityAssociationPlacement": "Embedded",
+        "properties": {
+          "roleKey": {
+            "ValueSetId": null,
+            "Name": "roleKey",
+            "UniqueName": "WorkHistory.roleKey",
+            "Description": "Employment experience identifier.",
+            "DataType": "string",
+            "Required": "No",
+            "Array": "No",
+            "Extension": false
+          },
+          "roleTitle": {
+            "ValueSetId": null,
+            "Name": "roleTitle",
+            "UniqueName": "WorkHistory.roleTitle",
+            "Description": "Job title.",
+            "DataType": "string",
+            "Required": "No",
+            "Array": "No",
+            "Extension": false
+          },
+          "startedOn": {
+            "ValueSetId": null,
+            "Name": "startedOn",
+            "UniqueName": "WorkHistory.startedOn",
+            "Description": "Role start date.",
+            "DataType": "string",
+            "Required": "No",
+            "Array": "No",
+            "Extension": false
+          },
+          "endedOn": {
+            "ValueSetId": null,
+            "Name": "endedOn",
+            "UniqueName": "WorkHistory.endedOn",
+            "Description": "Role end date.",
+            "DataType": "string",
+            "Required": "No",
+            "Array": "No",
+            "Extension": false
+          },
+          "isCurrent": {
+            "ValueSetId": null,
+            "Name": "isCurrent",
+            "UniqueName": "WorkHistory.isCurrent",
+            "Description": "True when the role has no end date.",
+            "DataType": "boolean",
+            "Required": "No",
+            "Array": "No",
+            "Extension": false
+          },
+          "roleSummary": {
+            "ValueSetId": null,
+            "Name": "roleSummary",
+            "UniqueName": "WorkHistory.roleSummary",
+            "Description": "Position description, truncated to a summary.",
+            "DataType": "string",
+            "Required": "No",
+            "Array": "No",
+            "Extension": false
+          },
+          "positionRef": {
+            "ValueSetId": null,
+            "Name": "positionRef",
+            "UniqueName": "WorkHistory.positionRef",
+            "Description": "Referenced position as name [key].",
+            "DataType": "string",
+            "Required": "No",
+            "Array": "No",
+            "Extension": false
+          },
+          "employerOrg": {
+            "ValueSetId": null,
+            "Name": "employerOrg",
+            "UniqueName": "WorkHistory.employerOrg",
+            "Description": "Organization offering the referenced position.",
+            "DataType": "string",
+            "Required": "No",
+            "Array": "No",
+            "Extension": false
+          },
+          "assertedByOrg": {
+            "ValueSetId": null,
+            "Name": "assertedByOrg",
+            "UniqueName": "WorkHistory.assertedByOrg",
+            "Description": "Organization asserting the employment record.",
+            "DataType": "string",
+            "Required": "No",
+            "Array": "No",
+            "Extension": false
+          },
+          "trainingProviderOrg": {
+            "ValueSetId": null,
+            "Name": "trainingProviderOrg",
+            "UniqueName": "WorkHistory.trainingProviderOrg",
+            "Description": "Organization that offered the employment/training.",
+            "DataType": "string",
+            "Required": "No",
+            "Array": "No",
+            "Extension": false
+          },
+          "approvingOrg": {
+            "ValueSetId": null,
+            "Name": "approvingOrg",
+            "UniqueName": "WorkHistory.approvingOrg",
+            "Description": "Organization that approved the employment record.",
+            "DataType": "string",
+            "Required": "No",
+            "Array": "No",
+            "Extension": false
+          },
+          "sourceSystems": {
+            "ValueSetId": null,
+            "Name": "sourceSystems",
+            "UniqueName": "WorkHistory.sourceSystems",
+            "Description": "Distinct sources behind this work-history row.",
+            "DataType": "string",
+            "Required": "No",
+            "Array": "Yes",
+            "Extension": false
+          },
+          "sourceOrganizations": {
+            "ValueSetId": null,
+            "Name": "sourceOrganizations",
+            "UniqueName": "WorkHistory.sourceOrganizations",
+            "Description": "Distinct contributing organizations behind this row.",
+            "DataType": "string",
+            "Required": "No",
+            "Array": "Yes",
+            "Extension": false
+          },
+          "RelatedAward": {
+            "type": "object",
+            "Name": "RelatedAward",
+            "UniqueName": "WorkHistory.RelatedAward",
+            "Description": "The credential award attached to an employment experience, embedded rather than referenced.",
+            "Required": "No",
+            "Array": "No",
+            "Extension": false,
+            "EntityAssociationPlacement": "Embedded",
+            "properties": {
+              "title": {
+                "ValueSetId": null,
+                "Name": "title",
+                "UniqueName": "WorkHistory.RelatedAward.title",
+                "Description": "Name of the award attached to the role.",
+                "DataType": "string",
+                "Required": "No",
+                "Array": "No",
+                "Extension": false
+              },
+              "awardKey": {
+                "ValueSetId": null,
+                "Name": "awardKey",
+                "UniqueName": "WorkHistory.RelatedAward.awardKey",
+                "Description": "Award identifier.",
+                "DataType": "string",
+                "Required": "No",
+                "Array": "No",
+                "Extension": false
+              },
+              "externalKey": {
+                "ValueSetId": null,
+                "Name": "externalKey",
+                "UniqueName": "WorkHistory.RelatedAward.externalKey",
+                "Description": "The award's source-system id, where one is carried.",
+                "DataType": "string",
+                "Required": "No",
+                "Array": "No",
+                "Extension": false
+              },
+              "issuedOn": {
+                "ValueSetId": null,
+                "Name": "issuedOn",
+                "UniqueName": "WorkHistory.RelatedAward.issuedOn",
+                "Description": "Award date normalized to YYYY-MM-DD.",
+                "DataType": "string",
+                "Required": "No",
+                "Array": "No",
+                "Extension": false
+              },
+              "recipientName": {
+                "ValueSetId": null,
+                "Name": "recipientName",
+                "UniqueName": "WorkHistory.RelatedAward.recipientName",
+                "Description": "Awardee as named by the issuing system.",
+                "DataType": "string",
+                "Required": "No",
+                "Array": "No",
+                "Extension": false
+              }
+            }
+          }
+        }
+      },
+      "Skill": {
+        "type": "array",
+        "Name": "Skill",
+        "UniqueName": "Skill",
+        "Description": "One row per proficiency, with the long LIF description truncated to a summary.",
+        "Required": "No",
+        "Array": "Yes",
+        "Extension": false,
+        "EntityAssociationPlacement": "Embedded",
+        "properties": {
+          "skillName": {
+            "ValueSetId": null,
+            "Name": "skillName",
+            "UniqueName": "Skill.skillName",
+            "Description": "Proficiency name.",
+            "DataType": "string",
+            "Required": "No",
+            "Array": "No",
+            "Extension": false
+          },
+          "skillSummary": {
+            "ValueSetId": null,
+            "Name": "skillSummary",
+            "UniqueName": "Skill.skillSummary",
+            "Description": "Proficiency description truncated to a summary.",
+            "DataType": "string",
+            "Required": "No",
+            "Array": "No",
+            "Extension": false
+          },
+          "evidenceAwardKey": {
+            "ValueSetId": null,
+            "Name": "evidenceAwardKey",
+            "UniqueName": "Skill.evidenceAwardKey",
+            "Description": "Award offered as evidence for the skill.",
+            "DataType": "string",
+            "Required": "No",
+            "Array": "No",
+            "Extension": false
+          },
+          "evidenceIssuer": {
+            "ValueSetId": null,
+            "Name": "evidenceIssuer",
+            "UniqueName": "Skill.evidenceIssuer",
+            "Description": "Organization behind the evidencing award.",
+            "DataType": "string",
+            "Required": "No",
+            "Array": "No",
+            "Extension": false
+          },
+          "sourceSystems": {
+            "ValueSetId": null,
+            "Name": "sourceSystems",
+            "UniqueName": "Skill.sourceSystems",
+            "Description": "Distinct sources behind this skill row.",
+            "DataType": "string",
+            "Required": "No",
+            "Array": "Yes",
+            "Extension": false
+          }
+        }
+      },
+      "CareerPreference": {
+        "type": "object",
+        "Name": "CareerPreference",
+        "UniqueName": "CareerPreference",
+        "Description": "Single block merging the two separate LIF preference entities (EmploymentPreferences + PositionPreferences).",
+        "Required": "No",
+        "Array": "No",
+        "Extension": false,
+        "EntityAssociationPlacement": "Embedded",
+        "properties": {
+          "preferenceKeys": {
+            "ValueSetId": null,
+            "Name": "preferenceKeys",
+            "UniqueName": "CareerPreference.preferenceKeys",
+            "Description": "Identifiers of the contributing preference records.",
+            "DataType": "string",
+            "Required": "No",
+            "Array": "Yes",
+            "Extension": false
+          },
+          "targetEmployers": {
+            "ValueSetId": null,
+            "Name": "targetEmployers",
+            "UniqueName": "CareerPreference.targetEmployers",
+            "Description": "Named organizations the learner wants to work for.",
+            "DataType": "string",
+            "Required": "No",
+            "Array": "Yes",
+            "Extension": false
+          },
+          "employerTypes": {
+            "ValueSetId": null,
+            "Name": "employerTypes",
+            "UniqueName": "CareerPreference.employerTypes",
+            "Description": "Kinds of organization the learner wants to work for.",
+            "DataType": "string",
+            "Required": "No",
+            "Array": "Yes",
+            "Extension": false
+          },
+          "desiredRoles": {
+            "ValueSetId": null,
+            "Name": "desiredRoles",
+            "UniqueName": "CareerPreference.desiredRoles",
+            "Description": "Job titles the learner is targeting.",
+            "DataType": "string",
+            "Required": "No",
+            "Array": "Yes",
+            "Extension": false
+          },
+          "desiredScheduleTypes": {
+            "ValueSetId": null,
+            "Name": "desiredScheduleTypes",
+            "UniqueName": "CareerPreference.desiredScheduleTypes",
+            "Description": "Preferred work schedules.",
+            "DataType": "string",
+            "Required": "No",
+            "Array": "Yes",
+            "Extension": false
+          },
+          "desiredOfferingTypes": {
+            "ValueSetId": null,
+            "Name": "desiredOfferingTypes",
+            "UniqueName": "CareerPreference.desiredOfferingTypes",
+            "Description": "Preferred hiring arrangements.",
+            "DataType": "string",
+            "Required": "No",
+            "Array": "Yes",
+            "Extension": false
+          },
+          "Mobility": {
+            "type": "object",
+            "Name": "Mobility",
+            "UniqueName": "CareerPreference.Mobility",
+            "Description": "Relocation / remote / travel appetite, re-expressed as codes and a human-readable phrase.",
+            "Required": "No",
+            "Array": "No",
+            "Extension": false,
+            "EntityAssociationPlacement": "Embedded",
+            "properties": {
+              "workArrangement": {
+                "ValueSetId": null,
+                "Name": "workArrangement",
+                "UniqueName": "CareerPreference.Mobility.workArrangement",
+                "Description": "REMOTE_OK / ONSITE, derived from the remote-work flag.",
+                "DataType": "string",
+                "Required": "No",
+                "Array": "No",
+                "Extension": false
+              },
+              "relocationOk": {
+                "ValueSetId": null,
+                "Name": "relocationOk",
+                "UniqueName": "CareerPreference.Mobility.relocationOk",
+                "Description": "Whether the learner will relocate.",
+                "DataType": "boolean",
+                "Required": "No",
+                "Array": "No",
+                "Extension": false
+              },
+              "travelWillingness": {
+                "ValueSetId": null,
+                "Name": "travelWillingness",
+                "UniqueName": "CareerPreference.Mobility.travelWillingness",
+                "Description": "Human-readable travel appetite.",
+                "DataType": "string",
+                "Required": "No",
+                "Array": "No",
+                "Extension": false
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

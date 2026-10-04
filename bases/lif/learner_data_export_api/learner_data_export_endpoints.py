@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import Any, Dict
+from typing import Annotated, Any, Dict
 
 from fastapi import APIRouter, HTTPException, Query, Request
 from lif.datatypes.core import TargetTransformationDataModelDTO, TargetTransformationDataModelsDTO
@@ -9,6 +9,8 @@ from lif.mdr_client.core import MDRClientException, fetch_data_models_from_mdr, 
 from lif.mdr_utils.logger_config import get_logger
 from lif.query_planner_client import QueryPlannerException, fetch_query_from_query_planner
 from lif.translator_client import TranslatorException, translate_learner_data
+from pydantic import AfterValidator
+from pydantic_core import PydanticCustomError
 
 router = APIRouter()
 logger = get_logger(__name__)
@@ -22,13 +24,32 @@ logger.info(f"LIF_TRANSLATOR_BASE_URL: {CONFIG.translator_base_url}")
 logger.info(f"LIF_MDR_API_URL: {CONFIG.mdr_api_url}")
 
 
+def non_blank(alias: str) -> AfterValidator:
+    """Trim a query parameter, rejecting empty or whitespace-only values.
+
+    The alias is passed in explicitly because a validator on a FastAPI query
+    parameter gets `ValidationInfo.field_name` as None, so the message has no
+    other way to name the offending parameter.
+    """
+
+    def validate(value: str) -> str:
+        trimmed = value.strip()
+        if not trimmed:
+            raise PydanticCustomError("blank_query_param", "{alias} must not be blank", {"alias": alias})
+        return trimmed
+
+    return AfterValidator(validate)
+
+
 @router.get("/exports", response_model=Dict[str, Any])
 async def get_data(
     request: Request,
-    learner_id: str = Query(..., alias="learnerId"),
-    data_model_name: str = Query(..., alias="dataModelName"),
-    data_model_version: str = Query(..., alias="dataModelVersion"),
-    data_model_contributor_organization: str = Query(..., alias="dataModelContributorOrganization"),
+    learner_id: Annotated[str, non_blank("learnerId"), Query(alias="learnerId")],
+    data_model_name: Annotated[str, non_blank("dataModelName"), Query(alias="dataModelName")],
+    data_model_version: Annotated[str, non_blank("dataModelVersion"), Query(alias="dataModelVersion")],
+    data_model_contributor_organization: Annotated[
+        str, non_blank("dataModelContributorOrganization"), Query(alias="dataModelContributorOrganization")
+    ],
 ):
     """Endpoint to export learner data in a specified format.
 

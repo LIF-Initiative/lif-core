@@ -73,3 +73,12 @@
 .bulk-body__file-btn { font-size:11px; font-weight:600; padding:4px 10px; border:1px solid #cfd5de; background:#eef2f7; color:#334155; border-radius:4px; cursor:pointer; letter-spacing:.5px; text-transform:uppercase; }
 .bulk-body__file-btn:hover { background:#e2e8f0; }
 .bulk-body__input-mode-toggle { display:inline-flex; border:1px solid #cfd5de; border-radius:4px; overflow:hidden; }
+
+/* Schema validation of the assembled output (issue #973) */
+.bulk-body__schema-issues { font-size: 12px; margin-top: 8px; padding: 10px 12px; border-radius: 4px; background: #fff7ed; color: #9a3412; border: 1px solid #fed7aa; max-height: 200px; overflow: auto; }
+.bulk-body__schema-issues-title { font-weight: 600; margin-bottom: 6px; }
+.bulk-body__schema-issues ul { margin: 0; padding-left: 18px; }
+.bulk-body__schema-issues li { margin: 2px 0; white-space: normal; }
+.bulk-body__schema-issues code { background: rgba(0, 0, 0, .06); padding: 0 4px; border-radius: 3px; }
+.bulk-body__schema-issues--ok { background: #f0fdf4; color: #166534; border-color: #bbf7d0; }
+.bulk-body__schema-issues--error { background: #fef2f2; color: #b91c1c; border-color: #fecaca; }

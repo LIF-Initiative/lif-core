@@ -74,11 +74,13 @@ async def create_value_set(session: AsyncSession, data: CreateValueSetDTO):
 async def update_value_set(session: AsyncSession, id: int, data: UpdateValueSetDTO):
     value_set = await get_value_set_by_id(session=session, id=id)
     data_model_id = value_set.DataModelId
-    if data.DataModelId:
+    # `is not None`, not truthiness: an id of 0 is a value the client supplied, and the
+    # write below applies it (dict(exclude_unset=True)) — so it must be honored, not skipped.
+    if data.DataModelId is not None:
         data_model_id = data.DataModelId
 
-    if data.DataModelId or data.Name:
-        updated_data_model_id = data.DataModelId if data.DataModelId else value_set.DataModelId
+    if data.DataModelId is not None or data.Name:
+        updated_data_model_id = data.DataModelId if data.DataModelId is not None else value_set.DataModelId
         updated_name = data.Name if data.Name else value_set.Name
         existing_value_set_query = select(ValueSet).where(
             ValueSet.Name == updated_name, ValueSet.DataModelId == updated_data_model_id, ValueSet.Deleted == False

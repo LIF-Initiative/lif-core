@@ -30,4 +30,4 @@ packages = ["lif"]
 "../../components/lif/exceptions" = "lif/exceptions"
 "../../components/lif/lif_schema_config" = "lif/lif_schema_config"
 "../../components/lif/logging" = "lif/logging"
-"../../components/lif/query_planner_service" = "lif/query_planner_service"
+"../../components/lif/lif_fragment_utils" = "lif/lif_fragment_utils"

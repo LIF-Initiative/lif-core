@@ -448,3 +448,145 @@ TBD
 ## Dependencies
 
 TBD
+
+# Performance Report
+
+Issue [#572](https://github.com/LIF-Initiative/lif-core/issues/572) reported an
+`httpx.ReadTimeout` on the Query Planner's `POST /jobs` during the R1 demo, and asked for the
+submission latency to be measured so the replacement timeout could be set from data rather than
+from a doubling of the value that failed (sub-issue of the performance epic
+[#1131](https://github.com/LIF-Initiative/lif-core/issues/1131)). Measured 2026-09-22.
+
+## Method
+
+Harness: `development/scripts/bench_lif_orchestrator_submit.py`, committed so the figures can be
+re-run. It times the Query Planner's view — wall clock around `POST /jobs`, which covers
+`OrchestratorService.submit_job` -> `DagsterClient.post_job` -> `submit_job_execution` ->
+`dagster-webserver` GraphQL -> code-location gRPC -> postgres run write.
+
+Local `docker compose` (`deployments/advisor-demo-docker`), minimal 4-container stack:
+`postgres-dagster`, `dagster-code-location`, `dagster-webserver`, `lif-orchestrator-api-org1`.
+`dagster-daemon` is deliberately absent — submission returns once the run is queued, and the
+daemon only dequeues. `--no-deps` is required, because `lif-orchestrator-api-org1` declares
+`depends_on: lif-query-planner-org1`.
+
+The plan submitted is the 3-part `lif-to-lif` shape from #572's own report, on a host with no
+competing workload.
+
+Every submission creates a real Dagster run in `postgres-dagster`, and the harness does not clean
+them up, so repeated sessions accumulate runs. Run `docker compose down -v` between sessions to
+start from an empty run storage, so that sample 400 is measured against the same state as sample 1.
+
+## Findings
+
+| profile | N | min | p50 | p95 | p99 | max | slow share | slow p50 |
+|---|---|---|---|---|---|---|---|---|
+| back-to-back | 200 | 134 | 324 | 5472 | 5575 | 6196 | 10% | 5472 |
+| back-to-back (repeat) | 200 | 171 | 269 | 5338 | 5443 | 6191 | 7% | 5364 |
+| 10s gaps | 20 | 227 | 567 | 6179 | 6257 | 6257 | 45% | 3290 |
+
+(milliseconds; slow = >= 1000 ms)
+
+The two back-to-back runs were taken independently and agree closely (p95 5472 vs 5338, max
+6196 vs 6191, slow share 10% vs 7%), so the shape is reproducible rather than an artefact of one
+sitting.
+
+**The distribution is bimodal, and that is the whole result.** A median submission costs about a
+third of a second; an intermittent minority cost 3-6 seconds. A mean would hide the mode that
+actually caused #572. The 10s-gap row is the profile closest to real Query Planner traffic, which
+is sporadic rather than saturating — but N=20 is small and its 45% carries wide error bars, so it
+should be read as "the slow mode is at least as common under sporadic traffic as under load",
+not as a precise rate.
+
+This explains #572's report directly. The failing call used httpx's silent 5s default and the
+slow mode sits at ~5.5s, so roughly one submission in ten was a coin flip against the ceiling —
+which is exactly the reported behavior of failing once at the demo and succeeding on retry.
+
+The slow mode lives **inside Dagster's submit path, not in LIF code**. Orchestrator API logs
+bracket the cost entirely within `submit_job_execution` (5.162s between
+`Submitting Dagster job with config:` and `Dagster run submitted:`, with request receipt and
+`RunConfig` construction landing in the same millisecond), and calling
+`DagsterGraphQLClient.submit_job_execution` directly from inside the container — bypassing LIF's
+HTTP layer — reproduces it. `dagster-webserver` logs nothing during a slow submission. The
+root cause is gRPC's DNS resolver; see [Root cause](#root-cause-1294) below.
+
+Ruled out by measurement, recorded so they are not re-derived:
+
+- **Not a cold start.** Restarting `dagster-code-location` before each sample yields ~230 ms, as
+  fast as warm.
+- **Not first-call-in-a-fresh-process.** Within one process, submits #1 and #2 cost 0.26s and
+  0.25s while #3, on a newly built client, cost 5.34s. This also clears
+  `DagsterClient._get_client()` (`components/lif/orchestrator_clients/dagster.py:75`) building a
+  fresh `DagsterGraphQLClient` per submission — that is real, but it is not this.
+- **Not a fixed 5s timeout.** Slow samples ranged 2.86s - 6.26s.
+- **Not idle- or TTL-driven.** It appears back-to-back with zero gap as readily as with 10s gaps.
+- **Not resource contention.** Under 10s gaps the stack is idle almost all of the time, and the
+  slow mode is *more* frequent there than under back-to-back load — the opposite of what
+  contention would produce.
+
+A separate failure mode worth knowing: for roughly 3-11s after a `dagster-code-location` restart
+the webserver cannot reach its gRPC server, and submission fails **fast** — HTTP 500,
+`DagsterUserCodeUnreachableError`, ~0.1s. An unreachable orchestrator therefore does not hang.
+
+## Root cause (#1294)
+
+Traced 2026-09-25 under [#1294](https://github.com/LIF-Initiative/lif-core/issues/1294): the
+slow mode is **gRPC's default c-ares DNS resolver in `dagster-webserver`**, which intermittently
+stalls ~5s resolving `dagster-code-location`. Each link below was measured on the same local stack:
+
+1. **Not the client side.** `submit_job_execution` makes two GraphQL requests to the webserver
+   over the same connection. `GetJobNames` costs 7-16 ms every time; the whole stall is in the
+   second, `SubmitRun` (`launchRun`). Plain `getaddrinfo` lookups from the orchestrator container
+   were never slow (0/600).
+2. **The webserver waits on the code location.** Stack samples of `dagster-webserver` (py-spy)
+   show `launchRun` blocked in the gRPC `execution_plan_snapshot` call for the whole stall, while
+   Dagster's own server-watch thread loses contact with the code location at the same moment.
+3. **The code location never receives the request.** Both code-location processes (the
+   `code-server` proxy and its `api grpc` subprocess) sample fully idle through four stalls, so
+   the call is stuck in the gRPC transport before it reaches any handler.
+4. **The resolver is what stalls.** Fresh `DagsterGrpcClient.get_server_id()` calls from the
+   webserver: the default resolver stalled 11 of 2,300 calls (~5.2s each; one at 2,991 ms, the
+   same shape as the 2.86s outlier above), with a 75 ms median. By IP address, or with
+   `GRPC_DNS_RESOLVER=native` (the system resolver), 0 of 2,300 stalled, with a 4 ms median.
+
+End to end, from the compose file with `GRPC_DNS_RESOLVER: native` on the webserver:
+
+| profile | N | min | p50 | p95 | p99 | max | slow share |
+|---|---|---|---|---|---|---|---|
+| back-to-back, default resolver (control) | 200 | 151 | 272 | 405 | 5581 | 6249 | 5% |
+| back-to-back, native | 200 | 121 | 170 | 223 | 293 | 413 | 0% |
+| back-to-back, native (repeat) | 200 | 103 | 154 | 207 | 303 | 323 | 0% |
+| 10s gaps, native | 20 | 155 | 201 | 222 | 225 | 225 | 0% |
+
+(milliseconds; slow = >= 1000 ms)
+
+The compose files set `GRPC_DNS_RESOLVER: native` on `dagster-webserver` and `dagster-daemon`,
+the two services that call the code location over gRPC. **ECS is not changed.** There the
+code-location name resolves through the VPC resolver rather than Docker's embedded DNS, so
+whether it stalls at all is unmeasured; that is
+[#1320](https://github.com/LIF-Initiative/lif-core/issues/1320). Why c-ares loses a query is also
+not established: a dropped UDP reply followed by its retry timeout would fit, but has not been
+measured.
+
+## Bearing on the timeout
+
+`LIF_SERVICE_REQUEST_TIMEOUT_SECONDS` (default **10**,
+`bases/lif/query_planner_restapi/core.py:62`) bounds this call at
+`components/lif/query_planner_service/core.py:382`. Against a max observed **6.2s on an idle
+local machine**, that is ~1.6x headroom over an event that is routine rather than exceptional,
+and there is no basis for assuming loaded ECS hardware preserves the margin. Note also that the
+"fail fast against a dead orchestrator" reasoning that set the 10s ceiling in #1172's review is
+not what a read timeout protects: an unreachable code location already returns in ~0.1s, and a
+dead Orchestrator API is connection-refused; the read timeout governs only a *hung* orchestrator.
+
+**Decision (2026-09-22): leave the value at 10s.** The measured distribution fits inside it, and
+every figure above comes from a local machine — choosing 15s or 20s from local data would repeat
+the error #572 was opened to correct, which was setting the number from something other than
+measurement of the environment that matters. The ceiling is also not the defect: a 10% chance of
+a 5.5s submission against a 324ms median is, and a larger ceiling would hide it rather than fix
+it (#1294). This knowingly leaves a gap — there is no ECS-side measurement, so if the slow mode
+is materially worse there this ceiling will still bite. **Every figure in this report is local,
+so read it as a floor for ECS, not an estimate.** A submission that exceeds the ceiling is not
+surfaced as an error: since #1232 the planner answers from cache with a `200` marked
+`X-LIF-Partial: orchestrator_submission_failed`, or a `503` when nothing was cached. Revisit if it
+is ever observed in dev or demo (#1320).

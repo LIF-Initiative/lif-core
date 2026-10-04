@@ -116,18 +116,22 @@ async def update_entity_attribute_association(
     # Get existing association
     entity_attribute_association = await get_entity_attribute_association_by_id(session, association_id)
 
-    if data.EntityId:
+    # `is not None`, not truthiness: an id of 0 is a value the client supplied, and the
+    # write below applies it (dict(exclude_unset=True)) — so it must be validated, not skipped.
+    if data.EntityId is not None:
         await check_entity_by_id(session=session, id=data.EntityId)
-    if data.AttributeId:
+    if data.AttributeId is not None:
         await check_attribute_by_id(session=session, id=data.AttributeId)
 
     # Checking if unique association already exists
-    if data.EntityId or data.AttributeId:
-        updated_entity_id = data.EntityId if data.EntityId else entity_attribute_association.EntityId
-        updated_attribute_id = data.AttributeId if data.AttributeId else entity_attribute_association.AttributeId
+    if data.EntityId is not None or data.AttributeId is not None:
+        updated_entity_id = data.EntityId if data.EntityId is not None else entity_attribute_association.EntityId
+        updated_attribute_id = (
+            data.AttributeId if data.AttributeId is not None else entity_attribute_association.AttributeId
+        )
         updated_extended_by_data_model_id = (
             data.ExtendedByDataModelId
-            if data.ExtendedByDataModelId
+            if data.ExtendedByDataModelId is not None
             else entity_attribute_association.ExtendedByDataModelId
         )
         existing_association = await get_entity_attribute_association_by_entity_attribute_id(

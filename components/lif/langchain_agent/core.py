@@ -43,6 +43,11 @@ LLM_OUTPUT_TOKEN_COST = LLM_TOKEN_COST.get("output", 0)
 LLM_CACHED_TOKEN_COST = LLM_TOKEN_COST.get("cached", 0)
 AGENT_TASKS = os.environ.get("LIF_ADVISOR_AGENT_TASKS", None)
 MESSAGES_TO_KEEP = int(os.environ.get("LIF_ADVISOR_MESSAGES_TO_KEEP", "4"))
+# Post-summarization token budget for the messages after the summary.  The summary
+# SystemMessage is always kept and its size is added on top, so a long summary cannot
+# crowd out the current turn.  If the current turn alone exceeds this budget (a large
+# tool result, for instance), the list is sent untrimmed rather than without the
+# user's question.
 TRIMMED_MESSAGES_SIZE = int(os.environ.get("LIF_ADVISOR_TRIMMED_MESSAGES_SIZE", "384"))
 MAX_CONVERSATION_SIZE = int(os.environ.get("LIF_ADVISOR_MAX_CONVERSATION_SIZE", "384"))
 MAX_SUMMARY_SIZE = int(os.environ.get("LIF_ADVISOR_MAX_SUMMARY_SIZE", "128"))
@@ -145,7 +150,7 @@ class LIFAIAgent:
             prompt = PromptTemplate.from_template(template=prompt_text).format(tools=tools)
 
         summarization_node = create_summarization_node(model, MAX_CONVERSATION_SIZE, MAX_SUMMARY_SIZE)
-        pre_model_hook = make_pre_model_hook(summarization_node, MESSAGES_TO_KEEP, logger)
+        pre_model_hook = make_pre_model_hook(summarization_node, MESSAGES_TO_KEEP, TRIMMED_MESSAGES_SIZE, logger)
 
         return create_react_agent(
             model,

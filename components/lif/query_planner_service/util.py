@@ -9,92 +9,14 @@ from typing import List
 
 from jsonpath_ng import parse
 
-from lif.datatypes.core import LIFFragment, LIFQuery, LIFQueryPlan, LIFQueryPlanPart, LIFPersonIdentifier, LIFRecord
-from lif.lif_schema_config import (
-    PERSON_DOT,
-    PERSON_DOT_PASCAL,
-    PERSON_DOT_ALL,
-    PERSON_DOT_ZERO,
-    PERSON_JSON_PATH_PREFIX,
-    PERSON_DOT_LENGTH,
-)
+from lif.datatypes.core import LIFQuery, LIFQueryPlan, LIFQueryPlanPart, LIFPersonIdentifier, LIFRecord
+from lif.lif_schema_config import PERSON_DOT, PERSON_DOT_PASCAL, PERSON_JSON_PATH_PREFIX, PERSON_DOT_LENGTH
+from lif.datatypes.orchestration import OrchestratorJobResults
 from lif.logging.core import get_logger
 from lif.query_planner_service.datatypes import LIFQueryPlannerInfoSourceConfig
 
 
 logger = get_logger(__name__)
-
-
-def _find_key_case_insensitive(d: dict, key: str) -> str | None:
-    """Find a key in a dict using case-insensitive matching.
-
-    Returns the actual key from the dict if found, None otherwise.
-    This handles the case where translator returns "Person" but we're looking for "person".
-    """
-    if key in d:
-        return key
-    key_lower = key.lower()
-    for k in d.keys():
-        if k.lower() == key_lower:
-            return k
-    return None
-
-
-# -------------------------------------------------------------------------
-# Helper function to adjust the LIF fragments for the initial orchestrator
-# simplification. Initially, fragments will contain a full person.  This
-# function creates and returns a new list of fragments that includes a
-# fragment for each list field.
-# -------------------------------------------------------------------------
-def adjust_lif_fragments_for_initial_orchestrator_simplification(
-    lif_fragments: List[LIFFragment], desired_fragment_paths: List[str]
-) -> List[LIFFragment]:
-    """
-    Adjust LIF fragments for initial orchestrator simplification (fragments will contain full person).
-
-    Args:
-        lif_fragments (List[LIFFragment]): List of LIF fragments to adjust.
-        desired_fragment_paths (List[str]): List of desired fragment paths to include.
-
-    Returns:
-        List[LIFFragment]: Adjusted list of LIF fragments.
-    """
-    if len(lif_fragments) == 0:
-        logger.warning("No LIF fragments provided for adjustment.")
-        return []
-    results: List[LIFFragment] = []
-    for fragment in lif_fragments:
-        if fragment.fragment_path == PERSON_DOT_ALL:
-            for path in desired_fragment_paths:
-                adjusted_path = PERSON_DOT_ZERO + path[PERSON_DOT_LENGTH - 1 : :]
-                keys = adjusted_path.split(".")
-                last_key = keys[-1]
-                current_field = fragment.fragment[0]
-                for key in keys:
-                    # Handle case-insensitive lookup for "person"/"Person" root key
-                    actual_key = (
-                        _find_key_case_insensitive(current_field, key) if isinstance(current_field, dict) else key
-                    )
-                    if key == last_key:
-                        if actual_key and actual_key in current_field:
-                            current_field = current_field[actual_key]
-                            new_fragment = LIFFragment(
-                                fragment_path=path,
-                                fragment=current_field if isinstance(current_field, list) else [current_field],
-                            )
-                            results.append(new_fragment)
-                    elif isinstance(current_field, dict) and actual_key and actual_key in current_field:
-                        current_field = current_field[actual_key]
-                    elif isinstance(current_field, list) and len(current_field) == 0:
-                        logger.info(f"list in lif record is empty for key: {key}")
-                        break
-                    elif isinstance(current_field, list) and key.isdigit():
-                        current_field = current_field[int(key)]
-                    else:
-                        logger.info(f"key in lif record has unexpected type: {key}")
-        else:
-            results.append(fragment)
-    return results
 
 
 # -------------------------------------------------------------------------
@@ -165,10 +87,49 @@ def get_lif_fragment_paths_not_found_in_lif_record(lif_record: LIFRecord, lif_fr
             logger.info(f"Path '{path}' not found in LIFRecord.")
             not_found_paths.append(path)
         else:
-            matches_str = ", ".join([str(match.value) for match in matches])
-            logger.info(f"Matched path '{path}' with values: {matches_str}")
+            logger.info(f"Matched path '{path}' with {len(matches)} value(s).")
 
     return not_found_paths
+
+
+# -------------------------------------------------------------------------
+# Helper functions to summarize objects for logging. Both carry person data,
+# which must never reach the logs.
+# -------------------------------------------------------------------------
+def summarize_query_plan(lif_query_plan: LIFQueryPlan) -> str:
+    """
+    Summarize a LIF query plan for logging, omitting the person identifier each part carries.
+
+    Args:
+        lif_query_plan (LIFQueryPlan): The query plan to summarize.
+
+    Returns:
+        str: Information source ids, adapter ids and fragment path counts.
+    """
+    parts = [
+        f"{part.information_source_id}/{part.adapter_id} ({len(part.lif_fragment_paths or [])} path(s))"
+        for part in lif_query_plan.root
+    ]
+    return f"{len(lif_query_plan.root)} part(s): {'; '.join(parts)}"
+
+
+def summarize_orchestration_results(results: OrchestratorJobResults) -> str:
+    """
+    Summarize orchestration results for logging, omitting person identifiers and fragment payloads.
+
+    Args:
+        results (OrchestratorJobResults): The orchestration results to summarize.
+
+    Returns:
+        str: Per-source fragment counts, or the error reported for that source.
+    """
+    parts = [
+        f"{part_result.information_source_id}/{part_result.adapter_id} ("
+        + (f"error: {part_result.error}" if part_result.error else f"{len(part_result.fragments or [])} fragment(s)")
+        + ")"
+        for part_result in results.query_plan_part_results
+    ]
+    return f"{len(results.query_plan_part_results)} part result(s): {'; '.join(parts)}"
 
 
 # -------------------------------------------------------------------------

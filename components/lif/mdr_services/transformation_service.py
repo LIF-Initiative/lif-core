@@ -1341,9 +1341,11 @@ async def update_transformation_group(
         )
 
     # Checking if data models exist or not
-    if data.SourceDataModelId:
+    # `is not None`, not truthiness: an id of 0 is a value the client supplied, so it must
+    # be validated rather than skipped.
+    if data.SourceDataModelId is not None:
         await check_datamodel_by_id(session=session, id=data.SourceDataModelId)
-    if data.TargetDataModelId:
+    if data.TargetDataModelId is not None:
         await check_datamodel_by_id(session=session, id=data.TargetDataModelId)
 
     # Check that these updates won't make this transformation group a duplicate with another

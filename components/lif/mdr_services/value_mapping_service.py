@@ -146,33 +146,35 @@ async def soft_delete_mapping(session: AsyncSession, id: int):
 async def update_mapping(session: AsyncSession, id: int, data: UpdateValueSetValueMappingDTO) -> dict:
     mapping = await get_mapping_by_id(session=session, id=id)
 
+    # `is not None`, not truthiness: an id of 0 is a value the client supplied, and the write
+    # below applies it (dict(exclude_unset=True)) — so it must be validated, not skipped.
     # Check if transformation group exists
-    if data.TransformationGroupId:
+    if data.TransformationGroupId is not None:
         await get_transformation_group_by_id(session=session, id=data.TransformationGroupId)
 
     # Check if source value set exists
-    if data.SourceValueSetId:
+    if data.SourceValueSetId is not None:
         await get_value_set_by_id(session=session, id=data.SourceValueSetId)
 
     # Check if target value set exists
-    if data.TargetValueSetId:
+    if data.TargetValueSetId is not None:
         await get_value_set_by_id(session=session, id=data.TargetValueSetId)
 
     # Check if the source ValueSetValueId exists
-    if data.SourceValueId:
+    if data.SourceValueId is not None:
         source_value_set_value = await get_value_set_value_by_id(session=session, id=data.SourceValueId)
-        source_value_set_id = data.SourceValueSetId if data.SourceValueSetId else mapping.SourceValueSetId
-        if source_value_set_id and source_value_set_value.ValueSetId != source_value_set_id:
+        source_value_set_id = data.SourceValueSetId if data.SourceValueSetId is not None else mapping.SourceValueSetId
+        if source_value_set_id is not None and source_value_set_value.ValueSetId != source_value_set_id:
             raise HTTPException(
                 status_code=400,
                 detail=f"Source ValueSetId {source_value_set_id} does not match the ValueSetId {source_value_set_value.ValueSetId} of the SourceValueId {data.SourceValueId}.",
             )
 
     # Check if the target ValueSetValueId exists
-    if data.TargetValueId:
+    if data.TargetValueId is not None:
         target_value_set_value = await get_value_set_value_by_id(session=session, id=data.TargetValueId)
-        target_value_set_id = data.TargetValueSetId if data.TargetValueSetId else mapping.TargetValueSetId
-        if target_value_set_id and target_value_set_value.ValueSetId != target_value_set_id:
+        target_value_set_id = data.TargetValueSetId if data.TargetValueSetId is not None else mapping.TargetValueSetId
+        if target_value_set_id is not None and target_value_set_value.ValueSetId != target_value_set_id:
             raise HTTPException(
                 status_code=400,
                 detail=f"Target ValueSetId {target_value_set_id} does not match the ValueSetId {target_value_set_value.ValueSetId} of the TargetValueId {data.TargetValueId}.",
@@ -181,19 +183,19 @@ async def update_mapping(session: AsyncSession, id: int, data: UpdateValueSetVal
     # Validate duplicate value mapping is not being created
     validation_query = None
     updated_transformation_group_id = (
-        data.TransformationGroupId if data.TransformationGroupId else mapping.TransformationGroupId
+        data.TransformationGroupId if data.TransformationGroupId is not None else mapping.TransformationGroupId
     )
-    updated_source_value_id = data.SourceValueId if data.SourceValueId else mapping.SourceValueId
-    updated_target_value_id = data.TargetValueId if data.TargetValueId else mapping.TargetValueId
+    updated_source_value_id = data.SourceValueId if data.SourceValueId is not None else mapping.SourceValueId
+    updated_target_value_id = data.TargetValueId if data.TargetValueId is not None else mapping.TargetValueId
 
-    if updated_transformation_group_id:
+    if updated_transformation_group_id is not None:
         validation_query = select(ValueSetValueMapping).where(
             ValueSetValueMapping.SourceValueId == updated_source_value_id,
             ValueSetValueMapping.TargetValueId == updated_target_value_id,
             ValueSetValueMapping.TransformationGroupId == updated_transformation_group_id,
             ValueSetValueMapping.Deleted == False,
         )
-    elif data.SourceValueId or data.TargetValueId:
+    elif data.SourceValueId is not None or data.TargetValueId is not None:
         validation_query = select(ValueSetValueMapping).where(
             ValueSetValueMapping.SourceValueId == updated_source_value_id,
             ValueSetValueMapping.TargetValueId == updated_target_value_id,

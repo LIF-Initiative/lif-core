@@ -75,6 +75,11 @@ Parameters:
       served through this load balancer. The advisor's load_profile call runs
       ~45s (LLM + MCP + GraphQL), so the previous 30s caused ALB 504s on demo
       (surfaced in the browser as a CORS error). See issue #1050.
+      The Query Planner's sync poll ceiling (LIF_QUERY_TIMEOUT_SECONDS, deployed
+      120 in lif-query-planner-taskdef-includes.yml) must stay below this value,
+      or the QP never returns its clean 408 -- the ALB cuts first with a 504.
+      Lowering this below that ceiling re-inverts the ladder. Full ladder:
+      docs/design/cross-cutting/timeouts.md (#1263).
     Default: '150'
 
   DnsZone:

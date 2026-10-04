@@ -1,21 +1,29 @@
 import asyncio
 import httpx
+import json
 import logging
-from unittest.mock import patch, MagicMock, AsyncMock
+import pytest
+from datetime import datetime, timedelta, timezone
+from unittest.mock import patch, call, MagicMock, AsyncMock
 
 from lif.datatypes import (
     LIFFragment,
     LIFQuery,
     LIFQueryFilter,
     LIFQueryPersonFilter,
+    LIFQueryPlan,
     LIFQueryStatusResponse,
     LIFPersonIdentifier,
     LIFPersonIdentifiers,
+    LIFUpdate,
     OrchestratorJobQueryPlanPartResults,
 )
-from lif.query_planner_service import core
+from lif.datatypes.core import LIFUpdatePersonPayload
+from lif.query_planner_service import core, statistics
 from lif.exceptions.core import LIFException
+from lif.datatypes.orchestration import OrchestratorJobQueryPlanPartResults
 from lif.query_planner_service.core import OrchestratorJobResults, add_job_to_store
+from lif.query_planner_service.datatypes import LIFQueryPlannerPartialRecords
 
 
 def test_sample():
@@ -114,12 +122,13 @@ def test_run_query_when_no_data_sources_found_for_any_fragment_paths(mock_post):
 
     async def run_test():
         # When no information sources match the requested fragment paths, the service
-        # should return the cached LIF records (list of LIFRecord) instead of posting a job.
-        lif_records_list = await service.run_query(query, first_run=True)
-        assert lif_records_list is not None
+        # should return the cached LIF records instead of posting a job, marked partial so
+        # the caller can tell them from a complete answer (#1232).
+        result = await service.run_query(query, first_run=True)
+        assert isinstance(result, LIFQueryPlannerPartialRecords)
+        assert result.reason == statistics.OUTCOME_NO_SOURCES_AVAILABLE
         # Expect one cached record based on the mocked cache response
-        assert isinstance(lif_records_list, list)
-        assert len(lif_records_list) == 1
+        assert len(result.records) == 1
 
     asyncio.run(run_test())
     mock_post.assert_called_once()
@@ -170,10 +179,12 @@ def test_run_query_logs_failure_reason_when_orchestrator_submission_fails(mock_p
             mock_post.return_value = mock_cache_response
 
             async def run_test():
-                # The partial-degrade is preserved: cached records are returned, not a hard failure.
-                lif_records = await service.run_query(query, first_run=True)
-                assert isinstance(lif_records, list)
-                assert len(lif_records) == 1
+                # The partial-degrade is preserved: cached records are returned, not a hard failure,
+                # marked partial with the reason (#1232).
+                result = await service.run_query(query, first_run=True)
+                assert isinstance(result, LIFQueryPlannerPartialRecords)
+                assert result.reason == statistics.OUTCOME_ORCHESTRATOR_SUBMISSION_FAILED
+                assert len(result.records) == 1
 
             asyncio.run(run_test())
 
@@ -432,6 +443,444 @@ def test_run_post_orchestration_results(mock_post):
     )
 
 
+# -------------------------------------------------------------------------
+# #1269 — person data must never reach the logs.
+# -------------------------------------------------------------------------
+def _sentinel_query() -> LIFQuery:
+    return LIFQuery(
+        filter=LIFQueryFilter(
+            root=LIFQueryPersonFilter(
+                person=LIFPersonIdentifiers(
+                    Identifier=LIFPersonIdentifier(identifier="Sentinel-1234", identifierType="School-assigned number")
+                )
+            )
+        ),
+        selected_fields=["person.name"],
+    )
+
+
+@patch("httpx.AsyncClient.post")
+def test_run_query_does_not_log_the_person_identifier(mock_post, caplog):
+    config: core.LIFQueryPlannerConfig = core.LIFQueryPlannerConfig(
+        lif_cache_url="https://api.example.com",
+        lif_orchestrator_url="https://api.example.com",
+        information_sources_config=[
+            {
+                "information_source_id": "source_1",
+                "information_source_organization": "Example Org 1",
+                "adapter_id": "lif-to-lif",
+                "ttl_hours": 24,
+                "lif_fragment_paths": ["Person.name"],
+            }
+        ],
+    )
+    service: core.LIFQueryPlannerService = core.LIFQueryPlannerService(config=config)
+
+    mock_post.side_effect = [
+        _create_mock_post_response(200, [{"person": [{}]}], "https://api.example.com/query"),
+        _create_mock_post_response(200, {"run_id": "run-1"}, "https://api.example.com/jobs"),
+    ]
+
+    with patch.object(core, "JOB_STORE", {}), caplog.at_level(logging.DEBUG):
+        asyncio.run(service.run_query(_sentinel_query(), first_run=True))
+
+    assert "Sentinel" not in caplog.text
+    # The query plan line still says which sources were planned.
+    assert "source_1" in caplog.text
+
+
+@patch("httpx.AsyncClient.post")
+def test_run_post_orchestration_results_does_not_log_person_data(mock_post, caplog):
+    config: core.LIFQueryPlannerConfig = core.LIFQueryPlannerConfig(
+        lif_cache_url="https://api.example.com",
+        lif_orchestrator_url="https://api.example.com",
+        information_sources_config=[],
+    )
+    service: core.LIFQueryPlannerService = core.LIFQueryPlannerService(config=config)
+    mock_post.return_value = _create_mock_post_response(200, {}, "https://api.example.com/save")
+
+    results = OrchestratorJobResults(
+        run_id="run-1",
+        query_plan_part_results=[
+            OrchestratorJobQueryPlanPartResults(
+                information_source_id="source_1",
+                adapter_id="lif-to-lif",
+                data_timestamp="2026-01-01T00:00:00Z",
+                person_id=LIFPersonIdentifier(identifier="Sentinel-1234", identifierType="School-assigned number"),
+                fragments=[LIFFragment(fragment_path="person.name", fragment=[{"name": [{"familyName": "Canary"}]}])],
+                error=None,
+            )
+        ],
+    )
+
+    job_store = {"run-1": core.LIFQueryPlannerJob(job_id="run-1", query=_sentinel_query(), status="PENDING")}
+    with patch.object(core, "JOB_STORE", job_store), caplog.at_level(logging.DEBUG):
+        asyncio.run(service.run_post_orchestration_results(results))
+
+    assert "Sentinel" not in caplog.text
+    assert "Canary" not in caplog.text
+    # The run id and the source are still traceable.
+    assert "run-1" in caplog.text
+    assert "source_1" in caplog.text
+
+
+# -------------------------------------------------------------------------
+# #341 — query statistics emission.
+# -------------------------------------------------------------------------
+_FULL_CACHE_RECORD = {"person": [{"name": [{"givenName": ["John"], "familyName": "Doe"}]}]}
+
+_STATS_SOURCES = [
+    {
+        "information_source_id": "source_1",
+        "information_source_organization": "Example Org 1",
+        "adapter_id": "lif-to-lif",
+        "ttl_hours": 24,
+        "lif_fragment_paths": ["Person.name"],
+    }
+]
+
+
+def _stats_service() -> "core.LIFQueryPlannerService":
+    return core.LIFQueryPlannerService(
+        config=core.LIFQueryPlannerConfig(
+            lif_cache_url="https://api.example.com",
+            lif_orchestrator_url="https://api.example.com",
+            information_sources_config=_STATS_SOURCES,
+        )
+    )
+
+
+def _emitted_events(caplog) -> list:
+    prefix = statistics.QUERY_STATISTICS_PREFIX + " "
+    return [json.loads(line[line.index(prefix) + len(prefix) :]) for line in caplog.text.splitlines() if prefix in line]
+
+
+@patch("httpx.AsyncClient.post")
+def test_run_query_emits_orchestrated_query_statistics(mock_post, caplog):
+    mock_post.side_effect = [
+        _create_mock_post_response(200, [{"person": [{}]}], "https://api.example.com/query"),
+        _create_mock_post_response(200, {"run_id": "run-1"}, "https://api.example.com/jobs"),
+    ]
+
+    with patch.object(core, "JOB_STORE", {}), caplog.at_level(logging.INFO):
+        asyncio.run(_stats_service().run_query(_sentinel_query(), first_run=True))
+
+    events = _emitted_events(caplog)
+    assert len(events) == 1
+    assert events[0]["outcome"] == statistics.OUTCOME_ORCHESTRATED
+    assert events[0]["correlation_id"] == "run-1"
+    assert events[0]["requested_paths"] == ["Person.name"]
+    assert events[0]["sources"] == [{"information_source_id": "source_1", "adapter_id": "lif-to-lif", "path_count": 1}]
+    assert "Sentinel" not in caplog.text
+
+
+@patch("httpx.AsyncClient.post")
+def test_run_query_emits_served_from_cache_statistics(mock_post, caplog):
+    mock_post.side_effect = [_create_mock_post_response(200, [_FULL_CACHE_RECORD], "https://api.example.com/query")]
+
+    with patch.object(core, "JOB_STORE", {}), caplog.at_level(logging.INFO):
+        asyncio.run(_stats_service().run_query(_sentinel_query(), first_run=True))
+
+    events = _emitted_events(caplog)
+    assert len(events) == 1
+    assert events[0]["outcome"] == statistics.OUTCOME_SERVED_FROM_CACHE
+    assert events[0]["cache_hit"] is True
+
+
+@patch("httpx.AsyncClient.post")
+def test_sync_query_path_emits_exactly_one_planned_event(mock_post, caplog):
+    # The sync /query endpoint calls run_query twice: once with first_run=True, then again with
+    # first_run=False after polling. The second call lands on the served-from-cache branch, so
+    # without the first_run guard every orchestrated query would be counted twice (#341 gap 3).
+    mock_post.side_effect = [
+        _create_mock_post_response(200, [{"person": [{}]}], "https://api.example.com/query"),
+        _create_mock_post_response(200, {"run_id": "run-1"}, "https://api.example.com/jobs"),
+        _create_mock_post_response(200, [_FULL_CACHE_RECORD], "https://api.example.com/query"),
+    ]
+    service = _stats_service()
+
+    async def run_both():
+        await service.run_query(_sentinel_query(), first_run=True)
+        await service.run_query(_sentinel_query(), first_run=False)
+
+    with patch.object(core, "JOB_STORE", {}), caplog.at_level(logging.INFO):
+        asyncio.run(run_both())
+
+    events = _emitted_events(caplog)
+    assert len(events) == 1
+    assert events[0]["outcome"] == statistics.OUTCOME_ORCHESTRATED
+
+
+@patch("httpx.AsyncClient.post")
+def test_every_planned_outcome_records_the_client(mock_post, caplog):
+    """
+    Each of the four outcomes emits from its own call site, so each must be handed the
+    client -- one forgotten site would silently bucket that outcome under "unknown" (#1272).
+    """
+    cache_miss = _create_mock_post_response(200, [{"person": [{}]}], "https://api.example.com/query")
+    full_cache = _create_mock_post_response(200, [_FULL_CACHE_RECORD], "https://api.example.com/query")
+    submitted = _create_mock_post_response(200, {"run_id": "run-1"}, "https://api.example.com/jobs")
+    no_sources = core.LIFQueryPlannerService(
+        config=core.LIFQueryPlannerConfig(
+            lif_cache_url="https://api.example.com",
+            lif_orchestrator_url="https://api.example.com",
+            information_sources_config=[],
+        )
+    )
+
+    async def run_all():
+        mock_post.side_effect = [full_cache]
+        await _stats_service().run_query(_sentinel_query(), first_run=True, client="graphql")
+        mock_post.side_effect = [cache_miss]
+        await no_sources.run_query(_sentinel_query(), first_run=True, client="graphql")
+        mock_post.side_effect = [cache_miss, httpx.ConnectError("down")]
+        await _stats_service().run_query(_sentinel_query(), first_run=True, client="graphql")
+        mock_post.side_effect = [cache_miss, submitted]
+        await _stats_service().run_query(_sentinel_query(), first_run=True, client="graphql")
+
+    with patch.object(core, "JOB_STORE", {}), caplog.at_level(logging.INFO):
+        asyncio.run(run_all())
+
+    events = _emitted_events(caplog)
+    assert [e["outcome"] for e in events] == [
+        statistics.OUTCOME_SERVED_FROM_CACHE,
+        statistics.OUTCOME_NO_SOURCES_AVAILABLE,
+        statistics.OUTCOME_ORCHESTRATOR_SUBMISSION_FAILED,
+        statistics.OUTCOME_ORCHESTRATED,
+    ]
+    assert {e["client"] for e in events} == {"graphql"}
+
+
+@patch("httpx.AsyncClient.post")
+def test_run_query_without_a_client_still_succeeds_and_emits_unknown(mock_post, caplog):
+    """The header is optional: its absence is a statistic, never a failed query (ADR 0004)."""
+    mock_post.side_effect = [_create_mock_post_response(200, [_FULL_CACHE_RECORD], "https://api.example.com/query")]
+
+    with patch.object(core, "JOB_STORE", {}), caplog.at_level(logging.INFO):
+        records = asyncio.run(_stats_service().run_query(_sentinel_query(), first_run=True))
+
+    assert len(records) == 1
+    events = _emitted_events(caplog)
+    assert len(events) == 1
+    assert events[0]["client"] == statistics.CLIENT_UNKNOWN
+
+
+@patch("httpx.AsyncClient.post")
+def test_a_malformed_client_is_recorded_as_invalid_and_never_logged_raw(mock_post, caplog):
+    mock_post.side_effect = [_create_mock_post_response(200, [_FULL_CACHE_RECORD], "https://api.example.com/query")]
+    raw = "Sentinel-1234 john.doe@example.edu"
+
+    with patch.object(core, "JOB_STORE", {}), caplog.at_level(logging.DEBUG):
+        asyncio.run(_stats_service().run_query(_sentinel_query(), first_run=True, client=raw))
+
+    assert _emitted_events(caplog)[0]["client"] == statistics.CLIENT_INVALID
+    assert "john.doe" not in caplog.text
+
+
+@patch("httpx.AsyncClient.post")
+def test_the_client_survives_to_the_completed_event(mock_post, caplog):
+    """
+    The orchestrator's results callback carries no caller, so the only way the completed
+    event can name one is the job remembering it from the original query.
+    """
+    mock_post.side_effect = [
+        _create_mock_post_response(200, [{"person": [{}]}], "https://api.example.com/query"),
+        _create_mock_post_response(200, {"run_id": "run-1"}, "https://api.example.com/jobs"),
+        _create_mock_post_response(200, {}, "https://api.example.com/save"),
+    ]
+    results = OrchestratorJobResults(run_id="run-1", query_plan_part_results=[])
+    service = _stats_service()
+
+    async def submit_then_complete():
+        await service.run_query(_sentinel_query(), first_run=True, client="learner-data-export")
+        await service.run_post_orchestration_results(results)
+
+    with patch.object(core, "JOB_STORE", {}), caplog.at_level(logging.INFO):
+        asyncio.run(submit_then_complete())
+
+    events = _emitted_events(caplog)
+    assert [(e["event"], e["client"]) for e in events] == [
+        ("query_planned", "learner-data-export"),
+        ("query_completed", "learner-data-export"),
+    ]
+
+
+@patch("httpx.AsyncClient.post")
+def test_both_events_carry_the_configured_org_key(mock_post, caplog):
+    """One planner runs per org; without this every org's events share one bucket (#1271)."""
+    mock_post.side_effect = [
+        _create_mock_post_response(200, [{"person": [{}]}], "https://api.example.com/query"),
+        _create_mock_post_response(200, {"run_id": "run-1"}, "https://api.example.com/jobs"),
+        _create_mock_post_response(200, {}, "https://api.example.com/save"),
+    ]
+    service = core.LIFQueryPlannerService(
+        config=core.LIFQueryPlannerConfig(
+            lif_cache_url="https://api.example.com",
+            lif_orchestrator_url="https://api.example.com",
+            information_sources_config=_STATS_SOURCES,
+            org_key="org2",
+        )
+    )
+
+    async def submit_then_complete():
+        await service.run_query(_sentinel_query(), first_run=True)
+        await service.run_post_orchestration_results(OrchestratorJobResults(run_id="run-1", query_plan_part_results=[]))
+
+    with patch.object(core, "JOB_STORE", {}), caplog.at_level(logging.INFO):
+        asyncio.run(submit_then_complete())
+
+    assert [(e["event"], e["org_key"]) for e in _emitted_events(caplog)] == [
+        ("query_planned", "org2"),
+        ("query_completed", "org2"),
+    ]
+
+
+@patch("httpx.AsyncClient.post")
+def test_a_planner_without_an_org_key_still_serves_the_query_and_emits_unknown(mock_post, caplog):
+    """A planner deployed without LIF_ORG_KEY must degrade to "unknown", not fail (#1271)."""
+    mock_post.side_effect = [_create_mock_post_response(200, [_FULL_CACHE_RECORD], "https://api.example.com/query")]
+
+    with patch.object(core, "JOB_STORE", {}), caplog.at_level(logging.INFO):
+        records = asyncio.run(_stats_service().run_query(_sentinel_query(), first_run=True))
+
+    assert len(records) == 1
+    assert [e["org_key"] for e in _emitted_events(caplog)] == [statistics.ORG_KEY_UNKNOWN]
+
+
+@patch("httpx.AsyncClient.post")
+def test_run_post_orchestration_results_emits_completed_statistics(mock_post, caplog):
+    mock_post.return_value = _create_mock_post_response(200, {}, "https://api.example.com/save")
+    results = OrchestratorJobResults(
+        run_id="run-1",
+        query_plan_part_results=[
+            OrchestratorJobQueryPlanPartResults(
+                information_source_id="source_1",
+                adapter_id="lif-to-lif",
+                data_timestamp="2026-01-01T00:00:00Z",
+                person_id=LIFPersonIdentifier(identifier="Sentinel-1234", identifierType="School-assigned number"),
+                fragments=[LIFFragment(fragment_path="person.name", fragment=[{"name": [{"familyName": "Canary"}]}])],
+                error=None,
+            )
+        ],
+    )
+    job_store = {"run-1": core.LIFQueryPlannerJob(job_id="run-1", query=_sentinel_query(), status="PENDING")}
+
+    with patch.object(core, "JOB_STORE", job_store), caplog.at_level(logging.INFO):
+        asyncio.run(_stats_service().run_post_orchestration_results(results))
+
+    events = [e for e in _emitted_events(caplog) if e["event"] == "query_completed"]
+    assert len(events) == 1
+    assert events[0]["fulfilled_paths"] == ["Person.name"]
+    assert events[0]["paths_not_fulfilled"] == []
+    assert events[0]["sources"][0]["fragment_count"] == 1
+    assert "Sentinel" not in caplog.text
+    assert "Canary" not in caplog.text
+
+
+@patch("httpx.AsyncClient.post")
+def test_run_query_prunes_the_job_store_before_storing_a_new_job(mock_post):
+    query = _prune_test_query()
+
+    information_sources_config = [
+        {
+            "information_source_id": "source_1",
+            "information_source_organization": "Example Org 1",
+            "adapter_id": "lif-to-lif",
+            "ttl_hours": 24,
+            "lif_fragment_paths": ["Person.name"],
+        }
+    ]
+
+    config: core.LIFQueryPlannerConfig = core.LIFQueryPlannerConfig(
+        lif_cache_url="https://api.example.com",
+        lif_orchestrator_url="https://api.example.com",
+        information_sources_config=information_sources_config,
+    )
+    service: core.LIFQueryPlannerService = core.LIFQueryPlannerService(config=config)
+
+    mock_cache_response = _create_mock_post_response(200, [{"person": [{}]}], "https://api.example.com/query")
+    mock_post_job_response = _create_mock_post_response(200, {"run_id": "new-job"}, "https://api.example.com/jobs")
+    mock_post.side_effect = [mock_cache_response, mock_post_job_response]
+
+    # One more than the size bound, all expired, so exactly the oldest is eligible.
+    job_store = {
+        f"expired-{i}": _job_aged_hours(f"expired-{i}", core.JOB_EXPIRY_HOURS + 1)
+        for i in range(core.JOB_MAX_CACHE_SIZE + 1)
+    }
+
+    async def run_test():
+        lif_query_status_response: LIFQueryStatusResponse = await service.run_query(query, first_run=True)
+        assert lif_query_status_response.query_id == "new-job"
+
+    with patch.object(core, "JOB_STORE", job_store):
+        asyncio.run(run_test())
+        assert "expired-0" not in core.JOB_STORE
+        assert "expired-1" in core.JOB_STORE
+        assert "new-job" in core.JOB_STORE
+
+
+def test_prune_job_store_keeps_the_most_recent_entries_regardless_of_age():
+    overflow = 5
+    job_store = {
+        f"job-{i}": _job_aged_hours(f"job-{i}", core.JOB_EXPIRY_HOURS + 24)
+        for i in range(core.JOB_MAX_CACHE_SIZE + overflow)
+    }
+
+    with patch.object(core, "JOB_STORE", job_store):
+        core.prune_job_store()
+
+        assert len(core.JOB_STORE) == core.JOB_MAX_CACHE_SIZE
+        assert all(f"job-{i}" not in core.JOB_STORE for i in range(overflow))
+        assert all(f"job-{i}" in core.JOB_STORE for i in range(overflow, core.JOB_MAX_CACHE_SIZE + overflow))
+
+
+def test_prune_job_store_keeps_entries_younger_than_the_expiry_window():
+    job_store = {f"job-{i}": _job_aged_hours(f"job-{i}", 0) for i in range(core.JOB_MAX_CACHE_SIZE + 5)}
+
+    with patch.object(core, "JOB_STORE", job_store):
+        core.prune_job_store()
+
+        assert len(core.JOB_STORE) == core.JOB_MAX_CACHE_SIZE + 5
+
+
+def test_prune_job_store_removes_an_expired_pending_entry():
+    # A caller that gives up before the planner does leaves the entry PENDING forever (#572).
+    job_store = {
+        f"pending-{i}": _job_aged_hours(f"pending-{i}", core.JOB_EXPIRY_HOURS + 1, status="PENDING") for i in range(5)
+    }
+    job_store.update({f"recent-{i}": _job_aged_hours(f"recent-{i}", 0) for i in range(core.JOB_MAX_CACHE_SIZE)})
+
+    with patch.object(core, "JOB_STORE", job_store):
+        core.prune_job_store()
+
+        assert all(f"pending-{i}" not in core.JOB_STORE for i in range(5))
+        assert len(core.JOB_STORE) == core.JOB_MAX_CACHE_SIZE
+
+
+def _prune_test_query() -> LIFQuery:
+    return LIFQuery(
+        filter=LIFQueryFilter(
+            root=LIFQueryPersonFilter(
+                person=LIFPersonIdentifiers(
+                    Identifier=LIFPersonIdentifier(identifier="12345", identifierType="School-assigned number")
+                )
+            )
+        ),
+        selected_fields=["person.name"],
+    )
+
+
+def _job_aged_hours(job_id: str, hours: int, status: str = "COMPLETED") -> core.LIFQueryPlannerJob:
+    timestamp = (datetime.now(timezone.utc) - timedelta(hours=hours)).isoformat()
+    return core.LIFQueryPlannerJob(
+        job_id=job_id,
+        query=_prune_test_query(),
+        status=status,
+        created_timestamp=timestamp,
+        updated_timestamp=timestamp,
+    )
+
+
 def _create_mock_post_response(status_code, json_data, uri):
     mock_response = MagicMock()
     mock_response.status_code = status_code
@@ -443,3 +892,281 @@ def _create_mock_post_response(status_code, json_data, uri):
     else:
         mock_response.raise_for_status.return_value = None
     return mock_response
+
+
+def _make_query():
+    return LIFQuery(
+        filter=LIFQueryFilter(
+            root=LIFQueryPersonFilter(
+                person=LIFPersonIdentifiers(
+                    Identifier=LIFPersonIdentifier(identifier="12345", identifierType="School-assigned number")
+                )
+            )
+        ),
+        selected_fields=["person.name"],
+    )
+
+
+# -------------------------------------------------------------------------
+# LIFQueryPlannerConfig timeout
+# -------------------------------------------------------------------------
+def test_query_planner_config_default_query_timeout_is_300():
+    config = core.LIFQueryPlannerConfig(
+        lif_cache_url="https://api.example.com",
+        lif_orchestrator_url="https://api.example.com",
+        information_sources_config=[],
+    )
+    assert config.query_timeout_seconds == 300
+
+
+def test_query_planner_config_accepts_explicit_query_timeout():
+    config = core.LIFQueryPlannerConfig(
+        lif_cache_url="https://api.example.com",
+        lif_orchestrator_url="https://api.example.com",
+        information_sources_config=[],
+        query_timeout_seconds=120,
+    )
+    assert config.query_timeout_seconds == 120
+
+
+def test_query_planner_config_rejects_non_positive_query_timeout():
+    from pydantic import ValidationError
+
+    with pytest.raises(ValidationError):
+        core.LIFQueryPlannerConfig(
+            lif_cache_url="https://api.example.com",
+            lif_orchestrator_url="https://api.example.com",
+            information_sources_config=[],
+            query_timeout_seconds=0,
+        )
+
+
+def test_query_planner_config_default_service_request_timeout_is_10():
+    """Short by design: these are fast service-to-service calls, not the orchestration wait."""
+    config = core.LIFQueryPlannerConfig(
+        lif_cache_url="https://api.example.com",
+        lif_orchestrator_url="https://api.example.com",
+        information_sources_config=[],
+    )
+    assert config.service_request_timeout_seconds == 10
+
+
+def test_query_planner_config_rejects_non_positive_service_request_timeout():
+    from pydantic import ValidationError
+
+    with pytest.raises(ValidationError):
+        core.LIFQueryPlannerConfig(
+            lif_cache_url="https://api.example.com",
+            lif_orchestrator_url="https://api.example.com",
+            information_sources_config=[],
+            service_request_timeout_seconds=0,
+        )
+
+
+# -------------------------------------------------------------------------
+# Internal HTTP clients use the short per-request timeout, not the query budget
+# -------------------------------------------------------------------------
+@patch("httpx.AsyncClient")
+def test_query_lif_cache_uses_configured_timeout(mock_client_cls):
+    mock_client = AsyncMock()
+    mock_client.post.return_value = _create_mock_post_response(200, [], "https://api.example.com/query")
+    mock_client_cls.return_value.__aenter__ = AsyncMock(return_value=mock_client)
+    mock_client_cls.return_value.__aexit__ = AsyncMock(return_value=False)
+
+    asyncio.run(core.query_lif_cache("https://api.example.com/query", _make_query(), timeout=300))
+
+    mock_client_cls.assert_called_once_with(timeout=300)
+
+
+@patch("httpx.AsyncClient")
+def test_post_orchestrator_job_uses_configured_timeout(mock_client_cls):
+    mock_client = AsyncMock()
+    mock_client.post.return_value = _create_mock_post_response(200, {"run_id": "123"}, "https://api.example.com/jobs")
+    mock_client_cls.return_value.__aenter__ = AsyncMock(return_value=mock_client)
+    mock_client_cls.return_value.__aexit__ = AsyncMock(return_value=False)
+
+    request = core.OrchestratorJobRequest(lif_query_plan=LIFQueryPlan(root=[]), async_=True)
+    asyncio.run(core.post_orchestrator_job("https://api.example.com/jobs", request, timeout=300))
+
+    mock_client_cls.assert_called_once_with(timeout=300)
+
+
+@patch("httpx.AsyncClient")
+def test_run_query_passes_service_request_timeout_to_both_http_calls(mock_client_cls):
+    """run_query's own call sites must pass the per-request timeout, not the query budget (#571).
+
+    The two tests above call the module-level functions directly with a literal timeout, so
+    they pin the *signatures*. They stay green even if run_query hands those functions
+    self.config.query_timeout_seconds -- which is exactly the coupling this issue removed.
+    Distinct values (7 vs 123) are what make the assertion mean something.
+    """
+    config = core.LIFQueryPlannerConfig(
+        lif_cache_url="https://api.example.com/cache",
+        lif_orchestrator_url="https://api.example.com/orchestrator",
+        information_sources_config=[
+            {
+                "information_source_id": "source_1",
+                "information_source_organization": "Example Org 1",
+                "adapter_id": "lif-to-lif",
+                "ttl_hours": 24,
+                "lif_fragment_paths": ["Person.name"],
+            }
+        ],
+        query_timeout_seconds=123,
+        service_request_timeout_seconds=7,
+    )
+    service = core.LIFQueryPlannerService(config=config)
+
+    mock_client = AsyncMock()
+    mock_client.post.side_effect = [
+        _create_mock_post_response(200, [], "https://api.example.com/cache/query"),
+        _create_mock_post_response(200, {"run_id": "run-1"}, "https://api.example.com/orchestrator/jobs"),
+    ]
+    mock_client_cls.return_value.__aenter__ = AsyncMock(return_value=mock_client)
+    mock_client_cls.return_value.__aexit__ = AsyncMock(return_value=False)
+
+    # run_query registers the submitted job, so keep the mutation out of the module singleton.
+    with patch.dict(core.JOB_STORE, {}, clear=True):
+        asyncio.run(service.run_query(_make_query(), first_run=True))
+
+    # The cache read and the orchestrator submission -- both on 7, neither on the 123 budget.
+    assert mock_client_cls.call_args_list == [call(timeout=7), call(timeout=7)]
+
+
+@patch("httpx.AsyncClient")
+def test_run_update_uses_service_request_timeout_not_query_budget(mock_client_cls):
+    # Distinct values: asserting 7 rather than 123 is what pins the decoupling.
+    config = core.LIFQueryPlannerConfig(
+        lif_cache_url="https://api.example.com/cache",
+        lif_orchestrator_url="https://api.example.com/orchestrator",
+        information_sources_config=[],
+        query_timeout_seconds=123,
+        service_request_timeout_seconds=7,
+    )
+    service = core.LIFQueryPlannerService(config=config)
+
+    mock_client = AsyncMock()
+    mock_client.post.return_value = _create_mock_post_response(200, {}, "https://api.example.com/cache/update")
+    mock_client_cls.return_value.__aenter__ = AsyncMock(return_value=mock_client)
+    mock_client_cls.return_value.__aexit__ = AsyncMock(return_value=False)
+
+    update = LIFUpdate(
+        updatePerson=LIFUpdatePersonPayload(
+            filter={"Person": {"Identifier": {"identifier": "12345", "identifierType": "School-assigned number"}}},
+            input={"Person": {"Name": "Test"}},
+        )
+    )
+    asyncio.run(service.run_update(update))
+
+    mock_client_cls.assert_called_once_with(timeout=7)
+
+
+@patch("httpx.AsyncClient")
+def test_run_post_orchestration_results_uses_service_request_timeout(mock_client_cls):
+    config = core.LIFQueryPlannerConfig(
+        lif_cache_url="https://api.example.com/cache",
+        lif_orchestrator_url="https://api.example.com/orchestrator",
+        information_sources_config=[
+            {
+                "information_source_id": "source_1",
+                "information_source_organization": "Example Org 1",
+                "adapter_id": "lif-to-lif",
+                "ttl_hours": 24,
+                "lif_fragment_paths": ["Person.name"],
+            }
+        ],
+        query_timeout_seconds=123,
+        service_request_timeout_seconds=7,
+    )
+    service = core.LIFQueryPlannerService(config=config)
+
+    mock_client = AsyncMock()
+    mock_client.post.return_value = _create_mock_post_response(200, [], "https://api.example.com/cache/save")
+    mock_client_cls.return_value.__aenter__ = AsyncMock(return_value=mock_client)
+    mock_client_cls.return_value.__aexit__ = AsyncMock(return_value=False)
+
+    add_job_to_store(core.LIFQueryPlannerJob(job_id="123", status="PENDING", query=_make_query()))
+    orchestration_results = OrchestratorJobResults(
+        run_id="123",
+        query_plan_part_results=[
+            OrchestratorJobQueryPlanPartResults(
+                information_source_id="source_1",
+                adapter_id="lif_to_lif",
+                data_timestamp="2023-10-01T12:00:00Z",
+                person_id=LIFPersonIdentifier(identifier="12345", identifierType="School-assigned number"),
+                fragments=[
+                    {
+                        "fragment_path": "person.name",
+                        "fragment": [
+                            {"identifier": [{"identifier": "12345", "identifierType": "School-assigned number"}]}
+                        ],
+                    }
+                ],
+                error=None,
+            )
+        ],
+    )
+    asyncio.run(service.run_post_orchestration_results(orchestration_results))
+
+    mock_client_cls.assert_called_once_with(timeout=7)
+
+
+@patch("httpx.AsyncClient.post")
+def test_run_query_after_orchestration_returns_missing_paths_unflagged(mock_post):
+    # Once orchestration has run, a path still missing most likely means the learner has no
+    # data for it, not a failure. Flagging it would mark every such learner partial (#1232).
+    mock_post.return_value = _create_mock_post_response(200, [{"person": [{}]}], "https://api.example.com/query")
+
+    result = asyncio.run(_stats_service().run_query(_sentinel_query(), first_run=False))
+
+    assert isinstance(result, list)
+    assert len(result) == 1
+
+
+@patch("httpx.AsyncClient.post")
+def test_run_post_orchestration_results_records_the_sources_that_failed(mock_post):
+    # Dagster swallows a source's final failure and the run still succeeds, so this error
+    # field is the only trace of it (measured in-process for #1232).
+    mock_post.return_value = _create_mock_post_response(200, {}, "https://api.example.com/save")
+    failed = OrchestratorJobQueryPlanPartResults(
+        information_source_id="source_2",
+        adapter_id="lif-to-lif",
+        data_timestamp=None,
+        person_id=LIFPersonIdentifier(identifier="Sentinel-1234", identifierType="School-assigned number"),
+        fragments=[],
+        error="Pipeline did not run or failed.",
+    )
+    results = OrchestratorJobResults(run_id="run-1", query_plan_part_results=[failed])
+    job_store = {"run-1": core.LIFQueryPlannerJob(job_id="run-1", query=_sentinel_query(), status="PENDING")}
+
+    with patch.object(core, "JOB_STORE", job_store):
+        asyncio.run(_stats_service().run_post_orchestration_results(results))
+
+    assert job_store["run-1"].status == "COMPLETED"
+    assert job_store["run-1"].failed_source_ids == ["source_2"]
+
+
+@patch("httpx.AsyncClient.post")
+def test_run_query_after_orchestration_marks_missing_paths_when_a_source_failed(mock_post):
+    mock_post.return_value = _create_mock_post_response(200, [{"person": [{}]}], "https://api.example.com/query")
+    job = core.LIFQueryPlannerJob(
+        job_id="run-1", query=_sentinel_query(), status="COMPLETED", failed_source_ids=["source_2"]
+    )
+
+    with patch.object(core, "JOB_STORE", {"run-1": job}):
+        result = asyncio.run(_stats_service().run_query(_sentinel_query(), first_run=False, query_id="run-1"))
+
+    assert isinstance(result, LIFQueryPlannerPartialRecords)
+    assert result.reason == core.PARTIAL_REASON_SOURCE_FAILED
+    assert len(result.records) == 1
+
+
+@patch("httpx.AsyncClient.post")
+def test_run_query_after_orchestration_without_source_failures_stays_unmarked(mock_post):
+    mock_post.return_value = _create_mock_post_response(200, [{"person": [{}]}], "https://api.example.com/query")
+    job = core.LIFQueryPlannerJob(job_id="run-1", query=_sentinel_query(), status="COMPLETED")
+
+    with patch.object(core, "JOB_STORE", {"run-1": job}):
+        result = asyncio.run(_stats_service().run_query(_sentinel_query(), first_run=False, query_id="run-1"))
+
+    assert isinstance(result, list)

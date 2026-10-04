@@ -3,6 +3,7 @@ import type { TransformationGroupDetails, TransformationData } from '../../../..
 import './BulkTransformationsBody.css';
 import { generateSampleDataFromSchema } from '../../../../services/modelService';
 import { evaluateAndCombineExpressions } from '../../../../utils/jsonataUtils';
+import { validateAgainstSchema } from '../../../../utils/schemaValidation';
 
 export interface BulkTransformationsBodyProps {
   group: TransformationGroupDetails | null;
@@ -58,6 +59,9 @@ const BulkTransformationsBody: React.FC<BulkTransformationsBodyProps> = ({ group
   // View modes: 'data' (sample / output preview) or 'schema'
   const [inputViewMode, setInputViewMode] = useState<'data' | 'schema'>('data');
   const [outputViewMode, setOutputViewMode] = useState<'data' | 'schema'>('data');
+  // Off by default: the preview is a partial document, so missing-required errors would
+  // otherwise report every attribute the author has not mapped yet.
+  const [checkCompleteness, setCheckCompleteness] = useState(false);
 
   // Evaluate all transformations; suspended while any editor is open.
   React.useEffect(() => {
@@ -99,6 +103,11 @@ const BulkTransformationsBody: React.FC<BulkTransformationsBodyProps> = ({ group
     run();
     return () => { cancelled = true; };
   }, [sampleInput, transformations, hiddenKeys, deletedKeys, editingKeys.size, editedExpressions, expandedErrorKey]);
+
+  const schemaValidation = useMemo(
+    () => validateAgainstSchema(combinedOutput, targetSchema, { includeRequired: checkCompleteness }),
+    [combinedOutput, targetSchema, checkCompleteness]
+  );
 
   const totalErrors = Object.keys(errorMap).length;
   const hiddenCount = hiddenKeys.size;
@@ -358,6 +367,15 @@ const BulkTransformationsBody: React.FC<BulkTransformationsBodyProps> = ({ group
                 <button type="button" className={"bulk-body__toggle-btn" + (outputViewMode === 'data' ? ' is-active' : '')} onClick={() => setOutputViewMode('data')}>Data</button>
                 <button type="button" className={"bulk-body__toggle-btn" + (outputViewMode === 'schema' ? ' is-active' : '')} onClick={() => setOutputViewMode('schema')}>Schema</button>
               </div>
+              {outputViewMode === 'data' && targetSchema ? (
+                <button
+                  type="button"
+                  className={"bulk-body__toggle-btn" + (checkCompleteness ? ' is-active' : '')}
+                  aria-pressed={checkCompleteness}
+                  title="Also report properties the target schema requires that the output does not set yet"
+                  onClick={() => setCheckCompleteness(v => !v)}
+                >Check completeness</button>
+              ) : null}
             </div>
           </div>
           {outputViewMode === 'data' ? (
@@ -375,6 +393,30 @@ const BulkTransformationsBody: React.FC<BulkTransformationsBodyProps> = ({ group
               <div className="bulk-body__placeholder">No target schema provided.</div>
             )
           )}
+          {outputViewMode === 'data' && combinedOutput ? (
+            schemaValidation.schemaError ? (
+              <div className="bulk-body__schema-issues bulk-body__schema-issues--error">
+                Target schema could not be compiled: {schemaValidation.schemaError}
+              </div>
+            ) : schemaValidation.issues.length ? (
+              <div className="bulk-body__schema-issues">
+                <div className="bulk-body__schema-issues-title">
+                  {schemaValidation.issues.length} schema {schemaValidation.issues.length === 1 ? 'issue' : 'issues'}
+                </div>
+                <ul>
+                  {schemaValidation.issues.map((issue, i) => (
+                    <li key={`${issue.path}-${issue.keyword}-${i}`}>
+                      <code>{issue.path || '(root)'}</code> {issue.message}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : targetSchema ? (
+              <div className="bulk-body__schema-issues bulk-body__schema-issues--ok">
+                Output conforms to the target schema{checkCompleteness ? '' : ' (completeness not checked)'}.
+              </div>
+            ) : null
+          ) : null}
           {/* Error list removed; surfaced inline with each expression card */}
         </div>
       </div>

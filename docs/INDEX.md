@@ -26,6 +26,7 @@
 ### `docs/design/components/` — Per-service design
 
 - [`adapters.md`](design/components/adapters.md) — Adapters component: pluggable input layer, contract for source-system integrations.
+- [`advisor-api.md`](design/components/advisor-api.md) — Advisor API: demo-tier chat backend over a LangGraph agent + Semantic Search MCP retrieval; carries the #715 LLM-invocation tuning study (sampling params, TOP_K sweep, live reframer validation, findings F1–F8 / recs R1–R7).
 - [`composer.md`](design/components/composer.md) — Composer component: data fragment assembly into LIF records.
 - [`identity-mapper.md`](design/components/identity-mapper.md) — Identity Mapper component: cross-system identity resolution.
 - [`lif-api.md`](design/components/lif-api.md) — LIF API service: outbound query interface for learner data.
@@ -44,6 +45,8 @@
 - [`composer/0001-implement-as-module-component.md`](design/adr/composer/0001-implement-as-module-component.md) — Composer: implement as module component.
 - [`composer/0002-use-hierarchical-dot-path-for-fragment-paths.md`](design/adr/composer/0002-use-hierarchical-dot-path-for-fragment-paths.md) — Composer: hierarchical dot-path for fragment paths.
 - [`data_model/0001-field-naming-and-source-standard-normalization.md`](design/adr/data_model/0001-field-naming-and-source-standard-normalization.md) — Data model: field naming & source-standard normalization (Proposed).
+- [`data_model/0002-lif-variants-freeze-the-overlay-model.md`](design/adr/data_model/0002-lif-variants-freeze-the-overlay-model.md) — Data model: freeze the Org LIF / Partner LIF overlay model; a LIF variant becomes a Source Schema plus a mapping (Accepted).
+- [`data_model/0003-references-between-shared-entities.md`](design/adr/data_model/0003-references-between-shared-entities.md) — Data model: references are part of the model and its output: explicit schema refs, JSON-LD `@id` in records, layered organization identifiers (Accepted).
 - [`general/auth.md`](design/adr/general/auth.md) — ADR 0001: API and User Auth (Proposed).
 - [`general/0002-lif-control-plane-vs-mdr-host.md`](design/adr/general/0002-lif-control-plane-vs-mdr-host.md) — ADR 0002 (Proposed): identity + developer-key control plane belongs in a dedicated LIF service, not MDR; MDR is the interim host via portable bricks + signed-token offline validation (#1000/#1041).
 - [`general/0003-advisor-queries-query-planner-directly.md`](design/adr/general/0003-advisor-queries-query-planner-directly.md) — ADR 0003: Advisor/MCP retrieval talks to the Query Planner directly; GraphQL is an external query facade, not an internal waypoint (Proposed).
@@ -57,6 +60,7 @@
 - [`metadata_repository/0006-reverse-translation.md`](design/adr/metadata_repository/0006-reverse-translation.md) — MDR: reverse translation.
 - [`metadata_repository/0007-query-planner-integration.md`](design/adr/metadata_repository/0007-query-planner-integration.md) — MDR: query planner integration.
 - [`metadata_repository/0008-data-model-use-cases.md`](design/adr/metadata_repository/0008-data-model-use-cases.md) — MDR: data model use cases.
+- [`metadata_repository/0009-mapping-identity-and-cardinality.md`](design/adr/metadata_repository/0009-mapping-identity-and-cardinality.md) — MDR: a mapping is identified by (group, target path); one target per mapping, one mapping per target (Accepted).
 - [`orchestrator/0001-orchestrator-for-demo.md`](design/adr/orchestrator/0001-orchestrator-for-demo.md) — Orchestrator: design for demo deployment.
 - [`translator/0001-initialization-vs-mdr-dependency.md`](design/adr/translator/0001-initialization-vs-mdr-dependency.md) — Translator: initialization vs MDR dependency.
 - [`translator/0002-query-translation.md`](design/adr/translator/0002-query-translation.md) — Translator: query translation approach.
@@ -67,6 +71,7 @@
 
 - [`schema-loading.md`](design/cross-cutting/schema-loading.md) — Schema loading pattern (MDR-at-startup, no silent file fallback), `SchemaStateManager`, PascalCase/camelCase convention, Strawberry GraphQL implementation details.
 - [`self-serve-tenant-auth.md`](design/cross-cutting/self-serve-tenant-auth.md) — Self-serve tenant onboarding narrative: Cognito sign-up → post-confirmation Lambda → schema-per-tenant provisioning → workspace selection cookie → invite tokens (#882/#883/#884).
+- [`timeouts.md`](design/cross-cutting/timeouts.md) — The timeout ladders on the retrieval and export paths, the outward-in rule they follow, and the constraints that must hold when any one value is changed.
 
 *Other planned topics: `auth.md` (all-service auth model), `polylith-conventions.md`.*
 
@@ -81,6 +86,7 @@
 - [`884-demo-promotion-cheatsheet.md`](operations/guides/884-demo-promotion-cheatsheet.md) — Tactical runbook layered on `demo-environment-update.md` for the #884 self-serve promotion: SSM keys, MDR API + Cognito + SAM Flyway, frontend, user cleanup.
 - [`add-data-source.md`](operations/guides/add-data-source.md) — Adding a new data source to a LIF deployment: source schema, JSONata mappings, pipeline wiring.
 - [`adding-a-new-microservice.md`](operations/guides/adding-a-new-microservice.md) — Runbook for standing up a new HTTP microservice: Polylith brick layout, pyproject hygiene, Dockerfile2, AuthMiddleware wiring, docker-compose entry.
+- [`applying-mdr-migrations.md`](operations/guides/applying-mdr-migrations.md) — how to apply an MDR Flyway migration to dev/demo, why merging alone does not apply it, and how to verify it landed.
 - [`creating-a-data-source-adapter.md`](operations/guides/creating-a-data-source-adapter.md) — Reference for the data source adapter contract: what adapters are, what they receive, what they return.
 - [`demo-environment-update.md`](operations/guides/demo-environment-update.md) — End-to-end runbook for promoting dev images to demo.
 - [`deploying-lif-at-your-institution.md`](operations/guides/deploying-lif-at-your-institution.md) — Adopter-facing hub guide for standing up your own LIF instance: deployment shapes, stack bring-up, data model in MDR, source wiring, auth/tenancy, ops; links the detailed spokes and flags self-host gaps (#1004).
@@ -90,14 +96,17 @@
 - [`load-testing.md`](operations/guides/load-testing.md) — Load testing notes for LIF services.
 - [`mdr-ui-e2e-playwright.md`](operations/guides/mdr-ui-e2e-playwright.md) — Driving the MDR UI end-to-end with Playwright: scratchpad setup, Cognito hosted-UI login automation + the duplicate-responsive-input gotcha, persisting login state, when to prefer the API instead.
 - [`self-serve-registration-walkthrough.md`](operations/guides/self-serve-registration-walkthrough.md) — End-to-end walkthrough of the #884 self-serve flow (register → workspace → invite → switch); tester checklist + admin/operator notes for verifying it on dev or demo.
+- [`test-driving-mdr.md`](operations/guides/test-driving-mdr.md) — Run MDR alone on any Docker host (no AWS/Cognito): configured scrypt-hashed logins, `.env` secrets template, measured sizing, a Caddy HTTPS recipe with loopback-only ports (#1316).
 - [`testing.md`](operations/guides/testing.md) — Unit/integration test principles, sample data orgs, the 6 test users, service-layer testing order.
 
 ### `docs/operations/proposals/` — Proposed work
 
 - [`advisor-streaming.md`](operations/proposals/advisor-streaming.md) — End-to-end token streaming for the Advisor (NDJSON over `astream_events` + `StreamingResponse` + a fetch reader), including the single-worker reframe concurrency fix, ALB idle-timeout risk, rollout, and PR sequencing (#970).
+- [`advisor-llm-sampling-params.md`](operations/proposals/advisor-llm-sampling-params.md) — #715 implementation plan for the Advisor's LLM sampling params: hoist `temperature`/`top_p`/penalties into `LIF_ADVISOR_LLM_*` read at call time, apply at both `ChatOpenAI` sites (the reframer currently runs at the server default 1.0), wire the deployment surfaces; the default temperature is deliberately still open. Companion to the study in [`advisor-api.md`](design/components/advisor-api.md).
 - [`advisor-qp-direct-retrieval.md`](operations/proposals/advisor-qp-direct-retrieval.md) — ADR-0003 implementation plan: rewire Advisor/semantic-search to retrieve from the Query Planner directly (GraphQL becomes a peer facade). Covers the QP async-contract graduation, the net-new partial-result/pending-fragment model, shared query construction, QP auth, the two regimes, and a sequenced t-shirt-sized issue breakdown with a Regime-A-first recommendation (#1053).
 - [`mdr-transformation-output-validation.md`](operations/proposals/mdr-transformation-output-validation.md) — Validate the MDR bulk-transform preview output against the target LIF schema (Ajv) at authoring time; uses the already-wired `targetSchema` prop (#973).
-- [`cf-ci-improvements.md`](operations/proposals/cf-ci-improvements.md) — External review of the AWS delivery setup (CloudFormation/SAM/GitHub Actions/`aws-deploy.sh`): 8 prioritized improvements — PR-time CI, lockfile-based image builds, workflow dedup, targeted/verified deploys, uv standardization, `.params` secrets hygiene, per-org `STACK_ORDER` generation. Epic #1074 (#1066–#1073).
+- [`cf-ci-improvements.md`](operations/proposals/cf-ci-improvements.md) — External review of the AWS delivery setup (CloudFormation/SAM/GitHub Actions/`aws-deploy.sh`): 8 prioritized improvements — PR-time CI, lockfile-based image builds, workflow deduplication, targeted/verified deploys, uv standardization, `.params` secrets hygiene, per-org `STACK_ORDER` generation. Epic #1074 (#1066–#1073).
+- [`mdr-import-export-portability.md`](operations/proposals/mdr-import-export-portability.md) — Epic #1223 plan: make MDR schemas and mappings portable between installs — no database IDs in files, edit-by-upload, one converter between file and rows. Grounds three live export failures (the third filed as #1321), the ID-based upload lookups (#762–#765) and five kinds of reference; flags six gaps no ticket covers (inclusions and value mappings never exported, no schema update path, empty mapping groups, hand-synced seed files, unbounded parent chains, unowned mapping targets). Five decisions made — mirror-with-preflight import, `(group, target path)` mapping identity, JSONata-only lossless round trip, full ancestor-chain resolution — plus a phased plan, the converter contract (#1333) and nine further proposed tickets; a document-store migration is out of scope, deferred to #1132.
 
 ---
 
