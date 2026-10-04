@@ -306,7 +306,9 @@
         "runbook",
         "runbooks",
         "dklen",
-        "altchars"
+        "altchars",
+        "lifk",
+        "urlsafe"
     ],
     "ignorePaths": [
         ".git/",
