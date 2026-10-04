@@ -22,6 +22,7 @@ from lif.mdr_dto.import_export_dto import (
     ImportEntityDTO,
 )
 from lif.mdr_dto.transformation_dto import TransformationListDTO
+from lif.mdr_dto.valueset_dto import ValueSetDTO
 
 # Hard import (not importorskip): the premise of this suite is that the module used
 # to blow up at import/call time, so a future import regression must FAIL, not skip.
@@ -201,6 +202,24 @@ EXTENDED_DATA_MODEL_ID = 17
 BASE_DATA_MODEL_ID = 1
 
 
+def _value_set(data_model_id: int) -> ValueSetDTO:
+    return ValueSetDTO(
+        Id=1,
+        Name="VS",
+        Description=None,
+        UseConsiderations=None,
+        DataModelId=data_model_id,
+        Notes=None,
+        CreationDate=None,
+        ActivationDate=None,
+        DeprecationDate=None,
+        Contributor=None,
+        ContributorOrganization=None,
+        Extension=False,
+        ExtensionNotes=None,
+    )
+
+
 def _autospec_export_services(monkeypatch, data_model: DataModel, base_model: DataModel | None = None) -> dict:
     """Swap every service call export_datamodel makes for a signature-checking autospec.
 
@@ -212,7 +231,9 @@ def _autospec_export_services(monkeypatch, data_model: DataModel, base_model: Da
         "get_base_model_for_given_orglif": base_model,
         "get_list_of_entities_for_data_model": (0, []),
         "get_list_of_attributes_for_data_model": (0, []),
-        "get_paginated_value_sets_by_data_model_id": (0, []),
+        # One value set, so the per-value-set loop runs and its values lookup is checked too.
+        "get_paginated_value_sets_by_data_model_id": (1, [_value_set(data_model.Id)]),
+        "get_list_of_values_for_value_set": (0, []),
         "get_transformations_by_data_model_id": TransformationListDTO(
             SourceTransformations=[], TargetTransformations=[]
         ),
