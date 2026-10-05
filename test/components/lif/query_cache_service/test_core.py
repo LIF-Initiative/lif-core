@@ -14,7 +14,7 @@ from lif.datatypes import (
     LIFUpdate,
 )
 from lif.datatypes.core import LIFUpdatePersonPayload
-from lif.exceptions.core import ResourceNotFoundException
+from lif.exceptions.core import InvalidInputException, ResourceNotFoundException
 from lif.query_cache_service import core
 
 PERSON_DOC = {"Person": [{"Name": [{"FamilyName": "Doe"}]}]}
@@ -73,7 +73,7 @@ def test_add_raises_when_no_inserted_id():
 def test_update_set_only_uses_single_find_one_and_update():
     lif_update = LIFUpdate(
         updatePerson=LIFUpdatePersonPayload(
-            filter={"Person": {"Identifier": {"identifier": "1"}}}, input={"Person": {"Name": {"FamilyName": "Doe"}}}
+            filter={"Person": {"Identifier": {"identifier": "1"}}}, input={"Person": {"nickname": "Doe"}}
         )
     )
     mock_collection = MagicMock()
@@ -91,13 +91,14 @@ def test_update_set_only_uses_single_find_one_and_update():
     assert kwargs["projection"] == {"Person": 1, "_id": 0}
     assert kwargs["return_document"] == core.ReturnDocument.AFTER
     assert args[0] == {"Person.Identifier.identifier": "1"}
-    assert args[1] == {"$set": {"Person.0.Name.FamilyName": "Doe"}}
+    assert args[1] == {"$set": {"Person.0.nickname": "Doe"}}
 
 
 def test_update_append_pushes_array_then_sets_then_reads_back():
     lif_update = LIFUpdate(
         updatePerson=LIFUpdatePersonPayload(
-            filter={"Person": {"Identifier": {"identifier": "1"}}}, input={"Person": {"Name": {"GivenName": ["John"]}}}
+            filter={"Person": {"Identifier": {"identifier": "1"}}},
+            input={"Person": {"Proficiency": [{"name": "Welding"}]}},
         )
     )
     mock_collection = MagicMock()
@@ -111,11 +112,11 @@ def test_update_append_pushes_array_then_sets_then_reads_back():
     mock_collection.find_one.assert_awaited_once()
     # array init for missing array
     mock_collection.update_one.assert_awaited_once_with(
-        {"Person.Identifier.identifier": "1"}, {"$set": {"Person.0.Name.GivenName": []}}
+        {"Person.Identifier.identifier": "1"}, {"$set": {"Person.0.Proficiency": []}}
     )
     mock_collection.find_one_and_update.assert_awaited_once_with(
         {"Person.Identifier.identifier": "1"},
-        {"$push": {"Person.0.Name.GivenName": "John"}},
+        {"$push": {"Person.0.Proficiency": {"name": "Welding"}}},
         projection={"Person": 1, "_id": 0},
         return_document=core.ReturnDocument.AFTER,
     )
@@ -129,7 +130,7 @@ def test_update_append_multiple_elements_wraps_them_in_each():
     lif_update = LIFUpdate(
         updatePerson=LIFUpdatePersonPayload(
             filter={"Person": {"Identifier": {"identifier": "1"}}},
-            input={"Person": {"Name": {"GivenName": ["John", "Jack"]}}},
+            input={"Person": {"Proficiency": [{"name": "Welding"}, {"name": "Brazing"}]}},
         )
     )
     mock_collection = MagicMock()
@@ -144,7 +145,7 @@ def test_update_append_multiple_elements_wraps_them_in_each():
     # list itself as a single nested element.
     mock_collection.find_one_and_update.assert_awaited_once_with(
         {"Person.Identifier.identifier": "1"},
-        {"$push": {"Person.0.Name.GivenName": {"$each": ["John", "Jack"]}}},
+        {"$push": {"Person.0.Proficiency": {"$each": [{"name": "Welding"}, {"name": "Brazing"}]}}},
         projection={"Person": 1, "_id": 0},
         return_document=core.ReturnDocument.AFTER,
     )
@@ -153,8 +154,7 @@ def test_update_append_multiple_elements_wraps_them_in_each():
 def test_update_no_match_raises_resource_not_found():
     lif_update = LIFUpdate(
         updatePerson=LIFUpdatePersonPayload(
-            filter={"Person": {"Identifier": {"identifier": "missing"}}},
-            input={"Person": {"Name": {"FamilyName": "Doe"}}},
+            filter={"Person": {"Identifier": {"identifier": "missing"}}}, input={"Person": {"nickname": "Doe"}}
         )
     )
     mock_collection = MagicMock()
@@ -242,3 +242,40 @@ def test_save_replaces_existing_fragment_data_instead_of_appending():
 
     persisted_name = written_records[1]["Person"][0]["Name"]
     assert persisted_name == [{"FamilyName": "Smith"}]
+
+
+# -------------------------------------------------------------------------
+# #1229 — an object under an entity has no element to land in. Every
+# PascalCase entity is an array (docs/specs/data-model-rules.md), so
+# "Person.0.Name.lastName" names no element and MongoDB rejects it. It is
+# refused before any MongoDB call instead of surfacing as a 500.
+# -------------------------------------------------------------------------
+@pytest.mark.parametrize(
+    "update_input",
+    [
+        {"Person": {"Name": {"lastName": "Renamed"}}},  # $set inside an entity
+        {"Person": {"Name": {"GivenName": ["John"]}}},  # $push under an object under an entity
+        {"Person": {"nickname": "Writey", "Contact": {"Email": {"emailAddress": "a@b.c"}}}},  # mixed with a valid field
+    ],
+)
+def test_update_refuses_an_object_under_an_entity_before_touching_mongodb(update_input):
+    lif_update = LIFUpdate(
+        updatePerson=LIFUpdatePersonPayload(filter={"Person": {"Identifier": {"identifier": "1"}}}, input=update_input)
+    )
+    mock_collection = MagicMock()
+
+    with _patch_collection(mock_collection):
+        with pytest.raises(InvalidInputException) as exc_info:
+            asyncio.run(core.update(lif_update))
+
+    assert mock_collection.mock_calls == []
+    entity = next(k for k, v in update_input["Person"].items() if isinstance(v, dict))
+    assert entity in str(exc_info.value)
+
+
+def test_update_still_sets_an_object_under_a_camelcase_attribute():
+    """Only PascalCase keys are entities; a camelCase attribute holding an object is not an array."""
+    set_ops, push_ops = core.build_mongo_update_ops({"nickname": {"display": "W"}})
+
+    assert set_ops == {"Person.0.nickname.display": "W"}
+    assert push_ops == {}

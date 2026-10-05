@@ -22,7 +22,7 @@ from lif.datatypes.core import (
     LIFRecord,
     LIFUpdate,
 )
-from lif.exceptions.core import ResourceNotFoundException
+from lif.exceptions.core import InvalidInputException, ResourceNotFoundException
 from lif.lif_schema_config import PERSON_KEY_PASCAL, PERSON_DOT_PASCAL_ZERO
 from lif.logging.core import get_logger
 from lif.mongodb_connection.core import get_database_async
@@ -101,6 +101,13 @@ def build_mongo_update_ops(update_fields, root_prefix=PERSON_DOT_PASCAL_ZERO):
     for k, v in update_fields.items():
         key_path = f"{root_prefix}.{k}"
         if isinstance(v, dict):
+            # A PascalCase key is an entity, and every entity is an array (docs/specs/data-model-rules.md),
+            # so a path into it names no element and MongoDB rejects the write (#1229).
+            if k[:1].isupper():
+                raise InvalidInputException(
+                    f"Cannot update fields inside entity '{k}': it is an array, so the element to change is "
+                    f"ambiguous. To add an element, send a list instead: {{'{k}': [{{...}}]}}."
+                )
             sub_set, sub_push = build_mongo_update_ops(v, key_path)
             set_ops.update(sub_set)
             push_ops.update(sub_push)
