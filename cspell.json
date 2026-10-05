@@ -307,6 +307,8 @@
         "runbooks",
         "dklen",
         "altchars",
+        "lifk",
+        "urlsafe",
         "behaviour",
         "readback",
         "Writey"
