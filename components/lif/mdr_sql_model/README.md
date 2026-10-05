@@ -13,7 +13,7 @@ don't have to pull in MDR's SQLAlchemy/SQLModel dependency.
 ## Used by
 - `mdr_dto` — DTO enums mirror the ORM enums defined here
 - `mdr_services` — reads/writes these tables
-- `bases/lif/mdr_restapi` — a couple of endpoint modules reference the enums directly
+- `bases/lif/mdr_restapi` — `datamodel_endpoints.py` references the enums directly
 
 This component is MDR-internal, in the same sense as `mdr_dto`: other services
 that need MDR data should call the MDR API via `mdr_client`, not import these

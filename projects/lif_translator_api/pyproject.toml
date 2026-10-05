@@ -32,5 +32,5 @@ packages = ["lif"]
 "../../components/lif/exceptions" = "lif/exceptions"
 "../../components/lif/logging" = "lif/logging"
 "../../components/lif/mdr_client" = "lif/mdr_client"
-"../../components/lif/lif_schema_config" = "lif/lif_schema_config"  # via mdr_client
+"../../components/lif/lif_schema_config" = "lif/lif_schema_config"  # via mdr_client (type-only import)
 "../../components/lif/translator" = "lif/translator"
