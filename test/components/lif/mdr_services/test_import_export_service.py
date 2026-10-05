@@ -11,7 +11,7 @@ from unittest.mock import AsyncMock, MagicMock
 import pytest
 from fastapi import HTTPException
 
-from lif.datatypes.mdr_sql_model import DataModel, DataModelType, DatamodelElementType
+from lif.mdr_sql_model.core import DataModel, DataModelType, DatamodelElementType
 from lif.mdr_dto.datamodel_dto import CreateDataModelDTO
 from lif.mdr_dto.import_export_dto import (
     CreateCloneDTO,

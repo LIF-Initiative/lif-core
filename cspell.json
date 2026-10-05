@@ -66,6 +66,7 @@
         "celerybeat",
         "CEDS",
         "changeme",
+        "checkfirst",
         "checkpointer",
         "CLIR",
         "clir",
@@ -161,6 +162,7 @@
         "libpq",
         "LIFAIAgent",
         "LIFCORE",
+        "lifk",
         "liffy",
         "marimo",
         "MDRUI",
@@ -306,7 +308,12 @@
         "runbook",
         "runbooks",
         "dklen",
-        "altchars"
+        "altchars",
+        "lifk",
+        "urlsafe",
+        "behaviour",
+        "readback",
+        "Writey"
     ],
     "ignorePaths": [
         ".git/",

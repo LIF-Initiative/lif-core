@@ -15,7 +15,7 @@ from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
 
-from lif.datatypes.mdr_sql_model import DeveloperApiKey
+from lif.mdr_sql_model.core import DeveloperApiKey
 from lif.mdr_dto.developer_api_key_dto import CreatedDeveloperApiKeyDTO, CreateDeveloperApiKeyDTO, DeveloperApiKeyDTO
 
 KEY_PREFIX = "lifk_"

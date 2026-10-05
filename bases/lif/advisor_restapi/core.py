@@ -307,7 +307,10 @@ async def _safe_summarize(agent, task, username):
         response = await agent.ask_agent(
             task, "Summarize our conversation extracting metadata about the conversation and then save it"
         )
-        logger.info(f"Summarization response for {username}: {response}")
+        logger.info(
+            f"Summarization response for {username}: {len(response.get('content', ''))} chars, "
+            f"{response.get('tokens', 0)} tokens, cost {response.get('cost', 0.0)}"
+        )
     except Exception:
         logger.exception(f"Background summarization failed for {username}")
 

@@ -4,7 +4,7 @@ import re
 
 import pytest
 from deepdiff import DeepDiff
-from lif.datatypes.mdr_sql_model import Attribute, DataModel, DataModelType, Entity
+from lif.mdr_sql_model.core import Attribute, DataModel, DataModelType, Entity
 from lif.mdr_services.attribute_service import get_unique_attribute
 from lif.mdr_services.entity_service import get_unique_entity
 from sqlalchemy import text

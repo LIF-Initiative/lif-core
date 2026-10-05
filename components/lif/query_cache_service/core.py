@@ -22,7 +22,7 @@ from lif.datatypes.core import (
     LIFRecord,
     LIFUpdate,
 )
-from lif.exceptions.core import ResourceNotFoundException
+from lif.exceptions.core import InvalidInputException, ResourceNotFoundException
 from lif.lif_schema_config import PERSON_KEY_PASCAL, PERSON_DOT_PASCAL_ZERO
 from lif.logging.core import get_logger
 from lif.mongodb_connection.core import get_database_async
@@ -101,6 +101,13 @@ def build_mongo_update_ops(update_fields, root_prefix=PERSON_DOT_PASCAL_ZERO):
     for k, v in update_fields.items():
         key_path = f"{root_prefix}.{k}"
         if isinstance(v, dict):
+            # A PascalCase key is an entity, and every entity is an array (docs/specs/data-model-rules.md),
+            # so a path into it names no element and MongoDB rejects the write (#1229).
+            if k[:1].isupper():
+                raise InvalidInputException(
+                    f"Cannot update fields inside entity '{k}': it is an array, so the element to change is "
+                    f"ambiguous. To add an element, send a list instead: {{'{k}': [{{...}}]}}."
+                )
             sub_set, sub_push = build_mongo_update_ops(v, key_path)
             set_ops.update(sub_set)
             push_ops.update(sub_push)
@@ -157,7 +164,7 @@ async def query(query: LIFQuery) -> List[LIFRecord]:
         mongo_projection["_id"] = 0
 
         logger.info("===> WILL NOW MAKE MONGODB COLLECTION.FIND CALL:")
-        logger.info(f"FILTER: {mongo_filter}")
+        logger.info(f"FILTER on: {sorted(mongo_filter)}")
         logger.info(f"PROJECTION: {mongo_projection}")
         cursor = collection.find(mongo_filter, mongo_projection)
         logger.info("===> DONE MAKING MONGODB CALL")
@@ -166,7 +173,7 @@ async def query(query: LIFQuery) -> List[LIFRecord]:
             results.append(doc)
 
         logger.info("===> DONE COLLECTING RESULTS FROM MONGODB CALL")
-        logger.info("===> QUERY CACHE RETURNING: " + str(results))
+        logger.info(f"===> QUERY CACHE RETURNING {len(results)} record(s)")
         return results
     except Exception as e:
         logger.exception("Query Exception: %s", e)
@@ -191,7 +198,7 @@ async def update(lif_update: LIFUpdate) -> LIFRecord:
         Exception: If the update fails.
     """
     try:
-        logger.info(f"===> CALL MADE TO UPDATE: {lif_update}")
+        logger.info("===> CALL MADE TO UPDATE")
         filter_dict = lif_update.updatePerson.filter
         update_fields = lif_update.updatePerson.input
 
@@ -240,8 +247,8 @@ async def update(lif_update: LIFUpdate) -> LIFRecord:
             raise ValueError("No update fields provided.")
 
         logger.info("===> WILL NOW MAKE MONGODB COLLECTION.FIND_ONE_AND_UPDATE CALL: ")
-        logger.info(f"FILTER: {mongo_filter}")
-        logger.info(f"UPDATE DOC: {update_doc}")
+        logger.info(f"FILTER on: {sorted(mongo_filter)}")
+        logger.info(f"UPDATE DOC fields: { {op: sorted(fields) for op, fields in update_doc.items()} }")
         doc = await collection.find_one_and_update(
             mongo_filter, update_doc, projection={PERSON_KEY_PASCAL: 1, "_id": 0}, return_document=ReturnDocument.AFTER
         )
@@ -275,7 +282,7 @@ async def add(lif_record: LIFRecord) -> LIFRecord:
         Exception: If the add operation fails.
     """
     try:
-        logger.info(f"===> CALL MADE TO ADD: {lif_record}")
+        logger.info("===> CALL MADE TO ADD")
         result = await collection.insert_one(lif_record.model_dump(by_alias=True))
         if result.inserted_id:
             return lif_record

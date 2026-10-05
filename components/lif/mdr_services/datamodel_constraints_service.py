@@ -1,5 +1,5 @@
 from fastapi import HTTPException
-from lif.datatypes.mdr_sql_model import DataModelConstraints, DatamodelElementType
+from lif.mdr_sql_model.core import DataModelConstraints, DatamodelElementType
 from lif.mdr_dto.datamodel_constraints_dto import (
     CreateDataModelConstraintsDTO,
     DataModelConstraintsDTO,
