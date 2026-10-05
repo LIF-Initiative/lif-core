@@ -241,7 +241,7 @@ An OrgLIF or PartnerLIF extends a parent model. Following each parent to the roo
 nearest winning.
 
 `BaseDataModelId` is a plain self-reference with **no constraint on type or depth**
-([`mdr_sql_model.py:81`](../../../components/lif/datatypes/mdr_sql_model.py#L81)). Creation requires
+([`mdr_sql_model/core.py:81`](../../../components/lif/mdr_sql_model/core.py#L81)). Creation requires
 an OrgLIF/PartnerLIF to *have* a parent but never checks what kind
 ([`datamodel_service.py:234-238`](../../../components/lif/mdr_services/datamodel_service.py#L234-L238)),
 and the UI takes the parent as a free-typed number.
@@ -425,7 +425,7 @@ ship before export emits every element kind.
 **The preview has to cross into mappings.** A schema upload can break mappings that the file
 never mentions, because a mapping binds to schema elements **by row ID**:
 `TransformationAttributes.AttributeId` and `.EntityId` are foreign keys into `Attributes` and
-`Entities` ([`mdr_sql_model.py:350-366`](../../../components/lif/datatypes/mdr_sql_model.py#L350-L366)).
+`Entities` ([`mdr_sql_model/core.py:350-366`](../../../components/lif/mdr_sql_model/core.py#L350-L366)).
 Two ways an edit-by-upload damages them — both silent, which is **#1338**:
 
 - **Removing an attribute that a mapping uses.** In `replace`, an attribute absent from the file is
@@ -622,7 +622,7 @@ documented limitation.
 
 **One scope limit, stated up front: lossless applies to JSONata expressions.** JSONata and
 `LIF_Pseudo_Code` are the two values of `ExpressionLanguageType`
-([`mdr_sql_model.py:26-28`](../../../components/lif/datatypes/mdr_sql_model.py#L26-L28)), and only
+([`mdr_sql_model/core.py:26-28`](../../../components/lif/mdr_sql_model/core.py#L26-L28)), and only
 JSONata is executable — `LIF_Pseudo_Code` is the column default, so it is what a rule gets when
 nobody chose a language. Those rules are drafts, not transformations, and carrying them across
 installs is not something this epic owes anyone. A round trip is lossless for JSONata; a
@@ -859,7 +859,7 @@ It must settle:
   `DataModelConstraints`, or the attribute-level `Constraints` table; a file containing any of them
   is refused by name. The decision rests on the *code*, not the seed data (per "How to read this"):
   - **Constraint / Transformation inclusions.** `ElementType`
-    ([`mdr_sql_model.py:38-42`](../../../components/lif/datatypes/mdr_sql_model.py#L38-L42))
+    ([`mdr_sql_model/core.py:38-42`](../../../components/lif/mdr_sql_model/core.py#L38-L42))
     allows them, but the UI only ever creates Entity and Attribute inclusions (every
     `tmplCreateInclusion` call in `ModelExplorer.tsx`, guarded at `:1026`), upload only creates
     those two, `POST /inclusions/` does not check that such an element exists

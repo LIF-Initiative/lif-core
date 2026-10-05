@@ -1,7 +1,7 @@
 from typing import Dict, List
 
 from fastapi import HTTPException
-from lif.datatypes.mdr_sql_model import (
+from lif.mdr_sql_model.core import (
     AttributeType,
     DataModel,
     DatamodelElementType,
@@ -1061,7 +1061,7 @@ async def get_transformation_group_by_id(session: AsyncSession, id: int):
 async def _resolve_entity_id_path_to_named_path(
     session: AsyncSession, id_path: str, cache: dict[tuple[str, int], str]
 ) -> str:
-    from lif.datatypes.mdr_sql_model import Attribute, Entity
+    from lif.mdr_sql_model.core import Attribute, Entity
 
     ids = parse_transformation_path(id_path)
     segments: list[str] = []

@@ -1,6 +1,6 @@
 from copy import deepcopy
 from fastapi import HTTPException
-from lif.datatypes.mdr_sql_model import Entity, EntityAssociation, ExtInclusionsFromBaseDM, ValueSet, ValueSetValue
+from lif.mdr_sql_model.core import Entity, EntityAssociation, ExtInclusionsFromBaseDM, ValueSet, ValueSetValue
 from lif.mdr_services.attribute_service import get_attributes_with_association_metadata_for_entity
 from lif.mdr_services.datamodel_service import get_datamodel_by_id
 from lif.mdr_services.entity_service import get_entity_by_id

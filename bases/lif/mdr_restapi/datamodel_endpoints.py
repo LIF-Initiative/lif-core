@@ -5,7 +5,7 @@ from typing import Any, Dict, List, Optional
 from fastapi import APIRouter, Depends, File, Form, HTTPException, Query, Request, Response, UploadFile, status
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
-from lif.datatypes.mdr_sql_model import AccessType, StateType
+from lif.mdr_sql_model.core import AccessType, StateType
 from lif.mdr_dto.datamodel_dto import CreateDataModelDTO, DataModelDTO, DataModelWithDetailsDTO, UpdateDataModelDTO
 from lif.mdr_services import datamodel_service, schema_generation_service, schema_upload_service, tag_service
 from lif.mdr_utils.database_setup import get_session
