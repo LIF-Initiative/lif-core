@@ -308,7 +308,10 @@
         "dklen",
         "altchars",
         "lifk",
-        "urlsafe"
+        "urlsafe",
+        "behaviour",
+        "readback",
+        "Writey"
     ],
     "ignorePaths": [
         ".git/",
