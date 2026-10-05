@@ -56,10 +56,14 @@ async def test_update_logs_no_learner_data(caplog):
     lif_update = LIFUpdate(
         updatePerson=LIFUpdatePersonPayload(
             filter={"Person": {"Identifier": {"identifier": IDENTIFIER}}},
-            input={"Person": {"Name": {"FamilyName": FIELD_VALUE}}},
+            # A list under the entity: an object under it is refused before any log line (#1356).
+            input={"Person": {"Name": [{"familyName": FIELD_VALUE}]}},
         )
     )
     mock_collection = MagicMock()
+    # A list under an entity reads the current document and initializes the array before the update.
+    mock_collection.find_one = AsyncMock(return_value=PERSON_DOC)
+    mock_collection.update_one = AsyncMock()
     mock_collection.find_one_and_update = AsyncMock(return_value=PERSON_DOC)
 
     with patch.object(core, "collection", mock_collection), caplog.at_level(logging.INFO, logger=LOGGER):
