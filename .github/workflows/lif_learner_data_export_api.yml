@@ -9,9 +9,7 @@ on:
       - bases/lif/learner_data_export_api/**
       - cloudformation/dev-lif-learner-data-export-api.params
       - cloudformation/lif-learner-data-export-api-taskdef-includes.yml
-      - components/lif/api_key_auth/**
       - components/lif/auth_utils/**
-      - components/lif/cognito_auth/**
       - components/lif/datatypes/**
       - components/lif/exceptions/**
       - components/lif/lif_schema_config/**
