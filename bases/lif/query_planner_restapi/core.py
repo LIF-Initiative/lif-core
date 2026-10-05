@@ -210,14 +210,14 @@ async def do_run_query_sync(
                     logger.info(f"Query completed successfully, returning {len(result)} record(s)")
                     return result
                 else:
-                    msg: str = f"Query completed but results are not in expected format: {result}"
-                    logger.error(msg)
+                    # Only the type: the unexpected result can hold learner data (#1269).
+                    msg: str = "Query completed but results are not in expected format"
+                    logger.error(f"{msg}: {type(result).__name__}")
                     raise HTTPException(status_code=500, detail=msg)
             else:
+                # error_message is the orchestrator's text, so it goes to the log only (#1340).
                 msg = f"Query failed with status: {result.status}"
-                if result.error_message:
-                    msg += f" - {result.error_message}"
-                logger.error(msg)
+                logger.error(f"{msg} - {result.error_message}" if result.error_message else msg)
                 raise HTTPException(status_code=500, detail=msg)
         elif isinstance(result, LIFQueryPlannerPartialRecords):
             return respond_to_partial_records(result, response)
@@ -228,8 +228,10 @@ async def do_run_query_sync(
     except HTTPException:
         raise
     except Exception as e:
+        # The log keeps the message for operators; the caller gets none of it, since a cache
+        # failure's message carries the cache's response body (#1340, as #1291 and #1309 did for GraphQL).
         logger.error(f"Error processing query: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail="Error processing query")
 
 
 # -------------------------------------------------------------------------
@@ -260,7 +262,8 @@ async def do_run_query(
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        logger.error(f"Error processing query: {e}")
+        raise HTTPException(status_code=500, detail="Error processing query")
 
 
 @app.get("/query/{query_id}/status")
@@ -272,7 +275,7 @@ async def do_get_query_status(query_id: str) -> LIFQueryStatusResponse:
         raise HTTPException(status_code=400, detail="Invalid job ID")
     except Exception as e:
         logger.error(f"Error retrieving job status: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail="Error retrieving job status")
 
 
 @app.post("/update", response_model=LIFRecord)
@@ -285,7 +288,8 @@ async def do_run_update(update: LIFUpdate) -> LIFRecord:
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        logger.error(f"Error processing update: {e}")
+        raise HTTPException(status_code=500, detail="Error processing update")
 
 
 @app.post("/orchestration/results")
@@ -298,4 +302,5 @@ async def post_orchestration_results(results: OrchestratorJobResults):
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        logger.error(f"Error processing orchestration results: {e}")
+        raise HTTPException(status_code=500, detail="Error processing orchestration results")

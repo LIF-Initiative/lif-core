@@ -2,7 +2,7 @@ from typing import List
 from fastapi import FastAPI, HTTPException
 
 from lif.datatypes import LIFFragment, LIFQuery, LIFQueryFilter, LIFRecord, LIFUpdate
-from lif.exceptions.core import ResourceNotFoundException
+from lif.exceptions.core import InvalidInputException, ResourceNotFoundException
 from lif.logging.core import get_logger
 from lif.query_cache_service.core import add, query, save, update
 
@@ -33,6 +33,8 @@ async def do_run_update(lif_update: LIFUpdate) -> LIFRecord:
         return await update(lif_update)
     except ValueError:
         raise
+    except InvalidInputException as e:
+        raise HTTPException(status_code=422, detail=str(e))
     except ResourceNotFoundException as e:
         raise HTTPException(status_code=404, detail=str(e))
     except Exception as e:
