@@ -9,6 +9,7 @@ on:
       - bases/lif/learner_data_export_api/**
       - cloudformation/dev-lif-learner-data-export-api.params
       - cloudformation/lif-learner-data-export-api-taskdef-includes.yml
+      - components/lif/auth_utils/**
       - components/lif/datatypes/**
       - components/lif/exceptions/**
       - components/lif/lif_schema_config/**

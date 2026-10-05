@@ -24,13 +24,12 @@ from typing import Any, Optional
 
 import jwt
 import jwt.algorithms  # ensure the submodule is imported for `jwt.algorithms.has_crypto`
+from lif.auth_utils import DEFAULT_PUBLIC_PATH_PREFIXES, DEFAULT_PUBLIC_PATHS, extract_bearer_token, is_public_path
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 
 logger = logging.getLogger(__name__)
-
-_BEARER_PREFIX = "Bearer "
 
 # Cache PyJWKClient per (region, pool) so JWKS keys are fetched once per process.
 _jwk_clients: dict[tuple[str, str], jwt.PyJWKClient] = {}
@@ -59,8 +58,8 @@ class CognitoAuthConfig:
     user_pool_id: str = ""
     region: str = "us-east-1"
     client_id: str = ""
-    public_paths: set[str] = field(default_factory=lambda: {"/health", "/health-check"})
-    public_path_prefixes: set[str] = field(default_factory=lambda: {"/docs", "/openapi.json"})
+    public_paths: set[str] = field(default_factory=lambda: set(DEFAULT_PUBLIC_PATHS))
+    public_path_prefixes: set[str] = field(default_factory=lambda: set(DEFAULT_PUBLIC_PATH_PREFIXES))
 
     @property
     def is_enabled(self) -> bool:
@@ -126,20 +125,13 @@ def decode_cognito_jwt(token: str, config: CognitoAuthConfig) -> dict[str, Any]:
     return payload
 
 
-def _extract_bearer(request: Request) -> Optional[str]:
-    header = request.headers.get("Authorization", "")
-    if header.startswith(_BEARER_PREFIX):
-        return header[len(_BEARER_PREFIX) :].strip() or None
-    return None
-
-
 def authenticate_request(request: Request, config: CognitoAuthConfig) -> Optional[dict[str, Any]]:
     """Composable strategy: return the Cognito claims for a valid Bearer JWT, else ``None``.
 
     Never raises — a composite (e.g. LDE's "signed key OR Cognito JWT" dispatch)
     calls this and falls through to the next strategy on ``None``.
     """
-    token = _extract_bearer(request)
+    token = extract_bearer_token(request)
     if not token:
         return None
     try:
@@ -163,7 +155,7 @@ class CognitoAuthMiddleware(BaseHTTPMiddleware):
         self.config = config
 
     def _is_public(self, path: str) -> bool:
-        return path in self.config.public_paths or any(path.startswith(p) for p in self.config.public_path_prefixes)
+        return is_public_path(path, self.config.public_paths, self.config.public_path_prefixes)
 
     async def dispatch(self, request: Request, call_next):
         if self._is_public(request.url.path):

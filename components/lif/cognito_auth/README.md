@@ -23,6 +23,9 @@ in ADR 0004: bare capability in a component, composed at the edges.
   so a composite can fall through to another strategy.
 - `CognitoAuthMiddleware` — optional standalone Cognito-only middleware.
 
+Bearer extraction (the scheme is case-insensitive) and the default public paths come from
+[`auth_utils`](../auth_utils/).
+
 ## Composition (the LDE case, #1034)
 
 LDE stays **bare on `api_key_auth`** by default. When developer keys + Cognito are
@@ -31,6 +34,12 @@ enabled, the LDE base composes a *composite* inbound middleware that accepts a
 the JWT strategy and the developer-key validator (signed-token offline verify,
 #1033/#1038, ADR 0002) as the other. The composite lives at the base (composition
 is a base concern); this brick just provides the Cognito strategy.
+
+## Consumers
+
+- `bases/lif/learner_data_export_api` — composite mode, via `authenticate_request`.
+- `components/lif/mdr_auth` (packaged by `lif_mdr_api`) — calls `decode_cognito_jwt` with
+  a config built from MDR settings (#548).
 
 ## Requirements
 

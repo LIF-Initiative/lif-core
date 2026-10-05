@@ -13,6 +13,7 @@ on:
       - components/lif/demo_personas/**
       - components/lif/logging/**
       - components/lif/auth/**
+      - components/lif/auth_utils/**
       - projects/lif_advisor_api/**
       - .github/workflows/_deploy-service.yml
 

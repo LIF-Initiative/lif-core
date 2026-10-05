@@ -309,7 +309,8 @@
         "altchars",
         "behaviour",
         "readback",
-        "Writey"
+        "Writey",
+        "footgun"
     ],
     "ignorePaths": [
         ".git/",

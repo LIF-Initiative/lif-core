@@ -3,12 +3,16 @@ Core authentication module with JWT token handling, API key support, and Cognito
 """
 
 import uuid
-from datetime import datetime, timedelta, timezone
+from datetime import timedelta
 from typing import Any, Dict, Optional
 
 import jwt
 from fastapi import HTTPException, Request, status
 from fastapi.responses import JSONResponse
+from lif.auth_utils import API_KEY_HEADER, extract_bearer_token, is_public_path
+from lif.auth_utils.hs256 import decode_hs256, encode_hs256
+from lif.cognito_auth import CognitoAuthConfig, decode_cognito_jwt
+from lif.cognito_auth.core import _require_crypto
 from lif.mdr_auth.workspace_cookie import COOKIE_NAME, decode_workspace_cookie
 from lif.mdr_services.workspace_service import find_workspace
 from lif.mdr_utils.collection_utils import convert_csv_to_set
@@ -23,9 +27,7 @@ settings = get_settings()
 
 # JWT configuration
 SECRET_KEY = settings.mdr__auth__jwt_secret_key
-ALGORITHM = "HS256"
 
-API_KEY_HEADER_NAME = "X-API-Key"
 # Recommended to use hard-to-guess names for the API keys.
 API_KEYS = {
     settings.mdr__auth__service_api_key__graphql: "graphql-service",
@@ -35,60 +37,38 @@ API_KEYS = {
     settings.mdr__auth__service_api_key__learner_data_export: "learner-data-export-service",
 }
 
-# Cognito configuration
-COGNITO_USER_POOL_ID = settings.mdr__auth__cognito_user_pool_id
-COGNITO_REGION = settings.mdr__auth__cognito_region
-COGNITO_SPA_CLIENT_ID = settings.mdr__auth__cognito_spa_client_id
-COGNITO_ENABLED = bool(COGNITO_USER_POOL_ID)
+# Cognito configuration — validation itself is delegated to the cognito_auth brick.
+COGNITO_CONFIG = CognitoAuthConfig(
+    user_pool_id=settings.mdr__auth__cognito_user_pool_id,
+    region=settings.mdr__auth__cognito_region,
+    client_id=settings.mdr__auth__cognito_spa_client_id,
+)
+COGNITO_ENABLED = COGNITO_CONFIG.is_enabled
 
 # Tenant routing (issue #883) — read at request time via _tenant_routing_config
 # so tests can monkeypatch the settings object without re-importing this module.
 TENANT_ROUTING_ENABLED = settings.mdr__tenant_routing__enabled
 TENANT_SERVICE_SCHEMA = settings.mdr__tenant_routing__service_schema
 
-_cognito_jwk_client: Optional[jwt.PyJWKClient] = None
 
+def _validate_cognito_config(config: CognitoAuthConfig) -> None:
+    """Fail loudly at startup if Cognito is enabled without an SPA client id.
 
-def _get_cognito_jwk_client() -> jwt.PyJWKClient:
-    """Lazily initialize and cache the Cognito JWKS client."""
-    global _cognito_jwk_client  # noqa: PLW0603
-    if _cognito_jwk_client is None:
-        jwks_url = f"https://cognito-idp.{COGNITO_REGION}.amazonaws.com/{COGNITO_USER_POOL_ID}/.well-known/jwks.json"
-        _cognito_jwk_client = jwt.PyJWKClient(jwks_url, cache_keys=True, lifespan=3600)
-    return _cognito_jwk_client
-
-
-def decode_cognito_jwt(token: str) -> Dict[str, Any]:
-    """Decode and validate a Cognito-issued JWT (RS256 with JWKS).
-
-    Validates issuer, audience (for ID tokens) or client_id (for access tokens),
-    and token_use claims.
+    cognito_auth skips the client check when ``client_id`` is empty, which would
+    accept tokens minted for *any* app client in the pool. MDR must only accept
+    its own SPA's tokens, so a pool without a client id is a misconfiguration.
     """
-    expected_issuer = f"https://cognito-idp.{COGNITO_REGION}.amazonaws.com/{COGNITO_USER_POOL_ID}"
+    if not config.is_enabled:
+        return
+    if not config.client_id:
+        raise RuntimeError(
+            "MDR__AUTH__COGNITO_USER_POOL_ID is set but MDR__AUTH__COGNITO_SPA_CLIENT_ID is empty. "
+            "Set the SPA client id, or unset the user pool id to disable Cognito auth."
+        )
+    _require_crypto()
 
-    jwk_client = _get_cognito_jwk_client()
-    signing_key = jwk_client.get_signing_key_from_jwt(token)
 
-    payload = jwt.decode(
-        token,
-        signing_key.key,
-        algorithms=["RS256"],
-        issuer=expected_issuer,
-        options={"verify_aud": False},  # Cognito access tokens use client_id, not aud
-    )
-
-    # Validate the token is from our SPA client
-    token_use = payload.get("token_use")
-    if token_use == "id":
-        if payload.get("aud") != COGNITO_SPA_CLIENT_ID:
-            raise jwt.InvalidTokenError("ID token audience does not match SPA client ID")
-    elif token_use == "access":
-        if payload.get("client_id") != COGNITO_SPA_CLIENT_ID:
-            raise jwt.InvalidTokenError("Access token client_id does not match SPA client ID")
-    else:
-        raise jwt.InvalidTokenError(f"Unexpected token_use: {token_use}")
-
-    return payload
+_validate_cognito_config(COGNITO_CONFIG)
 
 
 METHODS_TO_REQUIRE_AUTH = convert_csv_to_set(settings.mdr__auth__methods_to_require_auth)
@@ -100,66 +80,30 @@ PUBLIC_ALLOWLIST_STARTS_WITH: set[str] = convert_csv_to_set(settings.mdr__auth__
 
 def create_access_token(data: Dict[str, Any], expires_delta: Optional[timedelta] = None) -> str:
     """Create JWT access token"""
-    to_encode = data.copy()
-    if expires_delta:
-        expire = datetime.now(timezone.utc) + expires_delta
-    else:
-        expire = datetime.now(timezone.utc) + timedelta(minutes=settings.mdr__auth__access_token_expire_minutes)
-
-    to_encode.update({"exp": expire, "type": "access"})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-    return encoded_jwt
+    expires_delta = expires_delta or timedelta(minutes=settings.mdr__auth__access_token_expire_minutes)
+    return encode_hs256({**data, "type": "access"}, SECRET_KEY, expires_delta)
 
 
 def create_refresh_token(data: Dict[str, Any]) -> str:
     """Create JWT refresh token"""
-    to_encode = data.copy()
-    expire = datetime.now(timezone.utc) + timedelta(days=settings.mdr__auth__refresh_token_expire_days)
-    to_encode.update(
-        {
-            "exp": expire,
-            "type": "refresh",
-            "jti": str(uuid.uuid4()),  # JWT ID for token tracking
-        }
+    return encode_hs256(
+        {**data, "type": "refresh", "jti": str(uuid.uuid4())},  # jti: JWT ID for token tracking
+        SECRET_KEY,
+        timedelta(days=settings.mdr__auth__refresh_token_expire_days),
     )
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-    return encoded_jwt
 
 
 def decode_jwt(token: str) -> Dict[str, Any]:
     """Decode and validate JWT token"""
-    try:
-        return jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-    except jwt.ExpiredSignatureError as error:
-        logger.warning("Auth Bearer token has expired")
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail="Token has expired", headers={"WWW-Authenticate": "Bearer"}
-        ) from error
-    except jwt.InvalidTokenError as error:
-        logger.warning("Auth Bearer token is invalid")
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Could not validate credentials",
-            headers={"WWW-Authenticate": "Bearer"},
-        ) from error
+    return decode_hs256(token, SECRET_KEY)
 
 
 def _is_public_path(path: str) -> bool:
-    return path in PUBLIC_ALLOWLIST_EXACT or any(path.startswith(prefix) for prefix in PUBLIC_ALLOWLIST_STARTS_WITH)
-
-
-def _extract_bearer_token(request: Request) -> Optional[str]:
-    auth_header = request.headers.get("Authorization")
-    if not auth_header:
-        return None
-    parts = auth_header.split()
-    if len(parts) == 2 and parts[0].lower() == "bearer":
-        return parts[1]
-    return None
+    return is_public_path(path, PUBLIC_ALLOWLIST_EXACT, PUBLIC_ALLOWLIST_STARTS_WITH)
 
 
 def _extract_api_key(request: Request) -> Optional[str]:
-    return request.headers.get(API_KEY_HEADER_NAME)
+    return request.headers.get(API_KEY_HEADER)
 
 
 def _verify_api_key(api_key: Optional[str]) -> Optional[str]:
@@ -208,7 +152,7 @@ class AuthMiddleware(BaseHTTPMiddleware):
 
             if getattr(request.state, "principal", None) is None:
                 # Fall back to Bearer token authentication
-                credentials = _extract_bearer_token(request)
+                credentials = extract_bearer_token(request)
                 if not credentials:
                     logger.warning("Auth blocked due to no credentials provided")
                     return _build_unauthorized(detail="Authentication required: Provide either Bearer token or API key")
@@ -222,7 +166,7 @@ class AuthMiddleware(BaseHTTPMiddleware):
                 if COGNITO_ENABLED and header.get("kid"):
                     # RS256 token with key ID — try Cognito validation
                     try:
-                        payload = decode_cognito_jwt(credentials)
+                        payload = decode_cognito_jwt(credentials, COGNITO_CONFIG)
                     except jwt.ExpiredSignatureError:
                         logger.warning("Cognito token has expired")
                         return _build_unauthorized(detail="Token has expired")

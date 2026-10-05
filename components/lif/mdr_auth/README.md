@@ -17,7 +17,7 @@ from lif.mdr_auth import (
 )
 ```
 
-`core.py` additionally exposes Cognito-side helpers (`decode_cognito_jwt`, `_get_cognito_jwk_client`) and config constants used by tests.
+HS256 signing/decoding, bearer extraction, the `X-API-Key` header name, and the public-path check come from [`auth_utils`](../auth_utils/). Cognito JWT validation is delegated to [`cognito_auth`](../cognito_auth/); `core.py` builds its `CognitoAuthConfig` (`COGNITO_CONFIG`) from MDR settings. If `MDR__AUTH__COGNITO_USER_POOL_ID` is set but `MDR__AUTH__COGNITO_SPA_CLIENT_ID` is empty, the module fails at import rather than accepting tokens from any app client in the pool.
 
 Phase 3 of issue #884 adds `workspace_cookie.py` (HMAC-signed workspace selection cookie) and `invite_token.py` (signed invite tokens for tenant sharing). Those land alongside the corresponding endpoint PRs (#914, #918).
 

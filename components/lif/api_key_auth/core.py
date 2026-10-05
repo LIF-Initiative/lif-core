@@ -27,11 +27,10 @@ from typing import Dict, Set
 
 from fastapi import Request
 from fastapi.responses import JSONResponse
+from lif.auth_utils import API_KEY_HEADER, DEFAULT_PUBLIC_PATH_PREFIXES, DEFAULT_PUBLIC_PATHS, is_public_path
 from starlette.middleware.base import BaseHTTPMiddleware
 
 logger = logging.getLogger(__name__)
-
-API_KEY_HEADER = "X-API-Key"
 
 
 @dataclass
@@ -42,10 +41,10 @@ class ApiKeyConfig:
     api_keys: Dict[str, str] = field(default_factory=dict)
 
     # Paths that don't require authentication (exact match)
-    public_paths: Set[str] = field(default_factory=lambda: {"/health", "/health-check"})
+    public_paths: Set[str] = field(default_factory=lambda: set(DEFAULT_PUBLIC_PATHS))
 
     # Path prefixes that don't require authentication
-    public_path_prefixes: Set[str] = field(default_factory=lambda: {"/docs", "/openapi.json"})
+    public_path_prefixes: Set[str] = field(default_factory=lambda: set(DEFAULT_PUBLIC_PATH_PREFIXES))
 
     # HTTP methods that require authentication (empty set = no auth required)
     methods_requiring_auth: Set[str] = field(default_factory=lambda: {"GET", "POST", "PUT", "DELETE", "PATCH"})
@@ -80,8 +79,10 @@ class ApiKeyConfig:
                 if key and name:
                     api_keys[key] = name
 
-        public_paths = cls._parse_csv_set(os.environ.get(f"{prefix}__PUBLIC_PATHS", "/health,/health-check"))
-        public_prefixes = cls._parse_csv_set(os.environ.get(f"{prefix}__PUBLIC_PATH_PREFIXES", "/docs,/openapi.json"))
+        public_paths = cls._parse_csv_set(os.environ.get(f"{prefix}__PUBLIC_PATHS", ",".join(DEFAULT_PUBLIC_PATHS)))
+        public_prefixes = cls._parse_csv_set(
+            os.environ.get(f"{prefix}__PUBLIC_PATH_PREFIXES", ",".join(DEFAULT_PUBLIC_PATH_PREFIXES))
+        )
 
         return cls(api_keys=api_keys, public_paths=public_paths, public_path_prefixes=public_prefixes)
 
@@ -121,13 +122,9 @@ class ApiKeyAuthMiddleware(BaseHTTPMiddleware):
         if request.method not in self.config.methods_requiring_auth:
             return await call_next(request)
 
-        # Skip auth for public paths (exact match)
+        # Skip auth for public paths (exact match or prefix)
         path = request.url.path
-        if path in self.config.public_paths:
-            return await call_next(request)
-
-        # Skip auth for public path prefixes
-        if any(path.startswith(prefix) for prefix in self.config.public_path_prefixes):
+        if is_public_path(path, self.config.public_paths, self.config.public_path_prefixes):
             return await call_next(request)
 
         # If no API keys configured, allow all requests (auth disabled)

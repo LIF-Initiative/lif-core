@@ -7,6 +7,8 @@ on:
     paths:
       - .github/workflows/lif_mdr_api.yml
       - bases/lif/mdr_restapi/**
+      - components/lif/auth_utils/**
+      - components/lif/cognito_auth/**
       - components/lif/datatypes/**
       - components/lif/mdr_auth/**
       - components/lif/mdr_dto/**

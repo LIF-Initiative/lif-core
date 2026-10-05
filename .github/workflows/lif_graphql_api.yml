@@ -9,6 +9,7 @@ on:
       - bases/lif/api_graphql/**
       - cloudformation/dev-lif-graphql.params
       - cloudformation/lif-graphql-taskdef-includes.yml
+      - components/lif/auth_utils/**
       - components/lif/mdr_client/**
       - components/lif/openapi_to_graphql/**
       - components/lif/string_utils/**
