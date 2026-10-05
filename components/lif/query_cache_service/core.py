@@ -164,7 +164,7 @@ async def query(query: LIFQuery) -> List[LIFRecord]:
         mongo_projection["_id"] = 0
 
         logger.info("===> WILL NOW MAKE MONGODB COLLECTION.FIND CALL:")
-        logger.info(f"FILTER: {mongo_filter}")
+        logger.info(f"FILTER on: {sorted(mongo_filter)}")
         logger.info(f"PROJECTION: {mongo_projection}")
         cursor = collection.find(mongo_filter, mongo_projection)
         logger.info("===> DONE MAKING MONGODB CALL")
@@ -173,7 +173,7 @@ async def query(query: LIFQuery) -> List[LIFRecord]:
             results.append(doc)
 
         logger.info("===> DONE COLLECTING RESULTS FROM MONGODB CALL")
-        logger.info("===> QUERY CACHE RETURNING: " + str(results))
+        logger.info(f"===> QUERY CACHE RETURNING {len(results)} record(s)")
         return results
     except Exception as e:
         logger.exception("Query Exception: %s", e)
@@ -198,7 +198,7 @@ async def update(lif_update: LIFUpdate) -> LIFRecord:
         Exception: If the update fails.
     """
     try:
-        logger.info(f"===> CALL MADE TO UPDATE: {lif_update}")
+        logger.info("===> CALL MADE TO UPDATE")
         filter_dict = lif_update.updatePerson.filter
         update_fields = lif_update.updatePerson.input
 
@@ -247,8 +247,8 @@ async def update(lif_update: LIFUpdate) -> LIFRecord:
             raise ValueError("No update fields provided.")
 
         logger.info("===> WILL NOW MAKE MONGODB COLLECTION.FIND_ONE_AND_UPDATE CALL: ")
-        logger.info(f"FILTER: {mongo_filter}")
-        logger.info(f"UPDATE DOC: {update_doc}")
+        logger.info(f"FILTER on: {sorted(mongo_filter)}")
+        logger.info(f"UPDATE DOC fields: { {op: sorted(fields) for op, fields in update_doc.items()} }")
         doc = await collection.find_one_and_update(
             mongo_filter, update_doc, projection={PERSON_KEY_PASCAL: 1, "_id": 0}, return_document=ReturnDocument.AFTER
         )
@@ -282,7 +282,7 @@ async def add(lif_record: LIFRecord) -> LIFRecord:
         Exception: If the add operation fails.
     """
     try:
-        logger.info(f"===> CALL MADE TO ADD: {lif_record}")
+        logger.info("===> CALL MADE TO ADD")
         result = await collection.insert_one(lif_record.model_dump(by_alias=True))
         if result.inserted_id:
             return lif_record
