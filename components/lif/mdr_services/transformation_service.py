@@ -1715,6 +1715,19 @@ async def import_transformation_group(
     source_data_model = await check_datamodel_by_id(session=session, id=reference_group.SourceDataModelId)
     target_data_model = await check_datamodel_by_id(session=session, id=reference_group.TargetDataModelId)
 
+    # A blank file Name counts as missing and falls back to the reference group's Name. Reject here,
+    # before anything is staged, when that is blank too: CreateTransformationGroupDTO would otherwise
+    # raise a ValidationError that surfaces as a 500.
+    name = data.Name if data.Name and data.Name.strip() else reference_group.Name
+    if not (name or "").strip():
+        raise HTTPException(
+            status_code=422,
+            detail=(
+                "Transformation group Name must not be empty or only whitespace, and the referenced group "
+                "has no Name to fall back to; supply a Name in the import file."
+            ),
+        )
+
     normalized_version = (version or "").strip()
     if normalized_version:
         existing_group = await find_transformation_group_by_triplet(
@@ -1755,7 +1768,7 @@ async def import_transformation_group(
             SourceDataModelId=reference_group.SourceDataModelId,
             TargetDataModelId=reference_group.TargetDataModelId,
             GroupVersion=resolved_version,
-            Name=data.Name or reference_group.Name,
+            Name=name,
             Description=data.Description if data.Description is not None else reference_group.Description,
             Notes=data.Notes if data.Notes is not None else reference_group.Notes,
             CreationDate=data.CreationDate,

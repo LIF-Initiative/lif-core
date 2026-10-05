@@ -993,6 +993,26 @@ async def test_create_transformation_group_requires_name(async_client_mdr, mdr_a
     assert [error["loc"] for error in response.json()["detail"]] == [["body", "Name"]]
 
 
+@pytest.mark.asyncio
+@pytest.mark.parametrize(("case", "name"), [("empty", ""), ("spaces", "   ")])
+async def test_update_transformation_group_rejects_blank_name(async_client_mdr, mdr_api_headers, case, name):
+    """PUT applies the same blank-name rule as create, so an update cannot blank out a group's Name (#1138)."""
+
+    test_case_name = f"{inspect.currentframe().f_code.co_name}_{case}"
+    dataset = await DatasetTransformDeepLiteralAttribute.prepare(
+        async_client_mdr=async_client_mdr,
+        source_data_model_name=f"{test_case_name}_source",
+        target_data_model_name=f"{test_case_name}_target",
+        transformation_group_name=f"{test_case_name}_transform_group",
+    )
+
+    response = await async_client_mdr.put(
+        f"/transformation_groups/{dataset.transformation_group_id}", headers=mdr_api_headers, json={"Name": name}
+    )
+    assert response.status_code == 422, response.text
+    assert [error["loc"] for error in response.json()["detail"]] == [["body", "Name"]]
+
+
 # --- Import transformation group (#772) -------------------------------------------------------
 
 
@@ -1339,6 +1359,70 @@ async def test_import_treats_null_deleted_group_as_active(async_client_mdr, test
         headers=mdr_api_headers,
     )
     assert new_export["GroupVersion"] == "2.0"
+
+
+@pytest.mark.asyncio
+async def test_import_whitespace_name_falls_back_to_reference_name(async_client_mdr, mdr_api_headers):
+    """A whitespace-only Name in the import file counts as missing, so the clone takes the reference
+    group's Name. Without the fallback, the whitespace reached CreateTransformationGroupDTO's blank-name
+    validator and raised an unhandled ValidationError, which the client saw as a 500 (#1138)."""
+    test_case_name = inspect.currentframe().f_code.co_name
+    dataset, exported = await _prepare_group_with_two_jsonata_transforms(async_client_mdr, test_case_name)
+
+    result = await import_transformation_group(
+        async_client_mdr=async_client_mdr,
+        transformation_group_id=dataset.transformation_group_id,
+        body={**exported, "Name": "   "},
+        version=None,
+        headers=mdr_api_headers,
+    )
+    assert result["Success"] is True
+    new_export = await export_transformation_group(
+        async_client_mdr=async_client_mdr,
+        transformation_group_id=result["TransformationGroupId"],
+        headers=mdr_api_headers,
+    )
+    assert new_export["Name"] == exported["Name"]
+
+
+@pytest.mark.asyncio
+async def test_import_blank_name_with_blank_reference_name_is_422(async_client_mdr, test_db_session, mdr_api_headers):
+    """When the file has no Name and the reference group's stored Name is blank (main allowed creating
+    one), there is no name to fall back to. The import is rejected with a 422 instead of a 500, and
+    no group is created (#1138)."""
+    test_case_name = inspect.currentframe().f_code.co_name
+    dataset, exported = await _prepare_group_with_two_jsonata_transforms(async_client_mdr, test_case_name)
+
+    # Simulate a legacy group with an empty Name, which create now rejects.
+    await test_db_session.execute(
+        text('UPDATE "TransformationsGroup" SET "Name" = \'\' WHERE "Id" = :id'),
+        {"id": dataset.transformation_group_id},
+    )
+    await test_db_session.commit()
+    test_db_session.expire_all()
+
+    body = {key: value for key, value in exported.items() if key != "Name"}
+    result = await import_transformation_group(
+        async_client_mdr=async_client_mdr,
+        transformation_group_id=dataset.transformation_group_id,
+        body=body,
+        version=None,
+        headers=mdr_api_headers,
+        expected_status_code=422,
+    )
+    assert "name" in result["detail"].lower()
+
+    response = await async_client_mdr.get(
+        "/transformation_groups/",
+        headers=mdr_api_headers,
+        params={
+            "source_data_model_id": dataset.source_data_model_id,
+            "target_data_model_id": dataset.target_data_model_id,
+            "pagination": "false",
+        },
+    )
+    assert response.status_code == 200, response.text
+    assert "2.0" not in {g["GroupVersion"] for g in response.json()["data"]}
 
 
 def _hand_written_attribute(entity_id_path: str) -> dict:

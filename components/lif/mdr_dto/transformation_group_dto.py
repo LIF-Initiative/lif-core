@@ -13,6 +13,13 @@ class DataModelRefDTO(BaseModel):
     contributorOrganization: Optional[str] = None
 
 
+def _reject_blank_name(value: str) -> str:
+    # Reject empty and whitespace-only names; the value itself is stored unchanged.
+    if not value.strip():
+        raise ValueError("Name must not be empty or only whitespace")
+    return value
+
+
 class TransformationGroupDTO(BaseModel):
     Id: Optional[int]
     SourceDataModelId: int
@@ -56,10 +63,7 @@ class CreateTransformationGroupDTO(BaseModel):
     @field_validator("Name")
     @classmethod
     def name_must_not_be_blank(cls, value: str) -> str:
-        # Reject empty and whitespace-only names; the value itself is stored unchanged.
-        if not value.strip():
-            raise ValueError("Name must not be empty or only whitespace")
-        return value
+        return _reject_blank_name(value)
 
     class Config:
         orm_mode = True
@@ -80,6 +84,12 @@ class UpdateTransformationGroupDTO(BaseModel):
     Contributor: Optional[str] = None
     ContributorOrganization: Optional[str] = None
     Tags: Optional[str] = None
+
+    @field_validator("Name")
+    @classmethod
+    def name_must_not_be_blank(cls, value: Optional[str]) -> Optional[str]:
+        # None means "not updating Name"; a supplied Name follows the same rule as create.
+        return value if value is None else _reject_blank_name(value)
 
     class Config:
         orm_mode = True
