@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import List, Optional
 
-from lif.datatypes.mdr_sql_model import ExpressionLanguageType
+from lif.mdr_sql_model.core import ExpressionLanguageType
 from pydantic import BaseModel
 
 
@@ -165,69 +165,6 @@ class TransformationGroupWithTransformationsDTO(BaseModel):
     class Config:
         orm_mode = True
         from_attributes = True
-
-
-class TransformationGroupDTO(BaseModel):
-    Id: Optional[int]
-    SourceDataModelId: int
-    TargetDataModelId: int
-    # Friendly names for source/target models (populated in service layer)
-    SourceDataModelName: Optional[str] = None
-    TargetDataModelName: Optional[str] = None
-    Name: Optional[str] = None
-    GroupVersion: Optional[str] = None
-    Description: Optional[str] = None
-    Notes: Optional[str] = None
-    CreationDate: Optional[datetime] = None
-    ActivationDate: Optional[datetime] = None
-    DeprecationDate: Optional[datetime] = None
-    Contributor: Optional[str] = None
-    ContributorOrganization: Optional[str] = None
-    Tags: Optional[str] = None
-
-    class Config:
-        orm_mode = True
-        from_attributes = True
-
-
-class CreateTransformationGroupDTO(BaseModel):
-    SourceDataModelId: int
-    TargetDataModelId: int
-    Name: Optional[str] = None
-    GroupVersion: str
-    Description: Optional[str] = None
-    Notes: Optional[str] = None
-    CreationDate: Optional[datetime] = None
-    ActivationDate: Optional[datetime] = None
-    DeprecationDate: Optional[datetime] = None
-    Contributor: Optional[str] = None
-    ContributorOrganization: Optional[str] = None
-    Tags: Optional[str] = None
-
-    class Config:
-        orm_mode = True
-        from_attributes = True  # This enables the use of `from_orm`
-
-
-class UpdateTransformationGroupDTO(BaseModel):
-    SourceDataModelId: Optional[int] = None
-    TargetDataModelId: Optional[int] = None
-    Name: Optional[str] = None
-    GroupVersion: Optional[str] = None
-    Description: Optional[str] = None
-    Notes: Optional[str] = None
-    Alignment: Optional[str] = None
-    CreationDate: Optional[datetime] = None
-    ActivationDate: Optional[datetime] = None
-    DeprecationDate: Optional[datetime] = None
-    Contributor: Optional[str] = None
-    ContributorOrganization: Optional[str] = None
-    Transformations: Optional[List[UpdateTransformationDTO]] = None
-    Tags: Optional[str] = None
-
-    class Config:
-        orm_mode = True
-        from_attributes = True  # This enables the use of `from_orm`
 
 
 class TransformationListDTO(BaseModel):

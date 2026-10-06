@@ -9,7 +9,7 @@ from lif.mdr_services.entity_service import get_unique_entity
 from lif.mdr_services.entity_attribute_association_service import check_existing_association
 from lif.mdr_services.entity_association_service import get_entity_association_by_parent_child_relationship
 from lif.mdr_services.inclusions_service import check_inclusion_exists
-from lif.datatypes.mdr_sql_model import (
+from lif.mdr_sql_model.core import (
     Attribute,
     DataModel,
     Entity,

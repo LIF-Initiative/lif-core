@@ -3,7 +3,7 @@
 Passing ``EntityId`` to ``create_attribute`` must create the attribute AND its
 entity association in a single transaction, so a dropped response can never leave
 an orphaned (persisted-but-unassociated) attribute. Without ``EntityId`` the
-behaviour is unchanged (attribute only). If either step fails, the whole create
+behavior is unchanged (attribute only). If either step fails, the whole create
 rolls back — never a half-created attribute.
 
 Drives the real service against a live Postgres (``test_db_session`` fixture).
@@ -15,7 +15,7 @@ import pytest
 from fastapi import HTTPException
 from sqlmodel import select
 
-from lif.datatypes.mdr_sql_model import Attribute, DataModel, DataModelType, Entity, EntityAttributeAssociation
+from lif.mdr_sql_model.core import Attribute, DataModel, DataModelType, Entity, EntityAttributeAssociation
 from lif.mdr_dto.attribute_dto import CreateAttributeDTO
 from lif.mdr_services import attribute_service
 from lif.mdr_services.attribute_service import create_attribute
@@ -73,13 +73,13 @@ async def test_create_attribute_with_entity_id_creates_association_atomically(te
 
     assert created.Id is not None
     # The association was created in the same call — the attribute is NOT orphaned.
-    assocs = await _associations_for(session, created.Id)
-    assert len(assocs) == 1
-    assert assocs[0].EntityId == entity.Id
+    associations = await _associations_for(session, created.Id)
+    assert len(associations) == 1
+    assert associations[0].EntityId == entity.Id
 
 
 async def test_create_attribute_without_entity_id_makes_no_association(test_db_session, request):
-    """Backward-compatible: no EntityId -> attribute only, no association (unchanged behaviour)."""
+    """Backward-compatible: no EntityId -> attribute only, no association (unchanged behavior)."""
     session = test_db_session
     dm, _entity = await _seed_model_and_entity(session, request.node.name)
 
@@ -116,9 +116,9 @@ async def test_failure_creating_attribute_creates_no_association(test_db_session
             EntityAttributeAssociation.Deleted == False,  # noqa: E712
         )
     )
-    assocs = result.scalars().all()
-    assert len(assocs) == 1
-    assert assocs[0].AttributeId == first.Id
+    associations = result.scalars().all()
+    assert len(associations) == 1
+    assert associations[0].AttributeId == first.Id
 
 
 async def test_failure_creating_association_rolls_back_the_attribute(test_db_session, request, monkeypatch):
