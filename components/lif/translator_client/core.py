@@ -52,7 +52,8 @@ async def translate_learner_data(
 
     if response.status_code != 200:
         msg = f"Translator returned HTTP {response.status_code}"
-        logger.error("%s - %s", msg, response.text)
+        # Not the body: a 422 echoes the posted learner data (#1351).
+        logger.error(msg)
         raise TranslatorException(msg)
 
     return response.json()
