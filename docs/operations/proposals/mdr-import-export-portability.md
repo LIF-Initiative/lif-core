@@ -1,7 +1,7 @@
 # MDR import/export portability (schemas + mappings)
 
-**Status:** Proposed
-**Date:** 2026-09-25
+**Status:** Accepted — decisions settled in review 2026-09-30; merged in #1315
+**Date:** 2026-09-25 (updated 2026-10-06)
 **Author:** cbeach47
 **Tracking issue:** [#1223](https://github.com/LIF-Initiative/lif-core/issues/1223) (epic)
 
@@ -20,7 +20,9 @@ Throughout, two terms do a lot of work:
 - **Anchor** — the data model an import is aimed at, named by the request (a URL or form field),
   never read from the file.
 
-> **How to read this.** Every claim was checked against `main` @ `b97cd63`. Where a measurement
+> **How to read this.** Claims were checked against `main` when written — `b97cd63` for the
+> original plan, `3ef6d84` for the Phase 1 research findings — and every line anchor was
+> re-verified against `main` @ `497c863` on 2026-10-06. Where a measurement
 > contradicted an assumption, the losing reasoning is kept so it is not re-argued later.
 >
 > **Do not infer structure from the seed data.** Twice during this review the shipped data implied
@@ -66,22 +68,26 @@ reference.
 
 ## What is broken today
 
-### Three export failures, all live
+### Three export failures — one still live
 
-| Request | Failure | Where |
-|---|---|---|
-| `GET /import_export/export/{id}` | `check_base=False` passed to two functions that don't accept it → `TypeError` | [`import_export_service.py:118`](../../../components/lif/mdr_services/import_export_service.py#L118), [`:142`](../../../components/lif/mdr_services/import_export_service.py#L142) |
-| `GET /import_export/export/multiple/` | unpacks **6** of the **7** values it is given, then builds a record missing a required field | [`import_export_service.py:166-176`](../../../components/lif/mdr_services/import_export_service.py#L166-L176) |
-| `GET /import_export/export/{id}` for a **PartnerLIF** | the base-model lookup filters on `Type == "OrgLIF"`, so a PartnerLIF finds nothing and the result is used anyway → `AttributeError` | [`datamodel_service.py:413-421`](../../../components/lif/mdr_services/datamodel_service.py#L413-L421) |
+| Request | Failure | Where | Status |
+|---|---|---|---|
+| `GET /import_export/export/{id}` | `check_base=False` passed to functions that don't accept it → `TypeError` | [`import_export_service.py:118`](../../../components/lif/mdr_services/import_export_service.py#L118), [`:143`](../../../components/lif/mdr_services/import_export_service.py#L143) | **Live** — #1210 (PR #1212 open) |
+| `GET /import_export/export/multiple/` | unpacked **6** of the **7** values it was given, then built a record missing a required field | `export_multiple_datamodel` in `import_export_service.py` | Fixed — #1211, by #1349 |
+| `GET /import_export/export/{id}` for a **PartnerLIF** | the base-model lookup filtered on `Type == "OrgLIF"`, so a PartnerLIF found nothing and the result was used anyway → `AttributeError` | [`datamodel_service.py:413-423`](../../../components/lif/mdr_services/datamodel_service.py#L413-L423) | Fixed — #1321, by #1348 |
 
 The first two are **#1210** and **#1211** (each an export endpoint returning 500); PR #1212 fixes
-#1210. The third was untracked when this plan was written and is now **#1321**, filed ahead of the
-other proposed tickets because it is currently hidden behind #1210 — which fails first, so PR #1212
-exposes it on merge. Seed model 18 (`Org2 LIF`) triggers it, and #1321 adds a second entry point
-this table missed: `GET /datamodels/base/{id}` hits the same lookup with no type guard at all, so
-it 500s for a PartnerLIF id and for any id that does not exist, where a 404 is correct. None of the
-three has a regression test, and the two originally tracked were reported by an outside contributor
-rather than caught in CI.
+#1210. The third was untracked when this plan was written and became **#1321**, filed ahead of the
+other proposed tickets because it was hidden behind #1210 — which fails first. Seed model 18
+(`Org2 LIF`) triggered it, and #1321 added a second entry point this table missed:
+`GET /datamodels/base/{id}` hit the same lookup with no type guard at all, so it 500'd for a
+PartnerLIF id and for any id that does not exist, where a 404 is correct. The two originally
+tracked were reported by an outside contributor rather than caught in CI.
+
+**Since this plan was written, two are fixed, both with regression tests.** #1349 fixed #1211.
+#1348 fixed #1321 by keying the lookup on *having a base model* rather than on the type name —
+the structural rule this plan argues for (see "Key the converter off structure") — and now returns
+404 when there is none. #1210 is still live — the `check_base` `TypeError` was confirmed in dev logs during review (2026-10-02).
 
 ### Database IDs in import files — one bug, four times
 
@@ -136,7 +142,7 @@ Base-model inclusions (300 live rows) and value mappings (2,347) appear **nowher
 measured against a live database, not just read:
 
 - `clone_transformations` returns from inside its loop over groups
-  ([`import_export_service.py:664`](../../../components/lif/mdr_services/import_export_service.py#L664)),
+  ([`import_export_service.py:666`](../../../components/lif/mdr_services/import_export_service.py#L666)),
   so only the first group's rules are cloned. Cloning model 17 copied 6 groups and **0 of their 5
   live rules**, because the first group happened to be empty.
 - `clone_transformation_attributes` never sets `TransformationAttribute.EntityId`, which is
@@ -191,13 +197,13 @@ settle.
 ### B. There is no update path for schemas
 
 `import_datamodel` only ever creates
-([`import_export_service.py:196`](../../../components/lif/mdr_services/import_export_service.py#L196)).
+([`import_export_service.py:198`](../../../components/lif/mdr_services/import_export_service.py#L198)).
 Goal 3 has no backing code at all. **#17** (backend: update a schema by upload) and **#18**
 (frontend button for it) describe the flow but predate this work.
 
 ### C. Seven of nine mapping groups cannot be exported — and mostly they should not
 
-[`transformation_endpoint.py:234-246`](../../../bases/lif/mdr_restapi/transformation_endpoint.py#L234-L246)
+[`transformation_endpoint.py:237-249`](../../../bases/lif/mdr_restapi/transformation_endpoint.py#L237-L249)
 exports only JSONata rules. A group with none returns **400 — "There are no valid transformations
 to export for this group / version. Please add a transformation to this group's version and retry
 the export."** Only groups 25 and 26 export today.
@@ -259,12 +265,14 @@ It exists in **two copies that are not identical, and the uncalled one is the br
   tests `is not None`, carries a comment explaining that fix, and has regression tests asserting
   `[7, 0, 2]`. **This is the one in use** (called at `:875-876`).
 
-Keep the second. Neither has a cycle guard, and Gap E's own argument — an unconstrained
-self-reference, no type check, a free-typed number in the UI — means a model can be made its own
-ancestor, which would hang the walk.
+Under Decision 5 (5b) consolidating the two copies is out of scope; what carries forward is the
+second copy's `is not None` rule, which the converter's own chain walk follows. Neither copy has a
+cycle guard, and Gap E's own argument — an unconstrained self-reference, no type check, a
+free-typed number in the UI — means a model can be made its own ancestor, which would hang the
+walk, so the converter's walk adds one.
 
 Everything else assumes a single parent: the two name-lookup helpers search exactly two models, and
-so do `valueset_service.py:216,250` and `transformation_service.py:1595,1603`.
+so do `valueset_service.py:216,250` and `transformation_service.py:1581,1589`.
 
 Three consequences:
 
@@ -273,11 +281,12 @@ Three consequences:
    ([`import_export_dto.py:41-43`](../../../components/lif/mdr_dto/import_export_dto.py#L41-L43)),
    so a three-deep model has nowhere to put its grandparent. The fix is to drop the bundle, not to
    widen it — see below.
-2. **Exporting any PartnerLIF fails** — the third row in the table above. Now filed as
-   **#1321**, which found a second entry point for the same bug: `GET /datamodels/base/{id}`
-   500s for any id that is not a live OrgLIF, where a 404 is the right answer.
-3. **Name lookups must search the whole chain**, which is what `get_base_model_ids` already does
-   and no import/export code calls.
+2. **Exporting any PartnerLIF failed** — the third row in the table above, filed as **#1321**,
+   which found a second entry point for the same bug: `GET /datamodels/base/{id}` 500'd for any
+   id that was not a live OrgLIF, where a 404 is the right answer. Fixed by #1348.
+3. **The converter's name lookups must search the whole chain**, which is what
+   `get_base_model_ids` already does and no import/export code calls. Under Decision 5 (5b) this
+   applies to the converter only; the one-hop helpers elsewhere stay as they are.
 
 None of the 21 seed models is three deep, which is why this stayed invisible — and why the test
 matrix needs a three-deep fixture.
@@ -293,8 +302,11 @@ order? That is right, and the bundled parent slot turns out to be dead weight al
   parent chain, never from the file. A copy of the parent in the file has no one to talk to.
 - **A flat export already exists.** `GET /export/multiple/` returns
   `List[SingleDataModelExportDTO]` — no parent slot, no nesting.
-- **The slot is the sole cause of #1321.** `get_base_model_for_given_orglif` exists only to fill
-  it, and that lookup is what 500s on a PartnerLIF.
+- **The slot is the main reason for the lookup behind #1321.** Export calls
+  `get_base_model_for_given_orglif` to fill it; the other caller is `GET /datamodels/base/{id}`
+  ([`datamodel_endpoints.py:142`](../../../bases/lif/mdr_restapi/datamodel_endpoints.py#L142)),
+  the second entry point above. #1348 fixed the lookup; dropping the slot removes export's need
+  for it.
 
 So the export record does not need an ancestor list. Each model exports standalone and names the
 parent it extends by the three-field model identity (name, version, organization); import resolves
@@ -330,7 +342,7 @@ measured against the 185 mappings in the reference transforms instead (Decision 
 
 | Ticket | Evidence | Action |
 |---|---|---|
-| **#1252** — export 500 on a nested embedded parent | Fixed and **already closed** on GitHub; the two functions now agree on naming ([`schema_generation_service.py:355-400`](../../../components/lif/mdr_services/schema_generation_service.py#L355-L400)). | **None — listed so it is not re-opened** |
+| **#1252** — export 500 on a nested embedded parent | Fixed and **already closed** on GitHub; the two functions now agree on naming ([`schema_generation_service.py:353-400`](../../../components/lif/mdr_services/schema_generation_service.py#L353-L400)). | **None — listed so it is not re-opened** |
 | **#717** — fetch the schema from MDR instead of a file | Done. Services load from MDR at startup, with a documented dev-only file fallback. | **Close as stale** |
 | **#746** — enforce unique names on anything exportable | Mostly done in the database: 8 uniqueness rules already cover models, entities, attributes, value sets, values, mapping groups and both link tables. | **Re-scope** to the one gap: mapping names |
 | **#1063** — round-trip test matrix | The "fail loud, not skip" bullet *happens* to hold — CI run `35801872026` ran the round-trip test against real Postgres, 861 passed, zero skipped — but nothing guarantees it. | **Keep all bullets**; re-scope that one to "fail, don't skip" (below) |
@@ -380,8 +392,8 @@ They shape three tickets — NEW-J (D1), NEW-I (D3) and NEW-F (D5).
 **Where the decisions are recorded.** The decisions local to import/export — D1's modes and
 preview, D4, the converter, D2's scope — live in the living import/export guide this proposal
 becomes once promoted into `docs/design/cross-cutting/`. Three reach past import/export and get
-ADRs, opened in a separate PR so this one is not blocked on them: **mapping identity** (D3), **the
-overlay direction** (D5; amends [`metadata_repository/0004-value-set-and-value-inclusions.md`](../../design/adr/metadata_repository/0004-value-set-and-value-inclusions.md)), and **the reference model**.
+ADRs, recorded in #1339 (accepted): **mapping identity** (D3) — [`metadata_repository/0009`](../../design/adr/metadata_repository/0009-mapping-identity-and-cardinality.md); **the overlay direction**
+(D5) — [`data_model/0002`](../../design/adr/data_model/0002-lif-variants-freeze-the-overlay-model.md), which amends [`metadata_repository/0008`](../../design/adr/metadata_repository/0008-data-model-use-cases.md); and **the reference model** — [`data_model/0003`](../../design/adr/data_model/0003-references-between-shared-entities.md).
 
 ---
 
@@ -467,7 +479,7 @@ them.
 
 | Near term | Later phase |
 |---|---|
-| The three export 500s — #1210, #1211, #1321 | The round-trip proof over the shipped content (NEW-D, Phase 6) |
+| The three export 500s — #1210 (#1211 and #1321 since fixed by #1349 and #1348) | The round-trip proof over the shipped content (NEW-D, Phase 6) |
 | #1338's dependency blocking — the rule D1 and D3 depend on | Pulling seed data out of the migrations (Goal 2) |
 | The converter contract — #1333 | |
 | Documenting the endpoint and the round-trip contract — #1142 | |
@@ -622,7 +634,7 @@ documented limitation.
 
 **One scope limit, stated up front: lossless applies to JSONata expressions.** JSONata and
 `LIF_Pseudo_Code` are the two values of `ExpressionLanguageType`
-([`mdr_sql_model/core.py:26-28`](../../../components/lif/mdr_sql_model/core.py#L26-L28)), and only
+([`mdr_sql_model/core.py:28-30`](../../../components/lif/mdr_sql_model/core.py#L28-L30)), and only
 JSONata is executable — `LIF_Pseudo_Code` is the column default, so it is what a rule gets when
 nobody chose a language. Those rules are drafts, not transformations, and carrying them across
 installs is not something this epic owes anyone. A round trip is lossless for JSONata; a
@@ -634,7 +646,7 @@ Two things follow from the decision:
   name: `hasManager`, `relevantCourse`. The schema generator writes that link as a property called
   `Ref` + the target entity — so `hasManager` between Person and Employee is exported as
   `RefEmployee`, and the word `hasManager` is nowhere in the file
-  ([`schema_generation_service.py:802`](../../../components/lif/mdr_services/schema_generation_service.py#L802)).
+  ([`schema_generation_service.py:892-895`](../../../components/lif/mdr_services/schema_generation_service.py#L892-L895)).
   Re-import it and the link comes back with no name at all. #1062 asks whether to fix that or
   write the loss down as intended; Decision 4 picks fixing it — the exported file has to carry the
   name so the same link comes back on the other side.
@@ -655,7 +667,7 @@ investment in extensions and inclusions.**
 
 The direction for a later phase is to **replace the overlay model**: a variant becomes a source
 schema plus a mapping to the target LIF model, rather than an extension of it with inclusions. That
-is an ADR (amending `metadata_repository/0004`), not part of this epic. Until then, live overlay
+is recorded in [`data_model/0002`](../../design/adr/data_model/0002-lif-variants-freeze-the-overlay-model.md) (amending [`metadata_repository/0008`](../../design/adr/metadata_repository/0008-data-model-use-cases.md)), not part of this epic. Until then, live overlay
 bugs such as #1321 still get fixed, but the one-hop helpers outside import/export are left as they
 are.
 
@@ -663,7 +675,7 @@ Gap E establishes the facts: the chain is unbounded, uncapped and cycle-capable 
 one function in the codebase actually walks it to the root.** That is `get_base_model_ids`, and
 no import or export code calls it. Everywhere else that resolves a name looks at the anchor and
 its immediate parent and stops: both name-lookup helpers, `valueset_service.py:216,250`, and
-`transformation_service.py:1595,1603`. So on a two-deep model the shortcut is indistinguishable
+`transformation_service.py:1581,1589`. So on a two-deep model the shortcut is indistinguishable
 from the real thing, and on a three-deep model those lookups silently cannot see the
 grandparent. The question is how much to invest in fixing that.
 
@@ -716,7 +728,7 @@ file is discarded:
 - Every reference resolves by name within the anchor plus its ancestors, anchor winning a tie.
 
 This is already how mappings import, so it is proven rather than proposed:
-[`resolve_named_path`](../../../components/lif/mdr_services/transformation_service.py#L1558-L1590)
+[`resolve_named_path`](../../../components/lif/mdr_services/transformation_service.py#L1548-L1606)
 strips and ignores the model-ID prefix in each path, then delegates to
 [`get_unique_entity`](../../../components/lif/mdr_services/entity_service.py#L603-L619), which
 prefers the anchor's own row over an inherited one. The upload endpoint likewise takes the parent
@@ -735,8 +747,9 @@ Two caveats on "proven":
 - Not every shipped path fits the rule. `1:Credential,1:Credential.Image,16:~image.id` (group 50,
   model 17 → CLR) ends in a segment owned by model 16, which is not in model 17's ancestor chain,
   so anchor-plus-ancestors cannot resolve it. It is the path-level twin of the 25 inclusion rows
-  that point outside the chain (Gap A). The format either supports a peer-model segment explicitly
-  or refuses it by name — it must not resolve it by accident.
+  that point outside the chain (Gap A). Since the path format drops the model prefix (Phase 1,
+  "Mapping path format"), nothing in a path can locate such a segment, so it is **refused by name**
+  — never resolved by accident.
 
 ### Model identity is a safety check, not a lookup key
 
@@ -780,7 +793,7 @@ cannot export a reference set you cannot export.
 
 | Phase | Work | Demo |
 |---|---|---|
-| **0 — Unblock** *(near term)* | #1210, #1211, **#1321**, plus **#1338**'s dependency blocking | All three export failures gone, including PartnerLIF; deleting or renaming a field a mapping uses is refused with the mappings listed. |
+| **0 — Unblock** *(near term)* | #1210, plus **#1338**'s dependency blocking. (#1211 and #1321 are done — #1349, #1348.) | `GET /import_export/export/{id}` no longer 500s; deleting or renaming a field a mapping uses is refused with the mappings listed. |
 | **1 — One converter** *(near term)* | **#1333**, and **#1142** (document the endpoint and the round-trip contract) | *Not demoable* — a spec, the converter and its round-trip suite. Everything after depends on it; demo its first consumer instead. |
 | **2 — Export writes the portable file** | #1008, #1026, #1062, **NEW-A**, **NEW-F** | Export a BaseLIF, a PartnerLIF, and each model of a three-deep chain as its own file; inclusions present, no database IDs. |
 | **3 — Import reads it** | #762, #763, #764, #765, **NEW-H**, preflight preview | Import into a second install with different IDs; references intact. |
@@ -885,16 +898,17 @@ It must settle:
 - **A format version**, so today's files still read when the format changes.
 - **The same-name ambiguity** that forced mappings and entity-attribute links out of the import
   record. `import_datamodel` keys entities and attributes by `Name`
-  ([`import_export_service.py:219,241`](../../../components/lif/mdr_services/import_export_service.py#L219)),
+  ([`import_export_service.py:221,243`](../../../components/lif/mdr_services/import_export_service.py#L221)),
   but `Name` is not unique — attributes hold 234 duplicate `(model, Name)` pairs. What the database
   enforces is `UniqueName` per model (`uq_attributes_uniquename_datamodelid_active`,
   `uq_entities_uniquename_datamodelid_active`), a dotted path such as `Assessment.identifier`. Keying
   on `UniqueName` removes the ambiguity rather than working around it.
 - **Element keys for everything else**, taken from the database's own unique rules: value sets by
   `Name` within the model, values by `ValueName` within their value set, groups as in Decision 3.
-- **Mapping path format** — paths still carry a source-database model ID that the importer throws
-  away. Drop it or document it as advisory, and decide what happens to a segment outside the
-  anchor's chain (see "How a referenced model resolves").
+- **Mapping path format — decided.** Name-based `EntityIdPath` with the numeric model prefixes
+  removed ([`metadata_repository/0009`](../../design/adr/metadata_repository/0009-mapping-identity-and-cardinality.md), Decision 1). Today's paths carry a source-database model ID that the importer
+  already throws away; the format drops it. A path segment outside the anchor's chain is therefore
+  refused by name (see "How a referenced model resolves").
 
 ### Key the converter off structure, not the type name
 
@@ -917,8 +931,12 @@ Swapping the condition is safe for new converter code; retrofitting it into the 
 mechanical find-and-replace.
 
 Two places already use the structural test directly rather than the proxy:
-`search_service.py:37,47` splits models on `BaseDataModelId` being null or not, and
-`transformation_service.py:132` calls a model "self-contained" when it has no parent.
+`search_service.py:37,47` splits models on `BaseDataModelId` being null or not, and — since #1348
+— `get_base_model_for_given_orglif` keys on having a base model rather than on the type name.
+
+> *Corrected in review:* an earlier draft gave `transformation_service.py:132` as the second
+> example, as a structural "self-contained" test. It is the proxy: it checks
+> `Type in [BaseLIF, SourceSchema]`.
 
 So:
 
@@ -929,13 +947,13 @@ So:
   `schema_generation_service.py:544` and `:601` say an extended model "can have entities from
   multiple base data models."
 
-What *would* break in both cases is outside the converter: the UI hardcodes the parent to model
-`1` (`Dialog.tsx:94`, `DataModelSelector.tsx:93`), and the one-hop helpers in Gap E see only the
-nearest parent.
+What *would* break in both cases is outside the converter: when creating a **PartnerLIF**, the UI
+defaults the parent to model `1` if none is given (`Dialog.tsx:94`, `DataModelSelector.tsx:93`;
+other types are unaffected), and the one-hop helpers in Gap E see only the nearest parent.
 
 **Therefore: the converter keys off structure — has a parent, or does not — never off the type
 name.** That is strictly more robust, and it retires a class of bug by construction: the PartnerLIF
-export failure is exactly a type-name check (`Type == "OrgLIF"`) standing in for "has a parent".
+export failure was exactly a type-name check (`Type == "OrgLIF"`) standing in for "has a parent", and #1348 fixed it by switching to the structural test.
 
 ---
 
@@ -957,7 +975,7 @@ export failure is exactly a type-name check (`Type == "OrgLIF"`) standing in for
 
 ## Sizing
 
-Most are 1–3 days and demoable on their own. Three are not, and are flagged rather than disguised:
+Most tickets are demoable on their own. Three are not, and are flagged rather than disguised (effort estimates live on the project board, not in this public doc):
 
 | Ticket | Why not demoable | What to do |
 |---|---|---|
@@ -967,8 +985,8 @@ Most are 1–3 days and demoable on their own. Three are not, and are flagged ra
 
 **NEW-F shrank under Decision 5.** As 5a it would have touched many call sites across MDR; as 5b
 it is a local walk inside the converter, so it costs nothing outside #1333. `mdr_services` is
-packaged by exactly one project (`lif_mdr_api`) either way — still worth checking the deploy path
-filters for anything shared (#1171 — shared code changes that deploy workflows don't rebuild).
+packaged by exactly one project (`lif_mdr_api`) either way. (The deploy-path-filter gap that made
+shared-brick changes risky, #1171, was closed by #1274.)
 
 **#1141 must be re-scoped before it is estimated** — several items already shipped in #1136, one
 was replaced by a simpler rule, and one shipped with different behavior than its plan describes.
@@ -982,13 +1000,13 @@ blocks portability, so each is its own ticket rather than epic scope.
 
 | Bug | Where | Reproduced |
 |---|---|---|
-| A PartnerLIF's OpenAPI schema includes attributes it never included, and its full-metadata export 404s | The inclusion filter in `get_attributes_with_association_metadata_for_entity` has no `ExtDataModelId` condition ([`attribute_service.py:469-473`](../../../components/lif/mdr_services/attribute_service.py#L469-L473)), so an inclusion by *any* extension counts. | Model 18: 48 attributes pass the filter without a model-18 inclusion. Attribute 800 (`Credential.expirationDate`, included only by model 17) appears in model 18's schema; with `include_attr_md=True` generation returns 404 "Inclusion not found for Attribute ID 800". |
-| Cloning a model copies only the first group's rules | `return` inside the group loop ([`import_export_service.py:664`](../../../components/lif/mdr_services/import_export_service.py#L664)) | Cloning model 17's groups: 6 groups copied, 0 of 5 live rules. |
-| Updating a value mapping can create a duplicate within a group | The duplicate-check query for the known-group branch is built but never executed ([`value_mapping_service.py:192-208`](../../../components/lif/mdr_services/value_mapping_service.py#L192-L208)) | Two mappings in group 25; updating one onto the other's pair succeeded, leaving two live rows for the same pair and group. |
-| The Translator merges every live version of a group and evaluates non-JSONata rules as JSONata (#1350) | `get_paginated_all_transformations` filters neither `GroupVersion` nor `ExpressionLanguage` ([`transformation_service.py:614`](../../../components/lif/mdr_services/transformation_service.py#L614)); the Translator then compiles every expression as JSONata, skipping (and counting) any that fail ([`translator/utils.py:44-49`](../../../components/lif/translator/utils.py#L44-L49), [`core.py:51-62`](../../../components/lif/translator/core.py#L51-L62)) | With a `2.0` group added for pair 2 → 17, the read returned rules from `1.0` and `2.0`; pair 4 → 1 returned group 3's `LIF_Pseudo_Code` rule. |
+| A PartnerLIF's OpenAPI schema includes attributes it never included, and its full-metadata export 404s (#1334) | The inclusion filter in `get_attributes_with_association_metadata_for_entity` has no `ExtDataModelId` condition ([`attribute_service.py:469-473`](../../../components/lif/mdr_services/attribute_service.py#L469-L473)), so an inclusion by *any* extension counts. | Model 18: 48 attributes pass the filter without a model-18 inclusion. Attribute 800 (`Credential.expirationDate`, included only by model 17) appears in model 18's schema; with `include_attr_md=True` generation returns 404 "Inclusion not found for Attribute ID 800". |
+| Cloning a model copies only the first group's rules (#1335) | `return` inside the group loop ([`import_export_service.py:666`](../../../components/lif/mdr_services/import_export_service.py#L666)) | Cloning model 17's groups: 6 groups copied, 0 of 5 live rules. |
+| Updating a value mapping can create a duplicate within a group (#1336) | The duplicate-check query for the known-group branch is built but never executed ([`value_mapping_service.py:192-208`](../../../components/lif/mdr_services/value_mapping_service.py#L192-L208)) | Two mappings in group 25; updating one onto the other's pair succeeded, leaving two live rows for the same pair and group. |
+| The Translator merges every live version of a group and evaluates non-JSONata rules as JSONata (#1350) | `get_paginated_all_transformations` filters neither `GroupVersion` nor `ExpressionLanguage` ([`transformation_service.py:614`](../../../components/lif/mdr_services/transformation_service.py#L614)); the Translator then compiles every expression as JSONata, skipping (and counting) any that fail ([`translator/utils.py:44-49`](../../../components/lif/translator/utils.py#L44-L49), [`core.py:52-62`](../../../components/lif/translator/core.py#L52-L62)) | With a `2.0` group added for pair 2 → 17, the read returned rules from `1.0` and `2.0`; pair 4 → 1 returned group 3's `LIF_Pseudo_Code` rule. |
 
 Also noted, not a bug: `generate_openapi_schema` applies `public_only` to `ext_inclusions_query`
-instead of `inclusions_query` at `schema_generation_service.py:681,709`. The reassigned variable is
+instead of `inclusions_query` at `schema_generation_service.py:682,710`. The reassigned variable is
 never used again and the attribute list is already filtered upstream, so it has no effect — dead
 code to delete when the generator is next touched.
 
