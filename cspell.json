@@ -313,7 +313,9 @@
         "urlsafe",
         "behaviour",
         "readback",
-        "Writey"
+        "Writey",
+        "Caddyfile",
+        "retryable"
     ],
     "ignorePaths": [
         ".git/",
