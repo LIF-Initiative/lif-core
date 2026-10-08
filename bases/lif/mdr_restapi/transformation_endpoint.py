@@ -236,9 +236,12 @@ async def get_all_transformation_groups(
 
 @router.get("/{transformation_group_id}/export")
 async def export_transformation_group(transformation_group_id: int, session: AsyncSession = Depends(get_session)):
-    total_count, group_data = await transformation_service.get_paginated_transformations_for_a_group(
-        session=session, group_id=transformation_group_id, pagination=False, make_exportable=True
-    )
+    try:
+        total_count, group_data = await transformation_service.get_paginated_transformations_for_a_group(
+            session=session, group_id=transformation_group_id, pagination=False, make_exportable=True
+        )
+    except transformation_service.ExportPathError as e:
+        raise HTTPException(status_code=e.status_code, detail=e.detail) from e
     if total_count == 0:
         raise HTTPException(
             status_code=400,

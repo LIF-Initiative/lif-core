@@ -2,10 +2,12 @@ from typing import Dict, List
 
 from fastapi import HTTPException
 from lif.mdr_sql_model.core import (
+    Attribute,
     AttributeType,
     DataModel,
     DatamodelElementType,
     DataModelType,
+    Entity,
     EntityAttributeAssociation,
     ExpressionLanguageType,
     Transformation,
@@ -1058,18 +1060,25 @@ async def get_transformation_group_by_id(session: AsyncSession, id: int):
     return transformation_group
 
 
+class ExportPathError(Exception):
+    """An EntityIdPath could not be resolved to a portable named path during export."""
+
+    def __init__(self, status_code: int, detail: str):
+        self.status_code = status_code
+        self.detail = detail
+        super().__init__(detail)
+
+
 async def _resolve_entity_id_path_to_named_path(
     session: AsyncSession, id_path: str, cache: dict[tuple[str, int], str]
 ) -> str:
-    from lif.mdr_sql_model.core import Attribute, Entity
-
     ids = parse_transformation_path(id_path)
     segments: list[str] = []
 
     for i, raw_id in enumerate(ids):
         is_last = i == len(ids) - 1
         if not is_last and raw_id < 0:
-            raise HTTPException(
+            raise ExportPathError(
                 status_code=400,
                 detail=f"Unable to export - invalid path '{id_path}': non-terminal ID '{raw_id}' must be positive",
             )
@@ -1081,12 +1090,12 @@ async def _resolve_entity_id_path_to_named_path(
             record = await session.get(Attribute, cleaned_id) if is_attribute else await session.get(Entity, cleaned_id)
             record_type = cache_key[0].capitalize()
             if not record:
-                raise HTTPException(
+                raise ExportPathError(
                     status_code=404,
                     detail=f"Unable to export - {record_type} ID {cleaned_id} in path '{id_path}' not found",
                 )
             if record.Deleted == True:
-                raise HTTPException(
+                raise ExportPathError(
                     status_code=404,
                     detail=f"Unable to export - {record_type} ID {cleaned_id} in path '{id_path}' is deleted",
                 )
