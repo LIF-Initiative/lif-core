@@ -73,7 +73,7 @@ const DataModelSelector: React.FC<DataModelSelectorProps> = ({
       debugLog("Ignored node: ", n);
       return;
     }
-    let modelId = Number(n?.id) ? n.id : n.parentId;
+    const modelId = Number(n?.id) ? n.id : n.parentId;
     let extraPath = ``;
     if (n.type == "OrgLIF") {
       if (n.id === "only") extraPath += "/only";
@@ -186,7 +186,7 @@ const DataModelSelector: React.FC<DataModelSelectorProps> = ({
   };
   const handleOnAddNew = async () => {
     const baseModel = models.find((m) => m.Type === "BaseLIF");
-    let newCrudDialog: any = {
+    const newCrudDialog: any = {
       isEditMode: false,
       title: "Data Model",
       fields: DataModelCreateFields,

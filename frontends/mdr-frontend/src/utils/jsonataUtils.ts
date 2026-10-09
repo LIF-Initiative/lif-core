@@ -280,3 +280,14 @@ export async function evaluateCombinedJsonataExpression(
     return res && typeof (res as any).then === 'function' ? await res : res;
 }
 
+
+/**
+ * Quote one path segment so it reads that field in a JSONata path expression.
+ * JSONata quotes field names with backticks; `["name"]` would be an array literal.
+ * A backtick cannot be escaped inside backticks, so those names fall back to $lookup.
+ */
+export function quoteJsonataSegment(seg: string): string {
+    if (/^[A-Za-z_][A-Za-z0-9_]*$/.test(seg)) return seg;
+    if (!seg.includes("`")) return `\`${seg}\``;
+    return `$lookup($, ${JSON.stringify(seg)})`;
+}

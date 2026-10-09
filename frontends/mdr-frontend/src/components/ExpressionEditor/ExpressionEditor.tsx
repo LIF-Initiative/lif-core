@@ -6,6 +6,7 @@ import {
     generateSampleRecords,
 } from "@/services/modelService";
 import type { DataModelWithDetailsWithTree } from "@/types";
+import { quoteJsonataSegment } from "@/utils/jsonataUtils";
 import "./ExpressionEditor.css";
 
 // NOTE: This is the core editor BODY (not a dialog). Wrap it in your modal of choice.
@@ -129,10 +130,6 @@ const ExpressionEditor: React.FC<ExpressionEditorProps> = ({
     const inputSchemaPaths = useMemo(() => {
         if (!sampleModel?.EntityTree) return [] as string[];
         const paths: string[] = [];
-        const safeSeg = (seg: string) =>
-            /^[A-Za-z_][A-Za-z0-9_]*$/.test(seg)
-                ? seg
-                : `["${seg.replace(/"/g, '\"')}"]`;
         const walk = (node: any, ancestors: string[]) => {
             const wrapper: any = node.Entity;
             const meta = wrapper?.Entity?.Id ? wrapper.Entity : wrapper;
@@ -140,7 +137,7 @@ const ExpressionEditor: React.FC<ExpressionEditorProps> = ({
             const entityAncestors = [...ancestors, entityName];
             (wrapper.Attributes || []).forEach((attr: any) => {
                 const segs = [...entityAncestors, attr.Name || attr.UniqueName || `attr_${attr.Id}`];
-                const expr = segs.map(safeSeg).join('.');
+                const expr = segs.map(quoteJsonataSegment).join('.');
                 paths.push(expr);
             });
             (node.Children || []).forEach((child: any) => walk(child, entityAncestors));
@@ -166,9 +163,9 @@ const ExpressionEditor: React.FC<ExpressionEditorProps> = ({
             const start = el.selectionStart ?? prev.length;
             const end = el.selectionEnd ?? prev.length;
             const hasSelection = start !== end;
-            let before = prev.slice(0, start);
+            const before = prev.slice(0, start);
             let selected = prev.slice(start, end);
-            let after = prev.slice(end);
+            const after = prev.slice(end);
             let insertion = token;
 
             if (opts?.type === 'function' && hasSelection && selected.trim().length) {
