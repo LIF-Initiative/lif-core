@@ -1,12 +1,12 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { TransformationData } from '../../services/transformationsService';
-import jsonata from 'jsonata';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { TransformationData } from "@/services/transformationsService";
+import jsonata from "jsonata";
 import {
     getModelDetailsWithTree,
     generateSampleRecords,
-} from '../../services/modelService';
-import type { DataModelWithDetailsWithTree } from '../../types';
-import './ExpressionEditor.css';
+} from "@/services/modelService";
+import type { DataModelWithDetailsWithTree } from "@/types";
+import "./ExpressionEditor.css";
 
 // NOTE: This is the core editor BODY (not a dialog). Wrap it in your modal of choice.
 // Minimal starting implementation – extend with validation, syntax highlighting, etc.

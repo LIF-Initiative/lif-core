@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { RouteObject, useLocation, useMatches } from "react-router-dom";
-import { useMdrContext } from "../context/MdrContext";
-import router from "../pages/Routes";
+import { useMdrContext } from "@/context/MdrContext";
+import router from "@/pages/Routes";
 
 // Helper function to find route config by pathname
 const findRouteConfig = (pathname: string): RouteObject | null => {

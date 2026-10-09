@@ -122,7 +122,7 @@ export function buildDefaultAssignmentExpression(
 // -------------------------------------------------------------
 // JSONata evaluation helpers for bulk transformation preview
 // -------------------------------------------------------------
-import jsonata from 'jsonata';
+import jsonata from "jsonata";
 
 export interface CombinedEvaluationResult {
     output: any; // merged output object

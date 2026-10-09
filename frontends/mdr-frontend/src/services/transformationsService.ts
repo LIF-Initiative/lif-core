@@ -1,6 +1,6 @@
-import api from './api';
-import { parseEntityIdPath } from '../utils/entityIdPath';
-import { errorToString } from '../utils/errorUtils';
+import api from "./api";
+import { parseEntityIdPath } from "../utils/entityIdPath";
+import { errorToString } from "../utils/errorUtils";
 
 const apiBaseUrl = import.meta.env.VITE_API_URL;
 
