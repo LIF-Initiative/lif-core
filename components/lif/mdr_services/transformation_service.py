@@ -1,3 +1,4 @@
+from datetime import datetime, timezone
 from typing import Dict, List
 
 from fastapi import HTTPException
@@ -25,6 +26,7 @@ from lif.mdr_dto.transformation_dto import (
     UpdateTransformationDTO,
 )
 from lif.mdr_dto.transformation_group_dto import (
+    GROUP_VERSION_PATTERN,
     CreateTransformationGroupDTO,
     DataModelRefDTO,
     ImportTransformationAttributeDTO,
@@ -41,7 +43,7 @@ from lif.mdr_services.entity_service import get_unique_entity
 from lif.mdr_services.helper_service import check_attribute_by_id, check_datamodel_by_id, check_entity_by_id
 from lif.mdr_services.inclusions_service import check_existing_inclusion
 from lif.mdr_utils.logger_config import get_logger
-from sqlalchemy import and_
+from sqlalchemy import and_, or_
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import aliased
 from sqlmodel import func, select
@@ -620,6 +622,8 @@ async def get_paginated_all_transformations(
     pagination: bool = True,
     source_data_model_id: int | None = None,
     target_data_model_id: int | None = None,
+    transformation_group_id: int | None = None,
+    jsonata_only: bool = False,
 ):
     transformations_dtos: list[GetALLTransformationsDTO] = []
     # Query to count total transformations for pagination
@@ -632,6 +636,8 @@ async def get_paginated_all_transformations(
                 TransformationGroup.Deleted == False,
                 (TransformationGroup.SourceDataModelId == source_data_model_id if source_data_model_id else True),
                 (TransformationGroup.TargetDataModelId == target_data_model_id if target_data_model_id else True),
+                (Transformation.TransformationGroupId == transformation_group_id if transformation_group_id else True),
+                (Transformation.ExpressionLanguage == ExpressionLanguageType.JSONata if jsonata_only else True),
             )
         )
     )
@@ -666,6 +672,12 @@ async def get_paginated_all_transformations(
                     TransformationGroup.Deleted == False,
                     (TransformationGroup.SourceDataModelId == source_data_model_id if source_data_model_id else True),
                     (TransformationGroup.TargetDataModelId == target_data_model_id if target_data_model_id else True),
+                    (
+                        Transformation.TransformationGroupId == transformation_group_id
+                        if transformation_group_id
+                        else True
+                    ),
+                    (Transformation.ExpressionLanguage == ExpressionLanguageType.JSONata if jsonata_only else True),
                 )
             )
             .order_by(Transformation.TransformationGroupId, Transformation.Id)
@@ -700,6 +712,12 @@ async def get_paginated_all_transformations(
                     TransformationGroup.Deleted == False,
                     (TransformationGroup.SourceDataModelId == source_data_model_id if source_data_model_id else True),
                     (TransformationGroup.TargetDataModelId == target_data_model_id if target_data_model_id else True),
+                    (
+                        Transformation.TransformationGroupId == transformation_group_id
+                        if transformation_group_id
+                        else True
+                    ),
+                    (Transformation.ExpressionLanguage == ExpressionLanguageType.JSONata if jsonata_only else True),
                 )
             )
             .order_by(Transformation.TransformationGroupId, Transformation.Id)
@@ -779,6 +797,78 @@ async def get_paginated_all_transformations(
         transformations_dtos.append(transformation_dto)
 
     return total_count, transformations_dtos
+
+
+def _group_version_key(version: str) -> tuple[int, ...]:
+    """Order dotted-integer versions numerically ("1.10" > "1.9"). Trailing zeros are dropped, so "1" and
+    "1.0" are the same version."""
+    parts = [int(part) for part in version.split(".")]
+    while len(parts) > 1 and parts[-1] == 0:
+        parts.pop()
+    return tuple(parts)
+
+
+async def get_active_transformations_for_data_models(
+    session: AsyncSession, source_data_model_id: int, target_data_model_id: int
+):
+    """The mapping set the Translator applies for a (source, target) pair (#1350): the JSONata rules of the
+    latest active version of the pair's group, never a merge of versions.
+
+    A group is active when its ActivationDate is null or not after now and its DeprecationDate is null or
+    after now. Returns (group, total_count, transformations); there is no pagination, so nothing is cut off.
+    """
+    await check_datamodel_by_id(session=session, id=source_data_model_id)
+    await check_datamodel_by_id(session=session, id=target_data_model_id)
+
+    now = datetime.now(timezone.utc)
+    query = select(TransformationGroup).where(
+        TransformationGroup.SourceDataModelId == source_data_model_id,
+        TransformationGroup.TargetDataModelId == target_data_model_id,
+        TransformationGroup.Deleted == False,
+        or_(TransformationGroup.ActivationDate.is_(None), TransformationGroup.ActivationDate <= now),
+        or_(TransformationGroup.DeprecationDate.is_(None), TransformationGroup.DeprecationDate > now),
+    )
+    result = await session.execute(query)
+    candidates = []
+    for group in result.scalars().all():
+        # Writes are validated, but a row from before #1350 can still hold free text.
+        if group.GroupVersion and GROUP_VERSION_PATTERN.fullmatch(group.GroupVersion):
+            candidates.append(group)
+        else:
+            logger.warning(
+                "Ignoring transformation group %s: GroupVersion %r is not dotted integers", group.Id, group.GroupVersion
+            )
+    if not candidates:
+        raise HTTPException(
+            status_code=404,
+            detail=(
+                f"No active transformation group for source data model {source_data_model_id} and target data "
+                f"model {target_data_model_id}"
+            ),
+        )
+
+    latest_key = max(_group_version_key(group.GroupVersion) for group in candidates)
+    latest = [group for group in candidates if _group_version_key(group.GroupVersion) == latest_key]
+    if len(latest) > 1:
+        versions = ", ".join(sorted(group.GroupVersion for group in latest))
+        raise HTTPException(
+            status_code=409,
+            detail=(
+                f"More than one active transformation group has the latest version for source data model "
+                f"{source_data_model_id} and target data model {target_data_model_id}: {versions}"
+            ),
+        )
+    group = latest[0]
+
+    total_count, transformations = await get_paginated_all_transformations(
+        session=session,
+        pagination=False,
+        source_data_model_id=source_data_model_id,
+        target_data_model_id=target_data_model_id,
+        transformation_group_id=group.Id,
+        jsonata_only=True,
+    )
+    return group, total_count, transformations
 
 
 async def get_paginated_all_transformations_for_an_attribute(
@@ -1738,6 +1828,10 @@ async def import_transformation_group(
         )
 
     normalized_version = (version or "").strip()
+    if normalized_version and not GROUP_VERSION_PATTERN.fullmatch(normalized_version):
+        raise HTTPException(
+            status_code=422, detail=f"version must be dotted integers such as 1.0 or 2.1, not {normalized_version!r}"
+        )
     if normalized_version:
         existing_group = await find_transformation_group_by_triplet(
             session=session,

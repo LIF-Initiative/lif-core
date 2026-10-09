@@ -1,3 +1,4 @@
+import re
 from datetime import datetime
 from typing import List, Optional
 
@@ -17,6 +18,16 @@ def _reject_blank_name(value: str) -> str:
     # Reject empty and whitespace-only names; the value itself is stored unchanged.
     if not value.strip():
         raise ValueError("Name must not be empty or only whitespace")
+    return value
+
+
+# Dotted integers ("1", "1.0", "1.10"), so the latest version of a group can be computed (#1350).
+GROUP_VERSION_PATTERN = re.compile(r"[0-9]+(\.[0-9]+)*")
+
+
+def reject_non_numeric_group_version(value: str) -> str:
+    if not GROUP_VERSION_PATTERN.fullmatch(value):
+        raise ValueError(f"GroupVersion must be dotted integers such as 1.0 or 2.1, not {value!r}")
     return value
 
 
@@ -65,6 +76,11 @@ class CreateTransformationGroupDTO(BaseModel):
     def name_must_not_be_blank(cls, value: str) -> str:
         return _reject_blank_name(value)
 
+    @field_validator("GroupVersion")
+    @classmethod
+    def group_version_must_be_numeric(cls, value: str) -> str:
+        return reject_non_numeric_group_version(value)
+
     class Config:
         orm_mode = True
         from_attributes = True  # This enables the use of `from_orm`
@@ -90,6 +106,11 @@ class UpdateTransformationGroupDTO(BaseModel):
     def name_must_not_be_blank(cls, value: Optional[str]) -> Optional[str]:
         # None means "not updating Name"; a supplied Name follows the same rule as create.
         return value if value is None else _reject_blank_name(value)
+
+    @field_validator("GroupVersion")
+    @classmethod
+    def group_version_must_be_numeric(cls, value: Optional[str]) -> Optional[str]:
+        return value if value is None else reject_non_numeric_group_version(value)
 
     class Config:
         orm_mode = True

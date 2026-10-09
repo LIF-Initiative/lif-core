@@ -5,7 +5,7 @@ Date: 2026-01-19
 ## Status
 Proposed
 
-Amended in part by [data_model/0002](../data_model/0002-lif-variants-freeze-the-overlay-model.md) (the *Org LIF* and *Partner LIF* overlay is frozen) and [0009](0009-mapping-identity-and-cardinality.md) (mapping identity and cardinality, and the ID-based import under *Data Portability*).
+Amended in part by [data_model/0004](../data_model/0004-retire-overlays-variants-as-copies.md) (the four _Data Model_ types are retired, and every model is self-contained; this supersedes the freeze in [data_model/0002](../data_model/0002-lif-variants-freeze-the-overlay-model.md)) and [0009](0009-mapping-identity-and-cardinality.md) (mapping identity and cardinality, and the ID-based import under *Data Portability*).
 
 ## Context
 Recent testing of the **MDR** has revealed some questions on Data Model behavior [#790](https://github.com/LIF-Initiative/lif-core/issues/790). As discussions occurred to determine issue resolution, it was noted there was a lack of documented requirements around **MDR** Data Models. This ADR aims to specify requirements of the **MDR** _Data Models_, how existing _Entities_, _Attributes_, and _Value Sets_ are associated, and the behavior of transformations.
@@ -15,6 +15,8 @@ This ADR is aimed at what **MDR** _should_ support, not necessarily what it _cur
 It is not meant as the MDR user guide.
 
 ## Decision
+> **Amended by [data_model/0004](../data_model/0004-retire-overlays-variants-as-copies.md).** The four _Data Model_ types below are retired: there is one kind of model, every model is self-contained, and the "number supported" limits no longer apply. The type-specific sections are kept as a record.
+
 The following requirements will govern questions around MDR for the _Data Model_ Types:
 - Base LIF
 - Org LIF
@@ -87,7 +89,11 @@ The rest of the _Data Model_ IDs must match existing, active _Data Models_.
 
 _Entities_ and _Attributes_ must appropriately 'chain' together via the association tables based on the _Data Model_ types involved. For _Org LIF_ and _Partner LIF_, this includes checks that each item in the path is in the `Inclusions` table.
 
+> **Amended by [data_model/0004](../data_model/0004-retire-overlays-variants-as-copies.md).** Inclusions are retired, so the `Inclusions` check no longer applies. Every item in a path belongs to the anchor model.
+
 ### Base LIF
+
+> **Amended by [data_model/0004](../data_model/0004-retire-overlays-variants-as-copies.md).** *Base LIF* is no longer a separate type, and other models no longer depend on it. The official LIF model is an ordinary self-contained model, and variants are copies of it.
 
 The foundational model that all LIF adopters can use to seed and enhance their _Org LIF_ models. The intent is the LIF Steward manages the _Base LIF_ model, however since the LIF system is open source, anyone _could_ edit their copy of the _Base LIF_ model.
 
@@ -123,6 +129,8 @@ The origin _Value Set_ must be within the _Base LIF_.
 
 #### Org LIF
 
+> **Amended by [data_model/0004](../data_model/0004-retire-overlays-variants-as-copies.md).** *Org LIF* is retired. No new models of this type can be created, and existing ones are converted into self-contained models. A variant of LIF is a copy, compared with its source by schema diff.
+
 A model specific to the LIF adopter, seeded and reliant on references from other _Data Models_ (_Base LIF_ (known as `Inclusions`), _Partner LIF_, or _Source Schema_), and with enhancements added directly by the LIF adopter (known as extensions).
 
 Requires the _Base LIF_ to be present.
@@ -157,6 +165,8 @@ The origin _Value Set_ must be from any other _Data Model_.
 
 ### Source Schema
 
+> **Amended by [data_model/0004](../data_model/0004-retire-overlays-variants-as-copies.md).** *Source Schema* is no longer a separate type. Being self-contained is now the rule for every model.
+
 A self-contained model, without any dependencies on other data model types (including other _Source Schemas_).
 
 #### Number Supported
@@ -188,6 +198,8 @@ Supported.
 The origin _Value Set_ must be within the _Source Schema_.
 
 ### Partner LIF
+
+> **Amended by [data_model/0004](../data_model/0004-retire-overlays-variants-as-copies.md).** *Partner LIF* is retired. No new models of this type can be created, and existing ones are converted into self-contained models. A variant of LIF is a copy, compared with its source by schema diff.
 
 An _Org LIF_ from a different LIF system. It will likely have references into the _Base LIF_ model (hence the importance of having the _Base LIF_ model be consistent across LIF systems). It is not meant to be altered as a _Partner LIF_ model. Instead, the origin _Org LIF_ should be adjusted as needed, exported, and then imported into a target LIF system as a _Partner LIF_ model.
 

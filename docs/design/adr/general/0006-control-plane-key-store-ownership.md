@@ -4,10 +4,10 @@ Date: 2026-10-04
 
 ## Status
 
-Proposed
+Accepted
 
-Extends [ADR 0002](0002-lif-control-plane-vs-mdr-host.md) (control plane vs. MDR host). Decides the
-spike in #1181, part of epic #1041.
+Extends [ADR 0002](0002-lif-control-plane-vs-mdr-host.md) (control plane vs. MDR host), and partly
+reopens its Decision 2 (see decision 5). Decides the spike in #1181, part of epic #1041.
 
 ## Context
 
@@ -38,13 +38,16 @@ directly on this choice:
   `V1.4__clone_lif_schema_overriding_identity.sql:45`), so any key rows in `public` would be copied
   into every new tenant.
 - **MDR connects as the cluster's master user.** The MDR stack sets `DBUsername: postgres`
-  (`sam/mdr-database/template.yaml:89`), and `mdr-api` reads that user from SSM. There are no
-  per-schema or per-service roles. A separate schema in MDR's database would separate the tables but
-  not the access.
+  (`sam/mdr-database/template.yaml:89`), and `mdr-api` reads that user from SSM. A service role does
+  exist (`CREATE ROLE mdr LOGIN; GRANT rds_iam TO mdr;` with DML on `public`, `V1.0__database_init.sql:12-20`, and
+  `IamUser: mdr` at `template.yaml:87`), but `mdr-api` doesn't use it. A separate schema in MDR's
+  database would separate the tables but not the access.
 - **Each Aurora cluster has exactly one database.** `aurora-postgres.yml:385` sets one `DatabaseName`
   per cluster, and nothing under `sam/` runs `CREATE DATABASE`. Dagster already has its own cluster,
-  built from a near-copy of the MDR stack (`sam/README.md`). Flyway manages only `public`, and
-  migrations run only when `deploy-sam.sh` deploys a new image tag
+  built from the same shared nested template as the MDR stack (the two `aurora-postgres.yml` files
+  are byte-identical; `sam/README.md`). Migrations target `public`; reaching the tenant schemas is
+  per-migration and hand-written, as V1.5 does. Migrations run only when `deploy-sam.sh` deploys a new
+  image tag
   (`docs/operations/guides/applying-mdr-migrations.md`).
 
 Two constraints from the rest of the epic also apply. #1189 must show the control plane issuing,
@@ -55,7 +58,9 @@ keys without a destructive cutover.
 
 1. **The control plane owns its key store as its own logical Postgres database.** It has its own
    connection settings, its own database login, and its own Flyway migration set and history. It
-   never shares MDR's database, MDR's login or MDR's migrations, and MDR never reads the store.
+   never shares MDR's database, MDR's login or MDR's migrations. **Only the control plane reads or
+   writes the store.** No other service connects to it, MDR and LDE included. Other services validate
+   keys through the control plane, or offline if #1184 chooses signed keys.
 2. **Where that database runs is a deployment choice.** In dev and demo it may be a second database
    on the existing MDR Aurora cluster, which avoids a third cluster. A deployer may point it at any
    Postgres, including a dedicated cluster or a local container. The service only knows a connection
@@ -64,15 +69,23 @@ keys without a destructive cutover.
    a single table. Each row records the workspace it belongs to, instead of relying on per-tenant
    copies and `search_path`. `KeyHash` should be unique, because any validator of an opaque key looks
    it up by hash. Column names and types are settled in #1180 and #1183.
+
+   This ADR does not decide what identifies a workspace: the `tenant_*` schema name, the Cognito
+   group, or a new ID. Nor does it decide how the control plane confirms, at issuance, that the
+   caller belongs to the workspace. Today that check maps the caller's Cognito group to a schema with
+   `tenant_schema_for_group` (`components/lif/tenant_routing/core.py:45`), which is the identity seam
+   #1190 owns. The workspace column depends on #1190, and should not adopt MDR's `tenant_*` naming
+   just because the copy in decision 4 starts from it.
 4. **Existing keys are copied, not moved.** The migration copies rows out of each
    `tenant_*."DeveloperApiKeys"` table into the new store, tagged with the workspace they came from.
    Hashes carry over unchanged because they are plain SHA-256. Rows get new `Id`s, since today's
    `Id`s are per-schema identities and collide across tenants. The MDR tables stay in place and
    untouched until the cutover in #1185 retires MDR's key endpoints. Dropping them is a separate,
    later step.
-5. **This ADR does not decide the key format.** Whether keys stay opaque, with validation by lookup
-   against the store or a control-plane verify endpoint, or become the signed tokens ADR 0002
-   describes, is #1184's decision. The storage choice above works for either.
+5. **This ADR does not decide the key format, which partly reopens ADR 0002's Decision 2.** ADR
+   0002 chose signed tokens verified offline, but that format was never built (see Context). Whether
+   keys stay opaque, validated through a control-plane verify endpoint, or become the signed tokens
+   ADR 0002 describes, is #1184's decision. The storage choice above works for either.
 
 ## Alternatives
 
@@ -103,7 +116,17 @@ keys without a destructive cutover.
 - **The copy migration needs read access to every `tenant_*` schema** in the MDR database, so it
   runs once, with MDR's credentials, outside the control plane's normal access. Between the copy and
   the cutover, keys created in MDR do not reach the new store, so #1183 and #1185 have to be
-  sequenced to avoid a gap, for example with a final re-copy just before the cutover.
+  sequenced to avoid a gap, for example with a final re-copy just before the cutover. That re-copy
+  has to be an upsert on `KeyHash`, so a key revoked in MDR after the first copy carries its
+  `RevokedDate` across. Because `KeyHash` is unique, the copy also needs a rule for one hash in two
+  tenant schemas, which a data-copying clone can produce (`clone_lif_schema` copies rows by default,
+  as does `provision-mdr-tenant.sh --clone-data`). It must also tolerate a tenant schema with no
+  `DeveloperApiKeys` table at all (#1123).
+- **Local compose and the non-AWS test drive gain a step.** Local MDR is one Postgres container
+  whose `restore.sh` runs every migration against a single database
+  (`projects/lif_mdr_database/restore.sh`). A second logical database needs its own init step: a
+  database, a login, and a loop over its own migrations. Once #1185 retires MDR's key endpoints, a
+  test-drive deployer (#1316, #1290) who wants developer keys also has to run the control plane.
 - **Until #1184 lands, keys still authenticate nothing.** That lowers the risk of the migration, but
   it also means `LastUsedDate` stays empty, so the usage and audit views in #1186 and #1188 have no
   data to show.
@@ -111,23 +134,23 @@ keys without a destructive cutover.
   Postgres-specific.** If LIF's storage later moves to a document store such as MongoDB, the store
   stays the control plane's own database with one workspace-scoped collection. The unique `KeyHash`
   index would then have to be created by the control plane itself, not by an image entrypoint
-  (compare `person_identifier_idx`, #1307).
+  (compare `person_identifier_idx`, PR #1307 (#1243)).
 
 ### Effect on the follow-on issues in #1041
 
 | Issue | Change |
 |---|---|
-| #1180 | Extract the key logic into a `developer_keys` brick as planned. The brick's model should not assume `search_path` scoping. The workspace column can be added here or in #1183. |
+| #1180 | Extract the key logic into a `developer_keys` brick as planned. The brick's model should not assume `search_path` scoping. The workspace column can be added here or in #1183, once #1190 says what identifies a workspace. |
 | #1182 | Includes provisioning the control-plane database (a second database on the MDR cluster in dev/demo), its login, and a Flyway runner for its migration set. |
-| #1183 | The non-destructive copy from per-tenant tables into the single workspace-scoped table, with new `Id`s and a final re-copy before cutover. |
-| #1184 | Decides opaque-with-lookup vs. signed keys. ADR 0002's signed format was never built. |
+| #1183 | The non-destructive copy from per-tenant tables into the single workspace-scoped table, with new `Id`s and a final upsert re-copy before cutover. |
+| #1184 | Decides opaque keys validated through a control-plane verify endpoint vs. signed keys verified offline. ADR 0002's signed format was never built, so the issue's "formalize signed-token verification" scope needs re-scoping. |
 | #1185 | Retires MDR's key endpoints and keeps MDR's tables until a separate drop step. |
 | #1186, #1188 | Depend on #1184 writing `LastUsedDate` and revocation data. |
-| #1189 | The control plane plus LDE needs only a Postgres connection string, not MDR. |
+| #1189 | The control plane needs only a Postgres connection string, not MDR. LDE needs only the control plane (decision 1). |
 
 ## References
 
-- #1181 (this spike), epic #1041, sub-issues #1180 and #1182–#1189
+- #1181 (this spike), epic #1041, sub-issues #1180 and #1182–#1189, #1190 (identity ownership)
 - [ADR 0002](0002-lif-control-plane-vs-mdr-host.md); [ADR 0001](auth.md)
 - #1000 (LDE auth spike), #1033 (designed key format), PR #1038 (shipped store), #1034 (validation stub)
 - #1290 (deployable MDR without AWS), #1316 / PR #1323 (non-AWS test-drive)
