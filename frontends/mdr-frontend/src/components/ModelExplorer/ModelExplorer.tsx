@@ -493,7 +493,7 @@ const ModelTree: React.FC<ModelTreeProps> = ({
   // HANDLE CREATE CRUD DIALOG
   const handleCreateDropdown = async (node: any, kind: string) => {
     debugLog("handleCreateDropdown", kind, node);
-    let newDialogOptions: any = { isEditMode: false, fields: [] };
+    const newDialogOptions: any = { isEditMode: false, fields: [] };
 
     const valueSetId = node.parentType === "valueSet" ? node.parentId || undefined : undefined;
     switch(kind) {
@@ -543,7 +543,7 @@ const ModelTree: React.FC<ModelTreeProps> = ({
   // HANDLE EDIT CRUD DIALOG
   const handleEditItem = (item: any) => async () => {
     debugLog("Editing item:", item);
-    let newDialogOptions: any = { isEditMode: true, itemToEdit: item, fields: [] };
+    const newDialogOptions: any = { isEditMode: true, itemToEdit: item, fields: [] };
 
     const itemNode = selectedNode;
     switch(itemNode?.type) {
@@ -603,7 +603,7 @@ const ModelTree: React.FC<ModelTreeProps> = ({
 
     const assocNoFieldsText = 'The item association selected does not support placements, so placement and relationship editing options are unavailable.';
 
-    let newDialogOptions: any = { isEditMode: true, fields: [] };
+    const newDialogOptions: any = { isEditMode: true, fields: [] };
     const capitalizedType = capitalize(n.type);
     const All_Assoc = n.type === "entity"
       ? allEAs.filter((ea: any) => ea.ChildEntityId === n.id)
@@ -657,7 +657,7 @@ const ModelTree: React.FC<ModelTreeProps> = ({
     else if (!n.hasIncId) errMsg = `No inclusion ID found for ${n.type}#${n.id} to edit.`;
     if (errMsg.length) { alertDialog("Edit Inclusion Error", errMsg); return; }
 
-    let newDialogOptions: any = { isEditMode: true, fields: [] };
+    const newDialogOptions: any = { isEditMode: true, fields: [] };
     const capitalizedType = capitalize(n.type);
     const hasInc = selectedModel?.Inclusions?.find(
       (i: any) => i.Id === n.hasIncId && i.IncludedElementId === n.id && i.ElementType === capitalizedType && !i.Deleted
@@ -687,16 +687,16 @@ const ModelTree: React.FC<ModelTreeProps> = ({
     const Id = i?.Id;
     const iNode = selectedNode;
     const pNode = selectedNode?.parentNode || {};
-    debugLog("handleDeleteItem:", (!!delAssoc ? "association_only" : "complete_object"), i, iNode);
+    debugLog("handleDeleteItem:", (delAssoc ? "association_only" : "complete_object"), i, iNode);
     if(!Id || Id < 1) { reportWarn("Invalid item for deletion:", i); return; }
     if(delAssoc && (!pNode.id || pNode.id < 1)) { reportWarn("Invalid item for association removal:", i, pNode); return; }
-    let newDialogOptions: any = {
+    const newDialogOptions: any = {
       itemToDelete: i,
       title: `${!delAssoc ? "Delete" : "Remove"} ${capitalize(iNode?.type)}#${iNode?.id} ${iNode.label}`,
       message: (!delAssoc ? 'Are you sure you want to delete `' + iNode.label + ' for all models?'
         : `Are you sure you want to remove the ${capitalize(iNode.type)} \`${iNode.label}\` association from ${capitalize(pNode.type)} \`${pNode.label}\`?`),
     };
-    const ModelInclusions = useInclusion ? [...selectedModel?.Inclusions] : [];
+    const ModelInclusions = useInclusion ? [...(selectedModel?.Inclusions ?? [])] : [];
     switch(iNode?.type) {
       case "entity":
         newDialogOptions.onDelete = async () => {
@@ -1064,7 +1064,7 @@ const ModelTree: React.FC<ModelTreeProps> = ({
   useEffect(() => {
     if (!selectedNode || !Object.keys(selectedNode).length) { setPropBtns({}); return; }
     const validAssoc = selectedNode.hasAssocId && ['entity', 'attribute'].includes(selectedNode.type);
-    let newOpts: any = {
+    const newOpts: any = {
       inc: selectedNode.hasIncId && !selectedNode.isRef,
       assocEdit: validAssoc && (!selectedNode.isRef || selectedNode.isRef !== "c"),
       assocDel: (validAssoc && (!selectedNode.isRef || selectedNode.isRef !== "c")) || selectedNode.type === "valueSet",
@@ -1108,7 +1108,7 @@ const ModelTree: React.FC<ModelTreeProps> = ({
             onAddNew={handleOnAddNew}
             onFuncDownload={handleDownloadWithToast}
             headerString={treeHeader}
-            triggerModal={async (n, k, s) => { await s ? handleSelectDialog(n, k, s) : handleCreateDropdown(n, k); }}
+            triggerModal={async (n, k, s) => { if (s) await handleSelectDialog(n, k, s); else await handleCreateDropdown(n, k); }}
             triggerCheckbox={async (n, f, v) => { await handleCheckboxToggle(n, f, v, false); }}
             typeHandlers={{
               model: (n: any, p?: any) => { onNodeSelect(n, p); onModelSelect(); },

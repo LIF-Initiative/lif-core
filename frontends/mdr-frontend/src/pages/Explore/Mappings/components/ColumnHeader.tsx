@@ -106,7 +106,7 @@ const ColumnHeader: React.FC<ColumnHeaderProps> = ({
               if (pulseTarget) {
                 pulseTarget.classList.remove('mappings-pulse');
                 // force reflow to restart animation
-                (pulseTarget as any).offsetWidth;
+                void (pulseTarget as HTMLElement).offsetWidth;
                 pulseTarget.classList.add('mappings-pulse');
               }
             }

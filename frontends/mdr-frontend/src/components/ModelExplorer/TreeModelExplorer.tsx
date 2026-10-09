@@ -256,7 +256,7 @@ export const TreeModelExplorer: React.FC<TreeModelExplorerProps> = (props) => {
             <button type="button" className="openapi-dl-btn" title={`Standard OpenAPI schema for ${modelNode?.label}`}
               onClick={() => onFuncDownload(modelNode?.id, 'bare', openApiPublicOnly)}
             >Standard</button>
-            {['OrgLIF'].includes(modelNode?.subtype!) && (
+            {['OrgLIF'].includes(modelNode?.subtype ?? '') && (
             <label htmlFor="openapi-dl-pub" className="openapi-dl-pub" title={`Only include elements marked as public?`}>
               <input type="checkbox" id="openapi-dl-pub" checked={openApiPublicOnly}
                 onChange={e => setOpenApiPublicOnly(e.target.checked)} /> Public only?
@@ -565,7 +565,7 @@ export const transformData = (data: any, baseData?: any): TreeNode => {
   if (!baseData?.DataModel?.Id) baseData = {};  
 
   let i: number = 0;
-  const AutoSort = false || baseData;
+  const AutoSort = baseData;
   const IncludeOrphanValueSets = false;
   const DMContribOrg = data.DataModel.ContributorOrganization;
   const EAs: any[] = [...(baseData?.EntityAssociations || []), ...(data?.EntityAssociations || [])];
@@ -676,7 +676,7 @@ export const transformData = (data: any, baseData?: any): TreeNode => {
     });
   }
   buildValueSetNodeMap(data, false);
-  baseData ? buildValueSetNodeMap(baseData, true) : null;
+  if (baseData) buildValueSetNodeMap(baseData, true);
   i += iVS + iVal;
 
   const entityMap = new Map<string, any>();
@@ -735,7 +735,7 @@ export const transformData = (data: any, baseData?: any): TreeNode => {
     debugLog(`entityMap (${isBase ? 'w/ base' : 'model only'}):`, map2Console(entityMap));
   };
   buildEntityMap(data, false);
-  baseData ? buildEntityMap(baseData, true) : null;
+  if (baseData) buildEntityMap(baseData, true);
 
   const parentMap = new Map<string, any>();
   const parent404 = new Map<string, any>();
@@ -863,7 +863,7 @@ export const transformData = (data: any, baseData?: any): TreeNode => {
       }
       if (e?.ChildEntities && Array.isArray(e.ChildEntities)) {
         const childEntityLabel = (c: any): string => {
-          let nodeLabel = c.nodeLabel;
+          const nodeLabel = c.nodeLabel;
           const rel = (c.Relationship || "") + "Ref";
           if (c.Placement !== "Reference") return nodeLabel;
           else if (rel.startsWith("has") || rel.startsWith("relevant")) return nodeLabel;
