@@ -13,13 +13,9 @@ import pytest
 from fastapi import HTTPException
 from sqlmodel import select
 
-from lif.mdr_sql_model.core import DeveloperApiKey
-from lif.mdr_dto.developer_api_key_dto import CreateDeveloperApiKeyDTO
-from lif.mdr_services.developer_api_key_service import (
-    create_developer_api_key,
-    list_developer_api_keys,
-    revoke_developer_api_key,
-)
+from lif.developer_keys.dto import CreateDeveloperApiKeyDTO
+from lif.developer_keys.models import DeveloperApiKey
+from lif.developer_keys.core import create_developer_api_key, list_developer_api_keys, revoke_developer_api_key
 
 
 @pytest.fixture

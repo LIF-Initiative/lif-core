@@ -8,6 +8,7 @@ on:
       - .github/workflows/lif_mdr_api.yml
       - bases/lif/mdr_restapi/**
       - components/lif/mdr_sql_model/**
+      - components/lif/developer_keys/**
       - components/lif/mdr_auth/**
       - components/lif/mdr_dto/**
       - components/lif/mdr_services/**

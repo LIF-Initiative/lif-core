@@ -8,7 +8,7 @@ don't have to pull in MDR's SQLAlchemy/SQLModel dependency.
 
 | File | Contents |
 |---|---|
-| `core.py` | `DataModel`, `Entity`, `EntityAssociation`, `ValueSet`, `ValueSetValue`, `Attribute`, `EntityAttributeAssociation`, `Constraint`, `DataModelConstraints`, `TransformationGroup`, `Transformation`, `TransformationAttribute`, `ValueSetValueMapping`, `ExtInclusionsFromBaseDM`, `ExtMappedValueSet`, `DeveloperApiKey`, plus their supporting enums |
+| `core.py` | `DataModel`, `Entity`, `EntityAssociation`, `ValueSet`, `ValueSetValue`, `Attribute`, `EntityAttributeAssociation`, `Constraint`, `DataModelConstraints`, `TransformationGroup`, `Transformation`, `TransformationAttribute`, `ValueSetValueMapping`, `ExtInclusionsFromBaseDM`, `ExtMappedValueSet`, plus their supporting enums |
 
 ## Used by
 - `mdr_dto` — DTO enums mirror the ORM enums defined here
