@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Badge, Button, DropdownMenu, Flex, Text } from "@radix-ui/themes";
 import { PersonIcon, ExitIcon, EnterIcon, LayersIcon } from "@radix-ui/react-icons";
-import { useAuth } from "../../context/AuthContext";
-import authService from "../../services/authService";
+import { useAuth } from "@/context/AuthContext";
+import authService from "@/services/authService";
 import tenantsService, {
   WORKSPACE_CHANGE_EVENT,
   type WorkspaceItem,
-} from "../../services/tenantsService";
+} from "@/services/tenantsService";
 import "./Header.css";
 
 const Header: React.FC = () => {

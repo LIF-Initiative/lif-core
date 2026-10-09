@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { Checkbox, Dialog, Text, Button } from '@radix-ui/themes';
-import type { TransformationGroupDetails } from '../../../../services/transformationsService';
-import { importTransformationsForGroup } from '../../../../services/transformationsService';
-import { isValidJSONFile } from '../../../../utils/objectUtils';
-import { errorToString } from '../../../../utils/errorUtils';
-import FileInput from '../../../../components/FileInput.tsx';
+import React, { useState } from "react";
+import { Checkbox, Dialog, Text, Button } from "@radix-ui/themes";
+import type { TransformationGroupDetails } from "@/services/transformationsService";
+import { importTransformationsForGroup } from "@/services/transformationsService";
+import { isValidJSONFile } from "@/utils/objectUtils";
+import { errorToString } from "@/utils/errorUtils";
+import FileInput from "@/components/FileInput/FileInput";
 
 export interface ImportGroupDialogProps {
   open: boolean;

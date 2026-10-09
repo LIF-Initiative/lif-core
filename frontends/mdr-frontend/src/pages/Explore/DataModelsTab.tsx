@@ -1,10 +1,10 @@
-import DataModelSelector from "../../components/DataModelSelector/DataModelSelector";
+import DataModelSelector from "@/components/DataModelSelector/DataModelSelector";
 
 const DataModelsTab: React.FC = () => {
   return (
     <DataModelSelector
       dataModeltype="DataModel"
-      routPath="/explore/data-models/"
+      routePath="/explore/data-models/"
     />
   );
 };

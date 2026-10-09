@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { Box, Spinner, Flex } from "@radix-ui/themes";
-import authService from "../services/authService";
+import authService from "@/services/authService";
 
 interface AuthGuardProps {
   children: React.ReactNode;

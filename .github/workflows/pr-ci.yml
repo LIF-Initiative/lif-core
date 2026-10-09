@@ -141,6 +141,6 @@ jobs:
       - name: Build
         run: npm run build
 
-      # Runs vitest where a test script exists (lif_advisor_app); no-op otherwise.
+      # Runs vitest where a test script exists (both apps today); no-op otherwise.
       - name: Unit tests
         run: npm run test --if-present

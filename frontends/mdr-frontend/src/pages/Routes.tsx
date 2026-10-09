@@ -4,16 +4,16 @@ import {
   // NonIndexRouteObject,
 } from "react-router-dom";
 
-import Home from "../pages/Home";
-import Login from "../pages/Login";
-import AuthCallback from "../pages/AuthCallback";
-import Workspaces from "../pages/Workspaces";
-import ApiKeys from "../pages/ApiKeys";
-import ExportPlayground from "../pages/ExportPlayground";
-import InviteAccept from "../pages/InviteAccept";
-import AuthGuard from "../components/AuthGuard";
-import LifModel from "./Explore/lif-model";
-import DataExtensions from "./Explore/data-extensions";
+import Home from "./Home";
+import Login from "./Login";
+import AuthCallback from "./AuthCallback";
+import Workspaces from "./Workspaces";
+import ApiKeys from "./ApiKeys";
+import ExportPlayground from "./ExportPlayground";
+import InviteAccept from "./InviteAccept";
+import AuthGuard from "../components/AuthGuard/AuthGuard";
+import LifModel from "./Explore/LifModel";
+import DataExtensions from "./Explore/DataExtensions";
 import ExploreSearch from "./Explore/ExploreSearch";
 import MappingsView from "./Explore/Mappings/MappingsView";
 import TabLayout from "./Explore/TabLayout";

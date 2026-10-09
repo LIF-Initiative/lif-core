@@ -1,6 +1,6 @@
-import React, { createContext, useContext, ReactNode } from 'react';
-import * as Toast from '@radix-ui/react-toast';
-import { Cross2Icon } from '@radix-ui/react-icons';
+import React, { createContext, useContext, ReactNode } from "react";
+import * as Toast from "@radix-ui/react-toast";
+import { Cross2Icon } from "@radix-ui/react-icons";
 
 interface ToastContextType {
   showToast: (message: string, type?: 'success' | 'error' | 'warning' | 'info') => void;

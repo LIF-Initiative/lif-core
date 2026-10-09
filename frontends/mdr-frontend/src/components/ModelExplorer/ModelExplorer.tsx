@@ -5,8 +5,8 @@ import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { CrudDialog, DeleteDialog, SelectDialog, SimpleAlertDialog } from "../Dialog/Dialog";
 import { TreeModelExplorer, transformData } from "./TreeModelExplorer";
 import ObjectDetails from "../ObjectDetails/ObjectDetails";
-import { useToast } from "../../context/ToastContext";
-import { errorToString } from "../../utils/errorUtils";
+import { useToast } from "@/context/ToastContext";
+import { errorToString } from "@/utils/errorUtils";
 
 const FileDEBUG = false;
 const debugLog = (...args: any[]) => { if(FileDEBUG) console.log(...args); };
@@ -28,7 +28,7 @@ import {
   // deleteDataModel,
   CreateDataModelParams,
   downloadOpenApiSchema,
-} from "../../services/modelService";
+} from "@/services/modelService";
 import {
   entityCreateFields,
   entityAssociationFields,
@@ -50,7 +50,7 @@ import {
   createEntityAssociation,
   deleteEntityAssociation,
   updateEntityAssociation,
-} from "../../services/entityService";
+} from "@/services/entityService";
 import {
   listInclusionByModel,
   createInclusion,
@@ -59,7 +59,7 @@ import {
   CreateInclusionParams,
   tmplCreateInclusion,
   getInclusion,
-} from "../../services/inclusionService";
+} from "@/services/inclusionService";
 import {
   listAttributesForDataModel,
   listAttributesByEntity,
@@ -73,26 +73,26 @@ import {
   createEntityAttributeAssociation,
   deleteEntityAttributeAssociation,
   updateEntityAttributeAssociation,
-} from "../../services/attributesService";
+} from "@/services/attributesService";
 import {
   listValueSetsForDataModel,
   createValueSet,
   updateValueSet,
   deleteValueSet,
   ValueSetParams,
-} from "../../services/valueSetService";
+} from "@/services/valueSetService";
 import {
   createValue,
   updateValue,
   deleteValue,
   ValueParams,
-} from "../../services/valueService";
+} from "@/services/valueService";
 
 
 interface ModelTreeProps {
   crud: boolean;
   model: any;
-  routPath: string;
+  routePath: string;
   onEditModel: (id: number, params: any) => Promise<void>;
   ContribUser?: string;
   ContribOrg?: string;
@@ -101,7 +101,7 @@ interface ModelTreeProps {
 const ModelTree: React.FC<ModelTreeProps> = ({ 
   crud = false,
   model,
-  routPath,
+  routePath,
   onEditModel,
   ContribUser,
   ContribOrg,

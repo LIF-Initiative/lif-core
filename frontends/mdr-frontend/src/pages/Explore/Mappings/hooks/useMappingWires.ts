@@ -1,5 +1,5 @@
-import { MutableRefObject, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { buildAttributeLookupKey } from '../../../../utils/entityIdPath';
+import { MutableRefObject, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { buildAttributeLookupKey } from "@/utils/entityIdPath";
 
 // Track warned paths to avoid spamming console on every scroll
 const warnedPaths = new Set<string>();

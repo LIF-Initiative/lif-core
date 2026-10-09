@@ -5,8 +5,8 @@ import React, {
     useMemo,
     useRef,
     useState,
-} from 'react';
-import './MappingsView.css';
+} from "react";
+import "./MappingsView.css";
 import {
     getTransformationsForGroup,
     listAllTransformationGroups,
@@ -24,49 +24,49 @@ import {
     existsTransformationGroup,
     updateTransformationAttributes,
     exportTransformationsForGroup,
-} from '../../../services/transformationsService';
+} from "@/services/transformationsService";
 import {
     getModelDetailsWithTree,
     listModels,
     listOrgLifModels,
     generateJsonSchema,
-} from '../../../services/modelService';
-import { buildDefaultAssignmentExpression } from '../../../utils/jsonataUtils';
+} from "@/services/modelService";
+import { buildDefaultAssignmentExpression } from "@/utils/jsonataUtils";
 import {
     parseEntityIdPath,
     appendAttributeToPath,
     extractEntityIds,
     extractEntityPath,
     buildAttributeLookupKey,
-} from '../../../utils/entityIdPath';
+} from "@/utils/entityIdPath";
 import {
     DataModelWithDetailsDTO,
     DataModelWithDetailsWithTree,
     EntityDTO,
     AttributeDTO,
-} from '../../../types';
-import { Select as RdxSelect, Badge } from '@radix-ui/themes';
-import { useNavigate, useParams } from 'react-router-dom';
-import type { KeywordSearchItem } from '../../../components/KeywordSearch/KeywordSearch';
-import BodyModelColumn from './components/ModelColumn';
-import ColumnHeader from './components/ColumnHeader';
+} from "@/types";
+import { Select as RdxSelect, Badge } from "@radix-ui/themes";
+import { useNavigate, useParams } from "react-router-dom";
+import type { KeywordSearchItem } from "@/components/KeywordSearch/KeywordSearch";
+import BodyModelColumn from "./components/ModelColumn";
+import ColumnHeader from "./components/ColumnHeader";
 import useMappingWires, {
     WirePath as HookWirePath,
-} from './hooks/useMappingWires';
-import Wires from './components/Wires';
-import useSearchItems from './hooks/useSearchItems';
-import DeleteTransformationsDialog from './components/DeleteTransformationsDialog';
-import ExpressionEditorDialog from './components/ExpressionEditorDialog';
-import EditGroupDialog from './components/EditGroupDialog';
-import ImportGroupDialog from './components/ImportGroupDialog';
-import ForkGroupDialog from './components/ForkGroupDialog';
-import DetachSourcesDialog from './components/DetachSourcesDialog';
-import BulkTransformationsDialog from './components/BulkTransformationsDialog';
-import { trackEvent } from '../../../utils/analytics';
-import { downloadJsonFile } from '../../../utils/downloadJsonFile';
+} from "./hooks/useMappingWires";
+import Wires from "./components/Wires";
+import useSearchItems from "./hooks/useSearchItems";
+import DeleteTransformationsDialog from "./components/DeleteTransformationsDialog";
+import ExpressionEditorDialog from "./components/ExpressionEditorDialog";
+import EditGroupDialog from "./components/EditGroupDialog";
+import ImportGroupDialog from "./components/ImportGroupDialog";
+import ForkGroupDialog from "./components/ForkGroupDialog";
+import DetachSourcesDialog from "./components/DetachSourcesDialog";
+import BulkTransformationsDialog from "./components/BulkTransformationsDialog";
+import { trackEvent } from "@/utils/analytics";
+import { downloadJsonFile } from "@/utils/downloadJsonFile";
 import { Pencil2Icon, LayersIcon, UploadIcon, DownloadIcon } from "@radix-ui/react-icons";
-import { useToast } from "../../../context/ToastContext";
-import { errorToString } from '../../../utils/errorUtils';
+import { useToast } from "@/context/ToastContext";
+import { errorToString } from "@/utils/errorUtils";
 
 interface DisplayTransformationData extends TransformationData {
     SourceEntity?: EntityDTO;
@@ -735,7 +735,7 @@ const MappingsView: React.FC = () => {
             if (!forkDialogOpen || !group) return;
             try {
                 const { computeNextVersion } = await import(
-                    '../../../services/transformationsService'
+                    "@/services/transformationsService"
                 );
                 const next = await computeNextVersion(group.Id, forkBump);
                 setForkPreview(next);

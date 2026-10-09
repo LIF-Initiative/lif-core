@@ -4,7 +4,7 @@ description: Run the full LIF Core check suite — ruff, ty, pytest unit, Polyli
 allowed-tools: Bash
 ---
 
-Run the LIF Core quality gate. These are the same checks `pre-commit` runs (ruff, ty, pytest) plus the integration suite, the Polylith workspace check, and the one frontend with a test runner.
+Run the LIF Core quality gate. These are the same checks `pre-commit` runs (ruff, ty, pytest) plus the integration suite, the Polylith workspace check, and the advisor-app frontend tests.
 
 ## Steps
 
@@ -20,7 +20,7 @@ Run from the repo root. The backend checks are independent — run them, then th
 
 Notes:
 - **Integration tests hit a live stack** and load sample data from `projects/mongodb/sample_data/{org-key}/`. `--skip-unavailable` skips a test when its backing service is unreachable rather than failing — keep it on for local runs. Full reference: [`docs/operations/guides/testing.md`](../../../docs/operations/guides/testing.md).
-- **`mdr-frontend` has no test runner** (its `package.json` scripts are dev/build/lint/preview only). Don't try `npm test` there — for it, fall back to `cd frontends/mdr-frontend && npm run build` (runs `tsc -b`) as the type/build gate. (A vitest harness for it is tracked separately.)
+- **`mdr-frontend` is not in the steps above** but has a small vitest suite. When a change touches it, run `cd frontends/mdr-frontend && npm test && npm run build` (the build runs `tsc -b`).
 - **Don't use `importlib.reload()`** to re-run a module under test — it breaks `isinstance()`/`pytest.raises()`. Use `mock.patch.object(module, "VAR", value)`.
 - To scope unit tests to one component: `uv run pytest test/components/lif/<component>/`.
 - The one-shot equivalent of steps 1-3+5 is `uv run pre-commit run --all-files`.

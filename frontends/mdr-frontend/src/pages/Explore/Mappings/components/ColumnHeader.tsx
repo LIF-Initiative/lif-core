@@ -1,6 +1,6 @@
-import React from 'react';
-import KeywordSearch from '../../../../components/KeywordSearch/KeywordSearch';
-import type { KeywordSearchItem } from '../../../../components/KeywordSearch/KeywordSearch';
+import React from "react";
+import KeywordSearch from "@/components/KeywordSearch/KeywordSearch";
+import type { KeywordSearchItem } from "@/components/KeywordSearch/KeywordSearch";
 
 interface ColumnHeaderProps {
   side: 'left' | 'right';
