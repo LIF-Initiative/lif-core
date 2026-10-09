@@ -1,8 +1,9 @@
 """Developer API key management (#1033).
 
-User-owned keys for programmatic access to the LDE /exports API. Keys are workspace-scoped
-(they live in the tenant schema, reached via the request's search_path) and user-scoped by
-OwnerSub (the Cognito `sub`). The raw key is generated + returned exactly once; only its
+User-owned keys for programmatic access to the LDE /exports API. Keys are user-scoped by
+OwnerSub (the Cognito `sub`). Workspace scoping is the host's job: each function runs against
+whatever the caller's session is scoped to, which in MDR is the tenant schema set via
+search_path (ADR 0006). The raw key is generated + returned exactly once; only its
 SHA-256 hash is stored. Revocation is a soft state (RevokedDate).
 """
 
@@ -15,8 +16,8 @@ from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
 
-from lif.mdr_sql_model.core import DeveloperApiKey
-from lif.mdr_dto.developer_api_key_dto import CreatedDeveloperApiKeyDTO, CreateDeveloperApiKeyDTO, DeveloperApiKeyDTO
+from lif.developer_keys.dto import CreatedDeveloperApiKeyDTO, CreateDeveloperApiKeyDTO, DeveloperApiKeyDTO
+from lif.developer_keys.models import DeveloperApiKey
 
 KEY_PREFIX = "lifk_"
 _PREFIX_DISPLAY_LEN = 12  # leading chars kept for display (never the full key)
@@ -41,7 +42,7 @@ async def create_developer_api_key(
     key = DeveloperApiKey(OwnerSub=owner_sub, Label=data.Label, KeyPrefix=key_prefix, KeyHash=key_hash)
     session.add(key)
     # Flush (INSERT ... RETURNING) populates Id/CreationDate while the request's
-    # tenant search_path is still active, and read them BEFORE commit. A refresh()
+    # tenant search_path (set by the MDR host) is still active, and read them BEFORE commit. A refresh()
     # after commit runs in a fresh transaction that has lost the tenant search_path,
     # so it looks in `public`, can't find the tenant-schema row, and raises
     # "Could not refresh instance".
@@ -55,7 +56,7 @@ async def create_developer_api_key(
 
 async def list_developer_api_keys(session: AsyncSession, owner_sub: str) -> List[DeveloperApiKeyDTO]:
     result = await session.execute(select(DeveloperApiKey).where(DeveloperApiKey.OwnerSub == owner_sub))
-    return [DeveloperApiKeyDTO.from_orm(key) for key in result.scalars().all()]
+    return [DeveloperApiKeyDTO.model_validate(key) for key in result.scalars().all()]
 
 
 async def revoke_developer_api_key(session: AsyncSession, owner_sub: str, key_id: int) -> None:
