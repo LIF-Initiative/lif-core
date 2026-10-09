@@ -50,6 +50,7 @@ dev = [
     "dagster-webserver~=1.11",
     "greenlet~=3.2",
     "mysql-connector-python~=8.3",
+    "packaging~=24.2",
     "passlib[bcrypt]~=1.7",
     "polylith-cli~=1.30",
     "pre-commit~=4.2",
