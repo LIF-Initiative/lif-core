@@ -1,11 +1,11 @@
-import DataModelSelector from "../../components/DataModelSelector/DataModelSelector";
+import DataModelSelector from "@/components/DataModelSelector/DataModelSelector";
 
 const DataExtensions: React.FC = () => {
   return (
     <DataModelSelector
       // listTitle="Organization's LIF"
       dataModeltype="OrgLIF"
-      routPath="/explore/data-extensions/"
+      routePath="/explore/data-extensions/"
     />
   );
 };

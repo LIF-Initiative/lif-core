@@ -1,6 +1,6 @@
-import { useMemo } from 'react';
-import type { KeywordSearchItem } from '../../../../components/KeywordSearch/KeywordSearch';
-import type { DataModelWithDetailsDTO } from '../../../../types';
+import { useMemo } from "react";
+import type { KeywordSearchItem } from "@/components/KeywordSearch/KeywordSearch";
+import type { DataModelWithDetailsDTO } from "@/types";
 
 /**
  * Build KeywordSearchItem[] from a DataModelWithDetailsDTO.

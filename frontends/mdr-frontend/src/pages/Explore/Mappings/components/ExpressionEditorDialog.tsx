@@ -1,8 +1,8 @@
-import React from 'react';
-import { Dialog } from '@radix-ui/themes';
-import ExpressionEditor from '../../../../components/ExpressionEditor/ExpressionEditor';
-import type { DataModelWithDetailsWithTree } from '../../../../types';
-import type { TransformationData } from '../../../../services/transformationsService';
+import React from "react";
+import { Dialog } from "@radix-ui/themes";
+import ExpressionEditor from "@/components/ExpressionEditor/ExpressionEditor";
+import type { DataModelWithDetailsWithTree } from "@/types";
+import type { TransformationData } from "@/services/transformationsService";
 
 export interface ExpressionEditorDialogProps {
   open: boolean;

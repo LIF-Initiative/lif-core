@@ -5,8 +5,8 @@ import { DataModelCreateFields, DataModelEditFields } from "./CreateFields";
 import { SimpleTree, transformData } from "./SimpleTree";
 import { CrudDialog } from "../Dialog/Dialog";
 import ModelTree from "../ModelExplorer/ModelExplorer";
-import { errorToString } from "../../utils/errorUtils";
-import { trackEvent } from "../../utils/analytics";
+import { errorToString } from "@/utils/errorUtils";
+import { trackEvent } from "@/utils/analytics";
 
 const FileDEBUG = false;
 const debugLog = (...args: any[]) => { if(FileDEBUG) console.log(...args); };
@@ -19,27 +19,27 @@ import {
   createDataModel,
   updateDataModel,
   createDataModelFromUpload,
-} from "../../services/modelService";
+} from "@/services/modelService";
 
-interface ExplorePageLayoutProps {
+interface DataModelSelectorProps {
   dataModeltype: string;
-  routPath: string;
+  routePath: string;
 }
 
-const DataModelSelector: React.FC<ExplorePageLayoutProps> = ({
+const DataModelSelector: React.FC<DataModelSelectorProps> = ({
   dataModeltype,
-  routPath,
+  routePath,
 }) => {
   const navigate = useNavigate();
 
   const { modelId } = useParams();
   const [models, setModels] = useState<any[]>([]);
   const [selectedModel, setSelectedModel] = useState<any>(null);
-  const [modelPath, setModelPath] = useState<any>(routPath);
+  const [modelPath, setModelPath] = useState<any>(routePath);
   // const [modelDetails, setModelDetails] = useState<any>(null);
 
   const dataModelSelected = async (id: number, extraPath?: string, nav?: boolean) => {
-    const path = `${routPath}${id}${extraPath}`;
+    const path = `${routePath}${id}${extraPath}`;
     const model = models.find((m) => m.Id === id);
     if (!model) {
       console.warn("Model not found for ID:", id);
@@ -73,7 +73,7 @@ const DataModelSelector: React.FC<ExplorePageLayoutProps> = ({
       debugLog("Ignored node: ", n);
       return;
     }
-    let modelId = Number(n?.id) ? n.id : n.parentId;
+    const modelId = Number(n?.id) ? n.id : n.parentId;
     let extraPath = ``;
     if (n.type == "OrgLIF") {
       if (n.id === "only") extraPath += "/only";
@@ -137,7 +137,7 @@ const DataModelSelector: React.FC<ExplorePageLayoutProps> = ({
   //     await fetchModels();
   //     if (selectedModel?.Id === id) {
   //       setSelectedModel(null);
-  //       navigate(routPath);
+  //       navigate(routePath);
   //     }
   //   } catch (error) {
   //     reportError("Error deleting model:", errorToString(error));
@@ -149,16 +149,16 @@ const DataModelSelector: React.FC<ExplorePageLayoutProps> = ({
   useEffect(() => {
     if (!modelId && models.length > 0 && dataModeltype !== "BaseLIF") {
       setSelectedModel(null);
-      navigate(routPath);
+      navigate(routePath);
     }
     fetchModels();
-  }, [modelId, fetchModels, models.length, dataModeltype, navigate, routPath]);
+  }, [modelId, fetchModels, models.length, dataModeltype, navigate, routePath]);
 
   useEffect(() => {
     if (models.length > 0 && dataModeltype === "BaseLIF") {
-      navigate(`${routPath}${models[0].Id}`);
+      navigate(`${routePath}${models[0].Id}`);
     }
-  }, [models, dataModeltype, navigate, routPath]);
+  }, [models, dataModeltype, navigate, routePath]);
 
   
   /** CRUD Dialog functionality */
@@ -186,7 +186,7 @@ const DataModelSelector: React.FC<ExplorePageLayoutProps> = ({
   };
   const handleOnAddNew = async () => {
     const baseModel = models.find((m) => m.Type === "BaseLIF");
-    let newCrudDialog: any = {
+    const newCrudDialog: any = {
       isEditMode: false,
       title: "Data Model",
       fields: DataModelCreateFields,
@@ -244,7 +244,7 @@ const DataModelSelector: React.FC<ExplorePageLayoutProps> = ({
               crud={true}
               model={selectedModel}
               onEditModel={handleOnModelEdit}
-              routPath={modelPath}
+              routePath={modelPath}
               ContribUser={"MDRUser"}
               ContribOrg={selectedModel.ContributorOrganization}
             />

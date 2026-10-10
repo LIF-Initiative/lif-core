@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest';
-import { validateAgainstSchema } from './schemaValidation';
+import { describe, it, expect } from "vitest";
+import { validateAgainstSchema } from "./schemaValidation";
 
 /** Shaped like what `generateJsonSchema` emits: draft 2020-12, strict objects, required list. */
 const schema = {

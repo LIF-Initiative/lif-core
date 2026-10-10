@@ -133,7 +133,7 @@ const v4 = await agent(
   plan('frontend + holistic', v3, `
 **Your lens — v4: frontend React/TS + final holistic review.**
 1. Auth — fetch bypasses the axios interceptor; share the 401→refresh→retry logic (frontends/lif_advisor_app/src/utils/axios.ts). Use real localStorage keys + VITE_* env (build-time only — coordinated must-match flags hurt; prefer runtime/content-negotiation).
-2. Frontend tests — lif_advisor_app has vitest (npm test); mdr-frontend has NO runner (gate via npm run build / tsc). Name the test cases.
+2. Frontend tests — lif_advisor_app has vitest (npm test); mdr-frontend has vitest too (npm test, node env) plus npm run build / tsc. Name the test cases.
 3. Routing / session restore / lazy rehydration; empty + error states.
 4. Deploy ordering — backend vs frontend first; ECS task-def vs image rebuild; dev :latest → demo pinned promotion.
 5. Integration test additions that catch the deployment-like failure class (e.g. ALB idle-timeout for long responses).
@@ -182,7 +182,7 @@ ${candidate}
 Check it against all three lenses the plan was built through, plus scope:
 - **fp-polylith** — IO at the base edge, components pure; data-driven dispatch over if/elif; brick dependency direction; every new brick wired in [tool.polylith.bricks] (incl. the 3 Dagster pyproject.toml files if Dagster uses it).
 - **backend-correctness** — async correctness (advisor API is a SINGLE uvicorn worker; a blocking call stalls every concurrent request); tenant isolation failing CLOSED; pydantic validation at the boundary; migration ordering; named test cases.
-- **frontend-holistic** — 401→refresh→retry shared, not re-implemented on fetch; frontend test story (lif_advisor_app has vitest, mdr-frontend has NO runner); deploy ordering; merge-order against in-flight PRs.
+- **frontend-holistic** — 401→refresh→retry shared, not re-implemented on fetch; frontend test story (both lif_advisor_app and mdr-frontend have vitest); deploy ordering; merge-order against in-flight PRs.
 - **scope** — does the plan do what the description says, no more and no less? A slice that is unimplementable as written is a blocker.
 
 **A finding is a \`blocker\` only if an implementer would be unable to proceed, or would ship something wrong.** Missing polish is \`nit\`. Do not inflate severity to look thorough, and do not invent findings — an empty array is a valid answer.

@@ -1,6 +1,6 @@
-import api from './api';
-import { parseEntityIdPath } from '../utils/entityIdPath';
-import { errorToString } from '../utils/errorUtils';
+import api from "./api";
+import { parseEntityIdPath } from "../utils/entityIdPath";
+import { errorToString } from "../utils/errorUtils";
 
 const apiBaseUrl = import.meta.env.VITE_API_URL;
 
@@ -439,7 +439,7 @@ export const importTransformationsForGroup = async (
         throw new Error('Invalid JSON file: failed to parse the imported transformation group.');
     }
 
-    let url = `${apiBaseUrl}/transformation_groups/${id}/import?allowMissingPaths=${allowMissing}`;
+    const url = `${apiBaseUrl}/transformation_groups/${id}/import?allowMissingPaths=${allowMissing}`;
     // url += ver && ver > 0 ? `&version=${ver}` : ''; // TODO: backend doesn't support version param yet, but will in future
 
     try {

@@ -1,5 +1,5 @@
 import api from "./api";
-import { faker } from '@faker-js/faker';
+import { faker } from "@faker-js/faker";
 import {
   ApiResponse,
   DataModel,

@@ -34,6 +34,8 @@ const sanitizeFilename = (input: string, fallback: string = 'data.json'): string
 
   let name = input.trim();
   name = name.replace(/\s+/g, '_'); // Replace all whitespace runs with underscores
+  // Control characters (\x00-\x1F) are invalid in filenames on every major OS.
+  // eslint-disable-next-line no-control-regex
   name = name.replace(/[<>:"/\\|?*\x00-\x1F]/g, ''); // Remove path separators and invalid chars
   name = name.replace(/^[.\s]+|[.\s]+$/g, ''); // Remove leading/trailing dots and spaces
   name = name.replace(/_+/g, '_'); // Collapse repeated underscores

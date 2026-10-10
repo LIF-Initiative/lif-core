@@ -1,5 +1,5 @@
-import React from 'react';
-import { Dialog } from '@radix-ui/themes';
+import React from "react";
+import { Dialog } from "@radix-ui/themes";
 
 export interface ForkGroupDialogProps {
   open: boolean;

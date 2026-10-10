@@ -1,5 +1,5 @@
-import React from 'react';
-import * as RdxAlertDialog from '@radix-ui/react-alert-dialog';
+import React from "react";
+import * as RdxAlertDialog from "@radix-ui/react-alert-dialog";
 
 export interface DeleteTransformationsDialogProps {
   open: boolean;
