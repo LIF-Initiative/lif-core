@@ -9,8 +9,8 @@ middleware / get_session, so no explicit tenant handling is needed here).
 from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status
-from lif.mdr_dto.developer_api_key_dto import CreatedDeveloperApiKeyDTO, CreateDeveloperApiKeyDTO, DeveloperApiKeyDTO
-from lif.mdr_services import developer_api_key_service
+from lif import developer_keys
+from lif.developer_keys import CreatedDeveloperApiKeyDTO, CreateDeveloperApiKeyDTO, DeveloperApiKeyDTO
 from lif.mdr_utils.database_setup import get_session
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -34,16 +34,16 @@ async def create_api_key(
     data: CreateDeveloperApiKeyDTO, request: Request, session: AsyncSession = Depends(get_session)
 ):
     owner_sub = _require_owner_sub(request)
-    return await developer_api_key_service.create_developer_api_key(session, owner_sub, data)
+    return await developer_keys.create_developer_api_key(session, owner_sub, data)
 
 
 @router.get("/", response_model=List[DeveloperApiKeyDTO])
 async def list_api_keys(request: Request, session: AsyncSession = Depends(get_session)):
     owner_sub = _require_owner_sub(request)
-    return await developer_api_key_service.list_developer_api_keys(session, owner_sub)
+    return await developer_keys.list_developer_api_keys(session, owner_sub)
 
 
 @router.delete("/{key_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def revoke_api_key(key_id: int, request: Request, session: AsyncSession = Depends(get_session)):
     owner_sub = _require_owner_sub(request)
-    await developer_api_key_service.revoke_developer_api_key(session, owner_sub, key_id)
+    await developer_keys.revoke_developer_api_key(session, owner_sub, key_id)

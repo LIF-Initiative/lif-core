@@ -1,10 +1,12 @@
 import copy
 import inspect
 import re
+from unittest.mock import AsyncMock
 
 import pytest
 from deepdiff import DeepDiff
 from lif.mdr_sql_model.core import Attribute, DataModel, DataModelType, Entity
+from lif.mdr_services import transformation_service
 from lif.mdr_services.attribute_service import get_unique_attribute
 from lif.mdr_services.entity_service import get_unique_entity
 from sqlalchemy import text
@@ -704,6 +706,29 @@ async def test_transforms_export_fail_with_only_deleted_jsonata_transform(async_
                 "Please add a transformation to this group's version and retry the export."
             )
         },
+    )
+
+
+@pytest.mark.asyncio
+async def test_transforms_export_maps_export_path_error_to_http(async_client_mdr, mdr_api_headers, monkeypatch):
+    """
+    Confirms the export endpoint translates the service's domain ExportPathError into the HTTP response.
+
+    """
+
+    detail = "Unable to export - Entity ID 5 in path '5,-12' not found"
+    monkeypatch.setattr(
+        transformation_service,
+        "get_paginated_transformations_for_a_group",
+        AsyncMock(side_effect=transformation_service.ExportPathError(status_code=404, detail=detail)),
+    )
+
+    await export_transformation_group(
+        async_client_mdr=async_client_mdr,
+        transformation_group_id="1",
+        headers=mdr_api_headers,
+        expected_status_code=404,
+        expected_response_data={"detail": detail},
     )
 
 
