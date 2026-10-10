@@ -156,6 +156,23 @@ async def get_paginated_transformations_for_given_source_and_target(
     }
 
 
+@router.get("/active_transformations_for_data_models/", response_model=Dict[str, Any])
+async def get_active_transformations_for_given_source_and_target(
+    source_data_model_id: int, target_data_model_id: int, session: AsyncSession = Depends(get_session)
+):
+    """The Translator's mapping set for a pair: the JSONata rules of the latest active group version only
+    (#1350). Unpaginated. 404 when the pair has no active version."""
+    group, total_count, transformations = await transformation_service.get_active_transformations_for_data_models(
+        session, source_data_model_id, target_data_model_id
+    )
+    return {
+        "total": total_count,
+        "TransformationGroupId": group.Id,
+        "GroupVersion": group.GroupVersion,
+        "data": transformations,
+    }
+
+
 @router.get("/transformations_by_path_ids/", response_model=List[TransformationDTO])
 async def get_transformations_by_path_ids(
     entity_id_path: str, attribute_id: int | None = None, session: AsyncSession = Depends(get_session)
@@ -236,9 +253,12 @@ async def get_all_transformation_groups(
 
 @router.get("/{transformation_group_id}/export")
 async def export_transformation_group(transformation_group_id: int, session: AsyncSession = Depends(get_session)):
-    total_count, group_data = await transformation_service.get_paginated_transformations_for_a_group(
-        session=session, group_id=transformation_group_id, pagination=False, make_exportable=True
-    )
+    try:
+        total_count, group_data = await transformation_service.get_paginated_transformations_for_a_group(
+            session=session, group_id=transformation_group_id, pagination=False, make_exportable=True
+        )
+    except transformation_service.ExportPathError as e:
+        raise HTTPException(status_code=e.status_code, detail=e.detail) from e
     if total_count == 0:
         raise HTTPException(
             status_code=400,
