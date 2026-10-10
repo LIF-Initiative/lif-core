@@ -17,7 +17,6 @@ from lif.lif_fragment_utils import adjust_lif_fragments_for_initial_orchestrator
 register_demo_adapters()
 
 QUERY_PLANNER_RESULTS_BASE_URL = os.getenv("LIF_QUERY_PLANNER_RESULTS_BASE_URL")
-QUERY_PLANNER_RESULTS_TOKEN = os.getenv("LIF_QUERY_PLANNER_RESULTS_TOKEN")
 
 TRANSLATOR_BASE_URL = os.getenv("LIF_TRANSLATOR_BASE_URL")
 TRANSLATOR_TOKEN = os.getenv("LIF_TRANSLATOR_TOKEN")
@@ -254,8 +253,10 @@ def send_results_to_query_planner(
 
     endpoint = f"{QUERY_PLANNER_RESULTS_BASE_URL}/orchestration/results"
     headers = {"Content-Type": "application/json", "User-Agent": "LIF-Orchestrator"}
-    if QUERY_PLANNER_RESULTS_TOKEN:
-        headers["Authorization"] = f"Bearer {QUERY_PLANNER_RESULTS_TOKEN}"
+    # Stripped: a trailing newline from SSM makes requests raise before sending (#1115)
+    api_key = os.getenv("LIF_QUERY_PLANNER_API_KEY", "").strip()
+    if api_key:
+        headers["X-API-Key"] = api_key
 
     response = requests.post(endpoint, json=job_results.model_dump(), headers=headers)
     if not response.ok:

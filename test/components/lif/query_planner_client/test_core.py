@@ -66,6 +66,27 @@ async def test_query_names_this_caller_to_the_query_planner():
     assert mock_client.post.call_args[1]["headers"]["X-LIF-Client"] == "learner-data-export"
 
 
+async def test_query_sends_the_query_planner_api_key_when_configured():
+    mock_cls, mock_client = _make_http_mock(200, [])
+    with (
+        mock.patch.dict(os.environ, {"LIF_QUERY_PLANNER_API_KEY": "qp-key"}),
+        mock.patch("lif.query_planner_client.core.httpx.AsyncClient", mock_cls),
+    ):
+        await fetch_query_from_query_planner(_BASE_URL, _QUERY)
+    assert mock_client.post.call_args[1]["headers"] == {"X-LIF-Client": "learner-data-export", "X-API-Key": "qp-key"}
+
+
+async def test_query_sends_no_api_key_when_none_is_configured():
+    """Until the key is provisioned (#1108's rollout), the request is unchanged."""
+    mock_cls, mock_client = _make_http_mock(200, [])
+    with (
+        mock.patch.dict(os.environ, {"LIF_QUERY_PLANNER_API_KEY": ""}),
+        mock.patch("lif.query_planner_client.core.httpx.AsyncClient", mock_cls),
+    ):
+        await fetch_query_from_query_planner(_BASE_URL, _QUERY)
+    assert "X-API-Key" not in mock_client.post.call_args[1]["headers"]
+
+
 async def test_non_200_raises_query_planner_exception():
     mock_cls, _ = _make_http_mock(500)
     with mock.patch("lif.query_planner_client.core.httpx.AsyncClient", mock_cls):
