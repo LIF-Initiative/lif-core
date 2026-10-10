@@ -1,4 +1,5 @@
-"""Regression tests for import_datamodel (Issue #668) and clone_datamodel (Issue #1205).
+"""Regression tests for import_datamodel (Issue #668), clone_datamodel (Issue #1205) and
+export_datamodel (Issue #1210).
 
 These exercise the real import_datamodel logic end-to-end with the create_* I/O
 calls mocked out. Each test guards a specific #668 regression — see the docstring
@@ -6,7 +7,7 @@ on each test rather than a running list here (which would drift as tests are add
 """
 
 import types
-from unittest.mock import AsyncMock, MagicMock
+from unittest.mock import ANY, AsyncMock, MagicMock, create_autospec
 
 import pytest
 from fastapi import HTTPException
@@ -20,6 +21,7 @@ from lif.mdr_dto.import_export_dto import (
     ImportDataModelDTO,
     ImportEntityDTO,
 )
+from lif.mdr_dto.transformation_dto import TransformationListDTO
 
 # Hard import (not importorskip): the premise of this suite is that the module used
 # to blow up at import/call time, so a future import regression must FAIL, not skip.
@@ -191,3 +193,76 @@ async def test_clone_uniqueness_check_matches_inserted_tuple(monkeypatch):
     assert (inserted.Name, inserted.DataModelVersion, inserted.Type) == ("ClonedDM", "2.0", DataModelType.OrgLIF)
     assert inserted.ContributorOrganization is None
     assert inserted.BaseDataModelId == SOURCE_DATA_MODEL_ID  # OrgLIF clones point at their source
+
+
+# --- export_datamodel (Issue #1210) --------------------------------------------------------------
+
+EXTENDED_DATA_MODEL_ID = 17
+BASE_DATA_MODEL_ID = 1
+
+
+def _autospec_export_services(monkeypatch, data_model: DataModel, base_model: DataModel | None = None) -> dict:
+    """Swap every service call export_datamodel makes for a signature-checking autospec.
+
+    #1205 and #1210 were both stale call signatures into service functions. A plain AsyncMock accepts
+    any kwargs and would hide that class of bug; create_autospec raises TypeError on a kwarg the real
+    function does not take, exactly as production did."""
+    returns = {
+        "get_datamodel_by_id": data_model,
+        "get_base_model_for_given_orglif": base_model,
+        "get_list_of_entities_for_data_model": (0, []),
+        "get_list_of_attributes_for_data_model": (0, []),
+        "get_paginated_value_sets_by_data_model_id": (0, []),
+        "get_transformations_by_data_model_id": TransformationListDTO(
+            SourceTransformations=[], TargetTransformations=[]
+        ),
+        "get_entity_associations_by_data_model_id": [],
+        "get_entity_attribute_associations_by_data_model_id": (0, []),
+        "get_data_model_constraints_by_data_model_id": (0, []),
+    }
+    mocks = {}
+    for name, value in returns.items():
+        mocks[name] = create_autospec(getattr(svc, name), return_value=value)
+        monkeypatch.setattr(svc, name, mocks[name])
+    return mocks
+
+
+async def test_export_base_model_requests_own_rows_only(monkeypatch):
+    """Guards #1210: get_export_dto passed check_base=False to get_list_of_entities_for_data_model and
+    get_entity_associations_by_data_model_id, neither of which accepted it, so every export died with a
+    TypeError (HTTP 500) before any DTO was built."""
+    base = DataModel(Id=BASE_DATA_MODEL_ID, Name="Base", Type=DataModelType.BaseLIF)
+    mocks = _autospec_export_services(monkeypatch, base)
+
+    result = await svc.export_datamodel(session=AsyncMock(), id=BASE_DATA_MODEL_ID)
+
+    assert result.ExtendedDataModel is None
+    assert result.BaseDataModel.DataModel.Id == BASE_DATA_MODEL_ID
+    for name in ("get_list_of_entities_for_data_model", "get_list_of_attributes_for_data_model"):
+        mocks[name].assert_awaited_once_with(
+            session=ANY, data_model_id=BASE_DATA_MODEL_ID, pagination=False, check_base=False
+        )
+    mocks["get_entity_associations_by_data_model_id"].assert_awaited_once_with(
+        session=ANY, data_model_id=BASE_DATA_MODEL_ID
+    )
+
+
+async def test_export_extended_model_exports_base_model_separately(monkeypatch):
+    """An OrgLIF export carries its own rows under ExtendedDataModel and the base model's under
+    BaseDataModel, so each lookup runs once per model with check_base=False instead of letting the
+    extended lookup pull base rows in and duplicate them across the two sections."""
+    org = DataModel(
+        Id=EXTENDED_DATA_MODEL_ID, Name="Org", Type=DataModelType.OrgLIF, BaseDataModelId=BASE_DATA_MODEL_ID
+    )
+    base = DataModel(Id=BASE_DATA_MODEL_ID, Name="Base", Type=DataModelType.BaseLIF)
+    mocks = _autospec_export_services(monkeypatch, org, base_model=base)
+
+    result = await svc.export_datamodel(session=AsyncMock(), id=EXTENDED_DATA_MODEL_ID)
+
+    assert result.ExtendedDataModel.DataModel.Id == EXTENDED_DATA_MODEL_ID
+    assert result.BaseDataModel.DataModel.Id == BASE_DATA_MODEL_ID
+    entity_calls = mocks["get_list_of_entities_for_data_model"].await_args_list
+    assert [(c.kwargs["data_model_id"], c.kwargs["check_base"]) for c in entity_calls] == [
+        (EXTENDED_DATA_MODEL_ID, False),
+        (BASE_DATA_MODEL_ID, False),
+    ]
