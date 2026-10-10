@@ -41,8 +41,6 @@ git clone https://github.com/lif-initiative/lif-core.git
 cd lif-core
 ```
 
-Build from a fresh clone. The MDR UI image has no `.dockerignore`, so a stale `frontends/mdr-frontend/node_modules` left by a local `npm install` gets copied over the image's clean install and can fail the build with TypeScript errors.
-
 ## 2. Create the logins
 
 Generate a hash for each person. The script prompts twice and prints the hash:
