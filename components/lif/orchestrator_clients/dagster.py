@@ -99,8 +99,8 @@ class DagsterClient(OrchestratorClient):
             }
         )
 
-        # TODO: Change to debug level once stable
-        logger.info(f"Submitting Dagster job with config: {run_config.to_config_dict()}")
+        sources = [part.information_source_id for part in job_definition.lif_query_plan.root]
+        logger.info(f"Submitting Dagster job for sources: {sources}")
 
         try:
             run_id: str = await self._run_blocking(

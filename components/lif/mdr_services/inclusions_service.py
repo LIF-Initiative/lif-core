@@ -1,5 +1,5 @@
 from fastapi import HTTPException
-from lif.datatypes.mdr_sql_model import DatamodelElementType, EntityAttributeAssociation, ExtInclusionsFromBaseDM
+from lif.mdr_sql_model.core import DatamodelElementType, EntityAttributeAssociation, ExtInclusionsFromBaseDM
 from lif.mdr_dto.inclusion_dto import CreateInclusionDTO, InclusionDTO, UpdateInclusionDTO
 from lif.mdr_services.attribute_service import get_attribute_by_id
 from lif.mdr_services.entity_service import get_entity_by_id

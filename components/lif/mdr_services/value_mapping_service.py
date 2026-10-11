@@ -1,5 +1,5 @@
 from fastapi import HTTPException
-from lif.datatypes.mdr_sql_model import ValueSetValueMapping
+from lif.mdr_sql_model.core import ValueSetValueMapping
 from lif.mdr_dto.value_mapping_dto import (
     CreateValueSetValueMappingDTO,
     UpdateValueSetValueMappingDTO,

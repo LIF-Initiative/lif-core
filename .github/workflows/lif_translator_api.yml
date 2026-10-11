@@ -10,6 +10,7 @@ on:
       - cloudformation/dev-lif-translator-org1.params
       - cloudformation/lif-translator-taskdef-includes.yml
       - components/lif/exceptions/**
+      - components/lif/lif_schema_config/**
       - components/lif/logging/**
       - components/lif/mdr_client/**
       - components/lif/translator/**

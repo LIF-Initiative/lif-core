@@ -61,13 +61,16 @@ class BaseTranslator:
                 logger.debug("Fragment: %s", fragment)
             except Exception as e:
                 eval_errors += 1
-                logger.warning("Skipping mapping due to evaluation error: %s", e)
+                # The type, not the text: an evaluation error can quote the learner value (#1351).
+                logger.warning(
+                    "Skipping mapping due to evaluation error (%s): %s", type(e).__name__, mapping_expression_str
+                )
                 continue
 
             # Only merge object-shaped fragments; ignore scalars/None
             if not isinstance(fragment, dict):
                 non_object += 1
-                logger.warning("Skipping non-object fragment: %r", fragment)
+                logger.warning("Skipping non-object fragment of type %s", type(fragment).__name__)
                 continue
 
             # Tentative merge -> validate -> commit or rollback
@@ -82,7 +85,7 @@ class BaseTranslator:
                 applied += 1
             except ValueError as e:
                 discarded += 1
-                logger.warning("Discarding fragment due to target schema violation: %s", e)
+                logger.warning("Discarding fragment due to target schema violation: %s", schema_violation_summary(e))
                 # do not apply this fragment
                 continue
             finally:
@@ -112,7 +115,15 @@ class BaseTranslator:
         try:
             validate(instance=data, schema=schema)
         except ValidationError as e:
-            raise ValueError(f"Data does not conform to schema: {e.message}")
+            raise ValueError(f"Data does not conform to schema: {e.message}") from e
+
+
+def schema_violation_summary(error: ValueError) -> str:
+    """Where a schema violation is, and which rule it broke, without the value it quotes (#1351)."""
+    cause = error.__cause__
+    if isinstance(cause, ValidationError):
+        return f"{cause.validator} at {cause.json_path}"
+    return type(error).__name__
 
 
 class TranslatorConfig(BaseModel):

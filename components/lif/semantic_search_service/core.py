@@ -396,7 +396,7 @@ async def run_semantic_search(
     idxs = np.argsort(-sims)[:top_k]
 
     # Log ALL scores for review as needed
-    logger.info(f"Similarity scores for query [{query}]:")
+    logger.info(f"Similarity scores for query ({len(query)} chars):")
     counter = 0
     for i in np.argsort(-sims):
         logger.info(f"{counter}:  {sims[i]:.4f} - {leaves[i].json_path}: {leaves[i].description}")
@@ -421,7 +421,7 @@ async def run_semantic_search(
     filter_literal = to_graphql_literal(filter.model_dump())
     query_template = Template(GRAPH_QL_QUERY_TEMPLATE)
     graphql_query = query_template.substitute(filter=filter_literal, query=graphql_fields)
-    logger.info(f"Generated GraphQL for query [{query}]:\n{graphql_query}")
+    logger.info(f"Generated GraphQL query selecting:\n{graphql_fields}")
     try:
         response_json = await execute_graphql_query(
             query=graphql_query, url=graphql_url, timeout_read=SEMANTIC_SEARCH_SERVICE__GRAPHQL_TIMEOUT__READ

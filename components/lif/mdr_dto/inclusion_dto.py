@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime
 
-from lif.datatypes.mdr_sql_model import AccessType, ElementType
+from lif.mdr_sql_model.core import AccessType, ElementType
 
 
 class InclusionDTO(BaseModel):

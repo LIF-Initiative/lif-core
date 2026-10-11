@@ -1,9 +1,10 @@
+import re
 from datetime import datetime
 from typing import List, Optional
 
-from lif.datatypes.mdr_sql_model import ExpressionLanguageType
-from lif.mdr_dto.transformation_dto import CreateTransformationDTO, TransformationDTO, UpdateTransformationDTO
-from pydantic import BaseModel
+from lif.mdr_sql_model.core import ExpressionLanguageType
+from lif.mdr_dto.transformation_dto import TransformationDTO
+from pydantic import BaseModel, field_validator
 
 
 class DataModelRefDTO(BaseModel):
@@ -11,6 +12,23 @@ class DataModelRefDTO(BaseModel):
     name: str
     version: Optional[str] = None
     contributorOrganization: Optional[str] = None
+
+
+def _reject_blank_name(value: str) -> str:
+    # Reject empty and whitespace-only names; the value itself is stored unchanged.
+    if not value.strip():
+        raise ValueError("Name must not be empty or only whitespace")
+    return value
+
+
+# Dotted integers ("1", "1.0", "1.10"), so the latest version of a group can be computed (#1350).
+GROUP_VERSION_PATTERN = re.compile(r"[0-9]+(\.[0-9]+)*")
+
+
+def reject_non_numeric_group_version(value: str) -> str:
+    if not GROUP_VERSION_PATTERN.fullmatch(value):
+        raise ValueError(f"GroupVersion must be dotted integers such as 1.0 or 2.1, not {value!r}")
+    return value
 
 
 class TransformationGroupDTO(BaseModel):
@@ -42,7 +60,7 @@ class TransformationGroupDTO(BaseModel):
 class CreateTransformationGroupDTO(BaseModel):
     SourceDataModelId: int
     TargetDataModelId: int
-    Name: Optional[str] = None
+    Name: str
     GroupVersion: str
     Description: Optional[str] = None
     Notes: Optional[str] = None
@@ -51,8 +69,17 @@ class CreateTransformationGroupDTO(BaseModel):
     DeprecationDate: Optional[datetime] = None  # New column
     Contributor: Optional[str] = None  # New column
     ContributorOrganization: Optional[str] = None  # New column
-    Transformations: Optional[List[CreateTransformationDTO]] = None
     Tags: Optional[str] = None
+
+    @field_validator("Name")
+    @classmethod
+    def name_must_not_be_blank(cls, value: str) -> str:
+        return _reject_blank_name(value)
+
+    @field_validator("GroupVersion")
+    @classmethod
+    def group_version_must_be_numeric(cls, value: str) -> str:
+        return reject_non_numeric_group_version(value)
 
     class Config:
         orm_mode = True
@@ -72,21 +99,22 @@ class UpdateTransformationGroupDTO(BaseModel):
     DeprecationDate: Optional[datetime] = None
     Contributor: Optional[str] = None
     ContributorOrganization: Optional[str] = None
-    Transformations: Optional[List[UpdateTransformationDTO]] = None
     Tags: Optional[str] = None
+
+    @field_validator("Name")
+    @classmethod
+    def name_must_not_be_blank(cls, value: Optional[str]) -> Optional[str]:
+        # None means "not updating Name"; a supplied Name follows the same rule as create.
+        return value if value is None else _reject_blank_name(value)
+
+    @field_validator("GroupVersion")
+    @classmethod
+    def group_version_must_be_numeric(cls, value: Optional[str]) -> Optional[str]:
+        return value if value is None else reject_non_numeric_group_version(value)
 
     class Config:
         orm_mode = True
         from_attributes = True  # This enables the use of `from_orm`
-
-
-class TransformationListDTO(BaseModel):
-    SourceTransformations: List[TransformationDTO]
-    TargetTransformations: List[TransformationDTO]
-
-    class Config:
-        orm_mode = True
-        from_attributes = True
 
 
 class ImportTransformationAttributeDTO(BaseModel):

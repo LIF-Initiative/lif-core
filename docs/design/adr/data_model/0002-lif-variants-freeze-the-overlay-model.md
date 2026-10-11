@@ -3,7 +3,7 @@
 Date: 2026-09-30
 
 ## Status
-Accepted
+Superseded by [data_model/0004](0004-retire-overlays-variants-as-copies.md), which retires the overlay model rather than freezing it.
 
 Amends [metadata_repository/0008](../metadata_repository/0008-data-model-use-cases.md) (the *Org LIF* and *Partner LIF* sections).
 

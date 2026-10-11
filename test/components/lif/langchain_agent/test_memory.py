@@ -335,3 +335,59 @@ def test_a_long_summary_does_not_use_up_the_budget_for_the_current_turn():
     trimmed = _safe_trim_messages(messages, max_tokens=100, logger=logging.getLogger("test"))
 
     assert trimmed == [messages[0], latest]
+
+
+# -------------------------------------------------------------------------
+# #1326 — the retained window must not start on an orphan ToolMessage.
+# Parallel tool calls put several ToolMessages after one AIMessage, so a
+# plain slice can start between them and the AIMessage that issued them.
+# -------------------------------------------------------------------------
+def _parallel_tool_conversation() -> list[Any]:
+    """The #1326 reproduction: the second AI turn makes two parallel tool calls."""
+    return [
+        HumanMessage("q1"),
+        AIMessage("a1"),
+        HumanMessage("q2"),
+        AIMessage("", tool_calls=[{"name": "lif_query", "args": {}, "id": "c2"}]),
+        ToolMessage("r2", tool_call_id="c2"),
+        AIMessage(
+            "",
+            tool_calls=[{"name": "lif_query", "args": {}, "id": "c3a"}, {"name": "lif_query", "args": {}, "id": "c3b"}],
+        ),
+        ToolMessage("r3a", tool_call_id="c3a"),
+        ToolMessage("r3b", tool_call_id="c3b"),
+    ]
+
+
+def _orphan_tool_messages(messages: list[Any]) -> list[Any]:
+    """ToolMessages with no earlier AIMessage carrying their tool_call_id."""
+    issued: set[str] = set()
+    orphans = []
+    for message in messages:
+        if isinstance(message, AIMessage):
+            issued.update(call["id"] for call in message.tool_calls)
+        elif isinstance(message, ToolMessage) and message.tool_call_id not in issued:
+            orphans.append(message)
+    return orphans
+
+
+def test_retained_window_keeps_the_ai_message_for_parallel_tool_results():
+    """The exact #1326 case: MESSAGES_TO_KEEP=4, under budget, so no trim runs."""
+    messages = _parallel_tool_conversation()
+    hook = make_pre_model_hook(_fake_summarizer(), MAX_MESSAGES, NO_TRIM_BUDGET, logger)
+
+    llm_input = hook({"messages": messages, "context": {}})["llm_input_messages"]
+
+    assert _orphan_tool_messages(llm_input) == []
+    # The window grows back to the AIMessage rather than dropping the current turn's results.
+    assert llm_input[1:] == messages[3:]
+
+
+def test_no_window_size_or_budget_leaves_an_orphan_tool_message():
+    """Every boundary, under and over budget (the acceptance criteria of #1326)."""
+    messages = _parallel_tool_conversation()
+    for max_messages in range(1, len(messages)):
+        for budget in (NO_TRIM_BUDGET, 5):
+            hook = make_pre_model_hook(_fake_summarizer(), max_messages, budget, logger)
+            llm_input = hook({"messages": messages, "context": {}})["llm_input_messages"]
+            assert _orphan_tool_messages(llm_input) == [], f"max_messages={max_messages}, budget={budget}: {llm_input}"

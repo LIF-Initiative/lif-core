@@ -27,7 +27,7 @@ The base is split into many endpoint modules (one per concern) which `core.py` m
 `AuthMiddleware` (from `mdr_auth/core`) supports three principals: API-key (services), Cognito JWT (end users), and legacy HS256 JWT (pre-Cognito callers). The middleware also resolves `request.state.tenant_schema` per request based on Cognito groups + optional workspace-selection cookie — see [`docs/design/cross-cutting/self-serve-tenant-auth.md`](../../../docs/design/cross-cutting/self-serve-tenant-auth.md).
 
 ## Composes
-- `datatypes` — common payload shapes
+- `mdr_sql_model` — SQLModel ORM tables for MDR persistence
 - `mdr_auth` — auth middleware + JWT/cookie/invite-token helpers
 - `mdr_dto` — wire-format DTOs
 - `mdr_services` — business logic (tenant_service, transformation_service, etc.)

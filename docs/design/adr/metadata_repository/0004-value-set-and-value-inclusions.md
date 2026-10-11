@@ -5,6 +5,8 @@ Date: 2025-09-05
 ## Status
 Accepted
 
+Moot under [data_model/0004](../data_model/0004-retire-overlays-variants-as-copies.md), which retires inclusions. Every model is self-contained, so there is nothing to include from.
+
 ## Context
 There was a proposal in the initial draft of the MDR Design Document for the MDR to support explicitly including/excluding value sets and values from an organization or partner data mode.
 

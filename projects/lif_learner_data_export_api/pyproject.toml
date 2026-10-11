@@ -8,9 +8,9 @@ version = "0.1.0"
 
 requires-python = ">=3.13,<3.14"
 
-# sqlalchemy and sqlmodel are still required: datatypes.mdr_sql_model (imported via
-# mdr_dto → datatypes) uses both at module load time. Remove only once that chain
-# no longer pulls in mdr_sql_model.
+# sqlalchemy and sqlmodel are still required: mdr_sql_model (imported via
+# mdr_dto) uses both at module load time. Remove only once that chain no
+# longer pulls in mdr_sql_model.
 dependencies = [
     "httpx~=0.28",
     "fastapi~=0.115",
@@ -36,7 +36,8 @@ packages = ["lif"]
 "../../components/lif/mdr_utils" = "lif/mdr_utils"             # direct use
 "../../components/lif/api_key_auth" = "lif/api_key_auth"       # direct use (ApiKeyAuthMiddleware)
 "../../components/lif/cognito_auth" = "lif/cognito_auth"       # direct use (composite auth scaffold, #1034)
-"../../components/lif/mdr_dto" = "lif/mdr_dto"                 # via datatypes.mdr_consumer
+"../../components/lif/mdr_dto" = "lif/mdr_dto"                 # direct use (mdr_consumer_dto)
+"../../components/lif/mdr_sql_model" = "lif/mdr_sql_model"     # via mdr_dto
 "../../components/lif/lif_schema_config" = "lif/lif_schema_config" # direct use
 "../../components/lif/mdr_client" = "lif/mdr_client"           # direct use
 "../../components/lif/query_planner_client" = "lif/query_planner_client" # direct use

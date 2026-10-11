@@ -38,7 +38,8 @@ class OrchestratorService:
         # TODO: Support multiple parts in the query plan
         job_definition = OrchestratorJobDefinition(lif_query_plan=lif_query_plan)
 
-        logger.info(f"Job definition created: {job_definition}")
+        sources = [part.information_source_id for part in lif_query_plan.root]
+        logger.info(f"Job definition created for sources: {sources}")
 
         try:
             job_id = await self._orchestrator.post_job(job_definition)

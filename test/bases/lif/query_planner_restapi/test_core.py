@@ -19,6 +19,7 @@ from lif.datatypes import (
     LIFQueryStatusResponse,
     LIFRecord,
 )
+from lif.exceptions.core import LIFException
 import pytest
 
 _YML_PATH = os.path.dirname(__file__) + "/test_information_sources_config.yml"
@@ -638,3 +639,93 @@ def test_sync_query_returns_503_when_every_source_failed_and_nothing_was_cached(
             asyncio.run(core.do_run_query_sync(_sentinel_query(), Response()))
 
     assert exc_info.value.status_code == 503
+
+
+# -------------------------------------------------------------------------
+# #1340 — a 500 answers with a fixed message; the log keeps the error.
+# A Query Cache failure's message carries the cache's response body, so
+# relaying it put that body in front of every direct Query Planner caller.
+# -------------------------------------------------------------------------
+_LEAKY_MESSAGE = 'LIF Cache query HTTP error: 500 - {"detail": "auth failed for sentinel-user host=10.0.3.17"}'
+
+
+def _call_failing_handler(handler_name: str, service_method: str):
+    from lif.query_planner_restapi import core
+
+    leaky = LIFException(_LEAKY_MESSAGE)
+    handler = getattr(core, handler_name)
+    # The handlers pass their argument straight to the mocked service, so a stand-in is enough.
+    args = {
+        "do_run_query_sync": (_sentinel_query(), Response()),
+        "do_run_query": (_sentinel_query(), Response()),
+        "do_get_query_status": ("run-1",),
+        "do_run_update": (MagicMock(),),
+        "post_orchestration_results": (MagicMock(),),
+    }[handler_name]
+    with patch.object(core.service, service_method, AsyncMock(side_effect=leaky)):
+        with pytest.raises(HTTPException) as exc_info:
+            asyncio.run(handler(*args))
+    return exc_info.value
+
+
+@pytest.mark.parametrize(
+    "handler_name, service_method",
+    [
+        ("do_run_query_sync", "run_query"),
+        ("do_run_query", "run_query"),
+        ("do_get_query_status", "get_query_status"),
+        ("do_run_update", "run_update"),
+        ("post_orchestration_results", "run_post_orchestration_results"),
+    ],
+)
+@patch.dict(os.environ, _ENV)
+def test_a_500_does_not_relay_the_error_message(handler_name, service_method, caplog):
+    with caplog.at_level(logging.ERROR):
+        error = _call_failing_handler(handler_name, service_method)
+
+    assert error.status_code == 500
+    assert "sentinel-user" not in error.detail
+    # Three of these handlers logged nothing before #1340, so only replacing the
+    # detail would have dropped the error entirely.
+    assert "sentinel-user" in caplog.text
+
+
+@patch.dict(os.environ, _ENV)
+def test_sync_query_failed_job_does_not_relay_the_orchestrator_error(caplog):
+    """The orchestrator callback sets error_message; it is internal text, so it goes to the log."""
+    from lif.query_planner_restapi import core
+
+    pending = LIFQueryStatusResponse(query_id="run-1", status="PENDING")
+    failed = LIFQueryStatusResponse(query_id="run-1", status="FAILED", error_message=_LEAKY_MESSAGE)
+    with (
+        patch.object(core.service, "run_query", AsyncMock(return_value=pending)),
+        patch.object(core.service, "get_query_status", AsyncMock(return_value=failed)),
+        patch.object(core, "sleep", AsyncMock()),
+        caplog.at_level(logging.ERROR),
+    ):
+        with pytest.raises(HTTPException) as exc_info:
+            asyncio.run(core.do_run_query_sync(_sentinel_query(), Response()))
+
+    assert exc_info.value.status_code == 500
+    assert "sentinel-user" not in exc_info.value.detail
+    assert "sentinel-user" in caplog.text
+
+
+@patch.dict(os.environ, _ENV)
+def test_sync_query_unexpected_result_reaches_neither_the_caller_nor_the_log(caplog):
+    """The unexpected result can hold learner data, so only its type is logged (#1269)."""
+    from lif.query_planner_restapi import core
+
+    completed = LIFQueryStatusResponse(query_id="run-1", status="COMPLETED")
+    unexpected = {"person": [{"name": [{"firstName": "Canary"}]}]}
+    with (
+        patch.object(core.service, "run_query", AsyncMock(side_effect=[completed, unexpected])),
+        caplog.at_level(logging.DEBUG),
+    ):
+        with pytest.raises(HTTPException) as exc_info:
+            asyncio.run(core.do_run_query_sync(_sentinel_query(), Response()))
+
+    assert exc_info.value.status_code == 500
+    assert "Canary" not in exc_info.value.detail
+    assert "Canary" not in caplog.text
+    assert "dict" in caplog.text

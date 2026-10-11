@@ -2,7 +2,7 @@ import logging
 
 from langchain_openai import ChatOpenAI
 from langmem.short_term import SummarizationNode
-from langchain_core.messages import HumanMessage, SystemMessage
+from langchain_core.messages import HumanMessage, SystemMessage, ToolMessage
 from langchain_core.messages.utils import count_tokens_approximately, trim_messages
 from langgraph.prebuilt.chat_agent_executor import AgentState
 from typing import Any, Callable, NotRequired
@@ -51,7 +51,13 @@ def make_pre_model_hook(
         llm_input_messages = messages
 
         if len(messages) > max_messages:
-            messages_to_retain = messages[-max_messages:]
+            # Widen the window back over leading ToolMessages to the AIMessage that issued
+            # their tool_calls. OpenAI rejects a ToolMessage without it, and parallel tool
+            # calls can put the slice boundary between the two (#1326).
+            start = len(messages) - max_messages
+            while start > 0 and isinstance(messages[start], ToolMessage):
+                start -= 1
+            messages_to_retain = messages[start:]
             before_context = dict(context)
 
             summarizer_state: dict[str, Any] = {**state}

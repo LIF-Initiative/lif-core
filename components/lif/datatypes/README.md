@@ -8,8 +8,9 @@ Core Pydantic models that flow through the LIF data plane. Every service that ha
 |---|---|
 | `core.py` | `LIFRecord`, `LIFPerson`, `LIFFragment`, `LIFQuery`, `LIFQueryFilter`, `LIFUpdate`, `LIFQueryPlan*`, `LIFPersonIdentifier(s)`, `LIFQueryStatusResponse`, `LIFQueryPlanPartTranslation`, `HealthCheckResponse`, `TargetTransformationDataModel(s)DTO` |
 | `identity_mapping.py` | `IdentityMapping` |
-| `mdr_sql_model.py` | SQLModel-style classes used by MDR persistence |
 | `orchestration.py` | `OrchestratorJob`, `OrchestratorJobDefinition`, `OrchestratorJobRequest`, request/response wrappers |
+
+MDR-specific persistence/consumer models used to live here (`mdr_sql_model.py`, `mdr_consumer.py`) but have moved to [`mdr_sql_model`](../mdr_sql_model/) and [`mdr_dto`](../mdr_dto/) respectively, so that services which only need core LIF types don't have to pull in MDR's SQLAlchemy/SQLModel dependency.
 
 ## Naming convention
 

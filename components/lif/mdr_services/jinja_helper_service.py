@@ -2,7 +2,7 @@ import json
 import re
 from typing import List
 
-from lif.datatypes.mdr_sql_model import DataModel, Entity, EntityPlacementType
+from lif.mdr_sql_model.core import DataModel, Entity, EntityPlacementType
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
 import pandas as pd

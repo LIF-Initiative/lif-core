@@ -172,7 +172,7 @@ class LIFAIAgent:
         Returns:
             dict: Agent response containing content, tokens, and cost.
         """
-        logger.info(f"Query: {message}")
+        logger.info(f"Query: {len(message)} chars")
 
         identifier = self.user_identifier
         identifier_type = self.user_identifier_type
@@ -194,7 +194,7 @@ class LIFAIAgent:
         total_tokens += response.get("tokens", 0)
         total_cost += response.get("cost", 0.0)
 
-        logger.info(f"Reframed query: {message}")
+        logger.info(f"Reframed query: {len(message)} chars")
 
         result = await agent.ainvoke({"messages": [{"role": "user", "content": message}]}, config=config)
         messages = result.get("messages", [])
@@ -215,7 +215,7 @@ class LIFAIAgent:
         final_response = final_message.content
 
         response = {"content": final_response, "tokens": total_tokens, "cost": total_cost}
-        logger.info(f"Response: {response}")
+        logger.info(f"Response: {len(final_response)} chars, {total_tokens} tokens, cost {total_cost}")
         return response
 
     def calculate_tokens_and_cost(self, messages: list) -> tuple:

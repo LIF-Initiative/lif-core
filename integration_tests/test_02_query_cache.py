@@ -318,7 +318,7 @@ class TestQueryCacheWritePath:
         base_url = org_ports.query_cache_url
         self._add(http_client, base_url, write_test_identifier)
 
-        # A scalar directly under Person.0 -- see the xfail below for why not Name.lastName.
+        # A scalar directly under Person.0 -- see test_update_refuses_a_field_inside_an_array_entity for why not Name.lastName.
         response = http_client.post(
             f"{base_url}/update", json=self._update_payload(write_test_identifier, {"Person": {"nickname": "Writey"}})
         )
@@ -427,27 +427,15 @@ class TestQueryCacheWritePath:
         )
         assert self._person_from(readback.json())["Hobby"] == [{"name": "go"}]
 
-    @pytest.mark.xfail(
-        reason="#1229: $set into an array-valued entity builds Person.0.<Entity>.<field>, which "
-        "MongoDB rejects with OperationFailure -> HTTP 500. Pre-existing; predates #179, whose "
-        "66fad9c leaves build_mongo_update_ops untouched. Remove this marker when #1229 lands -- "
-        "strict=True means the suite goes red the moment it starts passing.",
-        strict=True,
-    )
-    def test_update_set_a_field_inside_an_array_entity(
+    def test_update_refuses_a_field_inside_an_array_entity(
         self, org_ports: OrgPorts, http_client: Any, require_query_cache: None, write_test_identifier: str
     ) -> None:
-        """``$set`` on a scalar inside an array-valued entity such as ``Name``.
+        """``$set`` on a scalar inside an array-valued entity such as ``Name`` is a 422 (#1229).
 
-        ``build_mongo_update_ops`` produces ``Person.0.Name.lastName``. Per the data-model
-        rules every PascalCase entity is an array, so ``Name`` is a list and MongoDB
-        cannot create a field inside it without an index -- it raises OperationFailure,
-        which the route turns into a 500.
-
-        The unit suite cannot see this: ``test_update_set_only_uses_single_find_one_and_update``
-        asserts exactly ``{"$set": {"Person.0.Name.FamilyName": "Doe"}}`` against a fixture
-        whose ``Name`` is a list, and the mock accepts it. This test is xfail(strict) so it
-        will announce itself the moment the underlying behaviour is fixed.
+        Per the data-model rules every PascalCase entity is an array, so the path
+        ``Person.0.Name.lastName`` names no element and MongoDB rejects it with
+        OperationFailure. The Query Cache now refuses it before writing, with a 422
+        naming the entity, instead of letting MongoDB's error surface as a 500.
         """
         base_url = org_ports.query_cache_url
         self._add(http_client, base_url, write_test_identifier)
@@ -456,7 +444,8 @@ class TestQueryCacheWritePath:
             f"{base_url}/update",
             json=self._update_payload(write_test_identifier, {"Person": {"Name": {"lastName": "Renamed"}}}),
         )
-        assert response.status_code == 200, f"/update $set failed: {response.status_code} - {response.text}"
+        assert response.status_code == 422, f"expected 422, got {response.status_code} - {response.text}"
+        assert "Name" in response.json()["detail"]
 
     # ---- /save ---------------------------------------------------------------
 

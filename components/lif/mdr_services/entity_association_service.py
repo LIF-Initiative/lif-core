@@ -1,7 +1,7 @@
 from typing import List, Optional, Sequence
 
 from fastapi import HTTPException
-from lif.datatypes.mdr_sql_model import DataModel, DataModelType, Entity, EntityAssociation, ExtInclusionsFromBaseDM
+from lif.mdr_sql_model.core import DataModel, DataModelType, Entity, EntityAssociation, ExtInclusionsFromBaseDM
 from lif.mdr_dto.entity_association_dto import (
     CreateEntityAssociationDTO,
     EntityAssociationDTO,

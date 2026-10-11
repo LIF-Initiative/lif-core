@@ -1,3 +1,4 @@
+import logging
 import pytest
 from typing import Dict, Any, cast
 from enum import Enum
@@ -200,3 +201,26 @@ async def test_get_job_status_unmapped_raises(monkeypatch):
     client = dag_mod.DagsterClient(config={})
     with pytest.raises(dag_mod.OrchestratorStatusMappingError):
         await client.get_job_status("RUN-X")
+
+
+@pytest.mark.asyncio
+async def test_post_job_logs_no_learner_id(monkeypatch, caplog):
+    # The run config carries each part's person_id; only the parts' sources are logged (#1351).
+    plan = LIFQueryPlan(
+        root=[
+            LIFQueryPlanPart(
+                information_source_id="src1",
+                adapter_id="adp1",
+                person_id=LIFPersonIdentifier(identifier="SENTINEL-ID-4471", identifierType="test"),
+                lif_fragment_paths=["person.name"],
+                translation=None,
+            )
+        ]
+    )
+    client_class = create_custom_dummy_client(next_run_id="RUN-1", status_to_return=None)
+    monkeypatch.setattr(dag_mod, "DagsterGraphQLClient", client_class)
+    client = dag_mod.DagsterClient(config={})
+    with caplog.at_level(logging.INFO, logger=dag_mod.__name__):
+        await client.post_job(OrchestratorJobDefinition(lif_query_plan=plan))
+    assert "src1" in caplog.text
+    assert "SENTINEL-ID-4471" not in caplog.text
