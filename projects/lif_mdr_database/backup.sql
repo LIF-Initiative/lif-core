@@ -11909,8 +11909,8 @@ COPY public."Transformations" ("Id", "TransformationGroupId", "Name", "Descripti
 --
 
 COPY public."TransformationsGroup" ("Id", "SourceDataModelId", "TargetDataModelId", "GroupVersion", "Name", "Description", "Notes", "CreationDate", "ActivationDate", "DeprecationDate", "Contributor", "ContributorOrganization", "Deleted", "Extension", "ExtensionNotes", "Tags") FROM stdin;
-3	4	1	1.0	CEDS_LIF	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N
-12	13	1	1.0	ANS_LIF	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N
+3	4	1	1.0	CEDS_LIF	\N	\N	\N	2025-08-26 16:04:47.192+00	\N	\N	LIF	f	f	\N	\N
+12	13	1	1.0	ANS_LIF	\N	\N	\N	2025-08-26 16:04:47.192+00	\N	\N	LIF	f	f	\N	\N
 13	14	1	1.0	CASE_LIF	\N	\N	\N	\N	\N	\N	LIF	t	f	\N	\N
 14	15	1	1.0	Open Badges v2_LIF	\N	\N	\N	\N	\N	\N	LIF	t	f	\N	\N
 11	12	1	1.0	CLR v1_LIF	\N	\N	\N	\N	\N	\N	LIF	t	f	\N	\N
@@ -11926,12 +11926,12 @@ COPY public."TransformationsGroup" ("Id", "SourceDataModelId", "TargetDataModelI
 18	25	17	1.0	TestNewSourceModel_StateULIF	Testing updating transformation group	\N	2025-08-26 16:04:47.192+00	2025-08-26 16:04:47.192+00	\N	Mary Gwozdz	Unicon	t	f	\N	\N
 21	25	17	1.0	TestNewSourceModel_StateULIF	Testing creating transformation group	\N	2025-08-26 16:04:47.192+00	2025-08-26 16:04:47.192+00	\N	Mary Gwozdz	Unicon	t	f	\N	\N
 22	25	17	1.0	TestNewSourceModel_StateULIF	Testing creating transformation group	\N	2025-08-26 16:04:47.192+00	2025-08-26 16:04:47.192+00	\N	Mary Gwozdz	Unicon	f	f	\N	\N
-23	15	17	1.0	Open Badges v2_StateU LIF	\N	\N	\N	\N	\N	\N	\N	f	f	\N	\N
-24	11	17	1.0	Schema.org_StateU LIF	\N	\N	\N	\N	\N	\N	\N	f	f	\N	\N
-25	2	17	1.0	HR Open_StateU LIF	\N	\N	\N	\N	\N	\N	\N	f	f	\N	\N
-26	26	17	1.0	R1 Demo Source Data Model_StateU LIF	\N	\N	\N	\N	\N	\N	\N	f	f	\N	\N
-15	16	1	1.0	StateU OB 3.0_LIF	\N	\N	\N	\N	\N	\N	StateU	f	f	\N	\N
-16	16	17	1.0	StateU OB 3.0_StateU LIF	\N	\N	\N	\N	\N	\N	StateU	f	f	\N	\N
+23	15	17	1.0	Open Badges v2_StateU LIF	\N	\N	\N	2025-08-26 16:04:47.192+00	\N	\N	\N	f	f	\N	\N
+24	11	17	1.0	Schema.org_StateU LIF	\N	\N	\N	2025-08-26 16:04:47.192+00	\N	\N	\N	f	f	\N	\N
+25	2	17	1.0	HR Open_StateU LIF	\N	\N	\N	2025-08-26 16:04:47.192+00	\N	\N	\N	f	f	\N	\N
+26	26	17	1.0	R1 Demo Source Data Model_StateU LIF	\N	\N	\N	2025-08-26 16:04:47.192+00	\N	\N	\N	f	f	\N	\N
+15	16	1	1.0	StateU OB 3.0_LIF	\N	\N	\N	2025-08-26 16:04:47.192+00	\N	\N	StateU	f	f	\N	\N
+16	16	17	1.0	StateU OB 3.0_StateU LIF	\N	\N	\N	2025-08-26 16:04:47.192+00	\N	\N	StateU	f	f	\N	\N
 2	3	1	1.0	CLR v2_LIF	\N	\N	\N	\N	\N	\N	LIF	t	f	\N	\N
 \.
 
@@ -29462,8 +29462,8 @@ COPY tenant_lif_team."Transformations" ("Id", "TransformationGroupId", "Name", "
 --
 
 COPY tenant_lif_team."TransformationsGroup" ("Id", "SourceDataModelId", "TargetDataModelId", "GroupVersion", "Name", "Description", "Notes", "CreationDate", "ActivationDate", "DeprecationDate", "Contributor", "ContributorOrganization", "Deleted", "Extension", "ExtensionNotes", "Tags") FROM stdin;
-3	4	1	1.0	CEDS_LIF	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N
-12	13	1	1.0	ANS_LIF	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N
+3	4	1	1.0	CEDS_LIF	\N	\N	\N	2025-08-26 16:04:47.192+00	\N	\N	LIF	f	f	\N	\N
+12	13	1	1.0	ANS_LIF	\N	\N	\N	2025-08-26 16:04:47.192+00	\N	\N	LIF	f	f	\N	\N
 13	14	1	1.0	CASE_LIF	\N	\N	\N	\N	\N	\N	LIF	t	f	\N	\N
 14	15	1	1.0	Open Badges v2_LIF	\N	\N	\N	\N	\N	\N	LIF	t	f	\N	\N
 11	12	1	1.0	CLR v1_LIF	\N	\N	\N	\N	\N	\N	LIF	t	f	\N	\N
@@ -29479,12 +29479,12 @@ COPY tenant_lif_team."TransformationsGroup" ("Id", "SourceDataModelId", "TargetD
 18	25	17	1.0	TestNewSourceModel_StateULIF	Testing updating transformation group	\N	2025-08-26 16:04:47.192+00	2025-08-26 16:04:47.192+00	\N	Mary Gwozdz	Unicon	t	f	\N	\N
 21	25	17	1.0	TestNewSourceModel_StateULIF	Testing creating transformation group	\N	2025-08-26 16:04:47.192+00	2025-08-26 16:04:47.192+00	\N	Mary Gwozdz	Unicon	t	f	\N	\N
 22	25	17	1.0	TestNewSourceModel_StateULIF	Testing creating transformation group	\N	2025-08-26 16:04:47.192+00	2025-08-26 16:04:47.192+00	\N	Mary Gwozdz	Unicon	f	f	\N	\N
-23	15	17	1.0	Open Badges v2_StateU LIF	\N	\N	\N	\N	\N	\N	\N	f	f	\N	\N
-24	11	17	1.0	Schema.org_StateU LIF	\N	\N	\N	\N	\N	\N	\N	f	f	\N	\N
-25	2	17	1.0	HR Open_StateU LIF	\N	\N	\N	\N	\N	\N	\N	f	f	\N	\N
-26	26	17	1.0	R1 Demo Source Data Model_StateU LIF	\N	\N	\N	\N	\N	\N	\N	f	f	\N	\N
-15	16	1	1.0	StateU OB 3.0_LIF	\N	\N	\N	\N	\N	\N	StateU	f	f	\N	\N
-16	16	17	1.0	StateU OB 3.0_StateU LIF	\N	\N	\N	\N	\N	\N	StateU	f	f	\N	\N
+23	15	17	1.0	Open Badges v2_StateU LIF	\N	\N	\N	2025-08-26 16:04:47.192+00	\N	\N	\N	f	f	\N	\N
+24	11	17	1.0	Schema.org_StateU LIF	\N	\N	\N	2025-08-26 16:04:47.192+00	\N	\N	\N	f	f	\N	\N
+25	2	17	1.0	HR Open_StateU LIF	\N	\N	\N	2025-08-26 16:04:47.192+00	\N	\N	\N	f	f	\N	\N
+26	26	17	1.0	R1 Demo Source Data Model_StateU LIF	\N	\N	\N	2025-08-26 16:04:47.192+00	\N	\N	\N	f	f	\N	\N
+15	16	1	1.0	StateU OB 3.0_LIF	\N	\N	\N	2025-08-26 16:04:47.192+00	\N	\N	StateU	f	f	\N	\N
+16	16	17	1.0	StateU OB 3.0_StateU LIF	\N	\N	\N	2025-08-26 16:04:47.192+00	\N	\N	StateU	f	f	\N	\N
 2	3	1	1.0	CLR v2_LIF	\N	\N	\N	\N	\N	\N	LIF	t	f	\N	\N
 \.
 
