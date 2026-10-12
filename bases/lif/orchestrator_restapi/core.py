@@ -56,7 +56,8 @@ async def submit_job(
     job_request: OrchestratorJobRequest, service: OrchestratorService = Depends(get_orchestrator_service)
 ):
     """Submit a new job to the orchestrator"""
-    logger.info(f"Received job request: {job_request}")
+    sources = [part.information_source_id for part in job_request.lif_query_plan.root]
+    logger.info(f"Received job request for sources: {sources}")
     try:
         job_id = await service.submit_job(job_request.lif_query_plan)
         return OrchestratorJobRequestResponse(run_id=job_id)
