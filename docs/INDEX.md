@@ -18,6 +18,7 @@
 ## `docs/specs/` — Specs (contracts)
 
 - [`data-model-rules.md`](specs/data-model-rules.md) — LIF data model rules, capitalization conventions, reserved-word recognition by MDR.
+- [`mdr-portable-file-format.md`](specs/mdr-portable-file-format.md) — MDR portable file formats (v1) for models, mapping groups and value-set crosswalks on the simplified data model (one self-contained model per file, with `CopiedFrom` lineage; ADR data_model/0004), with the deprecations, errors, canonical form and converter contract (#1333).
 
 ---
 
