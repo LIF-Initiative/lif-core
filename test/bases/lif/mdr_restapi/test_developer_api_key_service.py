@@ -11,6 +11,7 @@ import hashlib
 
 import pytest
 from fastapi import HTTPException
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
 
 from lif.developer_keys.dto import CreateDeveloperApiKeyDTO
@@ -66,3 +67,27 @@ async def test_revoke_sets_revoked_date_and_enforces_ownership(test_db_session, 
     await revoke_developer_api_key(session, owner, created.Id)
     row = (await session.execute(select(DeveloperApiKey).where(DeveloperApiKey.Id == created.Id))).scalars().one()
     assert row.RevokedDate is not None
+
+
+async def _read_committed(test_db_session, key_id: int) -> DeveloperApiKey | None:
+    # A second session sees only committed rows. The tests share one session, so reading back
+    # through test_db_session would pass even if the service never committed.
+    async with AsyncSession(test_db_session.bind) as other:
+        return await other.get(DeveloperApiKey, key_id)
+
+
+async def test_create_commits_the_key(test_db_session, dev_keys_table, request):
+    created = await create_developer_api_key(test_db_session, request.node.name, CreateDeveloperApiKeyDTO(Label="k"))
+
+    row = await _read_committed(test_db_session, created.Id)
+    assert row is not None
+
+
+async def test_revoke_commits_the_revocation(test_db_session, dev_keys_table, request):
+    owner = request.node.name
+    created = await create_developer_api_key(test_db_session, owner, CreateDeveloperApiKeyDTO(Label="k"))
+
+    await revoke_developer_api_key(test_db_session, owner, created.Id)
+
+    row = await _read_committed(test_db_session, created.Id)
+    assert row is not None and row.RevokedDate is not None
