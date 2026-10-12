@@ -113,7 +113,7 @@ r1_demo_data = {
 
 @authenticated.get("/r1-demo/users/{user_id}")
 def r1_demo_get_user(user_id: str) -> dict:
-    logger.info("The Example Data Source REST API r1_demo_get_user endpoint was called for the user: %s", user_id)
+    logger.info("The Example Data Source REST API r1_demo_get_user endpoint was called.")
     if user_id in r1_demo_data:
         return r1_demo_data[user_id]
     else:
@@ -122,7 +122,7 @@ def r1_demo_get_user(user_id: str) -> dict:
 
 @authenticated.get("/users/{user_id}")
 def get_user(user_id: int) -> dict:
-    logger.info("The Example Data Source REST API get_user endpoint was called for the user: %s", user_id)
+    logger.info("The Example Data Source REST API get_user endpoint was called.")
     try:
         return service.user_info(user_id)
     except Exception as error:
@@ -178,7 +178,8 @@ def get_students(
             filters["name_like"] = name_like
         if name is not None:
             filters["name"] = name
-        logger.info("Filters: " + str(filters))
+        # Keys only: the values are the caller's name and age search terms (#1351).
+        logger.info("Filter keys: %s", sorted(filters))
         answer = {"results": service.users_info_filtered(filters)}
         return answer
     except Exception as error:
