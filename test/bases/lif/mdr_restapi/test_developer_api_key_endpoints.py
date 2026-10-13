@@ -27,6 +27,7 @@ from lif import developer_keys  # noqa: E402
 from lif.developer_keys import CreatedDeveloperApiKeyDTO, DeveloperApiKeyDTO  # noqa: E402
 from lif.mdr_auth.core import AuthMiddleware, create_access_token  # noqa: E402
 from lif.mdr_restapi import developer_api_key_endpoints  # noqa: E402
+from test.utils.lif.mdr.cognito import enable_cognito, make_cognito_id_token  # noqa: E402
 
 pytestmark = pytest.mark.asyncio
 
@@ -141,3 +142,14 @@ async def test_revoke_is_called_with_the_callers_sub_and_key_id(client, brick, m
 
     assert resp.status_code == 204
     assert brick["revoke_developer_api_key"].await_args.args[1:] == ("sub-123", 7)
+
+
+async def test_real_cognito_token_scopes_keys_to_its_sub(client, brick, monkeypatch):
+    # No stub: the real middleware decodes the token and sets cognito_sub (#1380).
+    enable_cognito(monkeypatch)
+    token = make_cognito_id_token(sub="token-sub-1")
+
+    resp = await client.get("/api-keys/", headers={"Authorization": f"Bearer {token}"})
+
+    assert resp.status_code == 200
+    assert brick["list_developer_api_keys"].await_args.args[1] == "token-sub-1"
