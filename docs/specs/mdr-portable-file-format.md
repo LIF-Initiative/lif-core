@@ -60,7 +60,9 @@ evidence, not part of the contract.
 1. **No row IDs.** No field holds a database row ID, and nothing in a file is looked up by ID. A
    file that contains one is refused with `ROW_ID_PRESENT`.
 2. **Create-only, all or nothing.** Import creates new rows and never changes existing ones. It
-   either succeeds completely or leaves no rows behind.
+   either succeeds completely or leaves no rows behind. ADR `metadata_repository/0009` expects
+   import to update a mapping in place by `(group, target path)`; that is deferred to the merge and
+   replace import modes (NEW-J in the [portability plan](../operations/proposals/mdr-import-export-portability.md)).
 3. **Refused by name.** Anything the converter cannot carry faithfully is refused with a named
    error from [§10](#10-errors), naming the element. Nothing is silently skipped, defaulted or
    guessed.
@@ -187,8 +189,8 @@ Schema diff uses it as the default model to compare against ([ADR `data_model/00
 | `Description`, `UseConsiderations`, `Source`, `Notes`, `Contributor`, `ContributorOrganization` | | Descriptive text |
 | `CreationDate`, `ActivationDate`, `DeprecationDate` | | Timestamps |
 
-Every value set must be used by at least one attribute, otherwise the import is refused with
-`UNUSED_VALUE_SET`.
+A value set need not be used by any attribute. In the seed, 186 of 235 live value sets are not,
+including 89 of the 106 source value sets that value mappings refer to (§7).
 
 **Entity**
 
@@ -277,10 +279,19 @@ The two kinds of association follow [ADR `data_model/0003`](../design/adr/data_m
 | `Group` field | Req. | Meaning |
 |---|---|---|
 | `Source`, `Target` | ✓ | Model identities ([§2](#2-terms)), written inline |
-| `Version` | ✓ | Stored in the `GroupVersion` column. Together with `Source` and `Target`, the group's key (database unique index `ux_transformationsgroup_model_id_version_active`) |
+| `Version` | ✓ | Dotted integers such as `1`, `1.0` or `2.10`, as the API already requires (`transformation_group_dto.py`). Stored in the `GroupVersion` column. Together with `Source` and `Target`, the group's key (database unique index `ux_transformationsgroup_model_id_version_active`) |
 | `Name` | ✓ | Non-blank display name |
 | `Description`, `Notes`, `Contributor`, `ContributorOrganization`, `Tags` | | Descriptive text |
-| `CreationDate`, `ActivationDate`, `DeprecationDate` | | Timestamps |
+| `CreationDate` | | Timestamp |
+
+**Activation is local to each install.** A group's `ActivationDate` and `DeprecationDate` decide
+whether the Translator uses it (`transformation_service.py`), and #1350 makes an imported group
+arrive inactive. The file therefore never carries them: either one in `Group` is refused with
+`FIELD_UNKNOWN`. Every other `ActivationDate` and `DeprecationDate` in the format (on mappings,
+model elements and crosswalk entries) is carried as stored, because nothing reads them as a
+condition: they are descriptive, and can be content a standard publishes, such as a field's
+deprecation date. A date that starts controlling behavior on an install moves out of the format in
+the same way.
 
 If either model is not installed, the import is refused with `MODEL_MISSING`. If a live group with
 the same key exists, it is refused with `GROUP_EXISTS`. Choosing the next version number is endpoint
@@ -308,31 +319,35 @@ The rules, from [ADR `metadata_repository/0009`](../design/adr/metadata_reposito
   two mappings in a group may write the same target (`MAPPING_TARGET_SHARED`).
 - **Sources are content, not identity.** A mapping may declare several sources. The content rules
   (the sources cover every field the expression reads, and the expression writes only its target)
-  depend on an expression checker that NEW-I will define. Until it exists, the converter carries
+  depend on an expression checker that NEW-I (in the [portability plan](../operations/proposals/mdr-import-export-portability.md)) will define. Until it exists, the converter carries
   the declarations as they are.
 
 ### 6.3 Path format
 
-A path names a field the way the generated schema does: a starting entity, then association
-`Name`s, separated by commas.
+A path names a field: a top-level entity, then association `Name`s, separated by commas.
 
 ```
 Course,AccreditedBy,name
 ```
 
-1. The first segment is the `UniqueName` of an entity in the side's model: the group's source
-   model for `Sources`, its target model for `Target`.
+1. The first segment is the `UniqueName` of a **top-level entity** (one with no containing parent)
+   in the side's model: the group's source model for `Sources`, its target model for `Target`. In
+   the seed, every top-level entity's `UniqueName` equals its `Name` (294 of 294), and all 10 live
+   mapping paths start at one.
 2. Each later segment is the `Name` of an association under the previous entity, in that model.
    It may cross a reference association.
 3. The last segment must reach an attribute.
-4. No entity appears twice on a path, so a path through a recursive structure is always finite.
+
+A path may revisit an entity through a reference: `Competency,Entails,identifier` is valid. Each
+path is a finite string, so recursion needs no extra rule.
 
 A path that breaks any of these rules is refused with `PATH_INVALID`, naming the segment. A segment
 with a numeric prefix such as `1:` is a legacy model ID and is refused with `ROW_ID_PRESENT`.
 
 Because association names are required (§5.4), a path is never ambiguous:
 `Course,AccreditedBy,name` and `Course,ApprovedBy,name` are different fields. Today's
-`EntityIdPath` cannot tell them apart. This amends ADR `0009` Decision 1; see Q3.
+`EntityIdPath` cannot tell them apart. Accepting Q3 would amend ADR `0009` Decision 1, which needs
+its own ADR.
 
 ---
 
@@ -340,7 +355,7 @@ Because association names are required (§5.4), a path is never ambiguous:
 
 A crosswalk maps the values of one value set to the values of another, for example Ed-Fi's sex codes
 to LIF's. It is the portable form of today's value mappings (`ValueSetValueMapping`).
-Implementation belongs to NEW-K.
+Implementation belongs to NEW-K (in the [portability plan](../operations/proposals/mdr-import-export-portability.md)).
 
 ```json
 {
@@ -367,8 +382,9 @@ Implementation belongs to NEW-K.
 refused with `CROSSWALK_SOURCE_DUPLICATE`. Several sources may map to the same target. A source value
 with no entry is unmapped.
 
-The seed holds 2,347 value mappings across 106 value-set pairs, and every source value set maps to
-exactly one target value set. Nothing in the runtime reads value mappings today: neither the
+The seed holds 2,347 live value mappings, but 1,631 of them point at soft-deleted target values
+(model 1) and so count as absent (§2). The remaining 716 cover 7 value-set pairs, every source value
+set maps to exactly one target value set, and no source value maps to more than one target. Nothing in the runtime reads value mappings today: neither the
 Translator nor JSONata does, only the MDR frontend.
 
 ---
@@ -388,8 +404,9 @@ class PortabilityError(Exception): code, element, reason
 - **One module covers every file kind, in both directions.** Its intended callers are export,
   import, upload, edit-by-upload (#17), clone and the reference set. Moving the existing
   conversions onto it is later work.
-- **Clone is export, then import.** The copy gets a new identity, and its `CopiedFrom` is set to the
-  source's identity. Because every model file is complete, the copy stands alone.
+- **Clone is export, then import.** The caller supplies the copy's new identity, and its
+  `CopiedFrom` is set to the source's identity. Because every model file is complete, the copy
+  stands alone. Clone copies the model only; copying its mapping groups is a separate operation.
 - **Single transaction.** The converter never commits; the caller does. Every reference is resolved
   and every rule checked before the first row is written, so a refusal writes nothing.
 - **No type names.** There is one kind of model, and no model depends on another.
@@ -457,7 +474,6 @@ no rows.
 | `DUPLICATE_KEY` | Two entries in one list share a key |
 | `ASSOCIATION_NAME_TAKEN` | A parent already has a child under that `Name` |
 | `UNASSOCIATED_ATTRIBUTE` | An attribute is in no association |
-| `UNUSED_VALUE_SET` | A value set is used by no attribute |
 | `VALUE_NAME_MISSING` | A value without a `ValueName` |
 | `EXPRESSION_LANGUAGE_NOT_PORTABLE` | A rule that is not JSONata |
 | `MAPPING_TARGET_MISSING`, `MAPPING_TARGET_MULTIPLE`, `MAPPING_TARGET_SHARED` | §6.2 |
@@ -477,28 +493,45 @@ existing content onto the simplified model is migration work, not this spec's.
 |---|---|---|
 | Model types `BaseLIF`, `OrgLIF`, `PartnerLIF`, `SourceSchema` (`DataModels.Type`) | One kind of model ([ADR `data_model/0004`](../design/adr/data_model/0004-retire-overlays-variants-as-copies.md)) | All 21 models |
 | Overlays: a model built on another (`BaseDataModelId`) | A self-contained copy, with `CopiedFrom`. Existing overlays are converted once | 2 models: 17 (StateU LIF, `OrgLIF`) and 18 (Org2 LIF, `PartnerLIF`), both on model 1 |
-| Inclusion rows on a model's **own** elements | Flags on the element itself | 88 rows |
-| Inclusion rows on **another** model's elements | The element, copied into the model | 207 rows, all in models 17 and 18 |
+| Inclusion rows (`ExtInclusionsFromBaseDM`) on a model's **own** elements | Flags on the element itself | 83 rows |
+| Inclusion rows (`ExtInclusionsFromBaseDM`) on **another** model's elements | The element, copied into the model | 207 rows, all in models 17 and 18 |
 | Constraint and Transformation inclusions | — | 0 rows |
 | `ExtendedByDataModelId` on both association tables | Both ends in one model (§5.4): the declaring model is always the owner | 16 + 167 rows |
 | Associations between elements of different models | Both ends in one model | 55: 54 involve models 17 or 18, and 1 links model 1 to model 16 |
 | Associations where neither end is owned by the declaring model | — | 61 rows. 60 link two elements of one other model (59 in model 16, 1 in model 25) and belong to that model. 1 (`Credential.Image` → OB3's `image.id`) has no owner |
-| `Extension` / `ExtensionNotes` on every table | — | Set on 80 entities and attributes in models 1, 16, 17 and 18 (other models not counted) |
+| `Extension` / `ExtensionNotes` (on 8 tables, including `Entities`, `Attributes`, `ValueSets` and `EntityAssociation`) | — | Set only in models 17 and 18: 80 entities and attributes |
 | Overrides (an element reusing an inherited `UniqueName`) | — (a model sees only its own elements) | 1 (`Criteria.identifier`, model 17) |
 | An attribute using another model's value set | The value set, copied into the model | 1 attribute |
 | The `Ref` property keys (`<relationship>Ref<Type>`) | The required association `Name`, plus `"Reference": true` | 24 `Ref` keys in `lif-schema.json`; 21 sample-data, query and config files |
 | `Placement` (`Embedded` / `Reference` / NULL) | `"Reference": true` for `Reference`; absent for `Embedded` and NULL. The schema generator already treats NULL as `Embedded`; the Jinja generation code does not (`jinja_helper_service.py`) | 96 `Reference`, 36 `Embedded`, 78 NULL |
 | Free-text `Required` and `Array` (`Yes` / `No` / NULL / `""`) on entities and attributes | Booleans: `Yes` becomes `true`; everything else is absent, as the schema generator already reads it (`== "Yes"`) | Entities: `Required` 7 `Yes`, `Array` 92 `Yes`. Attributes: `Required` 295 `Yes`, `Array` 232 `Yes`. All other values are `No`, NULL or `""` |
-| `Relationship` and the `has*`/`relevant*` naming rule | The required association `Name` | 212 entity associations and 2,544 attribute associations need a `Name`; 115 entity associations have no relationship today |
+| `Relationship` and the `has*`/`relevant*` naming rule | The required association `Name` | 212 entity associations and 2,544 attribute associations need a `Name`; 163 entity associations have no relationship today (115 NULL, 48 empty) |
 | Attributes with `DataType = 'entity'` and `TargetEntityId` (`V1.6`) | An association to the entity | 109 attributes; 41 have a target, all in Open Badges v3 |
 | Attributes in no association | `UNASSOCIATED_ATTRIBUTE` | 99 attributes |
-| Value sets used by no attribute | `UNUSED_VALUE_SET` | Not measured |
 | Value mappings' group membership (`TransformationGroupId`), and `SourceValueSetId` / `TargetValueSetId` | The crosswalk file (§7) | 2 rows name a group. The two value-set columns are NULL or disagree with the values' own value sets on 2,345 rows |
-| A source value mapped to several targets | `CROSSWALK_SOURCE_DUPLICATE` | 8 values; 5 exact duplicates collapse to one |
+| A source value mapped to several targets | `CROSSWALK_SOURCE_DUPLICATE` | 0 among live value mappings. The 8 such values are all on mappings to soft-deleted targets |
+| Value mappings to soft-deleted values | — (references to soft-deleted rows count as absent, §2) | 1,631 of 2,347, all targeting model 1 |
 | `OriginalValueId`, `OriginalValueMappingId`, `ValueSetValues.DataModelId` | — (the value set's model) | 0 / 0 / always equal to the value set's |
 | `DataModelConstraints`, attribute `Constraints`, `ExtMappedValueSet` | — | 0 rows each |
 | `InputAttributesCount`, `OutputAttributesCount` | Derivable from the mapping | NULL on all 6 live rules |
 | Non-JSONata rules (`LIF_Pseudo_Code`) | `EXPRESSION_LANGUAGE_NOT_PORTABLE` | 1 rule (group 3) |
+
+**Migration defaults.** These rules reproduce the schema MDR generates today, which is ADR
+`data_model/0004`'s pass criterion for converting model 17:
+
+- **Flags.** An element with an inclusion row takes its `LevelOfAccess`, `Queryable` and
+  `Modifiable` from that row. Every other element gets `Public`, `false` and `false`. Today flags
+  are emitted only from inclusion rows, and only for Org LIF and Partner LIF models
+  (`schema_generation_service.py`); GraphQL reads a missing `x-queryable` or `x-mutable` as `false`
+  (`type_factory.py`).
+- **Association `Name`.** For an entity child: `Relationship` + the child's `Name`, or the bare
+  child `Name` when `Relationship` is NULL, empty, or starts with `has` or `relevant`. This is
+  `embedded_property_key` in `schema_generation_service.py`. For an attribute child: the
+  attribute's `Name`.
+- **Conflict with the `Ref` keys.** Today a reference is keyed `<Relationship>Ref<Name>`. Applying
+  the rule above to references changes those 24 published keys, so model 17's schema cannot match
+  exactly. Either retiring the `Ref` keys is a separate step after the conversion, or the pass
+  criterion excludes them. This needs a decision before model 17 is converted.
 
 **Why the constraint tables were already out.** `ElementType` allows Constraint and Transformation
 inclusions, but nothing creates or reads them. `DataModelConstraints` has API endpoints but no UI,
@@ -666,6 +699,7 @@ with no service. Both constraint tables trace to roadmap items that were never b
 | `"Reference": true` on an association whose child is an attribute | `REFERENCE_INVALID` |
 | `"Placement": "Reference"` on an association | `DEPRECATED_FIELD` (`Placement`) |
 | `"Type": "OrgLIF"` in `DataModel` | `DEPRECATED_FIELD` (`Type`) |
+| `"ActivationDate": "2026-10-06T00:00:00Z"` in `Group` | `FIELD_UNKNOWN` (`ActivationDate`) |
 | `"Includes": [ … ]` at the top level | `FIELD_UNKNOWN` (`Includes`) |
 | `{ "Model": "State LIF", "Entity": "Student" }` as an association end | `FIELD_UNKNOWN` (`Model`) |
 | `Student` → `Student` without `Reference` | `ASSOCIATION_CYCLE` (`Student`) |
@@ -685,7 +719,7 @@ with no service. Both constraint tables trace to roadmap items that were never b
 |---|---|---|
 | **Q1** | Are recursive associations allowed? | Yes, through a reference (§5.4), per [ADR `data_model/0003`](../design/adr/data_model/0003-references-between-shared-entities.md). Containing associations stay acyclic, so records stay finite. All 13 entities on cycles in the seed are on cycles only through reference associations |
 | **Q2** | Should association `Name` be required on every association, including attributes? | Required, for one consistent rule. It repeats the attribute's `Name` on every attribute association |
-| **Q3** | Should mapping paths use association names (§6.3) instead of `EntityIdPath` `UniqueName`s? | Yes, because `UniqueName` paths cannot distinguish roles. This amends ADR `0009` Decision 1 |
+| **Q3** | Should mapping paths use association names (§6.3) instead of `EntityIdPath` `UniqueName`s? | Yes, because `UniqueName` paths cannot distinguish roles. This would amend ADR `0009` Decision 1, in its own ADR |
 | **Q4** | Is turning entity-typed attributes (`TargetEntityId`) into associations acceptable? | Yes. They are references by another name |
 | **Q5** | Which ADRs change? | `data_model/0002` is already superseded by `data_model/0004`, which this spec follows. `data_model/0003` is unchanged: the spec keeps its distinction between containing and referencing. Still to change: `metadata_repository/0009` Decision 1 (Q3) |
 | **Q6** | Should a path through a reference reach any attribute of the referenced entity, or only its key and attested fields (0003 Decision 4)? An **attested field** is a detail that was part of what a record certified when it was issued, such as the issuer's name as printed on an award. 0003 copies attested fields onto the reference, because the referenced entity may change later (an institution is renamed) while the record must keep what it stated | Any attribute, for now. 0003 Decision 4 has no model-level marker for attested fields yet. Today `Required` stands in for one: a referenced entity's schema keeps only its `Required` attributes (`add_ref` in `schema_generation_service.py`; ADR `metadata_repository/0008`), so `Required` means both "must be present" and "shown in references" |
