@@ -21,7 +21,7 @@ directly on this choice:
 
 - **Keys are opaque, not signed.** #1033 designed `lifk_<base64url(payload)>.<hmac>`, verifiable
   offline with a shared secret. #1038 shipped `lifk_` plus `secrets.token_urlsafe(32)`, stored as a
-  plain SHA-256 hash (`components/lif/mdr_services/developer_api_key_service.py:32-33`). An opaque
+  plain SHA-256 hash (`components/lif/developer_keys/core.py:33-34`). An opaque
   key can only be validated by looking its hash up in the store.
 - **Nothing validates keys yet.** LDE's `_developer_key_strategy` is a stub that returns `None`
   (`bases/lif/learner_data_export_api/core.py:31`, `TODO(#1034)`), and deployed LDE runs

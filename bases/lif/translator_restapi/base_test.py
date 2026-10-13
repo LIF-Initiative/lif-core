@@ -3,7 +3,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from uuid import uuid4
 from lif.exceptions.core import LIFException
-from lif.translator.core import BaseTranslator, BaseTranslatorConfig
+from lif.translator.core import BaseTranslator, BaseTranslatorConfig, schema_violation_summary
 from lif.logging.core import get_logger
 
 logger = get_logger(__name__)
@@ -58,7 +58,7 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 
 @app.exception_handler(ValueError)
 async def value_error_exception_handler(request: Request, exc: ValueError):
-    logger.warning(f"Value error for {request.method} {request.url.path}: {exc}")
+    logger.warning(f"Value error for {request.method} {request.url.path}: {schema_violation_summary(exc)}")
     return JSONResponse(status_code=400, content={"status_code": "400", "path": request.url.path, "message": str(exc)})
 
 
