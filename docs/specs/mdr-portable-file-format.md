@@ -61,8 +61,8 @@ evidence, not part of the contract.
    file that contains one is refused with `ROW_ID_PRESENT`.
 2. **Create-only, all or nothing.** Import creates new rows and never changes existing ones. It
    either succeeds completely or leaves no rows behind. ADR `metadata_repository/0009` expects
-   import to update a mapping in place by `(group, target path)`; that is deferred to the merge and
-   replace import modes (NEW-J in the [portability plan](../operations/proposals/mdr-import-export-portability.md)).
+   import to update a mapping in place by `(group, target path)`; [ADR `metadata_repository/0010`](../design/adr/metadata_repository/0010-mapping-paths-use-association-names.md) defers that to the
+   merge and replace import modes (NEW-J in the [portability plan](../operations/proposals/mdr-import-export-portability.md)).
 3. **Refused by name.** Anything the converter cannot carry faithfully is refused with a named
    error from [§10](#10-errors), naming the element. Nothing is silently skipped, defaulted or
    guessed.
@@ -331,7 +331,7 @@ Course,AccreditedBy,name
 ```
 
 1. The first segment is the `UniqueName` of a **top-level entity** (one with no containing parent)
-   in the side's model: the group's source model for `Sources`, its target model for `Target`. In
+   in the group's source model for a path in `Sources`, or its target model for the `Target` path. In
    the seed, every top-level entity's `UniqueName` equals its `Name` (294 of 294), and all 10 live
    mapping paths start at one.
 2. Each later segment is the `Name` of an association under the previous entity, in that model.
@@ -346,8 +346,8 @@ with a numeric prefix such as `1:` is a legacy model ID and is refused with `ROW
 
 Because association names are required (§5.4), a path is never ambiguous:
 `Course,AccreditedBy,name` and `Course,ApprovedBy,name` are different fields. Today's
-`EntityIdPath` cannot tell them apart. Accepting Q3 would amend ADR `0009` Decision 1, which needs
-its own ADR.
+`EntityIdPath` cannot tell them apart. This path format is [ADR `metadata_repository/0010`](../design/adr/metadata_repository/0010-mapping-paths-use-association-names.md), which amends 0009
+Decision 1.
 
 ---
 
@@ -719,9 +719,9 @@ with no service. Both constraint tables trace to roadmap items that were never b
 |---|---|---|
 | **Q1** | Are recursive associations allowed? | Yes, through a reference (§5.4), per [ADR `data_model/0003`](../design/adr/data_model/0003-references-between-shared-entities.md). Containing associations stay acyclic, so records stay finite. All 13 entities on cycles in the seed are on cycles only through reference associations |
 | **Q2** | Should association `Name` be required on every association, including attributes? | Required, for one consistent rule. It repeats the attribute's `Name` on every attribute association |
-| **Q3** | Should mapping paths use association names (§6.3) instead of `EntityIdPath` `UniqueName`s? | Yes, because `UniqueName` paths cannot distinguish roles. This would amend ADR `0009` Decision 1, in its own ADR |
+| **Q3** | Should mapping paths use association names (§6.3) instead of `EntityIdPath` `UniqueName`s? | Yes, because `UniqueName` paths cannot distinguish roles. Decided in [ADR `metadata_repository/0010`](../design/adr/metadata_repository/0010-mapping-paths-use-association-names.md), which amends 0009 Decision 1 |
 | **Q4** | Is turning entity-typed attributes (`TargetEntityId`) into associations acceptable? | Yes. They are references by another name |
-| **Q5** | Which ADRs change? | `data_model/0002` is already superseded by `data_model/0004`, which this spec follows. `data_model/0003` is unchanged: the spec keeps its distinction between containing and referencing. Still to change: `metadata_repository/0009` Decision 1 (Q3) |
+| **Q5** | Which ADRs change? | `data_model/0002` is already superseded by `data_model/0004`, which this spec follows. `data_model/0003` is unchanged: the spec keeps its distinction between containing and referencing. `metadata_repository/0009` Decision 1 is amended by `metadata_repository/0010` (Q3) |
 | **Q6** | Should a path through a reference reach any attribute of the referenced entity, or only its key and attested fields (0003 Decision 4)? An **attested field** is a detail that was part of what a record certified when it was issued, such as the issuer's name as printed on an award. 0003 copies attested fields onto the reference, because the referenced entity may change later (an institution is renamed) while the record must keep what it stated | Any attribute, for now. 0003 Decision 4 has no model-level marker for attested fields yet. Today `Required` stands in for one: a referenced entity's schema keeps only its `Required` attributes (`add_ref` in `schema_generation_service.py`; ADR `metadata_repository/0008`), so `Required` means both "must be present" and "shown in references" |
 | **Q7** | Should `Array` (cardinality) move from the element to the association? | Open. `Array` belongs to the element, so a shared entity has one cardinality under every parent: `CredentialAward` has seven parents and one `Array` value. On the association, each parent could choose. This changes the model, not just the file |
 
