@@ -122,6 +122,8 @@ def schema_violation_summary(error: ValueError) -> str:
     """Where a schema violation is, and which rule it broke, without the value it quotes (#1351)."""
     cause = error.__cause__
     if isinstance(cause, ValidationError):
+        # json_path is built from the instance's keys. That is safe while keys are schema field names, as in
+        # LIF schemas; a schema whose keys are learner data (e.g. patternProperties keyed by ID) would leak here.
         return f"{cause.validator} at {cause.json_path}"
     return type(error).__name__
 
