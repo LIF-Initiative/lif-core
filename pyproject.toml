@@ -133,6 +133,7 @@ asyncio_mode = "auto"
 "components/lif/schema_state_manager" = "lif/schema_state_manager"
 "components/lif/tenant_routing" = "lif/tenant_routing"
 "bases/lif/learner_data_export_api" = "lif/learner_data_export_api"
+"bases/lif/control_plane_restapi" = "lif/control_plane_restapi"
 
 [tool.ruff]
 line-length = 120

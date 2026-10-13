@@ -462,6 +462,48 @@ services:
     depends_on:
       - lif-advisor-api
 
+  lif-control-plane-database:
+    image: postgres
+    command: postgres
+    environment:
+      POSTGRES_USER: ${LIF_CONTROL_PLANE__DATABASE__USER:-control_plane}
+      POSTGRES_PASSWORD: ${LIF_CONTROL_PLANE__DATABASE__PASSWORD:-control_plane}
+      POSTGRES_DB: ${LIF_CONTROL_PLANE__DATABASE__DBNAME:-control_plane}
+    volumes:
+      - ../../projects/lif_control_plane_database/migrations:/docker-entrypoint-initdb.d:ro
+    networks:
+      - lif-net-control-plane-db
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  lif-control-plane-api:
+    build:
+      context: ../../
+      dockerfile: projects/lif_control_plane_api/Dockerfile2
+    container_name: lif-control-plane-api
+    environment:
+      CONTROL_PLANE__DATABASE_URL: postgresql+asyncpg://${LIF_CONTROL_PLANE__DATABASE__USER:-control_plane}:${LIF_CONTROL_PLANE__DATABASE__PASSWORD:-control_plane}@lif-control-plane-database:5432/${LIF_CONTROL_PLANE__DATABASE__DBNAME:-control_plane}
+      CONTROL_PLANE_AUTH__USER_POOL_ID: ${CONTROL_PLANE_AUTH__USER_POOL_ID:-}
+      CONTROL_PLANE_AUTH__REGION: ${CONTROL_PLANE_AUTH__REGION:-us-east-1}
+      CONTROL_PLANE_AUTH__CLIENT_ID: ${CONTROL_PLANE_AUTH__CLIENT_ID:-}
+    ports:
+      - "8014:8014"
+    depends_on:
+      lif-control-plane-database:
+        condition: service_healthy
+    networks:
+      - lif-net-org1
+      - lif-net-control-plane-db
+    healthcheck:
+      test: ["CMD", "python", "-c", "import sys,urllib.request; sys.exit(0) if urllib.request.urlopen('http://localhost:8014/health-check').status==200 else sys.exit(1)"]
+      interval: 15s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
   lif-mdr-database:
     image: postgres
     command: postgres
@@ -714,6 +756,7 @@ networks:
   lif-net-org2:
   lif-net-org3:
   lif-net-mdr-db:
+  lif-net-control-plane-db:
 
 # ----------- VOLUMES -----------
 
