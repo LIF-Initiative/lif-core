@@ -62,6 +62,7 @@ def _create_test_app() -> FastAPI:
             {
                 "principal": request.state.principal,
                 "cognito_groups": getattr(request.state, "cognito_groups", None),
+                "cognito_sub": getattr(request.state, "cognito_sub", None),
                 "tenant_schema": getattr(request.state, "tenant_schema", None),
             }
         )
@@ -109,6 +110,13 @@ class TestMiddlewareCognitoPath:
         body = resp.json()
         assert body["principal"] == "alice@example.com"
         assert body["cognito_groups"] == ["eval-alice"]
+
+    async def test_valid_cognito_token_sets_cognito_sub(self, client):
+        """/api-keys and the tenant invite endpoints key on this, not on principal (#1380)."""
+        token = _make_cognito_id_token(email="alice@example.com", sub="alice-sub-1")
+        resp = await client.get("/protected", headers={"Authorization": f"Bearer {token}"})
+        assert resp.status_code == 200
+        assert resp.json()["cognito_sub"] == "alice-sub-1"
 
     async def test_cognito_token_without_email_falls_back_to_sub(self, client):
         """If the ID token has no email claim, principal falls back to sub."""
