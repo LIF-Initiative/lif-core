@@ -124,7 +124,7 @@ grep -rhn '^from lif\.' bases/lif/my_new_service/ | sort -u
 
 Copy verbatim from an existing project (e.g., `projects/lif_advisor_api/Dockerfile2`), changing only `PROJECT_NAME` and the final `--port` and `uvicorn` target.
 
-The runtime stage installs the wheel with `uv pip install --system`, which resolves dependencies from PyPI based on the wheel's metadata constraints — **not** from `uv.lock`. This means **a dependency must be declared in *this project's* `pyproject.toml`, not just at the monorepo root, to be available in the Docker image.** Putting `boto3` in the root `pyproject.toml` only is a known landmine.
+The image is built from *this project's* `pyproject.toml` and `uv.lock` — not the monorepo root. The runtime stage installs the wheel pinned to the versions in the project's `uv.lock`, and the build fails if that lock is stale. This means **a dependency must be declared in *this project's* `pyproject.toml`, not just at the monorepo root, to be available in the Docker image** — then run `uv lock` in the project directory and commit `uv.lock`. Putting `boto3` in the root `pyproject.toml` only is a known landmine.
 
 ### `README.md`
 
