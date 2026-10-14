@@ -163,7 +163,7 @@ All the field tables below share one format. **Req.** means the field must be pr
 | `Name`, `Version`, `ContributorOrganization` | ✓ | This model's identity |
 | `CopiedFrom` | | Lineage: the identity (`Name`, `Version`, `ContributorOrganization`) of the model this one was copied from, written inline. Absent means the model is not a copy. The named model need not be installed, and is not checked |
 | `Description`, `UseConsiderations`, `Notes`, `Contributor`, `State`, `Tags` | | Descriptive text |
-| `CreationDate`, `ActivationDate`, `DeprecationDate` | | Timestamps |
+| `ActivationDate`, `DeprecationDate` | | Timestamps |
 
 An import is refused with `MODEL_EXISTS` when a live model with the same identity is already
 installed. `CopiedFrom` is set once, when the copy is made; editing it is not part of this format.
@@ -178,7 +178,7 @@ Schema diff uses it as the default model to compare against ([ADR `data_model/00
 | `Name` | ✓ | Key |
 | `Values` | ✓ | List of values (below) |
 | `Description`, `UseConsiderations`, `Notes`, `Contributor`, `ContributorOrganization`, `Tags` | | Descriptive text |
-| `CreationDate`, `ActivationDate`, `DeprecationDate` | | Timestamps |
+| `ActivationDate`, `DeprecationDate` | | Timestamps |
 
 **Value**
 
@@ -187,7 +187,7 @@ Schema diff uses it as the default model to compare against ([ADR `data_model/00
 | `ValueName` | ✓ | Key. A value without one is refused with `VALUE_NAME_MISSING` |
 | `Value` | ✓ | The code itself. It may differ from `ValueName`, as it does for 1,269 seed values |
 | `Description`, `UseConsiderations`, `Source`, `Notes`, `Contributor`, `ContributorOrganization` | | Descriptive text |
-| `CreationDate`, `ActivationDate`, `DeprecationDate` | | Timestamps |
+| `ActivationDate`, `DeprecationDate` | | Timestamps |
 
 A value set need not be used by any attribute. In the seed, 186 of 235 live value sets are not,
 including 89 of the 106 source value sets that value mappings refer to (§7).
@@ -202,7 +202,7 @@ including 89 of the 106 source value sets that value mappings refer to (§7).
 | `Queryable`, `Modifiable` | ✓ | Booleans. They become `x-queryable` and `x-mutable` in the generated schema, which GraphQL and semantic search use to build filters and mutations |
 | `Required` | | Boolean; absent means `false`. Puts the element in its parent's `required` list |
 | `Description`, `UseConsiderations`, `SourceModel`, `Notes`, `Contributor`, `ContributorOrganization`, `Tags`, `Common` | | Descriptive text; `Common` is a nullable boolean |
-| `CreationDate`, `ActivationDate`, `DeprecationDate` | | Timestamps |
+| `ActivationDate`, `DeprecationDate` | | Timestamps |
 
 **Attribute**
 
@@ -215,7 +215,7 @@ including 89 of the 106 source value sets that value mappings refer to (§7).
 | `LevelOfAccess`, `Queryable`, `Modifiable` | ✓ | As for entities |
 | `Required` | | Boolean; absent means `false`. Puts the element in its parent's `required` list |
 | `Description`, `UseConsiderations`, `SourceModel`, `Example`, `Notes`, `Contributor`, `ContributorOrganization`, `Tags`, `Common` | | Descriptive text |
-| `CreationDate`, `ActivationDate`, `DeprecationDate` | | Timestamps |
+| `ActivationDate`, `DeprecationDate` | | Timestamps |
 
 Every attribute must be the child of at least one association, otherwise the import is
 refused with `UNASSOCIATED_ATTRIBUTE`. An attribute with no association has no place in the
@@ -238,7 +238,7 @@ An association places a child element, an entity or an attribute, under a parent
 | `Array` | | Boolean; absent means `false`. Makes the child a list under this parent, in the generated schema and in GraphQL. It belongs to the association, so a shared entity can be a list under one parent and single under another (Q7) |
 | `Reference` | | `true` when the parent points to the child rather than containing it. Allowed only when the child is an entity; on an attribute child it is refused with `REFERENCE_INVALID`. Absent means the parent directly contains the child |
 | `Notes`, `Contributor`, `ContributorOrganization` | | Descriptive text |
-| `CreationDate`, `ActivationDate`, `DeprecationDate` | | Timestamps |
+| `ActivationDate`, `DeprecationDate` | | Timestamps |
 
 The rules:
 
@@ -283,7 +283,6 @@ The two kinds of association follow [ADR `data_model/0003`](../design/adr/data_m
 | `Version` | ✓ | Dotted integers such as `1`, `1.0` or `2.10`, as the API already requires (`transformation_group_dto.py`). Stored in the `GroupVersion` column. Together with `Source` and `Target`, the group's key (database unique index `ux_transformationsgroup_model_id_version_active`) |
 | `Name` | ✓ | Non-blank display name |
 | `Description`, `Notes`, `Contributor`, `ContributorOrganization`, `Tags` | | Descriptive text |
-| `CreationDate` | | Timestamp |
 
 **Activation is local to each install.** A group's `ActivationDate` and `DeprecationDate` decide
 whether the Translator uses it (`transformation_service.py`), and #1350 makes an imported group
@@ -308,7 +307,7 @@ behavior, not part of the converter.
 | `Expression` | ✓ | The JSONata expression |
 | `Name` | ✓ | Display name |
 | `Description`, `UseConsiderations`, `Alignment`, `Notes`, `Contributor`, `ContributorOrganization` | | Descriptive text |
-| `CreationDate`, `ActivationDate`, `DeprecationDate` | | Timestamps |
+| `ActivationDate`, `DeprecationDate` | | Timestamps |
 
 The rules, from [ADR `metadata_repository/0009`](../design/adr/metadata_repository/0009-mapping-identity-and-cardinality.md):
 
@@ -377,7 +376,7 @@ Implementation belongs to NEW-K (in the [portability plan](../operations/proposa
 | `Source`, `Target` | ✓ | Value-set references, each naming its model by identity, written inline. Either model not installed is refused with `MODEL_MISSING`. Together they form the crosswalk's key; a live crosswalk with the same key is refused with `CROSSWALK_EXISTS` |
 | `Entries[].Source`, `Entries[].Target` | ✓ | `ValueName`s in the source and target value sets |
 | `Entries[]`: `Description`, `UseConsiderations`, `Notes`, `Contributor`, `ContributorOrganization` | | Descriptive text |
-| `Entries[]`: `CreationDate`, `ActivationDate`, `DeprecationDate` | | Timestamps |
+| `Entries[]`: `ActivationDate`, `DeprecationDate` | | Timestamps |
 
 **Each source value maps to exactly one target value.** A second entry for the same source is
 refused with `CROSSWALK_SOURCE_DUPLICATE`. Several sources may map to the same target. A source value
@@ -448,9 +447,10 @@ class PortabilityError(Exception): code, element, reason
   | `Entries` | `Source` |
 
   A reference sorts as `(element kind, key)`.
-- **Creation dates.** `CreationDate` defaults to the import time in the database. A file without it
-  imports correctly but is not canonical, because exporting it adds the date. Round-trip test
-  fixtures always carry `CreationDate`.
+- **Creation dates.** `CreationDate` is not part of the format. Import sets it to the import time,
+  which is the database default, and a file that carries it is refused with `FIELD_UNKNOWN`. A
+  creation date records when a row was written on one install, so carrying it would either be
+  ignored on import or make the round trip (§3) depend on it.
 
 ---
 
@@ -570,8 +570,7 @@ with no service. Both constraint tables trace to roadmap items that were never b
       "Name": "State LIF",
       "Version": "1.0",
       "ContributorOrganization": "State"
-    },
-    "CreationDate": "2026-10-06T00:00:00Z"
+    }
   },
   "ValueSets": [
     {
@@ -579,11 +578,9 @@ with no service. Both constraint tables trace to roadmap items that were never b
       "Values": [
         {
           "ValueName": "Free",
-          "Value": "F",
-          "CreationDate": "2026-10-06T00:00:00Z"
+          "Value": "F"
         }
-      ],
-      "CreationDate": "2026-10-06T00:00:00Z"
+      ]
     }
   ],
   "Entities": [
@@ -592,16 +589,14 @@ with no service. Both constraint tables trace to roadmap items that were never b
       "Name": "BusRoute",
       "LevelOfAccess": "Internal",
       "Queryable": true,
-      "Modifiable": false,
-      "CreationDate": "2026-10-06T00:00:00Z"
+      "Modifiable": false
     },
     {
       "UniqueName": "Student",
       "Name": "Student",
       "LevelOfAccess": "Public",
       "Queryable": true,
-      "Modifiable": false,
-      "CreationDate": "2026-10-06T00:00:00Z"
+      "Modifiable": false
     }
   ],
   "Attributes": [
@@ -614,8 +609,7 @@ with no service. Both constraint tables trace to roadmap items that were never b
       },
       "LevelOfAccess": "Restricted",
       "Queryable": true,
-      "Modifiable": true,
-      "CreationDate": "2026-10-06T00:00:00Z"
+      "Modifiable": true
     },
     {
       "UniqueName": "Student.ssn",
@@ -623,8 +617,7 @@ with no service. Both constraint tables trace to roadmap items that were never b
       "DataType": "string",
       "LevelOfAccess": "Private",
       "Queryable": false,
-      "Modifiable": false,
-      "CreationDate": "2026-10-06T00:00:00Z"
+      "Modifiable": false
     }
   ],
   "Associations": [
@@ -635,8 +628,7 @@ with no service. Both constraint tables trace to roadmap items that were never b
       "Child": {
         "Entity": "BusRoute"
       },
-      "Name": "BusRoute",
-      "CreationDate": "2026-10-06T00:00:00Z"
+      "Name": "BusRoute"
     },
     {
       "Parent": {
@@ -645,8 +637,7 @@ with no service. Both constraint tables trace to roadmap items that were never b
       "Child": {
         "Attribute": "Student.lunchStatus"
       },
-      "Name": "lunchStatus",
-      "CreationDate": "2026-10-06T00:00:00Z"
+      "Name": "lunchStatus"
     },
     {
       "Parent": {
@@ -655,8 +646,7 @@ with no service. Both constraint tables trace to roadmap items that were never b
       "Child": {
         "Attribute": "Student.ssn"
       },
-      "Name": "ssn",
-      "CreationDate": "2026-10-06T00:00:00Z"
+      "Name": "ssn"
     }
   ]
 }
@@ -711,6 +701,7 @@ with no service. Both constraint tables trace to roadmap items that were never b
 | `"Placement": "Reference"` on an association | `DEPRECATED_FIELD` (`Placement`) |
 | `"Type": "OrgLIF"` in `DataModel` | `DEPRECATED_FIELD` (`Type`) |
 | `"ActivationDate": "2026-10-06T00:00:00Z"` in `Group` | `FIELD_UNKNOWN` (`ActivationDate`) |
+| `"CreationDate": "2026-10-06T00:00:00Z"` on any object | `FIELD_UNKNOWN` (`CreationDate`) |
 | `"Includes": [ … ]` at the top level | `FIELD_UNKNOWN` (`Includes`) |
 | `{ "Model": "State LIF", "Entity": "Student" }` as an association end | `FIELD_UNKNOWN` (`Model`) |
 | `Student` → `Student` without `Reference` | `ASSOCIATION_CYCLE` (`Student`) |
