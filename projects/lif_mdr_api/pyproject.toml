@@ -27,6 +27,7 @@ dependencies = [
     "python-multipart~=0.0",
     "pyyaml~=6.0",
     "requests~=2.31",
+    "sqlalchemy[asyncio]~=2.0",
     "sqlmodel~=0.0",
     "uvicorn~=0.23",
 ]
