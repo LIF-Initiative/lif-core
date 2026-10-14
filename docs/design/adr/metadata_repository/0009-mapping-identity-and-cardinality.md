@@ -7,6 +7,8 @@ Accepted
 
 Amends [0008](0008-data-model-use-cases.md) (the *Transformations / Mappings* section's "many-to-many" statement).
 
+Amended in part by [0010](0010-mapping-paths-use-association-names.md): paths use association names (Decision 1), and update-in-place import is deferred.
+
 ## Context
 
 A mapping (a transformation) has no portable identity. Exports identify it, and everything it touches, by database ID (`Id`, `TransformationGroupId`, `AttributeId`, `EntityId`), so an exported group can only be matched back to rows in the install that produced it. Import needs a way to recognize "the same mapping" in another install, so it can update rather than duplicate or delete.
