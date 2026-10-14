@@ -5,6 +5,7 @@ import pytest
 from pydantic import BaseModel, ValidationError
 
 from lif.mdr_portability import CrosswalkFile, MappingGroupFile, ModelFile
+from lif.mdr_portability.models import CrosswalkEntry, ModelIdentity
 
 FIXTURES = Path(__file__).parent / "fixtures"
 
@@ -21,7 +22,8 @@ def _load(name: str) -> dict:
 @pytest.mark.parametrize(
     ("model_class", "fixture"),
     [
-        (ModelFile, "test_reference_model_file.json"),
+        (ModelFile, "test_reference_source_model_file.json"),
+        (ModelFile, "test_reference_target_model_file.json"),
         (MappingGroupFile, "test_reference_mapping_group_file.json"),
         (CrosswalkFile, "test_reference_crosswalk_file.json"),
     ],
@@ -33,17 +35,65 @@ def test_reference_files_parse_and_dump_back_byte_for_byte(model_class, fixture)
     assert _canonical_json(model_class.model_validate_json(text)) == text
 
 
+def test_reference_files_form_one_consistent_set():
+    # The mapping group and crosswalk name the two reference models, and the crosswalk's values exist in them.
+    source = ModelFile.model_validate(_load("test_reference_source_model_file.json"))
+    target = ModelFile.model_validate(_load("test_reference_target_model_file.json"))
+    group = MappingGroupFile.model_validate(_load("test_reference_mapping_group_file.json"))
+    crosswalk = CrosswalkFile.model_validate(_load("test_reference_crosswalk_file.json"))
+
+    def identity(model: ModelFile) -> ModelIdentity:
+        return ModelIdentity(
+            Name=model.Details.Name,
+            Version=model.Details.Version,
+            ContributorOrganization=model.Details.ContributorOrganization,
+        )
+
+    def value_names(model: ModelFile, value_set: str) -> set[str]:
+        return {v.ValueName for vs in model.ValueSets if vs.Name == value_set for v in vs.Values}
+
+    assert (group.Details.Source, group.Details.Target) == (identity(source), identity(target))
+    assert (crosswalk.Details.Source.Model, crosswalk.Details.Target.Model) == (identity(source), identity(target))
+    assert {e.Source for e in crosswalk.Entries} <= value_names(source, crosswalk.Details.Source.ValueSet)
+    assert {e.Target for e in crosswalk.Entries} <= value_names(target, crosswalk.Details.Target.ValueSet)
+
+
 def test_reference_false_imports_but_is_not_written():
-    data = _load("test_reference_model_file.json")
+    data = _load("test_reference_target_model_file.json")
     data["Associations"][0]["Reference"] = False
 
-    assert "Reference" not in _canonical_json(ModelFile.model_validate(data))
+    association = ModelFile.model_validate(data).Associations[0]
+
+    assert "Reference" not in association.model_dump(exclude_defaults=True)
 
 
 def test_association_child_resolves_to_the_kind_it_names():
-    file = ModelFile.model_validate(_load("test_reference_model_file.json"))
+    # Competency has an entity and an attribute that share the UniqueName "Competency.Classifier".
+    file = ModelFile.model_validate(_load("test_reference_target_model_file.json"))
 
-    assert [type(a.Child).__name__ for a in file.Associations] == ["EntityKey", "AttributeKey", "AttributeKey"]
+    assert {a.Name: type(a.Child).__name__ for a in file.Associations if a.Parent.Entity == "Competency"} == {
+        "Classifier": "EntityKey",
+        "Entails": "EntityKey",
+        "classifier": "AttributeKey",
+        "identifier": "AttributeKey",
+    }
+
+
+@pytest.mark.parametrize(
+    ("given", "written"),
+    [
+        ("2026-02-11T00:00:00Z", "2026-02-11T00:00:00Z"),
+        ("2026-02-11T10:04:02.843Z", "2026-02-11T10:04:02.843Z"),
+        ("2026-02-11T10:04:02.000001Z", "2026-02-11T10:04:02.000001Z"),
+        ("2026-02-11T10:04:02.500000Z", "2026-02-11T10:04:02.5Z"),
+        ("2026-02-11T12:04:02+02:00", "2026-02-11T10:04:02Z"),
+    ],
+)
+def test_timestamps_are_written_in_utc_with_trimmed_fractional_seconds(given, written):
+    # Portability Spec §9.
+    entry = CrosswalkEntry.model_validate({"Source": "F", "Target": "Female", "ActivationDate": given})
+
+    assert entry.model_dump(mode="json")["ActivationDate"] == written
 
 
 # Shape-level refusals from Portability Spec §12.3 and the field tables. Mapping them to named codes is the converter's job.
@@ -104,7 +154,7 @@ def _delete(path: list):
     ],
 )
 def test_model_file_shape_refusals(mutate, error_type):
-    data = mutate(_load("test_reference_model_file.json"))
+    data = mutate(_load("test_reference_target_model_file.json"))
 
     with pytest.raises(ValidationError) as exc_info:
         ModelFile.model_validate(data)

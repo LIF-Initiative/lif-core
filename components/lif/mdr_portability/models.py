@@ -13,11 +13,21 @@ ActivationDate with the creation time, which makes it closer to an install-local
 CreationDate is not carried: import sets it to the import time, so the round trip stays exact.
 """
 
+from datetime import datetime, timezone
 from typing import Annotated, List, Literal, Optional, Union
 
 from lif.mdr_dto.transformation_group_dto import reject_non_numeric_group_version
 from lif.mdr_sql_model.core import AccessType
-from pydantic import AfterValidator, AwareDatetime, BeforeValidator, BaseModel, ConfigDict, Field, StrictBool
+from pydantic import (
+    AfterValidator,
+    AwareDatetime,
+    BaseModel,
+    BeforeValidator,
+    ConfigDict,
+    Field,
+    PlainSerializer,
+    StrictBool,
+)
 
 # Parsing is strict: a key the format version does not define is refused (§4.2).
 _STRICT = ConfigDict(extra="forbid")
@@ -40,6 +50,18 @@ def _reject_blank(value: str) -> str:
     if not value.strip():
         raise ValueError("must not be empty or only whitespace")
     return value
+
+
+def _format_timestamp(value: datetime) -> str:
+    # §9: RFC 3339 in UTC with Z; fractional seconds only when non-zero, trailing zeros dropped.
+    utc = value.astimezone(timezone.utc)
+    text = utc.strftime("%Y-%m-%dT%H:%M:%S")
+    if utc.microsecond:
+        text += f".{utc.microsecond:06d}".rstrip("0")
+    return text + "Z"
+
+
+Timestamp = Annotated[AwareDatetime, PlainSerializer(_format_timestamp, when_used="json")]
 
 
 # --- Envelope (§4.1) ---
@@ -111,8 +133,8 @@ class DataModelDetails(BaseModel):
     Contributor: Optional[str] = None
     State: Optional[str] = None
     Tags: Optional[str] = None
-    ActivationDate: Optional[AwareDatetime] = None
-    DeprecationDate: Optional[AwareDatetime] = None
+    ActivationDate: Optional[Timestamp] = None
+    DeprecationDate: Optional[Timestamp] = None
 
 
 class Value(BaseModel):
@@ -126,8 +148,8 @@ class Value(BaseModel):
     Notes: Optional[str] = None
     Contributor: Optional[str] = None
     ContributorOrganization: Optional[str] = None
-    ActivationDate: Optional[AwareDatetime] = None
-    DeprecationDate: Optional[AwareDatetime] = None
+    ActivationDate: Optional[Timestamp] = None
+    DeprecationDate: Optional[Timestamp] = None
 
 
 class ValueSet(BaseModel):
@@ -141,8 +163,8 @@ class ValueSet(BaseModel):
     Contributor: Optional[str] = None
     ContributorOrganization: Optional[str] = None
     Tags: Optional[str] = None
-    ActivationDate: Optional[AwareDatetime] = None
-    DeprecationDate: Optional[AwareDatetime] = None
+    ActivationDate: Optional[Timestamp] = None
+    DeprecationDate: Optional[Timestamp] = None
 
 
 class Entity(BaseModel):
@@ -162,8 +184,8 @@ class Entity(BaseModel):
     ContributorOrganization: Optional[str] = None
     Tags: Optional[str] = None
     Common: Optional[StrictBool] = None
-    ActivationDate: Optional[AwareDatetime] = None
-    DeprecationDate: Optional[AwareDatetime] = None
+    ActivationDate: Optional[Timestamp] = None
+    DeprecationDate: Optional[Timestamp] = None
 
 
 class Attribute(BaseModel):
@@ -186,8 +208,8 @@ class Attribute(BaseModel):
     ContributorOrganization: Optional[str] = None
     Tags: Optional[str] = None
     Common: Optional[StrictBool] = None
-    ActivationDate: Optional[AwareDatetime] = None
-    DeprecationDate: Optional[AwareDatetime] = None
+    ActivationDate: Optional[Timestamp] = None
+    DeprecationDate: Optional[Timestamp] = None
 
 
 class Association(BaseModel):
@@ -201,8 +223,8 @@ class Association(BaseModel):
     Notes: Optional[str] = None
     Contributor: Optional[str] = None
     ContributorOrganization: Optional[str] = None
-    ActivationDate: Optional[AwareDatetime] = None
-    DeprecationDate: Optional[AwareDatetime] = None
+    ActivationDate: Optional[Timestamp] = None
+    DeprecationDate: Optional[Timestamp] = None
 
 
 class ModelFile(BaseModel):
@@ -241,8 +263,8 @@ class MappingPath(BaseModel):
     Notes: Optional[str] = None
     Contributor: Optional[str] = None
     ContributorOrganization: Optional[str] = None
-    ActivationDate: Optional[AwareDatetime] = None
-    DeprecationDate: Optional[AwareDatetime] = None
+    ActivationDate: Optional[Timestamp] = None
+    DeprecationDate: Optional[Timestamp] = None
 
 
 class Mapping(BaseModel):
@@ -259,8 +281,8 @@ class Mapping(BaseModel):
     Notes: Optional[str] = None
     Contributor: Optional[str] = None
     ContributorOrganization: Optional[str] = None
-    ActivationDate: Optional[AwareDatetime] = None
-    DeprecationDate: Optional[AwareDatetime] = None
+    ActivationDate: Optional[Timestamp] = None
+    DeprecationDate: Optional[Timestamp] = None
 
 
 class MappingGroupFile(BaseModel):
@@ -300,8 +322,8 @@ class CrosswalkEntry(BaseModel):
     Notes: Optional[str] = None
     Contributor: Optional[str] = None
     ContributorOrganization: Optional[str] = None
-    ActivationDate: Optional[AwareDatetime] = None
-    DeprecationDate: Optional[AwareDatetime] = None
+    ActivationDate: Optional[Timestamp] = None
+    DeprecationDate: Optional[Timestamp] = None
 
 
 class CrosswalkFile(BaseModel):

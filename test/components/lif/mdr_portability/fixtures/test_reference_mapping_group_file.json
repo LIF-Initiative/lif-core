@@ -5,31 +5,68 @@
   },
   "Details": {
     "Source": {
-      "Name": "Ed-Fi v5",
+      "Name": "District SIS",
       "Version": "1.0",
-      "ContributorOrganization": "LIF"
+      "ContributorOrganization": "District"
     },
     "Target": {
-      "Name": "StateU LIF",
+      "Name": "District LIF",
       "Version": "1.0",
-      "ContributorOrganization": "StateU"
+      "ContributorOrganization": "District"
     },
     "Version": "1.0",
-    "Name": "Ed-Fi v5_StateU LIF"
+    "Name": "District SIS to District LIF",
+    "Description": "Reference mapping group",
+    "Tags": "district,reference"
   },
   "Mappings": [
     {
       "Target": {
-        "Path": "Assessment,identifier"
+        "Path": "Course,AccreditedBy,name"
       },
       "Sources": [
         {
-          "Path": "Assessment,AssessmentIdentifier"
+          "Path": "School,nameOfInstitution"
         }
       ],
       "ExpressionLanguage": "JSONata",
-      "Expression": "{ \"Assessment\": Assessment. { \"identifier\": AssessmentIdentifier } }",
-      "Name": "Assessment.identifier"
+      "Expression": "{ \"Course\": { \"AccreditedBy\": { \"name\": School.nameOfInstitution } } }",
+      "Name": "Course.AccreditedBy.name"
+    },
+    {
+      "Target": {
+        "Path": "Course,ApprovedBy,name"
+      },
+      "Sources": [
+        {
+          "Path": "School,nameOfInstitution"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"Course\": { \"ApprovedBy\": { \"name\": School.nameOfInstitution } } }",
+      "Name": "Course.ApprovedBy.name"
+    },
+    {
+      "Target": {
+        "Path": "Course,title",
+        "Notes": "Display title"
+      },
+      "Sources": [
+        {
+          "Path": "Course,courseTitle",
+          "Contributor": "District data team"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"Course\": { \"title\": Course.courseTitle } }",
+      "Name": "Course.title",
+      "Description": "Course title",
+      "UseConsiderations": "Trimmed by the source system",
+      "Alignment": "Exact",
+      "Notes": "One to one",
+      "Contributor": "District data team",
+      "ContributorOrganization": "District",
+      "ActivationDate": "2026-10-06T00:00:00Z"
     },
     {
       "Target": {
@@ -37,15 +74,24 @@
       },
       "Sources": [
         {
-          "Path": "Student,StudentEducationOrganizationAssociation,Address,addressTypeDescriptor"
+          "Path": "Student,Address,addressTypeDescriptor"
         },
         {
-          "Path": "Student,StudentEducationOrganizationAssociation,Address,city"
+          "Path": "Student,Address,city"
         }
       ],
       "ExpressionLanguage": "JSONata",
-      "Expression": "{ \"Person\": { \"Contact\": { \"Address\": { \"city\": Student.StudentEducationOrganizationAssociation.Address[addressTypeDescriptor = \"Home\"].city } } } }",
+      "Expression": "(\n  $home := Student.Address[addressTypeDescriptor = \"Home\"];\n  { \"Person\": { \"Contact\": { \"Address\": { \"city\": $home.city } } } }\n)",
       "Name": "Person.Contact.Address.city"
+    },
+    {
+      "Target": {
+        "Path": "Person,Identifier,identifierType"
+      },
+      "Sources": [],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"Person\": { \"Identifier\": { \"identifierType\": \"SIS\" } } }",
+      "Name": "Person.Identifier.identifierType"
     }
   ]
 }
