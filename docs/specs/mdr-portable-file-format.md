@@ -234,7 +234,7 @@ An association places a child element, an entity or an attribute, under a parent
 |---|---|---|
 | `Parent` | ✓ | Reference to an entity in this model |
 | `Child` | ✓ | Reference to an entity or attribute in this model |
-| `Name` | ✓ | The key the child appears under in its parent. PascalCase for an entity child, camelCase for an attribute child ([data-model-rules.md](data-model-rules.md)) |
+| `Name` | ✓ | The key the child appears under in its parent. By convention PascalCase for an entity child and camelCase for an attribute child ([data-model-rules.md](data-model-rules.md)). The convention applies to new models and is not checked on import: migrated names keep today's keys, and 36 of the 49 relationships set in the seed start lowercase (`basisLegalCode`, `awardedByRefOrganization`) |
 | `Array` | | Boolean; absent means `false`. Makes the child a list under this parent, in the generated schema and in GraphQL. It belongs to the association, so a shared entity can be a list under one parent and single under another (Q7) |
 | `Reference` | | `true` when the parent points to the child rather than containing it. Allowed only when the child is an entity; on an attribute child it is refused with `REFERENCE_INVALID`. Absent means the parent directly contains the child |
 | `Notes`, `Contributor`, `ContributorOrganization` | | Descriptive text |
@@ -329,6 +329,9 @@ A path names a field: a top-level entity, then association `Name`s, separated by
 ```
 Course,AccreditedBy,name
 ```
+
+The example is illustrative; a migrated model keeps today's keys, such as
+`Course,accreditedByRefOrganization,name`.
 
 1. The first segment is the `UniqueName` of a **top-level entity** (one with no containing parent)
    in the group's source model for a path in `Sources`, or its target model for the `Target` path. In
@@ -500,8 +503,8 @@ existing content onto the simplified model is migration work, not this spec's.
 |---|---|---|
 | Model types `BaseLIF`, `OrgLIF`, `PartnerLIF`, `SourceSchema` (`DataModels.Type`) | One kind of model ([ADR `data_model/0004`](../design/adr/data_model/0004-retire-overlays-variants-as-copies.md)) | All 21 models |
 | Overlays: a model built on another (`BaseDataModelId`) | A self-contained copy, with `CopiedFrom`. Existing overlays are converted once | 2 models: 17 (StateU LIF, `OrgLIF`) and 18 (Org2 LIF, `PartnerLIF`), both on model 1 |
-| Inclusion rows (`ExtInclusionsFromBaseDM`) on a model's **own** elements | Flags on the element itself | 83 rows |
-| Inclusion rows (`ExtInclusionsFromBaseDM`) on **another** model's elements | The element, copied into the model | 207 rows, all in models 17 and 18 |
+| Inclusion rows (`ExtInclusionsFromBaseDM`) on a model's **own** elements | Flags on the element itself | 83 live rows whose element is live |
+| Inclusion rows (`ExtInclusionsFromBaseDM`) on **another** model's elements | The element, copied into the model | 207 live rows whose element is live, all in models 17 and 18. A further 10 (5 of each kind) name a soft-deleted element and count as absent; 300 live rows in all |
 | Constraint and Transformation inclusions | — | 0 rows |
 | `ExtendedByDataModelId` on both association tables | Both ends in one model (§5.4): the declaring model is always the owner | 16 + 167 rows |
 | Associations between elements of different models | Both ends in one model | 55: 54 involve models 17 or 18, and 1 links model 1 to model 16 |
@@ -737,7 +740,7 @@ with no service. Both constraint tables trace to roadmap items that were never b
 storage changes that do not exist yet:
 
 - flags on `Entities` and `Attributes`;
-- a `Name` on both association tables;
+- a `Name` and `Array` on both association tables;
 - a lineage (`CopiedFrom`) column on `DataModels`, applied to every tenant schema, not only
   `public` (#1226);
 - today's overlay models converted into self-contained models, after which inclusion rows are no
