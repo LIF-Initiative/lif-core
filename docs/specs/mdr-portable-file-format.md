@@ -1,6 +1,6 @@
 # MDR Portable File Format
 
-<!-- cspell:ignore valuename valuesetid -->
+<!-- cspell:ignore valuename valuesetid PESC OSID -->
 
 **Status:** Draft — for review before implementation. [§13](#13-open-questions) lists what is still open.
 **Format version:** 1
@@ -200,7 +200,7 @@ including 89 of the 106 source value sets that value mappings refer to (§7).
 | `Name` | ✓ | Display name. It is also the key the entity appears under when it has no parent |
 | `LevelOfAccess` | ✓ | `Public`, `Internal`, `Restricted` or `Private` |
 | `Queryable`, `Modifiable` | ✓ | Booleans. They become `x-queryable` and `x-mutable` in the generated schema, which GraphQL and semantic search use to build filters and mutations |
-| `Required`, `Array` | | Booleans; absent means `false`. `Array` makes the element a list in the generated schema and in GraphQL; `Required` puts it in its parent's `required` list |
+| `Required` | | Boolean; absent means `false`. Puts the element in its parent's `required` list |
 | `Description`, `UseConsiderations`, `SourceModel`, `Notes`, `Contributor`, `ContributorOrganization`, `Tags`, `Common` | | Descriptive text; `Common` is a nullable boolean |
 | `CreationDate`, `ActivationDate`, `DeprecationDate` | | Timestamps |
 
@@ -213,7 +213,7 @@ including 89 of the 106 source value sets that value mappings refer to (§7).
 | `DataType` | ✓ | Any data type except `entity` ([§11](#11-deprecated)) |
 | `ValueSet` | | Value-set reference ([§4.3](#43-element-references)) to a value set in this model |
 | `LevelOfAccess`, `Queryable`, `Modifiable` | ✓ | As for entities |
-| `Required`, `Array` | | Booleans; absent means `false`. `Array` makes the element a list in the generated schema and in GraphQL; `Required` puts it in its parent's `required` list |
+| `Required` | | Boolean; absent means `false`. Puts the element in its parent's `required` list |
 | `Description`, `UseConsiderations`, `SourceModel`, `Example`, `Notes`, `Contributor`, `ContributorOrganization`, `Tags`, `Common` | | Descriptive text |
 | `CreationDate`, `ActivationDate`, `DeprecationDate` | | Timestamps |
 
@@ -235,6 +235,7 @@ An association places a child element, an entity or an attribute, under a parent
 | `Parent` | ✓ | Reference to an entity in this model |
 | `Child` | ✓ | Reference to an entity or attribute in this model |
 | `Name` | ✓ | The key the child appears under in its parent. PascalCase for an entity child, camelCase for an attribute child ([data-model-rules.md](data-model-rules.md)) |
+| `Array` | | Boolean; absent means `false`. Makes the child a list under this parent, in the generated schema and in GraphQL. It belongs to the association, so a shared entity can be a list under one parent and single under another (Q7) |
 | `Reference` | | `true` when the parent points to the child rather than containing it. Allowed only when the child is an entity; on an attribute child it is refused with `REFERENCE_INVALID`. Absent means the parent directly contains the child |
 | `Notes`, `Contributor`, `ContributorOrganization` | | Descriptive text |
 | `CreationDate`, `ActivationDate`, `DeprecationDate` | | Timestamps |
@@ -465,7 +466,7 @@ no rows.
 | `FIELD_UNKNOWN` | A key the version does not define |
 | `DEPRECATED_FIELD` | A key listed in [§11](#11-deprecated); names the key |
 | `ROW_ID_PRESENT` | A key named `Id` or ending in `Id` (including `OriginalValueId`), or a path segment with a numeric prefix |
-| `MODEL_IDENTITY_INCOMPLETE` | An identity field missing, empty or NULL (seed model 26 has a NULL `ContributorOrganization`) |
+| `MODEL_IDENTITY_INCOMPLETE` | An identity field missing, empty or NULL (seed model 26 has a NULL `ContributorOrganization`; migration sets it to `LIF`) |
 | `MODEL_EXISTS`, `GROUP_EXISTS`, `CROSSWALK_EXISTS` | Create-only: the key is already live |
 | `MODEL_MISSING` | A model named by a mapping group or crosswalk is not installed |
 | `ASSOCIATION_CYCLE` | A cycle of containing associations (§5.4) |
@@ -502,12 +503,12 @@ existing content onto the simplified model is migration work, not this spec's.
 | `Extension` / `ExtensionNotes` (on 8 tables, including `Entities`, `Attributes`, `ValueSets` and `EntityAssociation`) | — | Set only in models 17 and 18: 80 entities and attributes |
 | Overrides (an element reusing an inherited `UniqueName`) | — (a model sees only its own elements) | 1 (`Criteria.identifier`, model 17) |
 | An attribute using another model's value set | The value set, copied into the model | 1 attribute |
-| The `Ref` property keys (`<relationship>Ref<Type>`) | The required association `Name`, plus `"Reference": true` | 24 `Ref` keys in `lif-schema.json`; 21 sample-data, query and config files |
+| The `Ref` property keys (`<relationship>Ref<Type>`) | The required association `Name`, plus `"Reference": true`. Retired in a separate step after model 17 is converted; until then a reference association's `Name` keeps the `Ref` spelling (*Migration defaults*) | 24 `Ref` keys in `lif-schema.json`; 21 sample-data, query and config files |
 | `Placement` (`Embedded` / `Reference` / NULL) | `"Reference": true` for `Reference`; absent for `Embedded` and NULL. The schema generator already treats NULL as `Embedded`; the Jinja generation code does not (`jinja_helper_service.py`) | 96 `Reference`, 36 `Embedded`, 78 NULL |
-| Free-text `Required` and `Array` (`Yes` / `No` / NULL / `""`) on entities and attributes | Booleans: `Yes` becomes `true`; everything else is absent, as the schema generator already reads it (`== "Yes"`) | Entities: `Required` 7 `Yes`, `Array` 92 `Yes`. Attributes: `Required` 295 `Yes`, `Array` 232 `Yes`. All other values are `No`, NULL or `""` |
+| Free-text `Required` and `Array` (`Yes` / `No` / NULL / `""`) on entities and attributes | Booleans: `Yes` becomes `true`; everything else is absent, as the schema generator already reads it (`== "Yes"`). `Required` stays on the element; `Array` moves to every association whose child is that element | Entities: `Required` 7 `Yes`, `Array` 92 `Yes`. Attributes: `Required` 295 `Yes`, `Array` 232 `Yes`. All other values are `No`, NULL or `""` |
 | `Relationship` and the `has*`/`relevant*` naming rule | The required association `Name` | 212 entity associations and 2,544 attribute associations need a `Name`; 163 entity associations have no relationship today (115 NULL, 48 empty) |
-| Attributes with `DataType = 'entity'` and `TargetEntityId` (`V1.6`) | An association to the entity | 109 attributes; 41 have a target, all in Open Badges v3 |
-| Attributes in no association | `UNASSOCIATED_ATTRIBUTE` | 99 attributes |
+| Attributes with `DataType = 'entity'` and `TargetEntityId` (`V1.6`) | An association to the entity; an attribute with no target is dropped | 109 attributes. 41 have a target, all in Open Badges v3. 68 have none (CLR v2: 55, CASE: 13) |
+| Attributes in no association | Dropped on migration; `UNASSOCIATED_ATTRIBUTE` on import | 99 attributes: CLR v2 48, model 17 14, Open Badges v2 12, Ed-Fi v5 9, EagleApps 7, model 25 4, PESC v1.8 2, LIF 2, OSID / CampusAPI 1 |
 | Value mappings' group membership (`TransformationGroupId`), and `SourceValueSetId` / `TargetValueSetId` | The crosswalk file (§7) | 2 rows name a group. The two value-set columns are NULL or disagree with the values' own value sets on 2,345 rows |
 | A source value mapped to several targets | `CROSSWALK_SOURCE_DUPLICATE` | 0 among live value mappings. The 8 such values are all on mappings to soft-deleted targets |
 | Value mappings to soft-deleted values | — (references to soft-deleted rows count as absent, §2) | 1,631 of 2,347, all targeting model 1 |
@@ -524,14 +525,24 @@ existing content onto the simplified model is migration work, not this spec's.
   are emitted only from inclusion rows, and only for Org LIF and Partner LIF models
   (`schema_generation_service.py`); GraphQL reads a missing `x-queryable` or `x-mutable` as `false`
   (`type_factory.py`).
-- **Association `Name`.** For an entity child: `Relationship` + the child's `Name`, or the bare
-  child `Name` when `Relationship` is NULL, empty, or starts with `has` or `relevant`. This is
-  `embedded_property_key` in `schema_generation_service.py`. For an attribute child: the
-  attribute's `Name`.
-- **Conflict with the `Ref` keys.** Today a reference is keyed `<Relationship>Ref<Name>`. Applying
-  the rule above to references changes those 24 published keys, so model 17's schema cannot match
-  exactly. Either retiring the `Ref` keys is a separate step after the conversion, or the pass
-  criterion excludes them. This needs a decision before model 17 is converted.
+- **Association `Name`.** For a containing entity association: `Relationship` + the child's
+  `Name`, or the bare child `Name` when `Relationship` is NULL, empty, or starts with `has` or
+  `relevant`. This is `embedded_property_key` in `schema_generation_service.py`. For a reference association:
+  today's key, `<Relationship>Ref<Name>`, or `Ref<Name>` with no relationship, so the 24 published
+  `Ref` keys do not change in the same step as the conversion. Retiring them is a separate, later
+  step. For an attribute child: the attribute's `Name`.
+- **`Array`.** Each association takes its child's current `Array` value.
+- **Dropped.** Attributes in no association (99), which do not appear in the generated schema
+  today. Entity-typed attributes with no `TargetEntityId` (68), which today appear as attributes of
+  type `entity` in CLR v2 and CASE (the generator's `!= "Entity"` check misses the lowercase stored
+  value). Dropping them changes those two schemas, not model 17's.
+- **Name collisions when flattening an overlay.** Where two elements end up under one parent with
+  the same `Name` (in model 17: `id` under `Credential.Image`, from models 16 and 17, and
+  `identifier` under `Credential.Requirements.Criteria`, from model 1 and model 17's override),
+  the one model 17's generated schema shows today survives. The schema-match check confirms the
+  choice.
+- **Model 26's organization.** Its NULL `ContributorOrganization` is set to `LIF`. The model keeps
+  its ID, so the Query Planner configs that name `source_schema_id: "26"` are unaffected.
 
 **Why the constraint tables were already out.** `ElementType` allows Constraint and Transformation
 inclusions, but nothing creates or reads them. `DataModelConstraints` has API endpoints but no UI,
@@ -723,7 +734,7 @@ with no service. Both constraint tables trace to roadmap items that were never b
 | **Q4** | Is turning entity-typed attributes (`TargetEntityId`) into associations acceptable? | Yes. They are references by another name |
 | **Q5** | Which ADRs change? | `data_model/0002` is already superseded by `data_model/0004`, which this spec follows. `data_model/0003` is unchanged: the spec keeps its distinction between containing and referencing. `metadata_repository/0009` Decision 1 is amended by `metadata_repository/0010` (Q3) |
 | **Q6** | Should a path through a reference reach any attribute of the referenced entity, or only its key and attested fields (0003 Decision 4)? An **attested field** is a detail that was part of what a record certified when it was issued, such as the issuer's name as printed on an award. 0003 copies attested fields onto the reference, because the referenced entity may change later (an institution is renamed) while the record must keep what it stated | Any attribute, for now. 0003 Decision 4 has no model-level marker for attested fields yet. Today `Required` stands in for one: a referenced entity's schema keeps only its `Required` attributes (`add_ref` in `schema_generation_service.py`; ADR `metadata_repository/0008`), so `Required` means both "must be present" and "shown in references" |
-| **Q7** | Should `Array` (cardinality) move from the element to the association? | Yes. `Array` belongs to the element, so a shared entity has one cardinality under every parent: `CredentialAward` has seven parents and one `Array` value. On the association, each parent could choose. This changes the model, not just the file |
+| **Q7** | Should `Array` (cardinality) move from the element to the association? | Yes, adopted in §5.4. `Array` belonged to the element, so a shared entity had one cardinality under every parent: `CredentialAward` has seven parents and one `Array` value. On the association, each parent could choose. This changes the model, not just the file |
 
 **What this needs from the database.** The format is the contract, but importing it needs
 storage changes that do not exist yet:
