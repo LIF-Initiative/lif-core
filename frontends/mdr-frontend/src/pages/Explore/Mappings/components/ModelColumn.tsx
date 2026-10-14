@@ -1,11 +1,11 @@
-import React, { useCallback } from 'react';
+import React, { useCallback } from "react";
 import type {
     DataModelWithDetailsDTO,
     DataModelWithDetailsWithTree,
     AttributeDTO,
     EntityTreeNode,
-} from '../../../../types';
-import { extractEntityPath, isNewCommaFormat } from '../../../../utils/entityIdPath';
+} from "@/types";
+import { extractEntityPath, isNewCommaFormat } from "@/utils/entityIdPath";
 
 // Types re-declared locally to avoid tight coupling; import actual interfaces from caller when wiring up
 export interface DisplayTransformationDataLike {
