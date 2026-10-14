@@ -54,7 +54,8 @@ async def fetch_query_from_query_planner(base_url: str, query: dict) -> list[dic
 
     if response.status_code != 200:
         msg = f"Query Planner returned HTTP {response.status_code}"
-        logger.error("%s - %s", msg, response.text)
+        # Not the body: a 422 echoes the posted learner data (#1351).
+        logger.error(msg)
         raise QueryPlannerException(msg)
 
     return response.json()

@@ -24,7 +24,8 @@ WORKDIR /code/projects/${PROJECT_NAME}
 
 # Sync dependencies and build the project wheel
 RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --frozen --no-dev && \
+    uv sync --locked --no-dev && \
+    uv export --locked --no-dev --no-emit-project --no-hashes -o /code/constraints.txt && \
     uv build --wheel
 
 # Stage 2: Final runtime image
@@ -38,9 +39,11 @@ RUN pip install --no-cache-dir uv
 
 # Copy the built wheel from the builder stage
 COPY --from=builder /code/projects/${PROJECT_NAME}/dist/*.whl /tmp/
+COPY --from=builder /code/constraints.txt /tmp/constraints.txt
 
-# Install the wheel in the final image
-RUN uv pip install --system /tmp/*.whl && rm /tmp/*.whl
+# Install the wheel in the final image, pinned to the versions in uv.lock
+RUN uv pip install --system --constraint /tmp/constraints.txt /tmp/*.whl && \
+    rm /tmp/*.whl /tmp/constraints.txt
 
 # Set working directory
 WORKDIR /code

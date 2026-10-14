@@ -16,8 +16,8 @@
  * partial — an author previewing three attributes of a large model would otherwise see an error for
  * every attribute they have not mapped yet.
  */
-import Ajv2020 from 'ajv/dist/2020';
-import type { ErrorObject, ValidateFunction } from 'ajv';
+import Ajv2020 from "ajv/dist/2020";
+import type { ErrorObject, ValidateFunction } from "ajv";
 
 export interface SchemaValidationIssue {
     /** Instance location of the problem, e.g. "/Person/0/givenName". Empty string means the root. */

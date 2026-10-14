@@ -59,12 +59,11 @@ async def get_data(
 
     logger.info(
         (
-            "Received request for learner data export as %s - learnerId: %s, "
+            "Received request for learner data export as %s - "
             "dataModelName: %s, dataModelVersion: %s, "
             "dataModelContributorOrganization: %s"
         ),
         getattr(request.state, "api_client", "unknown"),
-        learner_id,
         data_model_name,
         data_model_version,
         data_model_contributor_organization,
