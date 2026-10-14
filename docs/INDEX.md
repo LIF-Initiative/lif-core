@@ -18,6 +18,7 @@
 ## `docs/specs/` — Specs (contracts)
 
 - [`data-model-rules.md`](specs/data-model-rules.md) — LIF data model rules, capitalization conventions, reserved-word recognition by MDR.
+- [`mdr-portable-file-format.md`](specs/mdr-portable-file-format.md) — MDR portable file formats (v1) for models, mapping groups and value-set crosswalks on the simplified data model (one self-contained model per file, with `CopiedFrom` lineage; ADR data_model/0004), with the deprecations, errors, canonical form and converter contract (#1333).
 
 ---
 
@@ -63,6 +64,7 @@
 - [`metadata_repository/0007-query-planner-integration.md`](design/adr/metadata_repository/0007-query-planner-integration.md) — MDR: query planner integration.
 - [`metadata_repository/0008-data-model-use-cases.md`](design/adr/metadata_repository/0008-data-model-use-cases.md) — MDR: data model use cases.
 - [`metadata_repository/0009-mapping-identity-and-cardinality.md`](design/adr/metadata_repository/0009-mapping-identity-and-cardinality.md) — MDR: a mapping is identified by (group, target path); one target per mapping, one mapping per target (Accepted).
+- [`metadata_repository/0010-mapping-paths-use-association-names.md`](design/adr/metadata_repository/0010-mapping-paths-use-association-names.md) — MDR: mapping paths are a top-level entity then association `Name`s, so roles are distinct; update-in-place import deferred to merge/replace (Accepted; amends 0009).
 - [`orchestrator/0001-orchestrator-for-demo.md`](design/adr/orchestrator/0001-orchestrator-for-demo.md) — Orchestrator: design for demo deployment.
 - [`translator/0001-initialization-vs-mdr-dependency.md`](design/adr/translator/0001-initialization-vs-mdr-dependency.md) — Translator: initialization vs MDR dependency.
 - [`translator/0002-query-translation.md`](design/adr/translator/0002-query-translation.md) — Translator: query translation approach.
