@@ -20,7 +20,7 @@ bash build.sh
 bash build-docker.sh
 ```
 
-`Dockerfile2` is the path used by CI and reference deployments — it does a two-stage build with `uv sync` from this project's `pyproject.toml`. Any new runtime dependency must be added **to this project's `pyproject.toml`, not just the monorepo root** (see [`../../docs/operations/guides/adding-a-new-microservice.md`](../../docs/operations/guides/adding-a-new-microservice.md) for the rationale).
+`Dockerfile2` is the path used by CI and reference deployments — it does a two-stage build pinned to this project's `uv.lock` (the build fails if the lock is stale; run `uv lock` here after changing dependencies). Any new runtime dependency must be added **to this project's `pyproject.toml`, not just the monorepo root** (see [`../../docs/operations/guides/adding-a-new-microservice.md`](../../docs/operations/guides/adding-a-new-microservice.md) for the rationale).
 
 ## Configuration
 
