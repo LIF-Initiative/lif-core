@@ -280,6 +280,7 @@ export async function evaluateCombinedJsonataExpression(
     return res && typeof (res as any).then === 'function' ? await res : res;
 }
 
+const JSONATA_LITERALS = new Set(["true", "false", "null"]);
 
 /**
  * Quote one path segment so it reads that field in a JSONata path expression.
@@ -287,7 +288,8 @@ export async function evaluateCombinedJsonataExpression(
  * A backtick cannot be escaped inside backticks, so those names fall back to $lookup.
  */
 export function quoteJsonataSegment(seg: string): string {
-    if (/^[A-Za-z_][A-Za-z0-9_]*$/.test(seg)) return seg;
+    // true/false/null look like identifiers, but JSONata parses them as literals, not steps.
+    if (/^[A-Za-z_][A-Za-z0-9_]*$/.test(seg) && !JSONATA_LITERALS.has(seg)) return seg;
     if (!seg.includes("`")) return `\`${seg}\``;
     return `$lookup($, ${JSON.stringify(seg)})`;
 }

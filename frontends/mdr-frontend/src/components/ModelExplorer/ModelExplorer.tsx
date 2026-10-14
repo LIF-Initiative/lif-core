@@ -1108,7 +1108,15 @@ const ModelTree: React.FC<ModelTreeProps> = ({
             onAddNew={handleOnAddNew}
             onFuncDownload={handleDownloadWithToast}
             headerString={treeHeader}
-            triggerModal={async (n, k, s) => { if (s) await handleSelectDialog(n, k, s); else await handleCreateDropdown(n, k); }}
+            triggerModal={async (n, k, s) => {
+              // Menu onSelect callers don't await this, so report failures here instead of leaving an unhandled rejection.
+              try {
+                if (s) await handleSelectDialog(n, k, s);
+                else await handleCreateDropdown(n, k);
+              } catch (e) {
+                showToast(errorToString(e), 'error');
+              }
+            }}
             triggerCheckbox={async (n, f, v) => { await handleCheckboxToggle(n, f, v, false); }}
             typeHandlers={{
               model: (n: any, p?: any) => { onNodeSelect(n, p); onModelSelect(); },

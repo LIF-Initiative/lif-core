@@ -19,6 +19,9 @@ describe("quoteJsonataSegment", () => {
         ['say "hi"'],
         ["back\\slash"],
         ["tick`name"],
+        ["true"],
+        ["false"],
+        ["null"],
     ])("builds a path that reads the field %j", async (field) => {
         const input = { Person: { [field]: "value" } };
         await expect(evaluatePath(input, "Person", field)).resolves.toBe("value");
