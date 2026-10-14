@@ -18,16 +18,7 @@ from typing import Annotated, List, Literal, Optional, Union
 
 from lif.mdr_dto.transformation_group_dto import reject_non_numeric_group_version
 from lif.mdr_sql_model.core import AccessType
-from pydantic import (
-    AfterValidator,
-    AwareDatetime,
-    BaseModel,
-    BeforeValidator,
-    ConfigDict,
-    Field,
-    PlainSerializer,
-    StrictBool,
-)
+from pydantic import AfterValidator, AwareDatetime, BaseModel, BeforeValidator, ConfigDict, PlainSerializer, StrictBool
 
 # Parsing is strict: a key the format version does not define is refused (§4.2).
 _STRICT = ConfigDict(extra="forbid")
@@ -42,14 +33,16 @@ def _require_int(value: object) -> object:
 
 FormatVersion = Annotated[Literal[1], BeforeValidator(_require_int)]
 
-# Identity fields are required and non-empty (§2).
-IdentityStr = Annotated[str, Field(min_length=1)]
-
 
 def _reject_blank(value: str) -> str:
     if not value.strip():
         raise ValueError("must not be empty or only whitespace")
     return value
+
+
+# Model identity fields (§2), element keys (§4.3) and the names elements appear under in the generated
+# schema must not be empty or only whitespace. The value itself is carried unchanged (§9).
+NonBlankStr = Annotated[str, AfterValidator(_reject_blank)]
 
 
 def _format_timestamp(value: datetime) -> str:
@@ -94,9 +87,9 @@ class CrosswalkFormat(BaseModel):
 class ModelIdentity(BaseModel):
     model_config = _STRICT
 
-    Name: IdentityStr
-    Version: IdentityStr
-    ContributorOrganization: IdentityStr
+    Name: NonBlankStr
+    Version: NonBlankStr
+    ContributorOrganization: NonBlankStr
 
 
 class EntityKey(BaseModel):
@@ -123,9 +116,9 @@ class ValueSetKey(BaseModel):
 class DataModelDetails(BaseModel):
     model_config = _STRICT
 
-    Name: IdentityStr
-    Version: IdentityStr
-    ContributorOrganization: IdentityStr
+    Name: NonBlankStr
+    Version: NonBlankStr
+    ContributorOrganization: NonBlankStr
     CopiedFrom: Optional[ModelIdentity] = None
     Description: Optional[str] = None
     UseConsiderations: Optional[str] = None
@@ -140,7 +133,7 @@ class DataModelDetails(BaseModel):
 class Value(BaseModel):
     model_config = _STRICT
 
-    ValueName: str
+    ValueName: NonBlankStr
     Value: str
     Description: Optional[str] = None
     UseConsiderations: Optional[str] = None
@@ -155,7 +148,7 @@ class Value(BaseModel):
 class ValueSet(BaseModel):
     model_config = _STRICT
 
-    Name: str
+    Name: NonBlankStr
     Values: List[Value]
     Description: Optional[str] = None
     UseConsiderations: Optional[str] = None
@@ -170,8 +163,8 @@ class ValueSet(BaseModel):
 class Entity(BaseModel):
     model_config = _STRICT
 
-    UniqueName: str
-    Name: str
+    UniqueName: NonBlankStr
+    Name: NonBlankStr
     LevelOfAccess: AccessType
     Queryable: StrictBool
     Modifiable: StrictBool
@@ -191,8 +184,8 @@ class Entity(BaseModel):
 class Attribute(BaseModel):
     model_config = _STRICT
 
-    UniqueName: str
-    Name: str
+    UniqueName: NonBlankStr
+    Name: NonBlankStr
     DataType: str
     ValueSet: Optional[ValueSetKey] = None
     LevelOfAccess: AccessType
@@ -217,7 +210,7 @@ class Association(BaseModel):
 
     Parent: EntityKey
     Child: Union[EntityKey, AttributeKey]
-    Name: str
+    Name: NonBlankStr
     Array: StrictBool = False
     Reference: StrictBool = False
     Notes: Optional[str] = None
@@ -248,7 +241,7 @@ class MappingGroupDetails(BaseModel):
     Source: ModelIdentity
     Target: ModelIdentity
     Version: Annotated[str, AfterValidator(reject_non_numeric_group_version)]
-    Name: Annotated[str, AfterValidator(_reject_blank)]
+    Name: NonBlankStr
     Description: Optional[str] = None
     Notes: Optional[str] = None
     Contributor: Optional[str] = None
