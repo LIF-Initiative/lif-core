@@ -142,7 +142,7 @@ model 5).
 ```json
 {
   "Format": { "Type": "lif-mdr-model", "Version": 1 },
-  "DataModel": { … },     // this model's identity, its lineage, and descriptive fields
+  "Details": { … },       // this model's identity, its lineage, and descriptive fields
   "ValueSets": [ … ],     // the model's value sets, each with its values
   "Entities": [ … ],      // the model's entities
   "Attributes": [ … ],    // the model's attributes
@@ -156,7 +156,7 @@ installed.
 
 All the field tables below share one format. **Req.** means the field must be present.
 
-### 5.2 `DataModel`
+### 5.2 `Details`
 
 | Field | Req. | Meaning |
 |---|---|---|
@@ -272,12 +272,12 @@ The two kinds of association follow [ADR `data_model/0003`](../design/adr/data_m
 ```json
 {
   "Format": { "Type": "lif-mdr-mapping-group", "Version": 1 },
-  "Group": { … },      // source model, target model, version, and descriptive fields
+  "Details": { … },    // source model, target model, version, and descriptive fields
   "Mappings": [ … ]    // the transformation rules, one per target field
 }
 ```
 
-| `Group` field | Req. | Meaning |
+| `Details` field | Req. | Meaning |
 |---|---|---|
 | `Source`, `Target` | ✓ | Model identities ([§2](#2-terms)), written inline |
 | `Version` | ✓ | Dotted integers such as `1`, `1.0` or `2.10`, as the API already requires (`transformation_group_dto.py`). Stored in the `GroupVersion` column. Together with `Source` and `Target`, the group's key (database unique index `ux_transformationsgroup_model_id_version_active`) |
@@ -286,7 +286,7 @@ The two kinds of association follow [ADR `data_model/0003`](../design/adr/data_m
 
 **Activation is local to each install.** A group's `ActivationDate` and `DeprecationDate` decide
 whether the Translator uses it (`transformation_service.py`), and #1350 makes an imported group
-arrive inactive. The file therefore never carries them: either one in `Group` is refused with
+arrive inactive. The file therefore never carries them: either one in `Details` is refused with
 `FIELD_UNKNOWN`. Every other `ActivationDate` and `DeprecationDate` in the format (on mappings,
 model elements and crosswalk entries) is carried as stored, because nothing reads them as a
 condition: they are descriptive, and can be content a standard publishes, such as a field's
@@ -360,10 +360,12 @@ Implementation belongs to NEW-K (in the [portability plan](../operations/proposa
 ```json
 {
   "Format": { "Type": "lif-mdr-crosswalk", "Version": 1 },
-  "Source": { "Model": { "Name": "Ed-Fi v5", "Version": "1.0", "ContributorOrganization": "LIF" },
-              "ValueSet": "SexDescriptor" },
-  "Target": { "Model": { "Name": "LIF", "Version": "2.0", "ContributorOrganization": "LIF" },
-              "ValueSet": "Sex" },
+  "Details": {
+    "Source": { "Model": { "Name": "Ed-Fi v5", "Version": "1.0", "ContributorOrganization": "LIF" },
+                "ValueSet": "SexDescriptor" },
+    "Target": { "Model": { "Name": "LIF", "Version": "2.0", "ContributorOrganization": "LIF" },
+                "ValueSet": "Sex" }
+  },
   "Entries": [
     { "Source": "F", "Target": "Female" },
     { "Source": "M", "Target": "Male" }
@@ -373,7 +375,7 @@ Implementation belongs to NEW-K (in the [portability plan](../operations/proposa
 
 | Field | Req. | Meaning |
 |---|---|---|
-| `Source`, `Target` | ✓ | Value-set references, each naming its model by identity, written inline. Either model not installed is refused with `MODEL_MISSING`. Together they form the crosswalk's key; a live crosswalk with the same key is refused with `CROSSWALK_EXISTS` |
+| `Details.Source`, `Details.Target` | ✓ | Value-set references, each naming its model by identity, written inline. Either model not installed is refused with `MODEL_MISSING`. Together they form the crosswalk's key; a live crosswalk with the same key is refused with `CROSSWALK_EXISTS` |
 | `Entries[].Source`, `Entries[].Target` | ✓ | `ValueName`s in the source and target value sets |
 | `Entries[]`: `Description`, `UseConsiderations`, `Notes`, `Contributor`, `ContributorOrganization` | | Descriptive text |
 | `Entries[]`: `ActivationDate`, `DeprecationDate` | | Timestamps |
@@ -381,6 +383,10 @@ Implementation belongs to NEW-K (in the [portability plan](../operations/proposa
 **Each source value maps to exactly one target value.** A second entry for the same source is
 refused with `CROSSWALK_SOURCE_DUPLICATE`. Several sources may map to the same target. A source value
 with no entry is unmapped.
+
+`Details` holds only the key. Nothing else about a crosswalk as a whole is stored: each value
+mapping is its own row, with its own descriptive fields, carried on its entry. `Details` is where
+crosswalk-level fields such as a name would go in a later format version.
 
 The seed holds 2,347 live value mappings, but 1,631 of them point at soft-deleted target values
 (model 1) and so count as absent (§2). The remaining 716 cover 7 value-set pairs, every source value
@@ -562,7 +568,7 @@ with no service. Both constraint tables trace to roadmap items that were never b
     "Type": "lif-mdr-model",
     "Version": 1
   },
-  "DataModel": {
+  "Details": {
     "Name": "District LIF",
     "Version": "1.0",
     "ContributorOrganization": "District",
@@ -660,7 +666,7 @@ with no service. Both constraint tables trace to roadmap items that were never b
     "Type": "lif-mdr-mapping-group",
     "Version": 1
   },
-  "Group": {
+  "Details": {
     "Source": {
       "Name": "Ed-Fi v5",
       "Version": "1.0",
@@ -699,8 +705,8 @@ with no service. Both constraint tables trace to roadmap items that were never b
 | `{ "Id": 133, "UniqueName": "Assessment", … }` in `Entities` | `ROW_ID_PRESENT` (`Entities[Assessment].Id`) |
 | `"Reference": true` on an association whose child is an attribute | `REFERENCE_INVALID` |
 | `"Placement": "Reference"` on an association | `DEPRECATED_FIELD` (`Placement`) |
-| `"Type": "OrgLIF"` in `DataModel` | `DEPRECATED_FIELD` (`Type`) |
-| `"ActivationDate": "2026-10-06T00:00:00Z"` in `Group` | `FIELD_UNKNOWN` (`ActivationDate`) |
+| `"Type": "OrgLIF"` in a model file's `Details` | `DEPRECATED_FIELD` (`Type`) |
+| `"ActivationDate": "2026-10-06T00:00:00Z"` in a mapping-group file's `Details` | `FIELD_UNKNOWN` (`ActivationDate`) |
 | `"CreationDate": "2026-10-06T00:00:00Z"` on any object | `FIELD_UNKNOWN` (`CreationDate`) |
 | `"Includes": [ … ]` at the top level | `FIELD_UNKNOWN` (`Includes`) |
 | `{ "Model": "State LIF", "Entity": "Student" }` as an association end | `FIELD_UNKNOWN` (`Model`) |
