@@ -23,7 +23,7 @@ Refactor LIF Core code safely. The core discipline: **one atomic change → veri
    ```bash
    uv run pytest test/ && uv run poly check
    ```
-   If a frontend is in scope: `cd frontends/lif_advisor_app && npm test` (or `cd frontends/mdr-frontend && npm run build` — mdr has no test runner).
+   If a frontend is in scope: `cd frontends/lif_advisor_app && npm test` (or `cd frontends/mdr-frontend && npm test && npm run build` — the build runs `tsc -b`).
 
 ## Refactoring Loop
 

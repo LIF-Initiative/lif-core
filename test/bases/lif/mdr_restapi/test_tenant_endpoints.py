@@ -28,6 +28,7 @@ from lif.mdr_services.tenant_service import (  # noqa: E402
     InvalidGroupNameError,
     TenantAlreadyExistsError,
 )
+from test.utils.lif.mdr.cognito import enable_cognito, make_cognito_id_token  # noqa: E402
 
 pytestmark = pytest.mark.asyncio
 
@@ -380,6 +381,26 @@ class TestAcceptInvite:
         resp = await client.post("/tenants/invite/accept", json={"token": self._make_token()})
         assert resp.status_code == 400
         mock_cognito.assert_not_called()
+
+    async def test_real_cognito_tokens_carry_inviter_and_acceptor_subs(self, client, monkeypatch, mock_cognito):
+        """No stub: the real middleware sets cognito_sub from each caller's token (#1380)."""
+        enable_cognito(monkeypatch)
+        inviter = make_cognito_id_token(sub="inviter-sub-1", email="inviter@example.com", groups=["acme-univ"])
+        acceptor = make_cognito_id_token(sub="acceptor-sub-1", email="acceptor@example.com", groups=["lif-team"])
+
+        created = await client.post(
+            "/tenants/invite", json={"group": "acme-univ"}, headers={"Authorization": f"Bearer {inviter}"}
+        )
+        assert created.status_code == 200
+        resp = await client.post(
+            "/tenants/invite/accept",
+            json={"token": created.json()["token"]},
+            headers={"Authorization": f"Bearer {acceptor}"},
+        )
+
+        assert resp.status_code == 200
+        assert resp.json()["inviter_sub"] == "inviter-sub-1"
+        assert mock_cognito.call_args.kwargs["username"] == "acceptor-sub-1"
 
 
 # --- Workspace reset (issue #884 Phase 3 PR 3) ---
