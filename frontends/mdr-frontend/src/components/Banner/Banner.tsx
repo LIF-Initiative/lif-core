@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button, Flex, Text } from "@radix-ui/themes";
 import { CopyIcon, Cross1Icon } from "@radix-ui/react-icons";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "@/context/AuthContext";
 import "./Banner.css";
 
 interface BannerProps {

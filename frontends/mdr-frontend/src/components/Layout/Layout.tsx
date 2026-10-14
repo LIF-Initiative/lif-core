@@ -4,7 +4,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import Banner from "../Banner/Banner";
-import { RouterWrapper } from "../RouterWrapper";
+import { RouterWrapper } from "../RouterWrapper/RouterWrapper";
 import { Flex } from "@radix-ui/themes";
 
 const Layout: React.FC<any> = ({ children }) => {

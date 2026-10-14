@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Box, Card, Flex, Separator, Text } from "@radix-ui/themes";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { searchAll } from "../../services/searchService";
-import { getAttributeEntityAssociationsByAttr } from "../../services/attributesService";
-import { trackEvent } from "../../utils/analytics";
+import { searchAll } from "@/services/searchService";
+import { getAttributeEntityAssociationsByAttr } from "@/services/attributesService";
+import { trackEvent } from "@/utils/analytics";
 
 const ExploreSearch: React.FC = () => {
     const [params] = useSearchParams();

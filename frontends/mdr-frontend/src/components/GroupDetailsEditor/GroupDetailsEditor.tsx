@@ -1,9 +1,9 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState } from "react";
 import {
     CreateTransformationGroup,
     TransformationGroupDetails,
-} from '../../services/transformationsService';
-import './GroupDetailsEditor.css';
+} from "@/services/transformationsService";
+import "./GroupDetailsEditor.css";
 
 export interface GroupDetailsEditorProps {
     group: TransformationGroupDetails;
