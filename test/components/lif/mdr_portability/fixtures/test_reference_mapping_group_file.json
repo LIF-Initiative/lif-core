@@ -1,0 +1,51 @@
+{
+  "Format": {
+    "Type": "lif-mdr-mapping-group",
+    "Version": 1
+  },
+  "Details": {
+    "Source": {
+      "Name": "Ed-Fi v5",
+      "Version": "1.0",
+      "ContributorOrganization": "LIF"
+    },
+    "Target": {
+      "Name": "StateU LIF",
+      "Version": "1.0",
+      "ContributorOrganization": "StateU"
+    },
+    "Version": "1.0",
+    "Name": "Ed-Fi v5_StateU LIF"
+  },
+  "Mappings": [
+    {
+      "Target": {
+        "Path": "Assessment,identifier"
+      },
+      "Sources": [
+        {
+          "Path": "Assessment,AssessmentIdentifier"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"Assessment\": Assessment. { \"identifier\": AssessmentIdentifier } }",
+      "Name": "Assessment.identifier"
+    },
+    {
+      "Target": {
+        "Path": "Person,Contact,Address,city"
+      },
+      "Sources": [
+        {
+          "Path": "Student,StudentEducationOrganizationAssociation,Address,addressTypeDescriptor"
+        },
+        {
+          "Path": "Student,StudentEducationOrganizationAssociation,Address,city"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"Person\": { \"Contact\": { \"Address\": { \"city\": Student.StudentEducationOrganizationAssociation.Address[addressTypeDescriptor = \"Home\"].city } } } }",
+      "Name": "Person.Contact.Address.city"
+    }
+  ]
+}

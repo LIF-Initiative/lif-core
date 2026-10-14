@@ -1,0 +1,106 @@
+{
+  "Format": {
+    "Type": "lif-mdr-model",
+    "Version": 1
+  },
+  "Details": {
+    "Name": "District LIF",
+    "Version": "1.0",
+    "ContributorOrganization": "District",
+    "CopiedFrom": {
+      "Name": "State LIF",
+      "Version": "1.0",
+      "ContributorOrganization": "State"
+    }
+  },
+  "ValueSets": [
+    {
+      "Name": "LunchStatus",
+      "Values": [
+        {
+          "ValueName": "Free",
+          "Value": "F"
+        }
+      ]
+    },
+    {
+      "Name": "TransportationMode",
+      "Values": [
+        {
+          "ValueName": "Bus",
+          "Value": "B"
+        },
+        {
+          "ValueName": "Walk",
+          "Value": "W"
+        }
+      ]
+    }
+  ],
+  "Entities": [
+    {
+      "UniqueName": "BusRoute",
+      "Name": "BusRoute",
+      "LevelOfAccess": "Internal",
+      "Queryable": true,
+      "Modifiable": false
+    },
+    {
+      "UniqueName": "Student",
+      "Name": "Student",
+      "LevelOfAccess": "Public",
+      "Queryable": true,
+      "Modifiable": false
+    }
+  ],
+  "Attributes": [
+    {
+      "UniqueName": "Student.lunchStatus",
+      "Name": "lunchStatus",
+      "DataType": "string",
+      "ValueSet": {
+        "ValueSet": "LunchStatus"
+      },
+      "LevelOfAccess": "Restricted",
+      "Queryable": true,
+      "Modifiable": true
+    },
+    {
+      "UniqueName": "Student.ssn",
+      "Name": "ssn",
+      "DataType": "string",
+      "LevelOfAccess": "Private",
+      "Queryable": false,
+      "Modifiable": false
+    }
+  ],
+  "Associations": [
+    {
+      "Parent": {
+        "Entity": "Student"
+      },
+      "Child": {
+        "Entity": "BusRoute"
+      },
+      "Name": "BusRoute"
+    },
+    {
+      "Parent": {
+        "Entity": "Student"
+      },
+      "Child": {
+        "Attribute": "Student.lunchStatus"
+      },
+      "Name": "lunchStatus"
+    },
+    {
+      "Parent": {
+        "Entity": "Student"
+      },
+      "Child": {
+        "Attribute": "Student.ssn"
+      },
+      "Name": "ssn"
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "Format": {
+    "Type": "lif-mdr-crosswalk",
+    "Version": 1
+  },
+  "Details": {
+    "Source": {
+      "Model": {
+        "Name": "Ed-Fi v5",
+        "Version": "1.0",
+        "ContributorOrganization": "LIF"
+      },
+      "ValueSet": "SexDescriptor"
+    },
+    "Target": {
+      "Model": {
+        "Name": "LIF",
+        "Version": "2.0",
+        "ContributorOrganization": "LIF"
+      },
+      "ValueSet": "Sex"
+    }
+  },
+  "Entries": [
+    {
+      "Source": "F",
+      "Target": "Female"
+    },
+    {
+      "Source": "M",
+      "Target": "Male"
+    }
+  ]
+}
