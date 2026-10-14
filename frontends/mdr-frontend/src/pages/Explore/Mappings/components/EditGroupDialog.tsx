@@ -1,8 +1,8 @@
-import React from 'react';
-import { Dialog } from '@radix-ui/themes';
-import GroupDetailsEditor from '../../../../components/GroupDetailsEditor/GroupDetailsEditor';
-import type { CreateTransformationGroup } from '../../../../services/transformationsService';
-import type { TransformationGroupDetails } from '../../../../services/transformationsService';
+import React from "react";
+import { Dialog } from "@radix-ui/themes";
+import GroupDetailsEditor from "@/components/GroupDetailsEditor/GroupDetailsEditor";
+import type { CreateTransformationGroup } from "@/services/transformationsService";
+import type { TransformationGroupDetails } from "@/services/transformationsService";
 
 export interface EditGroupDialogProps {
   open: boolean;

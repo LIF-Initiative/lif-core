@@ -28,13 +28,14 @@ Each subdirectory within `frontends/` can define its own stack and tooling requi
 
 <pre lang="markdown"> <code> 
 frontends/  
-├── lif_advisor_app/ # Web client for the LIF Advisor experience  
-├── mdr-frontend/ # Web client for the LIF MDR experience  
-├── src/ # React source code  
-├── public/ # Static assets  
-├── Dockerfile # Optional containerization support  
-├── vite.config.ts # Vite configuration  
-└── package.json # JS/TS dependencies
+├── lif_advisor_app/      # Web client for the LIF Advisor experience
+└── mdr-frontend/         # Web client for the LIF MDR experience
+    ├── src/              # React source code
+    ├── public/           # Static assets
+    ├── Dockerfile        # Optional containerization support
+    ├── vite.config.ts    # Vite configuration
+    ├── package.json      # JS/TS dependencies
+    └── README.md         # App-specific structure, env vars and setup
 </code> </pre>
 
 
