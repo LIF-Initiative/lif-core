@@ -89,6 +89,8 @@ It will prepare the LIF ecosystem for additional auth flows to be introduced (Ad
 
 ## References
 
+*Refined by:* [ADR 0007 — One auth brick, with identity providers as strategies and one composable middleware](0007-single-auth-brick-with-provider-adapters.md)
+
 *Advisor API auth:*
 
 - https://github.com/LIF-Initiative/lif-core/blob/main/bases/lif/advisor_restapi/core.py
