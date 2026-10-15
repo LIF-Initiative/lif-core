@@ -133,6 +133,9 @@ Keys are unique per kind: an entity and an attribute in the same model may share
 because every reference states its kind. The seed has one such pair (`Taxonomy.Classifier` in
 model 5).
 
+Keys, and the `Name`s that entities, attributes and associations appear under, must not be empty
+or only whitespace; such a value is refused with `FIELD_INVALID`.
+
 ---
 
 ## 5. Model file
@@ -184,7 +187,7 @@ Schema diff uses it as the default model to compare against ([ADR `data_model/00
 
 | Field | Req. | Meaning |
 |---|---|---|
-| `ValueName` | ✓ | Key. A value without one is refused with `VALUE_NAME_MISSING` |
+| `ValueName` | ✓ | Key. A value without one is refused with `FIELD_INVALID` |
 | `Value` | ✓ | The code itself. It may differ from `ValueName`, as it does for 1,269 seed values |
 | `Description`, `UseConsiderations`, `Source`, `Notes`, `Contributor`, `ContributorOrganization` | | Descriptive text |
 | `ActivationDate`, `DeprecationDate` | | Timestamps |
@@ -473,6 +476,7 @@ no rows.
 | `FORMAT_UNKNOWN` | No `Format`, or an unrecognized `Format.Type` |
 | `FORMAT_VERSION_UNSUPPORTED` | A `Format.Version` this converter does not read |
 | `FIELD_UNKNOWN` | A key the version does not define |
+| `FIELD_INVALID` | A field that does not match its definition in §5–§7: a required field missing or NULL, a key or name that is empty or only whitespace (§4.3), or a value of the wrong type or outside its allowed set. Used when no more specific code applies |
 | `DEPRECATED_FIELD` | A key listed in [§11](#11-deprecated); names the key |
 | `ROW_ID_PRESENT` | A key named `Id` or ending in `Id` (including `OriginalValueId`), or a path segment with a numeric prefix |
 | `MODEL_IDENTITY_INCOMPLETE` | An identity field missing, empty, only whitespace or NULL (seed model 26 has a NULL `ContributorOrganization`; migration sets it to `LIF`) |
@@ -484,7 +488,6 @@ no rows.
 | `DUPLICATE_KEY` | Two entries in one list share a key |
 | `ASSOCIATION_NAME_TAKEN` | A parent already has a child under that `Name` |
 | `UNASSOCIATED_ATTRIBUTE` | An attribute is in no association |
-| `VALUE_NAME_MISSING` | A value without a `ValueName` |
 | `EXPRESSION_LANGUAGE_NOT_PORTABLE` | A rule that is not JSONata |
 | `MAPPING_TARGET_MISSING`, `MAPPING_TARGET_MULTIPLE`, `MAPPING_TARGET_SHARED` | §6.2 |
 | `PATH_INVALID` | §6.3 |
