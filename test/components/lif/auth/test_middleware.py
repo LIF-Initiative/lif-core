@@ -62,6 +62,19 @@ async def test_auth_error_rejects_with_its_detail_and_stops():
     assert resp.headers["www-authenticate"] == "Bearer"
 
 
+async def test_no_strategies_fails_closed_except_public_paths():
+    """An empty strategy list is supported: deny-all, whatever credentials are sent (#1384 relies on this)."""
+    app = _app([])
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
+        for method in ("GET", "OPTIONS"):
+            resp = await client.request(
+                method, "/protected", headers={"Authorization": "Bearer anything", "X-API-Key": "anything"}
+            )
+            assert resp.status_code == 401
+            assert resp.json() == {"detail": "Missing or invalid credentials"}
+    assert (await _call(app, "/health")).status_code == 200
+
+
 async def test_default_public_paths_and_explicit_empty_allowlist():
     assert (await _call(_app([_never]), "/health")).status_code == 200
     assert (await _call(_app([_never], public_paths=set(), public_prefixes=set()), "/health")).status_code == 401
