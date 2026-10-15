@@ -49,7 +49,7 @@ evidence, not part of the contract.
 
 | Term | Meaning |
 |---|---|
-| **Model identity** | `(Name, Version, ContributorOrganization)`. All three are required and non-empty. `Version` is stored in the `DataModelVersion` column. The database enforces their uniqueness with the unique index `datamodels_active_ux` on the `DataModels` table. |
+| **Model identity** | `(Name, Version, ContributorOrganization)`. All three are required and non-blank: not empty and not only whitespace. `Version` is stored in the `DataModelVersion` column. The database enforces their uniqueness with the unique index `datamodels_active_ux` on the `DataModels` table. |
 | **Lineage** | The identity of the model a copy was made from (`CopiedFrom`, §5.2). |
 | **Live row** | A row whose `Deleted` is not true. Soft-deleted rows are never exported, and references to them count as absent. |
 
@@ -475,7 +475,7 @@ no rows.
 | `FIELD_UNKNOWN` | A key the version does not define |
 | `DEPRECATED_FIELD` | A key listed in [§11](#11-deprecated); names the key |
 | `ROW_ID_PRESENT` | A key named `Id` or ending in `Id` (including `OriginalValueId`), or a path segment with a numeric prefix |
-| `MODEL_IDENTITY_INCOMPLETE` | An identity field missing, empty or NULL (seed model 26 has a NULL `ContributorOrganization`; migration sets it to `LIF`) |
+| `MODEL_IDENTITY_INCOMPLETE` | An identity field missing, empty, only whitespace or NULL (seed model 26 has a NULL `ContributorOrganization`; migration sets it to `LIF`) |
 | `MODEL_EXISTS`, `GROUP_EXISTS`, `CROSSWALK_EXISTS` | Create-only: the key is already live |
 | `MODEL_MISSING` | A model named by a mapping group or crosswalk is not installed |
 | `ASSOCIATION_CYCLE` | A cycle of containing associations (§5.4) |
