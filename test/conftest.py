@@ -23,6 +23,8 @@ _TEST_ONLY_ENV = {
     "SECRET_KEY": "test-only-not-a-real-secret",
     # Demo login password in the advisor and MDR bases
     "LIF_DEMO_USER_PASSWORD": "test-only-not-a-real-password",
+    # Shared x-key credential for the Example Data Source REST API
+    "API_TOKEN": "test-only-not-a-real-api-token",
 }
 
 for _name, _value in _TEST_ONLY_ENV.items():
