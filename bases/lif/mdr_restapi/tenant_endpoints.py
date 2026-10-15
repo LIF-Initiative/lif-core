@@ -27,6 +27,7 @@ from lif.mdr_auth.cognito_admin import (
     UserNotFoundError,
     add_user_to_group,
 )
+from lif.mdr_auth.core import SECRET_KEY
 from lif.mdr_auth.invite_token import decode_invite_token, encode_invite_token
 from lif.mdr_auth.workspace_cookie import COOKIE_NAME, DEFAULT_MAX_AGE_SECONDS, encode_workspace_cookie
 from lif.mdr_services.tenant_service import (
@@ -275,7 +276,7 @@ async def select_workspace(
             status_code=status.HTTP_404_NOT_FOUND, detail=f"Group {body.group!r} is not one of your workspaces"
         )
 
-    cookie_value = encode_workspace_cookie(workspace.group, secret=settings.mdr__auth__jwt_secret_key)
+    cookie_value = encode_workspace_cookie(workspace.group, secret=SECRET_KEY)
     # SameSite=Lax (not Strict): the future invite-email flow needs the cookie
     # to survive a top-level cross-site navigation when a recipient clicks an
     # emailed invite URL. Strict would drop the cookie on that first GET and
@@ -339,10 +340,7 @@ async def create_invite(
     # would be stripped under `python -O`) and drops a redundant HMAC round-trip.
     expires_at = int(time.time()) + settings.mdr__invite__token_max_age_seconds
     token = encode_invite_token(
-        body.group,
-        inviter_sub,
-        secret=settings.mdr__auth__jwt_secret_key,
-        max_age_seconds=settings.mdr__invite__token_max_age_seconds,
+        body.group, inviter_sub, secret=SECRET_KEY, max_age_seconds=settings.mdr__invite__token_max_age_seconds
     )
     logger.info("User %r created invite for group %r (expires %d)", inviter_sub, body.group, expires_at)
     return CreateInviteResponse(token=token, group=body.group, expires_at=expires_at)
@@ -380,7 +378,7 @@ async def accept_invite(
     # 410 instead of a generic "invalid" error, (b) it's cheap and the
     # extra decode-with-real-now would log a duplicate warning at the
     # decoder layer.
-    decoded = decode_invite_token(body.token, secret=settings.mdr__auth__jwt_secret_key, now=0)
+    decoded = decode_invite_token(body.token, secret=SECRET_KEY, now=0)
     if decoded is None:
         # Truly invalid: malformed, bad signature, or non-conforming payload.
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invite token is invalid")
