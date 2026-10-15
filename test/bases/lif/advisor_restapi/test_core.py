@@ -456,10 +456,11 @@ async def test_get_me_returns_current_user():
 
 @pytest.mark.asyncio
 async def test_get_me_requires_authentication():
-    """/me must reject unauthenticated requests (HTTPBearer -> 403)."""
+    """/me must reject unauthenticated requests (AuthMiddleware -> 401; was HTTPBearer's 403)."""
     async with get_client() as client:
         response = await client.get("/me")
-        assert response.status_code == 403, response.text
+        assert response.status_code == 401, response.text
+        assert response.headers["www-authenticate"] == "Bearer"
 
 
 @pytest.mark.asyncio
