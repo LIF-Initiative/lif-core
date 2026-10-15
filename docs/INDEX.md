@@ -92,12 +92,13 @@
 - [`add-data-source.md`](operations/guides/add-data-source.md) — Adding a new data source to a LIF deployment: source schema, JSONata mappings, pipeline wiring.
 - [`adding-a-new-microservice.md`](operations/guides/adding-a-new-microservice.md) — Runbook for standing up a new HTTP microservice: Polylith brick layout, pyproject hygiene, Dockerfile2, AuthMiddleware wiring, docker-compose entry.
 - [`applying-mdr-migrations.md`](operations/guides/applying-mdr-migrations.md) — how to apply an MDR Flyway migration to dev/demo, why merging alone does not apply it, and how to verify it landed.
+- [`auth-configuration.md`](operations/guides/auth-configuration.md) — Per-service auth variables: failure behaviour, compose and SSM sources, setup scripts, client↔server key pairs, read-only SSM check.
 - [`creating-a-data-source-adapter.md`](operations/guides/creating-a-data-source-adapter.md) — Reference for the data source adapter contract: what adapters are, what they receive, what they return.
 - [`demo-environment-update.md`](operations/guides/demo-environment-update.md) — End-to-end runbook for promoting dev images to demo.
 - [`deploying-lif-at-your-institution.md`](operations/guides/deploying-lif-at-your-institution.md) — Adopter-facing hub guide for standing up your own LIF instance: deployment shapes, stack bring-up, data model in MDR, source wiring, auth/tenancy, ops; links the detailed spokes and flags self-host gaps (#1004).
 - [`deployment.md`](operations/guides/deployment.md) — Deployment scripts, env config (dev vs. demo), MDR schema migrations, Docker build dependency resolution, ECS/CloudWatch debugging, querying the MDR API.
 - [`graphql-api-keys.md`](operations/guides/graphql-api-keys.md) — GraphQL org1 API key authentication: SSM key storage, `X-API-Key` flow, `setup-graphql-api-keys.sh` service/workshop modes.
-- [`lde-api-keys.md`](operations/guides/lde-api-keys.md) — Learner Data Export API key authentication: shared `api_key_auth` middleware, `LDE_AUTH__API_KEYS` SSM flow, `setup-api-keys.sh` generation, deploy-ordering gotcha.
+- [`lde-api-keys.md`](operations/guides/lde-api-keys.md) — Learner Data Export API key authentication: shared `lif.auth` middleware + `api_key_strategy`, `LDE_AUTH__API_KEYS` SSM flow, `setup-api-keys.sh` generation, deploy-ordering gotcha.
 - [`load-testing.md`](operations/guides/load-testing.md) — Load testing notes for LIF services.
 - [`mdr-ui-e2e-playwright.md`](operations/guides/mdr-ui-e2e-playwright.md) — Driving the MDR UI end-to-end with Playwright: scratchpad setup, Cognito hosted-UI login automation + the duplicate-responsive-input gotcha, persisting login state, when to prefer the API instead.
 - [`self-serve-registration-walkthrough.md`](operations/guides/self-serve-registration-walkthrough.md) — End-to-end walkthrough of the #884 self-serve flow (register → workspace → invite → switch); tester checklist + admin/operator notes for verifying it on dev or demo.
