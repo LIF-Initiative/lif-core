@@ -1,0 +1,1777 @@
+{
+  "components": {
+    "schemas": {
+      "CFPackage": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 14,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": "The container for all Competency Framework Package data, including the root CFDocument and its associated CFItems, CFAssociations, CFRubrics, and CFDefinitions.",
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 411,
+        "Name": "CFPackage",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": "CASE",
+        "Tags": null,
+        "UniqueName": "CFPackage",
+        "UseConsiderations": null,
+        "properties": {
+          "CFAssociationsCFAssociation": {
+            "ActivationDate": null,
+            "Array": "Yes",
+            "Common": null,
+            "Contributor": null,
+            "ContributorOrganization": "LIF",
+            "CreationDate": null,
+            "DataModelId": 14,
+            "Deleted": false,
+            "DeprecationDate": null,
+            "Description": "The container for relationship data between two CFDocuments or CFItems (e.g. parent/child, exact match, precedes).",
+            "EntityAssociationActivationDate": null,
+            "EntityAssociationContributor": null,
+            "EntityAssociationContributorOrganization": "LIF",
+            "EntityAssociationCreationDate": null,
+            "EntityAssociationDeprecationDate": null,
+            "EntityAssociationExtendedByDataModelId": null,
+            "EntityAssociationExtension": false,
+            "EntityAssociationExtensionNotes": null,
+            "EntityAssociationId": 224,
+            "EntityAssociationNotes": null,
+            "EntityAssociationParentEntityId": 411,
+            "EntityAssociationPlacement": "Embedded",
+            "EntityAssociationRelationship": "CFAssociations",
+            "Extension": false,
+            "ExtensionNotes": null,
+            "Id": 68,
+            "Name": "CFAssociation",
+            "Notes": null,
+            "Required": "No",
+            "SourceModel": "CASE",
+            "Tags": null,
+            "UniqueName": "CFAssociation",
+            "UseConsiderations": null,
+            "properties": {
+              "CFAssociationGroupingURI": {
+                "description": "A reference to the CFAssociationGrouping this CFAssociation is a member of, if any.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "CFDocumentURI": {
+                "description": "A reference to the CFDocument this CFAssociation is scoped to, when used outside a CFPackage context.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "associationType": {
+                "ValueSet": {
+                  "ActivationDate": null,
+                  "Contributor": null,
+                  "ContributorOrganization": "LIF",
+                  "CreationDate": null,
+                  "DataModelId": 14,
+                  "DeprecationDate": null,
+                  "Description": "The controlled set of relationship types available for CFAssociation.associationType. This is an extensible enumerated vocabulary (oneOf: the 10 fixed tokens below, or a string matching the pattern \"(ext:)[a-zA-Z0-9\\.\\-_]+\"); consumers that do not recognize an ext: value should treat it as isRelatedTo.",
+                  "Extension": false,
+                  "ExtensionNotes": null,
+                  "Id": 372,
+                  "Name": "CFAssociationTypeEnum",
+                  "Notes": "Extension token pattern: (ext:)[a-zA-Z0-9\\.\\-_]+",
+                  "Tags": null,
+                  "UseConsiderations": null,
+                  "Values": [
+                    {
+                      "ActivationDate": null,
+                      "Contributor": null,
+                      "ContributorOrganization": "LIF",
+                      "CreationDate": null,
+                      "DataModelId": 14,
+                      "Deleted": false,
+                      "DeprecationDate": null,
+                      "Description": null,
+                      "Extension": false,
+                      "ExtensionNotes": null,
+                      "Id": 5380,
+                      "Notes": null,
+                      "OriginalValueId": null,
+                      "Source": "CASE",
+                      "UseConsiderations": null,
+                      "Value": "isChildOf",
+                      "ValueName": "isChildOf",
+                      "ValueSetId": 372
+                    },
+                    {
+                      "ActivationDate": null,
+                      "Contributor": null,
+                      "ContributorOrganization": "LIF",
+                      "CreationDate": null,
+                      "DataModelId": 14,
+                      "Deleted": false,
+                      "DeprecationDate": null,
+                      "Description": null,
+                      "Extension": false,
+                      "ExtensionNotes": null,
+                      "Id": 5381,
+                      "Notes": null,
+                      "OriginalValueId": null,
+                      "Source": "CASE",
+                      "UseConsiderations": null,
+                      "Value": "isPeerOf",
+                      "ValueName": "isPeerOf",
+                      "ValueSetId": 372
+                    },
+                    {
+                      "ActivationDate": null,
+                      "Contributor": null,
+                      "ContributorOrganization": "LIF",
+                      "CreationDate": null,
+                      "DataModelId": 14,
+                      "Deleted": false,
+                      "DeprecationDate": null,
+                      "Description": null,
+                      "Extension": false,
+                      "ExtensionNotes": null,
+                      "Id": 5382,
+                      "Notes": null,
+                      "OriginalValueId": null,
+                      "Source": "CASE",
+                      "UseConsiderations": null,
+                      "Value": "isPartOf",
+                      "ValueName": "isPartOf",
+                      "ValueSetId": 372
+                    },
+                    {
+                      "ActivationDate": null,
+                      "Contributor": null,
+                      "ContributorOrganization": "LIF",
+                      "CreationDate": null,
+                      "DataModelId": 14,
+                      "Deleted": false,
+                      "DeprecationDate": null,
+                      "Description": null,
+                      "Extension": false,
+                      "ExtensionNotes": null,
+                      "Id": 5383,
+                      "Notes": null,
+                      "OriginalValueId": null,
+                      "Source": "CASE",
+                      "UseConsiderations": null,
+                      "Value": "exactMatchOf",
+                      "ValueName": "exactMatchOf",
+                      "ValueSetId": 372
+                    },
+                    {
+                      "ActivationDate": null,
+                      "Contributor": null,
+                      "ContributorOrganization": "LIF",
+                      "CreationDate": null,
+                      "DataModelId": 14,
+                      "Deleted": false,
+                      "DeprecationDate": null,
+                      "Description": null,
+                      "Extension": false,
+                      "ExtensionNotes": null,
+                      "Id": 5384,
+                      "Notes": null,
+                      "OriginalValueId": null,
+                      "Source": "CASE",
+                      "UseConsiderations": null,
+                      "Value": "precedes",
+                      "ValueName": "precedes",
+                      "ValueSetId": 372
+                    },
+                    {
+                      "ActivationDate": null,
+                      "Contributor": null,
+                      "ContributorOrganization": "LIF",
+                      "CreationDate": null,
+                      "DataModelId": 14,
+                      "Deleted": false,
+                      "DeprecationDate": null,
+                      "Description": null,
+                      "Extension": false,
+                      "ExtensionNotes": null,
+                      "Id": 5385,
+                      "Notes": null,
+                      "OriginalValueId": null,
+                      "Source": "CASE",
+                      "UseConsiderations": null,
+                      "Value": "isRelatedTo",
+                      "ValueName": "isRelatedTo",
+                      "ValueSetId": 372
+                    },
+                    {
+                      "ActivationDate": null,
+                      "Contributor": null,
+                      "ContributorOrganization": "LIF",
+                      "CreationDate": null,
+                      "DataModelId": 14,
+                      "Deleted": false,
+                      "DeprecationDate": null,
+                      "Description": null,
+                      "Extension": false,
+                      "ExtensionNotes": null,
+                      "Id": 5386,
+                      "Notes": null,
+                      "OriginalValueId": null,
+                      "Source": "CASE",
+                      "UseConsiderations": null,
+                      "Value": "replacedBy",
+                      "ValueName": "replacedBy",
+                      "ValueSetId": 372
+                    },
+                    {
+                      "ActivationDate": null,
+                      "Contributor": null,
+                      "ContributorOrganization": "LIF",
+                      "CreationDate": null,
+                      "DataModelId": 14,
+                      "Deleted": false,
+                      "DeprecationDate": null,
+                      "Description": null,
+                      "Extension": false,
+                      "ExtensionNotes": null,
+                      "Id": 5387,
+                      "Notes": null,
+                      "OriginalValueId": null,
+                      "Source": "CASE",
+                      "UseConsiderations": null,
+                      "Value": "exemplar",
+                      "ValueName": "exemplar",
+                      "ValueSetId": 372
+                    },
+                    {
+                      "ActivationDate": null,
+                      "Contributor": null,
+                      "ContributorOrganization": "LIF",
+                      "CreationDate": null,
+                      "DataModelId": 14,
+                      "Deleted": false,
+                      "DeprecationDate": null,
+                      "Description": null,
+                      "Extension": false,
+                      "ExtensionNotes": null,
+                      "Id": 5388,
+                      "Notes": null,
+                      "OriginalValueId": null,
+                      "Source": "CASE",
+                      "UseConsiderations": null,
+                      "Value": "hasSkillLevel",
+                      "ValueName": "hasSkillLevel",
+                      "ValueSetId": 372
+                    },
+                    {
+                      "ActivationDate": null,
+                      "Contributor": null,
+                      "ContributorOrganization": "LIF",
+                      "CreationDate": null,
+                      "DataModelId": 14,
+                      "Deleted": false,
+                      "DeprecationDate": null,
+                      "Description": null,
+                      "Extension": false,
+                      "ExtensionNotes": null,
+                      "Id": 5389,
+                      "Notes": null,
+                      "OriginalValueId": null,
+                      "Source": "CASE",
+                      "UseConsiderations": null,
+                      "Value": "isTranslationOf",
+                      "ValueName": "isTranslationOf",
+                      "ValueSetId": 372
+                    }
+                  ]
+                },
+                "description": "The type of association. This uses an enumerated vocabulary.",
+                "enum": [
+                  "isChildOf",
+                  "isPeerOf",
+                  "isPartOf",
+                  "exactMatchOf",
+                  "precedes",
+                  "isRelatedTo",
+                  "replacedBy",
+                  "exemplar",
+                  "hasSkillLevel",
+                  "isTranslationOf"
+                ],
+                "example": "",
+                "format": "",
+                "type": "enum",
+                "use_recommendations": ""
+              },
+              "destinationNodeURI": {
+                "description": "The resolvable URI for the destination node object.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "destinationNodeURI.targetType": {
+                "ValueSet": {
+                  "ActivationDate": null,
+                  "Contributor": null,
+                  "ContributorOrganization": "LIF",
+                  "CreationDate": null,
+                  "DataModelId": 14,
+                  "DeprecationDate": null,
+                  "Description": "Identifies whether a LinkGenURI-style reference (originNodeURI/destinationNodeURI) points at a CASE-based framework or an external, non-CASE resource. This is an extensible enumerated vocabulary (oneOf: the single fixed token \"CASE\", or a string matching the pattern \"(ext:)[a-zA-Z0-9\\.\\-_]+\" for non-CASE targets). New in CASE v1.1. It answers \"is this target CASE or not\", not \"which CASE class is it\".",
+                  "Extension": false,
+                  "ExtensionNotes": null,
+                  "Id": 375,
+                  "Name": "TargetTypeEnum",
+                  "Notes": "Extension token pattern: (ext:)[a-zA-Z0-9\\.\\-_]+",
+                  "Tags": null,
+                  "UseConsiderations": null,
+                  "Values": [
+                    {
+                      "ActivationDate": null,
+                      "Contributor": null,
+                      "ContributorOrganization": "LIF",
+                      "CreationDate": null,
+                      "DataModelId": 14,
+                      "Deleted": false,
+                      "DeprecationDate": null,
+                      "Description": null,
+                      "Extension": false,
+                      "ExtensionNotes": null,
+                      "Id": 5348,
+                      "Notes": null,
+                      "OriginalValueId": null,
+                      "Source": "CASE",
+                      "UseConsiderations": null,
+                      "Value": "CASE",
+                      "ValueName": "CASE",
+                      "ValueSetId": 375
+                    }
+                  ]
+                },
+                "description": "CASE v1.1 added targetType inside the LinkGenURI object that destinationNodeURI serializes as ({title, identifier, uri, targetType}); the real JSON path is destinationNodeURI.targetType, not a top-level CFAssociation property named \"destinationNodeType\". Identifies whether the target is a CASE-based framework (token \"CASE\") or an external, non-CASE resource (ext:-prefixed token) -- not which CASE class the target is.",
+                "enum": [
+                  "CASE"
+                ],
+                "example": "",
+                "format": "",
+                "type": "enum",
+                "use_recommendations": ""
+              },
+              "extensions": {
+                "description": "Freeform placeholder for non-standard/custom fields a CASE v1.1 payload may carry for this class. CASE defines its *Extension classes as open, schema-less objects (additionalProperties: true) with no fixed keys, so no concrete shape is modeled here.",
+                "example": "",
+                "format": "",
+                "type": "entity",
+                "use_recommendations": ""
+              },
+              "identifier": {
+                "description": "A unique identifier (UUID) assigned to the CFAssociation.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "lastChangeDateTime": {
+                "description": "The most recent date and time this CFAssociation was changed.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "notes": {
+                "description": "Additional freeform notes about the CFAssociation.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "originNodeURI": {
+                "description": "The resolvable URI for the origin node object.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "originNodeURI.targetType": {
+                "ValueSet": {
+                  "ActivationDate": null,
+                  "Contributor": null,
+                  "ContributorOrganization": "LIF",
+                  "CreationDate": null,
+                  "DataModelId": 14,
+                  "DeprecationDate": null,
+                  "Description": "Identifies whether a LinkGenURI-style reference (originNodeURI/destinationNodeURI) points at a CASE-based framework or an external, non-CASE resource. This is an extensible enumerated vocabulary (oneOf: the single fixed token \"CASE\", or a string matching the pattern \"(ext:)[a-zA-Z0-9\\.\\-_]+\" for non-CASE targets). New in CASE v1.1. It answers \"is this target CASE or not\", not \"which CASE class is it\".",
+                  "Extension": false,
+                  "ExtensionNotes": null,
+                  "Id": 375,
+                  "Name": "TargetTypeEnum",
+                  "Notes": "Extension token pattern: (ext:)[a-zA-Z0-9\\.\\-_]+",
+                  "Tags": null,
+                  "UseConsiderations": null,
+                  "Values": [
+                    {
+                      "ActivationDate": null,
+                      "Contributor": null,
+                      "ContributorOrganization": "LIF",
+                      "CreationDate": null,
+                      "DataModelId": 14,
+                      "Deleted": false,
+                      "DeprecationDate": null,
+                      "Description": null,
+                      "Extension": false,
+                      "ExtensionNotes": null,
+                      "Id": 5348,
+                      "Notes": null,
+                      "OriginalValueId": null,
+                      "Source": "CASE",
+                      "UseConsiderations": null,
+                      "Value": "CASE",
+                      "ValueName": "CASE",
+                      "ValueSetId": 375
+                    }
+                  ]
+                },
+                "description": "CASE v1.1 added targetType inside the LinkGenURI object that originNodeURI serializes as ({title, identifier, uri, targetType}); the real JSON path is originNodeURI.targetType, not a top-level CFAssociation property named \"originNodeType\". Identifies whether the target is a CASE-based framework (token \"CASE\") or an external, non-CASE resource (ext:-prefixed token) -- not which CASE class the target is.",
+                "enum": [
+                  "CASE"
+                ],
+                "example": "",
+                "format": "",
+                "type": "enum",
+                "use_recommendations": ""
+              },
+              "sequenceNumber": {
+                "description": "The relative order of this CFAssociation among its siblings.",
+                "example": "",
+                "format": "",
+                "type": "number",
+                "use_recommendations": ""
+              },
+              "uri": {
+                "description": "An unambiguous reference to the CFAssociation using a network-resolvable URI.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              }
+            },
+            "required": [
+              "uri",
+              "associationType",
+              "destinationNodeURI",
+              "originNodeURI",
+              "identifier",
+              "lastChangeDateTime"
+            ],
+            "type": "array",
+            "use_recommendations": ""
+          },
+          "CFDefinitionsCFDefinition": {
+            "ActivationDate": null,
+            "Array": "No",
+            "Common": null,
+            "Contributor": null,
+            "ContributorOrganization": "LIF",
+            "CreationDate": null,
+            "DataModelId": 14,
+            "Deleted": false,
+            "DeprecationDate": null,
+            "Description": "The container for the shared controlled vocabularies (concepts, subjects, licenses, item types, association groupings) referenced within a CFPackage.",
+            "EntityAssociationActivationDate": null,
+            "EntityAssociationContributor": null,
+            "EntityAssociationContributorOrganization": "LIF",
+            "EntityAssociationCreationDate": null,
+            "EntityAssociationDeprecationDate": null,
+            "EntityAssociationExtendedByDataModelId": null,
+            "EntityAssociationExtension": false,
+            "EntityAssociationExtensionNotes": null,
+            "EntityAssociationId": 226,
+            "EntityAssociationNotes": null,
+            "EntityAssociationParentEntityId": 411,
+            "EntityAssociationPlacement": "Embedded",
+            "EntityAssociationRelationship": "CFDefinitions",
+            "Extension": false,
+            "ExtensionNotes": null,
+            "Id": 413,
+            "Name": "CFDefinition",
+            "Notes": null,
+            "Required": "No",
+            "SourceModel": "CASE",
+            "Tags": null,
+            "UniqueName": "CFDefinition",
+            "UseConsiderations": null,
+            "properties": {
+              "CFAssociationGroupingsCFAssociationGrouping": {
+                "ActivationDate": null,
+                "Array": "Yes",
+                "Common": null,
+                "Contributor": null,
+                "ContributorOrganization": "LIF",
+                "CreationDate": null,
+                "DataModelId": 14,
+                "Deleted": false,
+                "DeprecationDate": null,
+                "Description": "The container for information about a set of CFAssociations that have been labelled as a named group (e.g. an alternate crosswalk).",
+                "EntityAssociationActivationDate": null,
+                "EntityAssociationContributor": null,
+                "EntityAssociationContributorOrganization": "LIF",
+                "EntityAssociationCreationDate": null,
+                "EntityAssociationDeprecationDate": null,
+                "EntityAssociationExtendedByDataModelId": null,
+                "EntityAssociationExtension": false,
+                "EntityAssociationExtensionNotes": null,
+                "EntityAssociationId": 231,
+                "EntityAssociationNotes": null,
+                "EntityAssociationParentEntityId": 413,
+                "EntityAssociationPlacement": "Embedded",
+                "EntityAssociationRelationship": "CFAssociationGroupings",
+                "Extension": false,
+                "ExtensionNotes": null,
+                "Id": 409,
+                "Name": "CFAssociationGrouping",
+                "Notes": null,
+                "Required": "No",
+                "SourceModel": "CASE",
+                "Tags": null,
+                "UniqueName": "CFAssociationGrouping",
+                "UseConsiderations": null,
+                "properties": {
+                  "description": {
+                    "description": "A human readable description of the CFAssociationGrouping.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "extensions": {
+                    "description": "Freeform placeholder for non-standard/custom fields a CASE v1.1 payload may carry for this class. CASE defines its *Extension classes as open, schema-less objects (additionalProperties: true) with no fixed keys, so no concrete shape is modeled here.",
+                    "example": "",
+                    "format": "",
+                    "type": "entity",
+                    "use_recommendations": ""
+                  },
+                  "identifier": {
+                    "description": "A unique identifier (UUID) assigned to the CFAssociationGrouping.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "lastChangeDateTime": {
+                    "description": "The most recent date and time this CFAssociationGrouping was changed.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "title": {
+                    "description": "The title of the CFAssociationGrouping.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "uri": {
+                    "description": "An unambiguous reference to the CFAssociationGrouping using a network-resolvable URI.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  }
+                },
+                "required": [
+                  "identifier",
+                  "uri",
+                  "title",
+                  "lastChangeDateTime"
+                ],
+                "type": "array",
+                "use_recommendations": ""
+              },
+              "CFConceptsCFConcept": {
+                "ActivationDate": null,
+                "Array": "Yes",
+                "Common": null,
+                "Contributor": null,
+                "ContributorOrganization": "LIF",
+                "CreationDate": null,
+                "DataModelId": 14,
+                "Deleted": false,
+                "DeprecationDate": null,
+                "Description": "The container for a controlled concept vocabulary term, referenced by CFItem.conceptKeywordsURI.",
+                "EntityAssociationActivationDate": null,
+                "EntityAssociationContributor": null,
+                "EntityAssociationContributorOrganization": "LIF",
+                "EntityAssociationCreationDate": null,
+                "EntityAssociationDeprecationDate": null,
+                "EntityAssociationExtendedByDataModelId": null,
+                "EntityAssociationExtension": false,
+                "EntityAssociationExtensionNotes": null,
+                "EntityAssociationId": 227,
+                "EntityAssociationNotes": null,
+                "EntityAssociationParentEntityId": 413,
+                "EntityAssociationPlacement": "Embedded",
+                "EntityAssociationRelationship": "CFConcepts",
+                "Extension": false,
+                "ExtensionNotes": null,
+                "Id": 408,
+                "Name": "CFConcept",
+                "Notes": null,
+                "Required": "No",
+                "SourceModel": "CASE",
+                "Tags": null,
+                "UniqueName": "CFConcept",
+                "UseConsiderations": null,
+                "properties": {
+                  "description": {
+                    "description": "A human readable description of the CFConcept.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "extensions": {
+                    "description": "Freeform placeholder for non-standard/custom fields a CASE v1.1 payload may carry for this class. CASE defines its *Extension classes as open, schema-less objects (additionalProperties: true) with no fixed keys, so no concrete shape is modeled here.",
+                    "example": "",
+                    "format": "",
+                    "type": "entity",
+                    "use_recommendations": ""
+                  },
+                  "hierarchyCode": {
+                    "description": "A code indicating this CFConcept's position within the concept hierarchy.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "identifier": {
+                    "description": "A unique identifier (UUID) assigned to the CFConcept.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "keywords": {
+                    "description": "Keyword(s) associated with this CFConcept.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "lastChangeDateTime": {
+                    "description": "The most recent date and time this CFConcept was changed.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "title": {
+                    "description": "The title of the CFConcept.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "uri": {
+                    "description": "An unambiguous reference to the CFConcept using a network-resolvable URI.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  }
+                },
+                "required": [
+                  "identifier",
+                  "uri",
+                  "title",
+                  "hierarchyCode",
+                  "lastChangeDateTime"
+                ],
+                "type": "array",
+                "use_recommendations": ""
+              },
+              "CFItemTypesCFItemType": {
+                "ActivationDate": null,
+                "Array": "Yes",
+                "Common": null,
+                "Contributor": null,
+                "ContributorOrganization": "LIF",
+                "CreationDate": null,
+                "DataModelId": 14,
+                "Deleted": false,
+                "DeprecationDate": null,
+                "Description": "The container for a controlled item-type vocabulary term (e.g. Standard, Benchmark, Strand, Domain), referenced by CFItem.CFItemTypeURI.",
+                "EntityAssociationActivationDate": null,
+                "EntityAssociationContributor": null,
+                "EntityAssociationContributorOrganization": "LIF",
+                "EntityAssociationCreationDate": null,
+                "EntityAssociationDeprecationDate": null,
+                "EntityAssociationExtendedByDataModelId": null,
+                "EntityAssociationExtension": false,
+                "EntityAssociationExtensionNotes": null,
+                "EntityAssociationId": 230,
+                "EntityAssociationNotes": null,
+                "EntityAssociationParentEntityId": 413,
+                "EntityAssociationPlacement": "Embedded",
+                "EntityAssociationRelationship": "CFItemTypes",
+                "Extension": false,
+                "ExtensionNotes": null,
+                "Id": 412,
+                "Name": "CFItemType",
+                "Notes": null,
+                "Required": "No",
+                "SourceModel": "CASE",
+                "Tags": null,
+                "UniqueName": "CFItemType",
+                "UseConsiderations": null,
+                "properties": {
+                  "description": {
+                    "description": "A human readable description of the CFItemType.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "extensions": {
+                    "description": "Freeform placeholder for non-standard/custom fields a CASE v1.1 payload may carry for this class. CASE defines its *Extension classes as open, schema-less objects (additionalProperties: true) with no fixed keys, so no concrete shape is modeled here.",
+                    "example": "",
+                    "format": "",
+                    "type": "entity",
+                    "use_recommendations": ""
+                  },
+                  "hierarchyCode": {
+                    "description": "A code indicating this CFItemType's position within the item-type hierarchy.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "identifier": {
+                    "description": "A unique identifier (UUID) assigned to the CFItemType.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "lastChangeDateTime": {
+                    "description": "The most recent date and time this CFItemType was changed.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "title": {
+                    "description": "The title of the CFItemType.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "typeCode": {
+                    "description": "A short code identifying this CFItemType.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "uri": {
+                    "description": "An unambiguous reference to the CFItemType using a network-resolvable URI.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  }
+                },
+                "required": [
+                  "identifier",
+                  "uri",
+                  "title",
+                  "description",
+                  "hierarchyCode",
+                  "lastChangeDateTime"
+                ],
+                "type": "array",
+                "use_recommendations": ""
+              },
+              "CFLicensesCFLicense": {
+                "ActivationDate": null,
+                "Array": "Yes",
+                "Common": null,
+                "Contributor": null,
+                "ContributorOrganization": "LIF",
+                "CreationDate": null,
+                "DataModelId": 14,
+                "Deleted": false,
+                "DeprecationDate": null,
+                "Description": "The container for information about a license used within the competency framework.",
+                "EntityAssociationActivationDate": null,
+                "EntityAssociationContributor": null,
+                "EntityAssociationContributorOrganization": "LIF",
+                "EntityAssociationCreationDate": null,
+                "EntityAssociationDeprecationDate": null,
+                "EntityAssociationExtendedByDataModelId": null,
+                "EntityAssociationExtension": false,
+                "EntityAssociationExtensionNotes": null,
+                "EntityAssociationId": 229,
+                "EntityAssociationNotes": null,
+                "EntityAssociationParentEntityId": 413,
+                "EntityAssociationPlacement": "Embedded",
+                "EntityAssociationRelationship": "CFLicenses",
+                "Extension": false,
+                "ExtensionNotes": null,
+                "Id": 65,
+                "Name": "CFLicense",
+                "Notes": null,
+                "Required": "No",
+                "SourceModel": "CASE",
+                "Tags": null,
+                "UniqueName": "CFLicense",
+                "UseConsiderations": null,
+                "properties": {
+                  "description": {
+                    "description": "A human readable description of the CFLicense.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "extensions": {
+                    "description": "Freeform placeholder for non-standard/custom fields a CASE v1.1 payload may carry for this class. CASE defines its *Extension classes as open, schema-less objects (additionalProperties: true) with no fixed keys, so no concrete shape is modeled here.",
+                    "example": "",
+                    "format": "",
+                    "type": "entity",
+                    "use_recommendations": ""
+                  },
+                  "identifier": {
+                    "description": "A unique identifier (UUID) assigned to the CFLicense.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "lastChangeDateTime": {
+                    "description": "The most recent date and time this CFLicense was changed.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "licenseText": {
+                    "description": "Legal license text used by the organization to convey license permissions. This may include the actual license text, or a link to a web location containing the license as a document or as text.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "title": {
+                    "description": "The title of the CFLicense.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "uri": {
+                    "description": "An unambiguous reference to the CFLicense using a network-resolvable URI.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  }
+                },
+                "required": [
+                  "licenseText",
+                  "identifier",
+                  "uri",
+                  "title",
+                  "lastChangeDateTime"
+                ],
+                "type": "array",
+                "use_recommendations": ""
+              },
+              "CFSubjectsCFSubject": {
+                "ActivationDate": null,
+                "Array": "Yes",
+                "Common": null,
+                "Contributor": null,
+                "ContributorOrganization": "LIF",
+                "CreationDate": null,
+                "DataModelId": 14,
+                "Deleted": false,
+                "DeprecationDate": null,
+                "Description": "The container for a controlled subject vocabulary term, referenced by subjectURI on CFDocument and CFItem.",
+                "EntityAssociationActivationDate": null,
+                "EntityAssociationContributor": null,
+                "EntityAssociationContributorOrganization": "LIF",
+                "EntityAssociationCreationDate": null,
+                "EntityAssociationDeprecationDate": null,
+                "EntityAssociationExtendedByDataModelId": null,
+                "EntityAssociationExtension": false,
+                "EntityAssociationExtensionNotes": null,
+                "EntityAssociationId": 228,
+                "EntityAssociationNotes": null,
+                "EntityAssociationParentEntityId": 413,
+                "EntityAssociationPlacement": "Embedded",
+                "EntityAssociationRelationship": "CFSubjects",
+                "Extension": false,
+                "ExtensionNotes": null,
+                "Id": 415,
+                "Name": "CFSubject",
+                "Notes": null,
+                "Required": "No",
+                "SourceModel": "CASE",
+                "Tags": null,
+                "UniqueName": "CFSubject",
+                "UseConsiderations": null,
+                "properties": {
+                  "description": {
+                    "description": "A human readable description of the CFSubject.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "extensions": {
+                    "description": "Freeform placeholder for non-standard/custom fields a CASE v1.1 payload may carry for this class. CASE defines its *Extension classes as open, schema-less objects (additionalProperties: true) with no fixed keys, so no concrete shape is modeled here.",
+                    "example": "",
+                    "format": "",
+                    "type": "entity",
+                    "use_recommendations": ""
+                  },
+                  "hierarchyCode": {
+                    "description": "A code indicating this CFSubject's position within the subject hierarchy.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "identifier": {
+                    "description": "A unique identifier (UUID) assigned to the CFSubject.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "lastChangeDateTime": {
+                    "description": "The most recent date and time this CFSubject was changed.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "title": {
+                    "description": "The title of the CFSubject.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "uri": {
+                    "description": "An unambiguous reference to the CFSubject using a network-resolvable URI.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  }
+                },
+                "required": [
+                  "identifier",
+                  "uri",
+                  "title",
+                  "hierarchyCode",
+                  "lastChangeDateTime"
+                ],
+                "type": "array",
+                "use_recommendations": ""
+              },
+              "extensions": {
+                "description": "Freeform placeholder for non-standard/custom fields a CASE v1.1 payload may carry for this class. CASE defines its *Extension classes as open, schema-less objects (additionalProperties: true) with no fixed keys, so no concrete shape is modeled here.",
+                "example": "",
+                "format": "",
+                "type": "entity",
+                "use_recommendations": ""
+              }
+            },
+            "required": [],
+            "type": "object",
+            "use_recommendations": ""
+          },
+          "CFDocumentCFDocument": {
+            "ActivationDate": null,
+            "Array": "No",
+            "Common": null,
+            "Contributor": null,
+            "ContributorOrganization": "LIF",
+            "CreationDate": null,
+            "DataModelId": 14,
+            "Deleted": false,
+            "DeprecationDate": null,
+            "Description": "The container for competency framework document data, serving as the root of a competency or standards framework.",
+            "EntityAssociationActivationDate": null,
+            "EntityAssociationContributor": null,
+            "EntityAssociationContributorOrganization": "LIF",
+            "EntityAssociationCreationDate": null,
+            "EntityAssociationDeprecationDate": null,
+            "EntityAssociationExtendedByDataModelId": null,
+            "EntityAssociationExtension": false,
+            "EntityAssociationExtensionNotes": null,
+            "EntityAssociationId": 222,
+            "EntityAssociationNotes": null,
+            "EntityAssociationParentEntityId": 411,
+            "EntityAssociationPlacement": "Embedded",
+            "EntityAssociationRelationship": "CFDocument",
+            "Extension": false,
+            "ExtensionNotes": null,
+            "Id": 64,
+            "Name": "CFDocument",
+            "Notes": null,
+            "Required": "Yes",
+            "SourceModel": "CASE",
+            "Tags": null,
+            "UniqueName": "CFDocument",
+            "UseConsiderations": null,
+            "properties": {
+              "CFPackageURI": {
+                "description": "A reference to the CFPackage this CFDocument is exchanged within, when exported as part of a package.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "adoptionStatus": {
+                "description": "The publication status of the document.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "caseVersion": {
+                "ValueSet": {
+                  "ActivationDate": null,
+                  "Contributor": null,
+                  "ContributorOrganization": "LIF",
+                  "CreationDate": null,
+                  "DataModelId": 14,
+                  "DeprecationDate": null,
+                  "Description": "The CASE specification version a CFDocument conforms to.",
+                  "Extension": false,
+                  "ExtensionNotes": null,
+                  "Id": 373,
+                  "Name": "CaseVersionEnum",
+                  "Notes": null,
+                  "Tags": null,
+                  "UseConsiderations": null,
+                  "Values": [
+                    {
+                      "ActivationDate": null,
+                      "Contributor": null,
+                      "ContributorOrganization": "LIF",
+                      "CreationDate": null,
+                      "DataModelId": 14,
+                      "Deleted": false,
+                      "DeprecationDate": null,
+                      "Description": null,
+                      "Extension": false,
+                      "ExtensionNotes": null,
+                      "Id": 5390,
+                      "Notes": null,
+                      "OriginalValueId": null,
+                      "Source": "CASE",
+                      "UseConsiderations": null,
+                      "Value": "1.1",
+                      "ValueName": "1.1",
+                      "ValueSetId": 373
+                    }
+                  ]
+                },
+                "description": "The version of the CASE specification this CFDocument conforms to.",
+                "enum": [
+                  "1.1"
+                ],
+                "example": "",
+                "format": "",
+                "type": "enum",
+                "use_recommendations": ""
+              },
+              "creator": {
+                "description": "The entity with authority that promulgates the competency framework. This is the entity that authorized or created the competency framework. It could be an education agency, higher education institution, professional body. It is the owner of the competency framework.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": "CASE v1.1 Information Model table lists this 0..1, but the Best Practice and Implementation Guide calls it \"(required)\". Modeled here as Required=Yes per the Implementation Guide; a strict-schema validator built from the Information Model alone would treat it as optional."
+              },
+              "description": {
+                "description": "A human readable description of the CFDocument.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "extensions": {
+                "description": "Freeform placeholder for non-standard/custom fields a CASE v1.1 payload may carry for this class. CASE defines its *Extension classes as open, schema-less objects (additionalProperties: true) with no fixed keys, so no concrete shape is modeled here.",
+                "example": "",
+                "format": "",
+                "type": "entity",
+                "use_recommendations": ""
+              },
+              "frameworkType": {
+                "description": "A label describing the type of framework represented by this CFDocument (e.g. 'Competency Framework', 'Curriculum Standard').",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "identifier": {
+                "description": "A unique identifier (UUID) assigned to the CFDocument.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "language": {
+                "description": "The default language of the text used for the content in the learning standard document (use ISO 639-2 [ISO 639]).",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "lastChangeDateTime": {
+                "description": "A system generated timestamp of the most recent change to this record. This conforms to ISO 8601 dateTime definition [ISO 8601].",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "licenseURI": {
+                "description": "A link to a legal document controlling permission to do something with the standards document.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "notes": {
+                "description": "Additional freeform notes about the CFDocument.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "officialSourceURL": {
+                "description": "The URL link to the formal citation of the original achievement standards document created for humans.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "publisher": {
+                "description": "The entity responsible for making the learning standards document available.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "statusEndDate": {
+                "description": "The date the CFDocument status ended or changed to another status.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "statusStartDate": {
+                "description": "The date the CFDocument status started.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "subject": {
+                "description": "The topic or academic subject of the Document (this should use some appropriate K-12, HE, etc. based vocabulary).",
+                "example": "",
+                "format": "string",
+                "type": "array",
+                "use_recommendations": ""
+              },
+              "subjectURI": {
+                "description": "A set of Link URIs denoting the set of subjects for the document as designated by the promulgating agency.",
+                "example": "",
+                "format": "string",
+                "type": "array",
+                "use_recommendations": ""
+              },
+              "title": {
+                "description": "The title of the CFDocument.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "uri": {
+                "description": "An unambiguous reference to the CFDocument using a network-resolvable URI.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "version": {
+                "description": "Defines the revision of the document (the nature of this versioning is an implementation issue).",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              }
+            },
+            "required": [
+              "uri",
+              "title",
+              "creator",
+              "lastChangeDateTime",
+              "identifier",
+              "CFPackageURI"
+            ],
+            "type": "object",
+            "use_recommendations": ""
+          },
+          "CFItemsCFItem": {
+            "ActivationDate": null,
+            "Array": "Yes",
+            "Common": null,
+            "Contributor": null,
+            "ContributorOrganization": "LIF",
+            "CreationDate": null,
+            "DataModelId": 14,
+            "Deleted": false,
+            "DeprecationDate": null,
+            "Description": "The container for CFItem data describing an individual competency, standard, or grouping node within a CFDocument's taxonomy.",
+            "EntityAssociationActivationDate": null,
+            "EntityAssociationContributor": null,
+            "EntityAssociationContributorOrganization": "LIF",
+            "EntityAssociationCreationDate": null,
+            "EntityAssociationDeprecationDate": null,
+            "EntityAssociationExtendedByDataModelId": null,
+            "EntityAssociationExtension": false,
+            "EntityAssociationExtensionNotes": null,
+            "EntityAssociationId": 223,
+            "EntityAssociationNotes": null,
+            "EntityAssociationParentEntityId": 411,
+            "EntityAssociationPlacement": "Embedded",
+            "EntityAssociationRelationship": "CFItems",
+            "Extension": false,
+            "ExtensionNotes": null,
+            "Id": 67,
+            "Name": "CFItem",
+            "Notes": null,
+            "Required": "No",
+            "SourceModel": "CASE",
+            "Tags": null,
+            "UniqueName": "CFItem",
+            "UseConsiderations": null,
+            "properties": {
+              "CFDocumentURI": {
+                "description": "A reference to the CFDocument that contains this CFItem.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "CFItemType": {
+                "description": "A human-readable label describing the type of this CFItem (e.g. 'Standard', 'Benchmark', 'Strand').",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "CFItemTypeURI": {
+                "description": "A reference to the CFItemType that classifies this CFItem.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "abbreviatedStatement": {
+                "description": "An abbreviated version of the Full Statement.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "alternativeLabel": {
+                "description": "An alternate 'term' for Competency. Some institutions may want to render their achievements as outcomes, or objectives, etc. Semantically they are the same as Competencies, but diversity of terms is used. This allows for the flexibility for the institution to define their own term for \"Competency\" and not being locked into it.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "conceptKeywords": {
+                "description": "The significant topicality of the CFItem using free-text keywords and phrases.",
+                "example": "",
+                "format": "string",
+                "type": "array",
+                "use_recommendations": ""
+              },
+              "conceptKeywordsURI": {
+                "description": "References to the CFConcept records that this CFItem's concept keywords resolve to.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "educationLevel": {
+                "description": "The education level, grade level or primary instructional level at which a CFItem is intended.",
+                "example": "",
+                "format": "string",
+                "type": "array",
+                "use_recommendations": ""
+              },
+              "extensions": {
+                "description": "Freeform placeholder for non-standard/custom fields a CASE v1.1 payload may carry for this class. CASE defines its *Extension classes as open, schema-less objects (additionalProperties: true) with no fixed keys, so no concrete shape is modeled here.",
+                "example": "",
+                "format": "",
+                "type": "entity",
+                "use_recommendations": ""
+              },
+              "fullStatement": {
+                "description": "The text of the statement. The textual content that either describes a specific competency or describes a less granular group of competencies within the taxonomy of the standards document.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "humanCodingScheme": {
+                "description": "A human-referenceable code designated by the publisher to identify the item among learning standard items.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "identifier": {
+                "description": "A unique identifier (UUID) assigned to the CFItem.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "language": {
+                "description": "The default language of the text used for the content in the learning standard document (use ISO 639-2 [ISO 639]).",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "lastChangeDateTime": {
+                "description": "The most recent date and time this CFItem was changed.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "licenseURI": {
+                "description": "A reference to the CFLicense governing use of this CFItem.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "listEnumeration": {
+                "description": "A label used to enumerate this CFItem's position within an ordered list of sibling items (e.g. 'a', '1', 'i').",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "notes": {
+                "description": "Additional freeform notes about the CFItem.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "statusEndDate": {
+                "description": "The date the CFItem status ended or changed to another status.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "statusStartDate": {
+                "description": "The date the CFItem status started.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "subject": {
+                "description": "The human-readable subject area(s) associated with this CFItem.",
+                "example": "",
+                "format": "string",
+                "type": "array",
+                "use_recommendations": ""
+              },
+              "subjectURI": {
+                "description": "References to the CFSubject records associated with this CFItem.",
+                "example": "",
+                "format": "string",
+                "type": "array",
+                "use_recommendations": ""
+              },
+              "uri": {
+                "description": "An unambiguous reference to the CFItem using a network-resolvable URI.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              }
+            },
+            "required": [
+              "uri",
+              "fullStatement",
+              "CFDocumentURI",
+              "identifier",
+              "lastChangeDateTime"
+            ],
+            "type": "array",
+            "use_recommendations": ""
+          },
+          "CFRubricsCFRubric": {
+            "ActivationDate": null,
+            "Array": "Yes",
+            "Common": null,
+            "Contributor": null,
+            "ContributorOrganization": "LIF",
+            "CreationDate": null,
+            "DataModelId": 14,
+            "Deleted": false,
+            "DeprecationDate": null,
+            "Description": "The container for the definition of a rubric addressed by the competency framework, including its associated CFRubricCriteria.",
+            "EntityAssociationActivationDate": null,
+            "EntityAssociationContributor": null,
+            "EntityAssociationContributorOrganization": "LIF",
+            "EntityAssociationCreationDate": null,
+            "EntityAssociationDeprecationDate": null,
+            "EntityAssociationExtendedByDataModelId": null,
+            "EntityAssociationExtension": false,
+            "EntityAssociationExtensionNotes": null,
+            "EntityAssociationId": 225,
+            "EntityAssociationNotes": null,
+            "EntityAssociationParentEntityId": 411,
+            "EntityAssociationPlacement": "Embedded",
+            "EntityAssociationRelationship": "CFRubrics",
+            "Extension": false,
+            "ExtensionNotes": null,
+            "Id": 407,
+            "Name": "CFRubric",
+            "Notes": null,
+            "Required": "No",
+            "SourceModel": "CASE",
+            "Tags": null,
+            "UniqueName": "CFRubric",
+            "UseConsiderations": null,
+            "properties": {
+              "CFRubricCriteriaCFRubricCriterion": {
+                "ActivationDate": null,
+                "Array": "Yes",
+                "Common": null,
+                "Contributor": null,
+                "ContributorOrganization": "LIF",
+                "CreationDate": null,
+                "DataModelId": 14,
+                "Deleted": false,
+                "DeprecationDate": null,
+                "Description": "The container for the definition of a rubric criterion addressed by the competency framework.",
+                "EntityAssociationActivationDate": null,
+                "EntityAssociationContributor": null,
+                "EntityAssociationContributorOrganization": "LIF",
+                "EntityAssociationCreationDate": null,
+                "EntityAssociationDeprecationDate": null,
+                "EntityAssociationExtendedByDataModelId": null,
+                "EntityAssociationExtension": false,
+                "EntityAssociationExtensionNotes": null,
+                "EntityAssociationId": 232,
+                "EntityAssociationNotes": null,
+                "EntityAssociationParentEntityId": 407,
+                "EntityAssociationPlacement": "Embedded",
+                "EntityAssociationRelationship": "CFRubricCriteria",
+                "Extension": false,
+                "ExtensionNotes": null,
+                "Id": 414,
+                "Name": "CFRubricCriterion",
+                "Notes": null,
+                "Required": "No",
+                "SourceModel": "CASE",
+                "Tags": null,
+                "UniqueName": "CFRubricCriterion",
+                "UseConsiderations": null,
+                "properties": {
+                  "CFItemURI": {
+                    "description": "A reference to the CFItem (competency) that this CFRubricCriterion assesses.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "CFRubricCriterionLevelsCFRubricCriterionLevel": {
+                    "ActivationDate": null,
+                    "Array": "Yes",
+                    "Common": null,
+                    "Contributor": null,
+                    "ContributorOrganization": "LIF",
+                    "CreationDate": null,
+                    "DataModelId": 14,
+                    "Deleted": false,
+                    "DeprecationDate": null,
+                    "Description": "The container for the definition of a rubric criterion performance level addressed by the competency framework.",
+                    "EntityAssociationActivationDate": null,
+                    "EntityAssociationContributor": null,
+                    "EntityAssociationContributorOrganization": "LIF",
+                    "EntityAssociationCreationDate": null,
+                    "EntityAssociationDeprecationDate": null,
+                    "EntityAssociationExtendedByDataModelId": null,
+                    "EntityAssociationExtension": false,
+                    "EntityAssociationExtensionNotes": null,
+                    "EntityAssociationId": 233,
+                    "EntityAssociationNotes": null,
+                    "EntityAssociationParentEntityId": 414,
+                    "EntityAssociationPlacement": "Embedded",
+                    "EntityAssociationRelationship": "CFRubricCriterionLevels",
+                    "Extension": false,
+                    "ExtensionNotes": null,
+                    "Id": 410,
+                    "Name": "CFRubricCriterionLevel",
+                    "Notes": null,
+                    "Required": "No",
+                    "SourceModel": "CASE",
+                    "Tags": null,
+                    "UniqueName": "CFRubricCriterionLevel",
+                    "UseConsiderations": null,
+                    "properties": {
+                      "description": {
+                        "description": "A human readable description of the CFRubricCriterionLevel.",
+                        "example": "",
+                        "format": "",
+                        "type": "string",
+                        "use_recommendations": ""
+                      },
+                      "extensions": {
+                        "description": "Freeform placeholder for non-standard/custom fields a CASE v1.1 payload may carry for this class. CASE defines its *Extension classes as open, schema-less objects (additionalProperties: true) with no fixed keys, so no concrete shape is modeled here.",
+                        "example": "",
+                        "format": "entity",
+                        "type": "array",
+                        "use_recommendations": ""
+                      },
+                      "feedback": {
+                        "description": "Feedback text associated with this performance level.",
+                        "example": "",
+                        "format": "",
+                        "type": "string",
+                        "use_recommendations": ""
+                      },
+                      "identifier": {
+                        "description": "A unique identifier (UUID) assigned to the CFRubricCriterionLevel.",
+                        "example": "",
+                        "format": "",
+                        "type": "string",
+                        "use_recommendations": ""
+                      },
+                      "lastChangeDateTime": {
+                        "description": "The most recent date and time this CFRubricCriterionLevel was changed.",
+                        "example": "",
+                        "format": "",
+                        "type": "string",
+                        "use_recommendations": ""
+                      },
+                      "position": {
+                        "description": "The ordinal position of this CFRubricCriterionLevel within its CFRubricCriterion.",
+                        "example": "",
+                        "format": "",
+                        "type": "number",
+                        "use_recommendations": ""
+                      },
+                      "quality": {
+                        "description": "A label describing the quality of performance represented by this level (e.g. 'Exemplary', 'Proficient').",
+                        "example": "",
+                        "format": "",
+                        "type": "string",
+                        "use_recommendations": ""
+                      },
+                      "rubricCriterionId": {
+                        "description": "A reference to the identifier of the CFRubricCriterion that contains this CFRubricCriterionLevel.",
+                        "example": "",
+                        "format": "",
+                        "type": "string",
+                        "use_recommendations": ""
+                      },
+                      "score": {
+                        "description": "A numeric score associated with this performance level.",
+                        "example": "",
+                        "format": "",
+                        "type": "number",
+                        "use_recommendations": ""
+                      },
+                      "uri": {
+                        "description": "An unambiguous reference to the CFRubricCriterionLevel using a network-resolvable URI.",
+                        "example": "",
+                        "format": "",
+                        "type": "string",
+                        "use_recommendations": ""
+                      }
+                    },
+                    "required": [
+                      "identifier",
+                      "uri",
+                      "lastChangeDateTime"
+                    ],
+                    "type": "array",
+                    "use_recommendations": ""
+                  },
+                  "category": {
+                    "description": "A label categorizing this CFRubricCriterion.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "description": {
+                    "description": "A human readable description of the CFRubricCriterion.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "extensions": {
+                    "description": "Freeform placeholder for non-standard/custom fields a CASE v1.1 payload may carry for this class. CASE defines its *Extension classes as open, schema-less objects (additionalProperties: true) with no fixed keys, so no concrete shape is modeled here.",
+                    "example": "",
+                    "format": "",
+                    "type": "entity",
+                    "use_recommendations": ""
+                  },
+                  "identifier": {
+                    "description": "A unique identifier (UUID) assigned to the CFRubricCriterion.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "lastChangeDateTime": {
+                    "description": "The most recent date and time this CFRubricCriterion was changed.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "position": {
+                    "description": "The ordinal position of this CFRubricCriterion within its CFRubric.",
+                    "example": "",
+                    "format": "",
+                    "type": "number",
+                    "use_recommendations": ""
+                  },
+                  "rubricId": {
+                    "description": "A reference to the identifier of the CFRubric that contains this CFRubricCriterion.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "uri": {
+                    "description": "An unambiguous reference to the CFRubricCriterion using a network-resolvable URI.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "weight": {
+                    "description": "A relative weighting factor for this CFRubricCriterion within its CFRubric.",
+                    "example": "",
+                    "format": "",
+                    "type": "number",
+                    "use_recommendations": ""
+                  }
+                },
+                "required": [
+                  "identifier",
+                  "uri",
+                  "lastChangeDateTime"
+                ],
+                "type": "array",
+                "use_recommendations": ""
+              },
+              "description": {
+                "description": "A human readable description of the CFRubric.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "extensions": {
+                "description": "Freeform placeholder for non-standard/custom fields a CASE v1.1 payload may carry for this class. CASE defines its *Extension classes as open, schema-less objects (additionalProperties: true) with no fixed keys, so no concrete shape is modeled here.",
+                "example": "",
+                "format": "",
+                "type": "entity",
+                "use_recommendations": ""
+              },
+              "identifier": {
+                "description": "A unique identifier (UUID) assigned to the CFRubric.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "lastChangeDateTime": {
+                "description": "The most recent date and time this CFRubric was changed.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "title": {
+                "description": "The title of the CFRubric.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "uri": {
+                "description": "An unambiguous reference to the CFRubric using a network-resolvable URI.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              }
+            },
+            "required": [
+              "identifier",
+              "uri",
+              "lastChangeDateTime"
+            ],
+            "type": "array",
+            "use_recommendations": ""
+          },
+          "extensions": {
+            "description": "Freeform placeholder for non-standard/custom fields a CASE v1.1 payload may carry for this class. CASE defines its *Extension classes as open, schema-less objects (additionalProperties: true) with no fixed keys, so no concrete shape is modeled here.",
+            "example": "",
+            "format": "",
+            "type": "entity",
+            "use_recommendations": ""
+          }
+        },
+        "required": [
+          "CFDocumentCFDocument"
+        ],
+        "type": "object",
+        "use_recommendations": ""
+      }
+    }
+  },
+  "info": {
+    "description": "OpenAPI Spec",
+    "title": "Machine-Readable Schema for CASE",
+    "version": "1.1"
+  },
+  "openapi": "3.0.0",
+  "paths": {}
+}
