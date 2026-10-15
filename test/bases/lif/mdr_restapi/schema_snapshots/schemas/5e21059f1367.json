@@ -1,0 +1,759 @@
+{
+  "components": {
+    "schemas": {
+      "Address": {
+        "properties": {
+          "AddressType": {
+            "description": "The type of address listed for an individual or organization. For example: Physical Address, Mailing Address, Home Address, etc.)",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "ApartmentRoomSuiteNumber": {
+            "description": "The apartment, room, or suite number of an address.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "City": {
+            "description": "The name of the city in which an address is located.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "CongressionalDistrict": {
+            "description": "The congressional district in which an address is located.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "CountyFIPSCode": {
+            "description": "The Federal Information Processing Standards (FIPS) numeric code for the county issued by the National Institute of Standards and Technology (NIST). Counties are considered to be the \"first-order subdivisions\" of each State and statistically equivalent entity, regardless of their local designations (county, parish, borough, etc.) Counties in different States will have the same code. A unique county number is created when combined with the 2-digit FIPS State Code.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "DoNotPublishIndicator": {
+            "description": "An indication that the address should not be published.",
+            "example": "",
+            "format": "",
+            "type": "boolean",
+            "use_recommendations": ""
+          },
+          "Latitude": {
+            "description": "The geographic latitude of the physical address.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "Locale": {
+            "description": "A general geographic indicator that categorizes U.S. territory (e.g., City, Suburban).",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "Longitude": {
+            "description": "The geographic longitude of the physical address.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "NameOfCounty": {
+            "description": "The name of the county, parish, borough, or comparable unit (within a state) in 'which an address is located.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "Period": {
+            "description": "The time periods for which the address is valid. For physical addresses, the periods in which the person lived at that address.",
+            "example": "",
+            "format": "",
+            "type": "array",
+            "use_recommendations": ""
+          },
+          "PostalCode": {
+            "description": "The five or nine digit zip code or overseas postal code portion of an address.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "StateAbbreviation": {
+            "description": "The abbreviation for the state (within the United States) or outlying area in which an address is located.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "StreetNumberName": {
+            "description": "The street number and street name or post office box number of an address.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "Assessment": {
+        "properties": {
+          "AcademicSubject": {
+            "description": "The description of the content or subject area (e.g., arts, mathematics, reading, stenography, or a foreign language) of an assessment.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "AssessedGradeLevel": {
+            "description": "The grade level(s) for which an assessment is designed. The semantics of null is assumed to mean that the assessment is not associated with any grade level.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "AssessmentCategory": {
+            "description": "The category of an assessment based on format and content.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "AssessmentIdentifier": {
+            "description": "A unique number or alphanumeric code assigned to an assessment.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "AssessmentScore": {
+            "description": "Definition of the scores to be expected from this assessment.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "AssessmentTitle": {
+            "description": "The title or name of the assessment.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "Language": {
+            "description": "An indication of the languages in which the assessment is designed.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "RevisionDate": {
+            "description": "The month, day, and year that the conceptual design for the assessment was most recently revised substantially.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "AssessmentScore": {
+        "properties": {
+          "AssessmentReportingMethod": {
+            "description": "This descriptor defines the method that the instructor of the class uses to report the performance and achievement of all students. It may be a qualitative method such as individualized teacher comments or a quantitative method such as a letter or a numerical grade.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "BirthData": {
+        "properties": {
+          "BirthCity": {
+            "description": "The city the student was born in.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "BirthCountry": {
+            "description": "The country in which an individual is born. It is strongly recommended that entries use only ISO 3166 2-letter country codes.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "BirthDate": {
+            "description": "The month, day, and year on which an individual was born.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "BirthInternationalProvince": {
+            "description": "For students born outside of the U.S., the Province or jurisdiction in which an individual is born.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "BirthStateAbbreviation": {
+            "description": "The abbreviation for the name of the state (within the United States) or extra-state jurisdiction in which an individual was born.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "DateEnteredUS": {
+            "description": "For students born outside of the U.S., the date the student entered the U.S.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "MultipleBirthStatus": {
+            "description": "Indicator of whether the student was born with other siblings (i.e., twins, triplets, etc.)",
+            "example": "",
+            "format": "",
+            "type": "boolean",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "Citizenship": {
+        "properties": {
+          "CitizenshipStatus": {
+            "description": "An indicator of whether or not the person is a U.S. citizen.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "Visa": {
+            "description": "An indicator of a non-US citizen's Visa type.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "Contact": {
+        "properties": {
+          "LevelOfEducation": {
+            "description": "This descriptor defines the different levels of education achievable.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "Course": {
+        "properties": {
+          "CourseCode": {
+            "description": "A unique alphanumeric code assigned to a course.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "CourseDescription": {
+            "description": "A description of the content standards and goals covered in the course. Reference may be made to state or national content standards.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "CourseGPAApplicability": {
+            "description": "An indicator of whether or not the course being described is included in the computation of the student's grade point average, and if so, if it is weighted differently from regular courses.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "CourseLevelCharacteristic": {
+            "description": "The type of specific program or designation with which the course is associated (e.g., AP, IB, Dual Credit, CTE).",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "CourseTitle": {
+            "description": "The descriptive name given to a course of study offered in a school or other institution or organization. In departmentalized classes at the elementary, secondary, and postsecondary levels (and for staff development activities), this refers to the name by which a course is identified (e.g., American History, English III). For elementary and other non-departmentalized classes, it refers to any portion of the instruction for which a grade or report is assigned (e.g., reading, composition, spelling, and language arts).",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "InstructionalTimePlanned": {
+            "description": "The planned total number of clock minutes of instruction for this course offering. Generally, this should be at least as many minutes as is required for completion by the related state- or district-defined course.",
+            "example": "",
+            "format": "",
+            "type": "number",
+            "use_recommendations": ""
+          },
+          "LearningStandard": {
+            "description": "Learning standard(s) to be taught by the course.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "OfferedGradeLevel": {
+            "description": "This descriptor defines the set of grade levels. The map to known Ed-Fi enumeration values is required.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "CourseIdentificationCode": {
+        "properties": {},
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "CourseTranscript": {
+        "properties": {
+          "CourseRepeatCode": {
+            "description": "Indicates that an academic course has been repeated by a student and how that repeat is to be computed in the student's academic grade average",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "Credits": {
+        "properties": {
+          "CreditType": {
+            "description": "The type of credits or units of value awarded for the completion of a course.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "EducationOrganization": {
+        "properties": {
+          "EducationOrganizationCategory": {
+            "description": "The classification of the education agency within the geographic boundaries of a state according to the level of administrative and operational control granted by the state.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "NameOfInstitution": {
+            "description": "The full, legally accepted name of the institution.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "OperationalStatus": {
+            "description": "The current operational status of the education organization (e.g., active, inactive).",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "ShortNameOfInstitution": {
+            "description": "A short name for the institution.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "EducationOrganizationIdentificationCode": {
+        "properties": {
+          "EducationOrganizationIdentificationSystem": {
+            "description": "The school system, state, or agency assigning the identification code.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "ElectronicMail": {
+        "properties": {
+          "ElectronicMailAddress": {
+            "description": "The electronic mail (e-mail) address listed for an individual or organization.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "ElectronicMailType": {
+            "description": "The type of email listed for an individual or organization. For example: Home/Personal, Work, etc.)",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "PrimaryEmailAddressIndicator": {
+            "description": "An indication that the electronic mail address should be used as the principal electronic mail address for an individual or organization.",
+            "example": "",
+            "format": "",
+            "type": "boolean",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "ExtendsGeneralStudentProgramAssociation": {
+        "properties": {
+          "StudentMigrantEducationProgramAssociation": {
+            "description": "This association represents the migrant education program(s) that a student participates in or receives services from. The association is an extension of the StudentProgramAssociation with added elements particular to migrant education programs.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "IdentificationDocument": {
+        "properties": {
+          "PersonalInformationVerification": {
+            "description": "The category of the document relative to its purpose.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "Language": {
+        "properties": {},
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "LearningResource": {
+        "properties": {
+          "InteractivityStyle": {
+            "description": "The predominate mode of learning supported by the learning resource. Acceptable values are active, expositive, or mixed.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "Name": {
+        "properties": {},
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "Section": {
+        "properties": {
+          "EducationalEnvironment": {
+            "description": "The setting in which a child receives education and related services.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "SectionIdentifier": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "Session": {
+        "properties": {
+          "BeginDate": {
+            "description": "Month, day, and year of the first day of the session.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "EndDate": {
+            "description": "Month, day and year of the last day of the session.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "Student": {
+        "properties": {
+          "Name": {
+            "description": "The set of elements that comprise an individual's legal name.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "UniqueId": {
+            "description": "A unique alphanumeric code assigned to a person by a system managing unique identifiers.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "StudentAssement": {
+        "properties": {
+          "AdministrationDate": {
+            "description": "The date and time an assessment was completed by the student. The use of ISO-8601 formats with a timezone designator (UTC or time offset) is recommended in order to prevent ambiguity due to time zones.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "AdministrationEndDate": {
+            "description": "The date and time an assessment administration ended.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "AdministrationEnvironment": {
+            "description": "The environment in which the test was administered.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "PlatformType": {
+            "description": "The platform with which the assessment was delivered to the student during the assessment session.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "StudentContactAssociation": {
+        "properties": {
+          "EmergencyContactStatus": {
+            "description": "Indicator of whether the person is a designated emergency contact for the student",
+            "example": "",
+            "format": "",
+            "type": "boolean",
+            "use_recommendations": ""
+          },
+          "LegalGuardian": {
+            "description": "Indicator of whether the person is a legal guardian for the student.",
+            "example": "",
+            "format": "",
+            "type": "boolean",
+            "use_recommendations": ""
+          },
+          "PrimaryContactStatus": {
+            "description": "Indicator of whether the person is a primary contact for the student.",
+            "example": "",
+            "format": "",
+            "type": "boolean",
+            "use_recommendations": ""
+          },
+          "Relation": {
+            "description": "The nature of an individual's relationship to a student.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "StudentEducationOrganizationAssociation": {
+        "properties": {
+          "HispanicLatinoEthnicity": {
+            "description": "An indication that the individual traces his or her origin or descent to Mexico, Puerto Rico, Cuba, Central, and South America, and other Spanish cultures, regardless of race, as last reported to the education organization. The term, \"Spanish origin,\" can be used in addition to \"Hispanic or Latino.\"",
+            "example": "",
+            "format": "",
+            "type": "boolean",
+            "use_recommendations": ""
+          },
+          "Race": {
+            "description": "The general racial category which most clearly reflects the individual's recognition of his or her community or with which the individual most identifies as last reported to the education organization. The data model allows for multiple entries so that each individual can specify all appropriate races.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "TribalAffiliation": {
+            "description": "An American Indian tribe with which the student is affiliated as last reported to the education organization.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "StudentHomelessProgramAssociation": {
+        "properties": {
+          "HomelessPrimaryNighttimeResidence": {
+            "description": "The primary nighttime residence of the student at the time the student is identified as homeless.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "StudentIdentificationCode": {
+        "properties": {
+          "StudentIdentificationSystem": {
+            "description": "This descriptor defines the originating record system and code that is used for record-keeping purposes of the student.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "Telephone": {
+        "properties": {
+          "DoNotPublishIndicator": {
+            "description": "An indication that the telephone number should not be published.",
+            "example": "",
+            "format": "",
+            "type": "boolean",
+            "use_recommendations": ""
+          },
+          "OrderOfPriority": {
+            "description": "The order of priority assigned to telephone numbers to define which number to attempt first, second, etc.",
+            "example": "",
+            "format": "",
+            "type": "number",
+            "use_recommendations": ""
+          },
+          "TelephoneNumber": {
+            "description": "The telephone number including the area code, and extension, if applicable.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "TelephoneNumberType": {
+            "description": "The type of communication number listed for an individual or organization.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "TextMessageCapabilityIndicator": {
+            "description": "An indication that the telephone number is technically capable of sending and receiving Short Message Service (SMS) text messages.",
+            "example": "",
+            "format": "",
+            "type": "boolean",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "{Multiple}": {
+        "properties": {
+          "Sex": {
+            "description": "A person's gender. (Different designations by context, e.g.  BirthSex: Persons gender at birth; StudentEdOrgAssoc: The student's gender as last reported to the education organization.)",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      }
+    }
+  },
+  "info": {
+    "description": "OpenAPI Spec",
+    "title": "Machine-Readable Schema for Ed-Fi v5",
+    "version": "1.0"
+  },
+  "openapi": "3.0.0",
+  "paths": {}
+}

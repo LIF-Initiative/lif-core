@@ -1,0 +1,1824 @@
+{
+  "components": {
+    "schemas": {
+      "Achievement": {
+        "properties": {
+          "achievementType": {
+            "description": "The type of achievement. This is an extensible vocabulary.",
+            "enum": [
+              "Badge",
+              "Assessment",
+              "Award",
+              "Certificate",
+              "QualityAssuranceCredential",
+              "Achievement",
+              "Certification",
+              "Course",
+              "CommunityService",
+              "Competency",
+              "CoCurricular",
+              "Degree",
+              "Diploma",
+              "Fieldwork",
+              "License",
+              "Membership",
+              "ApprenticeshipCertificate",
+              "Assignment",
+              "AssociateDegree",
+              "BachelorDegree",
+              "CertificateOfCompletion",
+              "DoctoralDegree",
+              "GeneralEducationDevelopment",
+              "JourneymanCertificate",
+              "LearningProgram",
+              "ProfessionalDoctorate",
+              "MasterCertificate",
+              "MasterDegree",
+              "MicroCredential",
+              "ResearchDoctorate",
+              "SecondarySchoolDiploma"
+            ],
+            "example": "",
+            "format": "",
+            "type": "enum",
+            "use_recommendations": ""
+          },
+          "alignment": {
+            "description": "The alignment(s) between this achievement and a node in an external framework. References Alignment.",
+            "example": "",
+            "format": "entity",
+            "type": "array",
+            "use_recommendations": ""
+          },
+          "creator": {
+            "description": "The Profile that created this achievement.",
+            "example": "",
+            "format": "",
+            "type": "entity",
+            "use_recommendations": ""
+          },
+          "creditsAvailable": {
+            "description": "Credit hours associated with this entity, or credit hours possible. For example 3.0.",
+            "example": "",
+            "format": "",
+            "type": "number",
+            "use_recommendations": ""
+          },
+          "criteria": {
+            "description": "Criteria describing how to earn the achievement. References Criteria.",
+            "example": "",
+            "format": "",
+            "type": "entity",
+            "use_recommendations": ""
+          },
+          "description": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "endorsement": {
+            "description": "Allows endorsers to make specific claims about the achievement. References EndorsementCredential.",
+            "example": "",
+            "format": "entity",
+            "type": "array",
+            "use_recommendations": ""
+          },
+          "endorsementJwt": {
+            "description": "Allows endorsers to make specific claims about the achievement in compact JWT format.",
+            "example": "",
+            "format": "string",
+            "type": "array",
+            "use_recommendations": ""
+          },
+          "fieldOfStudy": {
+            "description": "Category, subject, area of study, discipline, or general branch of knowledge. Examples include Business, Education, Psychology, and Technology.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "humanCode": {
+            "description": "The assigned course code (Subject + Catalog #)",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "id": {
+            "description": "Unique URI for the Achievement.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "image": {
+            "description": "An image representing the achievement.",
+            "example": "",
+            "format": "",
+            "type": "entity",
+            "use_recommendations": ""
+          },
+          "inLanguage": {
+            "description": "The language of the achievement.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "name": {
+            "description": "The title of the course.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "otherIdentifier": {
+            "description": "A list of identifiers for the described entity. References IdentifierEntry.",
+            "example": "",
+            "format": "entity",
+            "type": "array",
+            "use_recommendations": ""
+          },
+          "related": {
+            "description": "Related achievements, potentially in other languages or different versions of the same achievement.",
+            "example": "",
+            "format": "string",
+            "type": "array",
+            "use_recommendations": ""
+          },
+          "resultDescription": {
+            "description": "The set of result descriptions that may be asserted when this achievement is awarded. References ResultDescription.",
+            "example": "",
+            "format": "entity",
+            "type": "array",
+            "use_recommendations": ""
+          },
+          "specialization": {
+            "description": "Name given to the focus, concentration, or specific area of study defined in the achievement.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "tag": {
+            "description": "One or more short phrases or keywords that describe the achievement.",
+            "example": "",
+            "format": "string",
+            "type": "array",
+            "use_recommendations": ""
+          },
+          "type": {
+            "description": "The value of the type property MUST be an unordered set. One of the values MUST be Achievement.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "version": {
+            "description": "The version of the achievement.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [
+          "name",
+          "description",
+          "id",
+          "type",
+          "criteria"
+        ],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "AchievementCredential": {
+        "properties": {
+          "@context": {
+            "description": "The JSON-LD context(s) that apply to this credential.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "awardedDate": {
+            "description": "Timestamp of when the credential was awarded, distinct from validFrom.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "credentialSchema": {
+            "description": "One or more data schemas that provide verifiers with enough information to determine whether the provided data conforms to the schema(s).",
+            "example": "",
+            "format": "entity",
+            "type": "array",
+            "use_recommendations": ""
+          },
+          "credentialStatus": {
+            "description": "Information used to discover the current status of the credential (e.g. suspended or revoked).",
+            "example": "",
+            "format": "",
+            "type": "entity",
+            "use_recommendations": ""
+          },
+          "credentialSubject": {
+            "description": "The recipient of the achievement and their result. References AchievementSubject.",
+            "example": "",
+            "format": "",
+            "type": "entity",
+            "use_recommendations": ""
+          },
+          "description": {
+            "description": "A short description of the credential.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "endorsement": {
+            "description": "Allows endorsers to make specific claims about the credential. References EndorsementCredential.",
+            "example": "",
+            "format": "entity",
+            "type": "array",
+            "use_recommendations": ""
+          },
+          "endorsementJwt": {
+            "description": "Allows endorsers to make specific claims about the credential in compact JWT format.",
+            "example": "",
+            "format": "string",
+            "type": "array",
+            "use_recommendations": ""
+          },
+          "evidence": {
+            "description": "A description of the work that the recipient did to earn the achievement. This can be a page that links out to other pages if linking directly to the work is infeasible.",
+            "example": "",
+            "format": "entity",
+            "type": "array",
+            "use_recommendations": ""
+          },
+          "id": {
+            "description": "Unambiguous reference to the AchievementCredential.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "image": {
+            "description": "The image representing the credential for display purposes in wallets.",
+            "example": "",
+            "format": "",
+            "type": "entity",
+            "use_recommendations": ""
+          },
+          "issuer": {
+            "description": "The Profile who is issuing the credential.",
+            "example": "",
+            "format": "",
+            "type": "entity",
+            "use_recommendations": ""
+          },
+          "name": {
+            "description": "The name of the credential.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "proof": {
+            "description": "If present, one or more embedded cryptographic proofs that can be used to detect tampering and verify the authorship of the credential.",
+            "example": "",
+            "format": "entity",
+            "type": "array",
+            "use_recommendations": ""
+          },
+          "refreshService": {
+            "description": "Information used to refresh the verifiable credential.",
+            "example": "",
+            "format": "",
+            "type": "entity",
+            "use_recommendations": ""
+          },
+          "termsOfUse": {
+            "description": "The terms of use issued by the issuer.",
+            "example": "",
+            "format": "entity",
+            "type": "array",
+            "use_recommendations": ""
+          },
+          "type": {
+            "description": "The value of the type property MUST be an unordered set. One of the values MUST be AchievementCredential.",
+            "example": "",
+            "format": "string",
+            "type": "array",
+            "use_recommendations": ""
+          },
+          "validFrom": {
+            "description": "Timestamp of when the credential becomes valid. VC 2.0 naming (replaces the VC-1.1-era issuanceDate, which does not exist in the current OB3/CLR schema).",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "validUntil": {
+            "description": "Timestamp after which the credential should no longer be considered valid. VC 2.0 naming (replaces the VC-1.1-era expirationDate, which does not exist in the current OB3/CLR schema).",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [
+          "@context",
+          "id",
+          "type",
+          "credentialSubject",
+          "issuer",
+          "validFrom"
+        ],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "AchievementSubject": {
+        "properties": {
+          "achievement": {
+            "description": "The achievement being asserted -- the class's whole point. References Achievement.",
+            "example": "",
+            "format": "",
+            "type": "entity",
+            "use_recommendations": ""
+          },
+          "activityEndDate": {
+            "description": "Academic session (term) end date.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "activityStartDate": {
+            "description": "Academic session (term) start date.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "creditsEarned": {
+            "description": "The number of credits earned.",
+            "example": "",
+            "format": "",
+            "type": "number",
+            "use_recommendations": ""
+          },
+          "id": {
+            "description": "Unambiguous reference to the AchievementSubject.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "identifier": {
+            "description": "Other identifiers for the recipient of the achievement. Either id or at least one identifier MUST be supplied.",
+            "example": "",
+            "format": "entity",
+            "type": "array",
+            "use_recommendations": ""
+          },
+          "image": {
+            "description": "An image representing this individual achievement, used instead of the Achievement.image when needed.",
+            "example": "",
+            "format": "",
+            "type": "entity",
+            "use_recommendations": ""
+          },
+          "licenseNumber": {
+            "description": "The license number that was issued with this credential.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "narrative": {
+            "description": "A narrative that describes the achievement or its context.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "result": {
+            "description": "The set of results being asserted.",
+            "example": "",
+            "format": "entity",
+            "type": "array",
+            "use_recommendations": ""
+          },
+          "role": {
+            "description": "Role, position, or title of the learner when demonstrating the achievement.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "source": {
+            "description": "The person, organization, or system that assessed the learner's achievement. References Profile.",
+            "example": "",
+            "format": "",
+            "type": "entity",
+            "use_recommendations": ""
+          },
+          "term": {
+            "description": "The academic term in which this assertion was achieved.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "type": {
+            "description": "The value of the type property MUST be an unordered set. One of the values MUST be AchievementSubject.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [
+          "type",
+          "achievement"
+        ],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "Address": {
+        "properties": {
+          "addressCountry": {
+            "description": "The country. For example, USA. You can also provide the two-letter ISO 3166-1 alpha-2 country code.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "addressCountryCode": {
+            "description": "A country code as defined in ISO 3166-1 alpha-2.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "addressLocality": {
+            "description": "The locality. For example, Mountain View.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "addressRegion": {
+            "description": "The region. For example, CA.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "geo": {
+            "description": "The geographic coordinates of the location. References GeoCoordinates.",
+            "example": "",
+            "format": "",
+            "type": "entity",
+            "use_recommendations": ""
+          },
+          "postOfficeBoxNumber": {
+            "description": "The post office box number for PO box addresses.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "postalCode": {
+            "description": "The postal code. For example, 94043.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "streetAddress": {
+            "description": "The street address. For example, 1600 Amphitheatre Pkwy.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "type": {
+            "description": "The value of the type property MUST be an unordered set. One of the values MUST be Address.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "Alignment": {
+        "properties": {
+          "targetCode": {
+            "description": "If applicable, a locally unique string identifier that identifies the alignment target within its framework and/or targetUrl.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "targetDescription": {
+            "description": "Description of the alignment target.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "targetFramework": {
+            "description": "Name of the framework the alignment target belongs to.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "targetName": {
+            "description": "Name of the alignment target.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "targetType": {
+            "description": "The type of the alignment target node. Extensible vocabulary (ext: prefix pattern).",
+            "enum": [
+              "CFItem",
+              "CFRubric",
+              "CFRubricCriterion",
+              "CFRubricCriterionLevel",
+              "CTDL",
+              "ceasn:Competency",
+              "ceterms:Credential"
+            ],
+            "example": "",
+            "format": "",
+            "type": "enum",
+            "use_recommendations": ""
+          },
+          "targetUrl": {
+            "description": "The URL of a node in an established educational framework. When the alignment is to a CASE framework and the CASE Service support the CASE JSON-LD binding, the URL should be the 'uri' of the node document, otherwise the URL should be the CASE Service endpoint URL that returns the node JSON.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "type": {
+            "description": "The value of the type property MUST be an unordered set. One of the values MUST be Alignment.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [
+          "targetUrl",
+          "type",
+          "targetName"
+        ],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "Association": {
+        "properties": {
+          "associationType": {
+            "description": "The type of relationship between the two referenced achievements/credentials.",
+            "enum": [
+              "replacedBy",
+              "exactMatchOf",
+              "isChildOf",
+              "isParentOf",
+              "isPartOf",
+              "isPeerOf",
+              "isRelatedTo",
+              "precedes"
+            ],
+            "example": "",
+            "format": "",
+            "type": "enum",
+            "use_recommendations": ""
+          },
+          "sourceId": {
+            "description": "The identifier (xsd:anyURI) of the achievement/credential this association originates from.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "targetId": {
+            "description": "The identifier (xsd:anyURI) of the achievement/credential this association points to.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "type": {
+            "description": "The value of the type property MUST be an unordered set. One of the values MUST be Association.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [
+          "type",
+          "associationType",
+          "sourceId",
+          "targetId"
+        ],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "ClrCredential": {
+        "properties": {
+          "@context": {
+            "description": "The JSON-LD context(s) that apply to this credential, enabling a compact, ontologically defined JSON-LD document.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "awardedDate": {
+            "description": "Timestamp of when the credential was awarded. Distinct from validFrom -- an achievement can be awarded before the credential officially becomes valid.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "credentialSchema": {
+            "description": "The value of the credentialSchema property MUST be one or more data schemas that provide verifiers with enough information to determine whether the provided data conforms to the provided schema(s).",
+            "example": "",
+            "format": "entity",
+            "type": "array",
+            "use_recommendations": ""
+          },
+          "credentialStatus": {
+            "description": "The information in credentialStatus is used to discover information about the current status of the credential, such as whether it is suspended or revoked.",
+            "example": "",
+            "format": "",
+            "type": "entity",
+            "use_recommendations": ""
+          },
+          "credentialSubject": {
+            "description": "The learner and their achievements/credentials/associations. References ClrSubject.",
+            "example": "",
+            "format": "",
+            "type": "entity",
+            "use_recommendations": ""
+          },
+          "description": {
+            "description": "The short description of the credential.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "endorsement": {
+            "description": "Allows endorsers to make specific claims about the credential. References EndorsementCredential.",
+            "example": "",
+            "format": "entity",
+            "type": "array",
+            "use_recommendations": ""
+          },
+          "endorsementJwt": {
+            "description": "Allows endorsers to make specific claims about the credential in the form of a verifiable credential in compact JWT format.",
+            "example": "",
+            "format": "string",
+            "type": "array",
+            "use_recommendations": ""
+          },
+          "evidence": {
+            "description": "A description of the work that the recipient did to earn the achievement. References Evidence.",
+            "example": "",
+            "format": "entity",
+            "type": "array",
+            "use_recommendations": ""
+          },
+          "id": {
+            "description": "Unambiguous reference to the ClrCredential.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "image": {
+            "description": "An image representing the credential.",
+            "example": "",
+            "format": "",
+            "type": "entity",
+            "use_recommendations": ""
+          },
+          "issuer": {
+            "description": "The Profile who is issuing the credential.",
+            "example": "",
+            "format": "",
+            "type": "entity",
+            "use_recommendations": ""
+          },
+          "name": {
+            "description": "The name of the credential.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "partial": {
+            "description": "Flags an incomplete/in-progress CLR. The one attribute genuinely unique to ClrCredential (vs the shared VC envelope shape with AchievementCredential/EndorsementCredential).",
+            "example": "",
+            "format": "",
+            "type": "boolean",
+            "use_recommendations": ""
+          },
+          "proof": {
+            "description": "A JSON-LD Linked Data proof section for the credential.",
+            "example": "",
+            "format": "entity",
+            "type": "array",
+            "use_recommendations": ""
+          },
+          "refreshService": {
+            "description": "The information in refreshService is used to refresh the verifiable credential.",
+            "example": "",
+            "format": "",
+            "type": "entity",
+            "use_recommendations": ""
+          },
+          "termsOfUse": {
+            "description": "The terms of use issued by the issuer.",
+            "example": "",
+            "format": "entity",
+            "type": "array",
+            "use_recommendations": ""
+          },
+          "type": {
+            "description": "The value of the type property MUST be an unordered set. One of the values MUST be ClrCredential.",
+            "example": "",
+            "format": "string",
+            "type": "array",
+            "use_recommendations": ""
+          },
+          "validFrom": {
+            "description": "Timestamp of when the credential becomes valid. VC 2.0 naming (replaces the VC-1.1-era issuanceDate).",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "validUntil": {
+            "description": "Timestamp after which the credential should no longer be considered valid. VC 2.0 naming (replaces the VC-1.1-era expirationDate).",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [
+          "@context",
+          "id",
+          "type",
+          "name",
+          "credentialSubject",
+          "issuer",
+          "validFrom"
+        ],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "ClrSubject": {
+        "properties": {
+          "achievement": {
+            "description": "Bare Achievement definitions referenced by this learner's record. References Achievement.",
+            "example": "",
+            "format": "entity",
+            "type": "array",
+            "use_recommendations": ""
+          },
+          "association": {
+            "description": "The relationships between this learner's achievements/credentials. References Association.",
+            "example": "",
+            "format": "entity",
+            "type": "array",
+            "use_recommendations": ""
+          },
+          "id": {
+            "description": "Unambiguous reference to the ClrSubject.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "identifier": {
+            "description": "One or more identity objects used to identify the learner. References IdentityObject.",
+            "example": "",
+            "format": "entity",
+            "type": "array",
+            "use_recommendations": ""
+          },
+          "type": {
+            "description": "The value of the type property MUST be an unordered set. One of the values MUST be ClrSubject.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "verifiableCredential": {
+            "description": "The learner's nested credentials (AchievementCredential and/or EndorsementCredential objects).",
+            "example": "",
+            "format": "entity",
+            "type": "array",
+            "use_recommendations": ""
+          }
+        },
+        "required": [
+          "type",
+          "verifiableCredential"
+        ],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "CredentialSchema": {
+        "properties": {
+          "id": {
+            "description": "The URI identifying the schema file.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "type": {
+            "description": "The type of data schema validation, e.g. 1EdTechJsonSchemaValidator2019.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "CredentialStatus": {
+        "properties": {
+          "id": {
+            "description": "The URL of the issuers credential status method.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "type": {
+            "description": "The name of the credential status method.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "Criteria": {
+        "properties": {
+          "id": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "narrative": {
+            "description": "The URI of a webpage that describes in a human-readable format the criteria for the achievement.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "EndorsementCredential": {
+        "properties": {
+          "@context": {
+            "description": "The JSON-LD context(s) that apply to this credential.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "awardedDate": {
+            "description": "Timestamp of when the endorsement was made.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "credentialSchema": {
+            "description": "One or more data schemas that provide verifiers with enough information to determine whether the provided data conforms to the schema(s).",
+            "example": "",
+            "format": "entity",
+            "type": "array",
+            "use_recommendations": ""
+          },
+          "credentialStatus": {
+            "description": "Information used to discover the current status of the credential (e.g. suspended or revoked).",
+            "example": "",
+            "format": "",
+            "type": "entity",
+            "use_recommendations": ""
+          },
+          "credentialSubject": {
+            "description": "The entity being endorsed and the endorsement comment. References EndorsementSubject.",
+            "example": "",
+            "format": "",
+            "type": "entity",
+            "use_recommendations": ""
+          },
+          "description": {
+            "description": "A short description of the credential.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "evidence": {
+            "description": "A description of the work backing this endorsement.",
+            "example": "",
+            "format": "entity",
+            "type": "array",
+            "use_recommendations": ""
+          },
+          "id": {
+            "description": "Unambiguous reference to the EndorsementCredential.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "issuer": {
+            "description": "The Profile who is issuing the endorsement.",
+            "example": "",
+            "format": "",
+            "type": "entity",
+            "use_recommendations": ""
+          },
+          "name": {
+            "description": "The name of the credential.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "proof": {
+            "description": "A JSON-LD Linked Data proof section for the credential.",
+            "example": "",
+            "format": "entity",
+            "type": "array",
+            "use_recommendations": ""
+          },
+          "refreshService": {
+            "description": "Information used to refresh the verifiable credential.",
+            "example": "",
+            "format": "",
+            "type": "entity",
+            "use_recommendations": ""
+          },
+          "termsOfUse": {
+            "description": "The terms of use issued by the issuer.",
+            "example": "",
+            "format": "entity",
+            "type": "array",
+            "use_recommendations": ""
+          },
+          "type": {
+            "description": "The value of the type property MUST be an unordered set. One of the values MUST be EndorsementCredential.",
+            "example": "",
+            "format": "string",
+            "type": "array",
+            "use_recommendations": ""
+          },
+          "validFrom": {
+            "description": "Timestamp of when the credential becomes valid.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "validUntil": {
+            "description": "Timestamp after which the credential should no longer be considered valid.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [
+          "@context",
+          "id",
+          "type",
+          "name",
+          "credentialSubject",
+          "issuer",
+          "validFrom"
+        ],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "EndorsementSubject": {
+        "properties": {
+          "endorsementComment": {
+            "description": "Allows the endorser to make a simple claim in support of the entity being endorsed.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "id": {
+            "description": "Unambiguous reference to the thing being endorsed.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "type": {
+            "description": "The value of the type property MUST be an unordered set. One of the values MUST be EndorsementSubject.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "Evidence": {
+        "properties": {
+          "audience": {
+            "description": "Description of the intended audience for a piece of evidence.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "description": {
+            "description": "A longer description of the evidence.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "genre": {
+            "description": "A category or classification of the evidence.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "id": {
+            "description": "The URL of a webpage presenting evidence of achievement or the evidence encoded as a Data URI. The schema of the webpage is undefined.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "name": {
+            "description": "A descriptive title of the evidence.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "narrative": {
+            "description": "A narrative that describes the evidence and its relevance to the achievement.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "type": {
+            "description": "The value of the type property MUST be an unordered set. One of the items MUST be the IRI 'Evidence'.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "GeoCoordinates": {
+        "properties": {
+          "latitude": {
+            "description": "The latitude of the location.",
+            "example": "",
+            "format": "",
+            "type": "number",
+            "use_recommendations": ""
+          },
+          "longitude": {
+            "description": "The longitude of the location.",
+            "example": "",
+            "format": "",
+            "type": "number",
+            "use_recommendations": ""
+          },
+          "type": {
+            "description": "The value of the type property MUST be an unordered set. One of the values MUST be GeoCoordinates.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [
+          "type",
+          "latitude",
+          "longitude"
+        ],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "IdentifierEntry": {
+        "properties": {
+          "identifier": {
+            "description": "The identifier value, in plain text.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "identifierType": {
+            "description": "The type of identifier.",
+            "enum": [
+              "name",
+              "sourcedId",
+              "systemId",
+              "productId",
+              "userName",
+              "accountId",
+              "emailAddress",
+              "nationalIdentityNumber",
+              "isbn",
+              "issn",
+              "lisSourcedId",
+              "oneRosterSourcedId",
+              "sisSourcedId",
+              "ltiContextId",
+              "ltiDeploymentId",
+              "ltiToolId",
+              "ltiPlatformId",
+              "ltiUserId",
+              "identifier"
+            ],
+            "example": "",
+            "format": "",
+            "type": "enum",
+            "use_recommendations": ""
+          },
+          "type": {
+            "description": "The value of the type property MUST be an unordered set. One of the values MUST be IdentifierEntry.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [
+          "type",
+          "identifier",
+          "identifierType"
+        ],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "IdentityObject": {
+        "properties": {
+          "hashed": {
+            "description": "Whether the identityHash value is hashed.",
+            "example": "",
+            "format": "",
+            "type": "boolean",
+            "use_recommendations": ""
+          },
+          "identityHash": {
+            "description": "Either the hash of the identity value or the plaintext value, depending on the value of hashed.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "identityType": {
+            "description": "The type of identity. Shares its enumeration with IdentifierEntry.identifierType.",
+            "enum": [
+              "name",
+              "sourcedId",
+              "systemId",
+              "productId",
+              "userName",
+              "accountId",
+              "emailAddress",
+              "nationalIdentityNumber",
+              "isbn",
+              "issn",
+              "lisSourcedId",
+              "oneRosterSourcedId",
+              "sisSourcedId",
+              "ltiContextId",
+              "ltiDeploymentId",
+              "ltiToolId",
+              "ltiPlatformId",
+              "ltiUserId",
+              "identifier"
+            ],
+            "example": "",
+            "format": "",
+            "type": "enum",
+            "use_recommendations": ""
+          },
+          "salt": {
+            "description": "If the identityHash is hashed, this should contain the string used to salt the hash.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "type": {
+            "description": "The value of the type property MUST be an unordered set. One of the values MUST be IdentityObject.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [
+          "type",
+          "hashed",
+          "identityHash",
+          "identityType"
+        ],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "Image": {
+        "properties": {
+          "caption": {
+            "description": "The caption for the image.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "id": {
+            "description": "The URI of the image.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "type": {
+            "description": "The value of the type property MUST be an unordered set. One of the values MUST be Image.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "Profile": {
+        "properties": {
+          "additionalName": {
+            "description": "Additional name. Includes what is often referred to as middle name in the western world.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "address": {
+            "description": "The address for the individual or organization. References Address.",
+            "example": "",
+            "format": "",
+            "type": "entity",
+            "use_recommendations": ""
+          },
+          "dateOfBirth": {
+            "description": "Birthdate of the person.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "description": {
+            "description": "A short description of the individual or organization",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "email": {
+            "description": "A contact email address for the individual or organization.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "endorsement": {
+            "description": "Allows endorsers to make specific claims about the Profile. References EndorsementCredential.",
+            "example": "",
+            "format": "entity",
+            "type": "array",
+            "use_recommendations": ""
+          },
+          "endorsementJwt": {
+            "description": "Allows endorsers to make specific claims about the Profile in compact JWT format.",
+            "example": "",
+            "format": "string",
+            "type": "array",
+            "use_recommendations": ""
+          },
+          "familyName": {
+            "description": "Family name. In the western world, often referred to as the last name of a person.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "familyNamePrefix": {
+            "description": "Family name prefix, as used in some locales.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "givenName": {
+            "description": "Given name. In the western world, often referred to as the first name of a person.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "honorificPrefix": {
+            "description": "Honorific prefix(es) preceding a person's name (e.g. Dr, Mrs, Mr).",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "honorificSuffix": {
+            "description": "Honorific suffix(es) following a person's name (e.g. M.D, PhD, MSCSE).",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "id": {
+            "description": "An institution's student identifier for the person, learner, publisher, issuer.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "image": {
+            "description": "An image representing the profile, such as a logo.",
+            "example": "",
+            "format": "",
+            "type": "entity",
+            "use_recommendations": ""
+          },
+          "name": {
+            "description": "Name of the organization.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "official": {
+            "description": "If the entity is an organization, official is the name of an authorized official of the organization.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "otherIdentifier": {
+            "description": "A list of identifiers for the described entity. References IdentifierEntry.",
+            "example": "",
+            "format": "entity",
+            "type": "array",
+            "use_recommendations": ""
+          },
+          "parentOrg": {
+            "description": "The parent organization of the entity. References Profile.",
+            "example": "",
+            "format": "",
+            "type": "entity",
+            "use_recommendations": ""
+          },
+          "patronymicName": {
+            "description": "Patronymic name.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "phone": {
+            "description": "The profile's phone number.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "type": {
+            "description": "The value of the type property MUST be an unordered set. One of the values MUST be Profile.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "url": {
+            "description": "The homepage or social media profile of the entity, whether individual or institutional.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "Proof": {
+        "properties": {
+          "challenge": {
+            "description": "A value chosen by the verifier to mitigate authentication proof replay attacks.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "created": {
+            "description": "Date the proof was created.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "cryptosuite": {
+            "description": "The suite used to create the proof.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "domain": {
+            "description": "The domain of the proof to restrict its use to a particular target.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "nonce": {
+            "description": "A value chosen by the creator of proof to randomize proof values for privacy purposes.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "proofPurpose": {
+            "description": "The purpose of the proof to be used with verificationMethod. MUST be assertionMethod.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "proofValue": {
+            "description": "Value of the proof.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "type": {
+            "description": "Signature suite used to produce proof.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "verificationMethod": {
+            "description": "The URL of the public key that can verify the signature.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "RefreshService": {
+        "properties": {
+          "id": {
+            "description": "The URL of the issuers refresh service.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "type": {
+            "description": "The name of the refresh service method.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "Result": {
+        "properties": {
+          "achievedLevel": {
+            "description": "The rubric criterion level achieved. References RubricCriterionLevel's identifier.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "alignment": {
+            "description": "The alignment(s) between this result and a node in an external framework. References Alignment.",
+            "example": "",
+            "format": "entity",
+            "type": "array",
+            "use_recommendations": ""
+          },
+          "resultDescription": {
+            "description": "The ResultDescription that this Result is an instance of.",
+            "example": "",
+            "format": "",
+            "type": "entity",
+            "use_recommendations": ""
+          },
+          "status": {
+            "description": "The status of the achievement. Not yet wired to an enumeration -- see the deferred value-set decision for this data model.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "type": {
+            "description": "The value of the type property MUST be an unordered set. One of the values MUST be Result.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "value": {
+            "description": "A performance value, such as a score, percent, or raw score.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "ResultDescription": {
+        "properties": {
+          "alignment": {
+            "description": "The alignment(s) between this result description and a node in an external framework.",
+            "example": "",
+            "format": "entity",
+            "type": "array",
+            "use_recommendations": ""
+          },
+          "allowedValue": {
+            "description": "An ordered list of allowed values, from lowest to highest.",
+            "example": "",
+            "format": "string",
+            "type": "array",
+            "use_recommendations": ""
+          },
+          "id": {
+            "description": "Unambiguous reference to the ResultDescription.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "name": {
+            "description": "The name of the result.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "requiredLevel": {
+            "description": "The id of the rubric criterion level required to pass, as determined by the achievement creator.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "requiredValue": {
+            "description": "The value that must be met or exceeded to pass, when resultType is one of the numeric or level types.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "resultType": {
+            "description": "The type of result this description represents.",
+            "enum": [
+              "Status",
+              "GradePointAverage",
+              "RubricCriterion",
+              "RubricCriterionLevel",
+              "LetterGrade",
+              "Percent",
+              "Result",
+              "PredictedScore",
+              "RawScore",
+              "RubricScore",
+              "ScaledScore",
+              "PerformanceLevel"
+            ],
+            "example": "",
+            "format": "",
+            "type": "enum",
+            "use_recommendations": ""
+          },
+          "rubricCriterionLevel": {
+            "description": "An ordered array of rubric criterion levels that may be asserted, from lowest to highest. References RubricCriterionLevel.",
+            "example": "",
+            "format": "entity",
+            "type": "array",
+            "use_recommendations": ""
+          },
+          "type": {
+            "description": "The value of the type property MUST be an unordered set. One of the values MUST be ResultDescription.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "valueMax": {
+            "description": "The maximum value allowed for this result.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "valueMin": {
+            "description": "The minimum value allowed for this result.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "name",
+          "resultType"
+        ],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "RubricCriterionLevel": {
+        "properties": {
+          "alignment": {
+            "description": "The alignment(s) between this rubric criterion level and a node in an external framework. References Alignment.",
+            "example": "",
+            "format": "entity",
+            "type": "array",
+            "use_recommendations": ""
+          },
+          "description": {
+            "description": "A more complete description of the level.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "id": {
+            "description": "Unambiguous reference to the RubricCriterionLevel.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "level": {
+            "description": "The level in terms of interpreted meaning, not the point value.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "name": {
+            "description": "The name of the level.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "points": {
+            "description": "The points associated with this level.",
+            "example": "",
+            "format": "",
+            "type": "number",
+            "use_recommendations": ""
+          },
+          "type": {
+            "description": "The value of the type property MUST be an unordered set. One of the values MUST be RubricCriterionLevel.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "name"
+        ],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "TermsOfUse": {
+        "properties": {
+          "id": {
+            "description": "The URI identifying the term of use.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "type": {
+            "description": "The type of the terms of use.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "type": "object",
+        "use_recommendations": ""
+      }
+    }
+  },
+  "info": {
+    "description": "OpenAPI Spec",
+    "title": "Machine-Readable Schema for CLR v2",
+    "version": "2.0"
+  },
+  "openapi": "3.0.0",
+  "paths": {}
+}
