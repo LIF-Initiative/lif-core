@@ -61,6 +61,11 @@ LIF_GRAPHQL_CLIENT_TIMEOUT_SECONDS = int(
 LIF_CLIENT_HEADER = "X-LIF-Client"
 LIF_CLIENT_NAME = "graphql"
 
+# The Query Planner's inbound API key (#1108). Unset sends no key, which a planner without
+# QUERY_PLANNER_AUTH__API_KEYS accepts -- so this can ship before the planner enforces.
+LIF_QUERY_PLANNER_API_KEY = os.getenv("LIF_QUERY_PLANNER_API_KEY", "").strip()
+API_KEY_HEADER = "X-API-Key"
+
 
 # === Constants ===
 
@@ -796,6 +801,11 @@ def lif_client_headers(info: Any) -> Dict[str, str]:
     return {LIF_CLIENT_HEADER: incoming or LIF_CLIENT_NAME}
 
 
+def query_planner_auth_headers() -> Dict[str, str]:
+    """The X-API-Key header for the Query Planner, or nothing when no key is configured."""
+    return {API_KEY_HEADER: LIF_QUERY_PLANNER_API_KEY} if LIF_QUERY_PLANNER_API_KEY else {}
+
+
 # === Root Query Type Construction ===
 
 
@@ -853,7 +863,11 @@ def build_root_query_type(
             )
             # Make the backend API call
             async with httpx.AsyncClient(timeout=httpx.Timeout(LIF_GRAPHQL_CLIENT_TIMEOUT_SECONDS)) as client:
-                response = await client.post(query_planner_query_url, json=query, headers=lif_client_headers(info))
+                response = await client.post(
+                    query_planner_query_url,
+                    json=query,
+                    headers={**lif_client_headers(info), **query_planner_auth_headers()},
+                )
 
             if response.status_code == 200:
                 response_json = response.json()
@@ -973,7 +987,7 @@ def build_root_mutation_type(
         )
 
         async with httpx.AsyncClient() as client:
-            response = await client.post(query_planner_update_url, json=payload)
+            response = await client.post(query_planner_update_url, json=payload, headers=query_planner_auth_headers())
         # ... handle response as in create ...
         if response.status_code == 200:
             response_json = response.json()
