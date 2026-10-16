@@ -88,10 +88,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **GraphQL error contract:** a non-200 from the Query Planner now surfaces as a GraphQL `errors`
   entry instead of an empty result set, so callers can tell a backend failure from a learner with
   genuinely no data. A genuinely empty result still returns an empty list
+- **Auth:** every service with inbound auth composes one `lif.auth` brick: one `AuthMiddleware`
+  that runs identity-provider strategies (`api_key`, `cognito`, `jwt`) in order, one `AuthError`
+  401 contract, and one HS256 implementation (`lif.auth.jwt`). MDR uses
+  `lif.mdr_auth.add_mdr_auth(app)`, which runs MDR's tenant step after authentication.
+  Visible changes: MDR rejects an unknown `X-API-Key` with 401 instead of falling through to the
+  Bearer token, MDR answers missing credentials with `Missing or invalid credentials`, and the
+  Advisor answers a missing token with 401 instead of 403. See ADR 0007 and
+  `docs/operations/guides/auth-configuration.md` (issue #548)
 
 ### Deprecated
 
 ### Removed
+
+- Auth bricks `api_key_auth`, `api_token_auth` and `cognito_auth`, the
+  Advisor-only `lif.auth.core`, and MDR's `create_access_token`, `create_refresh_token`,
+  `decode_jwt` and its own `AuthMiddleware`, all replaced by `lif.auth` (issue #548)
 
 ### Fixed
 
@@ -114,6 +126,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - docker-compose: the MDR's post-confirm and learner-data-export service keys are passed through
   (`MDR__AUTH__SERVICE_API_KEY__POST_CONFIRM`, `MDR__AUTH__SERVICE_API_KEY__LEARNER_DATA_EXPORT`).
   MDR previously always used their built-in defaults, which could not be overridden from `.env`
+- Auth secrets have no fallback values: `MDR__AUTH__JWT_SECRET_KEY` (previously `change4`) is
+  required, and a signing secret set to a value published in this repo (`changeme*`, `change4`,
+  `replace`, …) stops the service at import, naming the variable. The Example Data Source fails
+  at startup when `API_TOKEN` is unset. MDR's service API keys no longer default to
+  `changeme1`–`6`: an unset key is not accepted (issue #548)
 
 ---
 

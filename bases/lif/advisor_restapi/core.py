@@ -2,12 +2,12 @@ import os
 import uuid
 from typing import Any, Dict, List
 
-import jwt
-from fastapi import BackgroundTasks, Depends, FastAPI, HTTPException
+from fastapi import BackgroundTasks, Depends, FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
-from lif.auth.core import create_access_token, create_refresh_token, decode_jwt, get_current_user
+from lif.auth import AuthMiddleware
+from lif.auth.jwt import JwtConfig, jwt_strategy, mint_access, mint_refresh, verify
 from lif.demo_personas import get_demo_personas_as_dicts
 from lif.langchain_agent import LIFAIAgent
 from lif.logging import get_logger
@@ -37,11 +37,25 @@ conversation_states: Dict[str, Dict[str, Any]] = {}
 refresh_tokens_store: Dict[str, str] = {}
 
 
+# HS256 access/refresh tokens (ADR 0007). SECRET_KEY is required at import, with no
+# fallback (#1191): an unset or placeholder value stops the service, naming the variable.
+JWT_CONFIG = JwtConfig.from_environment("SECRET_KEY")
+
 app = FastAPI(title="LIF Advisor API", description="API for the LIF Advisor chat application", version="1.0.0")
 
+# Inbound auth: every route except these needs a valid access token. Added before CORS
+# so CORS stays the outermost middleware and answers browser preflight requests itself.
+app.add_middleware(
+    AuthMiddleware, strategies=[jwt_strategy(JWT_CONFIG)], public_paths={"/login", "/refresh-token", "/health"}
+)
 app.add_middleware(
     CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"]
 )
+
+
+def get_current_user(request: Request) -> str:
+    """The authenticated username, set by AuthMiddleware from the token's ``sub``."""
+    return request.state.principal
 
 
 # --- Pydantic Models ---
@@ -178,8 +192,8 @@ async def login(request: LoginRequest) -> LoginResponse:
     """
     user = _find_user(request.username)
     if user and request.password == DEMO_USER_PASSWORD:
-        access_token = create_access_token({"sub": user["username"]})
-        refresh_token = create_refresh_token({"sub": user["username"]})
+        access_token = mint_access(JWT_CONFIG, {"sub": user["username"]})
+        refresh_token = mint_refresh(JWT_CONFIG, {"sub": user["username"]})
         refresh_tokens_store[user["username"]] = refresh_token
 
         # Every login starts a clean conversation + agent.
@@ -200,19 +214,15 @@ async def refresh_token(request: RefreshTokenRequest) -> RefreshTokenResponse:
     """
     Exchange a valid refresh token for a new access token.
     """
-    try:
-        payload = decode_jwt(request.refresh_token)
-        username = payload.get("sub")
-        if not username:
-            raise HTTPException(status_code=401, detail="Invalid refresh token")
-        stored_token = refresh_tokens_store.get(username)
-        if stored_token != request.refresh_token:
-            raise HTTPException(status_code=401, detail="Refresh token invalid or revoked")
-    except jwt.ExpiredSignatureError:
-        raise HTTPException(status_code=401, detail="Refresh token expired")
-    except jwt.InvalidTokenError:
+    # An expired or invalid token raises AuthError (a 401) from verify.
+    payload = verify(JWT_CONFIG, request.refresh_token)
+    username = payload.get("sub")
+    if not username:
         raise HTTPException(status_code=401, detail="Invalid refresh token")
-    access_token = create_access_token({"sub": username})
+    stored_token = refresh_tokens_store.get(username)
+    if stored_token != request.refresh_token:
+        raise HTTPException(status_code=401, detail="Refresh token invalid or revoked")
+    access_token = mint_access(JWT_CONFIG, {"sub": username})
     return RefreshTokenResponse(access_token=access_token)
 
 

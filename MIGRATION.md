@@ -63,6 +63,41 @@ compatibility. This includes:
   Data Export is unaffected — it calls the Query Planner directly.
 - **Related:** #1264, CHANGELOG.md "Changed", `bases/lif/api_graphql/README.md` → Error contract
 
+#### Auth: one `lif.auth` brick; secrets and MDR service keys have no defaults
+
+- **Action Required:**
+  1. Set `MDR__AUTH__JWT_SECRET_KEY` to a strong secret. It previously defaulted to `change4`, and
+     MDR now refuses to start without it. Local docker-compose won't even parse without it: copy
+     the value line from `deployments/advisor-demo-docker/.env.example` into your `.env`. In AWS it
+     comes from `/{env}/mdr-api/MdrAuthJwtSecretKey`. No script creates it; see
+     `docs/operations/guides/auth-configuration.md` → Creating secrets without a script.
+  2. Make sure no signing secret (`SECRET_KEY` for the Advisor, `MDR__AUTH__JWT_SECRET_KEY` for MDR)
+     is a value published in this repo (`changeme`, `changeme1`–`6`, `change4`, `replace`, …).
+     Those now stop the service at import, with an error naming the variable.
+  3. Set `API_TOKEN` for the Example Data Source API. An unset token now stops it at startup,
+     instead of making it reject every request.
+  4. Set each `MDR__AUTH__SERVICE_API_KEY__*` that a caller in your deployment uses. The
+     `changeme1`–`6` code defaults are gone, and an unset key is simply not accepted (a startup
+     warning names it). Local compose still supplies the `changeme*` values. In AWS,
+     `scripts/setup-mdr-api-keys.sh <env> --apply` writes each server key and its client copy.
+  5. Run the read-only SSM check in `docs/operations/guides/auth-configuration.md` for each
+     environment before deploying.
+- **Impact:**
+  - MDR rejects an unknown `X-API-Key` with 401, even if a valid Bearer token is also sent. It
+    previously fell through to the Bearer token.
+  - Response changes:
+    - MDR with no credentials: `{"detail": "Missing or invalid credentials"}` (was
+      `Authentication required: …`).
+    - Advisor with a missing token: 401 instead of 403.
+  - Code importing `lif.api_key_auth`, `lif.api_token_auth`, `lif.cognito_auth`,
+    `lif.auth.core`, or MDR's `create_access_token` / `create_refresh_token` / `decode_jwt` /
+    `AuthMiddleware` must move to `lif.auth` (middleware, strategies) and `lif.auth.jwt`
+    (`JwtConfig`, `mint_access`, `mint_refresh`, `verify`). MDR bases use
+    `lif.mdr_auth.add_mdr_auth(app)`.
+- **Related:** #548, CHANGELOG.md "Changed" / "Removed" / "Security", ADR 0007
+  (`docs/design/adr/general/0007-single-auth-brick-with-provider-adapters.md`),
+  `docs/operations/guides/auth-configuration.md`
+
 ### Deprecation Notices
 
 *No deprecations currently pending*

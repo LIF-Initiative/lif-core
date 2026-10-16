@@ -135,6 +135,10 @@ services:
       LIF_ADVISOR_MAX_CONVERSATION_SIZE: ${LIF_ADVISOR_MAX_CONVERSATION_SIZE:-2048}
       LIF_ADVISOR_MAX_SUMMARY_SIZE: ${LIF_ADVISOR_MAX_SUMMARY_SIZE:-1024}
       OPENAI_API_KEY: ${OPENAI_API_KEY}
+      # Required by the Advisor at startup, no defaults (#1191). Export them before
+      # `docker compose up`; the Advisor exits naming the variable if either is missing.
+      LIF_DEMO_USER_PASSWORD: ${LIF_DEMO_USER_PASSWORD}
+      SECRET_KEY: ${SECRET_KEY}
       CONFIG_KEY_STORE: ${CONFIG_KEY_STORE:-/etc/keys}
     ports:
       - "8004:8004"

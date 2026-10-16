@@ -7,7 +7,7 @@ FastAPI + Strawberry GraphQL base that converts an OpenAPI schema (loaded from t
 - `GET /graphql` (GraphiQL UI when not authed-and-running-in-prod)
 
 ## Auth
-API-key authentication via `ApiKeyAuthMiddleware`. Configured by `GRAPHQL_AUTH__API_KEYS` env var (`key1:client1,key2:client2`). When unset, auth is disabled — fine for local dev, never for deployed envs.
+API-key authentication via `lif.auth.AuthMiddleware` with `api_key_strategy` (`add_api_key_auth` in `core.py`). Configured by `GRAPHQL_AUTH__API_KEYS` env var (`key1:client1,key2:client2`). When unset, auth is disabled — fine for local dev, never for deployed envs.
 
 ## Error contract
 
@@ -21,7 +21,7 @@ Planner's error body can contain backend internals, so it goes to the server log
 relayed to the caller (#1291 for queries, #1309 for the update mutation).
 
 ## Composes
-- `api_key_auth` — middleware
+- `auth` — `AuthMiddleware` + `api_key_strategy`
 - `lif_schema_config` — env-driven config
 - `logging` — logger setup
 - `mdr_client` — fetches OpenAPI schema at startup

@@ -62,10 +62,11 @@ Compose reads `.env` from the directory it runs in, and the file is gitignored. 
 MDR__AUTH__LOCAL_USERS=alice@example.org=scrypt:...,bob@example.org=scrypt:...
 
 # --- Secrets: replace every value ------------------------------------------
-# Signs MDR sign-in tokens (compose default: change4).
+# Signs MDR sign-in tokens. Required: compose won't start without it, and MDR
+# refuses to start if it is left as this placeholder or another published one.
 MDR__AUTH__JWT_SECRET_KEY=replace-with-a-long-random-string
 # Service API keys. Anyone holding one gets service-level API access
-# (defaults: changeme1, changeme2, changeme3, changeme5, changeme6).
+# (compose defaults: changeme1, changeme2, changeme3, changeme5, changeme6).
 MDR__AUTH__SERVICE_API_KEY__GRAPHQL=replace
 MDR__AUTH__SERVICE_API_KEY__SEMANTIC_SEARCH=replace
 MDR__AUTH__SERVICE_API_KEY__TRANSLATOR=replace
