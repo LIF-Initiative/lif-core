@@ -28,3 +28,17 @@ class PortabilityErrorCode(str, Enum):
     PATH_INVALID = "PATH_INVALID"
     CROSSWALK_SOURCE_DUPLICATE = "CROSSWALK_SOURCE_DUPLICATE"
     NOT_MIGRATED = "NOT_MIGRATED"
+
+
+class PortabilityError(Exception):
+    """One refusal: its code, the element it concerns (by key or path), and why (spec §10)."""
+
+    def __init__(self, code: PortabilityErrorCode, element: str, reason: str):
+        super().__init__(f"{code.value} at {element or '(file)'}: {reason}")
+        self.code = code
+        self.element = element
+        self.reason = reason
+
+
+class PortabilityErrorGroup(ExceptionGroup[PortabilityError]):
+    """Every refusal found in one file, so a caller can report them all at once."""

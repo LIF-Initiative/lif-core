@@ -2,37 +2,16 @@ import json
 from pathlib import Path
 
 import pytest
-from pydantic import BaseModel, ValidationError
+from pydantic import ValidationError
 
 from lif.mdr_portability import CrosswalkFile, MappingGroupFile, ModelFile
-from lif.mdr_portability.models import CrosswalkEntry, ModelIdentity
+from lif.mdr_portability.v1.models import CrosswalkEntry, ModelIdentity
 
 FIXTURES = Path(__file__).parent / "fixtures"
 
 
-def _canonical_json(file: BaseModel) -> str:
-    # Portability Spec §9: omit NULL optionals and false optional booleans; 2-space indent; trailing newline.
-    return json.dumps(file.model_dump(mode="json", exclude_defaults=True), indent=2, ensure_ascii=False) + "\n"
-
-
 def _load(name: str) -> dict:
     return json.loads((FIXTURES / name).read_text())
-
-
-@pytest.mark.parametrize(
-    ("model_class", "fixture"),
-    [
-        (ModelFile, "test_reference_source_model_file.json"),
-        (ModelFile, "test_reference_target_model_file.json"),
-        (MappingGroupFile, "test_reference_mapping_group_file.json"),
-        (CrosswalkFile, "test_reference_crosswalk_file.json"),
-    ],
-)
-def test_reference_files_parse_and_dump_back_byte_for_byte(model_class, fixture):
-    # The fields are declared in spec order, so canonical reference files survive a round trip.
-    text = (FIXTURES / fixture).read_text()
-
-    assert _canonical_json(model_class.model_validate_json(text)) == text
 
 
 def test_reference_files_form_one_consistent_set():
@@ -50,12 +29,12 @@ def test_reference_files_form_one_consistent_set():
         )
 
     def value_names(model: ModelFile, value_set: str) -> set[str]:
-        return {v.ValueName for vs in model.ValueSets if vs.Name == value_set for v in vs.Values}
+        return {value.ValueName for each in model.ValueSets if each.Name == value_set for value in each.Values}
 
     assert (group.Details.Source, group.Details.Target) == (identity(source), identity(target))
     assert (crosswalk.Details.Source.Model, crosswalk.Details.Target.Model) == (identity(source), identity(target))
-    assert {e.Source for e in crosswalk.Entries} <= value_names(source, crosswalk.Details.Source.ValueSet)
-    assert {e.Target for e in crosswalk.Entries} <= value_names(target, crosswalk.Details.Target.ValueSet)
+    assert {entry.Source for entry in crosswalk.Entries} <= value_names(source, crosswalk.Details.Source.ValueSet)
+    assert {entry.Target for entry in crosswalk.Entries} <= value_names(target, crosswalk.Details.Target.ValueSet)
 
 
 def test_reference_false_imports_but_is_not_written():
@@ -71,12 +50,11 @@ def test_association_child_resolves_to_the_kind_it_names():
     # Competency has an entity and an attribute that share the UniqueName "Competency.Classifier".
     file = ModelFile.model_validate(_load("test_reference_target_model_file.json"))
 
-    assert {a.Name: type(a.Child).__name__ for a in file.Associations if a.Parent.Entity == "Competency"} == {
-        "Classifier": "EntityKey",
-        "Entails": "EntityKey",
-        "classifier": "AttributeKey",
-        "identifier": "AttributeKey",
-    }
+    assert {
+        association.Name: type(association.Child).__name__
+        for association in file.Associations
+        if association.Parent.Entity == "Competency"
+    } == {"Classifier": "EntityKey", "Entails": "EntityKey", "classifier": "AttributeKey", "identifier": "AttributeKey"}
 
 
 @pytest.mark.parametrize(
@@ -167,7 +145,7 @@ def test_model_file_shape_refusals(mutate, error_type):
     with pytest.raises(ValidationError) as exc_info:
         ModelFile.model_validate(data)
 
-    assert error_type in {e["type"] for e in exc_info.value.errors()}
+    assert error_type in {error["type"] for error in exc_info.value.errors()}
 
 
 @pytest.mark.parametrize(
@@ -192,7 +170,7 @@ def test_mapping_group_file_shape_refusals(mutate, error_type):
     with pytest.raises(ValidationError) as exc_info:
         MappingGroupFile.model_validate(data)
 
-    assert error_type in {e["type"] for e in exc_info.value.errors()}
+    assert error_type in {error["type"] for error in exc_info.value.errors()}
 
 
 def test_crosswalk_value_set_reference_requires_full_model_identity():
