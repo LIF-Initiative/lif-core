@@ -51,6 +51,7 @@
         "ASGI",
         "asgi",
         "asyncio",
+        "asyncpg",
         "attributey",
         "attributez",
         "autoflush",

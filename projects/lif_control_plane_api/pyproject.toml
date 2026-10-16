@@ -1,0 +1,29 @@
+[build-system]
+requires = ["hatchling", "hatch-polylith-bricks"]
+build-backend = "hatchling.build"
+
+[project]
+name = "lif_control_plane_api"
+version = "0.1.0"
+
+requires-python = ">=3.13,<3.14"
+
+dependencies = [
+    "asyncpg~=0.30",
+    "fastapi~=0.115",
+    "pyjwt[crypto]~=2.10",
+    "sqlalchemy[asyncio]~=2.0.0",
+    "uvicorn~=0.34",
+]
+
+# This section is needed for the Hatchling build backend, to activate the polylith build hook.
+[tool.hatch.build.hooks.polylith-bricks]
+
+# This section is needed for building
+[tool.hatch.build.targets.wheel]
+packages = ["lif"]
+
+[tool.polylith.bricks]
+"../../bases/lif/control_plane_restapi" = "lif/control_plane_restapi"
+"../../components/lif/cognito_auth" = "lif/cognito_auth"
+"../../components/lif/logging" = "lif/logging"
