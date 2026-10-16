@@ -18,7 +18,17 @@ from typing import Annotated, List, Literal, Optional, Union
 
 from lif.mdr_dto.transformation_group_dto import reject_non_numeric_group_version
 from lif.mdr_sql_model.core import AccessType
-from pydantic import AfterValidator, AwareDatetime, BaseModel, BeforeValidator, ConfigDict, PlainSerializer, StrictBool
+from pydantic import (
+    AfterValidator,
+    AwareDatetime,
+    BaseModel,
+    BeforeValidator,
+    ConfigDict,
+    Discriminator,
+    PlainSerializer,
+    StrictBool,
+    Tag,
+)
 
 # Parsing is strict: a key the format version does not define is refused (§4.2).
 _STRICT = ConfigDict(extra="forbid")
@@ -108,6 +118,29 @@ class ValueSetKey(BaseModel):
     model_config = _STRICT
 
     ValueSet: str
+
+
+# Tags naming the two kinds of association end. Pydantic puts the tag into an error's location
+# (Child.EntityKey.Model), so parse.py removes these to report the path as written (Child.Model).
+CHILD_KEY_TAGS = frozenset({EntityKey.__name__, AttributeKey.__name__})
+
+
+def _child_kind(value: object) -> Optional[str]:
+    # An association end states its kind by its key, so the matching model is chosen directly. Without
+    # this, one bad end is reported once per kind it might have been.
+    if isinstance(value, dict):
+        if "Entity" in value:
+            return EntityKey.__name__
+        if "Attribute" in value:
+            return AttributeKey.__name__
+        return None
+    return type(value).__name__
+
+
+ChildKey = Annotated[
+    Union[Annotated[EntityKey, Tag(EntityKey.__name__)], Annotated[AttributeKey, Tag(AttributeKey.__name__)]],
+    Discriminator(_child_kind),
+]
 
 
 # --- Model file (§5) ---
@@ -209,7 +242,7 @@ class Association(BaseModel):
     model_config = _STRICT
 
     Parent: EntityKey
-    Child: Union[EntityKey, AttributeKey]
+    Child: ChildKey
     Name: NonBlankStr
     Array: StrictBool = False
     Reference: StrictBool = False
