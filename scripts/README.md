@@ -36,6 +36,7 @@ Utility scripts for managing deployments, credentials, and data. AWS scripts req
 |--------|---------|
 | `reset-mdr-database.sh` | **Destructive.** Wipes and recreates the MDR database via Flyway clean + migrate. Required when `V1.1__metadata_repository_init.sql` is replaced rather than versioned incrementally. |
 | `provision-mdr-tenant.sh` | Create a `tenant_{name}` PostgreSQL schema by cloning DDL (and optionally data) from `public`. Supports MDR self-serve multi-tenancy (issue #883). Uses libpq env vars (`PG*`) for connectivity — caller manages network access. |
+| `backfill-transformation-group-activation.sh` | One-time backfill for #1350: dates the highest undated version of each transformation group pair and deprecates the older ones, in `public` and every `tenant_*` schema. Dry-run by default (runs and rolls back), `--apply` to commit; idempotent. Uses libpq env vars (`PG*`). |
 
 ## Demo Release
 
