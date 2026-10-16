@@ -1,0 +1,1489 @@
+{
+  "components": {
+    "schemas": {
+      "Credential": {
+        "properties": {
+          "CredentialAlignments": {
+            "properties": {
+              "alignmentType": {
+                "description": "Type of alignment, RSD, CredentialEngine, CASE, ASN, etc.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": "No change"
+              },
+              "code": {
+                "description": "If applicable, a locally unique string identifier that identifies the alignment target within its framework and/or targetUrl.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": "No change"
+              },
+              "description": {
+                "description": "Description of the alignment target.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": "No change"
+              },
+              "framework": {
+                "description": "Name of the framework being aligned.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": "No change"
+              },
+              "identifier": {
+                "description": "The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": "Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered."
+              },
+              "informationSourceId": {
+                "description": "An identifier key that represents a combination of informationSourceOrganization and informationSourceSystem from which this entity data came. Typically, this value is configured in the orchestrator and applied to the LIF record as it is generated. This could be a human or machine-readable value.\n",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "informationSourceOrganization": {
+                "description": "The organization from which this entity data came, such as a school, college, employer, agency, or vendor. Typically, this value is configured in the orchestrator and applied to the LIF record as it is generated. This could be the organization’s name or another preferred way to indicate the organization. This value may be visible to students or instructors via external applications or an LLM advisor, so it should be something easily identifiable. This field should help users identify which system to refer to if they have questions about the data associated with this field.\n",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "informationSourceSystem": {
+                "description": "The specific information system, application, or pipeline from which this entity data came. Examples include SIS, LMS, HR Systems, CRMs, and data warehouses. Typically, this value is configured in the orchestrator and applied to the LIF record as it is generated. This value may be visible to students, instructors, or staff via external applications or an LLM advisor, so it should be something easily identifiable. This field should help users identify which system to refer to if they have questions about the data associated with this field.\n",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "name": {
+                "description": "Name of the alignment.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": "No change"
+              },
+              "url": {
+                "description": "URL linking to the official description of the alignment target, for example an individual standard within a learning framework.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": "No change"
+              }
+            },
+            "required": [
+              "code",
+              "informationSourceId",
+              "informationSourceOrganization",
+              "identifier"
+            ],
+            "type": "array",
+            "use_recommendations": "",
+            "x-mutable": false,
+            "x-queryable": false
+          },
+          "Image": {
+            "properties": {
+              "caption": {
+                "description": "The caption for the image",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": "No change"
+              },
+              "identifier": {
+                "description": "The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": "Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered."
+              },
+              "imageType": {
+                "description": "Type of Image, usually PNG or SVG",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": "No change"
+              },
+              "informationSourceId": {
+                "description": "An identifier key that represents a combination of informationSourceOrganization and informationSourceSystem from which this entity data came. Typically, this value is configured in the orchestrator and applied to the LIF record as it is generated. This could be a human or machine-readable value.\n",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "informationSourceOrganization": {
+                "description": "The organization from which this entity data came, such as a school, college, employer, agency, or vendor. Typically, this value is configured in the orchestrator and applied to the LIF record as it is generated. This could be the organization’s name or another preferred way to indicate the organization. This value may be visible to students or instructors via external applications or an LLM advisor, so it should be something easily identifiable. This field should help users identify which system to refer to if they have questions about the data associated with this field.\n",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "informationSourceSystem": {
+                "description": "The specific information system, application, or pipeline from which this entity data came. Examples include SIS, LMS, HR Systems, CRMs, and data warehouses. Typically, this value is configured in the orchestrator and applied to the LIF record as it is generated. This value may be visible to students, instructors, or staff via external applications or an LLM advisor, so it should be something easily identifiable. This field should help users identify which system to refer to if they have questions about the data associated with this field.\n",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              }
+            },
+            "required": [
+              "identifier",
+              "informationSourceId",
+              "informationSourceOrganization"
+            ],
+            "type": "array",
+            "use_recommendations": "",
+            "x-mutable": false,
+            "x-queryable": false
+          },
+          "Requirements": {
+            "properties": {
+              "Criteria": {
+                "properties": {
+                  "informationSourceId": {
+                    "description": "An identifier key that represents a combination of informationSourceOrganization and informationSourceSystem from which this entity data came. Typically, this value is configured in the orchestrator and applied to the LIF record as it is generated. This could be a human or machine-readable value.\n",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "informationSourceOrganization": {
+                    "description": "The organization from which this entity data came, such as a school, college, employer, agency, or vendor. Typically, this value is configured in the orchestrator and applied to the LIF record as it is generated. This could be the organization’s name or another preferred way to indicate the organization. This value may be visible to students or instructors via external applications or an LLM advisor, so it should be something easily identifiable. This field should help users identify which system to refer to if they have questions about the data associated with this field.\n",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "informationSourceSystem": {
+                    "description": "The specific information system, application, or pipeline from which this entity data came. Examples include SIS, LMS, HR Systems, CRMs, and data warehouses. Typically, this value is configured in the orchestrator and applied to the LIF record as it is generated. This value may be visible to students, instructors, or staff via external applications or an LLM advisor, so it should be something easily identifiable. This field should help users identify which system to refer to if they have questions about the data associated with this field.\n",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "narrative": {
+                    "description": "A narrative of what is needed to earn the credential.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": "This element should not be separated from its context or bias and inaccuracy will result. An element must be added to indicate who is requiring or reporting on these requirements as they will vary based on reporting"
+                  },
+                  "uri": {
+                    "description": "The URI of a webpage that describes in a human-readable format the criteria for the credential.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": "No change"
+                  }
+                },
+                "required": [
+                  "uri",
+                  "informationSourceId",
+                  "informationSourceOrganization"
+                ],
+                "type": "array",
+                "use_recommendations": "",
+                "x-mutable": false,
+                "x-queryable": false
+              },
+              "identifier": {
+                "description": "The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": "Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered."
+              },
+              "informationSourceId": {
+                "description": "An identifier key that represents a combination of informationSourceOrganization and informationSourceSystem from which this entity data came. Typically, this value is configured in the orchestrator and applied to the LIF record as it is generated. This could be a human or machine-readable value.\n",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "informationSourceOrganization": {
+                "description": "The organization from which this entity data came, such as a school, college, employer, agency, or vendor. Typically, this value is configured in the orchestrator and applied to the LIF record as it is generated. This could be the organization’s name or another preferred way to indicate the organization. This value may be visible to students or instructors via external applications or an LLM advisor, so it should be something easily identifiable. This field should help users identify which system to refer to if they have questions about the data associated with this field.\n",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "informationSourceSystem": {
+                "description": "The specific information system, application, or pipeline from which this entity data came. Examples include SIS, LMS, HR Systems, CRMs, and data warehouses. Typically, this value is configured in the orchestrator and applied to the LIF record as it is generated. This value may be visible to students, instructors, or staff via external applications or an LLM advisor, so it should be something easily identifiable. This field should help users identify which system to refer to if they have questions about the data associated with this field.\n",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              }
+            },
+            "required": [
+              "informationSourceId",
+              "informationSourceOrganization",
+              "identifier"
+            ],
+            "type": "array",
+            "use_recommendations": "",
+            "x-mutable": false,
+            "x-queryable": false
+          },
+          "achievementType": {
+            "description": "Type of the Credential",
+            "example": "",
+            "format": "string",
+            "type": "array",
+            "use_recommendations": "These mapping values are not mutually exclusive and the selection on an achievement type will reflect context and social location. Care is recommended when using this element to categorize or classify credentials. Extreme bias will be replicated in using this data element"
+          },
+          "creditsAvailable": {
+            "description": "Credit hours associated with this entity, or credit hours possible. For example 3.0.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": "No change"
+          },
+          "description": {
+            "description": "Description of the credential.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": "No change"
+          },
+          "effectiveDate": {
+            "description": "The effective date of the credential, if not immediately effective.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": "No change"
+          },
+          "expirationDate": {
+            "description": "The expiration date of the credential, after which the credential will no longer be valid regardless of the awardee.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": "No change"
+          },
+          "fieldOfStudy": {
+            "description": "Category, subject, area of study, discipline, or general branch of knowledge. Examples include Business, Education, Psychology, and Technology.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": "No change"
+          },
+          "format": {
+            "description": "Digital Format of the Credential",
+            "example": "",
+            "format": "string",
+            "type": "array",
+            "use_recommendations": "Missing data should not be penalized in useage. Assuming that all organizations will want to comply with this system will introduce a high level of bias into outcomes. A value needs to be added for missing at will and a value needs to be added for not applicable to avoid too much missing data resulting in skewed outcomes"
+          },
+          "identifier": {
+            "description": "The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": "Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered."
+          },
+          "informationSourceId": {
+            "description": "An identifier key that represents a combination of informationSourceOrganization and informationSourceSystem from which this entity data came. Typically, this value is configured in the orchestrator and applied to the LIF record as it is generated. This could be a human or machine-readable value.\n",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "informationSourceOrganization": {
+            "description": "The organization from which this entity data came, such as a school, college, employer, agency, or vendor. Typically, this value is configured in the orchestrator and applied to the LIF record as it is generated. This could be the organization’s name or another preferred way to indicate the organization. This value may be visible to students or instructors via external applications or an LLM advisor, so it should be something easily identifiable. This field should help users identify which system to refer to if they have questions about the data associated with this field.\n",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "informationSourceSystem": {
+            "description": "The specific information system, application, or pipeline from which this entity data came. Examples include SIS, LMS, HR Systems, CRMs, and data warehouses. Typically, this value is configured in the orchestrator and applied to the LIF record as it is generated. This value may be visible to students, instructors, or staff via external applications or an LLM advisor, so it should be something easily identifiable. This field should help users identify which system to refer to if they have questions about the data associated with this field.\n",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "issuedByRefOrganization": {
+            "properties": {
+              "identifier": {
+                "description": "The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": "Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered."
+              },
+              "informationSourceId": {
+                "description": "An identifier key that represents a combination of informationSourceOrganization and informationSourceSystem from which this entity data came. Typically, this value is configured in the orchestrator and applied to the LIF record as it is generated. This could be a human or machine-readable value.\n",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "informationSourceOrganization": {
+                "description": "The organization from which this entity data came, such as a school, college, employer, agency, or vendor. Typically, this value is configured in the orchestrator and applied to the LIF record as it is generated. This could be the organization’s name or another preferred way to indicate the organization. This value may be visible to students or instructors via external applications or an LLM advisor, so it should be something easily identifiable. This field should help users identify which system to refer to if they have questions about the data associated with this field.\n",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "name": {
+                "description": "The name of a non-person entity such as an organization, institution, agency or business.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": "No Change"
+              }
+            },
+            "required": [
+              "name",
+              "informationSourceId",
+              "informationSourceOrganization",
+              "identifier"
+            ],
+            "type": "object",
+            "use_recommendations": "",
+            "x-mutable": false,
+            "x-queryable": false
+          },
+          "name": {
+            "description": "Name of the credential.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": "No change"
+          },
+          "schema": {
+            "description": "The data schema location",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": "No change"
+          }
+        },
+        "required": [
+          "identifier",
+          "name",
+          "informationSourceId",
+          "informationSourceOrganization"
+        ],
+        "type": "array",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "CredentialAward": {
+        "properties": {
+          "Identity": {
+            "properties": {
+              "hashed": {
+                "description": "Whether or not the identityHash value is hashed.",
+                "example": "",
+                "format": "",
+                "type": "boolean",
+                "use_recommendations": "No change"
+              },
+              "identifier": {
+                "description": "The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": "Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered."
+              },
+              "identityHash": {
+                "description": "A String consisting of an algorithm identifier, a $ separator, and a hash across an identifier and an optionally appended salt string. The only supported algorithms are MD5 [RFC1321] and SHA-256 [FIPS-180-4], identified by the strings 'md5' and 'sha256' respectively. Identifiers and salts MUST be encoded in UTF-8 prior to hashing, and the resulting hash MUST be expressed in hexadecimal using uppercase (A-F, 0-9) or lowercase character (a-f, 0-9) sets. For example: 'sha256$b5809d8a92f8858436d7e6b87c12ebc0ae1eac4baecc2c0b913aee2c922ef399' represents the result of calculating a SHA-256 hash on the string 'a@example.comKosher'. in which the email identifier 'a@example.com' is salted with 'Kosher'",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": "No change"
+              },
+              "identityType": {
+                "description": "The identity type.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": "No change"
+              },
+              "informationSourceId": {
+                "description": "An identifier key that represents a combination of informationSourceOrganization and informationSourceSystem from which this entity data came. Typically, this value is configured in the orchestrator and applied to the LIF record as it is generated. This could be a human or machine-readable value.\n",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "informationSourceOrganization": {
+                "description": "The organization from which this entity data came, such as a school, college, employer, agency, or vendor. Typically, this value is configured in the orchestrator and applied to the LIF record as it is generated. This could be the organization’s name or another preferred way to indicate the organization. This value may be visible to students or instructors via external applications or an LLM advisor, so it should be something easily identifiable. This field should help users identify which system to refer to if they have questions about the data associated with this field.\n",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "informationSourceSystem": {
+                "description": "The specific information system, application, or pipeline from which this entity data came. Examples include SIS, LMS, HR Systems, CRMs, and data warehouses. Typically, this value is configured in the orchestrator and applied to the LIF record as it is generated. This value may be visible to students, instructors, or staff via external applications or an LLM advisor, so it should be something easily identifiable. This field should help users identify which system to refer to if they have questions about the data associated with this field.\n",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "salt": {
+                "description": "If the identityHash is hashed, this should contain the string used to salt the hash. If this value is not provided, it should be assumed that the hash was not salted.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": "No change"
+              }
+            },
+            "required": [
+              "identityHash",
+              "informationSourceId",
+              "informationSourceOrganization",
+              "identifier"
+            ],
+            "type": "array",
+            "use_recommendations": "",
+            "x-mutable": false,
+            "x-queryable": false
+          },
+          "InstanceOfRefCredential": {
+            "properties": {
+              "identifier": {
+                "description": "The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": "Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered."
+              },
+              "informationSourceId": {
+                "description": "An identifier key that represents a combination of informationSourceOrganization and informationSourceSystem from which this entity data came. Typically, this value is configured in the orchestrator and applied to the LIF record as it is generated. This could be a human or machine-readable value.\n",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "informationSourceOrganization": {
+                "description": "The organization from which this entity data came, such as a school, college, employer, agency, or vendor. Typically, this value is configured in the orchestrator and applied to the LIF record as it is generated. This could be the organization’s name or another preferred way to indicate the organization. This value may be visible to students or instructors via external applications or an LLM advisor, so it should be something easily identifiable. This field should help users identify which system to refer to if they have questions about the data associated with this field.\n",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "name": {
+                "description": "Name of the credential.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": "No change"
+              }
+            },
+            "required": [
+              "identifier",
+              "name",
+              "informationSourceId",
+              "informationSourceOrganization"
+            ],
+            "type": "object",
+            "use_recommendations": "",
+            "x-mutable": false,
+            "x-queryable": false
+          },
+          "awardIssueDate": {
+            "description": "Date the credential was asserted/awarded.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": "No change"
+          },
+          "awardStatus": {
+            "description": "The status of the awarded credential or achievement.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": "No change"
+          },
+          "credentialAwardee": {
+            "description": "The person (subject) about which claims are made and who owns and has been awarded the credential.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": "No change"
+          },
+          "creditsEarned": {
+            "description": "The number of credits earned, generally in semester or quarter credit hours. This field correlates with the Achievement creditsAvailable field.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": "Ensure that missing data is not used as a negative."
+          },
+          "expirationDate": {
+            "description": "The expiration date of the credential, after which the credential will no longer be valid for the awardee.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": "No change"
+          },
+          "identifier": {
+            "description": "The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": "Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered."
+          },
+          "informationSourceId": {
+            "description": "An identifier key that represents a combination of informationSourceOrganization and informationSourceSystem from which this entity data came. Typically, this value is configured in the orchestrator and applied to the LIF record as it is generated. This could be a human or machine-readable value.\n",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "informationSourceOrganization": {
+            "description": "The organization from which this entity data came, such as a school, college, employer, agency, or vendor. Typically, this value is configured in the orchestrator and applied to the LIF record as it is generated. This could be the organization’s name or another preferred way to indicate the organization. This value may be visible to students or instructors via external applications or an LLM advisor, so it should be something easily identifiable. This field should help users identify which system to refer to if they have questions about the data associated with this field.\n",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "informationSourceSystem": {
+            "description": "The specific information system, application, or pipeline from which this entity data came. Examples include SIS, LMS, HR Systems, CRMs, and data warehouses. Typically, this value is configured in the orchestrator and applied to the LIF record as it is generated. This value may be visible to students, instructors, or staff via external applications or an LLM advisor, so it should be something easily identifiable. This field should help users identify which system to refer to if they have questions about the data associated with this field.\n",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "issuedByRefOrganization": {
+            "properties": {
+              "identifier": {
+                "description": "The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": "Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered."
+              },
+              "informationSourceId": {
+                "description": "An identifier key that represents a combination of informationSourceOrganization and informationSourceSystem from which this entity data came. Typically, this value is configured in the orchestrator and applied to the LIF record as it is generated. This could be a human or machine-readable value.\n",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "informationSourceOrganization": {
+                "description": "The organization from which this entity data came, such as a school, college, employer, agency, or vendor. Typically, this value is configured in the orchestrator and applied to the LIF record as it is generated. This could be the organization’s name or another preferred way to indicate the organization. This value may be visible to students or instructors via external applications or an LLM advisor, so it should be something easily identifiable. This field should help users identify which system to refer to if they have questions about the data associated with this field.\n",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "name": {
+                "description": "The name of a non-person entity such as an organization, institution, agency or business.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": "No Change"
+              }
+            },
+            "required": [
+              "name",
+              "informationSourceId",
+              "informationSourceOrganization",
+              "identifier"
+            ],
+            "type": "object",
+            "use_recommendations": "",
+            "x-mutable": false,
+            "x-queryable": false
+          },
+          "name": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "narrative": {
+            "description": "A narrative describing the work that the awardee did to earn the credential award.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": "No change"
+          },
+          "payload": {
+            "description": "Entire payload of the credential and credential award.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": "No change"
+          },
+          "proof": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": "No change"
+          },
+          "result": {
+            "description": "The set of results being asserted.",
+            "example": "",
+            "format": "string",
+            "type": "array",
+            "use_recommendations": "No change"
+          },
+          "revocationReason": {
+            "description": "Published reason for revocation, if the credential award has been revoked",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": "No change"
+          },
+          "revoked": {
+            "description": "Indicates if the assertion of the credential has been revoked, thus invalidating the award.",
+            "example": "",
+            "format": "",
+            "type": "boolean",
+            "use_recommendations": "No change"
+          },
+          "selfAsserted": {
+            "description": "If True, the credential has been Self Asserted",
+            "example": "",
+            "format": "",
+            "type": "boolean",
+            "use_recommendations": "No change"
+          },
+          "signedPayload": {
+            "description": "Signed version of the entire payload of the credential and credential award.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": "No change"
+          },
+          "termsOfUse": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": "No change"
+          },
+          "uri": {
+            "description": "A unique IRI for the  issued credential award.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": "Ensure that missing data is not used as a negative."
+          }
+        },
+        "required": [
+          "identifier",
+          "informationSourceId",
+          "informationSourceOrganization",
+          "name"
+        ],
+        "type": "array",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "Org2ExtensionEntity": {
+        "properties": {
+          "org2CustomExtensionAttr": {
+            "description": "An attribute added to the Org2ExtensionEntity as an example.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "array",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "Organization": {
+        "properties": {
+          "Contact": {
+            "properties": {
+              "Address": {
+                "properties": {
+                  "addressCity": {
+                    "description": "The name of the city in which an address is located.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "addressCountyName": {
+                    "description": "The name of the county, parish, borough, or comparable unit (within a state) in which an address is located.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "addressLine2": {
+                    "description": "The apartment, room, or suite number of an address.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": "Only use if consent has been verified."
+                  },
+                  "addressPostalCode": {
+                    "description": "A number that identifies each postal delivery area in a country used as a portion of an address.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "addressState": {
+                    "description": "The abbreviation for the state (within the United States) or outlying area in which an address is located.",
+                    "enum": [
+                      "AmericanSamoa",
+                      "WestVirginia",
+                      "Wyoming",
+                      "Michigan",
+                      "Arkansas",
+                      "Arizona",
+                      "California",
+                      "Colorado",
+                      "Connecticut",
+                      "Delaware",
+                      "Florida",
+                      "Georgia",
+                      "Guam",
+                      "Hawaii",
+                      "Iowa",
+                      "Idaho",
+                      "Illinois",
+                      "Indiana",
+                      "Alaska",
+                      "Alabama",
+                      "DistrictOfColumbia",
+                      "ArmedForcesAmerica",
+                      "Maine",
+                      "Minnesota",
+                      "Missouri",
+                      "NorthernMarianas",
+                      "ArmedForcesPacific",
+                      "Kansas",
+                      "Kentucky",
+                      "Louisiana",
+                      "MarshallIslands",
+                      "Massachusetts",
+                      "Maryland",
+                      "Mississippi",
+                      "Montana",
+                      "Nebraska",
+                      "Nevada",
+                      "Ohio",
+                      "Oklahoma",
+                      "Oregon",
+                      "Pennsylvania",
+                      "Palau",
+                      "Tennessee",
+                      "Texas",
+                      "Utah",
+                      "Virginia",
+                      "Vermont",
+                      "Washington",
+                      "Wisconsin",
+                      "NewHampshire",
+                      "SouthDakota",
+                      "NorthDakota",
+                      "NewJersey",
+                      "RhodeIsland",
+                      "VirginIslands",
+                      "NewYork",
+                      "SouthCarolina",
+                      "NorthCarolina",
+                      "PuertoRico",
+                      "NewMexico",
+                      "FederatedStatesOfMicronesia",
+                      "ArmedForcesAfricaCanadaEuropeAndMideast"
+                    ],
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "addressStreet": {
+                    "description": "The street number and street name or post office box number of an address.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": "Only use if consent has been verified."
+                  },
+                  "addressType": {
+                    "description": "The type of address listed for an individual or organization. For example: Physical Address, Mailing Address, Home Address, etc.)",
+                    "example": "",
+                    "format": "string",
+                    "type": "array",
+                    "use_recommendations": "Only use if consent has been verified."
+                  },
+                  "countryCode": {
+                    "description": "The unique two character International Organization for Standardization (ISO) code for the country in which an address is located.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "formattedAddress": {
+                    "description": "Formatted address",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "identifier": {
+                    "description": "The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": "Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered."
+                  },
+                  "informationSourceId": {
+                    "description": "An identifier key that represents a combination of informationSourceOrganization and informationSourceSystem from which this entity data came. Typically, this value is configured in the orchestrator and applied to the LIF record as it is generated. This could be a human or machine-readable value.\n",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "informationSourceOrganization": {
+                    "description": "The organization from which this entity data came, such as a school, college, employer, agency, or vendor. Typically, this value is configured in the orchestrator and applied to the LIF record as it is generated. This could be the organization’s name or another preferred way to indicate the organization. This value may be visible to students or instructors via external applications or an LLM advisor, so it should be something easily identifiable. This field should help users identify which system to refer to if they have questions about the data associated with this field.\n",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "informationSourceSystem": {
+                    "description": "The specific information system, application, or pipeline from which this entity data came. Examples include SIS, LMS, HR Systems, CRMs, and data warehouses. Typically, this value is configured in the orchestrator and applied to the LIF record as it is generated. This value may be visible to students, instructors, or staff via external applications or an LLM advisor, so it should be something easily identifiable. This field should help users identify which system to refer to if they have questions about the data associated with this field.\n",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "latitude": {
+                    "description": "The north or south angular distance from the equator that, when combined with longitude, reflects an estimation of where the address is physically situated.",
+                    "example": "",
+                    "format": "",
+                    "type": "number",
+                    "use_recommendations": ""
+                  },
+                  "longitude": {
+                    "description": "The east or west angular distance from the prime meridian that, when combined with latitude, reflects an estimation of where the address is physically situated.",
+                    "example": "",
+                    "format": "",
+                    "type": "number",
+                    "use_recommendations": ""
+                  },
+                  "residenceCountry": {
+                    "description": "The country (or countries) where a person currently resides.",
+                    "example": "",
+                    "format": "string",
+                    "type": "array",
+                    "use_recommendations": ""
+                  }
+                },
+                "required": [
+                  "addressStreet",
+                  "addressCity",
+                  "addressState",
+                  "addressPostalCode",
+                  "countryCode",
+                  "informationSourceId",
+                  "informationSourceOrganization",
+                  "identifier"
+                ],
+                "type": "array",
+                "use_recommendations": "Using and treating data on someone's physical address, be it personal, home, work etc., can have significant equity implications, particularly concerning privacy, security, and socioeconomic disparities and especially for people from marginalized communities. \n\nLIF implementors need to be responsible in the ways we design and use data models to serve in the use and transformation of people’s address data, requiring a holistic approach that acknowledges the historical injustices in the use of address data. \n\nIt is important we center the discussion of address in the history of how address data and information in the USA on “where people live” “reside” “are from” and “their address status” (e.g., nonresident, resident, people experiencing homeless) has been for centuries and still is used against people, especially indigenous communities (i.e., displacement, forced relocation), people from black and immigrant communities (e.g., redlining, economic disparities), homeless, and refugee communities. The treatment and use of this data has resulted in limiting people's access to safety and security, as well as learning, work and financial opportunities continuing systemic marginalization based on address and location data and information. \n\nConsiderations around “address” for indigenous and first nations peoples:\n1. Throughout history, Indigenous and first nations peoples in the USA have faced forced relocation from their ancestral lands, often to reservations or urban areas. Using or treating data on their addresses can serve as a reminder of this history of displacement and the ongoing impacts on Indigenous communities' access to resources and services.\n2. Indigenous communities have voiced concerns about the collection and use of their address data by external entities without their consent or meaningful participation. Address data collection efforts must respect Indigenous principles of data sovereignty, self-determination, and privacy, and involve community engagement.\n3. Address data collected from Indigenous communities may be vulnerable to misuse or discriminatory practices, such as racial profiling by law enforcement or targeting by predatory vendors and service providers. Ensuring the ethical and responsible use of address data is essential to prevent further harm and uphold principles of equity and justice.\n\nConsiderations around “address” for people experiencing homelessness:\n - Historically, people experiencing homelessness have been stigmatized and marginalized, facing discrimination in housing, employment, and access to services. Collecting data on their addresses can perpetuate this stigma and potentially expose them to further discrimination or harassment.\n- Homeless individuals may have legitimate concerns about the privacy and safety of their personal information, including their addresses. Collecting data on their addresses without adequate safeguards or assurances of confidentiality can further erode their trust in institutions and discourage them from seeking assistance or support services.\n- Someone who is experiencing homelessness should have the opportunity to demonstrate their skills in a manner that is accessible, without having to provide an address or other identifying information, and be able to benefit from LIF in order to help to improve their life circumstances.\n\nConsiderations around “address” for people from black and immigrant communities:\n- Historically, Black communities have been subject to discriminatory housing practices, including redlining, which systematically denied access to mortgage loans and homeownership opportunities based on race. Collecting data on addresses within these communities may reflect the legacy of segregation and economic disenfranchisement, perpetuating disparities in wealth, housing quality, and access to resources.\n- Immigrant communities, particularly those from marginalized backgrounds, have faced discriminatory policies and practices that restrict their access to housing, employment, education, and healthcare. Collecting data on addresses within immigrant communities may expose individuals and families to heightened surveillance, immigration enforcement, and xenophobic attacks, contributing to feelings of insecurity and fear.\n- Black and immigrant communities are disproportionately targeted for surveillance, policing, and criminalization. Collecting data on addresses within these communities may facilitate racial profiling, discriminatory policing practices, and surveillance technologies, leading to harassment, violence, and incarceration.\n\nGeneral considerations and recommendations:\n- Considering the foundational premise of LIF is intended to serve people from marginalized and underrepresented communities, it is important to recognize that sharing a street address can be sensitive for some people, dignity, respect and compassion should be priority. \n- That address is optional, and not required for a learner to be able to benefit from LIF.  \n- That the format for address adopts a generic international address format, i.e, not US centric to allow for multiple address formats.\n -That people can consent to the use and treatment of address in a manner that is best suited to them, and choosing to not include an address should not preclude a learner from being able to benefit from LIF. \n- If used for research purposes, an explanation about how address will be used, in an accessible manner, and informed manner.",
+                "x-mutable": false,
+                "x-queryable": false
+              },
+              "Email": {
+                "properties": {
+                  "emailAddress": {
+                    "description": "The numbers, letters, and symbols used to identify an electronic mail (Email) address of an individual or person.",
+                    "example": "",
+                    "format": "string",
+                    "type": "array",
+                    "use_recommendations": "Only use if consent has been verified.  Consider how the system will use multiple email addresses for connecting/matching records.\nConsider how we will accommodate in our model for special characters from other languages.\nConsider if we will need a means of verifying an email address."
+                  },
+                  "emailAddressType": {
+                    "description": "The type of electronic mail (e-mail) address listed for an individual or person.",
+                    "example": "",
+                    "format": "string",
+                    "type": "array",
+                    "use_recommendations": "Only use if consent has been verified."
+                  },
+                  "endPeriod": {
+                    "description": "Single period between date/times.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "identifier": {
+                    "description": "The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": "Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered."
+                  },
+                  "informationSourceId": {
+                    "description": "An identifier key that represents a combination of informationSourceOrganization and informationSourceSystem from which this entity data came. Typically, this value is configured in the orchestrator and applied to the LIF record as it is generated. This could be a human or machine-readable value.\n",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "informationSourceOrganization": {
+                    "description": "The organization from which this entity data came, such as a school, college, employer, agency, or vendor. Typically, this value is configured in the orchestrator and applied to the LIF record as it is generated. This could be the organization’s name or another preferred way to indicate the organization. This value may be visible to students or instructors via external applications or an LLM advisor, so it should be something easily identifiable. This field should help users identify which system to refer to if they have questions about the data associated with this field.\n",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "informationSourceSystem": {
+                    "description": "The specific information system, application, or pipeline from which this entity data came. Examples include SIS, LMS, HR Systems, CRMs, and data warehouses. Typically, this value is configured in the orchestrator and applied to the LIF record as it is generated. This value may be visible to students, instructors, or staff via external applications or an LLM advisor, so it should be something easily identifiable. This field should help users identify which system to refer to if they have questions about the data associated with this field.\n",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "primaryEmailAddressIndicator": {
+                    "description": "An indication that the electronic mail address should be used as the principal electronic mail address for an individual or organization.",
+                    "example": "",
+                    "format": "",
+                    "type": "boolean",
+                    "use_recommendations": ""
+                  },
+                  "startPeriod": {
+                    "description": "Single period between date/times.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  }
+                },
+                "required": [
+                  "emailAddress",
+                  "informationSourceId",
+                  "informationSourceOrganization",
+                  "identifier"
+                ],
+                "type": "array",
+                "use_recommendations": "",
+                "x-mutable": false,
+                "x-queryable": false
+              },
+              "Telephone": {
+                "properties": {
+                  "dateEffective": {
+                    "description": "Single period between date/times.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "dateExpired": {
+                    "description": "Single period between date/times.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "doNotPublishIndicator": {
+                    "description": "An indication that the telephone number should not be published. This may be a number that is confidential, private, or should not be shared.",
+                    "example": "",
+                    "format": "",
+                    "type": "boolean",
+                    "use_recommendations": ""
+                  },
+                  "identifier": {
+                    "description": "The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": "Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered."
+                  },
+                  "informationSourceId": {
+                    "description": "An identifier key that represents a combination of informationSourceOrganization and informationSourceSystem from which this entity data came. Typically, this value is configured in the orchestrator and applied to the LIF record as it is generated. This could be a human or machine-readable value.\n",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "informationSourceOrganization": {
+                    "description": "The organization from which this entity data came, such as a school, college, employer, agency, or vendor. Typically, this value is configured in the orchestrator and applied to the LIF record as it is generated. This could be the organization’s name or another preferred way to indicate the organization. This value may be visible to students or instructors via external applications or an LLM advisor, so it should be something easily identifiable. This field should help users identify which system to refer to if they have questions about the data associated with this field.\n",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "informationSourceSystem": {
+                    "description": "The specific information system, application, or pipeline from which this entity data came. Examples include SIS, LMS, HR Systems, CRMs, and data warehouses. Typically, this value is configured in the orchestrator and applied to the LIF record as it is generated. This value may be visible to students, instructors, or staff via external applications or an LLM advisor, so it should be something easily identifiable. This field should help users identify which system to refer to if they have questions about the data associated with this field.\n",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "orderOfPriority": {
+                    "description": "The order of priority assigned to telephone numbers to define which number to attempt first, second, etc.",
+                    "example": "",
+                    "format": "",
+                    "type": "boolean",
+                    "use_recommendations": "Only used if consent is verified. Only use if priority list i generated by the individual or person"
+                  },
+                  "primaryNumber": {
+                    "description": "An indication that the telephone number should be used as the principal number for a person or organization.",
+                    "example": "",
+                    "format": "",
+                    "type": "boolean",
+                    "use_recommendations": "Only use if consent has been verified."
+                  },
+                  "telephoneNumber": {
+                    "description": "The telephone number including the area code, and extension, if applicable.",
+                    "example": "",
+                    "format": "string",
+                    "type": "array",
+                    "use_recommendations": "Only use if consent has been verified."
+                  },
+                  "telephoneNumberType": {
+                    "description": "The type of communication number listed for a person.",
+                    "example": "",
+                    "format": "string",
+                    "type": "array",
+                    "use_recommendations": "Only use if consent has been verified."
+                  },
+                  "textMessageCapabilityIndicator": {
+                    "description": "An indication that the telephone number is technically capable of sending and receiving Short Message Service (SMS) text messages.",
+                    "example": "",
+                    "format": "",
+                    "type": "boolean",
+                    "use_recommendations": ""
+                  }
+                },
+                "required": [
+                  "telephoneNumber",
+                  "informationSourceId",
+                  "informationSourceOrganization",
+                  "identifier"
+                ],
+                "type": "array",
+                "use_recommendations": "",
+                "x-mutable": false,
+                "x-queryable": false
+              },
+              "dateEffective": {
+                "description": "The effective date for which the contact is valid.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "dateExpired": {
+                "description": "The expired date for which the contact  is valid.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "identifier": {
+                "description": "The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": "Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered."
+              },
+              "informationSourceId": {
+                "description": "An identifier key that represents a combination of informationSourceOrganization and informationSourceSystem from which this entity data came. Typically, this value is configured in the orchestrator and applied to the LIF record as it is generated. This could be a human or machine-readable value.\n",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "informationSourceOrganization": {
+                "description": "The organization from which this entity data came, such as a school, college, employer, agency, or vendor. Typically, this value is configured in the orchestrator and applied to the LIF record as it is generated. This could be the organization’s name or another preferred way to indicate the organization. This value may be visible to students or instructors via external applications or an LLM advisor, so it should be something easily identifiable. This field should help users identify which system to refer to if they have questions about the data associated with this field.\n",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "informationSourceSystem": {
+                "description": "The specific information system, application, or pipeline from which this entity data came. Examples include SIS, LMS, HR Systems, CRMs, and data warehouses. Typically, this value is configured in the orchestrator and applied to the LIF record as it is generated. This value may be visible to students, instructors, or staff via external applications or an LLM advisor, so it should be something easily identifiable. This field should help users identify which system to refer to if they have questions about the data associated with this field.\n",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "websiteAddress": {
+                "description": "The Uniform Resource Locator (URL) for the unique address of a Web page.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              }
+            },
+            "required": [
+              "informationSourceId",
+              "informationSourceOrganization",
+              "identifier",
+              "Address"
+            ],
+            "type": "array",
+            "use_recommendations": "Using or treating someone's contact information can have several equity implications, particularly concerning privacy, consent, and potential misuse.",
+            "x-mutable": false,
+            "x-queryable": false
+          },
+          "Identifier": {
+            "properties": {
+              "identifier": {
+                "description": "The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": "Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered."
+              },
+              "identifierType": {
+                "description": "The types of sources of identifiers used to uniquely identify the entity",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": "Only use if consent has been verified."
+              },
+              "identifierVerification": {
+                "description": "The evidence by which a persons name, address, date of birth, etc. is confirmed.",
+                "example": "",
+                "format": "string",
+                "type": "array",
+                "use_recommendations": "Only use if consent has been verified."
+              },
+              "informationSourceId": {
+                "description": "An identifier key that represents a combination of informationSourceOrganization and informationSourceSystem from which this entity data came. Typically, this value is configured in the orchestrator and applied to the LIF record as it is generated. This could be a human or machine-readable value.\n",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "informationSourceOrganization": {
+                "description": "The organization from which this entity data came, such as a school, college, employer, agency, or vendor. Typically, this value is configured in the orchestrator and applied to the LIF record as it is generated. This could be the organization’s name or another preferred way to indicate the organization. This value may be visible to students or instructors via external applications or an LLM advisor, so it should be something easily identifiable. This field should help users identify which system to refer to if they have questions about the data associated with this field.\n",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "informationSourceSystem": {
+                "description": "The specific information system, application, or pipeline from which this entity data came. Examples include SIS, LMS, HR Systems, CRMs, and data warehouses. Typically, this value is configured in the orchestrator and applied to the LIF record as it is generated. This value may be visible to students, instructors, or staff via external applications or an LLM advisor, so it should be something easily identifiable. This field should help users identify which system to refer to if they have questions about the data associated with this field.\n",
+                "example": "",
+                "format": "",
+                "type": "string",
+                "use_recommendations": ""
+              },
+              "issuedByRefOrganization": {
+                "properties": {
+                  "identifier": {
+                    "description": "The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": "Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered."
+                  },
+                  "informationSourceId": {
+                    "description": "An identifier key that represents a combination of informationSourceOrganization and informationSourceSystem from which this entity data came. Typically, this value is configured in the orchestrator and applied to the LIF record as it is generated. This could be a human or machine-readable value.\n",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "informationSourceOrganization": {
+                    "description": "The organization from which this entity data came, such as a school, college, employer, agency, or vendor. Typically, this value is configured in the orchestrator and applied to the LIF record as it is generated. This could be the organization’s name or another preferred way to indicate the organization. This value may be visible to students or instructors via external applications or an LLM advisor, so it should be something easily identifiable. This field should help users identify which system to refer to if they have questions about the data associated with this field.\n",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": ""
+                  },
+                  "name": {
+                    "description": "The name of a non-person entity such as an organization, institution, agency or business.",
+                    "example": "",
+                    "format": "",
+                    "type": "string",
+                    "use_recommendations": "No Change"
+                  }
+                },
+                "required": [
+                  "name",
+                  "informationSourceId",
+                  "informationSourceOrganization",
+                  "identifier"
+                ],
+                "type": "object",
+                "use_recommendations": "",
+                "x-mutable": false,
+                "x-queryable": false
+              }
+            },
+            "required": [
+              "identifier",
+              "informationSourceId",
+              "informationSourceOrganization"
+            ],
+            "type": "array",
+            "use_recommendations": "",
+            "x-mutable": false,
+            "x-queryable": false
+          },
+          "description": {
+            "description": "A description or quick summary of the organization.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": "No Change"
+          },
+          "identifier": {
+            "description": "The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": "Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered."
+          },
+          "imageUrl": {
+            "description": "The Uniform Resource Locator (URL) for the unique address of an image representing the Organization.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": "No Change"
+          },
+          "informationSourceId": {
+            "description": "An identifier key that represents a combination of informationSourceOrganization and informationSourceSystem from which this entity data came. Typically, this value is configured in the orchestrator and applied to the LIF record as it is generated. This could be a human or machine-readable value.\n",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "informationSourceOrganization": {
+            "description": "The organization from which this entity data came, such as a school, college, employer, agency, or vendor. Typically, this value is configured in the orchestrator and applied to the LIF record as it is generated. This could be the organization’s name or another preferred way to indicate the organization. This value may be visible to students or instructors via external applications or an LLM advisor, so it should be something easily identifiable. This field should help users identify which system to refer to if they have questions about the data associated with this field.\n",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "informationSourceSystem": {
+            "description": "The specific information system, application, or pipeline from which this entity data came. Examples include SIS, LMS, HR Systems, CRMs, and data warehouses. Typically, this value is configured in the orchestrator and applied to the LIF record as it is generated. This value may be visible to students, instructors, or staff via external applications or an LLM advisor, so it should be something easily identifiable. This field should help users identify which system to refer to if they have questions about the data associated with this field.\n",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "name": {
+            "description": "The name of a non-person entity such as an organization, institution, agency or business.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": "No Change"
+          },
+          "organizationType": {
+            "description": "The type of educational organization or entity.",
+            "example": "",
+            "format": "string",
+            "type": "array",
+            "use_recommendations": "Ensure your models and systems can ingest the ad-hoc organization types from organizations that reside outside the systems embedded in the current mapping schema"
+          },
+          "relationshipType": {
+            "description": "The nature of one organization’s relationship to another.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": "Ensure your models and systems can ingest the ad-hoc relationship statuses outside the systems embedded in the current mapping schema"
+          },
+          "shortName": {
+            "description": "The name of the institution, which may be the abbreviated form of the full legally accepted name.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": "No Change"
+          }
+        },
+        "required": [
+          "name",
+          "informationSourceId",
+          "informationSourceOrganization",
+          "identifier"
+        ],
+        "type": "array",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "TestEntity": {
+        "properties": {},
+        "required": [],
+        "type": "array",
+        "use_recommendations": "Test considerations",
+        "x-mutable": true,
+        "x-queryable": true
+      },
+      "TestEntity2": {
+        "properties": {
+          "TestAttribute2": {
+            "description": "This is a test of creating a new partner attribute",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": "consideration"
+          }
+        },
+        "required": [],
+        "type": "array",
+        "use_recommendations": "Test considerations",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "TestEntity3": {
+        "properties": {
+          "TestAttribute3": {
+            "description": "This is a test of creating a new partner attribute",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": "consideration"
+          }
+        },
+        "required": [],
+        "type": "array",
+        "use_recommendations": "Test considerations",
+        "x-mutable": true,
+        "x-queryable": true
+      },
+      "TestEntity4": {
+        "properties": {
+          "TestAttribute4": {
+            "description": "This is a test of creating a new partner attribute",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": "consideration"
+          },
+          "TestAttribute5": {
+            "description": "This is a test of creating a new partner attribute",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": "consideration"
+          }
+        },
+        "required": [],
+        "type": "array",
+        "use_recommendations": "Test considerations",
+        "x-mutable": true,
+        "x-queryable": true
+      },
+      "TestEntity5": {
+        "properties": {
+          "TestAttribute6": {
+            "description": "This is a test of creating a new partner attribute",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": "consideration"
+          },
+          "TestAttribute7": {
+            "description": "This is a test of creating a new partner attribute",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": "consideration"
+          }
+        },
+        "required": [],
+        "type": "array",
+        "use_recommendations": "Test considerations",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "TestEntity6": {
+        "properties": {
+          "MDRTest": {
+            "description": "This is a test of creating a new Source attribute",
+            "enum": [],
+            "example": "",
+            "format": "",
+            "type": "enum",
+            "use_recommendations": "consideration"
+          },
+          "TestAttribute8": {
+            "description": "This is a test of creating a new partner attribute",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": "consideration"
+          },
+          "TestAttribute9": {
+            "description": "This is a test of creating a new partner attribute",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": "consideration"
+          },
+          "TestUpdatedAttribute11": {
+            "description": "This is a test of creating updated attribute",
+            "example": "12345",
+            "format": "",
+            "type": "string",
+            "use_recommendations": "consideration"
+          }
+        },
+        "required": [],
+        "type": "array",
+        "use_recommendations": "Test considerations",
+        "x-mutable": true,
+        "x-queryable": true
+      },
+      "TestEntity7": {
+        "properties": {
+          "TestAttribute10": {
+            "description": "This is a test of creating a new partner attribute",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": "consideration"
+          }
+        },
+        "required": [],
+        "type": "array",
+        "use_recommendations": "Test considerations",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "TestPartnerChildEntity": {
+        "properties": {},
+        "required": [],
+        "type": "array",
+        "use_recommendations": "Test considerations",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "TestPartnerEntity": {
+        "properties": {
+          "TestNewPartnerAttribute": {
+            "description": "This is a test of creating a new partner attribute",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": "consideration"
+          }
+        },
+        "required": [],
+        "type": "array",
+        "use_recommendations": "Test considerations",
+        "x-mutable": false,
+        "x-queryable": false
+      }
+    }
+  },
+  "info": {
+    "description": "OpenAPI Spec",
+    "title": "Machine-Readable Schema for Org2 LIF",
+    "version": "1.0"
+  },
+  "openapi": "3.0.0",
+  "paths": {}
+}

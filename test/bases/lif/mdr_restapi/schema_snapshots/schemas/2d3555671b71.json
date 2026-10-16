@@ -1,0 +1,726 @@
+{
+  "components": {
+    "schemas": {
+      "AcademicAwardLevelType": {
+        "properties": {
+          "AcademicAwardLevel": {
+            "description": "The level of the degree, certificate, or award granted for the successful completion of requirements of an academic program.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "AcademicAwardTitleType": {
+        "properties": {
+          "AcademicAwardTitle": {
+            "description": "The descriptive title for the academic award.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "AcademicCompletionIndicatorType": {
+        "properties": {
+          "AcademicCompletionIndicator": {
+            "description": "An indication that the degree-seeking student completed all of the requirements for his or her academic program. Not used for Non-Degree programs.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "AcademicProgramCodeGroup": {
+        "properties": {},
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "AcademicProgramNameType": {
+        "properties": {
+          "AcademicProgramName": {
+            "description": "Literal name of program, major, or field of study.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "AcademicProgramType": {
+        "properties": {},
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "AccreditationType": {
+        "properties": {
+          "Accreditation": {
+            "description": "To provide information about the accreditation that has been awarded to the sending school.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "AlternateOutcomeFrameworkType": {
+        "properties": {
+          "FrameworkSourceReference": {
+            "description": "URL of the alternative framework that has the outcome taxnomies URI of alternative framework.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "Core": {
+        "properties": {
+          "PersonIdentifiersType": {
+            "description": "A logical grouping of components related to person identification information.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "Course": {
+        "properties": {
+          "CourseBeginDate": {
+            "description": "The official begin date for this course",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "CourseEndDate": {
+            "description": "The official end date for this course",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "CourseInstructionSiteType": {
+        "properties": {
+          "CourseInstructionSite": {
+            "description": "An indication of the type of location at which the course is taught.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "CourseInventoryInformation": {
+        "properties": {
+          "CourseDescription": {
+            "description": "The text description describing the content of the course, as carried in the sending institution’s course catalog.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "CourseHonorsCode": {
+            "description": "Indication whether the course is an Honors course, or has an option for students to take it as an honors course.",
+            "enum": [],
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "CourseLongDepartmentName": {
+            "description": "The full name of the department of the course.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "CourseRepeatabilityMaximumNumber": {
+            "description": "The maximum number of times the course may be taken or completed for credit.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "CreditHoursRequiredType": {
+        "properties": {
+          "CreditHoursRequired": {
+            "description": "The total value of credit hours that are required for the award or diploma for which the student is pursuing.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "EducationalCourseInventory.CourseInventoryInformation": {
+        "properties": {
+          "CourseDescription": {
+            "description": "The text description describing the content of the course, as carried in the sending institution’s course catalog.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "EmploymentBeginDateType": {
+        "properties": {
+          "EmploymentBeginDate": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "EmploymentEndDateType": {
+        "properties": {
+          "EmploymentEndDate": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "EmploymentStatusCodeType": {
+        "properties": {
+          "EmploymentStatusCode": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "EmploymentType": {
+        "properties": {
+          "Employment": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "NAICS": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "EmploymentType/OrganizationEntityType": {
+        "properties": {
+          "NAICS": {
+            "description": "NAICS code for industry for an employer (North American Industry Classification System).",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "ONET": {
+            "description": "O*NET code for position (O*NET codes defined by Department of Labor)",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "GrossAnnualSalaryType": {
+        "properties": {
+          "GrossAnnualSalary": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "LearningOutcomeDescriptionType": {
+        "properties": {
+          "FrameworkOutcomeValue": {
+            "description": "A container to hold the alternative framework taxonomies that map to the learning outcome Definition of alternative outcome taxonomy",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "LearningOutcomeQualificationAssessment": {
+        "properties": {
+          "LearningOutcomeSkillCode": {
+            "description": "Learning Outcome Skill based on DQP intellectual skills. Learning Outcome Skill based on DQP intellectual.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "OrganizationNameType": {
+        "properties": {
+          "OrganizationName": {
+            "description": "Name of Non-person entity such as Organization, Institution, Agency or Business.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "OrganizationType": {
+        "properties": {
+          "Organization": {
+            "description": "Non-person entity such as Organization, Institution, Agency or Business.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "PersonType/Name": {
+        "properties": {
+          "NamePrefix": {
+            "description": "An honorific, title or credential that follows the name.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "core-FirstName": {
+            "description": "The first name of the person, usually given at birth, baptism, or during, another ceremony, or through legal change.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "core-LastName": {
+            "description": "The last name or surname by which a person is legally known.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "core-MiddleName": {
+            "description": "A secondary name of the person, usually given at birth, baptism, or during another naming ceremony or through legal change.\nNOTE: allows multiple values",
+            "example": "",
+            "format": "",
+            "type": "array",
+            "use_recommendations": ""
+          },
+          "core-NameSuffix": {
+            "description": "The expression of an individual's generation within a family.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "PositionTitleType": {
+        "properties": {
+          "PositionTitle": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "ProgramCIPCodeType": {
+        "properties": {
+          "ProgramCIPCode": {
+            "description": "Code indicating a discipline or field of study assigned by the Classification of Instructional Programs by the US Department of Education’s National Center for Education Statistics.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "Student.AcademicRecord.AcademicAward": {
+        "properties": {
+          "AcademicAwardDate": {
+            "description": "The date on which the academic award was conferred.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "Student.AcademicRecord.AcademicAward.AcademicAwardProgram.ProgramSummary": {
+        "properties": {
+          "Deliquencies": {
+            "description": "The academic standing of the student upon transfer to the institution.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "Student.AcademicRecord.AcademicSession.Course": {
+        "properties": {
+          "Choice": {
+            "description": "Each option has it's own definition as documented in Voc 4-PESCCourseCode",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "CouirseSubjectAbbreviation": {
+            "description": "The alphabetic abbreviation of the academic department or discipline offering the course. It is one part of the total course identifier.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "CourseAcademicGrade": {
+            "description": "The final grade awarded for participation in the course.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "CourseAcademicGradeScaleCode": {
+            "description": "The grading scale used by an academic educational institution for an academic course.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "CourseAcademicGradeStatusCode": {
+            "description": "Special enrollment or completion status of this course.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "CourseAcademicGradeStatusCodeType": {
+            "description": "Special enrollment or completion status of this course",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "CourseAddDate": {
+            "description": "The date a student was added to an\n academic course at a school.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "CourseBeginDate": {
+            "description": "Begin Date.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "CourseCreditBasis": {
+            "description": "The type of enrollment associated with the credit hours for the course.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "CourseCreditLevel": {
+            "description": "The level of credit associated with the credit hours earned for the course.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "CourseCreditUnits": {
+            "description": "The type of credit (unit, semester, or quarter) associated with the credit hours earned for the course.",
+            "enum": [
+              "CarnegieUnits",
+              "ClockHours",
+              "ContinuingEducationUnits",
+              "NoCredit",
+              "Other",
+              "Quarter",
+              "Semester",
+              "Units",
+              "Unreported"
+            ],
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "CourseCreditValue": {
+            "description": "Number indicating the credit hours that may be earned in the course.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "CourseDropDate": {
+            "description": "The date on which the student drops or withdraws from the course.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "CourseEndDate": {
+            "description": "End Date.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "CourseGPAApplicabilityCode": {
+            "description": "An indicator of whether or not this course being described is included in the computation of the student's Grade Point Average, and if so, if it weighted differently from regular courses.",
+            "enum": [
+              "Applicable",
+              "NotApplicable",
+              "Weighted"
+            ],
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "CourseInstructionMethodType": {
+            "description": "The primary method of instruction used for the course.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "CourseInstructionSite": {
+            "description": "An indication of the type of location at which the course is taught.",
+            "enum": [
+              "Auxiliary",
+              "ClinicHospital",
+              "Correctional",
+              "Extension",
+              "Telecommunication",
+              "Millitary",
+              "OffCampus",
+              "OnCampus",
+              "StudyAbroad",
+              "DistanceLearning"
+            ],
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "CourseInstructionSiteName": {
+            "description": "The name of the location at which the course is taught.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "CourseLevel": {
+            "description": "The level of credit associated with the credit hours earned for the course.The level of work demonstrated by successful completion of the academic course being described",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "CourseNarrativeExplanationGrade": {
+            "description": "The narrative of the grade awarded to a student in an academic course in those cases where a course does not receive a letter or numeric grade included in the grading scale of the Course Academic Grade Qualifier.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "CourseNumber": {
+            "description": "The official reference number portion of a course identifier. This number frequently designates the level of the course as well as the level of the student expected to enroll in the course.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "CourseOverrideSchool": {
+            "description": "The school where the credit was earned if diffrerent from the Academic Session School.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "CourseQualityPointsEarned": {
+            "description": "The numerical value assigned to a letter grade to provide a basis of quantitative determination of an average.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "CourseRepeatCode": {
+            "description": "Indicates that an academic course has been repeated by a student and how that repeat is to be computed in the student’s academic grade average.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "CourseSectionNumber": {
+            "description": "The number assigned to differentiate among distinct occurrences of courses that have the same course abbreviation and number but are considered to be different courses.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "CourseSubjectAbbreviation": {
+            "description": "The alphabetic abbreviation of the academic department or discipline offering the course. It is one part of the total course identifier.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "CourseTitle": {
+            "description": "The name or title of the course taken by a student at an academic institution.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "TestsType": {
+        "properties": {
+          "TestName-TestNameType": {
+            "description": "Name identifying the test",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "URLType": {
+        "properties": {
+          "URL": {
+            "description": "A URL of a web location that hosts a learner's work results.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      }
+    }
+  },
+  "info": {
+    "description": "OpenAPI Spec",
+    "title": "Machine-Readable Schema for PESC v1.8",
+    "version": "1.0"
+  },
+  "openapi": "3.0.0",
+  "paths": {}
+}

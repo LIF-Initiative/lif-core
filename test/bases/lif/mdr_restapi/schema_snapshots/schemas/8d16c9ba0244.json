@@ -1,0 +1,12 @@
+{
+  "components": {
+    "schemas": {}
+  },
+  "info": {
+    "description": "OpenAPI Spec",
+    "title": "Machine-Readable Schema for ANS",
+    "version": "1.0"
+  },
+  "openapi": "3.0.0",
+  "paths": {}
+}
