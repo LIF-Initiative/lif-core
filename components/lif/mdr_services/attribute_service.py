@@ -17,6 +17,7 @@ from lif.mdr_dto.attribute_dto import (
     CreateAttributeDTO,
     UpdateAttributeDTO,
 )
+from lif.mdr_services.association_name import association_array
 from lif.mdr_services.helper_service import check_datamodel_by_id, check_entity_by_id
 from lif.mdr_services.value_set_values_service import check_value_set_exists_by_id
 from lif.mdr_utils.logger_config import get_logger
@@ -121,6 +122,8 @@ async def create_attribute(session: AsyncSession, data: CreateAttributeDTO):
                 ContributorOrganization=data.ContributorOrganization,
                 Deleted=False,
                 ExtendedByDataModelId=data.DataModelId if data.Extension else None,
+                Name=attribute.Name,
+                Array=association_array(attribute.Array),
             )
             session.add(association)
         await session.commit()
@@ -200,8 +203,19 @@ async def update_attribute(session: AsyncSession, id: int, data: UpdateAttribute
     if data.ValueSetId is not None:
         await check_value_set_exists_by_id(session=session, id=data.ValueSetId)
 
-    for key, value in data.dict(exclude_unset=True).items():
+    updates = data.dict(exclude_unset=True)
+    for key, value in updates.items():
         setattr(attribute, key, value)
+
+    # An attribute's associations store its Name and Array (#1386).
+    if "Name" in updates or "Array" in updates:
+        result = await session.execute(
+            select(EntityAttributeAssociation).where(EntityAttributeAssociation.AttributeId == id)
+        )
+        for association in result.scalars().all():
+            association.Name = attribute.Name
+            association.Array = association_array(attribute.Array)
+            session.add(association)
 
     session.add(attribute)
     await session.commit()

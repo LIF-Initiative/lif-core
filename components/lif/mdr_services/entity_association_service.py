@@ -7,6 +7,7 @@ from lif.mdr_dto.entity_association_dto import (
     EntityAssociationDTO,
     UpdateEntityAssociationDTO,
 )
+from lif.mdr_services.association_name import association_array, entity_association_name
 from lif.mdr_services.entity_service import get_entity_by_id
 from lif.mdr_services.helper_service import check_datamodel_by_id, check_entity_by_id
 from lif.mdr_utils.logger_config import get_logger
@@ -116,6 +117,8 @@ async def create_entity_association(session: AsyncSession, data: CreateEntityAss
         ContributorOrganization=data.ContributorOrganization,
         Extension=data.Extension,
         ExtendedByDataModelId=data.ExtendedByDataModelId,
+        Name=entity_association_name(data.Relationship, data.Placement, child_entity.Name),
+        Array=association_array(child_entity.Array),
     )
     session.add(entity_association)
     await session.commit()
@@ -191,6 +194,13 @@ async def update_entity_association(session: AsyncSession, association_id: int, 
 
     for key, value in dto.dict(exclude_unset=True).items():
         setattr(entity_association, key, value)
+
+    # Name and Array follow the child, Relationship and Placement, any of which may have changed (#1386).
+    child_entity = await session.get(Entity, entity_association.ChildEntityId)
+    entity_association.Name = entity_association_name(
+        entity_association.Relationship, entity_association.Placement, child_entity.Name
+    )
+    entity_association.Array = association_array(child_entity.Array)
 
     session.add(entity_association)
     await session.commit()

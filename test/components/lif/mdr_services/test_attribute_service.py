@@ -198,6 +198,7 @@ async def test_create_attribute_with_entity_association(fake_session, monkeypatc
                 "Extension": self.Extension,
                 "ValueSetId": self.ValueSetId,
                 "EntityId": self.EntityId,
+                "Array": "Yes",
             }
             for key in exclude or set():
                 data.pop(key, None)
@@ -213,6 +214,7 @@ async def test_create_attribute_with_entity_association(fake_session, monkeypatc
     assert association.EntityId == 7
     assert association.AttributeId == 42
     assert association.ExtendedByDataModelId is None  # non-extension model
+    assert (association.Name, association.Array) == ("weight", True)  # #1386: from the attribute
     assert out.UniqueName == "dm.weight"
 
 

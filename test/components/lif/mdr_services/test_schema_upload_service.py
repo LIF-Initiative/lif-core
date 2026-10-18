@@ -27,6 +27,7 @@ def test_parse_reference_key_with_relationship():
     assert svc.parse_reference_key("issuedByRefOrganization") == ("issuedBy", "Organization")
 
 
+# cspell:ignore erenced - deliberate fragment in the comment below, illustrating a mis-parse
 def test_parse_reference_key_relationship_containing_ref():
     # A relationship name can itself contain "Ref" (isReferencedBy, refersTo). rpartition splits
     # on the LAST "Ref", so the child entity name stays intact; splitting on the first would yield
@@ -75,8 +76,8 @@ def test_is_inlined_reference(prop_name, prop, expected):
 def patched_lookups(monkeypatch):
     """Resolve entities by UniqueName and report no pre-existing association."""
     entities = {
-        "Person": types.SimpleNamespace(Id=1, Name="Person"),
-        "Organization": types.SimpleNamespace(Id=2, Name="Organization"),
+        "Person": types.SimpleNamespace(Id=1, Name="Person", Array=None),
+        "Organization": types.SimpleNamespace(Id=2, Name="Organization", Array="Yes"),
     }
 
     async def fake_get_unique_entity(session, unique_name, data_model_id, base_data_model_id, data_model_type):
@@ -116,6 +117,8 @@ async def test_inlined_reference_creates_reference_association(patched_lookups):
     assert assoc.ChildEntityId == 2
     assert assoc.Relationship == "issuedBy"
     assert assoc.Placement == "Reference"
+    # #1386: Name is the key the reference was uploaded under.
+    assert (assoc.Name, assoc.Array) == ("issuedByRefOrganization", True)
 
 
 async def test_plain_reference_has_no_relationship(patched_lookups):
@@ -131,6 +134,7 @@ async def test_plain_reference_has_no_relationship(patched_lookups):
     associations = _added_associations(session)
     assert len(associations) == 1
     assert associations[0].Relationship is None
+    assert associations[0].Name == "RefOrganization"
 
 
 async def test_embedded_child_does_not_create_reference_association(patched_lookups):

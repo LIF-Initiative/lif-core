@@ -4,8 +4,8 @@ V1.7 backfills association Name/Array in SQL, and the create paths will compute 
 lif.mdr_services.association_name. backup.sql (loaded by conftest's postgres_server) holds V1.7's
 result, so every stored value must equal what the Python rule gives for the same row.
 
-Only rows with a Name are judged: other tests in the session create associations through paths that
-don't write Name yet, and NULL means "not computed yet".
+Only rows with a Name are judged: other tests in the session insert associations directly, bypassing
+the services that compute Name (test_association_name_writes.py covers those services).
 """
 
 from urllib.parse import urlparse
