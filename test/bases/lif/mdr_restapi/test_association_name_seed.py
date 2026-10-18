@@ -8,9 +8,6 @@ Only rows with a Name are judged: other tests in the session insert associations
 the services that compute Name (test_association_name_writes.py covers those services).
 """
 
-from urllib.parse import urlparse
-
-import psycopg2
 import pytest
 from sqlmodel import select
 
@@ -28,20 +25,6 @@ SEED_SCHEMAS = ("public", "tenant_lif_team")
 # Well under the seed's counts (each schema holds 170+ entity and 2,200+ attribute associations), so
 # the checks can't pass on a handful of rows.
 MIN_ROWS = 100
-
-
-@pytest.fixture
-def pg_conn(postgres_server):
-    parsed = urlparse(postgres_server.url())
-    conn = psycopg2.connect(
-        host=parsed.hostname,
-        port=parsed.port,
-        user=parsed.username,
-        password=parsed.password or "",
-        dbname=parsed.path.lstrip("/"),
-    )
-    yield conn
-    conn.close()
 
 
 @pytest.mark.parametrize("schema", SEED_SCHEMAS)
