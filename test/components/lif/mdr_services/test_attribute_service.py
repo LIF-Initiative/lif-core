@@ -241,7 +241,9 @@ async def test_create_attribute_duplicate_raises_400(fake_session, monkeypatch):
 
 async def test_update_attribute_happy_path(fake_session, monkeypatch):
     # existing attribute
-    current = types.SimpleNamespace(Id=5, Deleted=False, UniqueName="dm.height", DataModelId=1)
+    current = types.SimpleNamespace(
+        Id=5, Deleted=False, UniqueName="dm.height", Name="height", Array=None, DataModelId=1
+    )
     fake_session.get.return_value = current
 
     monkeypatch.setattr(svc, "check_datamodel_by_id", AsyncMock())
@@ -288,7 +290,9 @@ async def test_update_attribute_validates_a_zero_data_model_id(fake_session, mon
     """
     from lif.mdr_dto.attribute_dto import UpdateAttributeDTO
 
-    current = types.SimpleNamespace(Id=5, Deleted=False, UniqueName="dm.height", DataModelId=1)
+    current = types.SimpleNamespace(
+        Id=5, Deleted=False, UniqueName="dm.height", Name="height", Array=None, DataModelId=1
+    )
     fake_session.get.return_value = current
 
     check_datamodel = AsyncMock()

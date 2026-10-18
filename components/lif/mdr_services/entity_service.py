@@ -11,7 +11,7 @@ from lif.mdr_sql_model.core import (
     ExtInclusionsFromBaseDM,
 )
 from lif.mdr_dto.entity_dto import ChildEntityDTO, CreateEntityDTO, EntityDTO, UpdateEntityDTO
-from lif.mdr_services.association_name import association_array, entity_association_name
+from lif.mdr_services.association_name import association_array, entity_association_name, recomputed
 from lif.mdr_services.attribute_service import soft_delete_attribute
 from lif.mdr_services.helper_service import check_datamodel_by_id
 from lif.mdr_utils.logger_config import get_logger
@@ -108,15 +108,23 @@ async def update_entity(session: AsyncSession, id: int, data: UpdateEntityDTO):
             )
 
     updates = data.dict(exclude_unset=True)
+    name_before, array_before = entity.Name, entity.Array
     for key, value in updates.items():
         setattr(entity, key, value)
 
-    # Every association where this entity is the child stores its Name and Array (#1386).
+    # Every association where this entity is the child stores its Name and Array, which follow a rename
+    # or an Array change while they are still the rule's (#1386).
     if "Name" in updates or "Array" in updates:
         result = await session.execute(select(EntityAssociation).where(EntityAssociation.ChildEntityId == id))
         for association in result.scalars().all():
-            association.Name = entity_association_name(association.Relationship, association.Placement, entity.Name)
-            association.Array = association_array(entity.Array)
+            association.Name = recomputed(
+                association.Name,
+                entity_association_name(association.Relationship, association.Placement, name_before),
+                entity_association_name(association.Relationship, association.Placement, entity.Name),
+            )
+            association.Array = recomputed(
+                association.Array, association_array(array_before), association_array(entity.Array)
+            )
             session.add(association)
 
     logger.info(f"Updated entity : {entity}")

@@ -47,3 +47,14 @@ def entity_association_name(relationship, placement, child_name):
 def association_array(child_array):
     """Association Array: whether the child is a list under this parent (its ``Array`` is ``'Yes'``)."""
     return child_array == "Yes"
+
+
+def recomputed(stored, before, after):
+    """The value an update stores: the rule's new value while the stored one is still the rule's.
+
+    ``before`` is what the rule gave for the row before the edit, ``after`` what it gives now. A stored
+    value equal to ``before``, or NULL (not computed yet), came from the rule, so it follows the edit.
+    Any other value was set some other way (a model import writes Name and Array from the file, and
+    #1388 sets Names that resolve collisions), so the edit leaves it alone.
+    """
+    return after if stored is None or stored == before else stored

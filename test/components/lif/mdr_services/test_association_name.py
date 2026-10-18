@@ -5,7 +5,7 @@ V1.7 backfills the same rules in SQL; test_association_name_seed.py checks the t
 
 import pytest
 
-from lif.mdr_services.association_name import association_array, entity_association_name
+from lif.mdr_services.association_name import association_array, entity_association_name, recomputed
 from lif.mdr_sql_model.core import EntityPlacementType
 
 # (relationship, placement, child name, expected Name)
@@ -48,3 +48,18 @@ def test_placement_may_be_the_model_enum():
 )
 def test_association_array_is_true_only_for_yes(child_array, expected):
     assert association_array(child_array) is expected
+
+
+@pytest.mark.parametrize(
+    ("stored", "before", "after", "expected"),
+    [
+        ("mailingAddress", "mailingAddress", "homeAddress", "homeAddress"),  # still the rule's: follows the edit
+        (None, "mailingAddress", "homeAddress", "homeAddress"),  # not computed yet: computed now
+        ("AccreditedBy", "mailingAddress", "homeAddress", "AccreditedBy"),  # set some other way: kept
+        (True, True, False, False),  # Array follows the same rule
+        (False, True, False, False),
+        (True, False, False, True),  # an Array the rule wouldn't give stays, even when the edit changes nothing
+    ],
+)
+def test_recomputed_follows_the_rule_only_while_the_value_is_the_rules(stored, before, after, expected):
+    assert recomputed(stored, before, after) == expected

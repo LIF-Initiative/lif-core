@@ -17,7 +17,7 @@ from lif.mdr_dto.attribute_dto import (
     CreateAttributeDTO,
     UpdateAttributeDTO,
 )
-from lif.mdr_services.association_name import association_array
+from lif.mdr_services.association_name import association_array, recomputed
 from lif.mdr_services.helper_service import check_datamodel_by_id, check_entity_by_id
 from lif.mdr_services.value_set_values_service import check_value_set_exists_by_id
 from lif.mdr_utils.logger_config import get_logger
@@ -204,17 +204,21 @@ async def update_attribute(session: AsyncSession, id: int, data: UpdateAttribute
         await check_value_set_exists_by_id(session=session, id=data.ValueSetId)
 
     updates = data.dict(exclude_unset=True)
+    name_before, array_before = attribute.Name, attribute.Array
     for key, value in updates.items():
         setattr(attribute, key, value)
 
-    # An attribute's associations store its Name and Array (#1386).
+    # An attribute's associations store its Name and Array, which follow a rename or an Array change
+    # while they are still the rule's (#1386).
     if "Name" in updates or "Array" in updates:
         result = await session.execute(
             select(EntityAttributeAssociation).where(EntityAttributeAssociation.AttributeId == id)
         )
         for association in result.scalars().all():
-            association.Name = attribute.Name
-            association.Array = association_array(attribute.Array)
+            association.Name = recomputed(association.Name, name_before, attribute.Name)
+            association.Array = recomputed(
+                association.Array, association_array(array_before), association_array(attribute.Array)
+            )
             session.add(association)
 
     session.add(attribute)

@@ -115,6 +115,32 @@ async def test_update_paths_recompute_name_and_array(test_db_session, request):
     assert await _entity_association(session, reference_id) == ("RefOrganization", False)
 
 
+async def test_update_paths_leave_values_that_did_not_come_from_the_rule(test_db_session, request):
+    """A Name/Array written some other way (as a model import or #1388 will) survives later edits."""
+    session = test_db_session
+    _dm, rows, (embedded_id, reference_id, attribute_association_id) = await _seed(session, request.node.name)
+    # Set the stored values directly, as an import writes them from a file.
+    for model, association_id, values in (
+        (EntityAssociation, embedded_id, {"Name": "Studies", "Array": False}),
+        (EntityAttributeAssociation, attribute_association_id, {"Name": "contactEmail", "Array": False}),
+    ):
+        row = await session.get(model, association_id)
+        for key, value in values.items():
+            setattr(row, key, value)
+        session.add(row)
+    await session.commit()
+
+    await update_entity(session, rows["course"].Id, UpdateEntityDTO(Name="Class", Array="No"))
+    await update_entity_association(session, embedded_id, UpdateEntityAssociationDTO(Relationship="takes"))
+    await update_attribute(session, rows["email"].Id, UpdateAttributeDTO(Name="emailAddress", Array="No"))
+
+    assert await _entity_association(session, embedded_id) == ("Studies", False)
+    assert await _attribute_association(session, attribute_association_id) == ("contactEmail", False)
+    # The reference under the same parent still came from the rule, so it still follows an edit.
+    await update_entity_association(session, reference_id, UpdateEntityAssociationDTO(Relationship="hasIssuer"))
+    assert await _entity_association(session, reference_id) == ("RefOrganization", False)
+
+
 async def test_upload_stores_the_key_each_child_was_uploaded_under(test_db_session, request):
     session = test_db_session
     source, _rows, _ids = await _seed(session, request.node.name)

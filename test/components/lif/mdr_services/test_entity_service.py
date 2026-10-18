@@ -173,7 +173,7 @@ async def test_create_entity_raises_400_on_duplicate(fake_session, monkeypatch):
 
 async def test_update_entity_happy_path_updates_fields(fake_session, monkeypatch):
     monkeypatch.setattr(svc, "check_datamodel_by_id", AsyncMock())
-    current = types.SimpleNamespace(Id=9, Deleted=False, UniqueName="entity.old", DataModelId=1)
+    current = types.SimpleNamespace(Id=9, Deleted=False, UniqueName="entity.old", Name="old", Array=None, DataModelId=1)
     monkeypatch.setattr(svc, "get_entity_by_id", AsyncMock(return_value=current))
     monkeypatch.setattr(svc, "check_entity_exists", AsyncMock(return_value=None))
 

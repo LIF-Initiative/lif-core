@@ -35,6 +35,8 @@ def existing_association():
         Relationship="parentOf",
         Placement=None,
         ExtendedByDataModelId=None,
+        Name=None,  # not computed yet, as on a row an older MDR image created
+        Array=None,
     )
 
 
@@ -73,5 +75,20 @@ async def test_update_recomputes_name_and_array_from_the_child(fake_session, mon
 
     await svc.update_entity_association(fake_session, 9, UpdateEntityAssociationDTO(Placement="Reference"))
 
-    fake_session.get.assert_awaited_once_with(svc.Entity, 5)
+    fake_session.get.assert_awaited_with(svc.Entity, 5)
     assert (existing_association.Name, existing_association.Array) == ("parentOfRefCourse", True)
+
+
+async def test_update_leaves_a_name_and_array_that_did_not_come_from_the_rule(
+    fake_session, monkeypatch, existing_association
+):
+    """#1386: a Name/Array set some other way (a model import, #1388's collision fixes) is not overwritten."""
+    existing_association.Name, existing_association.Array = (
+        "accreditedBy",
+        False,
+    )  # the rule would give parentOfCourse/True
+    monkeypatch.setattr(svc, "get_entity_association_by_id", AsyncMock(return_value=existing_association))
+
+    await svc.update_entity_association(fake_session, 9, UpdateEntityAssociationDTO(Placement="Reference"))
+
+    assert (existing_association.Name, existing_association.Array) == ("accreditedBy", False)
