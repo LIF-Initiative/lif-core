@@ -12,6 +12,7 @@ import pytest
 from sqlmodel import select
 
 from lif.mdr_services.association_name import association_array, entity_association_name
+from lif.mdr_services.schema_generation_service import ENTITY_FIELDS_NOT_EMITTED, generate_openapi_schema
 from lif.mdr_sql_model.core import (
     AccessType,
     Attribute,
@@ -98,3 +99,22 @@ async def test_new_rows_get_the_column_defaults(test_db_session):
     # NULL until a create path computes it (it marks rows a later backfill still has to fill).
     assert (association.Name, association.Array) == (None, None)
     await test_db_session.rollback()
+
+
+def _keys(node):
+    if isinstance(node, dict):
+        for key, value in node.items():
+            yield key
+            yield from _keys(value)
+    elif isinstance(node, list):
+        for value in node:
+            yield from _keys(value)
+
+
+async def test_generated_schema_leaves_out_the_new_entity_fields(test_db_session):
+    # The generator copies each entity's fields when include_entity_md is set. Emitting the V1.7 flags is
+    # #1395's change, so until then they must not appear (model 1 covers both of the generator's copy sites).
+    schema = await generate_openapi_schema(test_db_session, 1, include_attr_md=True, include_entity_md=True)
+    keys = set(_keys(schema))
+    assert "UniqueName" in keys  # Entity metadata was emitted, so the check below can fail.
+    assert keys & ENTITY_FIELDS_NOT_EMITTED == set()
