@@ -1,5 +1,6 @@
 from copy import deepcopy
 from fastapi import HTTPException
+from lif.mdr_services.association_name import embedded_property_key, reference_property_key
 from lif.mdr_sql_model.core import Entity, EntityAssociation, ExtInclusionsFromBaseDM, ValueSet, ValueSetValue
 from lif.mdr_services.attribute_service import get_attributes_with_association_metadata_for_entity
 from lif.mdr_services.datamodel_service import get_datamodel_by_id
@@ -20,6 +21,10 @@ INCLUDED_FIELDS_MAP = {
     "DataType": "type",
 }
 
+# Stored since V1.7 (#1386) but not emitted yet: how the generator uses them is #1395's change,
+# and until then the generated schema must not change (ADR data_model/0004).
+ENTITY_FIELDS_NOT_EMITTED = {"LevelOfAccess", "Queryable", "Modifiable"}
+
 ATTRIBUTE_ASSOCIATION_FIELDS = [
     "EntityAttributeAssociationId",
     "EntityId",
@@ -33,25 +38,6 @@ ATTRIBUTE_ASSOCIATION_FIELDS = [
     "AssociationContributorOrganization",
     "AssociationExtendedByDataModelId",
 ]
-
-
-def embedded_property_key(relationship, entity_name):
-    """The property key an Embedded child is stored under in its parent's schema.
-
-    Single source of truth for a rule that used to be written out by hand in
-    ``find_children`` and assumed-away in ``add_ref``. The key is
-    ``Relationship + EntityName``, except when the relationship is absent or is a
-    structural ``has*`` / ``relevant*`` name, where it collapses to the bare entity
-    name.
-
-    ``add_ref`` navigates schemas that ``find_children`` built, so both must spell
-    the key the same way. They did not, and a named Embedded ancestor made
-    ``add_ref`` look up a key that was never written -- an uncaught ``KeyError``
-    surfacing as a bare 500 (#1252).
-    """
-    if relationship is not None and not (relationship.startswith("has") or relationship.startswith("relevant")):
-        return relationship + entity_name
-    return entity_name
 
 
 async def find_children(
@@ -111,7 +97,7 @@ async def find_children(
                 )  # Using empty string instead of null to make it easier to diff w/ P1 lif.json schema
                 required_elements = []
                 for key, value in entity_data.__dict__.items():
-                    if include_entity_md:
+                    if include_entity_md and key not in ENTITY_FIELDS_NOT_EMITTED:
                         parent_properties[entity_name][key] = value
                     if key == "Required" and value == "Yes" and entity_name not in parent_schema["required"]:
                         parent_schema["required"].append(entity_name)
@@ -667,6 +653,8 @@ async def generate_openapi_schema(
         required_elements = []
         if include_entity_md:
             for key, value in parent_entity.__dict__.items():
+                if key in ENTITY_FIELDS_NOT_EMITTED:
+                    continue
                 openapi_spec["components"]["schemas"][parent_entity.Name][key] = value
                 if key == "Required" and value == "Yes":
                     required_elements.append(parent_entity.Name)
@@ -889,10 +877,7 @@ async def generate_openapi_schema(
         logger.info(f" parent_ancestors : {parent_ancestors}")
         logger.info(f" child_ancestors : {child_ancestors}")
 
-        if relationship is None or relationship != None and relationship.startswith(("has", "relevant")):
-            key = "Ref" + child_entity_name
-        else:
-            key = relationship + "Ref" + child_entity_name
+        key = reference_property_key(relationship, child_entity_name)
         # logger.info(f"Key : {key}")
 
         if parent_id in child_ancestors:
