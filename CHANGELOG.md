@@ -108,6 +108,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   no migration, as their MariaDB datadir is ephemeral. Superseded by the #1258 entry under Changed, which drops this index
 - docker-compose: `lif-mdr-api` waits for `lif-mdr-database-restore` to complete, so
   `docker compose up lif-mdr-app` no longer starts MDR against an empty database
+- MDR database migration `V1.8`: adds V1.6's `Attributes.TargetEntityId` column, FK and index to
+  every `tenant_*` schema that lacks them (locally, the seed's `tenant_lif_team`, whose attribute
+  queries failed on the missing column). A no-op on dev and demo, which were fixed by hand
+  (issue #1386)
 
 ### Security
 
