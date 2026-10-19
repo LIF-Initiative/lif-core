@@ -2,10 +2,10 @@
 -- PostgreSQL database dump
 --
 
-\restrict gLw4oMyxTVHFfndcpfe4D4lbnvudbrd4tHcUiZX8Wt8VBhlhNbkT5lAYN4OidqP
+\restrict ZZFu3Wjr54H436r3qBwInDPVD122Qh952Lp2LEOBUqfLiyGz6EQCbtTi3HwOzdk
 
 -- Dumped from database version 18.6 (Debian 18.6-1.pgdg13+2)
--- Dumped by pg_dump version 18.6 (Debian 18.6-1.pgdg13+2)
+-- Dumped by pg_dump version 18.1 (Homebrew)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -18,6 +18,20 @@ SET check_function_bodies = false;
 SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
+
+--
+-- Name: public; Type: SCHEMA; Schema: -; Owner: -
+--
+
+-- *not* creating schema, since initdb creates it
+
+
+--
+-- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON SCHEMA public IS '';
+
 
 --
 -- Name: tenant_lif_team; Type: SCHEMA; Schema: -; Owner: -
@@ -1594,49 +1608,40 @@ ALTER TABLE tenant_lif_team."ValueSets" ALTER COLUMN "Id" ADD GENERATED ALWAYS A
 --
 
 COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConsiderations", "DataModelId", "DataType", "ValueSetId", "Required", "Array", "SourceModel", "Notes", "CreationDate", "ActivationDate", "DeprecationDate", "Contributor", "ContributorOrganization", "Extension", "ExtensionNotes", "Deleted", "Tags", "Example", "Common", "TargetEntityId", "LevelOfAccess", "Queryable", "Modifiable") FROM stdin;
-701	endReason	CourseRegistration.endReason	\N	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-458	name	CreativeWork+DefinedTerm.name	The name of the item.	\N	11	\N	\N	\N	\N	\N	6.19	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-943	id	LearningResult.id	\N	\N	5	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1027	BadgeClass	OpenBadges2.0.BadgeClass	\N	\N	15	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1166	title	EmployerHistoryType.title	\N	\N	2	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1195	roleName	Role.roleName	\N	\N	11	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1259	type	Organization.type	\N	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-164	identifier	GradingScheme.identifier	An identifier of the grading scheme	\N	7	\N	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-639	unitsContentOwner	StudentCourseRecord.Course.unitsContentOwner	\N	\N	5	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1749	id	OpenBadgeCredential.credentialSubject.id	\N	\N	16	string	\N	\N	No	\N	\N	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	\N	Public	f	f
-1073	about	EducationalOccupationalCredential.about	The subject matter of the content.	\N	11	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-112	AssessmentPerformanceLevelDescriptiveFeedback	AssessmentPerformanceLevel.AssessmentPerformanceLevelDescriptiveFeedback	A feedback message designed to be reported with the assessment performance level.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-113	DateIssued	LearningAssessment.DateIssued	The date when the learning assessment was formally approved/issued.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+172	id	Assessment.id	\N	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1248	logo	Organisation.logo	The logo of the organisation	\N	7	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1486	address	Address.address	\N	\N	5	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1574	birthDate	Person.birthDate	\N	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1695	requirement	Program.requirement	\N	\N	5	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1894	id	person.id	\N	\N	26	string	\N	Yes	No	\N	\N	\N	2025-10-08 22:12:00+00	\N	MDRUser	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
 1096	JobCode	Position.JobCode	\N	\N	1	entity	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	\N	Public	f	f
-115	ActualStartDateTime	AssessmentParticipantSession.ActualStartDateTime	Date and time the assessment actually began.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1092	IncomeSources	Person.EmploymentLearningExperience.IncomeSources	\N	\N	1	entity	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	\N	Public	f	f
+832	CredentialAward	Person.CredentialAward	\N	\N	1	entity	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	\N	Public	f	f
+1293	Name	Person.Name	\N	In the treatment of a person name by the Learner Information Framework (LIF) and associated technologies, may users of LIF always center the human story of a person's name, how important it is to them, it’s cultural connectedness to people and land, how people traverse multiple ways of “naming” and the impact of “naming” on our stories, experiences and the opportunities it may connect (or disconnect) us to/from.   Using and treating data on people's names can raise several equity issues due to the diversity of naming conventions across cultures and ethnicities. Some of these equity issues include:\n1. Many of the data standards from which LIF draws its normative data model, and as to user of LIF, these systems are designed with Western naming conventions in mind, which can marginalize individuals with non-Western names. This bias can lead to inaccuracies in data analysis and decision-making processes. For example, we made recommendations for the separation of “name” and “name type” as well as inclusion of multiple characters, unlimited character length, etc). \n2. The variety of ways the standards treat “person name” shows limited interoperability between system-standards, which ultimately may lead to multiple records with different ways names are recorded, managed, and/or used. This Inaccurate or incomplete data due to mishandling of names can lead to biased analyses and decision-making, ultimately reinforcing existing disparities in society.\n3. Many of the standards, and the normative model, collapse “name” and “name type” into each other. Given the sensitivities and human implications for name changes, as well as the type of name (e.g., preferred, legal, given/gifted etc), we lean’t into AACRAO report on student identity for recommendations on how learners/students prefer to record and include their names.\n4. Most of the standards systems encourage the standardization of names, which can overlook variations in spelling, pronunciation, and order of names across different cultures. This can result in the erasure of cultural identities and misrepresentation of individuals.\n5. Most of the standards did not include an option for people from indigenous communities to record their Nation Tribe, or their name type as belong to their nation tribe. We leaned into research from the BIA.gov and recommend adding this to the normative model to improve inclusivity and cultural responsiveness to the naming conventions of our first nations peoples.  \n6. Collecting full names without proper consent or understanding of cultural sensitivities can infringe on individuals' privacy rights, especially in contexts where certain names may carry social or political implications. For example, having strict guardrails on when/how “legal name” vs. “preferred name” is used and who has access to the \n\nFor LIF purposes, our recommendation is that IF used in normative model, only names which have been consented to including/use by LIF, be included, with flexibility for their design and formatting to allow for cultural differences. \n\n“Title” “Suffix” and “prefix” components of a person’s name are used to provide additional information about a person's name. Using and treating data on people's titles can raise several equity issues.\n1. One argument for the inclusion of titles in normative data models is they may provide contextual information about an individual's identity and social status, and when used correctly, may ensure that individuals are addressed and identified appropriately, respects their social and professional distinctions.\n2. Traditional titles and honorifics often assume binary gender categories and may not adequately reflect the diversity of gender or social identities, may not be universally understood or used in all cultures or communities; and standardized forms may not accommodate all cultural or social variations in naming practices. For example, "Mr." for men and "Mrs." for married women. These assumptions about gender roles or marital status based on titles may not align with individuals' cultural norms or preferences. This binary classification can exclude and do harm to individuals who do not identify within these categories, such as non-binary or gender non-conforming individuals.\n3. Name suffixes, such as "Jr." or "III," can sometimes reveal familial relationships or generational information. Collecting this data without consent or proper safeguards may infringe on individuals' privacy rights and expose them to risks like identity theft or targeted advertising.\n4. Name suffixes may intersect with other aspects of an individual's identity, such as race, ethnicity, or gender. Failing to consider these intersections can perpetuate systemic inequalities and hinder efforts to promote equity and social justice.\n5. Different cultures may have specific titles or honorifics that hold significance and should be respected in data collection processes. Failing to accommodate these cultural variations can lead to erasure and marginalization of certain communities.\n6. Further, some individuals may not use titles, prefixes, or suffixes at all in their names, or they may have unconventional naming customs that are not recognized by standardized systems.\n6. Inaccurate or incomplete data on titles and prefixes can lead to biased analyses and decision-making, especially in contexts such as healthcare or academic research where precise demographic information is crucial. \n7. Failing to accommodate these variations of the use of “titles, suffix, and/or prefix” can marginalize certain groups and perpetuate cultural biases. \n\nFor LIF purposes, our recommendation is that if used in normative model, only titles, prefix and affix which have been consented to including/use, and which pertain to qualifications, credentials, work, learning, cultural significance and/or honorifics be included, with flexibility for their design and formatting to allow for cultural differences. Titles, prefix and suffix which pertain to social, generational, marital or gender status should not be included to not perpetuate inequalities and expose learner to harm.	1	entity	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	\N	Public	f	f
+1772	targetUrl	achievement.alignment.targetUrl	\N	\N	16	string	\N	\N	No	\N	\N	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	\N	Public	f	f
+2780	proof	EndorsementCredential.proof	A JSON-LD Linked Data proof section for the credential.	\N	3	entity	\N	No	Yes	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+604	otherIdentifier	achievement.otherIdentifier	Use otherIdentifier for the course section ID.	\N	3	\N	\N	\N	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+623	CourseAcademicGrade	CourseSection->Enrollment.CourseAcademicGrade	The final grade awarded for participation in the course.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+605	Profile	Issuer.Profile	\N	\N	3	\N	\N	\N	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+2741	id	ClrCredential.id	Unambiguous reference to the ClrCredential.	\N	3	string	\N	Yes	No	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+894	id	Criteria.id	\N	\N	3	string	\N	No	No	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+70	id	achievement.id	Icdentifier	\N	3	\N	\N	\N	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+602	TargetFramework	Alignment.TargetFramework	\N	\N	3	\N	\N	\N	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+2920	created	Proof.created	Date the proof was created.	\N	3	string	\N	No	No	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+892	Criteria	Achievement.Criteria	Criteria describing how to earn the achievement.	\N	3	\N	\N	\N	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+2781	credentialSchema	EndorsementCredential.credentialSchema	One or more data schemas that provide verifiers with enough information to determine whether the provided data conforms to the schema(s).	\N	3	entity	\N	No	Yes	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+2784	termsOfUse	EndorsementCredential.termsOfUse	The terms of use issued by the issuer.	\N	3	entity	\N	No	Yes	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1540	BirthCity	BirthData.BirthCity	The city the student was born in.	\N	6	string	\N	No	No	Ed-Fi v5.0	maxLength 30; minLength 2	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1288	emailAddress	Common.Contact.Email.emailAddress	The numbers, letters, and symbols used to identify an electronic mail (Email) address of an individual or person.	Only use if consent has been verified.  Consider how the system will use multiple email addresses for connecting/matching records.\nConsider how we will accommodate in our model for special characters from other languages.\nConsider if we will need a means of verifying an email address.	17	string	\N	Yes	Yes	CEDS-Edited	\N	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	\N	Public	f	f
 1307	addressStreet	Common.Contact.Address.addressStreet	The street number and street name or post office box number of an address.	Only use if consent has been verified.	17	string	\N	Yes	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1765	id	achievement.id	\N	\N	16	string	\N	\N	No	\N	\N	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	\N	Public	f	f
-475	type	Person.Consent.type	Type of consent - active, passive, implied, etc.	\N	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1861	value	RemunerationPackage.Ranges.MinimumAmount.value	\N	\N	17	number	\N	No	No	\N	\N	\N	2025-10-02 20:51:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N	\N	Private	f	f
 1309	addressCity	Common.Contact.Address.addressCity	The name of the city in which an address is located.	\N	17	string	\N	Yes	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1310	addressState	Common.Contact.Address.addressState	The abbreviation for the state (within the United States) or outlying area in which an address is located.	\N	17	string	287	Yes	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1311	addressPostalCode	Common.Contact.Address.addressPostalCode	A number that identifies each postal delivery area in a country used as a portion of an address.	\N	17	string	\N	Yes	No	CEDS	MP: Suggest the definition should be country generic.	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1313	countryCode	Common.Contact.Address.countryCode	The unique two character International Organization for Standardization (ISO) code for the country in which an address is located.	\N	17	string	\N	Yes	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-116	ActualEndDateTime	AssessmentParticipantSession.ActualEndDateTime	Date and time the assessment actually ended.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1320	dateEffective	Common.Contact.Address.dateEffective	The effective date for which the address is valid. For physical addresses, the periods in which the person lived at that address.	\N	17	string	\N	No	No	\N	CM 3/11: Brought over from Person	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	\N	Public	f	f
-117	awardedBy	LearningAssessment.awardedBy	The awarding details of the learning assessment.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-119	ScoreType	AssessmentResult.ScoreType	Indicates the purpose for which this assessment score instance was recorded.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-120	ResultDataType	AssessmentResult.ResultDataType	The data type of the assessment result score value.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1742	type	OpenBadgeCredential.type	\N	\N	16	string	\N	\N	Yes	\N	Same type of information as @context	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	\N	Public	f	f
-1192	EmploymentEndDate	EmploymentEndDateType.EmploymentEndDate	\N	\N	9	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1193	occupationalCategory	Occupation.occupationalCategory	\N	\N	11	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-894	id	Criteria.id	\N	\N	3	string	\N	No	No	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-597	target	Alignment.target	\N	\N	3	\N	\N	\N	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1668	startDate	Person.ProgramLearningExperience.startDate	\N	\N	1	string	\N	No	No	\N	\N	\N	2025-11-26 22:39:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-121	CompletionStatus	AssessmentRegistration.CompletionStatus	The completion and scoring status for an instance of a person taking an assessment.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-122	ReasonNotCompleting	AssessmentRegistration.ReasonNotCompleting	The primary reason a participant did not complete an assessment.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1321	dateExpired	Common.Contact.Address.dateExpired	The expired date for which the address is valid. For physical addresses, the periods in which the person lived at that address.	\N	17	string	\N	No	No	\N	CM 3/11: Brought over from Person\n2024-08-09: Mary and Abhishek: We have created Contact entity at the root level in the Person workbook and added the inter-entity link between Organization and Contact, also the Contact in Person already has Address as sub-entity, so this field is marked as Ignore = Yes.	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	\N	Public	f	f
 1328	informationSourceId	Common.Contact.Address.informationSourceId	The indentifier for the Information Source record associated with this entity	\N	17	string	\N	Yes	No	LIF-Addition	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	\N	Public	f	f
 1333	informationSourceId	Common.Contact.informationSourceId	\N	\N	17	string	\N	Yes	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	\N	Public	f	f
 1338	informationSourceId	Common.Contact.Email.informationSourceId	The indentifier for the Information Source record associated with this entity	\N	17	string	\N	Yes	No	LIF-Addition	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	\N	Public	f	f
-344	hasProgressionLevel	Competency.hasProgressionLevel	Reference to a specific point in a progression model.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1340	telephoneNumber	Common.Contact.Telephone.telephoneNumber	The telephone number including the area code, and extension, if applicable.	Only use if consent has been verified.	17	string	\N	Yes	Yes	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1348	informationSourceId	Common.Contact.Telephone.informationSourceId	The indentifier for the Information Source record associated with this entity	\N	17	string	\N	Yes	No	LIF-Addition	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	\N	Public	f	f
 1658	specialization	Program.specialization	Words or brief phrases describing the topicality of the entity; select subject terms from an existing enumeration of such terms.	No change	17	string	\N	No	No	CTDL	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -1654,6 +1659,7 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1850	TestAttribute10	TestAttribute10	This is a test of creating a new partner attribute	consideration	18	string	\N	No	No	\N	\N	2025-08-19 13:42:40.259+00	2025-08-19 13:42:40.259+00	\N	Mary Gwozdz	Org2	t	\N	f	\N	\N	\N	\N	Private	t	t
 1858	basisCode	RemunerationPackage.basisCode	\N	\N	17	string	\N	No	No	\N	\N	\N	2025-10-02 20:47:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N	\N	Public	f	f
 1860	currency	MinimumAmount.currency	\N	\N	17	string	\N	No	No	\N	\N	\N	2025-10-02 20:50:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N	\N	Public	f	f
+1861	value	RemunerationPackage.Ranges.MinimumAmount.value	\N	\N	17	number	\N	No	No	\N	\N	\N	2025-10-02 20:51:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N	\N	Private	f	f
 1862	name	Narrative.name	\N	\N	17	string	\N	No	No	\N	\N	\N	2025-10-02 20:54:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N	\N	Public	f	f
 1864	positionOfferingTypeCodes	Person.positionPreferences.positionOfferingTypeCodes	\N	\N	17	string	\N	Yes	Yes	\N	\N	\N	2025-10-02 20:57:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N	\N	Public	f	f
 1865	positionScheduleTypeCodes	Person.PositionPreferences.positionScheduleTypeCodes	\N	\N	17	string	\N	Yes	Yes	\N	\N	\N	2025-10-02 23:23:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N	\N	Public	f	f
@@ -1673,9 +1679,9 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1885	channelIdentifier	Person.Interactions.channelIdentifier	A unique identifier that specifies the particular channel through which an individual interacted with the organization or its system	\N	17	string	\N	No	No	StateU		\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	\N	Private	f	t
 1886	interactionStart	Person.Interactions.interactionStart	The specific date and time when the interaction between an individual and the organization or system was started	\N	17	string	\N	No	No	StateU		\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	\N	Private	f	t
 1887	interactionEnd	Person.Interactions.interactionEnd	The specific date and time when the interaction between an individual and the organization or system was ended	\N	17	string	\N	No	No	StateU		\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	\N	Private	f	t
+3157	identityHash	IdentityObject.identityHash	Either the hash of the identity value or the plaintext value, depending on the value of hashed.	\N	29	string	\N	Yes	No	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1888	interactionType	Person.Interactions.interactionType	The category of interaction, such as advisement, administrative, or other types, that occurred between the individual and the organization	\N	17	string	\N	No	No	StateU		\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	\N	Private	f	t
 1889	summary	Person.Interactions.summary	A brief summary describing the interaction between the individual and the organization, including discussed topics and any advice or resolution provided	\N	17	string	\N	No	No	StateU		\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	\N	Private	f	t
-379	name	Objective.name	\N	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1890	sentiment	Person.Interactions.sentiment	A rating that reflects the individual’s emotional sentiment at the end of the interaction, such as happy, frustrated, angry, or other	\N	17	string	\N	No	No	StateU		\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	\N	Private	f	t
 1891	severity	Person.Interactions.severity	A rating indicating the severity of the individual’s situation or need, as assessed in the context of the specific interaction	\N	17	string	\N	No	No	StateU		\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	\N	Private	f	t
 1892	followupRequired	Person.Interactions.followupRequired	An indicator specifying whether a follow-up action is needed to further address or resolve the individual’s concern or request	\N	17	string	\N	No	No	StateU		\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	\N	Private	f	t
@@ -1690,8 +1696,8 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1950	identifier	RemunerationPackage.identifier	The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.	Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered.	17	string	\N	Yes	No	\N	\N	\N	2025-12-02 15:37:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N	\N	Public	f	f
 1951	identifier	Interactions.identifier	The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.	Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered.	17	string	\N	Yes	No	\N	\N	\N	2025-12-02 15:38:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N	\N	Public	f	f
 1952	identifier	Ranges.indentifier	The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.	Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered.	17	string	\N	Yes	No	\N	\N	\N	2025-12-02 15:43:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N	\N	Public	f	f
+3260	genre	Evidence.genre	A category or classification of the evidence.	\N	29	string	\N	No	No	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1953	identifier	MinimumAmount.identifier	The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.	Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered.	17	string	\N	Yes	No	\N	\N	\N	2025-12-02 15:59:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N	\N	Public	f	f
-381	assessment	Objective.assessment	\N	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1954	identifier	Criteria.identifier	The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.	Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered.	17	string	\N	Yes	No	\N	\N	\N	2025-12-02 19:15:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N	\N	Public	f	f
 3	shortName	Assessment.shortName	An abbreviated title for an assessment.	No change	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1237	code	OrgCode.code	\N	\N	5	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -1719,14 +1725,13 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 130	type	Exam.type	\N	\N	5	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 131	Classifier	Taxonomy.Classifier	\N	\N	5	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 132	resultValuesGroups	Exam.resultValuesGroups	\N	\N	5	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-133	AssessmentIdentifier	Assessment.AssessmentIdentifier	A unique number or alphanumeric code assigned to an assessment.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-134	AssessmentTitle	Assessment.AssessmentTitle	The title or name of the assessment.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+3496	ContentIdentifier	EducationContent.ContentIdentifier	A unique identifier for the education content.	\N	6	string	\N	Yes	No	Ed-Fi v5.0	maxLength 225	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3497	LearningResourceMetadataURI	EducationContent.LearningResourceMetadataURI	The URI (typical a URL) pointing to the metadata entry in a LRMI metadata repository, which describes this content item.	\N	6	string	\N	No	No	Ed-Fi v5.0	format: uri\nmaxLength 255; minLength 5\nExactly one of LearningResourceMetadataURI or LearningResource must be present.	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
 1238	name	Organization.name	\N	\N	5	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1851	TestUpdatedAttribute11	TestUpdatedAttribute11	This is a test of creating updated attribute	consideration	25	string	\N	No	No	\N	\N	2025-08-19 13:42:40.259+00	2025-08-19 13:42:40.259+00	\N	Mary Gwozdz	Unicon	f	\N	f	\N	12345	\N	\N	Public	f	f
-141	AdministrationDate	StudentAssement.AdministrationDate	The date and time an assessment was completed by the student. The use of ISO-8601 formats with a timezone designator (UTC or time offset) is recommended in order to prevent ambiguity due to time zones.	\N	6	string	\N	\N	\N	\N	student, not event	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-143	PlatformType	StudentAssement.PlatformType	The platform with which the assessment was delivered to the student during the assessment session.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-136	AssessmentCategory	Assessment.AssessmentCategory	The category of an assessment based on format and content.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-137	AcademicSubject	Assessment.AcademicSubject	The description of the content or subject area (e.g., arts, mathematics, reading, stenography, or a foreign language) of an assessment.	\N	6	string	\N	\N	\N	\N	Reference to AcademicSubjectDescriptor	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+3498	LearningResource	EducationContent.LearningResource	This entity maintains information that describes content, materials, and informational resources that support learning.	\N	6	entity	\N	No	No	Ed-Fi v5.0	Exactly one of LearningResourceMetadataURI or LearningResource must be present.	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	105	Public	f	f
+3499	Cost	EducationContent.Cost	An amount that has to be paid or spent to buy or obtain the education content.	\N	6	number	\N	No	No	Ed-Fi v5.0	format: decimal (U.S. currency, dollars and cents)	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3500	CostRate	EducationContent.CostRate	The rate by which the cost applies.	\N	6	enum	453	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
 980	type	Evidence.type	The type of the evidence.	\N	7	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 105	AssessmentTypeAdministered	Assessment.AssessmentTypeAdministered	The type of assessment administered	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 106	AssessmentScoreMetricType	Assessment.AssessmentScoreMetricType	The specific method used to report the performance and achievement of the assessment. This is the metric that is being used to derive the scores.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -1735,14 +1740,22 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 109	AssessmentPerformanceLevelLabel	AssessmentPerformanceLevel.AssessmentPerformanceLevelLabel	A label representing the performance level appropriate for use on a report.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 110	AssessmentPerformanceLevelLowerCutScore	AssessmentPerformanceLevel.AssessmentPerformanceLevelLowerCutScore	Lowest possible score for the performance level.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 111	AssessmentPerformanceLevelUpperCutScore	AssessmentPerformanceLevel.AssessmentPerformanceLevelUpperCutScore	Highest possible score for the performance level.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+112	AssessmentPerformanceLevelDescriptiveFeedback	AssessmentPerformanceLevel.AssessmentPerformanceLevelDescriptiveFeedback	A feedback message designed to be reported with the assessment performance level.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+113	DateIssued	LearningAssessment.DateIssued	The date when the learning assessment was formally approved/issued.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+115	ActualStartDateTime	AssessmentParticipantSession.ActualStartDateTime	Date and time the assessment actually began.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+116	ActualEndDateTime	AssessmentParticipantSession.ActualEndDateTime	Date and time the assessment actually ended.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+117	awardedBy	LearningAssessment.awardedBy	The awarding details of the learning assessment.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+119	ScoreType	AssessmentResult.ScoreType	Indicates the purpose for which this assessment score instance was recorded.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+120	ResultDataType	AssessmentResult.ResultDataType	The data type of the assessment result score value.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+121	CompletionStatus	AssessmentRegistration.CompletionStatus	The completion and scoring status for an instance of a person taking an assessment.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+122	ReasonNotCompleting	AssessmentRegistration.ReasonNotCompleting	The primary reason a participant did not complete an assessment.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 123	TimeAssessed	AssessmentParticipationSession.TimeAssessed	The overall time a learner actually spent during the assessment session.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 124	DeliveryDeviceDetails	AssessmentParticipationSession.DeliveryDeviceDetails	The details about the device or platform by with which the assessment was delivered to the learner.	\N	4	\N	\N	\N	\N	\N	About an instance of assessment	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 125	AssessmentSessionLocation	AssessmentParticipationSession.AssessmentSessionLocation	The description of the place where an assessment is administered.	\N	4	\N	\N	\N	\N	\N	About an instance of assessment	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 181	TestName-TestNameType	TestsType.TestName-TestNameType	Name identifying the test	\N	9	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-139	AssessmentScore	Assessment.AssessmentScore	Definition of the scores to be expected from this assessment.	\N	6	string	\N	\N	\N	\N	Describes more about the scores than a controlled set-- min, max, etc, not sure how to represent type	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+3501	Namespace	EducationContent.Namespace	Namespace for the education content.	\N	6	string	\N	Yes	No	Ed-Fi v5.0	format: uri\nmaxLength 255; minLength 5	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
 5	provider	Assessment.provider	Identifies the provider or publisher of the assessment.	No change	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 7	type	Assessment.type	The category of an assessment based on format and content.	No change	1	string	\N	No	No	\N	There are no proposed vocabularies	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-172	id	Assessment.id	\N	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 173	name	Assessment.name	\N	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 174	learningObjectives	Item.learningObjectives	\N	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 175	subject	Ontology.subject	\N	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -1780,7 +1793,6 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 35	approvedBy	Assessment.approvedBy	Organization that pronounces favorable judgment for this  assessment.	No change	1	string	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 193	ceterms-assessmentDeliveryType	AssessmentProfile.ceterms-assessmentDeliveryType	Delivery type for the assessment for the credential.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 36	methodDescription	Assessment.methodDescription	Description of the methods used to conduct assessment.	No change	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-457	description	CreativeWork+DefinedTerm.description	A description of the item.	\N	11	\N	\N	\N	\N	\N	6.19	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1841	TestAttribute	TestAttribute	This is a test of creating a new partner attribute	consideration	18	enum	347	No	No	\N	\N	2025-08-19 13:42:40.259+00	2025-08-19 13:42:40.259+00	\N	Mary Gwozdz	Org2	t	\N	f	\N	\N	\N	\N	Public	f	f
 245	version	CompetencyFramework.Competency.version	\N	No change	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 45	keyword	Assessment.keyword	\N	No change	1	string	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -1821,6 +1833,7 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 327	CompetencyDefinitionSequence	Competency.CompetencyDefinitionSequence	A set of one or more alphanumeric characters and/or symbols denoting the positioning of the statement being described in a sequential listing of statements.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 330	officialSourceURL	CFDocument.officialSourceURL	The URL link to the formal citation of the original achievement standards document created for humans.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 335	abbreviatedStatement	Competency.abbreviatedStatement	An abbreviated version of the Full Statement.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+344	hasProgressionLevel	Competency.hasProgressionLevel	Reference to a specific point in a progression model.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 67	deliveryDeviceDetails	Person.AssessmentLearningExperience.deliveryDeviceDetails	The details about the device or platform by with which the assessment was delivered to the learner.	No change	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 389	dateValidFrom	CompetencyFramework.dateValidFrom	Beginning date of validity of this competency framework.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1241	state	Organization.state	\N	\N	5	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -1858,6 +1871,8 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 375	source	ObjectiveBank.source	\N	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 377	license	ObjectiveBank.license	\N	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 378	description	Obective.description	\N	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+379	name	Objective.name	\N	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+381	assessment	Objective.assessment	\N	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 382	source	CompetencyFramework.source	The original competency framework which this resource is based on or derived from.	\N	10	\N	\N	\N	\N	\N	6.1	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 383	name	CompetencyFramework.name	The name or title of this resource.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 384	description	CompetencyFramework.description	A short description of this resource.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -1937,6 +1952,8 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 712	CourseSubjectAbbreviation	Student.AcademicRecord.AcademicSession.Course.CourseSubjectAbbreviation	The alphabetic abbreviation of the academic department or discipline offering the course. It is one part of the total course identifier.	\N	9	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 983	title	Credential.title	\N	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 147	title	LearningAssessmentSpecification.title	The title of the learning assessment specification. One value per language is permitted.	\N	7	\N	\N	Yes	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+457	description	CreativeWork+DefinedTerm.description	A description of the item.	\N	11	\N	\N	\N	\N	\N	6.19	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+458	name	CreativeWork+DefinedTerm.name	The name of the item.	\N	11	\N	\N	\N	\N	\N	6.19	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 146	alternativeName	LearningAssessmentSpecification.alternativeName	The alternative name of the learning assessment specification	\N	7	\N	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 148	assessedBy	LearningAssessmentSpecification.assessedBy	The competent body that awarded the grade.	\N	7	\N	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 149	lastModificationDate	LearningAssessmentSpecification.lastModificationDate	The date when the learning assessment specification was last modified	\N	7	\N	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -1973,6 +1990,7 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 161	otherDocuments	LearningAssessmentSpecification.otherDocuments	A public web document containing additional documentation about the learning assessment specification.	\N	7	\N	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 162	specialisationOf	LearningAssessmentSpecification.specialisationOf	A learning assessment specification (e.g., a standard) of which this specification is a specialisation.	\N	7	\N	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 163	status	LearningAssessmentSpecification.status	The publication status of the learning assessment specification.	\N	7	\N	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+164	identifier	GradingScheme.identifier	An identifier of the grading scheme	\N	7	\N	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 168	dateIssued	LearningAssessment.dateIssued	The date when the learning assessment was formally approved/issued.	\N	7	\N	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 165	label	ResultCategory.label	The label of the histogram score or score range. Should correspond to the grading scheme which has been used, e.g., 'C', or '20-30'	\N	7	\N	\N	Yes	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 171	location	LearningAssessment.location	The location where the learning assessment was completed	\N	7	\N	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -1996,6 +2014,7 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 614	CourseCodeSystem	Course.CourseCodeSystem	A system that is used to identify the organization of subject matter and related learning experiences provided for the instruction of students.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 615	CourseSubjectAbbreviation	Course.CourseSubjectAbbreviation	The alphabetic abbreviation of the academic department or discipline offering the course. It is one part of the total course identifier number.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 616	CreditValue	Course.CreditValue	The amount of credit available to the student who successfully meets the objectives of the course or learning opportunity based on the units defined by Credit Unit Type.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+3261	name	Evidence.name	A descriptive title of the evidence.	\N	29	string	\N	No	No	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 617	RelatedCompetencyDefinitions	Course.RelatedCompetencyDefinitions	An indication of the competency definition(s) addressed in the Course Section.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 618	StudentIdentifier	Enrollment.StudentIdentifier	A unique number or alphanumeric code assigned to a student by a school, school system, a state, or other agency or entity.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 611	CourseSectionTimeRequiredForCompletion	CourseSection.CourseSectionTimeRequiredForCompletion	The actual or estimated number of clock minutes required for course completion. This number is especially important for career and technical education course and may represent (in minutes) the clock hour requirement of the course, the number of minutes (or clock hours) of class time per week, times the number of equivalent weeks the class typically meets.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -2015,6 +2034,7 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 636	levelValue.name	StudentCourseRecord.Course.levelValue.name	\N	\N	5	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 637	levelValue.type	StudentCourseRecord.levelValue.type	\N	\N	5	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 638	courseCodeSuffix	StudentCourseRecord.Course.courseCodeSuffix	\N	\N	5	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+639	unitsContentOwner	StudentCourseRecord.Course.unitsContentOwner	\N	\N	5	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 640	repeatableForCreditRule	StudentCourseRecord.Course.repeatableForCreditRule	\N	\N	5	\N	\N	\N	\N	\N	this is a rule, not a fixed number	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 641	calculatedGradeScaleKey	StudentCourseRecord.calculatedGradeScaleKey	\N	\N	5	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 642	type	StudentCourseRecord.type	\N	\N	5	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -2029,13 +2049,7 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 651	isRepeated	StudentCourseRecord.isRepeated	\N	\N	5	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 652	lastAttendanceDate	StudentCourseRecord.lastAttendanceDate	\N	\N	5	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 653	sectionCode	StudentCourseRecord.sectionCode	\N	\N	5	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-662	CourseIdentificationSystem	CourseIdentificationCode.CourseIdentificationSystem	A system that is used to identify the organization of subject matter and related learning experiences provided for the instruction of students.	\N	6	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-660	InstructionalTimePlanned	Course.InstructionalTimePlanned	The planned total number of clock minutes of instruction for this course offering. Generally, this should be at least as many minutes as is required for completion by the related state- or district-defined course.	\N	6	number	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-657	CourseDescription	Course.CourseDescription	A description of the content standards and goals covered in the course. Reference may be made to state or national content standards.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-661	LearningStandard	Course.LearningStandard	Learning standard(s) to be taught by the course.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-655	CourseGPAApplicability	Course.CourseGPAApplicability	An indicator of whether or not the course being described is included in the computation of the student's grade point average, and if so, if it is weighted differently from regular courses.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-663	OfferedGradeLevel	Course.OfferedGradeLevel	This descriptor defines the set of grade levels. The map to known Ed-Fi enumeration values is required.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-671	SectionIdentifier	Section.SectionIdentifier	\N	\N	6	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+658	BeginDate	Session.BeginDate	Month, day, and year of the first day of the session.	\N	6	string	\N	Yes	No	Ed-Fi v5.0	format: date	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 672	id	CourseCatalog.id	\N	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 673	number	CourseEntry.Course.number	\N	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 674	title	Course.title	\N	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -2062,14 +2076,14 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 692	genusType	Activity.genusType	\N	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 694	type	Activity.type	\N	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 695	startDate	CourseRegistration.startDate	\N	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+701	endReason	CourseRegistration.endReason	\N	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 702	id	ActivityRegistration.Activity.id	\N	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 703	code	CourseEntry.Course.code	\N	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 705	CourseTitle	Student.AcademicRecord.AcademicSession.Course.CourseTitle	The name or title of the course taken by a student at an academic institution.	\N	9	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 706	CourseDescription	CourseInventoryInformation.CourseDescription	The text description describing the content of the course, as carried in the sending institution’s course catalog.	\N	9	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-743	expirationDate	Course.expirationDate	Date beyond which the resource is no longer offered or available.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 710	Choice	Student.AcademicRecord.AcademicSession.Course.Choice	Each option has it's own definition as documented in Voc 4-PESCCourseCode	\N	9	\N	\N	\N	\N	\N	There is no root element to name.  The choice exists between CourseRepeatCode and CourseQualityPointsEarned	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+809	narrative	Credential.Requirements.Criteria.narrative	A narrative of what is needed to earn the credential.	This element should not be separated from its context or bias and inaccuracy will result. An element must be added to indicate who is requiring or reporting on these requirements as they will vary based on reporting	1	string	\N	No	No	Open Badges v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 711	CourseCreditLevel	Student.AcademicRecord.AcademicSession.Course.CourseCreditLevel	The level of credit associated with the credit hours earned for the course.	\N	9	\N	\N	\N	\N	\N	Usually the same as CourseLevel; differs when the student uses the credit at a level different from the CourseLevel. For\nexample, when the student uses an UpperDivision course (CourseLevel) for Graduate credit (CourseCreditLevel).\nAlso, not a good match to CEDS CourseLevelCharacteristic.	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-664	CourseLevelCharacteristic	Course.CourseLevelCharacteristic	The type of specific program or designation with which the course is associated (e.g., AP, IB, Dual Credit, CTE).	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 714	CourseNumber	Student.AcademicRecord.AcademicSession.Course.CourseNumber	The official reference number portion of a course identifier. This number frequently designates the level of the course as well as the level of the student expected to enroll in the course.	\N	9	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 715	CourseLongDepartmentName	CourseInventoryInformation.CourseLongDepartmentName	The full name of the department of the course.	\N	9	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 716	CourseRepeatabilityMaximumNumber	CourseInventoryInformation.CourseRepeatabilityMaximumNumber	The maximum number of times the course may be taken or completed for credit.	\N	9	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -2091,6 +2105,7 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 732	CourseOverrideSchool	Student.AcademicRecord.AcademicSession.Course.CourseOverrideSchool	The school where the credit was earned if diffrerent from the Academic Session School.	\N	9	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 708	CourseEndDate	Course.CourseEndDate	The official end date for this course	\N	9	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 709	CourseAcademicGradeScaleCode	Student.AcademicRecord.AcademicSession.Course.CourseAcademicGradeScaleCode	The grading scale used by an academic educational institution for an academic course.	\N	9	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+3159	salt	IdentityObject.salt	If the identityHash is hashed, this should contain the string used to salt the hash.	\N	29	string	\N	No	No	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 733	CourseRepeatCode	Student.AcademicRecord.AcademicSession.Course.CourseRepeatCode	Indicates that an academic course has been repeated by a student and how that repeat is to be computed in the student’s academic grade average.	\N	9	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 734	CourseSectionNumber	Student.AcademicRecord.AcademicSession.Course.CourseSectionNumber	The number assigned to differentiate among distinct occurrences of courses that have the same course abbreviation and number but are considered to be different courses.	\N	9	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 735	CouirseSubjectAbbreviation	Student.AcademicRecord.AcademicSession.Course.CouirseSubjectAbbreviation	The alphabetic abbreviation of the academic department or discipline offering the course. It is one part of the total course identifier.	\N	9	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -2100,6 +2115,7 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 740	name	Course.name	Name or title of the resource.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 741	description	Course.description	Statement, characterization or account of the entity.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 742	dateEffective	Course.dateEffective	Effective date of this resource's content.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+743	expirationDate	Course.expirationDate	Date beyond which the resource is no longer offered or available.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 744	estimatedDuration	Course.estimatedDuration	Estimated time it will take to complete a course. [=>DurationProfile]	\N	10	\N	\N	\N	\N	\N	Would need to convert from DurationProfile.ExactDuration to minutes	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 745	audienceLevelType	Course.audienceLevelType	Type of level indicating a point in a progression through an educational or training context.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 749	creditUnitTypeDescription	Course.creditUnitTypeDescription	Detailed description of credit unit type.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -2127,6 +2143,7 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 770	targetLearningResource	Course.targetLearningResource	Learning object or resource that is used as part of an learning activity.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 973	owner	EuropeanDigitalCredential.owner	The person (subject) about which claims are made and who owns the credential. This property is inherited from Verifiable Credential.	\N	7	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 746	ceterms-creditLevelType	Course.ValueProfile.ceterms-creditLevelType	Credit Level Type	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+3158	identityType	IdentityObject.identityType	The type of identity. Shares its enumeration with IdentifierEntry.identifierType.	\N	29	enum	387	Yes	No	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 771	courseCode\n&/or\nidentifier	Course.courseCode\n&/or\nidentifier	The identifier for the Course used by the course provider (e.g. CS101 or 6.001).\n\nThe identifier property represents any kind of identifier for any kind of Thing, such as ISBNs, GTIN codes, UUIDs etc.	\N	11	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 772	name	Course.name	The name of the item.	\N	11	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 773	description	Course.description	A description of the item.	\N	11	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -2137,7 +2154,6 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 778	educationalLevel	Course.educationalLevel	The level in terms of progression through an educational or training context. Examples of educational levels include 'beginner', 'intermediate' or 'advanced', and formal sets of level indicators.	\N	11	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 779	educationalCredentialAwarded	Course.educationalCredentialAwarded	A description of the qualification, award, certificate, diploma or other educational credential awarded as a consequence of successful completion of this course or program.	\N	11	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 780	location	CourseInstance.location	The location of, for example, where the event is happening, an organization is located, or where an action takes place.	\N	11	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-265	allowedValues	CompetencyFramework.Competency.ProficiencyDefinition.allowedValues	An ordered list of allowed values. The values should be ordered from low to high as determined by the creator.	No change	1	string	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 781	courseMode	CourseInstance.courseMode	The medium or means of delivery of the course instance or the mode of study, either as a text label (e.g. "online", "onsite" or "blended"; "synchronous" or "asynchronous"; "full-time" or "part-time") or as a URL reference to a term from a controlled vocabulary (e.g. https://ceds.ed.gov/element/001311#Asynchronous ).	\N	11	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 782	price	Offer.price	The offer price of a product, or of a price component when attached to PriceSpecification and its subtypes.\n\n[Use Offer as value for offers property of Course]	\N	11	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 783	duration	CourseInstance.duration	The duration of the item (movie, audio recording, event, etc.)	\N	11	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -2158,6 +2174,7 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 238	rightsHolder	CompetencyFramework.Competency.rightsHolder	\N	The claim of rights should be assessed and validated prior to use. The origins of competency frameworks are often more complex than captured and this introduces critical bias and inaccuracy into outcomes.	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 54	type	Person.AssessmentLearningExperience.type	\N	No change	1	string	\N	No	No	\N	\N	\N	2025-11-26 22:24:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 236	name	CompetencyFramework.Competency.name	\N	The name of the competency should not be used a proxy for what is actually measured in the elements. Care should be taken to avoid biased assumptions about what a competency actually measures from its name.	1	string	\N	Yes	No	CEDS	\N	\N	2025-11-26 23:08:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+896	tags	Achievement.tags	Tags that describe the type of achievement.	\N	3	\N	\N	\N	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 286	alignmentType	CompetencyFramework.Competency.CompetencyAlignments.alignmentType	\N	\N	1	string	\N	No	No	\N	List of possible alignment types.	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 246	hasProgressionLevel	CompetencyFramework.Competency.hasProgressionLevel	\N	No change	1	string	\N	No	No	CTDL	A progression level is a member of a progression model. Likely a URI would be used, that points to the source progression level.	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 248	license	CompetencyFramework.Competency.license	\N	The claim of rights should be assessed and validated prior to use. The origins of competency frameworks are often more complex than captured and this introduces critical bias and inaccuracy into outcomes.	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -2168,7 +2185,7 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 30	performanceLowerLevel	Assessment.AssessmentPerformanceLevel.performanceLowerLevel	Lowest possible score for the performance level.	No change	1	number	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1839	MDRTest	MDRTest	This is a test of creating a new Source attribute	consideration	25	enum	338	No	No	\N	\N	2025-08-19 13:42:40.259+00	2025-08-19 13:42:40.259+00	\N	Mary Gwozdz	Unicon	f	\N	f	\N	\N	\N	\N	Public	f	f
 1122	payRateType	Position.Wage.payRateType	\N	\N	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-875	Criteria	Achievement.Criteria	Criteria object describing how to earn the achievement.	\N	12	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+265	allowedValues	CompetencyFramework.Competency.ProficiencyDefinition.allowedValues	An ordered list of allowed values. The values should be ordered from low to high as determined by the creator.	No change	1	string	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 266	requiredValue	CompetencyFramework.Competency.ProficiencyDefinition.requiredValue	A value from allowedValue or within the range of valueMin to valueMax required to pass as determined by the achievement creator.	No change	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 267	valueMax	CompetencyFramework.Competency.ProficiencyDefinition.valueMax	The maximum possible value that may be asserted	No change	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 268	valueMin	CompetencyFramework.Competency.ProficiencyDefinition.valueMin	The minimum possible value that may be asserted in a linked result.	No change	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -2204,6 +2221,7 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 872	name	Achievement.name	The name of the achievement.	\N	12	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 873	description	Achievement.description	A short description of the achievement. May be the same as name if no description is available.	\N	12	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 874	achievementType	Achievement.achievementType	Type of the Achievement	\N	12	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+875	Criteria	Achievement.Criteria	Criteria object describing how to earn the achievement.	\N	12	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 876	Image	Achievement.Image	IRI of an image representing the achievement. May be a Data URI or the URL where the image may be found.	\N	12	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 877	tags	Achievement.tags	Tags that describe the type of achievement.	\N	12	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 878	fieldOfStudy	Achievement.fieldOfStudy	Category, subject, area of study, discipline, or general branch of knowledge. Examples include Business, Education, Psychology, and Technology.	\N	12	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -2240,13 +2258,13 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 924	CredentialDefinitionMaximumDuration	Credential.CredentialDefinitionMaximumDuration	The maximum amount of time in minutes it will take to earn the described credential.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 925	CredentialDefinitionMinimumAge	Credential.CredentialDefinitionMinimumAge	The minimum allowed age in years at which a person is eligible for the credential.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 976	embeddedEvidence	Evidence.embeddedEvidence	The embeded evidence.	\N	7	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-484	LegalCode	Common.LegalCode	\N	\N	1	entity	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	\N	Public	f	f
 926	CredentialDefinitionNAICSIndustryType	Credential.CredentialDefinitionNAICSIndustryType	The North American Industry Classification System (NAICS) class identifier for an industry associated with the credential.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 927	CredentialImageURL	Credential.CredentialImageURL	The Uniform Resource Locator (URL) for the unique address of an image representing an award or badge associated with the achievement.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 928	CredentialDefinitionKeywords	Credential.CredentialDefinitionKeywords	Keywords or key phrases describing aspects of a credential considered useful for its discovery.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 930	CTDLAudienceLevelType	Credential.CTDLAudienceLevelType	Type of level indicating a point in a progression through an educational or training context, for which the credential is intended; select from an existing enumeration of such types.	\N	4	\N	40	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 931	ClassificationOfInstructionalProgramCode	Credential.ClassificationOfInstructionalProgramCode	A six-digit code in the form xx.xxxx that identifies instructional program specialties within educational institutions.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 942	type	Evidence.type	The type of the evidence.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+943	id	LearningResult.id	\N	\N	5	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 900	alignmentType	Alignment.alignmentType	Type of alignment, RSD, CredentialEngine,	\N	3	\N	\N	\N	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 901	humanCode	AchievementCredential.humanCode	Achievement is also extensible	\N	3	\N	\N	\N	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 902	expirationDate	AchievementCredential.expirationDate	If the credential has some notion of expiry, this indicates a timestamp when a credential should no longer be considered valid. After this time, the credential should be considered expired.	\N	3	\N	\N	\N	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -2294,6 +2312,7 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 963	methodOfAssessment	LearningAssessment.methodOfAssessment	Method of assessment supervision and ID verification. It should be provided using the EDC Controlled List of Methods Of Supervision And Verification.	\N	7	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 970	validWith	LearningEntitlementSpecification.validWith	The organisation which acknowledges the entitlement (i.e., the organisation offering the learning opportunity, membership or employment opportunity).	\N	7	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 996	AcademicAwardLevel	AcademicAwardLevelType.AcademicAwardLevel	The level of the degree, certificate, or award granted for the successful completion of requirements of an academic program.	\N	9	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+816	imageType	Credential.Image.imageType	Type of Image, usually PNG or SVG	No change	1	string	\N	No	No	Open Badges v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 997	LearningOutcomeSkillCode	LearningOutcomeQualificationAssessment.LearningOutcomeSkillCode	Learning Outcome Skill based on DQP intellectual skills. Learning Outcome Skill based on DQP intellectual.	\N	9	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 998	FrameworkSourceReference	AlternateOutcomeFrameworkType.FrameworkSourceReference	URL of the alternative framework that has the outcome taxnomies URI of alternative framework.	\N	9	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 999	NAICS	EmploymentType/OrganizationEntityType.NAICS	NAICS code for industry for an employer (North American Industry Classification System).	\N	9	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -2320,7 +2339,6 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1024	audienceLevelType	Credential.audienceLevelType	Type of level indicating a point in a progression through an educational or training context, for which the credential is intended; select from an existing enumeration of such types.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1025	instructionalProgramType	Credential.instructionalProgramType	Type of instructional program; select from an existing enumeration of such types. For U.S. credentials, best practice is to use a framework such as the CIP (Classification of Instructional Programs). Other credentials may use any framework of the class CTDL InstructionalProgramClassification.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1204	relationshipType	Organization.relationshipType	The nature of one organization’s relationship to another.	Ensure your models and systems can ingest the ad-hoc relationship statuses outside the systems embedded in the current mapping schema	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1072	keywords	EducationalOccupationalCredential.keywords	Keywords or tags used to describe this content. Multiple entries in a keywords list are typically delimited by commas.	\N	11	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1026	occupationType	Credential.occupationType	Type of occupation; select from an existing enumeration of such types. For U.S. credentials, best practice is to identify an occupation using a framework such as the O*NET. Other credentials may use any framework of the class ceterms:OccupationClassification, such as the EU's ESCO, ISCO-08, and SOC 2010.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1028	id	BadgeClass.id	Unique IRI for the BadgeClass. Most platforms to date can only handle HTTP-based IRIs. Issuers using signed assertions are encouraged to publish BadgeClasses using HTTP IRIs but may instead use ephemeral BadgeClasses that use an id in another scheme such as urn:uuid.	\N	15	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1029	name	BadgeClass.name	The name of the achievement.	\N	15	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -2329,6 +2347,7 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1032	Criteria	BadgeClass.Criteria	Criteria object describing how to earn the achievement.	\N	15	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1014	Requires->targetCompetency	ConditionProfile.Requires->targetCompetency	A competency relevant to the condition being described.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1010	ExpirationDate	Credential.ExpirationDate	Date beyond which the resource is no longer offered or available.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1027	BadgeClass	OpenBadges2.0.BadgeClass	\N	\N	15	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1033	id	Criteria.id	\N	\N	15	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1034	narrative	Criteria.narrative	\N	\N	15	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1035	Image	BadgeClass.Image	Object	\N	15	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -2336,6 +2355,7 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1037	caption	Image.caption	\N	\N	15	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1038	author	Image.author	\N	\N	15	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1039	alignment	BadgeClass.alignment	\N	\N	15	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+499	Grade	Course.Grade	\N	\N	1	entity	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	\N	Public	f	f
 1040	targetUrl	Alignment.targetUrl	URL linking to the official description of the alignment target, for example an individual standard within a learning framework.	\N	15	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1041	targetName	Alignment.targetName	Name of the alignment.	\N	15	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1042	targetDescription	Alignment.targetDescription	Short description of the alignment target.	\N	15	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -2366,6 +2386,9 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1069	inDefinedTermSet	DefinedTerm.inDefinedTermSet	A DefinedTermSet that contains this term.\n\n[use a DefinedTerm as value for  credentialCategory]	\N	11	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1070	competencyRequired	EducationalOccupationalCredential.competencyRequired	Knowledge, skill, ability or personal attribute that must be demonstrated by a person or other entity.	\N	11	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1071	image	EducationalOccupationalCredential.image	An image of the item. This can be a URL or a fully described ImageObject.	\N	11	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+484	LegalCode	Common.LegalCode	\N	\N	1	entity	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	\N	Public	f	f
+1072	keywords	EducationalOccupationalCredential.keywords	Keywords or tags used to describe this content. Multiple entries in a keywords list are typically delimited by commas.	\N	11	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1073	about	EducationalOccupationalCredential.about	The subject matter of the content.	\N	11	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1074	educationalLevel	EducationOccupationalCredential.educationalLevel	The level in terms of progression through an educational or training context. Examples of educational levels include 'beginner', 'intermediate' or 'advanced', and formal sets of level indicators.	\N	11	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 516	courseNumber	Course.courseNumber	The official reference number portion of a course identifier. This number normally designates the level of the course as well as the level of the individual expected to enroll in the course.	No change	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 517	courseDepartmentName	Course.courseDepartmentName	Department with jurisdiction over this course.	No change	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -2381,6 +2404,7 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1619	programVersion	Program.programVersion	Supporting program versions.	\N	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 539	ctid	Course.ctid	Globally unique Credential Transparency Identifier (CTID) by which the creator, owner or provider of a resource recognizes it in transactions with the external environment (e.g., in verifiable claims involving the resource).	Ensure any use incorporates a "not applicable" field as many legitimate courses will not have this and you don't want to accidentaly discard them due to missing data codes.	1	string	\N	No	No	CTDL	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 540	estimatedCost	Course.estimatedCost	Estimated cost of a course. [=>CostProfile]	Use with care. Even carefully standardized data will be likely to contain large inconsistencies and unstandard cacluations	1	string	\N	No	Yes	CTDL	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+2840	credentialSchema	AchievementCredential.credentialSchema	One or more data schemas that provide verifiers with enough information to determine whether the provided data conforms to the schema(s).	\N	3	entity	\N	No	Yes	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 541	estimatedDuration	Course.estimatedDuration	Estimated time it will take to complete a course. [=>DurationProfile]	No change	1	string	\N	No	Yes	CTDL	In the registry it is stored as an ISO 4601 string to describe duration in years, months, hours, etc. Outside the registration a different structure is likely	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 500	courseGPAApplicability	Course.Grade.courseGPAApplicability	An indicator of whether or not this course being described is included in the computation of the student’s Grade Point Average (GPA).	No change	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 515	courseLevelType	Course.courseLevelType	The level of work which is reflected in the credits associated with the academic course being described or the level of the typical individual taking the academic course.	Do not use without two elements to provide specifics on the standards used and who makes the determination. This element is likely to absorb a large amount of bias due to asymetrical power and organizational politics	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -2405,15 +2429,13 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 567	courseOverrideSchool	Person.CourseLearningExperience.courseOverrideSchool	The school where the credit was earned if different from the institution reporting.	\N	1	string	\N	No	No	CEDS	is just the name provided and/or an identifier?	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 573	courseSectionID	Person.CourseLearningExperience.courseSectionID	A unique number or alphanumeric code assigned by an institution, school, school system, state, or other agency or entity for a particular course-section.	\N	1	string	\N	No	Yes	CEDS	Is this relevent compared to using course number	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1410	given	PersonNameType.given	"The given name of a person.	\N	2	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-809	narrative	Credential.Requirements.Criteria.narrative	A narrative of what is needed to earn the credential.	This element should not be separated from its context or bias and inaccuracy will result. An element must be added to indicate who is requiring or reporting on these requirements as they will vary based on reporting	1	string	\N	No	No	Open Badges v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-816	imageType	Credential.Image.imageType	Type of Image, usually PNG or SVG	No change	1	string	\N	No	No	Open Badges v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-499	Grade	Course.Grade	\N	\N	1	entity	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	\N	Public	f	f
 526	courseHonorsType	Course.courseHonorsType	An indication that the course is or can be counted as an honors course.	No change	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 564	enrollmentStatusType	Person.CourseLearningExperience.enrollmentStatusType	The status related to a student enrollment in an instance of a course.	\N	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 568	courseRepeatCode	Person.CourseLearningExperience.courseRepeatCode	Indicates that an academic course has been repeated by a student and how that repeat is to be computed in the student's academic grade average.	\N	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 569	courseSectionEntryType	Person.CourseLearningExperience.courseSectionEntryType	The process by which a student enters a school (Course Section) during a given academic session.	\N	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 571	courseSectionExitType	Person.CourseLearningExperience.courseSectionExitType	The circumstances under which the student exited from membership in a course section.	\N	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 580	courseGradeStatusCode	Person.CourseLearningExperience.courseGradeStatusCode	Additional information regarding the context of the given grade.	\N	1	string	\N	No	Yes	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+2843	termsOfUse	AchievementCredential.termsOfUse	The terms of use issued by the issuer.	\N	3	entity	\N	No	Yes	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 581	singleSexClassStatus	Person.CourseLearningExperience.singleSexClassStatus	Section in a co-educational school where only male or only female students are permitted to take the course.	\N	1	string	\N	No	Yes	CEDS	Probably does not have a place for the LIF, but not sure what this is. Could be religious schools?	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 798	status	Credential.status	The status of the credential.  Not the status of the issuance or awardance of the credential.	Use this element carefully as credential status will vary by jurisdiction and ignoring this will cause inaccuracies in application	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 558	informationSourceId	Person.CourseLearningExperience.informationSourceId	\N	\N	1	string	\N	Yes	No	\N	Create an information source entry, and store the indentifier here. The same identifier would be used for LE, and course	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	\N	Public	f	f
@@ -2427,6 +2449,8 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1118	endDate	Position.Membership.endDate	Date some event or activity ends.	\N	1	string	\N	No	No	CTDL	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 234	code	CompetencyFramework.Competency.code	A human-referenceable code designated by the publisher to identify the item in the hierarchy of competency definitions. Use "missing at will" and "not applicable" for missng data to avoid skewed outcomes.	Missing data should not be penalized in useage. Assuming that all organizations will want to comply with this system will introduce a high level of bias into outcomes	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 488	mechanism	Person.Consent.mechanism	Method or mechanism used to obtain and manage consent, including accessibility technologies used (e.g., checkboxes, cookie banners, email confirmation, written or digital signature).	\N	1	string	\N	No	No	LIF	CM: 3/21: Does this need a codelist?	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+475	type	Person.Consent.type	Type of consent - active, passive, implied, etc.	\N	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1742	type	OpenBadgeCredential.type	\N	\N	16	string	\N	\N	Yes	\N	Same type of information as @context	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	\N	Public	f	f
 860	revocationReason	Person.CredentialAward.revocationReason	Published reason for revocation, if the credential award has been revoked	No change	1	string	\N	No	No	Open Badges v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 861	narrative	Person.CredentialAward.narrative	A narrative describing the work that the awardee did to earn the credential award.	No change	1	string	\N	No	No	Open Badges v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 862	payload	Person.CredentialAward.payload	Entire payload of the credential and credential award.	No change	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -2450,6 +2474,7 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1163	jobCategories	EmployerHistoryType.jobCategories	\N	\N	2	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1164	positionScheduleType	PositionType.positionScheduleType	\N	\N	2	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1165	fullTimeEquivalentRatio	DeploymentType.fullTimeEquivalentRatio	\N	\N	2	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1166	title	EmployerHistoryType.title	\N	\N	2	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1167	start	BaseHistoryType.start	\N	\N	2	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1168	end	BaseHistoryType.end	\N	\N	2	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1169	descriptions	BaseHistoryType.descriptions	\N	\N	2	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -2475,25 +2500,32 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1189	PositionTitle	PositionTitleType.PositionTitle	\N	\N	9	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1190	Employment	EmploymentType.Employment	\N	\N	9	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1191	EmploymentBeginDate	EmploymentBeginDateType.EmploymentBeginDate	\N	\N	9	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1192	EmploymentEndDate	EmploymentEndDateType.EmploymentEndDate	\N	\N	9	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1193	occupationalCategory	Occupation.occupationalCategory	\N	\N	11	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1100	contractLengthStatus	Position.contractLengthStatus	A status filed, which provide details about whether it is missing at will or not applicable.	\N	1	string	358	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 3181	description	Achievement.description	\N	\N	29	string	\N	Yes	No	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 3183	endorsementJwt	Achievement.endorsementJwt	Allows endorsers to make specific claims about the achievement in compact JWT format.	\N	29	string	\N	No	Yes	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1082	primaryPayMethod	Position.primaryPayMethod	An indication of the primary pay method of the position. For example, salary, hourly, commission only, contract, stipend, piecework, tips, or other.	\N	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1535	TelephoneNumber	Telephone.TelephoneNumber	The telephone number including the area code, and extension, if applicable.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1540	BirthCity	BirthData.BirthCity	The city the student was born in.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1093	incomeSourceCategory	Person.EmploymentLearningExperience.IncomeSources.incomeSourceCategory	The name of the category of any income source.	The assignment of eligibility of a person into income source categories should not be used as a proxy for eligiblity for these nor as a proxy for any other social or economic category.	1	string	\N	No	No	CEDS	Or have a vocabulary for income sources.	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1195	roleName	Role.roleName	\N	\N	11	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1196	startDate	Role.startDate	\N	\N	11	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1197	endDate	Role.endDate	\N	\N	11	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1242	EducationOrganizationIdentificationSystem	EducationOrganizationIdentificationCode.EducationOrganizationIdentificationSystem	The school system, state, or agency assigning the identification code.	\N	6	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1285	lastName	Person.Name.lastName	The last name of a person or individual	Only use if consent has been verified.	1	string	\N	Yes	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1078	industryCodeType	Position.IndustryCode.industryCodeType	The type of the Industry Code - NAICS, SIC, or ISIC.	\N	1	string	\N	No	No	\N	Could be a list, specific to the job, not the organization. Should handle non-NAICS industries	\N	2025-11-26 22:43:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1086	contractDaysOfServicePerYear	Position.contractDaysOfServicePerYear	The number of days per year that a person is expected to work as outlined specifically in their employment agreement, if appopriate in their form of employment.	This metric will be inaccurate for a large number of earners who do not have employment in a specific type of class of employment	1	number	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1099	contractLength	Position.contractLength	The contracted period for the person.	This metric will be inaccurate for a large number of earners who do not have employment in a specific type of class of employment	1	number	\N	No	No	CEDS	the vocab seems teacher specific, versus just contract length	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+835	expirationDate	Person.CredentialAward.expirationDate	The expiration date of the credential, after which the credential will no longer be valid for the awardee.	No change	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+906	proof	AchievementCredential.proof	If present, one or more embedded cryptographic proofs that can be used to detect tampering and verify the authorship of the credential.	\N	3	entity	\N	No	Yes	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+2829	id	AchievementCredential.id	Unambiguous reference to the AchievementCredential.	\N	3	string	\N	Yes	No	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+2808	id	RubricCriterionLevel.id	Unambiguous reference to the RubricCriterionLevel.	\N	3	string	\N	Yes	No	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+3211	refreshService	OpenBadgeCredential.refreshService	Information used to refresh the verifiable credential.	\N	29	entity	\N	No	No	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	510	Public	f	f
+2812	name	RubricCriterionLevel.name	The name of the level.	\N	3	string	\N	Yes	No	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1125	experienceType	Person.EmploymentLearningExperience.experienceType	Experience type considers self-employment, scholarships, volunteering, mentorships or internships. Includes any entity, not just employer or organisation. This is a category to sort all experiences include employment, military and any other working experiences, such as volunteering, mentorships, transition programs and more.	A person will need to be able to provide access to specific unique experiences rather than to turn on/off all experiences of the same type. The classification of an experience into a type is a subjective decision which will capture a lot of social and class location information. For example, a wealthy student may get their experience classified as an internship while a poor student may have their identical experience classified as volunteer.	1	string	\N	No	Yes	No Source	Experience type is an inclusive word to include employment details, military and any other "working" experiences, such as volunteering, mentorships, transition programs and the like.	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1129	aspirations	Person.EmploymentLearningExperience.aspirations	Allows a person to record the details of their personal learning or career aspirations	This can be a useful data element to set up measures of success that prioritize the wants and needs of the learner/earner instead of prioritizing a cultural norm. Ensure that we're clear that we're documenting learning aspirations and or career aspirations	1	string	\N	No	No	No Source	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1130	sourceExperience	Person.EmploymentLearningExperience.sourceExperience	A link to the sourced experience. It may point to a GitHub project, images, google docs and other sharable files.  If not applicable please indicate.	This should be optional as not all types of experiences leave collateral that can be shared. Resources to create such documentation will be directly linked to wealth and class. Making this mandatory will replicate class and wealth disparity.	1	string	\N	No	No	No Source	Helps to verify and solidify the experiences obtained via a source	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1134	description	Person.EmploymentLearningExperience.description	Statement, characterization or account of the entity.	\N	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 40	creditValue	Assessment.creditValue	A credit-related value. [=>QuantitativeValue]	No change	1	number	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1105	employmentTypeStatusDescription	Person.EmploymentLearningExperience.EmploymentTypeStatus.employmentTypeStatusDescription	The description of the employment type status category.	\N	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	\N	Public	f	f
-1243	NameOfInstitution	EducationOrganization.NameOfInstitution	The full, legally accepted name of the institution.	\N	6	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1743	name	OpenBadgeCredential.name	\N	\N	16	string	\N	\N	No	\N	\N	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	\N	Public	f	f
 1149	experienceCountryCode	Person.MilitaryLearningExperience.experienceCountryCode	The country in which this military service was performed. The unique two character International Organization for Standardization (ISO) code for the country. https://www.iso.org/obp/ui/#search	\N	1	string	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1156	campaigns	Person.MilitaryLearningExperience.campaigns	A list of campaigns to which the person was involved during the service period. Use "missing at will" and "not applicable" for missng data to avoid skewed outcomes.	\N	1	string	\N	No	Yes	HR Open	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -2503,7 +2535,6 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1140	employmentSeparationReason	Person.EmploymentLearningExperience.employmentSeparationReason	The primary reason for the termination of the employment relationship.	\N	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1141	employmentSeparationType	Person.EmploymentLearningExperience.employmentSeparationType	A designation of the type of separation occurring between a person and the organization.	\N	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1142	contractType	Person.EmploymentLearningExperience.contractType	The type of employment contract used by an institution.	\N	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1268	description	CredentialOrganization\nQACredentialOrganization.description	A description of the item.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1145	militaryStatus	Person.MilitaryLearningExperience.militaryStatus	An indication that the person is on Active Duty, in the National Guard, or in the Reserve components of the United States military services.	\N	1	string	\N	No	No	CEDS	CM 2/20 Propose move to Person->Relationship Contacts?\nMG 7/12 - Changed definition to be about the person instead of their parent or guardian. Adding a field for parent/guardian can be reconsidered later.	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 3188	inLanguage	Achievement.inLanguage	The language of the achievement.	\N	29	string	\N	No	No	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1671	participationStatus	Person.ProgramLearningExperience.participationStatus	The current status of the student's program participation	\N	1	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -2518,11 +2549,7 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1234	accreditedBy	CredentialOrganization\nQACredentialOrganization.accreditedBy	Quality assurance organization that provides official authorization to, or approval of, a credential, organization, assessment, or learning opportunity.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1235	accredits	QACredentialOrganization.accredits	Credential, assessment, organization, or learning opportunity for which this organization provides official authorization or approval based on prescribed standards or criteria.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1236	accreditedIn	CredentialOrganization\nQACredentialOrganization.accreditedIn	Region or political jurisdiction such as a state, province or locale in which the credential, learning opportunity or assessment is accredited.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1244	ShortNameOfInstitution	EducationOrganization.ShortNameOfInstitution	A short name for the institution.	\N	6	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1245	EducationOrganizationCategory	EducationOrganization.EducationOrganizationCategory	The classification of the education agency within the geographic boundaries of a state according to the level of administrative and operational control granted by the state.	\N	6	\N	\N	\N	\N	\N	More descriptive	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1246	OperationalStatus	EducationOrganization.OperationalStatus	The current operational status of the education organization (e.g., active, inactive).	\N	6	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1247	identifier	Organisation.identifier	An identifier of the organisation	\N	7	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1248	logo	Organisation.logo	The logo of the organisation	\N	7	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1249	legalName	Organisation.legalName	The legal name of the organisation	\N	7	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1250	alternativeName	Organisation.alternativeName	The alternative name of the organisation	\N	7	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1251	type	Organisation.type	The type of the organisation	\N	7	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -2533,6 +2560,7 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1256	accreditingAgent	Accreditation.accreditingAgent	The Quality Assuring Authority (i.e., assurer).	\N	7	\N	\N	\N	\N	\N	Might be misaligned (i.e., credentialing versus accrediting)	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1257	accreditedInJurisdiction	Accreditation.accreditedInJurisdiction	The jurisdiction for which the accreditation is valid. It should be provided using the Administrative territorial unit Authority Table (ATU) controlled vocabulary.	\N	7	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1258	displayName	Organization.displayName	\N	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1259	type	Organization.type	\N	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1260	state	State.state	\N	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1261	Organization	OrganizationType.Organization	Non-person entity such as Organization, Institution, Agency or Business.	\N	9	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1262	OrganizationName	OrganizationNameType.OrganizationName	Name of Non-person entity such as Organization, Institution, Agency or Business.	\N	9	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -2540,6 +2568,7 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1265	image	CredentialOrganization\nQACredentialOrganization.image	Image, icon or logo that represents the entity including registered trade or service marks.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1266	name	CredentialOrganization\nQACredentialOrganization.name	Name or title of the resource.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1267	alternateName	CredentialOrganization\nQACredentialOrganization.alternateName	Alias for the entity including acronyms, alphanumeric notations, and other forms of name abbreviations in common use such as PhD, MA, and BA.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1268	description	CredentialOrganization\nQACredentialOrganization.description	A description of the item.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1269	agentType	CredentialOrganization\nQACredentialOrganization.agentType	Type of organization such as educational institution, credentialing organization or quality assurance body	\N	10	\N	\N	\N	\N	\N	2.6	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1271	naics	CredentialOrganization\nQACredentialOrganization.naics	North American Industry Classification System (NAICS) code of an organization or business person.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1272	LifeCycleStatusType	CredentialOrganization\nQACredentialOrganization.LifeCycleStatusType	Type of state of the resource in terms of its stage in a life cycle; select from an enumeration of such types.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -2567,8 +2596,6 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1286	tribalNationName	Person.Demographics.tribalNationName	The name of an individual gifted by and/or connected to the land and people of their Tribal Nation, and recognised by the Bureau of Indian Affairs (BIA).	Only use if consent has been verified.	1	string	284	No	No	CEDS	3/6: CM brought up from Demographics section (row 130)	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 823	extensions	Credential.extensions	Any and all extension formats being used for this Credential	No change	1	string	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1155	currentRank	Person.MilitaryLearningExperience.currentRank	The rank which the person held currently.	\N	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	\N	Public	f	f
-1415	schemeId	IdentifierType.schemeId	The identification of the identifier scheme.	\N	2	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1416	middle	PersonNameType.middle	The middle names or initials of a person.	\N	2	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 259	proficiencyDefinition	CompetencyFramework.Competency.proficiencyDefinition	The definition of the how the competency is assessed for proficiency.	\N	1	entity	\N	No	No	\N	This might should be 0..* if there are more than one proficiency definition for the competency.	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	\N	Public	f	f
 1127	dateOfAssertion	Person.EmploymentLearningExperience.dateOfAssertion	Provides the date of the assertion experiences	\N	1	string	\N	No	Yes	No Source	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1897	deletedStatus	Common.deletedStatus		\N	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	t	\N	Public	f	f
@@ -2583,6 +2610,7 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1102	name	Position.name	The descriptive name of a person's position.	\N	1	string	\N	Yes	No	CEDS	this can be position specific or "current" on the top level class?	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1318	formattedAddress	Common.Contact.Address.formattedAddress	Formatted address	\N	1	string	\N	No	No	HR Open	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1319	residenceCountry	Common.Contact.Address.residenceCountry	The country (or countries) where a person currently resides.	\N	1	string	\N	No	Yes	HR Open	MP: probably not in a generic address class. Could possible derive if there is an effective date on the address.	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+3160	type	IdentityObject.type	The type of this object. A single value, which MUST be the IRI 'IdentityObject'.	Fixed value: type MUST equal "IdentityObject".	29	string	\N	Yes	No	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1315	proofOfResidency	Person.Residency.proofOfResidency	An accepted form of proof of residency in the district/county/other locality.	\N	1	string	\N	No	Yes	CEDS	MP: This would be specific to a person address where having a generic address class is more open.	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1325	localType	Person.Residency.localType	A general geographic indicator that categorizes U.S. territory (e.g., City, Suburban).	\N	1	string	\N	No	No	Ed-Fi	MP: maybe localType to be more meaningful.	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1831	TestNewPartnerAttribute	TestNewPartnerAttribute	This is a test of creating a new partner attribute	consideration	18	string	\N	No	No	\N	\N	2025-08-19 13:42:40.259+00	2025-08-19 13:42:40.259+00	\N	Mary Gwozdz	Org2	t	\N	t	\N	\N	\N	\N	Public	f	f
@@ -2601,7 +2629,6 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1378	highestLevelEducation	Person.Demographics.highestLevelEducation	The extent of formal instruction a person has received (e.g., the highest grade in school completed or its equivalent or the highest degree received).	Only use of consent is verified.	1	string	290	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1350	cityOfBirth	Person.Birth.cityOfBirth	The name of the city in which a person was born.	\N	1	string	\N	No	No	CEDS	\N	\N	2025-11-26 22:41:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1362	sex	Person.SexAndGender.sex	The concept describing the biological traits that distinguish the males and females of a species.	\N	1	string	288	Yes	No	CEDS	\N	\N	2025-11-26 23:26:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1491	namePrefix	PersonName.namePrefix	\N	\N	5	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1398	relationshipRestrictions	Person.RelationshipContacts.relationshipRestrictions	Restrictions for student and/or teacher contact with the individual (e.g., the student may not be picked up by the individual)	\N	1	string	\N	No	Yes	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1384	homelessPrimaryResidence	Person.Demographics.homelessPrimaryResidence	The primary nighttime residence of the students at the time the students are identified as homeless.	For use cases in which this field is used for research, it is not recommended to be used for research purposes given the variable nature of this field. Given the volatility, the use of this field for research purposes may lead to inaccurate findings if used in statistical or other analysis.	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1387	qualifyingMoveCountry	Person.Demographics.qualifyingMoveCountry	The abbreviation code for a country (other than the US) area in which the child resided prior to the qualifying move.	\N	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -2630,6 +2657,8 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1412	address	EmailType.address	Actual email address.	\N	2	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1413	useCode	CommunicationItemInclusion.useCode	Code identifying the usage of the contact point e.g. business, private, etc.	\N	2	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1414	value	IdentifierType.value	The identifier.	\N	2	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1415	schemeId	IdentifierType.schemeId	The identification of the identifier scheme.	\N	2	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1416	middle	PersonNameType.middle	The middle names or initials of a person.	\N	2	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1634	accreditedBy	Program.accreditedBy	Quality assurance organization that provides official authorization to, or approval of a program.	Ensure any use incorporates a "not applicable" field as many legitimate programs will not have this and you don't want to accidentaly discard them due to missing data codes.	1	string	\N	No	No	CTDL	URI lto an organization record in the credential registry	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1417	titleAffixCode	PersonNameType.titleAffixCode	The title affix attached to a person's name (such as Esq., K.B.E.).	\N	2	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1418	generationAffixCode	PersonNameType.generationAffixCode	The generational designation attached to the end of a person's name (such as Jr., Sr., II, III).	\N	2	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -2669,10 +2698,11 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1483	birthDate	PersonBioDemographics.birthDate	\N	\N	5	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1484	firstName	PersonName.firstName	\N	\N	5	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1485	lastName	PersonName.lastName	\N	\N	5	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1486	address	Address.address	\N	\N	5	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1487	Identifier	PersonIdentifier.Identifier	\N	\N	5	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1488	type	PersonIdentifier.type	\N	\N	5	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1489	middleName	PersonName.middleName	\N	\N	5	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1491	namePrefix	PersonName.namePrefix	\N	\N	5	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1749	id	OpenBadgeCredential.credentialSubject.id	\N	\N	16	string	\N	\N	No	\N	\N	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	\N	Public	f	f
 1492	PostalAddress.StreetAddressLine1\nPostalAddress.StreetAddressLine2\nPostalAddress.StreetAddressLine3	Address.PostalAddress.StreetAddressLine1\nPostalAddress.StreetAddressLine2\nPostalAddress.StreetAddressLine3	\N	\N	5	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1493	PostalAddress.mailstop	Address.PostalAddress.mailstop	\N	\N	5	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1494	PostalAddress.stateOrProvince	Address.PostalAddress.stateOrProvince	\N	\N	5	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -2694,25 +2724,6 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1460	FirstName	Person.FirstName	The full legal first name given to a person at birth, baptism, or through legal change.	\N	4	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1461	LastOrSurname	Person.LastOrSurname	The full legal last name borne in common by members of a family.	\N	4	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1490	nameSuffix-nameTitle	PersonName.nameSuffix-nameTitle	\N	\N	5	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1511	ElectronicMailAddress	ElectronicMail.ElectronicMailAddress	The electronic mail (e-mail) address listed for an individual or organization.	\N	6	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1537	OrderOfPriority	Telephone.OrderOfPriority	The order of priority assigned to telephone numbers to define which number to attempt first, second, etc.	\N	6	number	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1508	FirstName	Name.FirstName	A name given to an individual at birth, baptism, or during another naming ceremony, or through legal change.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1509	LastSurname	Name.LastSurname	The name borne in common by members of a family.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1513	UniqueId	Student.UniqueId	A unique alphanumeric code assigned to a person by a system managing unique identifiers.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1517	MiddleName	Name.MiddleName	A secondary name given to an individual at birth, baptism, or during another naming ceremony.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1518	GenerationCodeSuffix	Name.GenerationCodeSuffix	An appendage, if any, used to denote an individual's generation in his family (e.g., Jr., Sr., III).	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1516	Name	Student.Name	The set of elements that comprise an individual's legal name.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1510	TribalAffiliation	StudentEducationOrganizationAssociation.TribalAffiliation	An American Indian tribe with which the student is affiliated as last reported to the education organization.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1512	ElectronicMailType	ElectronicMail.ElectronicMailType	The type of email listed for an individual or organization. For example: Home/Personal, Work, etc.)	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1514	StudentIdentificationSystem	StudentIdentificationCode.StudentIdentificationSystem	This descriptor defines the originating record system and code that is used for record-keeping purposes of the student.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1515	PersonalInformationVerification	IdentificationDocument.PersonalInformationVerification	The category of the document relative to its purpose.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1520	AddressType	Address.AddressType	The type of address listed for an individual or organization. For example: Physical Address, Mailing Address, Home Address, etc.)	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1524	StateAbbreviation	Address.StateAbbreviation	The abbreviation for the state (within the United States) or outlying area in which an address is located.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1532	Locale	Address.Locale	A general geographic indicator that categorizes U.S. territory (e.g., City, Suburban).	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1536	TelephoneNumberType	Telephone.TelephoneNumberType	The type of communication number listed for an individual or organization.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1541	BirthStateAbbreviation	BirthData.BirthStateAbbreviation	The abbreviation for the name of the state (within the United States) or extra-state jurisdiction in which an individual was born.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1542	BirthCountry	BirthData.BirthCountry	The country in which an individual is born. It is strongly recommended that entries use only ISO 3166 2-letter country codes.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1533	Period	Address.Period	The time periods for which the address is valid. For physical addresses, the periods in which the person lived at that address.	\N	6	array	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1561	givenName	Person.givenName	The given name of the person	\N	7	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1562	familyName	Person.familyName	The family name of the person	\N	7	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1563	identifier	Person.identifier	An identifier of the person	\N	7	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -2726,7 +2737,6 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1571	placeOfBirth	Person.placeOfBirth	The place of birth of the person	\N	7	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1572	gender	Person.gender	The gender of the person. It should be provided using the Human Sex Named Authority List	\N	7	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1573	citizenship	Person.citizenship	The country (or countries) that conferred citizenship rights on the person. It should be provided using the Country Named Authority List	\N	7	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1574	birthDate	Person.birthDate	\N	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1575	givenName	Person.givenName	Given name. In the U.S., the first name of a Person. This can be used along with familyName instead of the name property.	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1576	surname	Person.surname	Family name. In the U.S., the last name of an Person. This can be used along with givenName instead of the name property.	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1578	institutionalIdentifier	Person.institutionalIdentifier	\N	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -2740,12 +2750,7 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1577	definedThroughTaggingOfAttributes	Ontology.definedThroughTaggingOfAttributes	not explicit in spec	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1586	endDate	Relevancy.endDate	\N	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1587	Contact	Contact.Contact	\N	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1545	DateEnteredUS	BirthData.DateEnteredUS	For students born outside of the U.S., the date the student entered the U.S.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1560	dateOfBirth	Person.dateOfBirth	The date of birth of the person	\N	7	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1546	Visa	Citizenship.Visa	An indicator of a non-US citizen's Visa type.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1547	Sex	{Multiple}.Sex	A person's gender. (Different designations by context, e.g.  BirthSex: Persons gender at birth; StudentEdOrgAssoc: The student's gender as last reported to the education organization.)	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1548	Race	StudentEducationOrganizationAssociation.Race	The general racial category which most clearly reflects the individual's recognition of his or her community or with which the individual most identifies as last reported to the education organization. The data model allows for multiple entries so that each individual can specify all appropriate races.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1550	LevelOfEducation	Contact.LevelOfEducation	This descriptor defines the different levels of education achievable.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1594	birthDate	Person.birthDate	Date of birth.	\N	11	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1595	givenName	Person.givenName	Given name. In the U.S., the first name of a Person. This can be used along with familyName instead of the name property.	\N	11	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1596	familyName	Person.familyName	Family name. In the U.S., the last name of an Person. This can be used along with givenName instead of the name property.	\N	11	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -2774,7 +2779,6 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1636	approvedBy	Program.approvedBy	Organization that pronounces favorable judgment for this  program.	Ensure any use incorporates a "not applicable" field as many legitimate programs will not have this and you don't want to accidentaly discard them due to missing data codes.	1	string	\N	No	No	CTDL	URI to an organization record in the credential registry	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 6	revisionDate	Assessment.revisionDate	The month, day, and year that the conceptual design for the assessment was most recently revised substantially	No change	1	string	\N	No	No	\N	in the absense of this, would effective date be used?	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1590	PersonIdentifiersType	Core.PersonIdentifiersType	A logical grouping of components related to person identification information.	\N	9	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1695	requirement	Program.requirement	\N	\N	5	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1696	duration.type	Program.duration.type	\N	\N	5	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1697	description	Program.description	\N	\N	5	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1698	code	Program.code	\N	\N	5	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -2834,7 +2838,6 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1642	availableAt	Program.availableAt	Physical location where the program can be pursued. [=>Place]	Ensure any use incorporates a "not applicable" field as many legitimate programs will not have this and you don't want to accidentaly discard them due to missing data codes.	1	string	\N	No	Yes	CTDL	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 170	GradeStatus	LearningAssessment.GradeStatus	The status of the grade, which can be i) pass, ii) fail or iii) other. It should be provided using a controlled vocabulary.	\N	7	\N	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1721	codedNotation	LearningProgram.codedNotation	Set of alphanumeric symbols that uniquely identifies an item and supports its discovery and use.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-575	institution	Person.CourseLearningExperience.institution	The institution to which the person attended.	\N	1	string	\N	No	No	HR Open Standards	Should already have this context based on source of the data?	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1718	deliveryType	LearningProgram.deliveryType	- Type of means by which a learning program is delivered to credential seekers and by which they interact; select from an existing enumeration of such types.\n- Detailed description of the delivery type of an assessment or learning opportunity.	\N	10	\N	\N	\N	\N	\N	7.2	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1716	instructionalProgramType	LearningProgram.instructionalProgramType	Type of instructional program; select from an existing enumeration of such types.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1720	name	LearningProgram.name	Name or title of the resource.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -2861,16 +2864,14 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1201	shortName	Organization.shortName	The name of the institution, which may be the abbreviated form of the full legally accepted name.	No Change	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1202	description	Organization.description	A description or quick summary of the organization.	No Change	1	string	\N	No	No	HR Open	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1662	targetAssessment	Program.targetAssessment	Assessment that provides direct, indirect, formative or summative evaluation or estimation of the nature, ability, or quality for an entity.	Ensure any use incorporates a "not applicable" field as many legitimate programs will not have this and you don't want to accidentaly discard them due to missing data codes.	1	string	\N	No	Yes	CTDL	URI To an assessment in the credential registry	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-546	offeredBy	Course.offeredBy	Agent that offers the resource.	Ensure any use incorporates a "not applicable" field as many legitimate courses will not have this and you don't want to accidentaly discard them due to missing data codes.	1	string	\N	No	Yes	CTDL	URI to an organization record in the credential registry	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1853	issuedByOrganization	Credential.IssuedByOrganization	\N	\N	1	string	\N	\N	\N	\N	\N	\N	2025-09-16 20:24:00+00	\N	UX	LIF	f	\N	t	\N	\N	\N	\N	Public	f	f
 12	subject	Assessment.subject	The description of the content or subject area (e.g., arts, mathematics, reading, or a foreign language) being evaluated. These can also be any broader subject out side education like coding test in jon interview. Here is an example of CEDS set https://ceds.ed.gov/element/000021	The decription of the content or subject of assessment should not be used a proxy for what is actually measured in the assessment. Care should be taken to avoid biased assumptions about what a framework actually measures from its claim. Assessments can be used to perpetuate cultural bias under the guise of professional assessment.	1	string	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 34	alternateName	Assessment.alternateName	Alias for the entity including acronyms, alpha-numeric notations, and other forms of name abbreviations in common use such as PhD, MA, and BA.	No change	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+3166	resultDescription	Result.resultDescription	The ResultDescription that this Result is an instance of.	Value is the id of a ResultDescription within the asserted Achievement, not an embedded object.	29	string	\N	No	No	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 38	audienceLevelType	Assessment.audienceLevelType	Type of level indicating a point in a progression through an educational or training context, for which the assessment is intended; select from an existing enumeration of such types. Use "missing at will" and "not applicable" for missng data to avoid skewed outcomes.	Missing data should not be penalized in useage. Assuming that all organizations will want to comply with this system will introduce a high level of bias into outcomes	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 61	scoreType	Person.AssessmentLearningExperience.scoreType	Indicates the purpose for which this assessment score instance was recorded.	The interpretation and use of this data element will depend on whose perspective is being captured in the element. The reason will be perceived differently by the learner, the assessor, and the organization.	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1199	imageUrl	Organization.imageUrl	The Uniform Resource Locator (URL) for the unique address of an image representing the Organization.	No Change	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1222	accredits	Common.Accreditation.accredits	Credential, assessment, organization, or learning opportunity for which this organization provides official authorization or approval based on prescribed standards or criteria. Use "missing at will" and "not applicable" for missng data to avoid skewed outcomes.	Missing data should not be penalized in useage. Assuming that all organizations will want to comply with this system will introduce a high level of bias into outcomes. A value needs to be added for missing at will and a value needs to be added for not applicable to avoid too much missing data resulting in skewed outcomes	1	string	\N	No	No	CTDL	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1665	identifier	Person.ProgramLearningExperience.identifier	The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.	Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered.	1	string	\N	Yes	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1894	id	person.id	\N	\N	26	string	\N	Yes	No	\N	\N	\N	2025-10-08 22:12:00+00	\N	MDRUser	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
 1294	middleName	Person.Name.middleName	A middle or additional given name of a person, further defined using nameType.	\N	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 533	CourseCompetency	Course.CourseCompetency	\N	\N	1	entity	\N	\N	\N	CTDL	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	\N	Public	f	f
 1085	hoursWorkedPerWeek	Position.hoursWorkedPerWeek	The average number of hours anticipated by the employer to be worked in this postion per week.	Depending on the unit of measurement here (average vs typical week vs last week) this will add bias towards earners in specific types of employment	1	number	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -2881,15 +2882,16 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 64	completionStatus	Person.AssessmentLearningExperience.completionStatus	The completion and scoring status for an instance of a person taking an assessment.	Great care should be made to ensure that missing data should not be penalized in useage. Assuming that all organizations will want to comply with this system will introduce a high level of bias into outcomes	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 501	name	Course.name	The descriptive name given to a course of study offered in a school or other institution or organization. In departmentalized classes at the elementary, secondary, and postsecondary levels (and for staff development activities), this refers to the name by which a course is identified (e.g., American History, English III). For elementary and other non-departmentalized classes, it refers to any portion of the instruction for which a grade or report is assigned (e.g., reading, composition, spelling, and language arts).	No change	1	string	\N	Yes	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1750	type	OpenBadgeCredential.credentialSubject.type	\N	\N	16	string	\N	\N	Yes	\N	\N	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	\N	Public	f	f
-494	auditDate	Person.Consent.AuditHistory.auditDate	Timestamp of when the audit took place.	\N	1	string	\N	Yes	No	\N	\N	\N	2025-11-26 23:23:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+546	offeredBy	Course.offeredBy	Agent that offers the resource.	Ensure any use incorporates a "not applicable" field as many legitimate courses will not have this and you don't want to accidentaly discard them due to missing data codes.	1	string	\N	No	Yes	CTDL	URI to an organization record in the credential registry	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+575	institution	Person.CourseLearningExperience.institution	The institution to which the person attended.	\N	1	string	\N	No	No	HR Open Standards	Should already have this context based on source of the data?	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 577	currentlyAttendingIndicator	Person.CourseLearningExperience.currentlyAttendingIndicator	Indicator that the person is still attending.	\N	1	string	\N	No	No	HR Open Standards	Couldn't this be derived? It could have been collected while attending and not recollected after the status may have changed?	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1616	instructionalProgramCode	Program.instructionalProgramCode	A six-digit code in the form xx.xxxx that identifies instructional program specialties within educational institutions.	No change	1	string	\N	No	Yes	CEDS	\N	\N	2025-11-26 22:19:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 118	ScoreValue	AssessmentResult.ScoreValue	A meaningful raw score, derived score, or statistical expression of the performance of a person on an assessment. The type of result is indicated by the Assessment Score Metric Type element. The results can be expressed as a number, percentile, range, level, etc. The score relates to all scored items or a sub test scoring one aspect of performance on the test. This value may or may not correspond to one or more Performance Levels.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 477	status	Person.Consent.status	Indicates whether consent has been given, withdrawn, or is pending.	Use in tandem with aditional elements described in description change.	1	string	\N	No	No	LIF	Other categories for consent are included in non-required fields. This includes time/date, purpose for which the consent is obtained, categories for types of data that will be collected, entities with whom the data will be shared, the method used to obtain, language of consent, channels, compliance, and other. Reference should be made to these other non-required fields and these fields should be used when possible.	\N	2025-11-26 22:41:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 808	uri	Credential.Requirements.Criteria.uri	The URI of a webpage that describes in a human-readable format the criteria for the credential.	No change	1	string	\N	Yes	No	Open Badges v2	in programs	\N	2025-11-26 23:21:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 498	identifier	Course.identifier	The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.	Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered.	1	string	\N	Yes	No	CEDS	\N	\N	2025-11-26 22:51:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1544	BirthInternationalProvince	BirthData.BirthInternationalProvince	For students born outside of the U.S., the Province or jurisdiction in which an individual is born.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 231	Competency	CompetencyFramework.Competency	\N	\N	1	entity	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	\N	Public	f	f
+810	estimatedDuration	Credential.Requirements.estimatedDuration	Estimated duration or time to earn the credential.	No change	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 817	identifier	Credential.Image.identifier	The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.	Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered.	1	string	\N	Yes	No	Open Badges v2	IRI or document representing an image of the achievement. This must be a PNG or SVG image	\N	2025-11-26 23:20:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1322	congressionalDistrict	Person.Residency.congressionalDistrict	The congressional district in which an address is located.	\N	1	string	\N	No	Yes	Ed-Fi	MP: how to derive, or make more generic. Districts can change, and wouldn't want require mass updates.	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1895	preferred_org_types	person.employment.preferences.preferred_org_types	\N	\N	26	string	\N	No	Yes	\N	\N	\N	2025-10-08 22:14:00+00	\N	MDRUser	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -2906,6 +2908,8 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1758	name	OpenBadgeCredential.credentialSubject.source.name	\N	\N	16	string	\N	\N	No	\N	\N	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	\N	Public	f	f
 1759	term	OpenBadgeCredential.credentialSubject.term	\N	\N	16	string	\N	\N	No	\N	\N	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	\N	Public	f	f
 1762	identityType	OpenBadgeCredential.credentialSubject.identifier.identityType	\N	\N	16	string	\N	\N	No	\N	\N	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	\N	Public	f	f
+3174	points	RubricCriterionLevel.points	The points associated with this level.	Typed as String in the specification on purpose - a level may be "3", "3.5" or "A". Do not "correct" this to a number.	29	string	\N	No	No	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+3163	type	GeoCoordinates.type	The type of this object. A single value, which MUST be the IRI 'GeoCoordinates'.	Fixed value: type MUST equal "GeoCoordinates".	29	string	\N	Yes	No	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1094	incomeSourceDescription	Person.EmploymentLearningExperience.IncomeSources.incomeSourceDescription	A description of the income source category. For example, for salaryforTeachingAssignmentOnly the description might be "Indicator to determine whether the teacher's base salary includes pay for teaching assignments alone." For titleITargetedAssistanceStaff the description might be "An indication that a staff member is targeted assistance (TAS) program staff funded by Title I, Part A, Section 1115 of ESEA as amended." For migrantEducationProgramPersonnel the description might be "An indication that a staff member's salary is paid by the Title I, Part C Migrant Education Program (MEP) of ESEA as amended". For staffCompensationHealthBenefits the description might be "Contributions made by the school district, municipal, state, federal and other government agencies for the teacher's or early learning provider's health insurance, prorated to the specific school or local provider agency indicated on the record, not including contributions made by the teacher or early learning provider.". For staffCompensationRetirementBenefits the description might be "Contributions made by the school district, municipal, state, federal and other government agencies for the teacher's or early learning provider’s health insurance, prorated to the specific school or local provider agency indicated on the record, not including contributions made by the teacher or early learning provider.". For staffCompensationOtherBenefits the description might be "All other benefits paid by the school district, municipal, state, federal, and other government agencies for the teacher or early learning provider, prorated to the specific school or local provider agency indicated on the record, not including retirement and health insurance benefits or contributions made by the teacher or early learning provider.".	The assignment of eligibility of a person into income source categories should not be used as a proxy for eligiblity for these nor as a proxy for any other social or economic category.	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 281	competencyAssociationOriginName	CompetencyFramework.Association.competencyAssociationOriginName	\N	No change	1	string	\N	No	No	CEDS	\N	\N	2025-11-26 22:12:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 155	language	LearningAssessmentSpecification.language	The language of instruction. It should be provided using the Language Named Authority List	\N	7	\N	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -2927,6 +2931,7 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1284	firstName	Person.Name.firstName	The first name of a person or individual, further defined by nameType	Only use if consent has been verified.	1	string	\N	Yes	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 3204	endorsementJwt	OpenBadgeCredential.endorsementJwt	Allows endorsers to make specific claims about the credential in compact JWT format.	\N	29	string	\N	No	Yes	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1323	countyFIPSCode	Person.Residency.countyFIPSCode	The Federal Information Processing Standards (FIPS) numeric code for the county issued by the National Institute of Standards and Technology (NIST). Counties are considered to be the "first-order subdivisions" of each State and statistically equivalent entity, regardless of their local designations (county, parish, borough, etc.) Counties in different States will have the same code. A unique county number is created when combined with the 2-digit FIPS State Code.	\N	1	string	\N	No	No	Ed-Fi	MP: if based on the county, maybe have it derived, rather than stored. As well making generic.	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1853	issuedByOrganization	Credential.IssuedByOrganization	\N	\N	1	string	\N	\N	\N	\N	\N	\N	2025-09-16 20:24:00+00	\N	UX	LIF	f	\N	t	\N	\N	\N	\N	Public	f	f
 1357	birthInternationalProvince	Person.Birth.birthInternationalProvince	For students born outside of the U.S., the Province or jurisdiction in which an individual is born.	\N	1	string	\N	No	No	Ed-Fi	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1763	identityHash	OpenBadgeCredential.credentialSubject.identifier.identityHash	\N	\N	16	string	\N	\N	No	\N	\N	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	\N	Public	f	f
 1386	qualifyingMoveCity	Person.Demographics.qualifyingMoveCity	The name of the city in which the child resided prior to the qualifying move.	Only use if consent has been verified.	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -2955,21 +2960,6 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 10	goalDescription	Assessment.goalDescription	A statement that describes the desired outcomes.	No change	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 11	goalSuccessCriteria	Assessment.goalSuccessCriteria	One or more statements that describes the criteria used by teachers and students to check for attainment of a goal.	No change	1	string	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 15	assessmentLevelOther	Assessment.assessmentLevelOther	This can be an estimated level for an assessment which can be out side of the academic domain.	\N	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1531	DoNotPublishIndicator	Address.DoNotPublishIndicator	An indication that the address should not be published.	\N	6	boolean	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1534	PrimaryEmailAddressIndicator	ElectronicMail.PrimaryEmailAddressIndicator	An indication that the electronic mail address should be used as the principal electronic mail address for an individual or organization.	\N	6	boolean	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1538	DoNotPublishIndicator	Telephone.DoNotPublishIndicator	An indication that the telephone number should not be published.	\N	6	boolean	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1539	TextMessageCapabilityIndicator	Telephone.TextMessageCapabilityIndicator	An indication that the telephone number is technically capable of sending and receiving Short Message Service (SMS) text messages.	\N	6	boolean	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1543	MultipleBirthStatus	BirthData.MultipleBirthStatus	Indicator of whether the student was born with other siblings (i.e., twins, triplets, etc.)	\N	6	boolean	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1469	AddressTypeForLearnerOrFamily	Person.AddressTypeForLearnerOrFamily	The type of address listed for a learner or a parent, guardian, family member or related person.	\N	4	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1549	HispanicLatinoEthnicity	StudentEducationOrganizationAssociation.HispanicLatinoEthnicity	An indication that the individual traces his or her origin or descent to Mexico, Puerto Rico, Cuba, Central, and South America, and other Spanish cultures, regardless of race, as last reported to the education organization. The term, "Spanish origin," can be used in addition to "Hispanic or Latino."	\N	6	boolean	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1554	LegalGuardian	StudentContactAssociation.LegalGuardian	Indicator of whether the person is a legal guardian for the student.	\N	6	boolean	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1555	EmergencyContactStatus	StudentContactAssociation.EmergencyContactStatus	Indicator of whether the person is a designated emergency contact for the student	\N	6	boolean	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1557	PrimaryContactStatus	StudentContactAssociation.PrimaryContactStatus	Indicator of whether the person is a primary contact for the student.	\N	6	boolean	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-135	RevisionDate	Assessment.RevisionDate	The month, day, and year that the conceptual design for the assessment was most recently revised substantially.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-658	BeginDate	Session.BeginDate	Month, day, and year of the first day of the session.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-659	EndDate	Session.EndDate	Month, day and year of the last day of the session.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1507	BirthDate	BirthData.BirthDate	The month, day, and year on which an individual was born.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-142	AdministrationEndDate	StudentAssement.AdministrationEndDate	The date and time an assessment administration ended.	\N	6	string	\N	\N	\N	\N	student, not event	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1478	Latitude	Person.Latitude	The north or south angular distance from the equator that, when combined with longitude, reflects an estimation of where the address is physically situated.	\N	4	number	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1479	Longitude	Person.Longitude	The east or west angular distance from the prime meridian that, when combined with latitude, reflects an estimation of where the address is physically situated.	\N	4	number	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 19	category	Assessment.category	The category of the learning assessment specification as a string.	No change	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -2984,14 +2974,10 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 31	performanceUpperLevel	Assessment.AssessmentPerformanceLevel.performanceUpperLevel	Highest possible score for the performance level.	No change	1	number	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 229	officialSourceUrl	CompetencyFramework.officialSourceUrl	\N	It is very likely that competing claims of formal documentation will exist. Do not assume that all data here is final.	1	string	\N	No	No	CASE	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 228	subjectUri	CompetencyFramework.subjectUri	\N	No change	1	string	\N	No	Yes	CASE	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-654	CourseIdentificationCode	CourseIdentificationCode.CourseIdentificationCode	A unique number or alphanumeric code assigned to a course by a school, school system, state, or other agency or entity. For multi-part course codes, concatenate the parts separated by a "/". For example, consider the following SCED code- subject = 20 Math course = 272 Geometry level = G General credits = 1.00 course sequence 1 of 1- would be entered as 20/272/G/1.00/1 of 1.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-656	CourseTitle	Course.CourseTitle	The descriptive name given to a course of study offered in a school or other institution or organization. In departmentalized classes at the elementary, secondary, and postsecondary levels (and for staff development activities), this refers to the name by which a course is identified (e.g., American History, English III). For elementary and other non-departmentalized classes, it refers to any portion of the instruction for which a grade or report is assigned (e.g., reading, composition, spelling, and language arts).	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-665	CourseCode	Course.CourseCode	A unique alphanumeric code assigned to a course.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1519	PersonalTitlePrefix	Name.PersonalTitlePrefix	A prefix used to denote the title, degree, position, or seniority of the individual.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1465	PersonalInformationVerification	Person.PersonalInformationVerification	The evidence by which a persons name, address, date of birth, etc. is confirmed.	\N	4	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1466	MiddleName	Person.MiddleName	A full legal middle name given to a person at birth, baptism, or through legal change.	\N	4	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1468	PersonalTitleOrPrefix	Person.PersonalTitleOrPrefix	An appellation, if any, used to denote rank, placement, or status (e.g., Mr., Ms., Reverend, Sister, Dr., Colonel).	\N	4	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1896	deletedDate	Common.deletedDate	The date when the object with deleted.	\N	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	t	\N	Public	f	f
+1469	AddressTypeForLearnerOrFamily	Person.AddressTypeForLearnerOrFamily	The type of address listed for a learner or a parent, guardian, family member or related person.	\N	4	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1470	AddressStreetNumberAndName	Person.AddressStreetNumberAndName	The street number and street name or post office box number of an address.	\N	4	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1471	AddressApartmentRoomOrSuiteNumber	Person.AddressApartmentRoomOrSuiteNumber	The apartment, room, or suite number of an address.	\N	4	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1473	StateAbbreviation	Person.StateAbbreviation	The abbreviation for the state (within the United States) or outlying area in which an address is located.	\N	4	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -2999,16 +2985,7 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1475	AddressCountyName	Person.AddressCountyName	The name of the county, parish, borough, or comparable unit (within a state) in which an address is located.	\N	4	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1476	CountryCode	Person.CountryCode	The unique two character International Organization for Standardization (ISO) code for the country in which an address is located.	\N	4	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1477	ProofOfResidencyType	Person.ProofOfResidencyType	An accepted form of proof of residency in the district/county/other locality.	\N	4	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1521	StreetNumberName	Address.StreetNumberName	The street number and street name or post office box number of an address.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1522	ApartmentRoomSuiteNumber	Address.ApartmentRoomSuiteNumber	The apartment, room, or suite number of an address.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1523	City	Address.City	The name of the city in which an address is located.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1525	PostalCode	Address.PostalCode	The five or nine digit zip code or overseas postal code portion of an address.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1526	NameOfCounty	Address.NameOfCounty	The name of the county, parish, borough, or comparable unit (within a state) in 'which an address is located.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1919	name	CredentialAward.name	\N	\N	1	string	\N	Yes	No	\N	\N	\N	2025-12-01 17:12:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1527	Latitude	Address.Latitude	The geographic latitude of the physical address.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1528	Longitude	Address.Longitude	The geographic longitude of the physical address.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1529	CongressionalDistrict	Address.CongressionalDistrict	The congressional district in which an address is located.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1530	CountyFIPSCode	Address.CountyFIPSCode	The Federal Information Processing Standards (FIPS) numeric code for the county issued by the National Institute of Standards and Technology (NIST). Counties are considered to be the "first-order subdivisions" of each State and statistically equivalent entity, regardless of their local designations (county, parish, borough, etc.) Counties in different States will have the same code. A unique county number is created when combined with the 2-digit FIPS State Code.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 289	alignsToUri	CompetencyFramework.Competency.CompetencyAlignments.alignsToUri	\N	\N	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 261	competencyUri	CompetencyFramework.Competency.ProficiencyDefinition.competencyUri	The URI identifier for the Competency	No change	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 239	typeUrl	CompetencyFramework.Competency.typeUrl	\N	No change	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -3023,23 +3000,13 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 58	endDate	Person.AssessmentLearningExperience.endDate	Date and time the assessment actually ended.	No change	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 227	lastChangeDateTime	CompetencyFramework.lastChangeDateTime	\N	No change	1	string	\N	No	No	CASE	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 241	ageRangeMin	CompetencyFramework.Competency.ageRangeMin	\N	Typical minimum and maximum age should be considered to be an opinion of the dataset creator and used with the assumption of great added bias.	1	number	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+3191	related	Achievement.related	Related achievements, potentially in other languages or different versions of the same achievement.	\N	29	entity	\N	No	Yes	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	511	Public	f	f
 242	ageRangeMax	CompetencyFramework.Competency.ageRangeMax	\N	Typical minimum and maximum age should be considered to be an opinion of the dataset creator and used with the assumption of great added bias.	1	number	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 27	assessmentPerformanceLevel	Assessment.assessmentPerformanceLevel	\N	\N	1	entity	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	\N	Public	f	f
-138	AssessedGradeLevel	Assessment.AssessedGradeLevel	The grade level(s) for which an assessment is designed. The semantics of null is assumed to mean that the assessment is not associated with any grade level.	\N	6	string	\N	\N	\N	\N	Reference to GradeLevelDescriptor	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-140	Language	Assessment.Language	An indication of the languages in which the assessment is designed.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-144	AdministrationEnvironment	StudentAssement.AdministrationEnvironment	The environment in which the test was administered.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-666	CreditType	Credits.CreditType	The type of credits or units of value awarded for the completion of a course.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1339	Telephone	Common.Contact.Telephone	\N	\N	1	entity	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	\N	Public	f	f
-667	AssessmentReportingMethod	AssessmentScore.AssessmentReportingMethod	This descriptor defines the method that the instructor of the class uses to report the performance and achievement of all students. It may be a qualitative method such as individualized teacher comments or a quantitative method such as a letter or a numerical grade.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-668	EducationalEnvironment	Section.EducationalEnvironment	The setting in which a child receives education and related services.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1593	NamePrefix	PersonType/Name.NamePrefix	An honorific, title or credential that follows the name.	\N	9	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 282	competencyAssociationOriginUri	CompetencyFramework.Association.competencyAssociationOriginUri	\N	No change	1	string	\N	No	No	CEDS	\N	\N	2025-11-26 22:12:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 283	competencyAssociationWeight	CompetencyFramework.Association.competencyAssociationWeight	\N	\N	1	number	\N	No	Yes	CEDS	\N	\N	2025-11-26 22:12:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 298	name	Person.Proficiency.name	\N	No change	1	string	\N	Yes	No	\N	\N	\N	2025-11-26 23:29:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-670	CourseRepeatCode	CourseTranscript.CourseRepeatCode	Indicates that an academic course has been repeated by a student and how that repeat is to be computed in the student's academic grade average	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1551	CitizenshipStatus	Citizenship.CitizenshipStatus	An indicator of whether or not the person is a U.S. citizen.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1552	HomelessPrimaryNighttimeResidence	StudentHomelessProgramAssociation.HomelessPrimaryNighttimeResidence	The primary nighttime residence of the student at the time the student is identified as homeless.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1556	Relation	StudentContactAssociation.Relation	The nature of an individual's relationship to a student.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 257	weight	CompetencyFramework.Competency.weight	\N	No change	1	number	\N	No	No	\N	Total weight for all competencies within Framework should equal 100.	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 53	AssessmentLearningExperience	Person.AssessmentLearningExperience	\N	\N	1	entity	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	\N	Public	f	f
 275	Association	CompetencyFramework.Association	\N	\N	1	entity	\N	Yes	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	\N	Public	f	f
@@ -3047,10 +3014,9 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 297	proficiencyScaleType	Person.Proficiency.proficiencyScaleType	\N	No change	1	string	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 811	minimumDuration	Credential.Requirements.minimumDuration	Minimum duration of time allowed in order to earn the credential.	No change	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 812	maximumDuration	Credential.Requirements.maximumDuration	Maximum duration of time allowed in order to earn the credential.	No change	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1558	Language	Language.Language	This descriptor defines the language(s) that are spoken or written. It is strongly recommended that entries use only ISO 639-2 language codes: for CodeValue, use the 3 character code; for ShortDescription and Description use the full language name.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1559	LanguageUse	Language.LanguageUse	The category denoting how a language is used.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 210	description	CompetencyFramework.description	A textual description of the scope and contents of the competency framework.	Great care should be taken to understand that competency frameworks are not value neutral frameworks and an assessment should be taken as to what values are being prioritized in each competency framework before adoption	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 60	scoreValue	Person.AssessmentLearningExperience.scoreValue	A meaningful raw score, derived score, or statistical expression of the performance of a person on an assessment. The type of result is indicated by the Assessment Score Metric Type element. The results can be expressed as a number, percentile, range, level, etc. The score relates to all scored items or a sub test scoring one aspect of performance on the test. This value may or may not correspond to one or more Performance Levels. Use "missing at will" and "not applicable" for missng data to avoid skewed outcomes.	Great care should be made to ensure that missing data should not be penalized in useage. Assuming that all organizations will want to comply with this system will introduce a high level of bias into outcomes	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+3429	PrimaryLearningDeviceAccess	StudentEducationOrganizationAssociation.PrimaryLearningDeviceAccess	An indication of whether the primary learning device is shared or not shared with another individual.	\N	6	enum	434	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
 486	source	Common.LegalCode.source	The  source for where the legal code. For example, General Data Protection Regulation (GDPR) - European Union  (https://gdpr.eu/), California Consumer Privacy Act (CPPA) - (https://oag.ca.gov/privacy/ccpa), Health Insurance Portability and Accountability Act (HIPPA) (https://www.hhs.gov/hipaa/index.html), Canadian Personal Information Protection and Electronic Documents Act (PIPEDA) https://www.priv.gc.ca/en/privacy-topics/privacy-laws-in-canada/the-personal-information-protection-and-electronic-documents-act-pipeda/, Children's Online Privacy Protection Act (COPPA), https://www.ftc.gov/legal-library/browse/rules/childrens-online-privacy-protection-rule-coppa, Human Research Ethics Codes (https://www.hhs.gov/ohrp/index.html)	\N	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 487	narrative	Common.LegalCode.narrative	The narrative for the law or justification for processing the data or for the process in which the learner can withdraw consent.	\N	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 536	audienceLevelType	Course.audienceLevelType	Type of level indicating a point in a progression through an educational or training context, for which the credential is intended; select from an existing enumeration of such types. Use "missing at will" and "not applicable" for missng data to avoid skewed outcomes.	Ensure any use incorporates a "not applicable" field as many legitimate courses will not have this and you don't want to accidentaly discard them due to missing data codes.	1	string	\N	No	Yes	CTDL	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -3059,7 +3025,6 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 219	validStartDateStatus	CompetencyFramework.validStartDateStatus	A valid start date status, which provide details about whether it is missing at will or not applicable.	\N	1	string	353	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 145	identifier	LearningAchievementSpecification.identifier	An identifier of the learning assessment specification.	\N	7	\N	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 153	methodOfAssessmentSupervisionAndIDVerification	LearningAssessment.methodOfAssessmentSupervisionAndIDVerification	Method of assessment supervision and ID verification. It should be provided using the EDC Controlled List of Methods Of Supervision And Verification.	\N	7	\N	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-669	InteractivityStyle	LearningResource.InteractivityStyle	The predominate mode of learning supported by the learning resource. Acceptable values are active, expositive, or mixed.	\N	6	string	\N	\N	\N	\N	TBD - Ed-Fi EdOrg?	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 508	courseStandardAlignment	Course.courseStandardAlignment	An indication whether a course is aligned with the established standards of a curriculum framework.	Use only in tandem with an element designed to be more specific about what curriculum framework is being references.	1	boolean	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 555	type	Person.CourseLearningExperience.type	\N	\N	1	string	\N	No	No	\N	\N	\N	2025-11-26 22:25:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 511	courseLevelCharacteristic	Course.courseLevelCharacteristic	An indication of the general nature and difficulty of instruction provided throughout a course.	Do not use without two elements to provide specifics on the standards used and who makes the determination. This element is likely to absorb a large amount of bias due to asymetrical power and organizational politics	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -3075,16 +3040,14 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1106	employmentTypeStatusValue	Person.EmploymentLearningExperience.EmploymentTypeStatus.employmentTypeStatusValue	A boolean indication of whether or not the learner has the employment type status.	\N	1	boolean	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	\N	Public	f	f
 1084	fullTimeEquivalentRatio	Position.fullTimeEquivalentRatio	The number of total hours worked divided by the maximum number of compensable hours in a full-time schedule as defined by law, or determined by civil or organizational policies.	The denominator of this element needs to be carefully considered to avoid creating calculations that further bias outcomes away from many diverse types of earners.	1	number	\N	No	No	HR Open	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 813	minimumAge	Credential.Requirements.minimumAge	Minimum age, in years, in order to earn the credential.	No change	1	number	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1086	contractDaysOfServicePerYear	Position.contractDaysOfServicePerYear	The number of days per year that a person is expected to work as outlined specifically in their employment agreement, if appopriate in their form of employment.	This metric will be inaccurate for a large number of earners who do not have employment in a specific type of class of employment	1	number	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1099	contractLength	Position.contractLength	The contracted period for the person.	This metric will be inaccurate for a large number of earners who do not have employment in a specific type of class of employment	1	number	\N	No	No	CEDS	the vocab seems teacher specific, versus just contract length	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-835	expirationDate	Person.CredentialAward.expirationDate	The expiration date of the credential, after which the credential will no longer be valid for the awardee.	No change	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-810	estimatedDuration	Credential.Requirements.estimatedDuration	Estimated duration or time to earn the credential.	No change	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+3430	PrimaryLearningDeviceProvider	StudentEducationOrganizationAssociation.PrimaryLearningDeviceProvider	The provider of the primary learning device.	\N	6	enum	436	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
 1135	hireDate	Person.EmploymentLearningExperience.hireDate	The year, month and day on which a person was hired for a position, or consecutive positions within the same organization and job classification.	\N	1	string	\N	No	No	CEDS	NOTE: given a person can have multiple employment records for an org, then wouldn't make sense to have hireDate on each record. CEDS suggested the position can have a hire date as well. \nFor a position hireDate doesn't make sense\nAlso, how important is hireDate versus startDate?	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1112	Membership	Position.Membership	\N	\N	1	entity	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	\N	Public	f	f
 840	Identity	Person.CredentialAward.Identity	\N	\N	1	entity	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	\N	Public	f	f
 1334	Email	Common.Contact.Email	\N	\N	1	entity	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	\N	Public	f	f
 1098	jobCodeType	Position.JobCode.jobCodeType	\N	\N	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1359	visa	Person.Birth.visa	An indicator of a non-US citizen's Visa type.	\N	1	string	\N	No	No	Ed-Fi	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1896	deletedDate	Common.deletedDate	The date when the object with deleted.	\N	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	t	\N	Public	f	f
 836	awardIssueDate	Person.CredentialAward.awardIssueDate	Date the credential was asserted/awarded.	No change	1	string	\N	No	No	\N	\N	\N	2025-11-26 22:26:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1664	type	Person.ProgramLearningExperience.type	\N	\N	1	string	\N	No	No	\N	Type=Program	\N	2025-11-26 22:40:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1123	payRate	Position.Wage.payRate	\N	\N	1	number	\N	Yes	No	\N	\N	\N	2025-11-26 23:25:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -3103,6 +3066,7 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1220	seekingAccreditationDate	Common.Accreditation.seekingAccreditationDate	The date in which accreditation process was started (but not officially approved or denied).	Missing data should not be penalized in useage. Assuming that all organizations will want to comply with this system will introduce a high level of bias into outcomes. A value needs to be added for missing at will and a value needs to be added for not applicable to avoid too much missing data resulting in skewed outcomes	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1316	latitude	Common.Contact.Address.latitude	The north or south angular distance from the equator that, when combined with longitude, reflects an estimation of where the address is physically situated.	\N	1	number	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1317	longitude	Common.Contact.Address.longitude	The east or west angular distance from the prime meridian that, when combined with latitude, reflects an estimation of where the address is physically situated.	\N	1	number	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1092	IncomeSources	Person.EmploymentLearningExperience.IncomeSources	\N	\N	1	entity	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	\N	Public	f	f
 1330	websiteAddress	Common.Contact.websiteAddress	The Uniform Resource Locator (URL) for the unique address of a Web page.	\N	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1335	primaryEmailAddressIndicator	Common.Contact.Email.primaryEmailAddressIndicator	An indication that the electronic mail address should be used as the principal electronic mail address for an individual or organization.	\N	1	boolean	\N	No	No	Ed-Fi	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1397	relationshipPriority	Person.RelationshipContacts.relationshipPriority	The numeric order in the preferred sequence and priority for contacting a person related to the learner.	\N	1	number	\N	No	Yes	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -3118,6 +3082,7 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1383	startEndDate	Person.Demographics.startEndDate	The last year, month and day when a status applied to an individual.	If this field is used, it is recommended that researchers or other stakeholders consider the variability and nuances that accompany how this field is collected, and how accurate or up-to-date it is. In considering that this may be used for research in evaluating stop-outs, extreme caution should be used when entering this into a statistical or machine learning model for the reasons and observations listed above. There is considerable variability in this field and this has the potential to perpetuate biases or produce inaccurate result	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1625	description	Program.description	Statement, characterization or account of the program.	No change	1	string	\N	No	No	CTDL	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1652	keyword	Program.keyword	Keyword or key phrase describing relevant aspects of an entity.	No change	1	string	\N	No	Yes	CTDL	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1339	Telephone	Common.Contact.Telephone	\N	\N	1	entity	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	\N	Public	f	f
 1401	expiraryDates	Person.RelationshipContacts.expiraryDates	The expiry date for which the relationship does not apply.	None	1	string	\N	No	No	LIF-Addition	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1400	effectiveDates	Person.RelationshipContacts.effectiveDates	The effective date for which the relationship is valid.	None	1	string	\N	No	No	LIF-Addition	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1224	informationSourceId	Common.Accreditation.informationSourceId	\N	\N	1	string	\N	Yes	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	\N	Public	f	f
@@ -3134,6 +3099,7 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 547	ownedBy	Course.ownedBy	Organization or person with an enforceable claim or legal title to the resource.	Ensure any use incorporates a "not applicable" field as many legitimate courses will not have this and you don't want to accidentaly discard them due to missing data codes.	1	string	\N	No	Yes	CTDL	URI to an organization record in the credential registry	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 263	desiredProficiencyLevelUri	CompetencyFramework.Competency.ProficiencyDefinition.desiredProficiencyLevelUri	Identifies the desired proficiency level by identifier.	No change	1	string	\N	No	No	HR Open	Must have proficienc levels defined	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1764	salt	OpenBadgeCredential.credentialSubject.identifier.salt	\N	\N	16	string	\N	\N	No	\N	\N	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	\N	Public	f	f
+1765	id	achievement.id	\N	\N	16	string	\N	\N	No	\N	\N	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	\N	Public	f	f
 549	regulatedBy	Course.regulatedBy	Quality assurance organization that enforces the legal requirements of the course.	Ensure any use incorporates a "not applicable" field as many legitimate courses will not have this and you don't want to accidentaly discard them due to missing data codes.	1	string	\N	No	Yes	CTDL	URI to an organization record in the credential registry	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 551	subjectWebpage	Course.subjectWebpage	The webpage that describes this entity.	No change	1	string	\N	No	No	CTDL	VARCHAR or URL	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 552	targetAssessment	Course.targetAssessment	Assessment that provides direct, indirect, formative or summative evaluation or estimation of the nature, ability, or quality for an entity.	Ensure any use incorporates a "not applicable" field as many legitimate courses will not have this and you don't want to accidentaly discard them due to missing data codes.	1	string	\N	No	Yes	CTDL	URI To an assessment in the credential registry	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -3141,16 +3107,18 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1304	Identifier	Common.Identifier	\N	\N	1	entity	\N	No	Yes	\N	CM 2/20: Unclear if/how this fits in to the entity? Propose omitting	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	\N	Public	f	f
 492	AuditHistory	Person.Consent.AuditHistory	Mechanism for recording and tracking consent-related activities and changes.	\N	1	entity	\N	No	Yes	LIF	CM3/21: Unclear how this is actually represented?	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	\N	Public	f	f
 554	CourseLearningExperience	Person.CourseLearningExperience	\N	\N	1	entity	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	\N	Public	f	f
-832	CredentialAward	Person.CredentialAward	\N	\N	1	entity	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	\N	Public	f	f
 1124	EmploymentLearningExperience	Person.EmploymentLearningExperience	\N	\N	1	entity	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	\N	Public	f	f
 1143	MilitaryLearningExperience	Person.MilitaryLearningExperience	\N	\N	1	entity	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	\N	Public	f	f
-1293	Name	Person.Name	\N	In the treatment of a person name by the Learner Information Framework (LIF) and associated technologies, may users of LIF always center the human story of a person's name, how important it is to them, it’s cultural connectedness to people and land, how people traverse multiple ways of “naming” and the impact of “naming” on our stories, experiences and the opportunities it may connect (or disconnect) us to/from.   Using and treating data on people's names can raise several equity issues due to the diversity of naming conventions across cultures and ethnicities. Some of these equity issues include:\n1. Many of the data standards from which LIF draws its normative data model, and as to user of LIF, these systems are designed with Western naming conventions in mind, which can marginalize individuals with non-Western names. This bias can lead to inaccuracies in data analysis and decision-making processes. For example, we made recommendations for the separation of “name” and “name type” as well as inclusion of multiple characters, unlimited character length, etc). \n2. The variety of ways the standards treat “person name” shows limited interoperability between system-standards, which ultimately may lead to multiple records with different ways names are recorded, managed, and/or used. This Inaccurate or incomplete data due to mishandling of names can lead to biased analyses and decision-making, ultimately reinforcing existing disparities in society.\n3. Many of the standards, and the normative model, collapse “name” and “name type” into each other. Given the sensitivities and human implications for name changes, as well as the type of name (e.g., preferred, legal, given/gifted etc), we lean’t into AACRAO report on student identity for recommendations on how learners/students prefer to record and include their names.\n4. Most of the standards systems encourage the standardization of names, which can overlook variations in spelling, pronunciation, and order of names across different cultures. This can result in the erasure of cultural identities and misrepresentation of individuals.\n5. Most of the standards did not include an option for people from indigenous communities to record their Nation Tribe, or their name type as belong to their nation tribe. We leaned into research from the BIA.gov and recommend adding this to the normative model to improve inclusivity and cultural responsiveness to the naming conventions of our first nations peoples.  \n6. Collecting full names without proper consent or understanding of cultural sensitivities can infringe on individuals' privacy rights, especially in contexts where certain names may carry social or political implications. For example, having strict guardrails on when/how “legal name” vs. “preferred name” is used and who has access to the \n\nFor LIF purposes, our recommendation is that IF used in normative model, only names which have been consented to including/use by LIF, be included, with flexibility for their design and formatting to allow for cultural differences. \n\n“Title” “Suffix” and “prefix” components of a person’s name are used to provide additional information about a person's name. Using and treating data on people's titles can raise several equity issues.\n1. One argument for the inclusion of titles in normative data models is they may provide contextual information about an individual's identity and social status, and when used correctly, may ensure that individuals are addressed and identified appropriately, respects their social and professional distinctions.\n2. Traditional titles and honorifics often assume binary gender categories and may not adequately reflect the diversity of gender or social identities, may not be universally understood or used in all cultures or communities; and standardized forms may not accommodate all cultural or social variations in naming practices. For example, "Mr." for men and "Mrs." for married women. These assumptions about gender roles or marital status based on titles may not align with individuals' cultural norms or preferences. This binary classification can exclude and do harm to individuals who do not identify within these categories, such as non-binary or gender non-conforming individuals.\n3. Name suffixes, such as "Jr." or "III," can sometimes reveal familial relationships or generational information. Collecting this data without consent or proper safeguards may infringe on individuals' privacy rights and expose them to risks like identity theft or targeted advertising.\n4. Name suffixes may intersect with other aspects of an individual's identity, such as race, ethnicity, or gender. Failing to consider these intersections can perpetuate systemic inequalities and hinder efforts to promote equity and social justice.\n5. Different cultures may have specific titles or honorifics that hold significance and should be respected in data collection processes. Failing to accommodate these cultural variations can lead to erasure and marginalization of certain communities.\n6. Further, some individuals may not use titles, prefixes, or suffixes at all in their names, or they may have unconventional naming customs that are not recognized by standardized systems.\n6. Inaccurate or incomplete data on titles and prefixes can lead to biased analyses and decision-making, especially in contexts such as healthcare or academic research where precise demographic information is crucial. \n7. Failing to accommodate these variations of the use of “titles, suffix, and/or prefix” can marginalize certain groups and perpetuate cultural biases. \n\nFor LIF purposes, our recommendation is that if used in normative model, only titles, prefix and affix which have been consented to including/use, and which pertain to qualifications, credentials, work, learning, cultural significance and/or honorifics be included, with flexibility for their design and formatting to allow for cultural differences. Titles, prefix and suffix which pertain to social, generational, marital or gender status should not be included to not perpetuate inequalities and expose learner to harm.	1	entity	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	\N	Public	f	f
 1349	Birth	Person.Birth	\N	\N	1	entity	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	\N	Public	f	f
 1361	SexAndGender	Person.SexAndGender	\N	\N	1	entity	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	\N	Public	f	f
 1663	programLearningExperience	Person.programLearningExperience	\N	\N	1	entity	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	\N	Public	f	f
 578	goodStandingIndicator	Person.CourseLearningExperience.goodStandingIndicator	Indicator that the person is currently in good standing according to the rules of the educational institution.	\N	1	boolean	\N	No	No	HR Open Standards	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 859	revoked	Person.CredentialAward.revoked	Indicates if the assertion of the credential has been revoked, thus invalidating the award.	No change	1	boolean	\N	No	No	Open Badges v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1668	startDate	Person.ProgramLearningExperience.startDate	\N	\N	1	string	\N	No	No	\N	\N	\N	2025-11-26 22:39:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1107	employedWhileEnrolled	Person.EmploymentLearningExperience.employedWhileEnrolled	An individual who is a paid employee or works in his or her own business, profession, or farm, as reported through the State Unemployment Insurance Wage Report, FEDES, or WRIS, and at the same time is enrolled in secondary, postsecondary, or adult education or workforce programs.	If you have a verification method for determining whether or not the learner was employed during enrollment, then the LIF model may be extended with additional fields to indcate how this was determined (self reported or otherwise).	1	boolean	\N	No	No	CEDS	could be derived from emp history and course (tbd) history	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+3218	id	AchievementSubject.id	Unambiguous reference to the AchievementSubject.	Object-level conditional requirement: an AchievementSubject MUST carry either "id" or at least one entry in "identifier". Neither attribute is individually required, so this cannot be expressed by the Required flag - a generated validator must implement it as an OR-constraint evaluated at the AchievementSubject level, not as Required on either attribute alone.	29	string	\N	No	No	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+3213	type	OpenBadgeCredential.type	The value of the type property MUST be an unordered set. One of the items MUST be the URI 'VerifiableCredential', and one of the items MUST be the URI 'AchievementCredential' or the URI 'OpenBadgeCredential'.	\N	29	string	\N	Yes	Yes	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+3144	type	EndorsementCredential.type	The value of the type property MUST be an unordered set. One of the items MUST be the URI 'VerifiableCredential', and one of the items MUST be the URI 'EndorsementCredential'.	\N	29	string	\N	Yes	Yes	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1109	employedPriorToEnrollment	Person.EmploymentLearningExperience.employedPriorToEnrollment	An individual who is a paid employee or works in his or her own business, profession, or farm, as reported through the State Unemployment Insurance Wage Report, FEDES, or WRIS, before enrolling in secondary, postsecondary, or adult education or workforce programs. Additional information on this field is available (https://ceds.ed.gov/element/001342), and states that usage for this involves  Individual-level data obtained by matching records with wage records, FEDES, or WRIS. The State Education Agency defines the time period for this collection around an exit period and a corresponding period for employment and earnings data to be obtained. The option set includes "Yes" for employment found via one of the resources listed in the source element. These sources won't tell you anything further about employment or unemployment, only that a record was "not found" or "not matched" thus “unknown."	If you have a verification method for determining whether or not the learner was employed prior to enrollment, then the LIF model may be extended with additional fields to indcate how this was determined (self reported or otherwise).	1	boolean	\N	No	No	CEDS	enrollment data	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1836	TestNewSourceAttributeForValueSet	TestNewSourceAttributeForValueSet	This is a test of creating a new Source attribute	consideration	25	enum	337	No	No	\N	\N	2025-08-19 13:42:40.259+00	2025-08-19 13:42:40.259+00	\N	Mary Gwozdz	Unicon	f	\N	f	\N	\N	\N	\N	Public	f	f
 1838	TestAnotherNewSourceAttributeForValueSet	TestAnotherNewSourceAttributeForValueSet	This is a test of creating a new Source attribute	consideration	25	enum	338	No	No	\N	\N	2025-08-19 13:42:40.259+00	2025-08-19 13:42:40.259+00	\N	Mary Gwozdz	Unicon	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -3172,6 +3140,8 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 277	competencyAssociationType	CompetencyFramework.Association.competencyAssociationType	\N	No change	1	string	\N	No	No	CEDS	\N	\N	2025-11-26 22:12:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 290	alignsToText	CompetencyFramework.Competency.CompetencyAlignments.alignsToText	\N	\N	1	string	\N	No	No	\N	Required if no alignsToUri	\N	2025-11-26 22:13:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 346	CompetencyDefinitionLicense	Competency.CompetencyDefinitionLicense	The full text or URL reference to a legal document giving official permission to do something with the competency definition statement.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+3167	status	Result.status	The status of the achievement. Required if the resultType of the linked ResultDescription is Status.	\N	29	enum	389	No	No	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+3152	type	Image.type	The type of this object. A single value, which MUST be the IRI 'Image'.	Fixed value: type MUST equal "Image".	29	string	\N	Yes	No	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1108	employedAfterExit	Person.EmploymentLearningExperience.employedAfterExit	An individual who is a paid employee or works in his or her own business, profession, or farm, as reported through the State Unemployment Insurance Wage Report, FEDES, or WRIS, after exiting secondary, postsecondary, or adult education or workforce programs.  Additional usage notes for this field from CEDs: Individual-level data obtained by matching records with wage records, FEDES, or WRIS. The State Education Agency defines the time period for this collection around an exit period and a corresponding period for employment and earnings data to be obtained. The option set includes "Yes" for employment found via one of the resources listed in the source element. These sources will provide information about most of the types of jobs that students or former students will become employed in but not all. For that reason when a record is "not found" or "not matched" their employment status is "unknown" for the targeted time base. (https://ceds.ed.gov/element/000988)	If you have a verification method for determining whether or not the learner was employed after exit, then the LIF model may be extended with additional fields to indcate how this was determined (self reported or otherwise).	1	boolean	\N	No	No	CEDS	outcome data?	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 284	competencyAlignments	CompetencyFramework.Competency.competencyAlignments	\N	\N	1	entity	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	\N	Public	f	f
 1214	accreditationStatus	Common.Accreditation.accreditationStatus	An indication of the accreditation status of a higher education institution. This can be any international value. Some potential example for this property could be : Regionally, Programmatic accreditation, Nationally accredited, Faith, Career related, Not accredited, Unknown.	Until the data team updates the normative value set, this element should be used with great caution. It contains a high degree of bias towards generating results and outcomes that will reflect priviledge and marginalization baked into current US accreditation schemes. Recommendation for normative value set from WAC - Current normative set does not provide enough information for the data user or the engineering team to be able to map data or use the LIF results	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	\N	Public	f	f
@@ -3192,6 +3162,7 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 218	validStartDate	CompetencyFramework.validStartDate	The year, month and day the competency framework was adopted by the jurisdiction in which it was intended to apply.	Missing data should not be penalized in useage. Assuming that all organizations will want to comply with this system will introduce a high level of bias into outcomes	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 478	dateTimeConsentGiven	Person.Consent.dateTimeConsentGiven	Date and time when consent was first given.	\N	1	string	\N	No	No	LIF	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 479	dateTimeConsentUpdated	Person.Consent.dateTimeConsentUpdated	Date and time when consent was updated.	\N	1	string	\N	No	No	LIF	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+494	auditDate	Person.Consent.AuditHistory.auditDate	Timestamp of when the audit took place.	\N	1	string	\N	Yes	No	\N	\N	\N	2025-11-26 23:23:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1295	startDate	Person.Name.startDate	The start date that this name record is effective for the person	\N	1	string	\N	No	No	LIF-Addition	2/20: CM added as part of truing up to model	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1296	endDate	Person.Name.endDate	The end date that this name record is effective for the person	\N	1	string	\N	No	No	LIF-Addition	2/20: CM added as part of truing up to model	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1297	lastModificationDate	Person.Name.lastModificationDate	The date when the person (information) was last modified	\N	1	string	\N	No	No	ELM	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -3219,7 +3190,7 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 806	assessmentMethodType	Credential.Requirements.assessmentMethodType	Any assessments methods to achieve part or the whole credential.	This element should not be separated from its context or bias and inaccuracy will result.	1	string	\N	No	No	CEDS	in programs	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 14	assessmentLevel	Assessment.assessmentLevel	The typical level for which the assessment was designed, such as a grade or combination of grade-levels, developmental levels, or age-levels for which an assessment is designed.	This level will absorb a large amount of bias toward conventional power dynamics and use of this data element is likely to bias results and outcomes towards priviledged groups.	1	string	359	No	No	\N	Expanded language a bit to cover other cases outside of academic institutions	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1144	branch	Person.MilitaryLearningExperience.branch	A branch of the U.S. Military applicable for specifying more details when using Military Connected Student Indicator, Military Active Student Indicator, Military Veteran Student Indicator, and Military Enlistment After Exit elements.	\N	1	string	362	No	Yes	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1812	role	Person.CredentialAward.role	\N	\N	17	string	\N	No	No	Open Badges v3	\N	2025-08-03 19:39:51.760627+00	2025-08-03 19:39:51.760627+00	\N	\N	StateU	t	\N	f	\N	\N	\N	\N	Public	f	f
+2242	uri	CFItemType.uri	An unambiguous reference to the CFItemType using a network-resolvable URI.	\N	14	string	\N	Yes	No	CASE	format: uri	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1089	compensationBaseSalaryStatus	Position.compensationBaseSalaryStatus	A status filed, which provide details about whether it is missing at will or not applicable.	\N	1	string	355	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1087	contractDaysOfServicePerYearStatus	Position.contractDaysOfServicePerYearStatus	A status filed, which provide details about whether it is missing at will or not applicable.	\N	1	string	357	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1161	dischargeDateStatus	Person.MilitaryLearningExperience.dischargeDateStatus	A valid start date status, which provide details about whether it is missing at will or not applicable.	\N	1	string	354	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -3242,8 +3213,7 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1083	otherPayMethods	Position.otherPayMethods	An indication of the other payment methods of the position besides the primary payment method. For example, commission, stipend, piecework, bonus, tips, profit sharing, equity/stock options, or other.	\N	1	string	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1210	operationalStatus	Organization.OperationalStatus.operationalStatus	The current status of the organization's operations, exclusive of scheduled breaks, holidays, or other temporary interruptions.	Ensure your models and systems can ingest the ad-hoc organization types from organizations that reside outside the systems embedded in the current mapping schema	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1367	americanIndianOrAlaskan	Person.Culture.americanIndianOrAlaskan	A person having origins in any of the original peoples of North and South America (including Central America), and who maintains cultural identification through tribal affiliation or community attachment.	\N	1	string	\N	No	No	CEDS	CM: 2/4: Do we need a normative codelist for race/culture (instead of a fixed set of federal values)?	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1816	term	Person.CredentialAward.term	\N	\N	17	string	\N	No	No	Open Badges v3	\N	2025-08-03 19:39:51.760627+00	2025-08-03 19:39:51.760627+00	\N	\N	StateU	t	\N	f	\N	\N	\N	\N	Public	f	f
-1859	minimumAmount	Ranges.minimumAmount	\N	\N	17	number	\N	\N	\N	\N	\N	\N	2025-10-02 20:48:00+00	\N	MDRUser	StateU	t	\N	t	\N	\N	\N	\N	Public	f	f
+3155	type	IdentifierEntry.type	The type of this object. A single value, which MUST be the IRI 'IdentifierEntry'.	Fixed value: type MUST equal "IdentifierEntry".	29	string	\N	Yes	No	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1381	homeless	Person.Demographics.homeless	Children and youth who lack a fixed, regular, and adequate nighttime residence. Homeless children and youth include: 1) children and youth who are sharing the housing of other persons due to loss of housing, economic hardship, or a similar reason; are living in motels, hotels, trailer parks, or camping grounds due to the lack of alternative adequate accommodations; are living in emergency or transitional shelters; are abandoned in hospitals; or are awaiting foster care placement; 2) children and youth who have a primary nighttime residence that is a public or private place not designed for or originally used as a regular sleeping accommodation for human beings; or 3) children and youths who are living in cars, parks, public spaces, abandoned buildings, substandard housing, bus or train stations, or similar settings. 4) migratory children who qualify as homeless because the children are living in circumstances described in the above. (See Section 103 of the McKinney Act for a more detailed description of this data element).	In use cases where this field may be desired for research purposes, it is not recommended that this field be used, considering the likelihood for missing data, and inconsistencies. It would appear that the likelihood for inaccurate analysis is higher than for research that may benefit a learner.	1	boolean	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1631	programSponsorType	Program.programSponsorType	A type of organization providing funds for a particular educational or service program or activity or for an individual's participation in the program or activity.	No change	1	string	\N	No	Yes	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1638	assessmentMethodType	Program.assessmentMethodType	Type of method used to conduct an assessment; select from an existing enumeration of such types.	Ensure any use incorporates a "not applicable" field as many legitimate programs will not have this and you don't want to accidentaly discard them due to missing data codes.	1	string	\N	No	Yes	CTDL	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -3267,7 +3237,6 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1794	creditsAvailable	achievement.creditsAvailable	\N	\N	16	number	\N	\N	No	\N	\N	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	\N	Public	f	f
 1937	identifier	Name.identifier	The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.	Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered.	1	string	\N	Yes	No	\N	\N	\N	2025-12-01 22:23:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1770	targetFramework	achievement.alignment.targetFramework	\N	\N	16	string	\N	\N	No	\N	\N	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	\N	Public	f	f
-1772	targetUrl	achievement.alignment.targetUrl	\N	\N	16	string	\N	\N	No	\N	\N	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	\N	Public	f	f
 1753	creditsEarned	OpenBadgeCredential.credentialSubject.creditsEarned	\N	\N	16	number	\N	\N	No	\N	\N	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	\N	Public	f	f
 1774	achievementType	achievement.achievementType	\N	\N	16	string	\N	\N	No	\N	\N	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	\N	Public	f	f
 1740	@context	OpenBadgeCredential.@context	\N	\N	16	string	\N	\N	Yes	\N	\N	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -3283,6 +3252,9 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1777	name	achievement.creator.name	\N	\N	16	string	\N	\N	No	\N	Deduplication with Organization entity should be considered	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	\N	Public	f	f
 1778	url	achievement.creator.url	\N	\N	16	string	\N	\N	No	\N	Deduplication with Organization entity should be considered	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	\N	Public	f	f
 1782	country	address.country	\N	\N	16	string	\N	\N	No	\N	\N	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	\N	Public	f	f
+1812	role	Person.CredentialAward.role	\N	\N	17	string	\N	No	No	Open Badges v3	\N	2025-08-03 19:39:51.760627+00	2025-08-03 19:39:51.760627+00	\N	\N	StateU	t	\N	f	\N	\N	\N	\N	Public	f	f
+1816	term	Person.CredentialAward.term	\N	\N	17	string	\N	No	No	Open Badges v3	\N	2025-08-03 19:39:51.760627+00	2025-08-03 19:39:51.760627+00	\N	\N	StateU	t	\N	f	\N	\N	\N	\N	Public	f	f
+1859	minimumAmount	Ranges.minimumAmount	\N	\N	17	number	\N	\N	\N	\N	\N	\N	2025-10-02 20:48:00+00	\N	MDRUser	StateU	t	\N	t	\N	\N	\N	\N	Public	f	f
 1814	sourceType	Organization.sourceType	\N	\N	17	string	\N	No	Yes	Open Badges v3	\N	2025-08-03 19:39:51.760627+00	2025-08-03 19:39:51.760627+00	\N	\N	StateU	t	\N	t	\N	\N	\N	\N	Public	f	f
 1818	imageCaption	Organization.imageCaption	\N	\N	17	string	\N	No	No	Open Badges v3	\N	2025-08-03 19:39:51.760627+00	2025-08-03 19:39:51.760627+00	\N	\N	StateU	t	\N	t	\N	\N	\N	\N	Public	f	f
 1819	credentialOfficial	Organization.credentialOfficial	\N	\N	17	string	\N	No	No	Open Badges v3	\N	2025-08-03 19:39:51.760627+00	2025-08-03 19:39:51.760627+00	\N	\N	StateU	t	\N	t	\N	\N	\N	\N	Public	f	f
@@ -3304,6 +3276,7 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1803	credentialStatus	OpenBadgeCredential.credentialStatus	\N	\N	16	entity	\N	\N	No	\N	N/A	\N	\N	\N	\N	StateU	f	\N	t	\N	\N	\N	\N	Public	f	f
 1806	refreshService	OpenBadgeCredential.refreshService	\N	\N	16	entity	\N	\N	No	\N	N/A	\N	\N	\N	\N	StateU	f	\N	t	\N	\N	\N	\N	Public	f	f
 1813	sourceId	Organization.sourceId	\N	\N	17	string	\N	No	No	Open Badges v3	\N	2025-08-03 19:39:51.760627+00	2025-08-03 19:39:51.760627+00	\N	\N	StateU	t	\N	t	\N	\N	\N	\N	Public	f	f
+3431	InternetAccessInResidence	StudentEducationOrganizationAssociation.InternetAccessInResidence	An indication of whether the student is able to access the internet in their primary place of residence.	\N	6	boolean	\N	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
 1878	id	Person.CredentialAward.Image.id	\N	\N	17	string	\N	\N	\N	\N	\N	\N	2025-10-06 17:09:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N	\N	Public	f	f
 1879	type	image.type	\N	\N	17	string	\N	\N	No	\N	\N	\N	2025-10-06 17:10:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N	\N	Public	f	f
 1882	id	image.id		No change	17	string	\N		No			\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -3316,13 +3289,13 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1817	category	Credential.CredentialAlignments.category	RSD's skill category from OSMT goes here.	\N	17	string	\N	No	No	StateU	\N	2025-08-03 19:39:51.760627+00	2025-08-03 19:39:51.760627+00	\N	\N	StateU	t	\N	f	\N	\N	\N	\N	Public	f	f
 1826	stateUPrivateTestAttr	StateUExtensionEntity.stateUPrivateTestAttr	An attribute added to the StateUExtensionEntity for the purpose of being an example of an attribute marked private.	\N	17	string	\N	No	No	LIF-Addition	\N	\N	\N	\N	\N	StateU	t	\N	f	\N	\N	\N	\N	Public	f	f
 532	teaches	Course.teaches	Competency that the course is intended to teach.	No change	1	string	\N	No	Yes	CEDS	Starting with a simple list of strings. Note that CTDL may be part of the StateU demo.	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+3433	InternetAccessTypeInResidence	StudentEducationOrganizationAssociation.InternetAccessTypeInResidence	The primary type of internet service used in the student's primary place of residence.	\N	6	enum	421	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
 212	creator	CompetencyFramework.creator	The person or organization chiefly responsible for the intellectual content of the competency framework.	The claim of creation should be assessed and validated prior to use. The origins of competency frameworks are often more complex than captured and this introduces critical bias and inaccuracy into outcomes.	1	string	\N	No	No	CEDS	\N	\N	2025-11-26 22:15:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 215	publicationStatus	CompetencyFramework.publicationStatus	The publication status of the competency framework is "Published".	No change	1	string	360	No	No	CEDS	\N	\N	2025-11-26 22:16:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1203	organizationType	Organization.organizationType	The type of educational organization or entity.	Ensure your models and systems can ingest the ad-hoc organization types from organizations that reside outside the systems embedded in the current mapping schema	1	string	\N	No	Yes	CEDS	\N	\N	2025-11-26 22:09:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1464	PersonIdentificationSystem	Person.PersonIdentificationSystem	A coding scheme that is used for identification of a person.	\N	4	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 837	credentialAwardee	Person.CredentialAward.credentialAwardee	The person (subject) about which claims are made and who owns and has been awarded the credential.	No change	1	string	\N	No	No	\N	\N	\N	2025-11-26 22:26:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 482	lifEntities	Person.Consent.lifEntities	List of entities for which this consent pertains.	\N	1	string	45	No	Yes	LIF	\N	\N	2025-11-26 22:41:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-159	mode	LearningAssessmentSpecification.mode	The mode of learning and or assessment (i.e., online, blended, presential, work based). It should be provided using the EDC Controlled List of Modes Of Learning and Assessment.	\N	7	\N	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 481	typesOfData	Person.Consent.typesOfData	Categories or types of data that will be collected, processed, or shared. These types of data may include information related to competencies, employment skills and achievements, educational achievements, and other metadata.	Reach out to legal counsel and extend the LIF Model as necessary.	1	string	\N	No	Yes	LIF	PW: This may not be needed, as this entity will be directly associated with the portion(s) of the information model instance to which it applies\nCM: 3/21:	\N	2025-11-26 22:41:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1115	membershipStatus	Position.Membership.membershipStatus	An indication of whether the person is an active member of an association.	The selection of what associations are included as possibilities will severely bias this element	1	boolean	\N	No	No	CEDS	This could now be derived using associationType of union.	\N	2025-11-26 22:43:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1120	startDate	Position.Wage.startDate	Date the validity or usefulness of the information in this resource begins.	\N	1	string	\N	No	No	CTDL	\N	\N	2025-11-26 22:44:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -3339,9 +3312,8 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1207	organizationCodeType	Organization.OrganizationCode.organizationCodeType	A code type, which provide details about whether it is NAICS, SIC or ISIC.	\N	1	string	\N	No	No	\N	\N	\N	2025-11-26 22:23:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1352	birthCode	Person.Birth.birthCode	The unique two digit International Organization for Standardization (ISO) code for the country in which a person is born.	\N	1	string	\N	No	No	CEDS	\N	\N	2025-11-26 22:40:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1351	stateOfBirth	Person.Birth.stateOfBirth	The abbreviation for the name of the state (within the United States) or extra-state jurisdiction in which a person was born.	\N	1	string	\N	No	No	CEDS	\N	\N	2025-11-26 22:41:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+2805	resultDescription	Result.resultDescription	The ResultDescription that this Result is an instance of.	\N	3	entity	\N	No	No	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1116	membershipType	Position.Membership.membershipType	Type of association for which an invidividual is a member.	The selection of what associations are included as possibilities will severely bias this element	1	string	\N	No	No	\N	New concept scheme of Association Type	\N	2025-11-26 22:44:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-623	CourseAcademicGrade	CourseSection->Enrollment.CourseAcademicGrade	The final grade awarded for participation in the course.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-619	CourseAddDate	CourseSection->Enrollment.CourseAddDate	The date an individual was added to an academic course at a school.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1906	identifier	Organization.OperationalStatus.identifier	The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.	Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered.	1	string	\N	Yes	No	\N	\N	\N	2025-11-26 18:23:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 557	personId	Person.CourseLearningExperience.personId	\N	\N	1	string	\N	No	No	\N	N/A if part of a Person graph	\N	2025-11-26 22:42:00+00	\N	\N	LIF	f	\N	t	\N	\N	\N	\N	Public	f	f
 1217	ctid	Common.Accreditation.ctid	Globally unique Credential Transparency Identifier (CTID) by which the creator, owner or provider of a resource recognizes it in transactions with the external environment (e.g., in verifiable claims involving the resource).	Missing data should not be penalized in useage. Assuming that all organizations will want to comply with this system will introduce a high level of bias into outcomes. A mapping option for not applicable and missing at will need to be added to this	1	string	\N	No	No	CEDS	\N	\N	2025-11-26 23:19:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -3358,6 +3330,7 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1289	emailAddressType	Common.Contact.Email.emailAddressType	The type of electronic mail (e-mail) address listed for an individual or person.	Only use if consent has been verified.	1	string	\N	No	Yes	CEDS	\N	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	\N	Public	f	f
 1342	primaryNumber	Common.Contact.Telephone.primaryNumber	An indication that the telephone number should be used as the principal number for a person or organization.	Only use if consent has been verified.	1	boolean	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 848	evidenceAccreditation	Person.CredentialAward.Evidence.evidenceAccreditation		No change	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+3432	BarrierToInternetAccessInResidence	StudentEducationOrganizationAssociation.BarrierToInternetAccessInResidence	An indication of the barrier to having internet access in the student's primary place of residence.	\N	6	enum	397	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
 1290	identifier	Common.Identifier.identifier	The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.	Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered.	1	string	\N	Yes	No	CEDS-Edited	\N	\N	2025-11-26 22:14:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 230	identifier	CompetencyFramework.identifier	The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.	Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered.	1	string	\N	Yes	No	CASE	\N	\N	2025-12-01 22:14:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1924	identifier	Address.identifier	The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.	Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered.	1	string	\N	Yes	No	\N	\N	\N	2025-12-01 22:14:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -3404,7 +3377,8 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 376	language(session)	ObjectiveBank.language(session)	\N	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 445	educationalAlignment;ORabout	DefinedTermSet.educationalAlignment;ORabout	An alignment to an established educational framework.\n\nThe subject matter of the content.	\N	11	\N	\N	\N	\N	\N	6.18	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 359	CompetencyAssociationIdentifierURI	Competency.CompetencyAssociationIdentifierURI	A URI that establishes uniqueness of an association between a competency definition and another competency item or other objects such as learning resources.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-428	uri	CFItem.uri	An unambiguous reference to the CFItem using a network-resolvable URI.	\N	14	string	\N	Yes	No	CASE	format: uri	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+159	mode	LearningAssessmentSpecification.mode	The mode of learning and or assessment (i.e., online, blended, presential, work based). It should be provided using the EDC Controlled List of Modes Of Learning and Assessment.	\N	7	\N	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+619	CourseAddDate	CourseSection->Enrollment.CourseAddDate	The date an individual was added to an academic course at a school.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 621	CourseSectionEnrollmentStatusEndDate	CourseSection->Enrollment.CourseSectionEnrollmentStatusEndDate	The date on which the enrollment status ended related to a student enrolled in an instance of a course.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 620	CourseSectionEnrollmentStatusStartDate	CourseSection->Enrollment.CourseSectionEnrollmentStatusStartDate	The date on which the enrollment status began related to a student enrolled in an instance of a course.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 693	sponsors(OfType)	Course.sponsors(OfType)	\N	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -3418,7 +3392,6 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1584	(extendedThroughTypeDefinition)	Address.(extendedThroughTypeDefinition)	\N	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1019	Requires->minimumAge	ConditionProfile.Requires->minimumAge	Minimum allowed age at which a person is eligible for the credential.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 456	identifierTermCode	CreativeWork+DefinedTerm.identifieridentifierTermCode	The identifier property represents any kind of identifier for any kind of Thing, such as ISBNs, GTIN codes, UUIDs etc.\n\nA code that identifies this DefinedTerm within a DefinedTermSet.	\N	11	\N	\N	\N	\N	\N	6.19	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-1553	StudentMigrantEducationProgramAssociation	ExtendsGeneralStudentProgramAssociation.StudentMigrantEducationProgramAssociation	This association represents the migrant education program(s) that a student participates in or receives services from. The association is an extension of the StudentProgramAssociation with added elements particular to migrant education programs.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 166	lowerPercentage	ShortenedGrading.lowerPercentage	The percentage of students of the same course who got a lower grade.	\N	7	\N	\N	Yes	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1194	naics	PersonOrOrganization.naics	\N	\N	11	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 167	higherPercentage	ShortenedGrading.higherPercentage	The percentage of students of the same course who got a higher grade.	\N	7	\N	\N	Yes	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -3430,9 +3403,9 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 1681	DistanceEducationProgramEnrollmentIndicator	ProgramOfStudy.DistanceEducationProgramEnrollmentIndicator	An individual's enrollment in a program for which all the required coursework for program completion is able to be completed via distance education courses. Distance education is education that uses one or more technologies to deliver instruction to individuals who are separated from the instructor and to support regular and substantive interaction between the individuals and the instructor synchronously or asynchronously.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 309	AMinimumLevelOfProficiencyForACompetencyAssociatedWithAPosition-Role-Course-OrOtherItem.	requiredProficiencyLevel.AMinimumLevelOfProficiencyForACompetencyAssociatedWithAPosition-Role-Course-OrOtherItem.	A minimum level of proficiency for a competency  associated with a position, role, course, or other item.	\N	2	\N	\N	\N	\N	\N	Synthetic	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 748	assessmentMethodDescription-assessmentMethodType	Course.assessmentMethodDescription-assessmentMethodType	Description of the methods used to conduct assessment.\nType of method used to conduct an assessment; select from an existing enumeration of such types.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+78	resultType	resultDescription.resultType	The type of result this description represents. This is an extensible enumerated vocabulary.	\N	3	\N	\N	\N	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 406	ceterms-environmentalHazardType	Competency.ceterms-environmentalHazardType	Type of condition in the physical work performance environment that entails risk exposures requiring mitigating processes; select from an existing enumeration of such types.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1004	ceterms-credentialId	Credential.ceterms-credentialId	Globally unique identifier by which the creator, owner or provider of a credential recognizes that credential in transactions with the external environment (e.g., in verifiable claims involving the credential).	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-2843	termsOfUse	AchievementCredential.termsOfUse	The terms of use issued by the issuer.	\N	3	entity	\N	No	Yes	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1438	PersonBaseType-ethnicity	PersonLegalInclusion/PersonBaseType.PersonBaseType-ethnicity	ethnicity: The ethnicity (or ethnicities) of a person. A country may define which of these terms (race, nationality, ethnicity) be used and how they are defined. One or more properties may be used by a country. A predefined country list allows a person to specify their ethnicity.	\N	2	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1589	core-LastName	PersonType/Name.core-LastName	The last name or surname by which a person is legally known.	\N	9	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 1225	1.EntityType-id2.OrganizationType-taxId3.OrganizationType-legalId	OrganizationType.1.EntityType-id2.OrganizationType-taxId3.OrganizationType-legalId	1. A unique identifier which cannot be expressed as enumeration.\n2. A government assigned identifier to distinguish organization. This typically is a country-level tax code. For example, Federal Employer Identification Number (FEIN) in the USA.\n3. An identifier of the organization for legal purposes. This could be a company, state, or other kind of identifier. For example, Data Universal Numbering System, abbreviated as DUNS.	\N	2	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -3468,6 +3441,7 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 3287	type	RefreshService.type	The name of the refresh service method.	\N	29	string	\N	Yes	No	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 411	uri	CFDocument.uri	An unambiguous reference to the CFDocument using a network-resolvable URI.	\N	14	string	\N	Yes	No	CASE	format: uri	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 427	officialSourceURL	CFDocument.officialSourceURL	The URL link to the formal citation of the original achievement standards document created for humans.	\N	14	string	\N	No	No	CASE	format: uri	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+428	uri	CFItem.uri	An unambiguous reference to the CFItem using a network-resolvable URI.	\N	14	string	\N	Yes	No	CASE	format: uri	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 439	uri	CFAssociation.uri	An unambiguous reference to the CFAssociation using a network-resolvable URI.	\N	14	string	\N	Yes	No	CASE	format: uri	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 2196	uri	CFLicense.uri	An unambiguous reference to the CFLicense using a network-resolvable URI.	\N	14	string	\N	Yes	No	CASE	format: uri	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 2201	uri	CFAssociationGrouping.uri	An unambiguous reference to the CFAssociationGrouping using a network-resolvable URI.	\N	14	string	\N	Yes	No	CASE	format: uri	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -3557,7 +3531,6 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 2264	destinationNodeURI.targetType	CFAssociation.destinationNodeURI.targetType	CASE v1.1 added targetType inside the LinkGenURI object that destinationNodeURI serializes as ({title, identifier, uri, targetType}); the real JSON path is destinationNodeURI.targetType, not a top-level CFAssociation property named "destinationNodeType". Identifies whether the target is a CASE-based framework (token "CASE") or an external, non-CASE resource (ext:-prefixed token) -- not which CASE class the target is.	\N	14	enum	375	No	No	CASE	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 2753	proof	ClrCredential.proof	A JSON-LD Linked Data proof section for the credential.	\N	3	entity	\N	No	Yes	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 2740	@context	ClrCredential.@context	The JSON-LD context(s) that apply to this credential, enabling a compact, ontologically defined JSON-LD document.	\N	3	string	\N	Yes	No	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-2741	id	ClrCredential.id	Unambiguous reference to the ClrCredential.	\N	3	string	\N	Yes	No	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 2743	name	ClrCredential.name	The name of the credential.	\N	3	string	\N	Yes	No	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 2744	description	ClrCredential.description	The short description of the credential.	\N	3	string	\N	No	No	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 2745	credentialSubject	ClrCredential.credentialSubject	The learner and their achievements/credentials/associations. References ClrSubject.	\N	3	entity	\N	Yes	No	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -3576,6 +3549,7 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 844	salt	Person.CredentialAward.Identity.salt	If the identityHash is hashed, this should contain the string used to salt the hash. If this value is not provided, it should be assumed that the hash was not salted.	No change	1	string	\N	No	No	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 849	name	Person.CredentialAward.Evidence.name	A descriptive title of the evidence.	No change	1	string	\N	No	No	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 850	description	Person.CredentialAward.Evidence.description	A longer description of the evidence.	No change	1	string	\N	No	No	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+79	@language	achievement.@language	The language of the achievement.	\N	3	\N	\N	\N	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 851	genre	Person.CredentialAward.Evidence.genre	A string that describes the type of evidence. For example, Poetry, Prose, Film.	No change	1	string	\N	No	No	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 852	audience	Person.CredentialAward.Evidence.audience	A description of the intended audience for a piece of evidence.	No change	1	string	\N	No	No	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 853	evidenceStatement	Person.CredentialAward.Evidence.evidenceStatement	A narrative that describes the evidence and process of achievement that led to an assertion.	No change	1	string	\N	No	No	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -3607,26 +3581,7 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 2899	requiredLevel	ResultDescription.requiredLevel	The id of the rubric criterion level required to pass, as determined by the achievement creator.	\N	3	string	\N	No	No	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 2900	evidence	EndorsementCredential.evidence	A description of the work backing this endorsement.	\N	3	entity	\N	No	Yes	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 2901	description	RubricCriterionLevel.description	A more complete description of the level.	\N	3	string	\N	No	No	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-2780	proof	EndorsementCredential.proof	A JSON-LD Linked Data proof section for the credential.	\N	3	entity	\N	No	Yes	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-2781	credentialSchema	EndorsementCredential.credentialSchema	One or more data schemas that provide verifiers with enough information to determine whether the provided data conforms to the schema(s).	\N	3	entity	\N	No	Yes	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-2784	termsOfUse	EndorsementCredential.termsOfUse	The terms of use issued by the issuer.	\N	3	entity	\N	No	Yes	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-2840	credentialSchema	AchievementCredential.credentialSchema	One or more data schemas that provide verifiers with enough information to determine whether the provided data conforms to the schema(s).	\N	3	entity	\N	No	Yes	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-906	proof	AchievementCredential.proof	If present, one or more embedded cryptographic proofs that can be used to detect tampering and verify the authorship of the credential.	\N	3	entity	\N	No	Yes	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-2829	id	AchievementCredential.id	Unambiguous reference to the AchievementCredential.	\N	3	string	\N	Yes	No	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-2808	id	RubricCriterionLevel.id	Unambiguous reference to the RubricCriterionLevel.	\N	3	string	\N	Yes	No	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-3211	refreshService	OpenBadgeCredential.refreshService	Information used to refresh the verifiable credential.	\N	29	entity	\N	No	No	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	510	Public	f	f
-2812	name	RubricCriterionLevel.name	The name of the level.	\N	3	string	\N	Yes	No	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-3166	resultDescription	Result.resultDescription	The ResultDescription that this Result is an instance of.	Value is the id of a ResultDescription within the asserted Achievement, not an embedded object.	29	string	\N	No	No	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-3174	points	RubricCriterionLevel.points	The points associated with this level.	Typed as String in the specification on purpose - a level may be "3", "3.5" or "A". Do not "correct" this to a number.	29	string	\N	No	No	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-3218	id	AchievementSubject.id	Unambiguous reference to the AchievementSubject.	Object-level conditional requirement: an AchievementSubject MUST carry either "id" or at least one entry in "identifier". Neither attribute is individually required, so this cannot be expressed by the Required flag - a generated validator must implement it as an OR-constraint evaluated at the AchievementSubject level, not as Required on either attribute alone.	29	string	\N	No	No	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-3213	type	OpenBadgeCredential.type	The value of the type property MUST be an unordered set. One of the items MUST be the URI 'VerifiableCredential', and one of the items MUST be the URI 'AchievementCredential' or the URI 'OpenBadgeCredential'.	\N	29	string	\N	Yes	Yes	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-3144	type	EndorsementCredential.type	The value of the type property MUST be an unordered set. One of the items MUST be the URI 'VerifiableCredential', and one of the items MUST be the URI 'EndorsementCredential'.	\N	29	string	\N	Yes	Yes	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-3167	status	Result.status	The status of the achievement. Required if the resultType of the linked ResultDescription is Status.	\N	29	enum	389	No	No	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-3152	type	Image.type	The type of this object. A single value, which MUST be the IRI 'Image'.	Fixed value: type MUST equal "Image".	29	string	\N	Yes	No	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-3155	type	IdentifierEntry.type	The type of this object. A single value, which MUST be the IRI 'IdentifierEntry'.	Fixed value: type MUST equal "IdentifierEntry".	29	string	\N	Yes	No	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-3160	type	IdentityObject.type	The type of this object. A single value, which MUST be the IRI 'IdentityObject'.	Fixed value: type MUST equal "IdentityObject".	29	string	\N	Yes	No	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-3163	type	GeoCoordinates.type	The type of this object. A single value, which MUST be the IRI 'GeoCoordinates'.	Fixed value: type MUST equal "GeoCoordinates".	29	string	\N	Yes	No	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-3191	related	Achievement.related	Related achievements, potentially in other languages or different versions of the same achievement.	\N	29	entity	\N	No	Yes	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	511	Public	f	f
+600	level	achievement.level	\N	\N	3	\N	\N	\N	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 3117	identifier	AchievementSubject.identifier	Other identifiers for the recipient of the achievement. Either id or at least one identifier MUST be supplied.	Object-level conditional requirement: an AchievementSubject MUST carry either "id" or at least one entry in "identifier". Neither attribute is individually required, so this cannot be expressed by the Required flag - a generated validator must implement it as an OR-constraint evaluated at the AchievementSubject level, not as Required on either attribute alone.	29	entity	\N	No	Yes	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	506	Public	f	f
 3135	credentialStatus	EndorsementCredential.credentialStatus	Information used to discover the current status of the credential (e.g. suspended or revoked).	\N	29	entity	\N	No	No	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	499	Public	f	f
 3136	credentialSubject	EndorsementCredential.credentialSubject	The entity being endorsed and the endorsement comment. References EndorsementSubject.	\N	29	entity	\N	Yes	No	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	502	Public	f	f
@@ -3655,15 +3610,13 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 3264	geo	Address.geo	The geographic coordinates of the location. References GeoCoordinates.	\N	29	entity	\N	No	No	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	504	Public	f	f
 3269	evidence	EndorsementCredential.evidence	A description of the work backing this endorsement.	\N	29	entity	\N	No	Yes	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	503	Public	f	f
 69	achievementType	achievement.achievementType	The achievement is an assessment if the achievementType = Assessment	\N	3	\N	\N	\N	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-70	id	achievement.id	Icdentifier	\N	3	\N	\N	\N	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 71	name	achievement.name	The name of the achievement.	\N	3	\N	\N	\N	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 72	description	achievement.description	A short description of the achievement.	\N	3	\N	\N	\N	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 73	creator	achievement.creator	The person or organization that created the achievement definition.	\N	3	\N	\N	\N	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 74	version	achievement.version	\N	\N	3	\N	\N	\N	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 76	criteria	achievement.criteria	Criteria describing how to earn the achievement.	\N	3	\N	\N	\N	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 77	fieldOfStudy	achievement.fieldOfStudy	Category, subject, area of study, discipline, or general branch of knowledge. Examples include Business, Education, Psychology, and Technology.	\N	3	\N	\N	\N	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-78	resultType	resultDescription.resultType	The type of result this description represents. This is an extensible enumerated vocabulary.	\N	3	\N	\N	\N	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-79	@language	achievement.@language	The language of the achievement.	\N	3	\N	\N	\N	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+603	LetterGrade	ResultsType.LetterGrade	The result is a letter grade	\N	3	\N	\N	\N	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 80	specialization	achievement.specialization	Name given to the focus, concentration, or specific area of study defined in the achievement. Examples include 'Entrepreneurship', 'Technical Communication', and 'Finance'.	\N	3	\N	\N	\N	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 81	achievedLevel	result.achievedLevel	If the result represents an achieved rubric criterion level (e.g. Mastered), the value is the id of the RubricCriterionLevel in linked ResultDescription.	\N	3	\N	\N	\N	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 82	resultDescripton	result.resultDescripton	An achievement can have many result descriptions describing possible results. The value of resultDescription is the id of the result description linked to this result. The linked result description must be in the achievement that is being asserted.	\N	3	\N	\N	\N	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -3699,18 +3652,9 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 3134	credentialSchema	EndorsementCredential.credentialSchema	One or more data schemas that provide verifiers with enough information to determine whether the provided data conforms to the schema(s).	\N	29	entity	\N	No	Yes	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	498	Public	f	f
 3153	identifier	IdentifierEntry.identifier	The identifier value, in plain text.	\N	29	string	\N	Yes	No	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 596	ResultType	ResultDescription.ResultType	Enumeration of ResultDescription Result Types	\N	3	\N	\N	\N	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+597	target	Alignment.target	\N	\N	3	\N	\N	\N	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 598	humanCode	achievement.humanCode	The Subject part of the humanCode  (Subject + Catalog #)	\N	3	\N	\N	\N	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 599	level	Achievement.level	Grade(s) for which the class is attended. The permitted vocabulary should be defined as part of the adoption and deployment process. See the Implementation Guide [OR-IG, 20] for more details on how to define/use such a vocabulary.	\N	3	\N	\N	\N	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-600	level	achievement.level	\N	\N	3	\N	\N	\N	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-603	LetterGrade	ResultsType.LetterGrade	The result is a letter grade	\N	3	\N	\N	\N	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-604	otherIdentifier	achievement.otherIdentifier	Use otherIdentifier for the course section ID.	\N	3	\N	\N	\N	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-605	Profile	Issuer.Profile	\N	\N	3	\N	\N	\N	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-602	TargetFramework	Alignment.TargetFramework	\N	\N	3	\N	\N	\N	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-892	Criteria	Achievement.Criteria	Criteria describing how to earn the achievement.	\N	3	\N	\N	\N	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-3157	identityHash	IdentityObject.identityHash	Either the hash of the identity value or the plaintext value, depending on the value of hashed.	\N	29	string	\N	Yes	No	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-3158	identityType	IdentityObject.identityType	The type of identity. Shares its enumeration with IdentifierEntry.identifierType.	\N	29	enum	387	Yes	No	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-3159	salt	IdentityObject.salt	If the identityHash is hashed, this should contain the string used to salt the hash.	\N	29	string	\N	No	No	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-896	tags	Achievement.tags	Tags that describe the type of achievement.	\N	3	\N	\N	\N	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 898	Level	Achievement.Level	Text that describes the level of achievement apart from how the achievement was performed or demonstrated. Examples would include 'Level 1', 'Level 2', 'Level 3', or 'Bachelors', 'Masters', 'Doctoral'.	\N	3	\N	\N	\N	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 3161	latitude	GeoCoordinates.latitude	The latitude of the location.	\N	29	number	\N	Yes	No	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 3162	longitude	GeoCoordinates.longitude	The longitude of the location.	\N	29	number	\N	Yes	No	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -3746,6 +3690,7 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 3214	validFrom	OpenBadgeCredential.validFrom	Timestamp of when the credential becomes valid. VC 2.0 naming (replaces the VC-1.1-era issuanceDate, which does not exist in the current OB3/CLR schema).	\N	29	string	\N	Yes	No	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 3220	licenseNumber	AchievementSubject.licenseNumber	The license number that was issued with this credential.	\N	29	string	\N	No	No	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 590	AchievementType=Course	Achievement.AchievementType=Course	A Course is a course of study that, typically, has a shared curriculum although it may be taught to different students by different teachers. It is likely that several classes of a single course may be taught in a term.  For example, a school runs Grade 9 English in the spring term. There are four classes, each with a different 30 students, taught by 4 different teachers. However the curriculum for each of those four classes is the same – the course curriculum.	\N	3	\N	\N	\N	\N	CLR v2	Not applicable to a course?	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+3259	audience	Evidence.audience	Description of the intended audience for a piece of evidence.	\N	29	string	\N	No	No	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 903	awardedDate(orIssuanceDate)	AchievementCredential.awardedDate(orIssuanceDate)	Timestamp of when the credential was awarded. issuanceDate is used to determine the most recent version of a Credential in conjunction with issuer and id. Consequently, the only way to update a Credental is to update the issuanceDate, losing the date when the Credential was originally awarded. awardedDate is meant to keep this original date.	\N	3	\N	\N	\N	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 2273	extensions	CFConcept.extensions	Freeform placeholder for non-standard/custom fields a CASE v1.1 payload may carry for this class. CASE defines its *Extension classes as open, schema-less objects (additionalProperties: true) with no fixed keys, so no concrete shape is modeled here.	\N	14	entity	\N	No	No	CASE	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 2274	extensions	CFSubject.extensions	Freeform placeholder for non-standard/custom fields a CASE v1.1 payload may carry for this class. CASE defines its *Extension classes as open, schema-less objects (additionalProperties: true) with no fixed keys, so no concrete shape is modeled here.	\N	14	entity	\N	No	No	CASE	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -3778,9 +3723,6 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 3256	patronymicName	Profile.patronymicName	Patronymic name.	\N	29	string	\N	No	No	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 3257	type	Profile.type	The value of the type property MUST be an unordered set. One of the values MUST be Profile.	\N	29	string	\N	Yes	Yes	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 3258	url	Profile.url	The homepage or social media profile of the entity, whether individual or institutional.	\N	29	string	\N	No	No	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-3259	audience	Evidence.audience	Description of the intended audience for a piece of evidence.	\N	29	string	\N	No	No	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-3260	genre	Evidence.genre	A category or classification of the evidence.	\N	29	string	\N	No	No	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-3261	name	Evidence.name	A descriptive title of the evidence.	\N	29	string	\N	No	No	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 3262	narrative	Evidence.narrative	A narrative that describes the evidence and its relevance to the achievement.	\N	29	string	\N	No	No	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 3263	addressCountryCode	Address.addressCountryCode	A country code as defined in ISO 3166-1 alpha-2.	\N	29	string	\N	No	No	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 3265	postOfficeBoxNumber	Address.postOfficeBoxNumber	The post office box number for PO box addresses.	\N	29	string	\N	No	No	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -3843,7 +3785,6 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 2228	identifier	CFConcept.identifier	A unique identifier (UUID) assigned to the CFConcept.	\N	14	string	\N	Yes	No	CASE	format: uuid\npattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$\n(Per CASE v1.1 REST/JSON Binding Appendix C's JSON Schema pattern on identifier properties, which is unanchored there; ^/$ added here for full-match semantics.)	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 415	creator	CFDocument.creator	The entity with authority that promulgates the competency framework. This is the entity that authorized or created the competency framework. It could be an education agency, higher education institution, professional body. It is the owner of the competency framework.	CASE v1.1 Information Model table lists this 0..1, but the Best Practice and Implementation Guide calls it "(required)". Modeled here as Required=Yes per the Implementation Guide; a strict-schema validator built from the Information Model alone would treat it as optional.	14	string	\N	Yes	No	CASE	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 2236	uri	CFSubject.uri	An unambiguous reference to the CFSubject using a network-resolvable URI.	\N	14	string	\N	Yes	No	CASE	format: uri	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-2242	uri	CFItemType.uri	An unambiguous reference to the CFItemType using a network-resolvable URI.	\N	14	string	\N	Yes	No	CASE	format: uri	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 2227	lastChangeDateTime	CFRubricCriterionLevel.lastChangeDateTime	The most recent date and time this CFRubricCriterionLevel was changed.	\N	14	string	\N	Yes	No	CASE	format: date-time (ISO 8601)	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 2234	lastChangeDateTime	CFConcept.lastChangeDateTime	The most recent date and time this CFConcept was changed.	\N	14	string	\N	Yes	No	CASE	format: date-time (ISO 8601)	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 2235	identifier	CFSubject.identifier	A unique identifier (UUID) assigned to the CFSubject.	\N	14	string	\N	Yes	No	CASE	format: uuid\npattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$\n(Per CASE v1.1 REST/JSON Binding Appendix C's JSON Schema pattern on identifier properties, which is unanchored there; ^/$ added here for full-match semantics.)	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -3851,7 +3792,6 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 2217	rubricId	CFRubricCriterion.rubricId	A reference to the identifier of the CFRubric that contains this CFRubricCriterion.	\N	14	string	\N	No	No	CASE	format: uuid\npattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$\n(Per CASE v1.1 REST/JSON Binding Appendix C's JSON Schema pattern on identifier properties, which is unanchored there; ^/$ added here for full-match semantics.)	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 2226	rubricCriterionId	CFRubricCriterionLevel.rubricCriterionId	A reference to the identifier of the CFRubricCriterion that contains this CFRubricCriterionLevel.	\N	14	string	\N	No	No	CASE	format: uuid\npattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$\n(Per CASE v1.1 REST/JSON Binding Appendix C's JSON Schema pattern on identifier properties, which is unanchored there; ^/$ added here for full-match semantics.)	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 2742	type	ClrCredential.type	The value of the type property MUST be an unordered set. One of the values MUST be ClrCredential.	\N	3	string	\N	Yes	Yes	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-2920	created	Proof.created	Date the proof was created.	\N	3	string	\N	No	No	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 2921	cryptosuite	Proof.cryptosuite	The suite used to create the proof.	\N	3	string	\N	No	No	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 2922	challenge	Proof.challenge	A value chosen by the verifier to mitigate authentication proof replay attacks.	\N	3	string	\N	No	No	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 2923	domain	Proof.domain	The domain of the proof to restrict its use to a particular target.	\N	3	string	\N	No	No	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -3880,7 +3820,6 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 2802	type	Result.type	The value of the type property MUST be an unordered set. One of the values MUST be Result.	\N	3	string	\N	Yes	No	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 2803	achievedLevel	Result.achievedLevel	The rubric criterion level achieved. References RubricCriterionLevel's identifier.	\N	3	string	\N	No	No	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 2804	alignment	Result.alignment	The alignment(s) between this result and a node in an external framework. References Alignment.	\N	3	entity	\N	No	Yes	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
-2805	resultDescription	Result.resultDescription	The ResultDescription that this Result is an instance of.	\N	3	entity	\N	No	No	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 2806	status	Result.status	The status of the achievement. Not yet wired to an enumeration -- see the deferred value-set decision for this data model.	\N	3	string	\N	No	No	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 2807	value	Result.value	A performance value, such as a score, percent, or raw score.	\N	3	string	\N	No	No	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 2809	type	RubricCriterionLevel.type	The value of the type property MUST be an unordered set. One of the values MUST be RubricCriterionLevel.	\N	3	string	\N	Yes	No	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
@@ -3987,6 +3926,289 @@ COPY public."Attributes" ("Id", "Name", "UniqueName", "Description", "UseConside
 3205	evidence	OpenBadgeCredential.evidence	A description of the work that the recipient did to earn the achievement. This can be a page that links out to other pages if linking directly to the work is infeasible.	\N	29	entity	\N	No	Yes	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	503	Public	f	f
 3208	issuer	OpenBadgeCredential.issuer	The Profile who is issuing the credential.	\N	29	entity	\N	Yes	No	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	508	Public	f	f
 3210	proof	OpenBadgeCredential.proof	If present, one or more embedded cryptographic proofs that can be used to detect tampering and verify the authorship of the credential.	\N	29	entity	\N	No	Yes	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	509	Public	f	f
+3294	BeginDate	Period.BeginDate	The month, day, and year for the start of the period.	\N	6	string	\N	Yes	No	Ed-Fi v5.0	format: date	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3295	EndDate	Period.EndDate	The month, day, and year for the end of the period.	\N	6	string	\N	No	No	Ed-Fi v5.0	format: date	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+660	InstructionalTimePlanned	CourseOffering.InstructionalTimePlanned	The planned total number of clock minutes of instruction for this course offering. Generally, this should be at least as many minutes as is required for completion by the related state- or district-defined course.	\N	6	number	\N	No	No	Ed-Fi v5.0	format: int32; minimum 1	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+3357	CreditConversion	Credits.CreditConversion	Conversion factor that when multiplied by the number of credits is equivalent to Carnegie units.	\N	6	number	\N	No	No	Ed-Fi v5.0	format: decimal; totalDigits 9; fractionDigits 2	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3359	MaximumScore	AssessmentScore.MaximumScore	The maximum score possible on the assessment.	\N	6	string	\N	No	No	Ed-Fi v5.0	maxLength 35	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3360	ResultDatatypeType	AssessmentScore.ResultDatatypeType	The datatype of the result. The results can be expressed as a number, percentile, range, level, etc.	\N	6	enum	440	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3440	PersonReference	Student.PersonReference	Relates the student to a generic person.	\N	6	entity	\N	No	No	Ed-Fi v5.0	Ed-Fi cross-entity reference	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+1546	Visa	Citizenship.Visa	An indicator of a non-US citizen's Visa type.	\N	6	enum	452	No	Yes	Ed-Fi v5.0	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+3297	Sex	Contact.Sex	A person's birth sex.	\N	6	enum	445	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3331	AssessedMinutes	StudentAssessment.AssessedMinutes	Reported time student was assessed in minutes.	\N	6	number	\N	No	No	Ed-Fi v5.0	format: int32	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3332	ReportedSchoolReference	StudentAssessment.ReportedSchoolReference	The school reference reported as the school the enrollment at the time of the assessment using the assigned SchoolId.	\N	6	entity	\N	No	No	Ed-Fi v5.0	Ed-Fi cross-entity reference	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3333	ReportedSchoolIdentifier	StudentAssessment.ReportedSchoolIdentifier	A reported school identifier for the school the enrollment at the time of the assessment used when the assigned SchoolId is not known by the assessment vendor.	\N	6	string	\N	No	No	Ed-Fi v5.0	maxLength 60	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+654	IdentificationCode	CourseIdentificationCode.IdentificationCode	A unique number or alphanumeric code assigned to a course by a school, school system, state, or other agency or entity. For multi-part course codes, concatenate the parts separated by a "/". For example, consider the following SCED code-    subject = 20 Math    course = 272 Geometry    level = G General    credits = 1.00   course sequence 1 of 1- would be entered as 20/272/G/1.00/1 of 1.	\N	6	string	\N	Yes	No	Ed-Fi v5.0	maxLength 60	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+3315	SerialNumber	StudentAssessment.SerialNumber	The unique number for the assessment form or answer document.	\N	6	string	\N	No	No	Ed-Fi v5.0	maxLength 60	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3299	AssessmentIdentificationCode	Assessment.AssessmentIdentificationCode	A unique number or alphanumeric code assigned to an assessment by a school, school system, a state, or other agency or entity.	\N	6	entity	\N	No	Yes	Ed-Fi v5.0	Ed-Fi common type (nested object)	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3300	AssessmentPerformanceLevel	Assessment.AssessmentPerformanceLevel	Definition of the performance levels and the associated cut scores. Three styles are supported: 1. Specification of performance level by minimum and maximum score, 2. Specification of performance level by cut score, using only minimum score, 3. Specification of performance level without any mapping to scores.	\N	6	entity	\N	No	Yes	Ed-Fi v5.0	Ed-Fi common type (nested object)	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3301	ContentStandard	Assessment.ContentStandard	An indication as to whether an assessment conforms to a standard (e.g., local standard, statewide standard, regional standard, association standard).	\N	6	entity	\N	No	No	Ed-Fi v5.0	Ed-Fi common type (nested object)	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3302	AssessmentForm	Assessment.AssessmentForm	Identifies the form of the assessment, for example a regular versus makeup form, multiple choice versus constructed response, etc.	\N	6	string	\N	No	No	Ed-Fi v5.0	maxLength 60	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3303	AssessmentVersion	Assessment.AssessmentVersion	The version identifier for the assessment.	\N	6	number	\N	No	No	Ed-Fi v5.0	format: int32	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3304	MaxRawScore	Assessment.MaxRawScore	The maximum raw score achievable across all assessment items that are correct and scored at the maximum.	\N	6	number	\N	No	No	Ed-Fi v5.0	format: decimal; totalDigits 15; fractionDigits 5	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3305	Nomenclature	Assessment.Nomenclature	Reflects the specific nomenclature used for assessment.	\N	6	string	\N	No	No	Ed-Fi v5.0	maxLength 100	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3306	AssessmentPeriod	Assessment.AssessmentPeriod	The period or window in which an assessment is supposed to be administered.	\N	6	entity	\N	No	Yes	Ed-Fi v5.0	Ed-Fi common type (nested object)	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3307	AssessmentFamily	Assessment.AssessmentFamily	The assessment family this assessment is a member of.	\N	6	string	\N	No	No	Ed-Fi v5.0	maxLength 60	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3308	SectionReference	Assessment.SectionReference	The Section(s) to which the assessment is associated.	\N	6	entity	\N	No	Yes	Ed-Fi v5.0	Ed-Fi cross-entity reference | Inside an optional xs:choice with the other of SectionReference/ProgramReference - at most one of the two may appear, and neither is required.	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	104	Public	f	f
+3343	MinimumAvailableCredits	Course.MinimumAvailableCredits	The minimum amount of credit available to a student who successfully completes the course.	\N	6	entity	\N	No	No	Ed-Fi v5.0	Ed-Fi common type (nested object)	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	102	Public	f	f
+3309	ProgramReference	Assessment.ProgramReference	The programs associated with the assessment.	\N	6	entity	\N	No	Yes	Ed-Fi v5.0	Ed-Fi cross-entity reference | Inside an optional xs:choice with the other of SectionReference/ProgramReference - at most one of the two may appear, and neither is required.	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3310	Namespace	Assessment.Namespace	Namespace for the assessment.	\N	6	string	\N	Yes	No	Ed-Fi v5.0	format: uri; maxLength 255; minLength 5	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3311	EducationOrganizationReference	Assessment.EducationOrganizationReference	The education organization for which the assessment was developed and in which it was employed.	\N	6	entity	\N	No	No	Ed-Fi v5.0	Ed-Fi cross-entity reference	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	226	Public	f	f
+3312	AdaptiveAssessment	Assessment.AdaptiveAssessment	Indicates that the assessment is adaptive.	\N	6	boolean	\N	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3313	PlatformType	Assessment.PlatformType	The platforms with which the assessment may be delivered.	\N	6	enum	432	No	Yes	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3314	StudentAssessmentIdentifier	StudentAssessment.StudentAssessmentIdentifier	A unique number or alphanumeric code assigned to an assessment administered to a student.	\N	6	string	\N	Yes	No	Ed-Fi v5.0	maxLength 60	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3316	AdministrationLanguage	StudentAssessment.AdministrationLanguage	The language in which an assessment is written and/or administered.	\N	6	enum	423	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3317	Accommodation	StudentAssessment.Accommodation	The specific type of special variation used in how an examination is presented, how it is administered, or how the test taker is allowed to respond. This generally refers to changes that do not substantially alter what the examination measures. The proper use of accommodations does not substantially change academic level or performance criteria.	\N	6	enum	391	No	Yes	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3318	RetestIndicator	StudentAssessment.RetestIndicator	Indicator if the test was a retake.	\N	6	enum	441	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3319	ReasonNotTested	StudentAssessment.ReasonNotTested	The primary reason student is not tested.	\N	6	enum	438	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3320	ScoreResult	StudentAssessment.ScoreResult	A meaningful score or statistical expression of the performance of an individual. The results can be expressed as a number, percentile, range, level, etc.	\N	6	entity	\N	No	Yes	Ed-Fi v5.0	Ed-Fi common type (nested object)	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3321	WhenAssessedGradeLevel	StudentAssessment.WhenAssessedGradeLevel	The grade level of a student when assessed.	\N	6	enum	417	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3322	PerformanceLevel	StudentAssessment.PerformanceLevel	The performance level(s) achieved for the student assessment.	\N	6	entity	\N	No	Yes	Ed-Fi v5.0	Ed-Fi common type (nested object)	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3323	EventCircumstance	StudentAssessment.EventCircumstance	An unusual event occurred during the administration of the assessment. This could include fire alarm, student became ill, etc.	\N	6	enum	416	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3324	EventDescription	StudentAssessment.EventDescription	Describes special events that occur before during or after the assessment session that may impact use of results.	\N	6	string	\N	No	No	Ed-Fi v5.0	maxLength 1024	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3325	StudentReference	StudentAssessment.StudentReference	Reference to the student associated with the assessment.	\N	6	entity	\N	Yes	No	Ed-Fi v5.0	Ed-Fi cross-entity reference	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	276	Public	f	f
+3326	AssessmentReference	StudentAssessment.AssessmentReference	Reference to the assessment taken by the student.	\N	6	entity	\N	Yes	No	Ed-Fi v5.0	Ed-Fi cross-entity reference	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	24	Public	f	f
+3327	StudentAssessmentItem	StudentAssessment.StudentAssessmentItem	The student's response to an assessment item and the item-level scores such as correct, incorrect, or met standard.	\N	6	entity	\N	No	Yes	Ed-Fi v5.0	Ed-Fi common type (nested object)	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3328	StudentObjectiveAssessment	StudentAssessment.StudentObjectiveAssessment	The student's score and/or performance levels earned for an objective assessment.	\N	6	entity	\N	No	Yes	Ed-Fi v5.0	Ed-Fi common type (nested object)	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3329	SchoolYear	StudentAssessment.SchoolYear	The school year for which the assessment was administered to a student. Among other uses, handles cases in which a student takes a prior-year exam in a subsequent school year during an exam re-test.	\N	6	enum	442	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3330	AssessmentPeriod	StudentAssessment.AssessmentPeriod	The period or window in which an assessment is supposed to be administered.	\N	6	entity	\N	No	No	Ed-Fi v5.0	Ed-Fi common type (nested object)	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+662	CourseIdentificationSystem	CourseIdentificationCode.CourseIdentificationSystem	A system that is used to identify the organization of subject matter and related learning experiences provided for the instruction of students.	\N	6	enum	407	Yes	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+3334	AssigningOrganizationIdentificationCode	CourseIdentificationCode.AssigningOrganizationIdentificationCode	The organization code or name assigning the Identification Code.	\N	6	string	\N	No	No	Ed-Fi v5.0	maxLength 60	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3335	CourseCatalogURL	CourseIdentificationCode.CourseCatalogURL	The URL for the course catalog that defines the course identification code.	\N	6	string	\N	No	No	Ed-Fi v5.0	maxLength 255; minLength 5	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3336	NumberOfParts	Course.NumberOfParts	The number of parts identified for a course.	\N	6	number	\N	Yes	No	Ed-Fi v5.0	format: int32; minimum 1; maximum 8	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3337	CourseIdentificationCode	Course.CourseIdentificationCode	The code that identifies the organization of subject matter and related learning experiences provided for the instruction of students.	\N	6	entity	\N	Yes	Yes	Ed-Fi v5.0	Ed-Fi common type (nested object)	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	99	Public	f	f
+3338	AcademicSubject	Course.AcademicSubject	The intended major subject/s area of the course.	\N	6	enum	390	No	Yes	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3339	TimeRequiredForCompletion	Course.TimeRequiredForCompletion	The actual or estimated number of clock minutes required for class completion. This number is especially important for career and technical education classes and may represent (in minutes) the clock hour requirement of the class.	\N	6	number	\N	No	No	Ed-Fi v5.0	format: int32; minimum 1	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3340	DateCourseAdopted	Course.DateCourseAdopted	Date the course was adopted by the education agency.	\N	6	string	\N	No	No	Ed-Fi v5.0	format: date	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3341	HighSchoolCourseRequirement	Course.HighSchoolCourseRequirement	An indication that this course may satisfy high school graduation requirements in the course's subject area.	\N	6	boolean	\N	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3342	CourseDefinedBy	Course.CourseDefinedBy	Specifies whether the course was defined by the SEA, LEA, School, or national organization.	\N	6	enum	405	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3344	MaximumAvailableCredits	Course.MaximumAvailableCredits	The maximum amount of credit available to a student who successfully completes the course.	\N	6	entity	\N	No	No	Ed-Fi v5.0	Ed-Fi common type (nested object)	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	102	Public	f	f
+3345	CareerPathway	Course.CareerPathway	Indicates the career cluster or pathway the course is associated with as part of a CTE curriculum.	\N	6	enum	398	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3346	CompetencyLevel	Course.CompetencyLevel	The competency levels defined to rate the student for the course.	\N	6	enum	400	No	Yes	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3347	EducationOrganizationReference	Course.EducationOrganizationReference	The education organization that defines the curriculum and courses offered - often the LEA or school.	\N	6	entity	\N	Yes	No	Ed-Fi v5.0	Ed-Fi cross-entity reference	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	226	Public	f	f
+661	LearningStandardReference	Course.LearningStandardReference	Learning standard(s) to be taught by the course.	\N	6	entity	\N	No	Yes	Ed-Fi v5.0	Ed-Fi cross-entity reference	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+3348	MaxCompletionsForCredit	Course.MaxCompletionsForCredit	Designates how many times the course may be taken with credit received by the student.	\N	6	number	\N	No	No	Ed-Fi v5.0	format: int32; minimum 1	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3349	SessionName	Session.SessionName	The identifier for the calendar for the academic session.	\N	6	string	\N	Yes	No	Ed-Fi v5.0	maxLength 60	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3350	SchoolYear	Session.SchoolYear	The identifier for the school year.	\N	6	enum	442	Yes	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3351	Term	Session.Term	A descriptor value to indicate the term that the session is associated with.	\N	6	enum	450	Yes	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3352	TotalInstructionalDays	Session.TotalInstructionalDays	The total number of instructional days in the school calendar.	\N	6	number	\N	Yes	No	Ed-Fi v5.0	format: int32; minimum 0	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3353	SchoolReference	Session.SchoolReference	Relates the session to the school.	\N	6	entity	\N	Yes	No	Ed-Fi v5.0	Ed-Fi cross-entity reference	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3354	GradingPeriodReference	Session.GradingPeriodReference	Grading periods associated with the session.	\N	6	entity	\N	No	Yes	Ed-Fi v5.0	Ed-Fi cross-entity reference	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3355	AcademicWeekReference	Session.AcademicWeekReference	The academic weeks associated with the school year.	\N	6	entity	\N	No	Yes	Ed-Fi v5.0	Ed-Fi cross-entity reference	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3356	Credits	Credits.Credits	The value of credits or units of value awarded for the completion of a course.	\N	6	number	\N	Yes	No	Ed-Fi v5.0	format: decimal; totalDigits 9; fractionDigits 3; minimum 0	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3358	MinimumScore	AssessmentScore.MinimumScore	The minimum score possible on the assessment.	\N	6	string	\N	No	No	Ed-Fi v5.0	maxLength 35	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3361	SectionType	Section.SectionType	Specifies whether the section is for attendance only, credit only, or both.	\N	6	enum	444	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3362	SequenceOfCourse	Section.SequenceOfCourse	When a section is part of a sequence of parts for a course, the number of the sequence. If the course has only one part, the value of this section attribute should be 1.	\N	6	number	\N	No	No	Ed-Fi v5.0	format: int32; minimum 1; maximum 8	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3363	MediumOfInstruction	Section.MediumOfInstruction	The media through which teachers provide instruction to students and students and teachers communicate about instructional matters.	\N	6	enum	428	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3364	PopulationServed	Section.PopulationServed	The type of students the section is offered and tailored to.	\N	6	enum	433	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3365	AvailableCredits	Section.AvailableCredits	The amount of credit available to a student who successfully meets the objectives of the course. Available credits are measured in Carnegie units, A course meeting every day for one period of the school day over the span of a school year offers one Carnegie unit. See publication: U.S. Department of Education, NCES, 2007-341, Secondary School Course Classification System: School Codes for the Exchange of Data (SCED).	\N	6	entity	\N	No	No	Ed-Fi v5.0	Ed-Fi common type (nested object)	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	102	Public	f	f
+3366	SectionCharacteristic	Section.SectionCharacteristic	Reflects important characteristics of the section, such as whether or not attendance is taken and the section is graded.	\N	6	enum	443	No	Yes	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3367	InstructionLanguage	Section.InstructionLanguage	The primary language of instruction. If omitted, English is assumed.	\N	6	enum	423	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3368	CourseOfferingReference	Section.CourseOfferingReference	The course offering taught in the section.	\N	6	entity	\N	Yes	No	Ed-Fi v5.0	Ed-Fi cross-entity reference	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	517	Public	f	f
+3369	LocationSchoolReference	Section.LocationSchoolReference	The physical school location in which the section is taught.	\N	6	entity	\N	No	No	Ed-Fi v5.0	Ed-Fi cross-entity reference	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3370	LocationReference	Section.LocationReference	The location, typically a classroom, where the section meets.	\N	6	entity	\N	No	No	Ed-Fi v5.0	Ed-Fi cross-entity reference	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3371	ClassPeriodReference	Section.ClassPeriodReference	The class period during which the section meets.	\N	6	entity	\N	No	Yes	Ed-Fi v5.0	Ed-Fi cross-entity reference	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3372	ProgramReference	Section.ProgramReference	Optional reference to program to which the section is associated.	\N	6	entity	\N	No	Yes	Ed-Fi v5.0	Ed-Fi cross-entity reference	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3373	CourseLevelCharacteristic	Section.CourseLevelCharacteristic	The type of specific program or designation with which the section is associated. This collection should only be populated if it differs from the course level characteristics identified at the course offering level.	\N	6	enum	408	No	Yes	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3374	OfferedGradeLevel	Section.OfferedGradeLevel	The grade levels in which the section is offered. This collection should only be populated if it differs from the Offered Grade Levels identified at the course offering level.	\N	6	enum	417	No	Yes	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3375	OfficialAttendancePeriod	Section.OfficialAttendancePeriod	Indicator of whether this section is used for official daily attendance. Alternatively, official daily attendance may be tied to a class period.	\N	6	boolean	\N	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3376	SectionName	Section.SectionName	A locally-defined name for the section, generally created to make the section more recognizable in informal contexts and generally distinct from the section identifier.	\N	6	string	\N	No	No	Ed-Fi v5.0	maxLength 100	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3377	CourseAttemptResult	CourseTranscript.CourseAttemptResult	The result from the student's attempt to take the course.	\N	6	enum	404	Yes	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+659	EndDate	Session.EndDate	Month, day and year of the last day of the session.	\N	6	string	\N	Yes	No	Ed-Fi v5.0	format: date	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+3378	AttemptedCredits	CourseTranscript.AttemptedCredits	The number of credits a student attempted and could earn for successfully completing a given course.	\N	6	entity	\N	No	No	Ed-Fi v5.0	Ed-Fi common type (nested object)	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	102	Public	f	f
+3379	EarnedCredits	CourseTranscript.EarnedCredits	The number of credits a student earned for completing a given course.	\N	6	entity	\N	No	No	Ed-Fi v5.0	Ed-Fi common type (nested object)	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	102	Public	f	f
+3380	EarnedAdditionalCredits	CourseTranscript.EarnedAdditionalCredits	The number of additional credits a student attempted and could earn for successfully completing a given course.	\N	6	entity	\N	No	Yes	Ed-Fi v5.0	Ed-Fi common type (nested object)	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3381	WhenTakenGradeLevel	CourseTranscript.WhenTakenGradeLevel	Student's grade level at time of course.	\N	6	enum	417	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3382	MethodCreditEarned	CourseTranscript.MethodCreditEarned	The method the credits were earned.	\N	6	enum	429	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3383	FinalLetterGradeEarned	CourseTranscript.FinalLetterGradeEarned	The final indicator of student performance in a class as submitted by the instructor.	\N	6	string	\N	No	No	Ed-Fi v5.0	maxLength 20	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3384	FinalNumericGradeEarned	CourseTranscript.FinalNumericGradeEarned	The final indicator of student performance in a class as submitted by the instructor.	\N	6	number	\N	No	No	Ed-Fi v5.0	format: decimal; totalDigits 9; fractionDigits 2	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3385	CourseReference	CourseTranscript.CourseReference	The course recorded in the course transcript entry.	\N	6	entity	\N	Yes	No	Ed-Fi v5.0	Ed-Fi cross-entity reference	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	100	Public	f	f
+3386	StudentAcademicRecordReference	CourseTranscript.StudentAcademicRecordReference	Link to the student's academic record for a semester/school year.	\N	6	entity	\N	Yes	No	Ed-Fi v5.0	Ed-Fi cross-entity reference	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3387	SectionReference	CourseTranscript.SectionReference	The section(s) associated with the course transcript.	\N	6	entity	\N	No	Yes	Ed-Fi v5.0	Ed-Fi cross-entity reference	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	104	Public	f	f
+3388	ResponsibleTeacherStaffReference	CourseTranscript.ResponsibleTeacherStaffReference	The staff member that is the responsible teacher for instructing or monitoring instruction for student attempting the course.	\N	6	entity	\N	No	No	Ed-Fi v5.0	Ed-Fi cross-entity reference	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3389	CourseProgramReference	CourseTranscript.CourseProgramReference	The program(s) that the student participated in the context of the course.	\N	6	entity	\N	No	Yes	Ed-Fi v5.0	Ed-Fi cross-entity reference	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3411	StudentReference	StudentEducationOrganizationAssociation.StudentReference	A reference to the student.	\N	6	entity	\N	Yes	No	Ed-Fi v5.0	Ed-Fi cross-entity reference	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	276	Public	f	f
+3390	CourseTitle	CourseTranscript.CourseTitle	The descriptive name given to a course of study offered in a school or other institution or organization. In departmentalized classes at the elementary, secondary, and postsecondary levels (and for staff development activities), this refers to the name by which a course is identified (e.g., American History, English III). For elementary and other non-departmentalized classes, it refers to any portion of the instruction for which a grade or report is assigned (e.g., reading, composition, spelling, language arts).	\N	6	string	\N	No	No	Ed-Fi v5.0	maxLength 60	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3391	AlternativeCourseTitle	CourseTranscript.AlternativeCourseTitle	The descriptive name given to a course of study offered in the school, if different from the CourseTitle.	\N	6	string	\N	No	No	Ed-Fi v5.0	maxLength 60	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3392	ExternalEducationOrganizationReference	CourseTranscript.ExternalEducationOrganizationReference	The external institution where the student completed the course (e.g., the original education organization for a transferred course transcript, or the provider for an online course).	\N	6	entity	\N	No	No	Ed-Fi v5.0	Ed-Fi cross-entity reference	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	226	Public	f	f
+3393	ExternalEducationOrganizationNameOfInstitution	CourseTranscript.ExternalEducationOrganizationNameOfInstitution	Name of the external institution where the student completed the course; to be used only when the reference external education organization is not available.	\N	6	string	\N	No	No	Ed-Fi v5.0	maxLength 75	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3394	AlternativeCourseIdentificationCode	CourseTranscript.AlternativeCourseIdentificationCode	The code that identifies the course, course offering, the code from an external educational organization, or other alternate course code.	\N	6	entity	\N	No	Yes	Ed-Fi v5.0	Ed-Fi common type (nested object)	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	99	Public	f	f
+3395	AssigningOrganizationIdentificationCode	CourseTranscript.AssigningOrganizationIdentificationCode	The organization code or name assigning the course identification code.	\N	6	string	\N	No	No	Ed-Fi v5.0	maxLength 60	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3396	CourseCatalogURL	CourseTranscript.CourseCatalogURL	The URL for the course catalog that defines the course identification code.	\N	6	string	\N	No	No	Ed-Fi v5.0	maxLength 255; minLength 5	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3397	CreditCategory	CourseTranscript.CreditCategory	A categorization for the course transcript credits awarded in the course transcript.	\N	6	enum	410	No	Yes	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3398	AcademicSubject	CourseTranscript.AcademicSubject	The subject area for the course transcript credits awarded in the course transcript.	\N	6	enum	390	No	Yes	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3399	PartialCourseTranscriptAwards	CourseTranscript.PartialCourseTranscriptAwards	A collection of partial credits and/or grades a student earned against the course over the session, used when awards of credit are incremental.	\N	6	entity	\N	No	Yes	Ed-Fi v5.0	Ed-Fi common type (nested object)	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3400	IdentificationCode	EducationOrganizationIdentificationCode.IdentificationCode	A unique number or alphanumeric code that is assigned to an education organization by a school, school system, state, or other agency or entity.	\N	6	string	\N	Yes	No	Ed-Fi v5.0	maxLength 60	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3401	EducationOrganizationIdentificationCode	EducationOrganization.EducationOrganizationIdentificationCode	A unique number or alphanumeric code assigned to an education organization by a school, school system, a state, or other agency or entity.	\N	6	entity	\N	No	Yes	Ed-Fi v5.0	Ed-Fi common type (nested object)	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	225	Public	f	f
+3402	Address	EducationOrganization.Address	The set of elements that describes an address for the education entity, including the street address, city, state, ZIP code, and ZIP code + 4.	\N	6	entity	\N	No	Yes	Ed-Fi v5.0	Ed-Fi common type (nested object)	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	279	Public	f	f
+3403	InternationalAddress	EducationOrganization.InternationalAddress	The set of elements that describes the international physical location of the education entity.	\N	6	entity	\N	No	Yes	Ed-Fi v5.0	Ed-Fi common type (nested object)	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3404	InstitutionTelephone	EducationOrganization.InstitutionTelephone	The 10-digit telephone number, including the area code, for the education entity.	\N	6	entity	\N	No	Yes	Ed-Fi v5.0	Ed-Fi common type (nested object)	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+1531	DoNotPublishIndicator	Address.DoNotPublishIndicator	An indication that the address should not be published.	\N	6	boolean	\N	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+3405	WebSite	EducationOrganization.WebSite	The public web site address (URL) for the education organization.	\N	6	string	\N	No	No	Ed-Fi v5.0	format: uri; maxLength 255; minLength 5	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3406	EducationOrganizationIndicator	EducationOrganization.EducationOrganizationIndicator	An indicator or metric of an education organization.	\N	6	entity	\N	No	Yes	Ed-Fi v5.0	Ed-Fi common type (nested object)	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3298	BirthSex	BirthData.BirthSex	A person's sex at birth.	\N	6	enum	445	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+1519	PersonalTitlePrefix	Name.PersonalTitlePrefix	A prefix used to denote the title, degree, position, or seniority of the individual.	\N	6	string	\N	No	No	Ed-Fi v5.0	maxLength 30	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1508	FirstName	Name.FirstName	A name given to an individual at birth, baptism, or during another naming ceremony, or through legal change.	\N	6	string	\N	Yes	No	Ed-Fi v5.0	maxLength 75	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1517	MiddleName	Name.MiddleName	A secondary name given to an individual at birth, baptism, or during another naming ceremony.	\N	6	string	\N	No	No	Ed-Fi v5.0	maxLength 75	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1509	LastSurname	Name.LastSurname	The name borne in common by members of a family.	\N	6	string	\N	Yes	No	Ed-Fi v5.0	maxLength 75	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1518	GenerationCodeSuffix	Name.GenerationCodeSuffix	An appendage, if any, used to denote an individual's generation in his family (e.g., Jr., Sr., III).	\N	6	string	\N	No	No	Ed-Fi v5.0	maxLength 10	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+3407	MaidenName	Name.MaidenName	The individual's maiden name.	\N	6	string	\N	No	No	Ed-Fi v5.0	maxLength 75	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3408	PreferredFirstName	Name.PreferredFirstName	The first name the individual prefers, if different from their legal first name	\N	6	string	\N	No	No	Ed-Fi v5.0	maxLength 75	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3409	PreferredLastSurname	Name.PreferredLastSurname	The last name the individual prefers, if different from their legal last name	\N	6	string	\N	No	No	Ed-Fi v5.0	maxLength 75	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3410	PersonalIdentificationDocument	Name.PersonalIdentificationDocument	The documents presented as evident to verify one's personal identity; for example: drivers license, passport, birth certificate, etc.	\N	6	entity	\N	No	Yes	Ed-Fi v5.0	Ed-Fi common type (nested object)	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	278	Public	f	f
+3412	EducationOrganizationReference	StudentEducationOrganizationAssociation.EducationOrganizationReference	A reference to the education organization representing the context of the student information.	\N	6	entity	\N	Yes	No	Ed-Fi v5.0	Ed-Fi cross-entity reference	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	226	Public	f	f
+3413	StudentIdentificationCode	StudentEducationOrganizationAssociation.StudentIdentificationCode	A coding scheme that is used for identification and record-keeping purposes by schools, social services, or other agencies to refer to a student.	\N	6	entity	\N	No	Yes	Ed-Fi v5.0	Ed-Fi common type (nested object)	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	277	Public	f	f
+3296	Sex	StudentEducationOrganizationAssociation.Sex	The student's birth sex as reported to the education organization.	\N	6	enum	445	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3414	GenderIdentity	StudentEducationOrganizationAssociation.GenderIdentity	The student's gender as last reported to the education organization.	\N	6	string	\N	No	No	Ed-Fi v5.0	maxLength 60	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3415	Address	StudentEducationOrganizationAssociation.Address	The set of elements that describes an address, including the street address, city, state, and ZIP code.	\N	6	entity	\N	No	Yes	Ed-Fi v5.0	Ed-Fi common type (nested object)	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	279	Public	f	f
+3416	InternationalAddress	StudentEducationOrganizationAssociation.InternationalAddress	The set of elements that describes an international address.	\N	6	entity	\N	No	Yes	Ed-Fi v5.0	Ed-Fi common type (nested object)	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3417	Telephone	StudentEducationOrganizationAssociation.Telephone	The 10-digit telephone number, including the area code, for the person.	\N	6	entity	\N	No	Yes	Ed-Fi v5.0	Ed-Fi common type (nested object)	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	280	Public	f	f
+3418	ElectronicMail	StudentEducationOrganizationAssociation.ElectronicMail	The numbers, letters, and symbols used to identify an electronic mail (e-mail) user within the network to which the individual or organization belongs.	\N	6	entity	\N	No	Yes	Ed-Fi v5.0	Ed-Fi common type (nested object)	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	275	Public	f	f
+3419	ProfileThumbnail	StudentEducationOrganizationAssociation.ProfileThumbnail	Locator reference for the student photo. The specification for that reference is left to local definition.	\N	6	string	\N	No	No	Ed-Fi v5.0	maxLength 255	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3420	StudentCharacteristic	StudentEducationOrganizationAssociation.StudentCharacteristic	Reflects important characteristics of a student. If a student has a characteristic present, that characteristic is considered true or active for that student. If a characteristic is not present, no assumption is made as to the applicability of the characteristic, but local policy may dictate otherwise.	\N	6	entity	\N	No	Yes	Ed-Fi v5.0	Ed-Fi common type (nested object)	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3421	LimitedEnglishProficiency	StudentEducationOrganizationAssociation.LimitedEnglishProficiency	An indication that the student has been identified as limited English proficient by the Language Proficiency Assessment Committee (LPAC), or English proficient.	\N	6	enum	426	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3422	Language	StudentEducationOrganizationAssociation.Language	The language(s) the individual uses to communicate. It is strongly recommended that entries use only ISO 639-3 language codes.	\N	6	entity	\N	No	Yes	Ed-Fi v5.0	Ed-Fi common type (nested object)	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	287	Public	f	f
+3423	Disability	StudentEducationOrganizationAssociation.Disability	The disability condition(s) that best describes an individual's impairment, as determined by evaluation(s) conducted by the education organization.	\N	6	entity	\N	No	Yes	Ed-Fi v5.0	Ed-Fi common type (nested object)	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3424	CohortYear	StudentEducationOrganizationAssociation.CohortYear	The type and year of a cohort (e.g., 9th grade) the student belongs to as determined by the year that student entered a specific grade.	\N	6	entity	\N	No	Yes	Ed-Fi v5.0	Ed-Fi common type (nested object)	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3425	StudentIndicator	StudentEducationOrganizationAssociation.StudentIndicator	An indicator or metric computed for the student (e.g., at risk).	\N	6	entity	\N	No	Yes	Ed-Fi v5.0	Ed-Fi common type (nested object)	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3426	LoginId	StudentEducationOrganizationAssociation.LoginId	The login ID for the user; used for security access control interface.	\N	6	string	\N	No	No	Ed-Fi v5.0	maxLength 60	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3427	AncestryEthnicOrigin	StudentEducationOrganizationAssociation.AncestryEthnicOrigin	The original peoples or cultures with which the individual identifies.	\N	6	enum	394	No	Yes	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3428	PrimaryLearningDeviceAwayFromSchool	StudentEducationOrganizationAssociation.PrimaryLearningDeviceAwayFromSchool	The type of device the student uses most often to complete learning activities away from school.	\N	6	enum	435	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3434	InternetPerformanceInResidence	StudentEducationOrganizationAssociation.InternetPerformanceInResidence	An indication of whether the student can complete the full range of learning activities, including video streaming and assignment upload, without interruptions caused by poor internet performance in their primary place of residence.	\N	6	enum	422	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3435	SupporterMilitaryConnection	StudentEducationOrganizationAssociation.SupporterMilitaryConnection	Military connection of the person/people whom the student is a dependent of.	\N	6	enum	448	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3436	DoNotPublishIndicator	ElectronicMail.DoNotPublishIndicator	An indication that the electronic email address should not be published.	\N	6	boolean	\N	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+1513	StudentUniqueId	Student.StudentUniqueId	A unique alphanumeric code assigned to a student.	\N	6	string	\N	Yes	No	Ed-Fi v5.0	maxLength 32	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+3437	OtherName	Student.OtherName	Other names (e.g., alias, nickname, previous legal name) associated with a person.	\N	6	entity	\N	No	Yes	Ed-Fi v5.0	Ed-Fi common type (nested object)	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3438	BirthData	Student.BirthData	The set of elements that capture relevant data regarding a person's birth, including birth date and place of birth.	\N	6	entity	\N	Yes	No	Ed-Fi v5.0	Ed-Fi common type (nested object)	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	272	Public	f	f
+3439	Citizenship	Student.Citizenship	Contains information relative to U.S. citizenship status and its associated probationary documentation.	\N	6	entity	\N	No	No	Ed-Fi v5.0	Ed-Fi common type (nested object)	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	281	Public	f	f
+3441	IdentificationCode	StudentIdentificationCode.IdentificationCode	A unique number or alphanumeric code assigned to a student by a school, school system, a state, or other agency or entity.	\N	6	string	\N	Yes	No	Ed-Fi v5.0	maxLength 60	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3442	AssigningOrganizationIdentificationCode	StudentIdentificationCode.AssigningOrganizationIdentificationCode	The organization code or name assigning the StudentIdentificationCode.	\N	6	string	\N	Yes	No	Ed-Fi v5.0	maxLength 60	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3443	DocumentTitle	IdentificationDocument.DocumentTitle	The title of the document given by the issuer.	\N	6	string	\N	No	No	Ed-Fi v5.0	maxLength 60	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3444	DocumentExpirationDate	IdentificationDocument.DocumentExpirationDate	The day when the document  expires, if null then never expires.	\N	6	string	\N	No	No	Ed-Fi v5.0	format: date	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3445	IssuerDocumentIdentificationCode	IdentificationDocument.IssuerDocumentIdentificationCode	The unique identifier on the issuer's identification system.	\N	6	string	\N	No	No	Ed-Fi v5.0	maxLength 60	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3446	IssuerName	IdentificationDocument.IssuerName	Name of the entity or institution that issued the document.	\N	6	string	\N	No	No	Ed-Fi v5.0	maxLength 150	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3447	IssuerCountry	IdentificationDocument.IssuerCountry	Country of origin of the document. It is strongly recommended that entries use only ISO 3166 2-letter country codes.	\N	6	enum	403	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3448	IdentificationDocumentUse	IdentificationDocument.IdentificationDocumentUse	The primary function of the document used for establishing identity.	\N	6	enum	419	Yes	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3449	BuildingSiteNumber	Address.BuildingSiteNumber	The number of the building on the site, if more than one building shares the same address.	\N	6	string	\N	No	No	Ed-Fi v5.0	maxLength 20	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3450	IdentificationDocument	Citizenship.IdentificationDocument	Describe the documentation of citizenship.	\N	6	entity	\N	No	Yes	Ed-Fi v5.0	Ed-Fi common type (nested object)	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	278	Public	f	f
+3451	ContactUniqueId	Contact.ContactUniqueId	A unique alphanumeric code assigned to a contact.	\N	6	string	\N	Yes	No	Ed-Fi v5.0	maxLength 32	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3452	Name	Contact.Name	Full legal name of the person.	\N	6	entity	\N	Yes	No	Ed-Fi v5.0	Ed-Fi common type (nested object)	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	273	Public	f	f
+3453	OtherName	Contact.OtherName	Other names (e.g., alias, nickname, previous legal name) associated with a person.	\N	6	entity	\N	No	Yes	Ed-Fi v5.0	Ed-Fi common type (nested object)	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3454	GenderIdentity	Contact.GenderIdentity	The gender the contact identifies themselves as.	\N	6	string	\N	No	No	Ed-Fi v5.0	maxLength 60	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3455	Address	Contact.Address	Contact's address, if different from the student address.	\N	6	entity	\N	No	Yes	Ed-Fi v5.0	Ed-Fi common type (nested object)	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	279	Public	f	f
+3456	InternationalAddress	Contact.InternationalAddress	The set of elements that describes an international address.	\N	6	entity	\N	No	Yes	Ed-Fi v5.0	Ed-Fi common type (nested object)	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3457	Telephone	Contact.Telephone	The 10-digit telephone number, including the area code, for the person.	\N	6	entity	\N	No	Yes	Ed-Fi v5.0	Ed-Fi common type (nested object)	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	280	Public	f	f
+3458	ElectronicMail	Contact.ElectronicMail	The numbers, letters, and symbols used to identify an electronic mail (e-mail) user within the network to which the individual or organization belongs.	\N	6	entity	\N	No	Yes	Ed-Fi v5.0	Ed-Fi common type (nested object)	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	275	Public	f	f
+3459	LoginId	Contact.LoginId	The login ID for the user; used for security access control interface.	\N	6	string	\N	No	No	Ed-Fi v5.0	maxLength 60	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3460	Language	Contact.Language	The language(s) the individual uses to communicate. It is strongly recommended that entries use only ISO 639-2 language codes.	\N	6	entity	\N	No	Yes	Ed-Fi v5.0	Ed-Fi common type (nested object)	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	287	Public	f	f
+3461	PersonReference	Contact.PersonReference	Relates the contact to a generic person.	\N	6	entity	\N	No	No	Ed-Fi v5.0	Ed-Fi cross-entity reference	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+1550	HighestCompletedLevelOfEducation	Contact.HighestCompletedLevelOfEducation	The extent of formal instruction an individual has received (e.g., the highest grade in school completed or its equivalent or the highest degree received).	\N	6	enum	425	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+3462	AwaitingFosterCare	StudentHomelessProgramAssociation.AwaitingFosterCare	State defined definition for awaiting foster care.	\N	6	boolean	\N	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3463	HomelessUnaccompaniedYouth	StudentHomelessProgramAssociation.HomelessUnaccompaniedYouth	A homeless unaccompanied youth is a youth who is not in the physical custody of a parent or guardian and who fits the McKinney-Vento definition of homeless. Students must be both unaccompanied and homeless to be included as an unaccompanied homeless youth.	\N	6	boolean	\N	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3464	HomelessProgramService	StudentHomelessProgramAssociation.HomelessProgramService	Indicates the service(s) being provided to the student by the homeless program.	\N	6	entity	\N	No	Yes	Ed-Fi v5.0	Ed-Fi common type (nested object)	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3465	StudentReference	StudentContactAssociation.StudentReference	The student associated with the contact.	\N	6	entity	\N	Yes	No	Ed-Fi v5.0	Ed-Fi cross-entity reference	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	276	Public	f	f
+3466	ContactReference	StudentContactAssociation.ContactReference	The contact associated with the student.	\N	6	entity	\N	Yes	No	Ed-Fi v5.0	Ed-Fi cross-entity reference	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	283	Public	f	f
+3467	LivesWith	StudentContactAssociation.LivesWith	Indicator of whether the student lives with the associated contact.	\N	6	boolean	\N	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3468	ContactPriority	StudentContactAssociation.ContactPriority	The numeric order of the preferred sequence or priority of contact.	\N	6	number	\N	No	No	Ed-Fi v5.0	format: int32	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3469	ContactRestrictions	StudentContactAssociation.ContactRestrictions	Restrictions for student and/or teacher contact with the individual (e.g., the student may not be picked up by the individual).	\N	6	string	\N	No	No	Ed-Fi v5.0	maxLength 250	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+1558	Language	Language.Language	A specification of which written or spoken communication is being used.	\N	6	enum	423	Yes	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1559	LanguageUse	Language.LanguageUse	A description of how the language is used (e.g. Home Language, Native Language, Spoken Language).	\N	6	enum	424	No	Yes	Ed-Fi v5.0	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+3470	PriorityForServices	StudentMigrantEducationProgramAssociation.PriorityForServices	Report migratory children who are classified as having "priority for services" because they are failing, or most at risk of failing to meet the state's challenging state academic content standards and challenging state student academic achievement standards, and their education has been interrupted during the regular school year.	\N	6	boolean	\N	Yes	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3471	LastQualifyingMove	StudentMigrantEducationProgramAssociation.LastQualifyingMove	Date the last qualifying move occurred; used to compute MEP status.	\N	6	string	\N	Yes	No	Ed-Fi v5.0	format: date	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3472	ContinuationOfServicesReason	StudentMigrantEducationProgramAssociation.ContinuationOfServicesReason	The "continuation of services" provision found in Section 1304(e) of the statute provides that (1) a child who ceases to be a migratory child during a school term shall be eligible for services until the end of such term; (2) a child who is no longer a migratory child may continue to receive services for one additional school year, but only if comparable services are not available through other programs; and (3) secondary school students who were eligible for services in secondary school may continue to be served through credit accrual programs until graduation. Only students who received services at any time during their 36 month eligibility period may continue to receive services (not necessarily the same service).	\N	6	enum	402	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3473	USInitialEntry	StudentMigrantEducationProgramAssociation.USInitialEntry	The month, day, and year on which the student first entered the U.S.	\N	6	string	\N	No	No	Ed-Fi v5.0	format: date	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3474	USMostRecentEntry	StudentMigrantEducationProgramAssociation.USMostRecentEntry	The month, day, and year of the student's most recent entry into the U.S.	\N	6	string	\N	No	No	Ed-Fi v5.0	format: date	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3475	USInitialSchoolEntry	StudentMigrantEducationProgramAssociation.USInitialSchoolEntry	The month, day, and year on which the student first entered a U.S. school.	\N	6	string	\N	No	No	Ed-Fi v5.0	format: date	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3476	QualifyingArrivalDate	StudentMigrantEducationProgramAssociation.QualifyingArrivalDate	The qualifying arrival date (QAD) is the date the child joins the worker who has already moved, or the date when the worker joins the child who has already moved. The QAD is the date that the child's eligibility for the MEP begins. The QAD is not affected by subsequent non-qualifying moves.	\N	6	string	\N	No	No	Ed-Fi v5.0	format: date	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3477	StateResidencyDate	StudentMigrantEducationProgramAssociation.StateResidencyDate	The verified state residency for the student.	\N	6	string	\N	No	No	Ed-Fi v5.0	format: date	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3478	EligibilityExpirationDate	StudentMigrantEducationProgramAssociation.EligibilityExpirationDate	The eligibility expiration date is used to determine end of eligibility and to account for a child's eligibility expiring earlier than 36 months from the child's QAD. A child's eligibility would end earlier than 36 months from the child's QAD, if the child is no longer entitled to a free public education (e.g., graduated with a high school diploma, obtained a high school equivalency diploma (HSED), or for other reasons as determined by states' requirements), or if the child passes away.	\N	6	string	\N	No	No	Ed-Fi v5.0	format: date	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3479	MigrantEducationProgramService	StudentMigrantEducationProgramAssociation.MigrantEducationProgramService	Indicates the service(s) being provided to the student by the migrant education program.	\N	6	entity	\N	No	Yes	Ed-Fi v5.0	Ed-Fi common type (nested object)	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3480	ShortDescription	LearningResource.ShortDescription	A short description or name of the entity.	\N	6	string	\N	Yes	No	Ed-Fi v5.0	maxLength 75	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3481	Description	LearningResource.Description	An extended written representation of the education content.	\N	6	string	\N	No	No	Ed-Fi v5.0	maxLength 1024	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3482	Author	LearningResource.Author	The individual credited with the creation of the resource.	\N	6	string	\N	No	Yes	Ed-Fi v5.0	maxLength 100	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3483	AdditionalAuthorsIndicator	LearningResource.AdditionalAuthorsIndicator	Indicates whether there are additional un-named authors. In a research report, this is often marked by the abbreviation "et al".	\N	6	boolean	\N	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3484	Publisher	LearningResource.Publisher	The organization credited with publishing the resource.	\N	6	string	\N	No	No	Ed-Fi v5.0	maxLength 50	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3485	TimeRequired	LearningResource.TimeRequired	Approximate or typical time it takes to work with or through this learning resource for the typical intended target audience.	\N	6	string	\N	No	No	Ed-Fi v5.0	Ed-Fi TimeInterval (ISO 8601 duration); no MDR DataType maps exactly.	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3486	ContentClass	LearningResource.ContentClass	The predominate type or kind characterizing the learning resource.	\N	6	enum	401	Yes	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3487	UseRightsURL	LearningResource.UseRightsURL	The URL where the owner specifies permissions for using the resource.	\N	6	string	\N	No	No	Ed-Fi v5.0	format: uri; maxLength 255; minLength 5	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3488	DerivativeSourceEducationContentSource	LearningResource.DerivativeSourceEducationContentSource	A reference or URL pointing to education content from which this education content was derived.	\N	6	entity	\N	No	No	Ed-Fi v5.0	Ed-Fi common type (nested object)	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3489	PublicationDate	LearningResource.PublicationDate	The date on which this content was first published.	\N	6	string	\N	No	No	Ed-Fi v5.0	format: date | Inside an optional xs:choice with the other of PublicationDate/PublicationYear - at most one of the two may appear, and neither is required.	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3490	PublicationYear	LearningResource.PublicationYear	The year at which this content was first published.	\N	6	string	\N	No	No	Ed-Fi v5.0	format: gYear (4-digit year, ISO 8601) | Inside an optional xs:choice with the other of PublicationDate/PublicationYear - at most one of the two may appear, and neither is required.	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3491	AppropriateSex	LearningResource.AppropriateSex	Sexes for which this education content is applicable. If omitted, considered generally applicable.	\N	6	enum	445	No	Yes	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3492	AppropriateGradeLevel	LearningResource.AppropriateGradeLevel	Grade levels for which this education content is applicable. If omitted, considered generally applicable.	\N	6	enum	417	No	Yes	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3493	Language	LearningResource.Language	An indication of the languages in which the Education Content is designed.	\N	6	enum	423	No	Yes	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3494	Version	LearningResource.Version	The version identifier for the content.	\N	6	string	\N	No	No	Ed-Fi v5.0	maxLength 10	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+3495	LearningStandardReference	LearningResource.LearningStandardReference	Relates the competency, learning standard, skill and/or text complexity to which the learning resource is aligned.	\N	6	entity	\N	No	No	Ed-Fi v5.0	Ed-Fi cross-entity reference	\N	\N	\N	\N	\N	f	\N	f	\N	\N	\N	\N	Public	f	f
+133	AssessmentIdentifier	Assessment.AssessmentIdentifier	A unique number or alphanumeric code assigned to an assessment.	\N	6	string	\N	Yes	No	Ed-Fi v5.0	maxLength 60	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+134	AssessmentTitle	Assessment.AssessmentTitle	The title or name of the assessment.	\N	6	string	\N	Yes	No	Ed-Fi v5.0	maxLength 255	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+135	RevisionDate	Assessment.RevisionDate	The month, day, and year that the conceptual design for the assessment was most recently revised substantially.	\N	6	string	\N	No	No	Ed-Fi v5.0	format: date	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+136	AssessmentCategory	Assessment.AssessmentCategory	The category of an assessment based on format and content.	\N	6	enum	395	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+137	AcademicSubject	Assessment.AcademicSubject	The description of the content or subject area (e.g., arts, mathematics, reading, stenography, or a foreign language) of an assessment.	\N	6	enum	390	Yes	Yes	Ed-Fi v5.0	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+138	AssessedGradeLevel	Assessment.AssessedGradeLevel	The grade level(s) for which an assessment is designed. The semantics of null is assumed to mean that the assessment is not associated with any grade level.	\N	6	enum	417	No	Yes	Ed-Fi v5.0	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+140	Language	Assessment.Language	An indication of the languages in which the assessment is designed.	\N	6	enum	423	No	Yes	Ed-Fi v5.0	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+141	AdministrationDate	StudentAssessment.AdministrationDate	The date and time an assessment was completed by the student. The use of ISO-8601 formats with a timezone designator (UTC or time offset) is recommended in order to prevent ambiguity due to time zones.	\N	6	string	\N	No	No	Ed-Fi v5.0	format: date-time\nstudent, not event	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+142	AdministrationEndDate	StudentAssessment.AdministrationEndDate	The date and time an assessment administration ended.	\N	6	string	\N	No	No	Ed-Fi v5.0	format: date-time\nstudent, not event	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+143	PlatformType	StudentAssessment.PlatformType	The platform with which the assessment was delivered to the student during the assessment session.	\N	6	enum	432	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+144	AdministrationEnvironment	StudentAssessment.AdministrationEnvironment	The environment in which the test was administered.	\N	6	enum	393	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+655	CourseGPAApplicability	Course.CourseGPAApplicability	An indicator of whether or not the course being described is included in the computation of the student's grade point average, and if so, if it is weighted differently from regular courses.	\N	6	enum	406	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+656	CourseTitle	Course.CourseTitle	The descriptive name given to a course of study offered in a school or other institution or organization. In departmentalized classes at the elementary, secondary, and postsecondary levels (and for staff development activities), this refers to the name by which a course is identified (e.g., American History, English III). For elementary and other non-departmentalized classes, it refers to any portion of the instruction for which a grade or report is assigned (e.g., reading, composition, spelling, and language arts).	\N	6	string	\N	Yes	No	Ed-Fi v5.0	maxLength 60	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+657	CourseDescription	Course.CourseDescription	A description of the content standards and goals covered in the course. Reference may be made to state or national content standards.	\N	6	string	\N	No	No	Ed-Fi v5.0	maxLength 1024	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+664	CourseLevelCharacteristic	Course.CourseLevelCharacteristic	The type of specific program or designation with which the course is associated (e.g., AP, IB, Dual Credit, CTE).	\N	6	enum	408	No	Yes	Ed-Fi v5.0	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+665	CourseCode	Course.CourseCode	A unique alphanumeric code assigned to a course.	\N	6	string	\N	Yes	No	Ed-Fi v5.0	maxLength 60	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+666	CreditType	Credits.CreditType	The type of credits or units of value awarded for the completion of a course.	\N	6	enum	411	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+670	CourseRepeatCode	CourseTranscript.CourseRepeatCode	Indicates that an academic course has been repeated by a student and how that repeat is to be computed in the student's academic grade average.	\N	6	enum	409	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1242	EducationOrganizationIdentificationSystem	EducationOrganizationIdentificationCode.EducationOrganizationIdentificationSystem	The school system, state, or agency assigning the identification code.	\N	6	enum	413	Yes	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1243	NameOfInstitution	EducationOrganization.NameOfInstitution	The full, legally accepted name of the institution.	\N	6	string	\N	Yes	No	Ed-Fi v5.0	maxLength 75	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1244	ShortNameOfInstitution	EducationOrganization.ShortNameOfInstitution	A short name for the institution.	\N	6	string	\N	No	No	Ed-Fi v5.0	maxLength 75	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1245	EducationOrganizationCategory	EducationOrganization.EducationOrganizationCategory	The classification of the education agency within the geographic boundaries of a state according to the level of administrative and operational control granted by the state.	\N	6	enum	412	Yes	Yes	Ed-Fi v5.0	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1246	OperationalStatus	EducationOrganization.OperationalStatus	The current operational status of the education organization (e.g., active, inactive).	\N	6	enum	430	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1507	BirthDate	BirthData.BirthDate	The month, day, and year on which an individual was born.	\N	6	string	\N	Yes	No	Ed-Fi v5.0	format: date	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1541	BirthStateAbbreviation	BirthData.BirthStateAbbreviation	The abbreviation for the name of the state (within the United States) or extra-state jurisdiction in which an individual was born.	\N	6	enum	446	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1542	BirthCountry	BirthData.BirthCountry	The country in which an individual is born. It is strongly recommended that entries use only ISO 3166 2-letter country codes.	\N	6	enum	403	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1543	MultipleBirthStatus	BirthData.MultipleBirthStatus	Indicator of whether the student was born with other siblings (i.e., twins, triplets, etc.)	\N	6	boolean	\N	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1544	BirthInternationalProvince	BirthData.BirthInternationalProvince	For students born outside of the U.S., the Province or jurisdiction in which an individual is born.	\N	6	string	\N	No	No	Ed-Fi v5.0	maxLength 150	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1545	DateEnteredUS	BirthData.DateEnteredUS	For students born outside of the U.S., the date the student entered the U.S.	\N	6	string	\N	No	No	Ed-Fi v5.0	format: date	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1510	TribalAffiliation	StudentEducationOrganizationAssociation.TribalAffiliation	An American Indian tribe with which the student is affiliated as last reported to the education organization.	\N	6	enum	451	No	Yes	Ed-Fi v5.0	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+663	OfferedGradeLevel	Course.OfferedGradeLevel	The grade levels in which the course is offered.	\N	6	enum	417	No	Yes	Ed-Fi v5.0	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1548	Race	StudentEducationOrganizationAssociation.Race	The general racial category which most clearly reflects the individual's recognition of his or her community or with which the individual most identifies as last reported to the education organization. The data model allows for multiple entries so that each individual can specify all appropriate races.	\N	6	enum	437	No	Yes	Ed-Fi v5.0	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1549	HispanicLatinoEthnicity	StudentEducationOrganizationAssociation.HispanicLatinoEthnicity	An indication that the individual traces his or her origin or descent to Mexico, Puerto Rico, Cuba, Central, and South America, and other Spanish cultures, regardless of race, as last reported to the education organization. The term, "Spanish origin," can be used in addition to "Hispanic or Latino."	\N	6	boolean	\N	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1511	ElectronicMailAddress	ElectronicMail.ElectronicMailAddress	The electronic mail (e-mail) address listed for an individual or organization.	\N	6	string	\N	Yes	No	Ed-Fi v5.0	maxLength 128; minLength 7	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1512	ElectronicMailType	ElectronicMail.ElectronicMailType	The type of email listed for an individual or organization. For example: Home/Personal, Work, etc.)	\N	6	enum	415	Yes	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1534	PrimaryEmailAddressIndicator	ElectronicMail.PrimaryEmailAddressIndicator	An indication that the electronic mail address should be used as the principal electronic mail address for an individual or organization.	\N	6	boolean	\N	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1515	PersonalInformationVerification	IdentificationDocument.PersonalInformationVerification	The category of the document relative to its purpose.	\N	6	enum	431	Yes	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1521	StreetNumberName	Address.StreetNumberName	The street number and street name or post office box number of an address.	\N	6	string	\N	Yes	No	Ed-Fi v5.0	maxLength 150	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1522	ApartmentRoomSuiteNumber	Address.ApartmentRoomSuiteNumber	The apartment, room, or suite number of an address.	\N	6	string	\N	No	No	Ed-Fi v5.0	maxLength 50	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1523	City	Address.City	The name of the city in which an address is located.	\N	6	string	\N	Yes	No	Ed-Fi v5.0	maxLength 30; minLength 2	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1524	StateAbbreviation	Address.StateAbbreviation	The abbreviation for the state (within the United States) or outlying area in which an address is located.	\N	6	enum	446	Yes	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1525	PostalCode	Address.PostalCode	The five or nine digit zip code or overseas postal code portion of an address.	\N	6	string	\N	Yes	No	Ed-Fi v5.0	maxLength 17	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1527	Latitude	Address.Latitude	The geographic latitude of the physical address.	\N	6	string	\N	No	No	Ed-Fi v5.0	maxLength 20	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1528	Longitude	Address.Longitude	The geographic longitude of the physical address.	\N	6	string	\N	No	No	Ed-Fi v5.0	maxLength 20	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1529	CongressionalDistrict	Address.CongressionalDistrict	The congressional district in which an address is located.	\N	6	string	\N	No	No	Ed-Fi v5.0	maxLength 30	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1530	CountyFIPSCode	Address.CountyFIPSCode	The Federal Information Processing Standards (FIPS) numeric code for the county issued by the National Institute of Standards and Technology (NIST). Counties are considered to be the "first-order subdivisions" of each State and statistically equivalent entity, regardless of their local designations (county, parish, borough, etc.) Counties in different States will have the same code. A unique county number is created when combined with the 2-digit FIPS State Code.	\N	6	string	\N	No	No	Ed-Fi v5.0	maxLength 5; minLength 3	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1532	Locale	Address.Locale	A general geographic indicator that categorizes U.S. territory (e.g., City, Suburban).	\N	6	enum	427	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1535	TelephoneNumber	Telephone.TelephoneNumber	The telephone number including the area code, and extension, if applicable.	\N	6	string	\N	Yes	No	Ed-Fi v5.0	maxLength 24	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1536	TelephoneNumberType	Telephone.TelephoneNumberType	The type of communication number listed for an individual or organization.	\N	6	enum	449	Yes	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1537	OrderOfPriority	Telephone.OrderOfPriority	The order of priority assigned to telephone numbers to define which number to attempt first, second, etc.	\N	6	number	\N	No	No	Ed-Fi v5.0	format: int32; minimum 1	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1538	DoNotPublishIndicator	Telephone.DoNotPublishIndicator	An indication that the telephone number should not be published.	\N	6	boolean	\N	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1539	TextMessageCapabilityIndicator	Telephone.TextMessageCapabilityIndicator	An indication that the telephone number is technically capable of sending and receiving Short Message Service (SMS) text messages.	\N	6	boolean	\N	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1551	CitizenshipStatus	Citizenship.CitizenshipStatus	An indicator of whether or not the person is a U.S. citizen.	\N	6	enum	399	Yes	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1552	HomelessPrimaryNighttimeResidence	StudentHomelessProgramAssociation.HomelessPrimaryNighttimeResidence	The primary nighttime residence of the student at the time the student is identified as homeless.	\N	6	enum	418	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1554	LegalGuardian	StudentContactAssociation.LegalGuardian	Indicator of whether the person is a legal guardian for the student.	\N	6	boolean	\N	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1555	EmergencyContactStatus	StudentContactAssociation.EmergencyContactStatus	Indicator of whether the person is a designated emergency contact for the student.	\N	6	boolean	\N	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1557	PrimaryContactStatus	StudentContactAssociation.PrimaryContactStatus	Indicator of whether the person is a primary contact for the student.	\N	6	boolean	\N	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+139	AssessmentScore	Assessment.AssessmentScore	Definition of the scores to be expected from this assessment.	\N	6	entity	\N	No	Yes	Ed-Fi v5.0	Ed-Fi common type (nested object)	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	103	Public	f	f
+1533	Period	Address.Period	The time periods for which the address is valid. For physical addresses, the periods in which the person lived at that address.	\N	6	entity	\N	No	Yes	Ed-Fi v5.0	Ed-Fi common type (nested object)	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	516	Public	f	f
+667	AssessmentReportingMethod	AssessmentScore.AssessmentReportingMethod	The method that the administrator of the assessment uses to report the performance and achievement of all students. It may be a qualitative method such as performance level descriptors or a quantitative method such as a numerical grade or cut score. More than one type of reporting method may be used.	\N	6	enum	396	Yes	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+668	EducationalEnvironment	Section.EducationalEnvironment	The setting in which a student receives education and related services.	\N	6	enum	414	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+671	SectionIdentifier	Section.SectionIdentifier	The local identifier assigned to a section.	\N	6	string	\N	Yes	No	Ed-Fi v5.0	maxLength 255	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1516	Name	Student.Name	Full legal name of the person.	\N	6	entity	\N	Yes	No	Ed-Fi v5.0	Ed-Fi common type (nested object)	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	273	Public	f	f
+1514	StudentIdentificationSystem	StudentIdentificationCode.StudentIdentificationSystem	A coding scheme that is used for identification and record-keeping purposes by schools, social services, or other agencies to refer to a student.	\N	6	enum	447	Yes	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1556	Relation	StudentContactAssociation.Relation	The nature of an individual's relationship to a student, primarily used to capture family relationships.	\N	6	enum	439	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1520	AddressType	Address.AddressType	The type of address listed for an individual or organization.    For example:  Physical Address, Mailing Address, Home Address, etc.	\N	6	enum	392	Yes	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1526	NameOfCounty	Address.NameOfCounty	The name of the county, parish, borough, or comparable unit (within a state) in 'which an address is located.	\N	6	string	\N	No	No	Ed-Fi v5.0	maxLength 30	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
+1547	Sex	{Multiple}.Sex	A person's gender. (Different designations by context, e.g.  BirthSex: Persons gender at birth; StudentEdOrgAssoc: The student's gender as last reported to the education organization.)	\N	6	string	\N	\N	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	\N	Public	f	f
+1553	StudentMigrantEducationProgramAssociation	StudentMigrantEducationProgramAssociation.StudentMigrantEducationProgramAssociation	This association represents the migrant education program(s) that a student participates in or receives services from. The association is an extension of the StudentProgramAssociation with added elements particular to migrant education programs.	\N	6	string	\N	\N	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	\N	Public	f	f
+669	InteractivityStyle	LearningResource.InteractivityStyle	The predominate mode of learning supported by the learning resource. Acceptable values are active, expositive, or mixed.	\N	6	enum	420	No	No	Ed-Fi v5.0	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	\N	Public	f	f
 \.
 
 
@@ -4015,7 +4237,6 @@ COPY public."DataModels" ("Id", "Name", "Description", "UseConsiderations", "Typ
 3	CLR v2	1EdTech Comprehensive Learner Record (CLR) Standard v2.0, Final Release 14 Oct 2025, extending Open Badges 3.0 and targeting the W3C Verifiable Credentials Data Model v2.0.	\N	SourceSchema	\N	Scope decisions: (1) Merged duplicate casing pairs into the spec's PascalCase name (Achievement, AchievementCredential, Alignment, ResultDescription); old lowercase entities retired, their Attributes rows left in place unwired rather than hard-deleted. (2) No Reference-placement EntityAssociation rows -- flat entity/string-typed scalar attributes only for cross-entity pointers, avoiding the add_ref/find_children key-mismatch bug found on CASE. (3) VC 2.0 naming only (validFrom/validUntil); the VC-1.1-era issuanceDate/expirationDate do not exist in the current OB3/CLR schema and were retired, not kept as an alternate. (4) EndorsementCredential, EndorsementSubject, Image, IdentifierEntry, IdentityObject, GeoCoordinates modeled as full entities. (5) 4 pre-existing orphaned value sets (NormativeIDType, NormativeAwardStatus, NormativeCredentialFormat, NormativeCredentialStatusType) and assessmentMethod were left untouched pending a follow-up decision -- not wired, not deleted.	2.0	\N	\N	\N	\N	LIF	f	Draft	\N	\N	\N	\N
 4	CEDS	\N	\N	SourceSchema	\N	\N	1.0	\N	\N	\N	\N	LIF	f	Draft	\N	\N	\N	\N
 5	EagleApps	\N	\N	SourceSchema	\N	\N	1.0	\N	\N	\N	\N	LIF	f	Draft	\N	\N	\N	\N
-6	Ed-Fi v5	\N	\N	SourceSchema	\N	\N	1.0	\N	\N	\N	\N	LIF	f	Draft	\N	\N	\N	\N
 7	ELM	\N	\N	SourceSchema	\N	\N	1.0	\N	\N	\N	\N	LIF	f	Draft	\N	\N	\N	\N
 8	OSID / CampusAPI	\N	\N	SourceSchema	\N	\N	1.0	\N	\N	\N	\N	LIF	f	Draft	\N	\N	\N	\N
 9	PESC v1.8	\N	\N	SourceSchema	\N	\N	1.0	\N	\N	\N	\N	LIF	f	Draft	\N	\N	\N	\N
@@ -4038,6 +4259,7 @@ COPY public."DataModels" ("Id", "Name", "Description", "UseConsiderations", "Typ
 16	StateU OB 3.0	\N	\N	SourceSchema	\N	\N	1.0	\N	\N	\N	\N	StateU	f	Draft	\N	\N	\N	\N
 29	Open Badges v3	1EdTech Open Badges Specification v3.0 - a digital badge expressed as a W3C Verifiable Credential. Entities and attributes derived from the published AchievementCredential JSON schema (ob_v3p0_achievementcredential_schema.json). The root entity uses the specification's OpenBadgeCredential alias rather than AchievementCredential.	\N	SourceSchema	\N	Built by copying the 175 Open Badges 3.0 attributes already present in CLR v2 (DataModels.Id 3), which had been authored as a combined CLR/OB model, and adding the Related class from the spec. Excluded: the CLR-specific entities ClrCredential, ClrSubject and Association; the 12 CLR v2 attributes with no counterpart in the 3.0 schema; and Context and ProfileRef, which declare no properties of their own. Array flags on every type and @context attribute were set to Yes to match the spec's "MUST be an unordered set" wording, correcting 12 CLR v2 rows.	3.0	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	Draft	\N	\N	\N	\N
 14	CASE	1EdTech Competencies and Academic Standards Exchange (CASE) Service, Final Release v1.1 (24 Jan 2025, errata v1 13 Mar 2025). https://www.imsglobal.org/spec/case/v1p1	\N	SourceSchema	\N	Scope decisions (2026-08-07): (1) CFPckgDocument/CFPckgItem/CFPckgAssociation are not modeled as separate entities -- consolidated into CFDocument/CFItem/CFAssociation, which therefore carry the union of standalone + package-embedded fields (e.g. CFDocument.CFPackageURI, CFItem/CFAssociation.CFDocumentURI are present but optional even though CASE would omit them inside a CFPackage). (2) LinkURI/LinkGenURI are not modeled as entities -- all *URI-suffixed attributes (including originNodeURI/destinationNodeURI/subjectURI) are flat DataType=string scalars rather than {title,identifier,uri[,targetType]} objects; TargetTypeEnum is therefore also not modeled. (3) The 5 *Set collection wrappers, the 13 *Extension classes (and the extensions property on every class), and imsx_StatusInfo/imsx_CodeMinor/imsx_CodeMinorField are excluded entirely as transport/wrapper constructs with no competency content of their own.	1.1	\N	\N	\N	\N	LIF	f	Draft	\N	\N	\N	\N
+6	Ed-Fi v5	\N	Required and Array in this model reflect element cardinality in the Ed-Fi v5.0.0 XML interchange schema (Ed-Fi-Core.xsd, targetNamespace http://ed-fi.org/5.0.0). This model describes the XML interchange representation, not the ODS/API REST/JSON projection, which expresses references, collections and choice constructs differently. Do not diff this model's cardinality against an ODS/API Swagger document - differences between the two are representational, not defects.	SourceSchema	\N	Tracks Ed-Fi Data Standard v5.0.0 (XSD targetNamespace http://ed-fi.org/5.0.0; source: tag v5.0.0 of Ed-Fi-Alliance-OSS/Ed-Fi-Standard). Ed-Fi Data Standard 5.1 and 5.2 exist as minor updates to the 5.x line and are not tracked by this model.	5.0.0	\N	\N	\N	\N	LIF	f	Draft	\N	\N	\N	\N
 \.
 
 
@@ -4054,7 +4276,15 @@ COPY public."DeveloperApiKeys" ("Id", "OwnerSub", "Label", "KeyPrefix", "KeyHash
 --
 
 COPY public."Entities" ("Id", "Name", "UniqueName", "Description", "UseConsiderations", "Required", "Array", "SourceModel", "DataModelId", "Notes", "CreationDate", "ActivationDate", "DeprecationDate", "Contributor", "ContributorOrganization", "Extension", "ExtensionNotes", "Deleted", "Tags", "Common", "LevelOfAccess", "Queryable", "Modifiable") FROM stdin;
-112	Subject	Subject	\N	\N	\N	\N	\N	8	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
+19	AssessmentRegistration	AssessmentRegistration	\N	\N	\N	\N	\N	4	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
+21	Exam	Exam	\N	\N	\N	\N	\N	5	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
+22	Revision	Revision	\N	\N	\N	\N	\N	5	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
+23	Taxonomy	Taxonomy	\N	\N	\N	\N	\N	5	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
+31	Assessment	Assessment	\N	\N	\N	\N	\N	8	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
+32	Item	Item	\N	\N	\N	\N	\N	8	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
+33	Ontology	Ontology	\N	\N	\N	\N	\N	8	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
+34	Assesssment	Assesssment	\N	\N	\N	\N	\N	8	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
+35	AssessmentTaken	AssessmentTaken	\N	\N	\N	\N	\N	8	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 336	Org2ExtensionEntity	Org2ExtensionEntity	This entity was created to demonstrate an entity that is an extension authored by Organization 2 (Org2).	\N	No	Yes	LIF-Addition	18	\N	\N	\N	\N	\N	Org2	t	\N	f	\N	\N	Public	f	f
 344	TestPartnerEntity	TestPartnerEntity	Test of creating a partner LIF extension Entity	Test considerations	No	Yes	\N	18	Test notes	2025-08-17 16:19:22.543+00	2025-08-17 16:19:22.543+00	\N	Mary Gwozdz	StateU	t	\N	f	\N	\N	Public	f	f
 345	TestPartnerChildEntity	TestPartnerChildEntity	Test of creating a partner LIF extension Entity	Test considerations	No	Yes	\N	18	Test notes	2025-08-17 16:19:22.543+00	2025-08-17 16:19:22.543+00	\N	Mary Gwozdz	Org2	t	\N	f	\N	\N	Public	f	f
@@ -4086,17 +4316,6 @@ COPY public."Entities" ("Id", "Name", "UniqueName", "Description", "UseConsidera
 87	Profile	Profile	\N	\N	\N	\N	CLR v2	3	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 12	Assessment	Assessment	\N	\N	\N	\N	\N	4	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 13	Goal	Goal	\N	\N	\N	\N	\N	4	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
-19	AssessmentRegistration	AssessmentRegistration	\N	\N	\N	\N	\N	4	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
-21	Exam	Exam	\N	\N	\N	\N	\N	5	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
-22	Revision	Revision	\N	\N	\N	\N	\N	5	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
-23	Taxonomy	Taxonomy	\N	\N	\N	\N	\N	5	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
-24	Assessment	Assessment	\N	\N	\N	\N	\N	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
-25	StudentAssement	StudentAssement	\N	\N	\N	\N	\N	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
-31	Assessment	Assessment	\N	\N	\N	\N	\N	8	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
-32	Item	Item	\N	\N	\N	\N	\N	8	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
-33	Ontology	Ontology	\N	\N	\N	\N	\N	8	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
-34	Assesssment	Assesssment	\N	\N	\N	\N	\N	8	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
-35	AssessmentTaken	AssessmentTaken	\N	\N	\N	\N	\N	8	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 36	TestsType	TestsType	\N	\N	\N	\N	\N	9	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 37	AssessmentProfile	AssessmentProfile	\N	\N	\N	\N	\N	10	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 38	ValueProfile	ValueProfile	\N	\N	\N	\N	\N	10	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
@@ -4131,11 +4350,6 @@ COPY public."Entities" ("Id", "Name", "UniqueName", "Description", "UseConsidera
 96	StudentCourseRecord.Course	StudentCourseRecord.Course	\N	\N	\N	\N	\N	5	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 97	Taxonomy.Classifier	Taxonomy.Classifier	\N	\N	\N	\N	\N	5	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 98	StudentCourseRecord.Course.SubjectArea	StudentCourseRecord.Course.SubjectArea	\N	\N	\N	\N	\N	5	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
-99	CourseIdentificationCode	CourseIdentificationCode	\N	\N	\N	\N	\N	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
-100	Course	Course	\N	\N	\N	\N	\N	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
-101	Session	Session	\N	\N	\N	\N	\N	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
-102	Credits	Credits	\N	\N	\N	\N	\N	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
-103	AssessmentScore	AssessmentScore	\N	\N	\N	\N	\N	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 15	AssessmentPerformanceLevel	AssessmentPerformanceLevel	\N	\N	\N	\N	\N	4	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 16	LearningAssessment	LearningAssessment	\N	\N	\N	\N	\N	4	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 18	AssessmentResult	AssessmentResult	\N	\N	\N	\N	\N	4	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
@@ -4148,8 +4362,6 @@ COPY public."Entities" ("Id", "Name", "UniqueName", "Description", "UseConsidera
 71	CreativeWork+DefinedTerm	CreativeWork+DefinedTerm	\N	\N	\N	\N	\N	11	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 91	CourseSection	CourseSection	\N	\N	\N	\N	\N	4	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 93	CourseSection->Enrollment	CourseSection->Enrollment	\N	\N	\N	\N	\N	4	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
-104	Section	Section	\N	\N	\N	\N	\N	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
-106	CourseTranscript	CourseTranscript	\N	\N	\N	\N	\N	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 107	CourseCatalog	CourseCatalog	\N	\N	\N	\N	\N	8	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 5	achievement	achievement	\N	\N	\N	\N	\N	3	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	Public	f	f
 9	achievementCredential	achievementCredential	\N	\N	\N	\N	\N	3	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	Public	f	f
@@ -4158,6 +4370,7 @@ COPY public."Entities" ("Id", "Name", "UniqueName", "Description", "UseConsidera
 109	Course	Course	\N	\N	\N	\N	\N	8	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 110	CourseEntry.Term	CourseEntry.Term	\N	\N	\N	\N	\N	8	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 111	Activity	Activity	\N	\N	\N	\N	\N	8	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
+112	Subject	Subject	\N	\N	\N	\N	\N	8	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 113	CourseEntry.Grade	CourseEntry.Grade	\N	\N	\N	\N	\N	8	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 114	CourseEntry	CourseEntry	\N	\N	\N	\N	\N	8	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 115	CourseRegistration	CourseRegistration	\N	\N	\N	\N	\N	8	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
@@ -4246,8 +4459,6 @@ COPY public."Entities" ("Id", "Name", "UniqueName", "Description", "UseConsidera
 222	QACredentialOrganization	QACredentialOrganization	\N	\N	\N	\N	\N	4	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 223	OrgCode	OrgCode	\N	\N	\N	\N	\N	5	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 224	Organization	Organization	\N	\N	\N	\N	\N	5	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
-225	EducationOrganizationIdentificationCode	EducationOrganizationIdentificationCode	\N	\N	\N	\N	\N	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
-226	EducationOrganization	EducationOrganization	\N	\N	\N	\N	\N	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 227	Organisation	Organisation	\N	\N	\N	\N	\N	7	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 228	Accreditation	Accreditation	\N	\N	\N	\N	\N	7	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 229	Organization	Organization	\N	\N	\N	\N	\N	8	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
@@ -4255,6 +4466,7 @@ COPY public."Entities" ("Id", "Name", "UniqueName", "Description", "UseConsidera
 231	OrganizationType	OrganizationType	\N	\N	\N	\N	\N	9	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 232	OrganizationNameType	OrganizationNameType	\N	\N	\N	\N	\N	9	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 233	AccreditationType	AccreditationType	\N	\N	\N	\N	\N	9	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
+185	Position	Position	\N	\N	No	Yes	\N	1	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 234	CredentialOrganization\nQACredentialOrganization	CredentialOrganization\nQACredentialOrganization	\N	\N	\N	\N	\N	10	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 187	IncomeSources	Person.EmploymentLearningExperience.IncomeSources	\N	\N	No	Yes	\N	1	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 188	JobCode	Position.JobCode	\N	\N	No	Yes	\N	1	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
@@ -4280,21 +4492,6 @@ COPY public."Entities" ("Id", "Name", "UniqueName", "Description", "UseConsidera
 269	Contact	Contact	\N	\N	\N	\N	\N	5	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 270	PersonRelation	PersonRelation	\N	\N	\N	\N	\N	5	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 271	Proficiency	Proficiency	\N	\N	\N	\N	\N	5	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
-272	BirthData	BirthData	\N	\N	\N	\N	\N	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
-273	Name	Name	\N	\N	\N	\N	\N	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
-274	StudentEducationOrganizationAssociation	StudentEducationOrganizationAssociation	\N	\N	\N	\N	\N	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
-275	ElectronicMail	ElectronicMail	\N	\N	\N	\N	\N	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
-276	Student	Student	\N	\N	\N	\N	\N	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
-277	StudentIdentificationCode	StudentIdentificationCode	\N	\N	\N	\N	\N	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
-278	IdentificationDocument	IdentificationDocument	\N	\N	\N	\N	\N	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
-279	Address	Address	\N	\N	\N	\N	\N	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
-280	Telephone	Telephone	\N	\N	\N	\N	\N	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
-281	Citizenship	Citizenship	\N	\N	\N	\N	\N	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
-282	{Multiple}	{Multiple}	\N	\N	\N	\N	\N	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
-283	Contact	Contact	\N	\N	\N	\N	\N	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
-284	StudentHomelessProgramAssociation	StudentHomelessProgramAssociation	\N	\N	\N	\N	\N	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
-286	StudentContactAssociation	StudentContactAssociation	\N	\N	\N	\N	\N	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
-287	Language	Language	\N	\N	\N	\N	\N	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 288	Person	Person	\N	\N	\N	\N	\N	7	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 289	Location	Location	\N	\N	\N	\N	\N	7	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 290	Address	Address	\N	\N	\N	\N	\N	7	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
@@ -4307,7 +4504,6 @@ COPY public."Entities" ("Id", "Name", "UniqueName", "Description", "UseConsidera
 298	Core	Core	\N	\N	\N	\N	\N	9	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 299	Person	Person	\N	\N	\N	\N	\N	11	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 300	Person\nor\nContactPoint	Person\nor\nContactPoint	\N	\N	\N	\N	\N	11	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
-285	ExtendsGeneralStudentProgramAssociation	ExtendsGeneralStudentProgramAssociation	\N	\N	\N	\N	\N	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 297	PersonType/Name	PersonType/Name	\N	\N	\N	\N	\N	9	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 301	ContactPoint	ContactPoint	\N	\N	\N	\N	\N	11	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 302	PostalAddress	PostalAddress	\N	\N	\N	\N	\N	11	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
@@ -4342,7 +4538,6 @@ COPY public."Entities" ("Id", "Name", "UniqueName", "Description", "UseConsidera
 369	Accreditation	Accreditation	\N	\N	\N	Yes	\N	17	\N	\N	2025-10-03 17:28:00+00	\N	MDRUser	StateU	t	\N	t	\N	\N	Public	f	f
 131	Criteria	Credential.Requirements.Criteria	The required criteria, or what is needed to earn the credential.	\N	No	Yes	OB2	1	in programs	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 135	Identity	Person.CredentialAward.Identity	\N	\N	No	Yes	\N	1	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
-185	Position	Position	\N	\N	No	Yes	\N	1	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 186	IndustryCode	Position.IndustryCode	\N	\N	No	Yes	\N	1	Could be a list, specific to the job, not the organization. Should handle non-NAICS industries	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 76	Common	Common	\N	\N	\N	Yes	\N	1	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 130	Requirements	Credential.Requirements	The requirements to achieve the credential.	\N	No	Yes	New	1	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
@@ -4411,7 +4606,6 @@ COPY public."Entities" ("Id", "Name", "UniqueName", "Description", "UseConsidera
 78	Grade	Course.Grade	\N	\N	No	Yes	\N	1	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	Public	f	f
 14	AssessmentForm	AssessmentForm	\N	\N	\N	\N	\N	4	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 17	AssessmentParticipantSession	AssessmentParticipantSession	\N	\N	\N	\N	\N	4	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
-105	LearningResource	LearningResource	\N	\N	\N	\N	\N	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 137	CertificationTypeAnd/orEducationDegreeType	CertificationTypeAnd/orEducationDegreeType	\N	\N	\N	\N	\N	2	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 210	PersonOrOrganization	PersonOrOrganization	\N	\N	\N	\N	\N	11	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 306	ProgramOfStudy	ProgramOfStudy	\N	\N	\N	\N	\N	4	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
@@ -4445,6 +4639,7 @@ COPY public."Entities" ("Id", "Name", "UniqueName", "Description", "UseConsidera
 143	OB3	OB3	\N	\N	\N	\N	\N	3	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	Public	f	f
 11	resultType	resultType	\N	\N	\N	\N	\N	3	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	Public	f	f
 88	ResultsType	ResultsType	\N	\N	\N	\N	\N	3	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	Public	f	f
+100	Course	Course	This educational entity represents the organization of subject matter and related learning experiences provided for the instruction of students on a regular or systematic basis.	\N	\N	\N	Ed-Fi v5.0	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 455	IdentityObject	IdentityObject	A hashed or plaintext identifier for a credential subject, used for privacy-preserving identity verification. Shares its type enumeration with IdentifierEntry.identifierType (confirmed via the schema's own "Origin: IdentifierTypeEnum" comment).	\N	\N	\N	CLR v2	3	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 456	ClrSubject	ClrSubject	The learner. Holds a flat list of bare Achievement definitions, the learner's nested AchievementCredentials/EndorsementCredentials, and the Associations linking them. Does not inherit AchievementSubject's fields (role, term, activityStartDate/EndDate, creditsEarned, licenseNumber, result) -- those live on the nested AchievementCredential.credentialSubject objects, not here.	\N	\N	\N	CLR v2	3	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 457	EndorsementSubject	EndorsementSubject	The subject of an EndorsementCredential -- the thing being endorsed, plus the endorsement comment.	\N	\N	\N	CLR v2	3	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
@@ -4477,6 +4672,36 @@ COPY public."Entities" ("Id", "Name", "UniqueName", "Description", "UseConsidera
 500	Criteria	Criteria	\N	\N	\N	\N	Open Badges v3	29	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 501	EndorsementCredential	EndorsementCredential	A Verifiable Credential envelope whose subject is an endorsement of some other entity (an Achievement, a Profile, another credential).	\N	\N	\N	Open Badges v3	29	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
 502	EndorsementSubject	EndorsementSubject	The subject of an EndorsementCredential -- the thing being endorsed, plus the endorsement comment.	\N	\N	\N	Open Badges v3	29	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
+516	Period	Period	The time period for which the information is applicable or effective.	\N	\N	\N	Ed-Fi v5.0	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	Public	f	f
+24	Assessment	Assessment	This entity represents a tool, instrument, process, or exhibition composed of a systematic sampling of behavior for measuring a student's competence, knowledge, skills, or behavior. An assessment can be used to measure differences in individuals or groups and changes in performance from one occasion to the next.	\N	\N	\N	Ed-Fi v5.0	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
+25	StudentAssessment	StudentAssessment	This entity represents the analysis or scoring of a student's response on an assessment. The analysis results in a value that represents a student's performance on a set of items on a test.	\N	\N	\N	Ed-Fi v5.0	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
+99	CourseIdentificationCode	CourseIdentificationCode	A standard code that identifies the organization of subject matter and related learning experiences provided for the instruction of students.	\N	\N	\N	Ed-Fi v5.0	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
+101	Session	Session	A specific designated unit of time during which instruction is provided, grades are reported and academic credits are awarded to students (whenever applicable). Sessions serve as organized segments of the academic year and can be interrupted by vacations or other events.	\N	\N	\N	Ed-Fi v5.0	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
+102	Credits	Credits	Credits or units of value awarded for the completion of a course.	\N	\N	\N	Ed-Fi v5.0	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
+103	AssessmentScore	AssessmentScore	Definition of the scores to be expected from this assessment.	\N	\N	\N	Ed-Fi v5.0	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
+104	Section	Section	This entity represents a setting in which organized instruction of course content is provided, in-person or otherwise, to one or more students for a given period of time. A course offering may be offered to more than one section.	\N	\N	\N	Ed-Fi v5.0	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
+106	CourseTranscript	CourseTranscript	This entity is the final record of a student's performance in their courses at the end of a semester or school year.	\N	\N	\N	Ed-Fi v5.0	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
+272	BirthData	BirthData	The set of elements that capture relevant data regarding a person's birth, including birth date and place of birth.	\N	\N	\N	Ed-Fi v5.0	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
+278	IdentificationDocument	IdentificationDocument	Represents the valid document that a person uses for identification.	\N	\N	\N	Ed-Fi v5.0	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
+279	Address	Address	The set of elements that describes an address, including the street address, city, state, and ZIP code.	\N	\N	\N	Ed-Fi v5.0	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
+225	EducationOrganizationIdentificationCode	EducationOrganizationIdentificationCode	A unique number or alphanumeric code that is assigned to an education organization by a school, school system, state, or other agency or entity.	\N	\N	\N	Ed-Fi v5.0	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
+226	EducationOrganization	EducationOrganization	This entity represents any public or private institution, organization, or agency that provides instructional or support services to students or staff at any level.	\N	\N	\N	Ed-Fi v5.0	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
+273	Name	Name	The set of elements that comprise an individual's legal name.	\N	\N	\N	Ed-Fi v5.0	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
+274	StudentEducationOrganizationAssociation	StudentEducationOrganizationAssociation	This association represents student information as reported in the context of the student's relationship to the education organization. Enrollment relationship semantics are covered by StudentSchoolAssociation.	\N	\N	\N	Ed-Fi v5.0	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
+275	ElectronicMail	ElectronicMail	The numbers, letters, and symbols used to identify an electronic mail (e-mail) user within the network to which the individual or organization belongs.	\N	\N	\N	Ed-Fi v5.0	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
+276	Student	Student	This entity represents an individual for whom instruction, services, and/or care are provided in an early childhood, elementary, or secondary educational program under the jurisdiction of a school, education agency or other institution or program. A student is a person who has been enrolled in a school or other educational institution.	\N	\N	\N	Ed-Fi v5.0	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
+277	StudentIdentificationCode	StudentIdentificationCode	A coding scheme that is used for identification and record-keeping purposes by schools, social services or other agencies to refer to a student.	\N	\N	\N	Ed-Fi v5.0	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
+287	Language	Language	A method of written or spoken communication.	\N	\N	\N	Ed-Fi v5.0	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
+280	Telephone	Telephone	The 10-digit telephone number, including the area code, of an individual or organization.	\N	\N	\N	Ed-Fi v5.0	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
+517	CourseOffering	CourseOffering	This entity represents an entry in the course catalog of available courses offered by the school during a session.	Created to host InstructionalTimePlanned, which the Ed-Fi v5.0 XSD places on CourseOffering rather than Course, and to give Section.CourseOfferingReference a resolvable target. Only the elements needed for those two purposes are modeled; the rest of the Ed-Fi CourseOffering type is out of scope for this pass.	\N	\N	Ed-Fi v5.0	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	Public	f	f
+105	LearningResource	LearningResource	This entity maintains information that describes content, materials, or informational resources that support learning.	Ed-Fi Common type, not a Domain Entity - it has no identity of its own and is owned by EducationContent (1..1, inside that entity's required choice). Ed-Fi scopes education content by Namespace on EducationContent, not by EducationOrganization. Ed-Fi's own element documentation for InteractivityStyle names three acceptable values (active, expositive, mixed) while InteractivityStyleDescriptor ships four - Active, Expositive, Mixed, Other. The four-value set is correct; the discrepancy is Ed-Fi's, so do not remove Other.	\N	\N	Ed-Fi v5.0	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
+281	Citizenship	Citizenship	Contains information relative to U.S. citizenship status and its associated probationary documentation.	\N	\N	\N	Ed-Fi v5.0	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
+283	Contact	Contact	This entity represents a contact of a student, such as a parent, guardian or caretaker.	\N	\N	\N	Ed-Fi v5.0	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
+284	StudentHomelessProgramAssociation	StudentHomelessProgramAssociation	This association represents the McKinney-Vento Homeless Program program(s) that a student participates in or from which the student receives services.	\N	\N	\N	Ed-Fi v5.0	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
+285	StudentMigrantEducationProgramAssociation	StudentMigrantEducationProgramAssociation	This association represents the migrant education program(s) that a student participates in or receives services from. The association is an extension of the StudentProgramAssociation with added elements particular to migrant education programs.	Extends the Ed-Fi GeneralStudentProgramAssociation base class, which contributes StudentReference, ProgramReference, EducationOrganizationReference, BeginDate, EndDate, ReasonExited, ServedOutsideOfRegularSession and ProgramParticipationStatus. Those base-class elements are not modeled separately on this entity.	\N	\N	Ed-Fi v5.0	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
+286	StudentContactAssociation	StudentContactAssociation	This association relates students to their parents, guardians, or caretakers.	\N	\N	\N	Ed-Fi v5.0	6	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	Public	f	f
+282	{Multiple}	{Multiple}	\N	\N	\N	\N	Ed-Fi v5.0	6	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	Public	f	f
+518	EducationContent	EducationContent	This entity represents materials for students or teachers that can be used for teaching, learning, research, and more. Education content includes full courses, course materials, modules, intervention descriptions, textbooks, streaming videos, tests, software, and any other tools, materials, or techniques used to support access to knowledge.	LearningResourceMetadataURI and LearningResource sit inside a required xs:choice in Ed-Fi v5.0 - exactly one of the two must be present, never both. Ed-Fi scopes education content by Namespace, not by EducationOrganization.	\N	\N	Ed-Fi v5.0	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N	\N	Public	f	f
 \.
 
 
@@ -4730,7 +4955,43 @@ COPY public."EntityAssociation" ("Id", "ParentEntityId", "ChildEntityId", "Relat
 --
 
 COPY public."EntityAttributeAssociation" ("Id", "EntityId", "AttributeId", "Notes", "CreationDate", "ActivationDate", "DeprecationDate", "Contributor", "ContributorOrganization", "Deleted", "ExtendedByDataModelId", "Name", "Array") FROM stdin;
-2500	410	2223	\N	\N	\N	\N	\N	\N	f	\N	score	f
+3804	286	3469	\N	\N	\N	\N	\N	\N	f	\N	ContactRestrictions	f
+3632	287	1558	\N	\N	\N	\N	\N	\N	f	\N	Language	f
+3633	287	1559	\N	\N	\N	\N	\N	\N	f	\N	LanguageUse	t
+3805	285	3470	\N	\N	\N	\N	\N	\N	f	\N	PriorityForServices	f
+3806	285	3471	\N	\N	\N	\N	\N	\N	f	\N	LastQualifyingMove	f
+3807	285	3472	\N	\N	\N	\N	\N	\N	f	\N	ContinuationOfServicesReason	f
+3808	285	3473	\N	\N	\N	\N	\N	\N	f	\N	USInitialEntry	f
+3809	285	3474	\N	\N	\N	\N	\N	\N	f	\N	USMostRecentEntry	f
+3810	285	3475	\N	\N	\N	\N	\N	\N	f	\N	USInitialSchoolEntry	f
+3811	285	3476	\N	\N	\N	\N	\N	\N	f	\N	QualifyingArrivalDate	f
+3812	285	3477	\N	\N	\N	\N	\N	\N	f	\N	StateResidencyDate	f
+3813	285	3478	\N	\N	\N	\N	\N	\N	f	\N	EligibilityExpirationDate	f
+3814	285	3479	Ed-Fi MigrantEducationProgramService. TargetEntityId left null: MigrantEducationProgramService is not modeled in DataModelId 6.	\N	\N	\N	\N	\N	f	\N	MigrantEducationProgramService	t
+3815	105	3480	\N	\N	\N	\N	\N	\N	f	\N	ShortDescription	f
+3816	105	3481	\N	\N	\N	\N	\N	\N	f	\N	Description	f
+3817	105	3482	\N	\N	\N	\N	\N	\N	f	\N	Author	t
+3818	105	3483	\N	\N	\N	\N	\N	\N	f	\N	AdditionalAuthorsIndicator	f
+3819	105	3484	\N	\N	\N	\N	\N	\N	f	\N	Publisher	f
+3820	105	3485	\N	\N	\N	\N	\N	\N	f	\N	TimeRequired	f
+3821	105	3486	\N	\N	\N	\N	\N	\N	f	\N	ContentClass	f
+3822	105	3487	\N	\N	\N	\N	\N	\N	f	\N	UseRightsURL	f
+3823	105	3488	Ed-Fi EducationContentSource. TargetEntityId left null: EducationContentSource is not modeled in DataModelId 6.	\N	\N	\N	\N	\N	f	\N	DerivativeSourceEducationContentSource	f
+3824	105	3489	\N	\N	\N	\N	\N	\N	f	\N	PublicationDate	f
+3825	105	3490	\N	\N	\N	\N	\N	\N	f	\N	PublicationYear	f
+3826	105	3491	\N	\N	\N	\N	\N	\N	f	\N	AppropriateSex	t
+3827	105	3492	\N	\N	\N	\N	\N	\N	f	\N	AppropriateGradeLevel	t
+3828	105	3493	\N	\N	\N	\N	\N	\N	f	\N	Language	t
+3829	105	3494	\N	\N	\N	\N	\N	\N	f	\N	Version	f
+3830	105	3495	Ed-Fi LearningStandardReferenceType. TargetEntityId left null: LearningStandard is not modeled in DataModelId 6.	\N	\N	\N	\N	\N	f	\N	LearningStandardReference	f
+1517	285	1553	\N	\N	\N	\N	\N	LIF	t	\N	StudentMigrantEducationProgramAssociation	f
+1511	282	1547	\N	\N	\N	\N	\N	LIF	t	\N	Sex	f
+3831	518	3496	\N	\N	\N	\N	\N	\N	f	\N	ContentIdentifier	f
+3832	518	3497	\N	\N	\N	\N	\N	\N	f	\N	LearningResourceMetadataURI	f
+3833	518	3498	\N	\N	\N	\N	\N	\N	f	\N	LearningResource	f
+3834	518	3499	\N	\N	\N	\N	\N	\N	f	\N	Cost	f
+3835	518	3500	\N	\N	\N	\N	\N	\N	f	\N	CostRate	f
+3836	518	3501	\N	\N	\N	\N	\N	\N	f	\N	Namespace	f
 28	2	28	\N	\N	\N	\N	\N	LIF	f	\N	identifier	f
 29	2	29	\N	\N	\N	\N	\N	LIF	f	\N	label	f
 30	2	30	\N	\N	\N	\N	\N	LIF	f	\N	performanceLowerLevel	f
@@ -4818,15 +5079,14 @@ COPY public."EntityAttributeAssociation" ("Id", "EntityId", "AttributeId", "Note
 131	21	132	\N	\N	\N	\N	\N	LIF	f	\N	resultValuesGroups	f
 132	24	133	\N	\N	\N	\N	\N	LIF	f	\N	AssessmentIdentifier	f
 1793	344	1831	\N	2025-08-19 13:58:08.81+00	2025-08-19 13:58:08.81+00	\N	Mary Gwozdz	Org2	t	18	TestNewPartnerAttribute	f
-460	70	461	\N	\N	\N	\N	\N	LIF	f	\N	typicalAgeRange	f
 1799	349	1841	\N	2025-08-19 13:58:08.81+00	2025-08-19 13:58:08.81+00	\N	Mary Gwozdz	Org2	f	18	TestAttribute	f
 133	24	134	\N	\N	\N	\N	\N	LIF	f	\N	AssessmentTitle	f
 134	24	135	\N	\N	\N	\N	\N	LIF	f	\N	RevisionDate	f
 135	24	136	\N	\N	\N	\N	\N	LIF	f	\N	AssessmentCategory	f
-136	24	137	\N	\N	\N	\N	\N	LIF	f	\N	AcademicSubject	f
-137	24	138	\N	\N	\N	\N	\N	LIF	f	\N	AssessedGradeLevel	f
-138	24	139	\N	\N	\N	\N	\N	LIF	f	\N	AssessmentScore	f
-139	24	140	\N	\N	\N	\N	\N	LIF	f	\N	Language	f
+136	24	137	\N	\N	\N	\N	\N	LIF	f	\N	AcademicSubject	t
+137	24	138	\N	\N	\N	\N	\N	LIF	f	\N	AssessedGradeLevel	t
+138	24	139	\N	\N	\N	\N	\N	LIF	f	\N	AssessmentScore	t
+139	24	140	\N	\N	\N	\N	\N	LIF	f	\N	Language	t
 140	25	141	\N	\N	\N	\N	\N	LIF	f	\N	AdministrationDate	f
 141	25	142	\N	\N	\N	\N	\N	LIF	f	\N	AdministrationEndDate	f
 142	25	143	\N	\N	\N	\N	\N	LIF	f	\N	PlatformType	f
@@ -5095,6 +5355,7 @@ COPY public."EntityAttributeAssociation" ("Id", "EntityId", "AttributeId", "Note
 457	71	458	\N	\N	\N	\N	\N	LIF	f	\N	name	f
 458	69	459	\N	\N	\N	\N	\N	LIF	f	\N	copyrightHolder	f
 459	70	460	\N	\N	\N	\N	\N	LIF	f	\N	educationalLevel	f
+460	70	461	\N	\N	\N	\N	\N	LIF	f	\N	typicalAgeRange	f
 461	70	462	\N	\N	\N	\N	\N	LIF	f	\N	inLanguage	f
 462	70	463	\N	\N	\N	\N	\N	LIF	f	\N	keywords	f
 463	70	464	\N	\N	\N	\N	\N	LIF	f	\N	version	f
@@ -5190,7 +5451,6 @@ COPY public."EntityAttributeAssociation" ("Id", "EntityId", "AttributeId", "Note
 616	92	618	\N	\N	\N	\N	\N	LIF	f	\N	StudentIdentifier	f
 617	93	619	\N	\N	\N	\N	\N	LIF	f	\N	CourseAddDate	f
 618	93	620	\N	\N	\N	\N	\N	LIF	f	\N	CourseSectionEnrollmentStatusStartDate	f
-716	118	720	\N	\N	\N	\N	\N	LIF	f	\N	CourseHonorsCode	f
 619	93	621	\N	\N	\N	\N	\N	LIF	f	\N	CourseSectionEnrollmentStatusEndDate	f
 620	93	622	\N	\N	\N	\N	\N	LIF	f	\N	CourseDropDate	f
 621	93	623	\N	\N	\N	\N	\N	LIF	f	\N	CourseAcademicGrade	f
@@ -5229,10 +5489,8 @@ COPY public."EntityAttributeAssociation" ("Id", "EntityId", "AttributeId", "Note
 654	100	657	\N	\N	\N	\N	\N	LIF	f	\N	CourseDescription	f
 655	101	658	\N	\N	\N	\N	\N	LIF	f	\N	BeginDate	f
 656	101	659	\N	\N	\N	\N	\N	LIF	f	\N	EndDate	f
-657	100	660	\N	\N	\N	\N	\N	LIF	f	\N	InstructionalTimePlanned	f
-658	100	661	\N	\N	\N	\N	\N	LIF	f	\N	LearningStandard	f
-659	100	663	\N	\N	\N	\N	\N	LIF	f	\N	OfferedGradeLevel	f
-660	100	664	\N	\N	\N	\N	\N	LIF	f	\N	CourseLevelCharacteristic	f
+659	100	663	\N	\N	\N	\N	\N	LIF	f	\N	OfferedGradeLevel	t
+660	100	664	\N	\N	\N	\N	\N	LIF	f	\N	CourseLevelCharacteristic	t
 661	100	665	\N	\N	\N	\N	\N	LIF	f	\N	CourseCode	f
 662	102	666	\N	\N	\N	\N	\N	LIF	f	\N	CreditType	f
 663	103	667	\N	\N	\N	\N	\N	LIF	f	\N	AssessmentReportingMethod	f
@@ -5288,6 +5546,7 @@ COPY public."EntityAttributeAssociation" ("Id", "EntityId", "AttributeId", "Note
 713	117	717	\N	\N	\N	\N	\N	LIF	f	\N	CourseCreditUnits	f
 714	117	718	\N	\N	\N	\N	\N	LIF	f	\N	CourseCreditValue	f
 715	117	719	\N	\N	\N	\N	\N	LIF	f	\N	CourseCreditBasis	f
+716	118	720	\N	\N	\N	\N	\N	LIF	f	\N	CourseHonorsCode	f
 717	117	721	\N	\N	\N	\N	\N	LIF	f	\N	CourseInstructionMethodType	f
 718	117	722	\N	\N	\N	\N	\N	LIF	f	\N	CourseInstructionSiteName	f
 719	117	723	\N	\N	\N	\N	\N	LIF	f	\N	CourseInstructionSite	f
@@ -5576,7 +5835,6 @@ COPY public."EntityAttributeAssociation" ("Id", "EntityId", "AttributeId", "Note
 1184	212	1209	\N	\N	\N	\N	\N	LIF	f	\N	OperationalStatus	t
 1181	213	1206	\N	\N	\N	\N	\N	LIF	f	\N	organizationCodeValue	f
 1182	213	1207	\N	\N	\N	\N	\N	LIF	f	\N	organizationCodeType	f
-3075	456	2760	\N	\N	\N	\N	\N	\N	f	\N	id	f
 1185	214	1210	\N	\N	\N	\N	\N	LIF	f	\N	operationalStatus	f
 1186	214	1211	\N	\N	\N	\N	\N	LIF	f	\N	operationalStatusEffectiveDate	f
 1187	214	1212	\N	\N	\N	\N	\N	LIF	f	\N	informationSourceId	f
@@ -5658,7 +5916,7 @@ COPY public."EntityAttributeAssociation" ("Id", "EntityId", "AttributeId", "Note
 1217	225	1242	\N	\N	\N	\N	\N	LIF	f	\N	EducationOrganizationIdentificationSystem	f
 1218	226	1243	\N	\N	\N	\N	\N	LIF	f	\N	NameOfInstitution	f
 1219	226	1244	\N	\N	\N	\N	\N	LIF	f	\N	ShortNameOfInstitution	f
-1220	226	1245	\N	\N	\N	\N	\N	LIF	f	\N	EducationOrganizationCategory	f
+1220	226	1245	\N	\N	\N	\N	\N	LIF	f	\N	EducationOrganizationCategory	t
 1221	226	1246	\N	\N	\N	\N	\N	LIF	f	\N	OperationalStatus	f
 1222	227	1247	\N	\N	\N	\N	\N	LIF	f	\N	identifier	f
 1223	227	1248	\N	\N	\N	\N	\N	LIF	f	\N	logo	f
@@ -5816,10 +6074,9 @@ COPY public."EntityAttributeAssociation" ("Id", "EntityId", "AttributeId", "Note
 1474	270	1505	\N	\N	\N	\N	\N	LIF	f	\N	type	f
 1475	271	1506	\N	\N	\N	\N	\N	LIF	f	\N	learningObjective	f
 1476	272	1507	\N	\N	\N	\N	\N	LIF	f	\N	BirthDate	f
-1477	274	1510	\N	\N	\N	\N	\N	LIF	f	\N	TribalAffiliation	f
+1477	274	1510	\N	\N	\N	\N	\N	LIF	f	\N	TribalAffiliation	t
 1478	275	1511	\N	\N	\N	\N	\N	LIF	f	\N	ElectronicMailAddress	f
 1479	275	1512	\N	\N	\N	\N	\N	LIF	f	\N	ElectronicMailType	f
-1480	276	1513	\N	\N	\N	\N	\N	LIF	f	\N	UniqueId	f
 1481	277	1514	\N	\N	\N	\N	\N	LIF	f	\N	StudentIdentificationSystem	f
 1482	278	1515	\N	\N	\N	\N	\N	LIF	f	\N	PersonalInformationVerification	f
 1483	276	1516	\N	\N	\N	\N	\N	LIF	f	\N	Name	f
@@ -5836,7 +6093,7 @@ COPY public."EntityAttributeAssociation" ("Id", "EntityId", "AttributeId", "Note
 1494	279	1530	\N	\N	\N	\N	\N	LIF	f	\N	CountyFIPSCode	f
 1495	279	1531	\N	\N	\N	\N	\N	LIF	f	\N	DoNotPublishIndicator	f
 1496	279	1532	\N	\N	\N	\N	\N	LIF	f	\N	Locale	f
-1497	279	1533	\N	\N	\N	\N	\N	LIF	f	\N	Period	f
+1497	279	1533	\N	\N	\N	\N	\N	LIF	f	\N	Period	t
 1498	275	1534	\N	\N	\N	\N	\N	LIF	f	\N	PrimaryEmailAddressIndicator	f
 1499	280	1535	\N	\N	\N	\N	\N	LIF	f	\N	TelephoneNumber	f
 1500	280	1536	\N	\N	\N	\N	\N	LIF	f	\N	TelephoneNumberType	f
@@ -5849,14 +6106,11 @@ COPY public."EntityAttributeAssociation" ("Id", "EntityId", "AttributeId", "Note
 1507	272	1543	\N	\N	\N	\N	\N	LIF	f	\N	MultipleBirthStatus	f
 1508	272	1544	\N	\N	\N	\N	\N	LIF	f	\N	BirthInternationalProvince	f
 1509	272	1545	\N	\N	\N	\N	\N	LIF	f	\N	DateEnteredUS	f
-1510	281	1546	\N	\N	\N	\N	\N	LIF	f	\N	Visa	f
-1511	282	1547	\N	\N	\N	\N	\N	LIF	f	\N	Sex	f
-1512	274	1548	\N	\N	\N	\N	\N	LIF	f	\N	Race	f
+1510	281	1546	\N	\N	\N	\N	\N	LIF	f	\N	Visa	t
+1512	274	1548	\N	\N	\N	\N	\N	LIF	f	\N	Race	t
 1513	274	1549	\N	\N	\N	\N	\N	LIF	f	\N	HispanicLatinoEthnicity	f
-1514	283	1550	\N	\N	\N	\N	\N	LIF	f	\N	LevelOfEducation	f
 1515	281	1551	\N	\N	\N	\N	\N	LIF	f	\N	CitizenshipStatus	f
 1516	284	1552	\N	\N	\N	\N	\N	LIF	f	\N	HomelessPrimaryNighttimeResidence	f
-1517	285	1553	\N	\N	\N	\N	\N	LIF	f	\N	StudentMigrantEducationProgramAssociation	f
 1518	286	1554	\N	\N	\N	\N	\N	LIF	f	\N	LegalGuardian	f
 1519	286	1555	\N	\N	\N	\N	\N	LIF	f	\N	EmergencyContactStatus	f
 1520	286	1556	\N	\N	\N	\N	\N	LIF	f	\N	Relation	f
@@ -5927,6 +6181,8 @@ COPY public."EntityAttributeAssociation" ("Id", "EntityId", "AttributeId", "Note
 1309	241	1334	\N	\N	\N	\N	\N	LIF	f	\N	Email	t
 1314	241	1339	\N	\N	\N	\N	\N	LIF	f	\N	Telephone	t
 1263	242	1288	\N	\N	\N	\N	\N	LIF	f	\N	emailAddress	t
+1480	276	1513	\N	\N	\N	\N	\N	LIF	f	\N	StudentUniqueId	f
+1514	283	1550	\N	\N	\N	\N	\N	LIF	f	\N	HighestCompletedLevelOfEducation	f
 1264	242	1289	\N	\N	\N	\N	\N	LIF	f	\N	emailAddressType	t
 1310	242	1335	\N	\N	\N	\N	\N	LIF	f	\N	primaryEmailAddressIndicator	f
 1311	242	1336	\N	\N	\N	\N	\N	LIF	f	\N	startPeriod	f
@@ -6524,7 +6780,6 @@ COPY public."EntityAttributeAssociation" ("Id", "EntityId", "AttributeId", "Note
 1997	244	1899	\N	\N	\N	\N	\N	LIF	f	\N	informationSourceOrganization	f
 1998	244	1900	\N	\N	\N	\N	\N	LIF	f	\N	informationSourceSystem	f
 1999	76	1898	\N	\N	\N	\N	\N	LIF	f	\N	informationSourceId	f
-3183	86	2854	\N	\N	\N	\N	\N	\N	f	\N	type	f
 2000	76	1899	\N	\N	\N	\N	\N	LIF	f	\N	informationSourceOrganization	f
 2001	76	1900	\N	\N	\N	\N	\N	LIF	f	\N	informationSourceSystem	f
 2002	41	1898	\N	\N	\N	\N	\N	LIF	f	\N	informationSourceId	f
@@ -6946,6 +7201,7 @@ COPY public."EntityAttributeAssociation" ("Id", "EntityId", "AttributeId", "Note
 2497	410	2225	\N	\N	\N	\N	\N	\N	f	\N	position	f
 2498	410	2222	\N	\N	\N	\N	\N	\N	f	\N	quality	f
 2499	410	2226	\N	\N	\N	\N	\N	\N	f	\N	rubricCriterionId	f
+2500	410	2223	\N	\N	\N	\N	\N	\N	f	\N	score	f
 2501	410	2220	\N	\N	\N	\N	\N	\N	f	\N	uri	f
 2502	408	2233	\N	\N	\N	\N	\N	\N	f	\N	description	f
 2503	408	2232	\N	\N	\N	\N	\N	\N	f	\N	hierarchyCode	f
@@ -7234,6 +7490,7 @@ COPY public."EntityAttributeAssociation" ("Id", "EntityId", "AttributeId", "Note
 3072	458	2748	\N	\N	\N	\N	\N	\N	f	\N	validUntil	f
 3073	456	2763	\N	\N	\N	\N	\N	\N	f	\N	achievement	t
 3074	456	2765	\N	\N	\N	\N	\N	\N	f	\N	association	t
+3075	456	2760	\N	\N	\N	\N	\N	\N	f	\N	id	f
 3076	456	2762	\N	\N	\N	\N	\N	\N	f	\N	identifier	t
 3077	456	2761	\N	\N	\N	\N	\N	\N	f	\N	type	f
 3078	456	2764	\N	\N	\N	\N	\N	\N	f	\N	verifiableCredential	t
@@ -7342,6 +7599,7 @@ COPY public."EntityAttributeAssociation" ("Id", "EntityId", "AttributeId", "Note
 3180	86	2855	\N	\N	\N	\N	\N	\N	f	\N	targetName	f
 3181	86	2859	\N	\N	\N	\N	\N	\N	f	\N	targetType	f
 3182	86	899	\N	\N	\N	\N	\N	\N	f	\N	targetUrl	f
+3183	86	2854	\N	\N	\N	\N	\N	\N	f	\N	type	f
 3184	85	2864	\N	\N	\N	\N	\N	\N	f	\N	allowedValue	t
 3185	85	2860	\N	\N	\N	\N	\N	\N	f	\N	id	f
 3186	85	2862	\N	\N	\N	\N	\N	\N	f	\N	name	f
@@ -7399,6 +7657,190 @@ COPY public."EntityAttributeAssociation" ("Id", "EntityId", "AttributeId", "Note
 3259	468	2933	\N	\N	\N	\N	\N	\N	f	\N	type	f
 3260	467	2934	\N	\N	\N	\N	\N	\N	f	\N	id	f
 3261	467	2935	\N	\N	\N	\N	\N	\N	f	\N	type	f
+3620	516	3294	\N	\N	\N	\N	\N	\N	f	\N	BeginDate	f
+3621	516	3295	\N	\N	\N	\N	\N	\N	f	\N	EndDate	f
+657	517	660	\N	\N	\N	\N	\N	LIF	f	\N	InstructionalTimePlanned	f
+3634	24	3299	Ed-Fi AssessmentIdentificationCode. TargetEntityId left null: AssessmentIdentificationCode is not modeled in DataModelId 6.	\N	\N	\N	\N	\N	f	\N	AssessmentIdentificationCode	t
+3635	24	3300	Ed-Fi AssessmentPerformanceLevel. TargetEntityId left null: AssessmentPerformanceLevel is not modeled in DataModelId 6.	\N	\N	\N	\N	\N	f	\N	AssessmentPerformanceLevel	t
+3636	24	3301	Ed-Fi ContentStandard. TargetEntityId left null: ContentStandard is not modeled in DataModelId 6.	\N	\N	\N	\N	\N	f	\N	ContentStandard	f
+3637	24	3302	\N	\N	\N	\N	\N	\N	f	\N	AssessmentForm	f
+3638	24	3303	\N	\N	\N	\N	\N	\N	f	\N	AssessmentVersion	f
+3639	24	3304	\N	\N	\N	\N	\N	\N	f	\N	MaxRawScore	f
+3640	24	3305	\N	\N	\N	\N	\N	\N	f	\N	Nomenclature	f
+3641	24	3306	Ed-Fi AssessmentPeriod. TargetEntityId left null: AssessmentPeriod is not modeled in DataModelId 6.	\N	\N	\N	\N	\N	f	\N	AssessmentPeriod	t
+3642	24	3307	\N	\N	\N	\N	\N	\N	f	\N	AssessmentFamily	f
+3643	24	3308	\N	\N	\N	\N	\N	\N	f	\N	SectionReference	t
+3644	24	3309	Ed-Fi ProgramReferenceType. TargetEntityId left null: Program is not modeled in DataModelId 6.	\N	\N	\N	\N	\N	f	\N	ProgramReference	t
+3645	24	3310	\N	\N	\N	\N	\N	\N	f	\N	Namespace	f
+3646	24	3311	\N	\N	\N	\N	\N	\N	f	\N	EducationOrganizationReference	f
+3647	24	3312	\N	\N	\N	\N	\N	\N	f	\N	AdaptiveAssessment	f
+3648	24	3313	\N	\N	\N	\N	\N	\N	f	\N	PlatformType	t
+3649	25	3314	\N	\N	\N	\N	\N	\N	f	\N	StudentAssessmentIdentifier	f
+3650	25	3315	\N	\N	\N	\N	\N	\N	f	\N	SerialNumber	f
+3651	25	3316	\N	\N	\N	\N	\N	\N	f	\N	AdministrationLanguage	f
+3652	25	3317	\N	\N	\N	\N	\N	\N	f	\N	Accommodation	t
+3653	25	3318	\N	\N	\N	\N	\N	\N	f	\N	RetestIndicator	f
+3654	25	3319	\N	\N	\N	\N	\N	\N	f	\N	ReasonNotTested	f
+3655	25	3320	Ed-Fi ScoreResult. TargetEntityId left null: ScoreResult is not modeled in DataModelId 6.	\N	\N	\N	\N	\N	f	\N	ScoreResult	t
+3656	25	3321	\N	\N	\N	\N	\N	\N	f	\N	WhenAssessedGradeLevel	f
+3657	25	3322	Ed-Fi PerformanceLevel. TargetEntityId left null: PerformanceLevel is not modeled in DataModelId 6.	\N	\N	\N	\N	\N	f	\N	PerformanceLevel	t
+3658	25	3323	\N	\N	\N	\N	\N	\N	f	\N	EventCircumstance	f
+3659	25	3324	\N	\N	\N	\N	\N	\N	f	\N	EventDescription	f
+3660	25	3325	\N	\N	\N	\N	\N	\N	f	\N	StudentReference	f
+3661	25	3326	\N	\N	\N	\N	\N	\N	f	\N	AssessmentReference	f
+3662	25	3327	Ed-Fi StudentAssessmentItem. TargetEntityId left null: StudentAssessmentItem is not modeled in DataModelId 6.	\N	\N	\N	\N	\N	f	\N	StudentAssessmentItem	t
+3663	25	3328	Ed-Fi StudentObjectiveAssessment. TargetEntityId left null: StudentObjectiveAssessment is not modeled in DataModelId 6.	\N	\N	\N	\N	\N	f	\N	StudentObjectiveAssessment	t
+3664	25	3329	\N	\N	\N	\N	\N	\N	f	\N	SchoolYear	f
+3665	25	3330	Ed-Fi AssessmentPeriod. TargetEntityId left null: AssessmentPeriod is not modeled in DataModelId 6.	\N	\N	\N	\N	\N	f	\N	AssessmentPeriod	f
+3666	25	3331	\N	\N	\N	\N	\N	\N	f	\N	AssessedMinutes	f
+3667	25	3332	Ed-Fi SchoolReferenceType. TargetEntityId left null: School is not modeled in DataModelId 6.	\N	\N	\N	\N	\N	f	\N	ReportedSchoolReference	f
+3668	25	3333	\N	\N	\N	\N	\N	\N	f	\N	ReportedSchoolIdentifier	f
+3625	99	654	\N	\N	\N	\N	\N	\N	f	\N	IdentificationCode	f
+3626	99	662	\N	\N	\N	\N	\N	\N	f	\N	CourseIdentificationSystem	f
+3669	99	3334	\N	\N	\N	\N	\N	\N	f	\N	AssigningOrganizationIdentificationCode	f
+3670	99	3335	\N	\N	\N	\N	\N	\N	f	\N	CourseCatalogURL	f
+3671	100	3336	\N	\N	\N	\N	\N	\N	f	\N	NumberOfParts	f
+3672	100	3337	\N	\N	\N	\N	\N	\N	f	\N	CourseIdentificationCode	t
+3673	100	3338	\N	\N	\N	\N	\N	\N	f	\N	AcademicSubject	t
+3674	100	3339	\N	\N	\N	\N	\N	\N	f	\N	TimeRequiredForCompletion	f
+3675	100	3340	\N	\N	\N	\N	\N	\N	f	\N	DateCourseAdopted	f
+3676	100	3341	\N	\N	\N	\N	\N	\N	f	\N	HighSchoolCourseRequirement	f
+3677	100	3342	\N	\N	\N	\N	\N	\N	f	\N	CourseDefinedBy	f
+3678	100	3343	\N	\N	\N	\N	\N	\N	f	\N	MinimumAvailableCredits	f
+3679	100	3344	\N	\N	\N	\N	\N	\N	f	\N	MaximumAvailableCredits	f
+3680	100	3345	\N	\N	\N	\N	\N	\N	f	\N	CareerPathway	f
+3681	100	3346	\N	\N	\N	\N	\N	\N	f	\N	CompetencyLevel	t
+3682	100	3347	\N	\N	\N	\N	\N	\N	f	\N	EducationOrganizationReference	f
+658	100	661	Ed-Fi LearningStandardReferenceType. TargetEntityId left null: LearningStandard is not modeled in DataModelId 6.	\N	\N	\N	\N	LIF	f	\N	LearningStandardReference	t
+3683	100	3348	\N	\N	\N	\N	\N	\N	f	\N	MaxCompletionsForCredit	f
+3684	101	3349	\N	\N	\N	\N	\N	\N	f	\N	SessionName	f
+3685	101	3350	\N	\N	\N	\N	\N	\N	f	\N	SchoolYear	f
+3686	101	3351	\N	\N	\N	\N	\N	\N	f	\N	Term	f
+3687	101	3352	\N	\N	\N	\N	\N	\N	f	\N	TotalInstructionalDays	f
+3688	101	3353	Ed-Fi SchoolReferenceType. TargetEntityId left null: School is not modeled in DataModelId 6.	\N	\N	\N	\N	\N	f	\N	SchoolReference	f
+3689	101	3354	Ed-Fi GradingPeriodReferenceType. TargetEntityId left null: GradingPeriod is not modeled in DataModelId 6.	\N	\N	\N	\N	\N	f	\N	GradingPeriodReference	t
+3690	101	3355	Ed-Fi AcademicWeekReferenceType. TargetEntityId left null: AcademicWeek is not modeled in DataModelId 6.	\N	\N	\N	\N	\N	f	\N	AcademicWeekReference	t
+3691	102	3356	\N	\N	\N	\N	\N	\N	f	\N	Credits	f
+3692	102	3357	\N	\N	\N	\N	\N	\N	f	\N	CreditConversion	f
+3693	103	3358	\N	\N	\N	\N	\N	\N	f	\N	MinimumScore	f
+3694	103	3359	\N	\N	\N	\N	\N	\N	f	\N	MaximumScore	f
+3695	103	3360	\N	\N	\N	\N	\N	\N	f	\N	ResultDatatypeType	f
+3696	104	3361	\N	\N	\N	\N	\N	\N	f	\N	SectionType	f
+3697	104	3362	\N	\N	\N	\N	\N	\N	f	\N	SequenceOfCourse	f
+3698	104	3363	\N	\N	\N	\N	\N	\N	f	\N	MediumOfInstruction	f
+3699	104	3364	\N	\N	\N	\N	\N	\N	f	\N	PopulationServed	f
+3700	104	3365	\N	\N	\N	\N	\N	\N	f	\N	AvailableCredits	f
+3701	104	3366	\N	\N	\N	\N	\N	\N	f	\N	SectionCharacteristic	t
+3702	104	3367	\N	\N	\N	\N	\N	\N	f	\N	InstructionLanguage	f
+3703	104	3368	\N	\N	\N	\N	\N	\N	f	\N	CourseOfferingReference	f
+3704	104	3369	Ed-Fi SchoolReferenceType. TargetEntityId left null: School is not modeled in DataModelId 6.	\N	\N	\N	\N	\N	f	\N	LocationSchoolReference	f
+3705	104	3370	Ed-Fi LocationReferenceType. TargetEntityId left null: Location is not modeled in DataModelId 6.	\N	\N	\N	\N	\N	f	\N	LocationReference	f
+3706	104	3371	Ed-Fi ClassPeriodReferenceType. TargetEntityId left null: ClassPeriod is not modeled in DataModelId 6.	\N	\N	\N	\N	\N	f	\N	ClassPeriodReference	t
+3707	104	3372	Ed-Fi ProgramReferenceType. TargetEntityId left null: Program is not modeled in DataModelId 6.	\N	\N	\N	\N	\N	f	\N	ProgramReference	t
+3708	104	3373	\N	\N	\N	\N	\N	\N	f	\N	CourseLevelCharacteristic	t
+3709	104	3374	\N	\N	\N	\N	\N	\N	f	\N	OfferedGradeLevel	t
+3710	104	3375	\N	\N	\N	\N	\N	\N	f	\N	OfficialAttendancePeriod	f
+3711	104	3376	\N	\N	\N	\N	\N	\N	f	\N	SectionName	f
+3712	106	3377	\N	\N	\N	\N	\N	\N	f	\N	CourseAttemptResult	f
+3713	106	3378	\N	\N	\N	\N	\N	\N	f	\N	AttemptedCredits	f
+3714	106	3379	\N	\N	\N	\N	\N	\N	f	\N	EarnedCredits	f
+3715	106	3380	Ed-Fi AdditionalCredits. TargetEntityId left null: AdditionalCredits is not modeled in DataModelId 6.	\N	\N	\N	\N	\N	f	\N	EarnedAdditionalCredits	t
+3716	106	3381	\N	\N	\N	\N	\N	\N	f	\N	WhenTakenGradeLevel	f
+3717	106	3382	\N	\N	\N	\N	\N	\N	f	\N	MethodCreditEarned	f
+3718	106	3383	\N	\N	\N	\N	\N	\N	f	\N	FinalLetterGradeEarned	f
+3719	106	3384	\N	\N	\N	\N	\N	\N	f	\N	FinalNumericGradeEarned	f
+3720	106	3385	\N	\N	\N	\N	\N	\N	f	\N	CourseReference	f
+3721	106	3386	Ed-Fi StudentAcademicRecordReferenceType. TargetEntityId left null: StudentAcademicRecord is not modeled in DataModelId 6.	\N	\N	\N	\N	\N	f	\N	StudentAcademicRecordReference	f
+3722	106	3387	\N	\N	\N	\N	\N	\N	f	\N	SectionReference	t
+3723	106	3388	Ed-Fi StaffReferenceType. TargetEntityId left null: Staff is not modeled in DataModelId 6.	\N	\N	\N	\N	\N	f	\N	ResponsibleTeacherStaffReference	f
+3724	106	3389	Ed-Fi ProgramReferenceType. TargetEntityId left null: Program is not modeled in DataModelId 6.	\N	\N	\N	\N	\N	f	\N	CourseProgramReference	t
+3725	106	3390	\N	\N	\N	\N	\N	\N	f	\N	CourseTitle	f
+3726	106	3391	\N	\N	\N	\N	\N	\N	f	\N	AlternativeCourseTitle	f
+3727	106	3392	\N	\N	\N	\N	\N	\N	f	\N	ExternalEducationOrganizationReference	f
+3728	106	3393	\N	\N	\N	\N	\N	\N	f	\N	ExternalEducationOrganizationNameOfInstitution	f
+3729	106	3394	\N	\N	\N	\N	\N	\N	f	\N	AlternativeCourseIdentificationCode	t
+3730	106	3395	\N	\N	\N	\N	\N	\N	f	\N	AssigningOrganizationIdentificationCode	f
+3731	106	3396	\N	\N	\N	\N	\N	\N	f	\N	CourseCatalogURL	f
+3732	106	3397	\N	\N	\N	\N	\N	\N	f	\N	CreditCategory	t
+3733	106	3398	\N	\N	\N	\N	\N	\N	f	\N	AcademicSubject	t
+3734	106	3399	Ed-Fi PartialCourseTranscriptAwards. TargetEntityId left null: PartialCourseTranscriptAwards is not modeled in DataModelId 6.	\N	\N	\N	\N	\N	f	\N	PartialCourseTranscriptAwards	t
+3735	225	3400	\N	\N	\N	\N	\N	\N	f	\N	IdentificationCode	f
+3736	226	3401	\N	\N	\N	\N	\N	\N	f	\N	EducationOrganizationIdentificationCode	t
+3737	226	3402	\N	\N	\N	\N	\N	\N	f	\N	Address	t
+3738	226	3403	Ed-Fi InternationalAddress. TargetEntityId left null: InternationalAddress is not modeled in DataModelId 6.	\N	\N	\N	\N	\N	f	\N	InternationalAddress	t
+3739	226	3404	Ed-Fi InstitutionTelephone. TargetEntityId left null: InstitutionTelephone is not modeled in DataModelId 6.	\N	\N	\N	\N	\N	f	\N	InstitutionTelephone	t
+3740	226	3405	\N	\N	\N	\N	\N	\N	f	\N	WebSite	f
+3741	226	3406	Ed-Fi EducationOrganizationIndicator. TargetEntityId left null: EducationOrganizationIndicator is not modeled in DataModelId 6.	\N	\N	\N	\N	\N	f	\N	EducationOrganizationIndicator	t
+3624	272	3298	\N	\N	\N	\N	\N	\N	f	\N	BirthSex	f
+3631	273	1519	\N	\N	\N	\N	\N	\N	f	\N	PersonalTitlePrefix	f
+3627	273	1508	\N	\N	\N	\N	\N	\N	f	\N	FirstName	f
+3629	273	1517	\N	\N	\N	\N	\N	\N	f	\N	MiddleName	f
+3628	273	1509	\N	\N	\N	\N	\N	\N	f	\N	LastSurname	f
+3630	273	1518	\N	\N	\N	\N	\N	\N	f	\N	GenerationCodeSuffix	f
+3742	273	3407	\N	\N	\N	\N	\N	\N	f	\N	MaidenName	f
+3743	273	3408	\N	\N	\N	\N	\N	\N	f	\N	PreferredFirstName	f
+3744	273	3409	\N	\N	\N	\N	\N	\N	f	\N	PreferredLastSurname	f
+3745	273	3410	\N	\N	\N	\N	\N	\N	f	\N	PersonalIdentificationDocument	t
+3746	274	3411	\N	\N	\N	\N	\N	\N	f	\N	StudentReference	f
+3747	274	3412	\N	\N	\N	\N	\N	\N	f	\N	EducationOrganizationReference	f
+3748	274	3413	\N	\N	\N	\N	\N	\N	f	\N	StudentIdentificationCode	t
+3622	274	3296	\N	\N	\N	\N	\N	\N	f	\N	Sex	f
+3749	274	3414	\N	\N	\N	\N	\N	\N	f	\N	GenderIdentity	f
+3750	274	3415	\N	\N	\N	\N	\N	\N	f	\N	Address	t
+3751	274	3416	Ed-Fi InternationalAddress. TargetEntityId left null: InternationalAddress is not modeled in DataModelId 6.	\N	\N	\N	\N	\N	f	\N	InternationalAddress	t
+3752	274	3417	\N	\N	\N	\N	\N	\N	f	\N	Telephone	t
+3753	274	3418	\N	\N	\N	\N	\N	\N	f	\N	ElectronicMail	t
+3754	274	3419	\N	\N	\N	\N	\N	\N	f	\N	ProfileThumbnail	f
+3755	274	3420	Ed-Fi StudentCharacteristic. TargetEntityId left null: StudentCharacteristic is not modeled in DataModelId 6.	\N	\N	\N	\N	\N	f	\N	StudentCharacteristic	t
+3756	274	3421	\N	\N	\N	\N	\N	\N	f	\N	LimitedEnglishProficiency	f
+3757	274	3422	\N	\N	\N	\N	\N	\N	f	\N	Language	t
+3758	274	3423	Ed-Fi Disability. TargetEntityId left null: Disability is not modeled in DataModelId 6.	\N	\N	\N	\N	\N	f	\N	Disability	t
+3759	274	3424	Ed-Fi CohortYear. TargetEntityId left null: CohortYear is not modeled in DataModelId 6.	\N	\N	\N	\N	\N	f	\N	CohortYear	t
+3760	274	3425	Ed-Fi StudentIndicator. TargetEntityId left null: StudentIndicator is not modeled in DataModelId 6.	\N	\N	\N	\N	\N	f	\N	StudentIndicator	t
+3761	274	3426	\N	\N	\N	\N	\N	\N	f	\N	LoginId	f
+3762	274	3427	\N	\N	\N	\N	\N	\N	f	\N	AncestryEthnicOrigin	t
+3763	274	3428	\N	\N	\N	\N	\N	\N	f	\N	PrimaryLearningDeviceAwayFromSchool	f
+3764	274	3429	\N	\N	\N	\N	\N	\N	f	\N	PrimaryLearningDeviceAccess	f
+3765	274	3430	\N	\N	\N	\N	\N	\N	f	\N	PrimaryLearningDeviceProvider	f
+3766	274	3431	\N	\N	\N	\N	\N	\N	f	\N	InternetAccessInResidence	f
+3767	274	3432	\N	\N	\N	\N	\N	\N	f	\N	BarrierToInternetAccessInResidence	f
+3768	274	3433	\N	\N	\N	\N	\N	\N	f	\N	InternetAccessTypeInResidence	f
+3769	274	3434	\N	\N	\N	\N	\N	\N	f	\N	InternetPerformanceInResidence	f
+3770	274	3435	\N	\N	\N	\N	\N	\N	f	\N	SupporterMilitaryConnection	f
+3771	275	3436	\N	\N	\N	\N	\N	\N	f	\N	DoNotPublishIndicator	f
+3772	276	3437	Ed-Fi OtherName. TargetEntityId left null: OtherName is not modeled in DataModelId 6.	\N	\N	\N	\N	\N	f	\N	OtherName	t
+3773	276	3438	\N	\N	\N	\N	\N	\N	f	\N	BirthData	f
+3774	276	3439	\N	\N	\N	\N	\N	\N	f	\N	Citizenship	f
+3775	276	3440	Ed-Fi PersonReferenceType. TargetEntityId left null: Person is not modeled in DataModelId 6.	\N	\N	\N	\N	\N	f	\N	PersonReference	f
+3776	277	3441	\N	\N	\N	\N	\N	\N	f	\N	IdentificationCode	f
+3777	277	3442	\N	\N	\N	\N	\N	\N	f	\N	AssigningOrganizationIdentificationCode	f
+3778	278	3443	\N	\N	\N	\N	\N	\N	f	\N	DocumentTitle	f
+3779	278	3444	\N	\N	\N	\N	\N	\N	f	\N	DocumentExpirationDate	f
+3780	278	3445	\N	\N	\N	\N	\N	\N	f	\N	IssuerDocumentIdentificationCode	f
+3781	278	3446	\N	\N	\N	\N	\N	\N	f	\N	IssuerName	f
+3782	278	3447	\N	\N	\N	\N	\N	\N	f	\N	IssuerCountry	f
+3783	278	3448	\N	\N	\N	\N	\N	\N	f	\N	IdentificationDocumentUse	f
+3784	279	3449	\N	\N	\N	\N	\N	\N	f	\N	BuildingSiteNumber	f
+3785	281	3450	\N	\N	\N	\N	\N	\N	f	\N	IdentificationDocument	t
+3786	283	3451	\N	\N	\N	\N	\N	\N	f	\N	ContactUniqueId	f
+3787	283	3452	\N	\N	\N	\N	\N	\N	f	\N	Name	f
+3788	283	3453	Ed-Fi OtherName. TargetEntityId left null: OtherName is not modeled in DataModelId 6.	\N	\N	\N	\N	\N	f	\N	OtherName	t
+3623	283	3297	\N	\N	\N	\N	\N	\N	f	\N	Sex	f
+3789	283	3454	\N	\N	\N	\N	\N	\N	f	\N	GenderIdentity	f
+3790	283	3455	\N	\N	\N	\N	\N	\N	f	\N	Address	t
+3791	283	3456	Ed-Fi InternationalAddress. TargetEntityId left null: InternationalAddress is not modeled in DataModelId 6.	\N	\N	\N	\N	\N	f	\N	InternationalAddress	t
+3792	283	3457	\N	\N	\N	\N	\N	\N	f	\N	Telephone	t
+3793	283	3458	\N	\N	\N	\N	\N	\N	f	\N	ElectronicMail	t
+3794	283	3459	\N	\N	\N	\N	\N	\N	f	\N	LoginId	f
+3795	283	3460	\N	\N	\N	\N	\N	\N	f	\N	Language	t
+3796	283	3461	Ed-Fi PersonReferenceType. TargetEntityId left null: Person is not modeled in DataModelId 6.	\N	\N	\N	\N	\N	f	\N	PersonReference	f
+3797	284	3462	\N	\N	\N	\N	\N	\N	f	\N	AwaitingFosterCare	f
+3798	284	3463	\N	\N	\N	\N	\N	\N	f	\N	HomelessUnaccompaniedYouth	f
+3799	284	3464	Ed-Fi HomelessProgramService. TargetEntityId left null: HomelessProgramService is not modeled in DataModelId 6.	\N	\N	\N	\N	\N	f	\N	HomelessProgramService	t
+3800	286	3465	\N	\N	\N	\N	\N	\N	f	\N	StudentReference	f
+3801	286	3466	\N	\N	\N	\N	\N	\N	f	\N	ContactReference	f
+3802	286	3467	\N	\N	\N	\N	\N	\N	f	\N	LivesWith	f
+3803	286	3468	\N	\N	\N	\N	\N	\N	f	\N	ContactPriority	f
 \.
 
 
@@ -15689,6 +16131,7 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 3664	290	High school equivalency (e.g. GED) is the extent of formal instruction a person has received.	\N	HighSchoolEquivalency	HighSchoolEquivalency(e.g.GED)	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 3040	284	Chignik Bay Tribal Council (previously listed as Native Village of Chignik) is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	ChignikBayTribalCouncil	ChignikBayTribalCouncil	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 5264	351	\N	\N	Zgh	StandardMoroccanTamazight	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	1
+5698	396	\N	\N	Percentile rank	Percentile rank	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 374	32	Doctor’s degree-professional practice is the extent of formal instruction a person has received.	\N	73083	Doctor’sDegree-professionalPractice	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 4486	315	Doctor’s degree-professional practice is the extent of formal instruction a person has received.	\N	Doctor’sDegree-professionalPractice	Doctor’sDegree-professionalPractice	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 4484	315	Post-professional degree is the extent of formal instruction a person has received.	\N	Post-professionalDegree	Post-professionalDegree	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
@@ -15781,6 +16224,8 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 1849	77	CEDS	\N	Regents	Regents	\N	Regents is specified as the level of work required for a course or the level of the typical individual taking the course.	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 1850	77	CEDS	\N	Remedial	Remedial/Developmental	\N	Remedial/Developmental is specified as the level of work required for a course or the level of the typical individual taking the course.	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 1865	79	Carnegie Units is specified as the type of credit associated with the credit hours earned for the course.	\N	CarnegieUnits	CarnegieUnits	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	4
+5587	390	\N	\N	Career and Technical Education	Career and Technical Education	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5588	390	\N	\N	Composite	Composite	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 4253	310	Shinnecock Indian Nation is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	ShinnecockIndianNation	ShinnecockIndianNation	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 1854	77	CEDS	\N	Vocational	Vocational	\N	Vocational is specified as the level of work required for a course or the level of the typical individual taking the course.	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 1855	78	Undergraduate is specified as the level of credit associated with the credit hours earned for the course.	\N	Undergraduate	Undergraduate	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	4
@@ -15828,6 +16273,7 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 1935	83	Internet Instruction is the primary method of instruction used for the course.	\N	InternetInstruction	InternetInstruction	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 1902	80	\N	\N	511	Z-score	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 1903	80	\N	\N	9999	Other	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	4
+5589	390	\N	\N	Critical Reading	Critical Reading	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 1929	83	Computer Based Instruction is the primary method of instruction used for the course.	\N	ComputerBasedInstruction	ComputerBasedInstruction	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 1918	81	International Baccalaureate is specified as the type of enrollment associated with the credit hours for the course.	\N	InternationalBaccalaureate	InternationalBaccalaureate	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 1791	74	The related Course Code is based on the university course code system.	\N	University	UniversityCourseCode	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	4
@@ -16019,6 +16465,8 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 214	17	\N	\N	493	GradeEquivalentOrGrade-levelIndicator	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 3066	284	Coquille Indian Tribe (previously listed as Coquille Tribe of Oregon) is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	CoquilleIndianTribe	CoquilleIndianTribe	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 3069	284	Cowlitz Indian Tribe is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	CowlitzIndianTribe	CowlitzIndianTribe	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
+5590	390	\N	\N	Cross Subject	Cross Subject	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5591	390	\N	\N	English	English	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 3481	284	The Osage Nation (previously listed as Osage Tribe) is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	TheOsageNation	TheOsageNation	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 3955	310	Kaw Nation, Oklahoma is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	KawNationOklahoma	KawNation-Oklahoma	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 3074	284	Curyung Tribal Council is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	CuryungTribalCouncil	CuryungTribalCouncil	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
@@ -16134,6 +16582,7 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 2910	277	Puerto Rico	\N	PR	PuertoRico	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 1786	74	The related Course Code is based on the NCES Pilot Standard National Course Classification System for Secondary Education Codes.	\N	NCES	NCESPilotStandardNationalCourseClassificationSystemForSecondaryEducationCodes	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 3462	284	Standing Rock Sioux Tribe of North & South Dakota is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	StandingRockSiouxTribeOfNorth&SouthDakota	StandingRockSiouxTribeOfNorth&SouthDakota	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
+5592	390	\N	\N	English Language Arts	English Language Arts	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 3536	284	Washoe Tribe of Nevada & California (Carson Colony, Dresslerville Colony, Woodfords Community, Stewart Community & Washoe Ranches) is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	WashoeTribeOfNevada&California	WashoeTribeOfNevada&California	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 200	16	Regular assessment based on grade-level achievement standards without accommodations is specified as a type of assessment administered.	\N	REGASSWOACC	RegularAssessmentsBasedOnGrade-levelAchievementStandardsWithoutAccommodations	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 2416	140	128-bit number used to identify information in computer systems.	\N	UUID	UniversallyUniqueIdentifier	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	15
@@ -16326,6 +16775,7 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 2908	277	Oregon	\N	OR	Oregon	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 2909	277	Pennsylvania	\N	PA	Pennsylvania	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 310	30	The origin of the association is required as a prior condition for the destination of the association.	\N	IsPrerequisiteTo	IsPrerequisiteTo	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
+5593	390	\N	\N	Fine and Performing Arts	Fine and Performing Arts	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 2824	275	An organization responsible for identifying and/or selecting prospective employees to fill vacant positions in an organization.	\N	Recruiter	Recruiter	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 2827	275	An association or corporation established for the purpose of providing services on a nonprofit basis to its members.	\N	ProfessionalMembershipOrganization	ProfessionalMembershipOrganization	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 3989	310	Lower Elwha Tribal Community (previously listed as Lower Elwha Tribal Community of the Lower Elwha Reservation, Washington) is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	LowerElwhaTribalCommunity	LowerElwhaTribalCommunity	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
@@ -16512,6 +16962,7 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 3636	270	Home phone number is the type of communication number listed for a person.	\N	HomePhoneNumber	HomePhoneNumber	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 3176	284	Lone Pine Paiute-Shoshone Tribe (previously listed as Paiute-Shoshone Indians of the Lone Pine Community of the Lone Pine Reservation, California) is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	LonePinePaiute-ShoshoneTribe	LonePinePaiute-ShoshoneTribe	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 3190	284	Mashpee Wampanoag Tribe (previously listed as Mashpee Wampanoag Indian Tribal Council, Inc.) is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	MashpeeWampanoagTribe	MashpeeWampanoagTribe	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
+5782	403	\N	\N	BE	BE	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 3167	284	Lac Courte Oreilles Band of Lake Superior Chippewa Indians of Wisconsin is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	LacCourteOreillesBandOfLakeSuperiorChippewaIndiansOfWisconsin	LacCourteOreillesBandOfLakeSuperiorChippewaIndiansOfWisconsin	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 2774	268	Counties in metro areas of 250,000 to 1 million population	\N	2	CountiesInMetroAreasOf250000To1MillionPopulation	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 1572	52	\N	\N	BA	Bachelor'sDegree	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
@@ -16634,6 +17085,7 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 5121	351	\N	\N	Pal	Pahlavi;MiddlePersian	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 146	13	The related School Identifier uses the Dun and Bradstreet number.	\N	DUNS	DunAndBradstreetNumber	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 2811	273	The Organization Identifier is the organization's Dun and Bradstreet number.	\N	DUNS	DunAndBradstreetNumber	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
+5699	396	\N	\N	Proficiency level	Proficiency level	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 2702	265	An organization whose major purpose is to provide education and training services but is not a postsecondary education institution with the authority to award degrees. Includes community-based organizations, non-degree granting proprietary schools which are education and training providers that are recognized by states as schools and are Title IV eligible but do not award degrees, etc.	\N	EducationAndTrainingProvider	EducationAndTrainingProvider	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 2992	284	Angoon Community Association is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	AngoonCommunityAssociation	AngoonCommunityAssociation	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 2993	284	Anvik Village is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	AnvikVillage	AnvikVillage	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
@@ -16702,6 +17154,7 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 432	33	\N	\N	bin	Bini;Edo	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 1569	52	Intended for those attending secondary (high-school) level programs.	\N	AudLevel-SecondaryLevel	SecondaryLevel	\N	CTDL	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 51	3	Intended for those attending secondary (high-school) level programs.	No	audLevel-SecondaryLevel	SecondaryLevel	\N	CTDL	\N	\N	\N	\N	\N	LIF	f	\N	t	1
+5700	396	\N	\N	Promotion score	Promotion score	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 3272	284	Native Village of Nuiqsut (aka Nooiksut) is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	NativeVillageOfNuiqsut	NativeVillageOfNuiqsut	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 1539	51	Career and technical education dual-credit course (course qualifies for high school and postsecondary credit) is specified as the general nature and difficulty of instruction provided throughout a course.	\N	CareerAndtechnicalEducationDual-creditCourse	CareerAndtechnicalEducationDual-creditCourse	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 112	7	Work or product created or produced by the person being assessed.	\N	assessMethod-Artifact	Artifact	\N	CTDL	\N	\N	\N	\N	\N	LIF	f	\N	t	1
@@ -16792,6 +17245,7 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 655	33	\N	\N	mga	Irish-Middle(900-1200)	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 3972	310	Kootenai Tribe of Idaho is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	KootenaiTribeOfIdaho	KootenaiTribeOfIdaho	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 3983	310	Little Shell Tribe of Chippewa Indians of Montana is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	LittleShellTribeOfChippewaIndiansOfMontana	LittleShellTribeOfChippewaIndiansOfMontana	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
+5701	396	\N	\N	Ranking	Ranking	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 4347	310	Wichita and Affiliated Tribes (Wichita, Keechi, Waco & Tawakonie), Oklahoma is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	WichitaAndAffiliatedTribes	WichitaAndAffiliatedTribes	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 1795	75	Career and technical education dual-credit course (course qualifies for high school and postsecondary credit) is specified as the general nature and difficulty of instruction provided throughout a course.	\N	73045	CareerAndtechnicalEducationDual-creditCourse	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 1796	75	Career and technical education general course is specified as the general nature and difficulty of instruction provided throughout a course.	\N	73044	CareerAndtechnicalEducationGeneralCourse	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	4
@@ -16821,6 +17275,8 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 437	33	\N	\N	bra	Braj	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 438	33	\N	\N	bre	Breton	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 2394	139	Credential award at a postsecondary level for successful completion of a formal education program that is at least 2 years but less than 4 years, demonstrating competencies within specific occupational areas indicating job readiness.	\N	ceterms-TechnicalLevel3Certificate	TechnicalLevel3Certificate	\N	CTDL	\N	\N	\N	\N	\N	LIF	f	\N	f	10
+5594	390	\N	\N	Foreign Language and Literature	Foreign Language and Literature	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5595	390	\N	\N	Mathematics	Mathematics	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 2216	124	Credential award that requires completion of an organized program of study beyond that of a master's degree, which is designed for persons who have completed a master's degree but does not meet the requirements of a doctor's degree.	\N	Post-MasterCertificate	ceterms-PostMasterCertificate	\N	CTDL	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 2649	262	The organization is inactive.	\N	Inactive	Inactive	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 2217	124	Credential awarded to indicate readiness for an apprentice-level program.	\N	PreApprenticeshipCertificate	ceterms-PreApprenticeshipCertificate	\N	CTDL	\N	\N	\N	\N	\N	LIF	f	\N	t	1
@@ -16849,6 +17305,7 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 3014	284	Buena Vista Rancheria of Me-Wuk Indians of California is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	BuenaVistaRancheriaOfMe-WukIndiansOfCalifornia	BuenaVistaRancheriaOfMe-WukIndiansOfCalifornia	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 4039	310	Native Village of Council is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	NativeVillageOfCouncil	NativeVillageOfCouncil	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 4038	310	Native Village of Chuathbaluk (Russian Mission, Kuskokwim) is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	NativeVillageOfChuathbaluk	NativeVillageOfChuathbaluk	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
+5596	390	\N	\N	Life and Physical Sciences	Life and Physical Sciences	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 3938	310	Ione Band of Miwok Indians of California is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	IoneBandOfMiwokIndiansOfCalifornia	IoneBandOfMiwokIndiansOfCalifornia	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 2653	263	The entity responsible for operating the school.	\N	OperatingBody	OperatingBody	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 4054	310	Native Village of Hamilton is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	NativeVillageOfHamilton	NativeVillageOfHamilton	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
@@ -16881,6 +17338,7 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 312	30	The origin of the association has been supplanted by, displaced by, or superseded by the destination of the association.	\N	IsReplacedBy	IsReplacedBy	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 1927	83	Clinical Rotation Instruction is the primary method of instruction used for the course.	\N	ClinicalRotationInstruction	ClinicalRotationInstruction	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 2599	200	Credential revoked or suspended is the primary reason for the termination of the employment relationship.	\N	1402	CredentialRevokedOrSuspended	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	4
+5597	390	\N	\N	Military Science	Military Science	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 2604	200	Formal study or research is the primary reason for the termination of the employment relationship.	\N	1392	FormalStudyOrResearch	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 1788	74	The related Course Code is based on the School Codes for the Exchange of Data (SCED) course code system.	\N	SCED	SchoolCodesForTheExchangeOfData(SCED)CourseCode	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 4083	310	Native Village of Nunapitchuk is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	NativeVillageOfNunapitchuk	NativeVillageOfNunapitchuk	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
@@ -16932,6 +17390,7 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 3410	284	Robinson Rancheria (previously listed as Robinson Rancheria Band of Pomo Indians, California and the Robinson Rancheria of Pomo Indians of California) is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	RobinsonRancheria	RobinsonRancheria	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 2180	123	A Uniform Resource Locator, commonly informally termed a web address is a reference to a web resource that specifies its location on a computer network and a mechanism for retrieving it.	\N	URL	UniformResourceLocator	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 443	33	\N	\N	bur	Burmese	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
+5598	390	\N	\N	Other	Other	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 3807	310	Assiniboine and Sioux Tribes of the Fort Peck Indian Reservation, Montana is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	AssiniboineAndSiouxTribesOfTheFortPeckIndianReservation	AssiniboineAndSiouxTribesOfTheFortPeckIndianReservation-Montana	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 3019	284	Cahto Tribe of the Laytonville Rancheria is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	CahtoTribeOfTheLaytonvilleRancheria	CahtoTribeOfTheLaytonvilleRancheria	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 4331	310	Village of Iliamna is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	VillageOfIliamna	VillageOfIliamna	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
@@ -17017,6 +17476,8 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 4148	310	Organized Village of Saxman is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	OrganizedVillageOfSaxman	OrganizedVillageOfSaxman	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 3541	284	Winnemucca Indian Colony of Nevada is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	WinnemuccaIndianColonyOfNevada	WinnemuccaIndianColonyOfNevada	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 3350	284	Passamaquoddy Tribe is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	PassamaquoddyTribe	PassamaquoddyTribe	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
+5599	390	\N	\N	Physical, Health, and Safety Education	Physical, Health, and Safety Education	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5600	390	\N	\N	Reading	Reading	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 4376	312	Permanent, at time of admission is specified as the type of address listed for a learner or a parent, guardian, family member or related person.	\N	PermanentatTimeOfAdmission	Permanent-atTimeOfadmission	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 3415	284	Sac & Fox Tribe of the Mississippi in Iowa is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	Sac&FoxTribeOfTheMississippiInIowa	Sac&FoxTribeOfTheMississippiInIowa	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 3535	284	Wampanoag Tribe of Gay Head (Aquinnah) is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	WampanoagTribeOfGayHead	WampanoagTribeOfGayHead	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
@@ -17227,6 +17688,8 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 4726	91	Withdrawal by a parent (or guardian)	\N	2232	WithdrawalByAParent(orGuardian)	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 3512	284	\N	\N	Viejas	Viejas	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 4394	313	Federated States of Micronesia	\N	FederatedStatesOfMicronesia	FederatedStatesOfMicronesia	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
+5601	390	\N	\N	Religious Education and Theology	Religious Education and Theology	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5602	390	\N	\N	Social Sciences and History	Social Sciences and History	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 4719	91	Student with disabilities who met the district graduation requirements for a regular diploma, but is remaining in school to receive transitional services deemed necessary by the IEP team.	\N	73079	StudentWithDisabilitiesRemainingInSchoolToReceiveTransitionalServices	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 4705	91	Graduated with a high school diploma	\N	2212	GraduatedWithAHighSchoolDiploma	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 3446	284	Shoshone-Bannock Tribes of the Fort Hall Reservation is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	Shoshone-BannockTribesOfTheFortHallReservation	Shoshone-BannockTribesOfTheFortHallReservation	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
@@ -17275,6 +17738,7 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 72	5	\N	\N	Achievement/proficiencyLevel	Achievement/proficiencyLevel	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 572	33	\N	\N	inc	IndicLanguages	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 67	4	Alternate assessment based on alternate achievement standards is specified as a type of assessment administered.	\N	ALTASSALTACH	AlternateAassessmentsBasedOnAlternateAchievementStandards	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
+5603	390	\N	\N	Social Studies	Social Studies	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 65	4	Alternate assessment based on grade-level achievement standards is specified as a type of assessment administered.	\N	ALTASSGRADELVL	AlternateAssessmentsBasedOnGrade-levelAchievementStandards	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 66	4	Alternate assessment based on modified achievement standards is specified as a type of assessment administered.	\N	ALTASSMODACH	AlternateAssessmentsBasedOnModifiedAchievementStandards	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 136	11	No valid score is specified as the primary reason a participant did not complete an assessment.	\N	NoValidScore	NoValidScore	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
@@ -17315,6 +17779,7 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 1654	57	Advanced Placement is specified as the type of enrollment associated with the credit hours for the course.	\N	AdvancedPlacement	AdvancedPlacement	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 1655	57	Advanced Standing is specified as the type of enrollment associated with the credit hours for the course.	\N	AdvancedStanding	AdvancedStanding	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 343	32	First grade is the extent of formal instruction a person has received.	\N	790	FirstGrade	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
+5604	390	\N	\N	Science	Science	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 1729	64	Pre-registered is the status related to a student enrollment in an instance of a course.	\N	Pre-registered	Pre-registered	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 1730	64	Registered is the status related to a student enrollment in an instance of a course.	\N	Registered	Registered	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 335	31	The learning standards document or competency framework has been adopted.	\N	Adopted	Adopted	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	1
@@ -17408,6 +17873,8 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 105	6	Course is taught via hard or electronic copy or other media (CD, DVD, video cassette) and student works at own pace usually without an instructor present, but generally under supervision of LEA. Includes “packet” programs.	\N	Correspondence	Correspondence	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 4110	310	Native Village of Tyonek is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	NativeVillageOfTyonek	NativeVillageOfTyonek	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 311	30	The origin of the association is cited by the resource at the destination of the association.	\N	IsReferencedBy	IsReferencedBy	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
+5605	390	\N	\N	Writing	Writing	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5606	391	\N	\N	504 accommodation	504 accommodation	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 307	30	Context or meaning for understanding the origin of the association is provided by the destination of the association.	\N	IsDefinedBy	IsDefinedBy	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 108	6	Structured learning experience is recognized for credit but is not under supervision of the LEA.	\N	IndependentStudy	IndependentStudy	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 110	6	Course is taught through a website, web application, or app on an internet connected device.	\N	Online	Online	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
@@ -17451,6 +17918,7 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 327	30	Equivalent to. Used to connect derived CFItem to CFItem in original source CFDocument.	\N	exactMatchOf	exactMatchOf	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 328	30	The target of the association is an example of best practice for the definition of the item.	\N	exemplar	exemplar	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 329	30	To represent the structural relationship in a taxonomy between parent and child. The item is a child of the target of the association.	\N	isChildOf	isChildOf	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
+5607	391	\N	\N	English language learner accommodation	English language learner accommodation	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 330	30	To represent the structural relationship in a taxonomy between parent and child. The item is a parent of the target of the association.	\N	isParentOf	isParentOf	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 331	30	The item is a peer of the target of the association.	\N	isPeerOf	isPeerOf	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 332	30	The item is related to the target of the association in some way that is not better described by another association type.	\N	isRelatedTo	isRelatedTo	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
@@ -18035,6 +18503,7 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 857	33	\N	\N	zha	Zhuang;Chuang	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 1591	53	International Baccalaureate is specified as the level of work required for a course or the level of the typical individual taking the course.	\N	InternationalBaccalaureate	InternationalBaccalaureate	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 1607	54	Vocational/technical credit is specified as the level of credit associated with the credit hours earned for the course.	\N	Vocational	Vocational/technicalCredit	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
+5608	391	\N	\N	Other	Other	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 2789	270	Fax number is the type of communication number listed for an organization.	\N	Fax	FaxNumber	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 1517	49	The related Course Code is based on the State course code system.	\N	State	StateCourseCode	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 1518	49	The related Course Code is based on the university course code system.	\N	University	UniversityCourseCode	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
@@ -18072,6 +18541,7 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 1621	55	Unreported is specified as the type of credit associated with the credit hours earned for the course.	\N	Unreported	Unreported	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 1637	56	\N	\N	Percentile	Percentile	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 4057	310	Native Village of Karluk is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	NativeVillageOfKarluk	NativeVillageOfKarluk	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
+5609	391	\N	\N	Scheduling accommodation	Scheduling accommodation	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 1668	57	Regular/general enrollment is specified as the type of enrollment associated with the credit hours for the course.	\N	Regular	Regular/generalEnrollment	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 1641	56	\N	\N	Ranking	Ranking	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 1670	57	Life Experience	\N	LifeExperience	LifeExperience	\N	PESC	\N	\N	\N	\N	\N	LIF	f	\N	t	1
@@ -18156,6 +18626,7 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 1753	68	Other not passing/unsatisfactory grade not described by other options is specified as additional information regarding the context of the given grade.	\N	OtherFail	OtherFail	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 1752	68	No grade reported yet by instructor (although the course has ended) is specified as additional information regarding the context of the given grade.	\N	NotYetReported	NotYetReported	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 3993	310	Makah Indian Tribe of the Makah Indian Reservation is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	MakahIndianTribeOfTheMakahIndianReservation	MakahIndianTribeOfTheMakahIndianReservation	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
+5702	396	\N	\N	Ratio IQ's	Ratio IQ's	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 3087	284	Ely Shoshone Tribe of Nevada is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	ElyShoshoneTribeOfNevada	ElyShoshoneTribeOfNevada	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 2735	267	Maine	\N	ME	Maine	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 4051	310	Native Village of Gambell is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	NativeVillageOfGambell	NativeVillageOfGambell	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
@@ -18203,6 +18674,7 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 3518	284	Village of Chefornak is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	VillageOfChefornak	VillageOfChefornak	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 2493	151	Falsified application form is the primary reason for the termination of the employment relationship.	\N	FalsifiedApplicationForm	FalsifiedApplicationForm	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 2498	151	Leave Not Planning to Return is the primary reason for the termination of the employment relationship.	\N	LeaveNotPlanningToReturn	LeaveNotPlanningToReturn	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
+5703	396	\N	\N	Raw score	Raw score	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 2497	151	Illness/disability is the primary reason for the termination of the employment relationship.	\N	Illness/disability	Illness/disability	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 2494	151	Family/personal relocation is the primary reason for the termination of the employment relationship.	\N	Family/personalRelocation	Family/personalRelocation	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 3519	284	Village of Clarks Point is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	VillageOfClarksPoint	VillageOfClarksPoint	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
@@ -18238,6 +18710,7 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 3057	284	Confederated Tribes and Bands of the Yakama Nation is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	ConfederatedTribesAndBandsOfTheYakamaNation	ConfederatedTribesAndBandsOfTheYakamaNation	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 2668	264	An installation in which an organization is housed; includes all buildings, structures, and other stationary items that are located on a single site or on contiguous or adjacent sites and that are used for district or system administrative purposes.	\N	Facility	Facility	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 2501	151	Organizational restructuring is the primary reason for the termination of the employment relationship.	\N	OrganizationalRestructuring	OrganizationalRestructuring	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
+5610	391	\N	\N	Settings accommodation	Settings accommodation	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 2645	261	The Organization Identifier is a license number. A permit from an authority to own or use something, do a particular thing, or carry on a trade.	\N	LicenseNumber	LicenseNumber	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 2503	151	Personal reason is the primary reason for the termination of the employment relationship.	\N	PersonalReason	PersonalReason	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 2788	269	Organizational department.	\N	CustomerService	CustomerService	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	1
@@ -18372,6 +18845,7 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 3917	310	Gulkana Village Council (previously listed as Gulkana Village) is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	GulkanaVillageCouncil	GulkanaVillageCouncil	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 4591	322	Intended for those who are under-prepared for learning at a particular level.	\N	audLevel-RemedialLevel	RemedialLevel	\N	CTDL	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 3914	310	Greenville Rancheria (previously listed as Greenville Rancheria of Maidu Indians of California) is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	GreenvilleRancheria	GreenvilleRancheria	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
+5611	391	\N	\N	Student equipment/technology accommodation	Student equipment/technology accommodation	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 4077	310	Native Village of Nelson Lagoon is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	NativeVillageOfNelsonLagoon	NativeVillageOfNelsonLagoon	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 4542	316	The Organization Identifier is from an identification system not yet defined in CEDS.	\N	Other	Other	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 3911	310	Galena Village (aka Louden Village) is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	GalenaVillage	GalenaVillage	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
@@ -18457,6 +18931,7 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 2486	151	Budgetary reduction is the primary reason for the termination of the employment relationship.	\N	BudgetaryReduction	BudgetaryReduction	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 3015	284	Burns Paiute Tribe (previously listed as Burns Paiute Tribe of the Burns Paiute Indian Colony of Oregon) is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	BurnsPaiuteTribe	BurnsPaiuteTribe	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 4071	310	Native Village of Mekoryuk is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	NativeVillageOfMekoryuk	NativeVillageOfMekoryuk	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
+5612	391	\N	\N	Test administration accommodation	Test administration accommodation	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 4137	310	Nunakauyarmiut Tribe is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	NunakauyarmiutTribe	NunakauyarmiutTribe	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 4164	310	Pedro Bay Village is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	PedroBayVillage	PedroBayVillage	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 4142	310	Oneida Nation (previously listed as Oneida Tribe of Indians of Wisconsin) is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	OneidaNation	OneidaNation	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
@@ -18483,6 +18958,8 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 4204	310	Quapaw Nation (previously listed as The Quapaw Tribe of Indians) is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	QuapawNation	QuapawNation	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 4181	310	Prairie Band Potawatomi Nation (previously listed as Prairie Band of Potawatomi Nation, Kansas) is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	PrairieBandPotawatomiNation	PrairieBandPotawatomiNation	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 4210	310	Rampart Village is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	RampartVillage	RampartVillage	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
+5613	391	\N	\N	Test material accommodation	Test material accommodation	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5704	396	\N	\N	Scale score	Scale score	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 4219	310	Robinson Rancheria (previously listed as Robinson Rancheria Band of Pomo Indians, California and the Robinson Rancheria of Pomo Indians of California) is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	RobinsonRancheria	RobinsonRancheria	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 4178	310	Port Gamble S'Klallam Tribe (previously listed as Port Gamble Band of S'Klallam Indians) is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	PortGambleS'KlallamTribe	PortGambleS'KlallamTribe	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 3106	284	Grindstone Indian Rancheria of Wintun-Wailaki Indians of California is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	GrindstoneIndianRancheriaOfWintun-WailakiIndiansOfCalifornia	GrindstoneIndianRancheriaOfWintun-WailakiIndiansOfCalifornia	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
@@ -18506,6 +18983,8 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 3459	284	Spokane Tribe of the Spokane Reservation is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	SpokaneTribeOfTheSpokaneReservation	SpokaneTribeOfTheSpokaneReservation	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 4229	310	Salamatof Tribe (previously listed as Village of Salamatoff) is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	SalamatofTribe	SalamatofTribe	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 4228	310	Saint Regis Mohawk Tribe (previously listed as St. Regis Band of Mohawk Indians of New York) is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	SaintRegisMohawkTribe	SaintRegisMohawkTribe	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
+5614	391	\N	\N	Test response accommodation	Test response accommodation	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5615	392	\N	\N	Billing	Billing	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 4240	310	Kewa Pueblo, New Mexico (previously listed as Pueblo of Santo Domingo) is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	SantoDomingoPueblo	SantoDomingoPueblo	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 3904	310	Fort Belknap Indian Community of the Fort Belknap Reservation of Montana is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	FortBelknapIndianCommunityOfTheFortBelknapReservationOfMontana	FortBelknapIndianCommunityOfTheFortBelknapReservationOfMontana	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 4182	310	Prairie Island Indian Community in the State of Minnesota is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	PrairieIslandIndianCommunityInTheStateOfMinnesota	PrairieIslandIndianCommunityInTheStateOfMinnesota	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
@@ -18530,6 +19009,8 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 4289	310	The Muscogee (Creek) Nation is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	TheMuscogee	TheMuscogee	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 4095	310	Native Village of Savoonga is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	NativeVillageOfSavoonga	NativeVillageOfSavoonga	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 4097	310	Native Village of Selawik is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	NativeVillageOfSelawik	NativeVillageOfSelawik	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
+5616	392	\N	\N	Doubled - up (i.e., living with another family)	Doubled - up (i.e., living with another family)	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5617	392	\N	\N	Father Address	Father Address	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 3045	284	Chippewa Cree Indians of the Rocky Boy's Reservation, Montana (previously listed as Chippewa-Cree Indians of the Rocky Boy's Reservation, Montana) is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	ChippewaCreeIndiansOfTheRockyBoy'sReservationMontana	ChippewaCreeIndiansOfTheRockyBoy'sReservation-Montana	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 4098	310	Native Village of Shaktoolik is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	NativeVillageOfShaktoolik	NativeVillageOfShaktoolik	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 3080	284	Eastern Band of Cherokee Indians is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	EasternBandOfCherokeeIndians	EasternBandOfCherokeeIndians	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
@@ -18603,6 +19084,7 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 4497	274	The person is the significant other of the learner's Father.	\N	Father'sSignificantOther	Father'sSignificantOther	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 3266	284	Native Village of Napakiak is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	NativeVillageOfNapakiak	NativeVillageOfNapakiak	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 4506	274	The person is the significant other of the learner's Mother.	\N	Mother'sSignificantOther	Mother'sSignificantOther	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
+5618	392	\N	\N	Guardian Address	Guardian Address	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 4459	315	Fifth grade is the extent of formal instruction a person has received.	\N	FifthGrade	FifthGrade	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 4460	315	Sixth grade is the extent of formal instruction a person has received.	\N	SixthGrade	SixthGrade	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 4512	274	The person is the Significant other of the learner.	\N	SignificantOther	SignificantOther	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
@@ -18651,6 +19133,8 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 3310	284	New Stuyahok Village is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	NewStuyahokVillage	NewStuyahokVillage	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 3311	284	Newhalen Village is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	NewhalenVillage	NewhalenVillage	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 3312	284	Newtok Village is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	NewtokVillage	NewtokVillage	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
+5619	392	\N	\N	Home	Home	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5620	392	\N	\N	Hotels/Motels	Hotels/Motels	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 3309	284	New Koliganek Village Council is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	NewKoliganekVillageCouncil	NewKoliganekVillageCouncil	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 3313	284	Nez Perce Tribe (previously listed as Nez Perce Tribe of Idaho) is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	NezPerceTribe	NezPerceTribe	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 3987	310	Lovelock Paiute Tribe of the Lovelock Indian Colony, Nevada is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	LovelockPaiuteTribeOfTheLovelockIndianColonyNevada	LovelockPaiuteTribeOfTheLovelockIndianColony-Nevada	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
@@ -18702,6 +19186,9 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 5434	379	\N	\N	replacedBy	replacedBy	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	3
 3372	284	Prairie Band Potawatomi Nation (previously listed as Prairie Band of Potawatomi Nation, Kansas) is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	PrairieBandPotawatomiNation	PrairieBandPotawatomiNation	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 4346	310	White Mountain Apache Tribe of the Fort Apache Reservation, Arizona is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	WhiteMountainApacheTribeOfTheFortApacheReservationArizona	WhiteMountainApacheTribeOfTheFortApacheReservation-Arizona	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
+5621	392	\N	\N	Mailing	Mailing	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5622	392	\N	\N	Mother Address	Mother Address	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5623	392	\N	\N	Other	Other	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 3268	284	Native Village of Nelson Lagoon is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	NativeVillageOfNelsonLagoon	NativeVillageOfNelsonLagoon	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 3496	284	Tunica-Biloxi Indian Tribe is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	Tunica-BiloxiIndianTribe	Tunica-BiloxiIndianTribe	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 3463	284	Stebbins Community Association is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	StebbinsCommunityAssociation	StebbinsCommunityAssociation	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
@@ -18726,6 +19213,7 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 3456	284	South Naknek Village is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	SouthNaknekVillage	SouthNaknekVillage	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 3441	284	Shawnee Tribe is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	ShawneeTribe	ShawneeTribe	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 3435	284	Seldovia Village Tribe is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	SeldoviaVillageTribe	SeldoviaVillageTribe	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
+5624	392	\N	\N	Physical	Physical	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 3450	284	Skagway Village is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	SkagwayVillage	SkagwayVillage	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 3444	284	Shinnecock Indian Nation is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	ShinnecockIndianNation	ShinnecockIndianNation	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 3595	287	Louisiana	\N	Louisiana	Louisiana	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
@@ -18777,6 +19265,7 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 3548	284	Yavapai-Prescott Indian Tribe (previously listed as Yavapai-Prescott Tribe of the Yavapai Reservation, Arizona) is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	Yavapai-PrescottIndianTribe	Yavapai-PrescottIndianTribe	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 3545	284	Yakutat Tlingit Tribe is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	YakutatTlingitTribe	YakutatTlingitTribe	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 3604	287	Mississippi	\N	Mississippi	Mississippi	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
+5625	392	\N	\N	Shelter, Transitional housing, Awaiting Foster	Shelter, Transitional housing, Awaiting Foster	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 3159	284	Kletsel Dehe Band of Wintun Indians (previously listed as Cortina Indian Rancheria and the Cortina Indian Rancheria of Wintun Indians of California) is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	KletselDeheBandOfWintunIndians	KletselDeheBandOfWintunIndians	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 3977	310	Lac du Flambeau Band of Lake Superior Chippewa Indians of the Lac du Flambeau Reservation of Wisconsin is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	LacDuFlambeauBandOfLakeSuperiorChippewaIndiansOfTheLacDuFlambeauReservationOfWisconsin	LacDuFlambeauBandOfLakeSuperiorChippewaIndiansOfTheLacDuFlambeauReservationOfWisconsin	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 3605	287	Montana	\N	Montana	Montana	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
@@ -18840,6 +19329,7 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 3753	305	\N	\N	Mother	Mother	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 3754	305	\N	\N	Father	Father	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 3755	305	\N	\N	Grandparent	Grandparent	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	1
+5626	392	\N	\N	Shipping	Shipping	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 3675	290	Post-master’s certificate is the extent of formal instruction a person has received.	\N	Post-master’sCertificate	Post-master’sCertificate	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 3676	290	Graduate certificate is the extent of formal instruction a person has received.	\N	GraduateCertificate	GraduateCertificate	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 3611	287	New Mexico	\N	NewMexico	NewMexico	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
@@ -18961,6 +19451,8 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 2958	282	The values specified for Name is the person's Other name.	Update description: “Any other names that an individual currently uses.”	OtherName	OtherName	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 2956	282	\N	Add data type with description.	TribalNationName	TribalNationName	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 2959	282	The values specified for Name is the person's Given name.	Update description: “Any other name an individual has used in the past, yet no longer currently uses.”	GivenName	GivenName	\N	HR OPEN	\N	\N	\N	\N	\N	LIF	f	\N	t	1
+5627	392	\N	\N	Temporary	Temporary	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5628	392	\N	\N	Unsheltered	Unsheltered	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 4279	310	Swinomish Indian Tribal Community (previously listed as Swinomish Indians of the Swinomish Reservation of Washington) is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	SwinomishIndianTribalCommunity	SwinomishIndianTribalCommunity	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 2978	283	This document constitutes deliverable Task 2, Sub-task 2.1 B as specified in the Department of Education contract “Develop Open Source Standard for Student Credential Wallet” between the\nDepartment of Education and MIT.	\N	LearnerCredentialWalletSpecification	LearnerCredentialWalletSpecification	\N	DCC	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 3556	285	Home/personal is the type of electronic mail (e-mail) address listed for a person or organization.	\N	Home/personal	Home/personal	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
@@ -19010,6 +19502,7 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 3740	300	\N	\N	ResidentAlien	ResidentAlien	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 2241	124	College/university award for students typically completing one to two years of postsecondary school education in a technical, professional, or vocational program with an emphasis on direct employment in applied scientific and technological fields.	\N	AssociateOfAppliedScienceDegree	ceterms-AssociateOfAppliedScienceDegree	\N	CTDL	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 3748	303	\N	\N	NonActive	NonActive	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	1
+5629	392	\N	\N	Work	Work	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 2242	124	College/university award for students typically completing the first one to two years of postsecondary school education with an emphasis in the liberal arts and sciences such as the humanities and social science fields.	\N	AssociateOfArtsDegree	ceterms-AssociateOfArtsDegree	\N	CTDL	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 2244	124	College/university award for students typically completing three to five years of education where course work and activities advance skills beyond those of the first one to two years of college/university study, with an emphasis in the liberal arts and sciences such as the humanities and social science fields.	\N	BachelorOfArtsDegree	ceterms-BachelorOfArtsDegree	\N	CTDL	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 3546	284	Yankton Sioux Tribe of South Dakota is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	YanktonSiouxTribeOfSouthDakota	YanktonSiouxTribeOfSouthDakota	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
@@ -19031,6 +19524,9 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 3332	284	Oneida Indian Nation (previously listed as Oneida Nation of New York) is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	OneidaIndianNation	OneidaIndianNation	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 3547	284	Yavapai-Apache Nation of the Camp Verde Indian Reservation, Arizona is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	Yavapai-ApacheNationOfTheCampVerdeIndianReservationArizona	Yavapai-ApacheNationOfTheCampVerdeIndianReservation-Arizona	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 3448	284	Sisseton-Wahpeton Oyate of the Lake Traverse Reservation, South Dakota is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	Sisseton-WahpetonOyateOfTheLakeTraverseReservationSouthDakota	Sisseton-WahpetonOyateOfTheLakeTraverseReservation-SouthDakota	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
+5630	393	\N	\N	Classroom	Classroom	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5631	393	\N	\N	School	School	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5632	393	\N	\N	Testing Center	Testing Center	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 4233	310	San Juan Southern Paiute Tribe of Arizona is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	SanJuanSouthernPaiuteTribeOfArizona	SanJuanSouthernPaiuteTribeOfArizona	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 3554	284	Yurok Tribe of the Yurok Reservation, California is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	YurokTribeOfTheYurokReservationCalifornia	YurokTribeOfTheYurokReservation-California	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 4238	310	Santa Ynez Band of Chumash Mission Indians of the Santa Ynez Reservation, California is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	SantaYnezBandOfChumashMissionIndiansOfTheSantaYnezReservationCalifornia	SantaYnezBandOfChumashMissionIndiansOfTheSantaYnezReservation-California	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
@@ -19054,6 +19550,7 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 4100	310	Native Village of Shungnak is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	NativeVillageOfShungnak	NativeVillageOfShungnak	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 3384	284	Pueblo of San Ildefonso, New Mexico is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	PuebloOfSanIldefonsoNewMexico	PuebloOfSanIldefonso-NewMexico	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 4031	310	Native Village of Belkofski is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	NativeVillageOfBelkofski	NativeVillageOfBelkofski	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
+5633	393	\N	\N	Remote	Remote	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 4040	310	Native Village of Deering is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	NativeVillageOfDeering	NativeVillageOfDeering	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 4041	310	Native Village of Diomede (aka Inalik) is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	NativeVillageOfDiomede	NativeVillageOfDiomede	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 4033	310	Native Village of Buckland is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	NativeVillageOfBuckland	NativeVillageOfBuckland	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
@@ -19076,6 +19573,7 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 4045	310	Native Village of Ekwok (previously listed as Ekwok Village) is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	NativeVillageOfEkwok	NativeVillageOfEkwok	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 4046	310	Native Village of Elim is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	NativeVillageOfElim	NativeVillageOfElim	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 4047	310	Native Village of Eyak (Cordova) is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	NativeVillageOfEyak	NativeVillageOfEyak	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
+5634	395	\N	\N	Advanced Placement	Advanced Placement	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 3161	284	Koi Nation of Northern California (previously listed as Lower Lake Rancheria, California) is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	KoiNationOfNorthernCalifornia	KoiNationOfNorthernCalifornia	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 3920	310	Havasupai Tribe of the Havasupai Reservation, Arizona is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	HavasupaiTribeOfTheHavasupaiReservationArizona	HavasupaiTribeOfTheHavasupaiReservation-Arizona	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 3178	284	Lovelock Paiute Tribe of the Lovelock Indian Colony, Nevada is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	LovelockPaiuteTribeOfTheLovelockIndianColonyNevada	LovelockPaiuteTribeOfTheLovelockIndianColony-Nevada	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
@@ -19098,6 +19596,8 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 4266	310	Southern Ute Indian Tribe of the Southern Ute Reservation, Colorado is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	SouthernUteIndianTribeOfTheSouthernUteReservationColorado	SouthernUteIndianTribeOfTheSouthernUteReservation-Colorado	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 4102	310	Native Village of Tanacross is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	NativeVillageOfTanacross	NativeVillageOfTanacross	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 2227	124	Credential that acknowledges attendance and/or engagement in an activity.	\N	ceterms-CertificateOfParticipation	ceterms-CertificateOfParticipation	\N	CTDL	\N	\N	\N	\N	\N	LIF	f	\N	t	1
+5635	395	\N	\N	Class quiz	Class quiz	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5705	396	\N	\N	Standard age score	Standard age score	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 3511	284	Utu Utu Gwaitu Paiute Tribe of the Benton Paiute Reservation, California is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	UtuUtuGwaituPaiuteTribeOfTheBentonPaiuteReservationCalifornia	UtuUtuGwaituPaiuteTribeOfTheBentonPaiuteReservation-California	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 4201	310	Pyramid Lake Paiute Tribe of the Pyramid Lake Reservation, Nevada is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	PyramidLakePaiuteTribeOfThePyramidLakeReservationNevada	PyramidLakePaiuteTribeOfThePyramidLakeReservation-Nevada	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 4293	310	Three Affiliated Tribes of the Fort Berthold Reservation, North Dakota is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	ThreeAffiliatedTribesOfTheFortBertholdReservationNorthDakota	ThreeAffiliatedTribesOfTheFortBertholdReservation-NorthDakota	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
@@ -19120,6 +19620,7 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 4288	310	The Choctaw Nation of Oklahoma is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	TheChoctawNationOfOklahoma	TheChoctawNationOfOklahoma	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 3295	284	Native Village of Tatitlek is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	NativeVillageOfTatitlek	NativeVillageOfTatitlek	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 4224	310	Sac & Fox Tribe of the Mississippi in Iowa is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	Sac&FoxTribeOfTheMississippiInIowa	Sac&FoxTribeOfTheMississippiInIowa	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
+5636	395	\N	\N	Early Learning - Physical well-being and motor dev	Early Learning - Physical well-being and motor dev	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 3185	284	Manchester Band of Pomo Indians of the Manchester Rancheria, California (previously listed as Manchester Band of Pomo Indians of the Manchester- Point Arena Rancheria, California) is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	ManchesterBandOfPomoIndiansOfTheManchesterRancheriaCalifornia	ManchesterBandOfPomoIndiansOfTheManchesterRancheria-California	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 3366	284	Pokagon Band of Potawatomi Indians, Michigan and Indiana is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	PokagonBandOfPotawatomiIndiansMichiganAndIndiana	PokagonBandOfPotawatomiIndians-MichiganAndIndiana	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 3965	310	Kiowa Indian Tribe of Oklahoma is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	KiowaIndianTribeOfOklahoma	KiowaIndianTribeOfOklahoma	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
@@ -19173,6 +19674,7 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 4180	310	Potter Valley Tribe, California is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	PotterValleyTribeCalifornia	PotterValleyTribe-California	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 3120	284	Houlton Band of Maliseet Indians is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	HoultonBandOfMaliseetIndians	HoultonBandOfMaliseetIndians	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 3275	284	Native Village of Ouzinkie is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	NativeVillageOfOuzinkie	NativeVillageOfOuzinkie	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
+5637	395	\N	\N	Language proficiency test	Language proficiency test	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 3958	310	Keweenaw Bay Indian Community, Michigan is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	KeweenawBayIndianCommunityMichigan	KeweenawBayIndianCommunity-Michigan	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 4011	310	Minnesota Chippewa Tribe, Minnesota (Six component reservations: Bois Forte Band (Nett Lake); Fond du Lac Band; Grand Portage Band; Leech Lake Band; Mille Lacs Band; White Earth Band) is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	MinnesotaChippewaTribeMinnesota	MinnesotaChippewaTribe-Minnesota	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 2936	278	Completely rural or less than 2,500 urban population, not adjacent to a metro area	\N	9	CompletelyRuralOrLessThan2500UrbanPopulation-notAdjacentToAMetroArea	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
@@ -19198,6 +19700,7 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 4443	313	Armed Forces Africa, Canada, Europe, and Mideast	\N	ArmedForcesAfricaCanadaEuropeAndMideast	ArmedForcesAfricaCanadaEuropeAndMideast	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 4223	310	Sac & Fox Nation, Oklahoma is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	Sac&FoxNationOklahoma	Sac&FoxNation-Oklahoma	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 4278	310	Susanville Indian Rancheria, California is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	SusanvilleIndianRancheriaCalifornia	SusanvilleIndianRancheria-California	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
+5638	395	\N	\N	Psychomotor test	Psychomotor test	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 4469	315	High school equivalency (e.g., GED) is the extent of formal instruction a person has received.	\N	HighSchoolEquivalency(e.g.GED)	HighSchoolEquivalency(e.g.-GED)	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 3276	284	Native Village of Paimiut is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	NativeVillageOfPaimiut	NativeVillageOfPaimiut	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 3277	284	Native Village of Perryville is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	NativeVillageOfPerryville	NativeVillageOfPerryville	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
@@ -19222,6 +19725,7 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 3307	284	Navajo Nation, Arizona, New Mexico & Utah is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	NavajoNationArizonaNewMexico&Utah	NavajoNation-Arizona-NewMexico-&Utah	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 3362	284	Pit River Tribe, California (includes XL Ranch, Big Bend, Likely, Lookout, Montgomery Creek and Roaring Creek Rancherias) is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	PitRiverTribeCalifornia	PitRiverTribe-California	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 3469	284	Susanville Indian Rancheria, California is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	SusanvilleIndianRancheriaCalifornia	SusanvilleIndianRancheria-California	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
+5639	395	\N	\N	State alternate assessment/ELL	State alternate assessment/ELL	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 4073	310	Native Village of Nanwalek (aka English Bay) is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	NativeVillageOfNanwalek	NativeVillageOfNanwalek	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 4191	310	Pueblo of Pojoaque, New Mexico is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	PuebloOfPojoaqueNewMexico	PuebloOfPojoaque-NewMexico	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 3405	284	Redding Rancheria, California is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	ReddingRancheriaCalifornia	ReddingRancheria-California	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
@@ -19246,6 +19750,8 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 3507	284	Upper Sioux Community, Minnesota is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	UpperSiouxCommunityMinnesota	UpperSiouxCommunity-Minnesota	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 3489	284	Tonkawa Tribe of Indians of Oklahoma is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	TonkawaTribeOfIndiansOfOklahoma	TonkawaTribeOfIndiansOfOklahoma	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 3452	284	Skull Valley Band of Goshute Indians of Utah is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	SkullValleyBandOfGoshuteIndiansOfUtah	SkullValleyBandOfGoshuteIndiansOfUtah	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
+5640	395	\N	\N	Alternate assessment/ELL	Alternate assessment/ELL	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5641	395	\N	\N	College entrance exam	College entrance exam	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 4103	310	Native Village of Tanana is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	NativeVillageOfTanana	NativeVillageOfTanana	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 3434	284	Scotts Valley Band of Pomo Indians of California is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	ScottsValleyBandOfPomoIndiansOfCalifornia	ScottsValleyBandOfPomoIndiansOfCalifornia	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 3078	284	Dry Creek Rancheria Band of Pomo Indians, California (previously listed as Dry Creek Rancheria of Pomo Indians of California) is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	DryCreekRancheriaBandOfPomoIndiansCalifornia	DryCreekRancheriaBandOfPomoIndians-California	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
@@ -19273,6 +19779,8 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 2798	271	Nationally accredited higher education institution.	\N	National	NationallyAccredited	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 2801	271	Not accredited higher education institution.	\N	NotAccredited	NotAccredited	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 3144	284	Kashia Band of Pomo Indians of the Stewarts Point Rancheria, California is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	KashiaBandOfPomoIndiansOfTheStewartsPointRancheriaCalifornia	KashiaBandOfPomoIndiansOfTheStewartsPointRancheria-California	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
+5642	395	\N	\N	Early Learning - Social and emotional development	Early Learning - Social and emotional development	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5643	395	\N	\N	Manual dexterity test	Manual dexterity test	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 3140	284	Kaibab Band of Paiute Indians of the Kaibab Indian Reservation, Arizona is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	KaibabBandOfPaiuteIndiansOfTheKaibabIndianReservationArizona	KaibabBandOfPaiuteIndiansOfTheKaibabIndianReservation-Arizona	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 3782	309	The related Person Identifier uses the person's other federally assigned number.	\N	OtherFederallyAssignedNumber	OtherFederallyAssignedNumber	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 2644	261	The Organization Identifier is an other federally assigned number.	\N	OtherFederallyAssignedNumber	OtherFederallyAssignedNumber	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
@@ -19307,6 +19815,8 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 2845	275	The local, state, or federal agency that has primary responsibility for responding to an emergency situation.	\N	EmergencyResponseAgency	EmergencyResponseAgency	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 869	36	A value needs to be added for missing at will and a value needs to be added for not applicable to avoid too much missing data resulting in skewed outcomes	\N	missingAtWill	missingAtWill	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 2531	155	\N	\N	missingAtWill	missingAtWill	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	1
+5644	395	\N	\N	Reading readiness test	Reading readiness test	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5783	403	\N	\N	BF	BF	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 2854	276	A public school offering special instruction and programs not available elsewhere, designed to attract a more diverse student body from throughout a school district.	\N	Magnet	Magnet/CompetitiveAdmissionsSchool	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 4608	67	Graduated with a high school diploma	\N	2212	GraduatedWithAHighSchoolDiploma	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 5275	354	\N	\N	MissingAtWill	MissingAtWill	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	1
@@ -19338,6 +19848,8 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 4024	310	Native Village of Akhiok is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	NativeVillageOfAkhiok	NativeVillageOfAkhiok	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 4536	316	The Organization Identifier is a State Education Agency assigned number.	\N	StateEducationAgencyAssignedNumber	StateEducationAgencyAssignedNumber	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 4017	310	Mooretown Rancheria of Maidu Indians of California is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	MooretownRancheriaOfMaiduIndiansOfCalifornia	MooretownRancheriaOfMaiduIndiansOfCalifornia	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
+5645	395	\N	\N	State English proficiency test	State English proficiency test	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5646	395	\N	\N	Achievement test	Achievement test	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 3945	310	Jamul Indian Village of California is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	JamulIndianVillageOfCalifornia	JamulIndianVillageOfCalifornia	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 4002	310	Mechoopda Indian Tribe of Chico Rancheria, California is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	MechoopdaIndianTribeOfChicoRancheriaCalifornia	MechoopdaIndianTribeOfChicoRancheria-California	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 4025	310	Native Village of Akutan is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	NativeVillageOfAkutan	NativeVillageOfAkutan	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
@@ -19363,6 +19875,8 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 4326	310	Village of Bill Moore's Slough is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	VillageOfBillMoore'sSlough	VillageOfBillMoore'sSlough	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 4330	310	Village of Dot Lake is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	VillageOfDotLake	VillageOfDotLake	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 3296	284	Native Village of Tazlina is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	NativeVillageOfTazlina	NativeVillageOfTazlina	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
+5647	395	\N	\N	Class test	Class test	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5706	396	\N	\N	Standard error measurement	Standard error measurement	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 3297	284	Native Village of Teller is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	NativeVillageOfTeller	NativeVillageOfTeller	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 3298	284	Native Village of Tetlin is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	NativeVillageOfTetlin	NativeVillageOfTetlin	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 4276	310	Sun'aq Tribe of Kodiak (previously listed as Shoonaq' Tribe of Kodiak) is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	Sun'aqTribeOfKodiak	Sun'aqTribeOfKodiak	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
@@ -19388,6 +19902,7 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 3525	284	Village of Kotlik is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	VillageOfKotlik	VillageOfKotlik	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 3514	284	Village of Anaktuvuk Pass is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	VillageOfAnaktuvukPass	VillageOfAnaktuvukPass	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 3306	284	Native Village of White Mountain is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	NativeVillageOfWhiteMountain	NativeVillageOfWhiteMountain	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
+5648	395	\N	\N	Early Learning - Language and literacy development	Early Learning - Language and literacy development	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 3348	284	Pascua Yaqui Tribe of Arizona is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	PascuaYaquiTribeOfArizona	PascuaYaquiTribeOfArizona	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 3423	284	San Carlos Apache Tribe of the San Carlos Reservation, Arizona is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	SanCarlosApacheTribeOfTheSanCarlosReservationArizona	SanCarlosApacheTribeOfTheSanCarlosReservation-Arizona	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 4006	310	Mescalero Apache Tribe of the Mescalero Reservation, New Mexico is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	MescaleroApacheTribeOfTheMescaleroReservationNewMexico	MescaleroApacheTribeOfTheMescaleroReservation-NewMexico	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
@@ -19470,6 +19985,7 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 3531	284	Village of Stony River is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	VillageOfStonyRiver	VillageOfStonyRiver	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 3890	310	Eastern Shawnee Tribe of Oklahoma is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	EasternShawneeTribeOfOklahoma	EasternShawneeTribeOfOklahoma	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 4145	310	Organized Village of Kake is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	OrganizedVillageOfKake	OrganizedVillageOfKake	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
+5649	395	\N	\N	International Baccalaureate	International Baccalaureate	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 4225	310	Saginaw Chippewa Indian Tribe of Michigan is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	SaginawChippewaIndianTribeOfMichigan	SaginawChippewaIndianTribeOfMichigan	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 4291	310	The Seminole Nation of Oklahoma is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	TheSeminoleNationOfOklahoma	TheSeminoleNationOfOklahoma	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 4335	310	Village of Lower Kalskag is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	VillageOfLowerKalskag	VillageOfLowerKalskag	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
@@ -19492,6 +20008,8 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 3092	284	Federated Indians of Graton Rancheria, California is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	FederatedIndiansOfGratonRancheriaCalifornia	FederatedIndiansOfGratonRancheria-California	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 3175	284	Little Traverse Bay Bands of Odawa Indians, Michigan is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	LittleTraverseBayBandsOfOdawaIndiansMichigan	LittleTraverseBayBandsOfOdawaIndians-Michigan	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 3091	284	Ewiiaapaayp Band of Kumeyaay Indians, California is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	EwiiaapaaypBandOfKumeyaayIndiansCalifornia	EwiiaapaaypBandOfKumeyaayIndians-California	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
+5650	395	\N	\N	Psychological test	Psychological test	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5651	395	\N	\N	State alternative assessment/modified standards	State alternative assessment/modified standards	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 3119	284	Hopland Band of Pomo Indians, California (previously listed as Hopland Band of Pomo Indians of the Hopland Rancheria, California) is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	HoplandBandOfPomoIndiansCalifornia	HoplandBandOfPomoIndians-California	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 3100	284	Fort Mojave Indian Tribe of Arizona, California & Nevada is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	FortMojaveIndianTribeOfArizona-California&Nevada	FortMojaveIndianTribeOfArizona-California&Nevada	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 3126	284	Iipay Nation of Santa Ysabel, California (previously listed as Santa Ysabel Band of Diegueno Mission Indians of the Santa Ysabel Reservation) is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	IipayNationOfSantaYsabel-California	IipayNationOfSantaYsabel-California	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
@@ -19513,6 +20031,7 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 4018	310	Morongo Band of Mission Indians, California (previously listed as Morongo Band of Cahuilla Mission Indians of the Morongo Reservation) is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	MorongoBandOfMissionIndiansCalifornia	MorongoBandOfMissionIndians-California	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 4184	310	Pueblo of Acoma, New Mexico is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	PuebloOfAcomaNewMexico	PuebloOfAcoma-NewMexico	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 4196	310	Pueblo of Santa Clara, New Mexico is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	PuebloOfSantaClaraNewMexico	PuebloOfSantaClara-NewMexico	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
+5652	395	\N	\N	Alternative assessment/modified standards	Alternative assessment/modified standards	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 3382	284	Pueblo of Pojoaque, New Mexico is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	PuebloOfPojoaqueNewMexico	PuebloOfPojoaque-NewMexico	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
 4209	310	Ramona Band of Cahuilla, California (previously listed as Ramona Band or Village of Cahuilla Mission Indians of California) is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	RamonaBandOfCahuillaCalifornia	RamonaBandOfCahuilla-California	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 4213	310	Red Lake Band of Chippewa Indians, Minnesota is the Native American tribal entity recognized and eligible to receive services from the United States Bureau of Indian Affairs to which a person is affiliated.	\N	RedLakeBandOfChippewaIndiansMinnesota	RedLakeBandOfChippewaIndians-Minnesota	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	4
@@ -19563,6 +20082,9 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 1858	78	Higher or upper division credit (associated with third or fourth year) is specified as the level of credit associated with the credit hours earned for the course.	\N	UpperDivision	HigherOrUpperDivisionCredit(associatedWithThirdOrFourthYear)	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	4
 363	32	Associate's degree (two years or more) is the extent of formal instruction a person has received.	\N	1050	Associate'sDegree(twoYearsOrMore)	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 3670	290	Associate's degree (two years or more) is the extent of formal instruction a person has received.	\N	Associate'sDegree(twoYearsOrMore)	Associate'sDegree(twoYearsOrMore)	\N	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	1
+5653	395	\N	\N	Developmental observation	Developmental observation	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5654	395	\N	\N	Foreign language proficiency test	Foreign language proficiency test	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5655	395	\N	\N	Performance assessment	Performance assessment	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 2315	133	Time-limited, revocable, renewable credential awarded by an authoritative body for demonstrating the knowledge, skills, and abilities to perform specific tasks or an occupation. Certifications can typically be revoked if not renewed, for a violation of a code of ethics (if applicable) or proven incompetence after due process. Description of revocation criteria for a specific Certification should be defined using Revocation Profile. This is an exact match of Certification in [CTDL-TERMS].	\N	Certification	Certification	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	3
 2316	133	Represents a course completion.	\N	Course	Course	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	3
 2317	133	Represents community service.	\N	CommunityService	CommunityService	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	3
@@ -19586,6 +20108,9 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 2336	133	Credential awarded upon demonstration through apprenticeship of the highest level of skills and performance in industry trades and professions. This is an exact match of MasterCertificate in [CTDL-TERMS].	\N	MasterCertificate	MasterCertificate	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	3
 2337	133	Credential awarded for a graduate level course of study where course work and activities advance skills beyond those of the bachelor's degree or its equivalent. Equivalent to an award at UNESCO ISCED 2011, Level 7. This is an exact match of MasterDegree in [CTDL-TERMS].	\N	MasterDegree	MasterDegree	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	3
 2338	133	Credential that addresses a subset of field-specific knowledge, skills, or competencies; often developmental with relationships to other micro-credentials and field credentials. This is an exact match of MicroCredential in [CTDL-TERMS].	\N	MicroCredential	MicroCredential	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	3
+5656	395	\N	\N	State summative assessment 3-8 general	State summative assessment 3-8 general	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5657	395	\N	\N	Aptitude test	Aptitude test	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5658	395	\N	\N	Diagnostic	Diagnostic	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 2339	133	Doctoral degree conferred for advanced work beyond the master level, including the preparation and defense of a thesis or dissertation based on original research, or the planning and execution of an original project demonstrating substantial artistic or scholarly achievement. Equivalent to an award at UNESCO ISCED 2011, Level 8. This is an exact match of ResearchDoctorate in [CTDL-TERMS].	\N	ResearchDoctorate	ResearchDoctorate	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	3
 2340	133	Diploma awarded by secondary education institutions for successful completion of a secondary school program of study. Equivalent to an award at UNESCO ISCED 2011 Levels 2 or 3. This is an exact match of SecondarySchoolDiploma in [CTDL-TERMS].	\N	SecondarySchoolDiploma	SecondarySchoolDiploma	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	3
 1774	70	The result is from a rubric criterion.	\N	RubricCriterion	RubricCriterion	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	f	3
@@ -19636,6 +20161,7 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 2201	124	Represents practical activities that are done away school, college, or place of work. Includes internships and practicums.	\N	Fieldwork	Fieldwork	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 2202	124	Represents a license.	\N	License	License	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 2203	124	Represents membership.	\N	Membership	Membership	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	t	1
+5659	395	\N	\N	Formative	Formative	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 2204	124	Credential earned through work-based learning and earn-and-learn models that meet standards and are applicable to industry trades and professions. This is an exact match of ApprenticeshipCertificate in [CTDL-TERMS].	\N	ApprenticeshipCertificate	ApprenticeshipCertificate	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 2205	124	Represents the result of a curricular, or co-curricular assignment or exam.	\N	Assignment	Assignment	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	t	1
 2206	124	College/university award for students typically completing the first one to two years of post secondary school education. Equivalent to an award at UNESCO ISCED 2011, Level 5. This is an exact match of AssociateDegree in [CTDL-TERMS].	\N	AssociateDegree	AssociateDegree	\N	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	t	1
@@ -19718,6 +20244,7 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 5538	385	Credential awarded to skilled workers on successful completion of an apprenticeship in industry trades and professions. This is an exact match of JourneymanCertificate in [CTDL-TERMS].	\N	JourneymanCertificate	JourneymanCertificate	\N	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	29
 5539	385	Visual symbol containing verifiable claims in accordance with the Open Badges specification and delivered digitally. This is an exact match of Badge in [CTDL-TERMS].	\N	Badge	Badge	\N	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	29
 5540	385	Set of learning opportunities that leads to an outcome, usually a credential like a degree or certificate. This is an exact match of LearningProgram in [CTDL-TERMS].	\N	LearningProgram	LearningProgram	\N	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	29
+5660	395	\N	\N	Personality test	Personality test	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 5541	385	Credential awarded upon demonstration through apprenticeship of the highest level of skills and performance in industry trades and professions. This is an exact match of MasterCertificate in [CTDL-TERMS].	\N	MasterCertificate	MasterCertificate	\N	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	29
 5542	385	Represents a generic achievement.	\N	Achievement	Achievement	\N	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	29
 5543	385	Diploma awarded by secondary education institutions for successful completion of a secondary school program of study. Equivalent to an award at UNESCO ISCED 2011 Levels 2 or 3. This is an exact match of SecondarySchoolDiploma in [CTDL-TERMS].	\N	SecondarySchoolDiploma	SecondarySchoolDiploma	\N	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	29
@@ -19742,6 +20269,7 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 5562	385	Credential earned through work-based learning and earn-and-learn models that meet standards and are applicable to industry trades and professions. This is an exact match of ApprenticeshipCertificate in [CTDL-TERMS].	\N	ApprenticeshipCertificate	ApprenticeshipCertificate	\N	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	29
 5563	385	Represents the result of a curricular, or co-curricular assignment or exam.	\N	Assignment	Assignment	\N	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	29
 5564	385	College/university award for students typically completing three to five years of education where course work and activities advance skills beyond those of the first one to two years of college/university study. Equivalent to an award at UNESCO ISCED 2011, Level 6. Use for 5-year cooperative (work-study) programs. A cooperative plan provides for alternate class attendance and employment in business, industry, or government; thus, it allows students to combine actual work experience with their college studies. Also includes bachelor's degrees in which the normal 4 years of work are completed in 3 years. This is an exact match of BachelorDegree in [CTDL-TERMS].	\N	BachelorDegree	BachelorDegree	\N	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	29
+5661	395	\N	\N	State high school subject assessment	State high school subject assessment	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 5565	385	College/university award for students typically completing the first one to two years of post secondary school education. Equivalent to an award at UNESCO ISCED 2011, Level 5. This is an exact match of AssociateDegree in [CTDL-TERMS].	\N	AssociateDegree	AssociateDegree	\N	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	29
 5566	386	An alignment to a CTDL Credential published by Credential Engine.	\N	ceterms:Credential	ceterms:Credential	\N	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	29
 5567	386	An alignment to a CASE Framework Rubric.	\N	CFRubric	CFRubric	\N	Open Badges v3	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	\N	f	29
@@ -19770,6 +20298,2004 @@ COPY public."ValueSetValues" ("Id", "ValueSetId", "Description", "UseConsiderati
 1441	43	a literal value property on associationType property	\N	isPartOf	isPartOf	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	14
 1443	43	a literal value property on associationType property	\N	replacedBy	replacedBy	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	14
 1444	43	\N	\N	hasSkillLevel	hasSkillLevel	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	14
+5662	395	\N	\N	Benchmark test	Benchmark test	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5663	395	\N	\N	Early Learning - Cognition and general knowledge	Early Learning - Cognition and general knowledge	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5664	395	\N	\N	Interim	Interim	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5665	395	\N	\N	Prekindergarten Readiness	Prekindergarten Readiness	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5666	395	\N	\N	State alternative assessment/grade-level standards	State alternative assessment/grade-level standards	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5667	395	\N	\N	Attitudinal test	Attitudinal test	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5668	395	\N	\N	Early Learning - Approaches toward learning	Early Learning - Approaches toward learning	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5669	395	\N	\N	Interest inventory	Interest inventory	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5670	395	\N	\N	Portfolio assessment	Portfolio assessment	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5671	395	\N	\N	State high school course assessment	State high school course assessment	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5672	395	\N	\N	Alternate assessment/grade-level standards	Alternate assessment/grade-level standards	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5673	395	\N	\N	Cognitive and perceptual skills test	Cognitive and perceptual skills test	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5674	395	\N	\N	English proficiency screening test	English proficiency screening test	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5675	395	\N	\N	Mental ability (intelligence) test	Mental ability (intelligence) test	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5676	395	\N	\N	State assessment	State assessment	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5677	395	\N	\N	Other	Other	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5678	396	\N	\N	Achievement/proficiency level	Achievement/proficiency level	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5679	396	\N	\N	ACT score	ACT score	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5680	396	\N	\N	Adaptive scale score	Adaptive scale score	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5681	396	\N	\N	Age score	Age score	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5682	396	\N	\N	C-scaled scores	C-scaled scores	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5683	396	\N	\N	College Board examination scores	College Board examination scores	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5684	396	\N	\N	Composite Score	Composite Score	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5685	396	\N	\N	Composite Rating	Composite Rating	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5686	396	\N	\N	Composition Score	Composition Score	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5687	396	\N	\N	Grade equivalent or grade-level indicator	Grade equivalent or grade-level indicator	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5688	396	\N	\N	Graduation score	Graduation score	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5689	396	\N	\N	Growth/value-added/indexing	Growth/value-added/indexing	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5690	396	\N	\N	International Baccalaureate score	International Baccalaureate score	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5691	396	\N	\N	Letter grade/mark	Letter grade/mark	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5692	396	\N	\N	Mastery level	Mastery level	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5693	396	\N	\N	Normal curve equivalent	Normal curve equivalent	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5694	396	\N	\N	Normalized standard score	Normalized standard score	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5695	396	\N	\N	Number score	Number score	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5696	396	\N	\N	Pass-fail	Pass-fail	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5697	396	\N	\N	Percentile	Percentile	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5707	396	\N	\N	Stanine score	Stanine score	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5708	396	\N	\N	Sten score	Sten score	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5709	396	\N	\N	Theta	Theta	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5710	396	\N	\N	T-score	T-score	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5711	396	\N	\N	Vertical score	Vertical score	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5712	396	\N	\N	Workplace readiness score	Workplace readiness score	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5713	396	\N	\N	Z-score	Z-score	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5714	396	\N	\N	Other	Other	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5715	396	\N	\N	Not applicable	Not applicable	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5716	396	\N	\N	Quantile Measure	Quantile Measure	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5717	396	\N	\N	Lexile Measure	Lexile Measure	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5718	396	\N	\N	Vertical Scale Score	Vertical Scale Score	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5719	396	\N	\N	National College-Bound Percentile	National College-Bound Percentile	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5720	396	\N	\N	State College-Bound Percentile	State College-Bound Percentile	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5721	396	\N	\N	RIT scale score	RIT scale score	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5722	397	\N	\N	Not Available	Not Available	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5723	397	\N	\N	Not Affordable	Not Affordable	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5724	397	\N	\N	Not Desired	Not Desired	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5725	397	\N	\N	Other	Other	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5726	398	\N	\N	Agriculture, Food and Natural Resources	Agriculture, Food and Natural Resources	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5727	398	\N	\N	Architecture and Construction	Architecture and Construction	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5728	398	\N	\N	Arts, A/V Technology and Communications	Arts, A/V Technology and Communications	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5729	398	\N	\N	Business, Management and Administration	Business, Management and Administration	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5730	398	\N	\N	Education and Training	Education and Training	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5731	398	\N	\N	Finance	Finance	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5732	398	\N	\N	Government and Public Administration	Government and Public Administration	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5733	398	\N	\N	Health Science	Health Science	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5734	398	\N	\N	Hospitality and Tourism	Hospitality and Tourism	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5735	398	\N	\N	Human Services	Human Services	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5736	398	\N	\N	Information Technology	Information Technology	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5737	398	\N	\N	Law, Public Safety, Corrections and Security	Law, Public Safety, Corrections and Security	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5738	398	\N	\N	Manufacturing	Manufacturing	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5739	398	\N	\N	Marketing, Sales and Service	Marketing, Sales and Service	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5740	398	\N	\N	Other	Other	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5741	398	\N	\N	Science, Technology, Engineering and Mathematics	Science, Technology, Engineering and Mathematics	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5742	398	\N	\N	Transportation, Distribution and Logistics	Transportation, Distribution and Logistics	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5743	399	\N	\N	Non-resident alien	Non-resident alien	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5744	399	\N	\N	Permanent resident	Permanent resident	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5745	399	\N	\N	Refugee	Refugee	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5746	399	\N	\N	Resident alien	Resident alien	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5747	399	\N	\N	US Citizen	US Citizen	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5748	400	\N	\N	Advanced	Advanced	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5749	400	\N	\N	Basic	Basic	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5750	400	\N	\N	Below Basic	Below Basic	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5751	400	\N	\N	Fail	Fail	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5752	400	\N	\N	Pass	Pass	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5753	400	\N	\N	Proficient	Proficient	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5754	400	\N	\N	Well Below Basic	Well Below Basic	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5755	401	\N	\N	Education Research	Education Research	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5756	401	\N	\N	Presentation	Presentation	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5757	401	\N	\N	Vendor Intervention Offering	Vendor Intervention Offering	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5758	401	\N	\N	Video	Video	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5759	401	\N	\N	Written Activity	Written Activity	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5760	402	\N	\N	Ceased to be migratory during previous term	Ceased to be migratory during previous term	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5761	402	\N	\N	Ceased to be migratory during school term	Ceased to be migratory during school term	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5762	402	\N	\N	Previously migratory secondary student	Previously migratory secondary student	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5763	403	\N	\N	AD	AD	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5764	403	\N	\N	AE	AE	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5765	403	\N	\N	AF	AF	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5766	403	\N	\N	AG	AG	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5767	403	\N	\N	AI	AI	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5768	403	\N	\N	AL	AL	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5769	403	\N	\N	AM	AM	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5770	403	\N	\N	AO	AO	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5771	403	\N	\N	AQ	AQ	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5772	403	\N	\N	AR	AR	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5773	403	\N	\N	AS	AS	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5774	403	\N	\N	AT	AT	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5775	403	\N	\N	AU	AU	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5776	403	\N	\N	AW	AW	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5777	403	\N	\N	AX	AX	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5778	403	\N	\N	AZ	AZ	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5779	403	\N	\N	BA	BA	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5780	403	\N	\N	BB	BB	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5781	403	\N	\N	BD	BD	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5784	403	\N	\N	BG	BG	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5785	403	\N	\N	BH	BH	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5786	403	\N	\N	BI	BI	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5787	403	\N	\N	BJ	BJ	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5788	403	\N	\N	BL	BL	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5789	403	\N	\N	BM	BM	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5790	403	\N	\N	BN	BN	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5791	403	\N	\N	BO	BO	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5792	403	\N	\N	BQ	BQ	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5793	403	\N	\N	BR	BR	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5794	403	\N	\N	BS	BS	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5795	403	\N	\N	BT	BT	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5796	403	\N	\N	BV	BV	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5797	403	\N	\N	BW	BW	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5798	403	\N	\N	BY	BY	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5799	403	\N	\N	BZ	BZ	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5800	403	\N	\N	CA	CA	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5801	403	\N	\N	CC	CC	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5802	403	\N	\N	CD	CD	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5803	403	\N	\N	CF	CF	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5804	403	\N	\N	CG	CG	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5805	403	\N	\N	CH	CH	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5806	403	\N	\N	CI	CI	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5807	403	\N	\N	CK	CK	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5808	403	\N	\N	CL	CL	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5809	403	\N	\N	CM	CM	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5810	403	\N	\N	CN	CN	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5811	403	\N	\N	CO	CO	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5812	403	\N	\N	CR	CR	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5813	403	\N	\N	CU	CU	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5814	403	\N	\N	CV	CV	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5815	403	\N	\N	CW	CW	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5816	403	\N	\N	CX	CX	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5817	403	\N	\N	CY	CY	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5818	403	\N	\N	CZ	CZ	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5819	403	\N	\N	DE	DE	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5820	403	\N	\N	DJ	DJ	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5821	403	\N	\N	DK	DK	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5822	403	\N	\N	DM	DM	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5823	403	\N	\N	DO	DO	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5824	403	\N	\N	DZ	DZ	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5825	403	\N	\N	EC	EC	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5826	403	\N	\N	EE	EE	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5827	403	\N	\N	EG	EG	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5828	403	\N	\N	EH	EH	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5829	403	\N	\N	ER	ER	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5830	403	\N	\N	ES	ES	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5831	403	\N	\N	ET	ET	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5832	403	\N	\N	FI	FI	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5833	403	\N	\N	FJ	FJ	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5834	403	\N	\N	FK	FK	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5835	403	\N	\N	FM	FM	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5836	403	\N	\N	FO	FO	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5837	403	\N	\N	FR	FR	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5838	403	\N	\N	GA	GA	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5839	403	\N	\N	GB	GB	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5840	403	\N	\N	GD	GD	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5841	403	\N	\N	GE	GE	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5842	403	\N	\N	GF	GF	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5843	403	\N	\N	GG	GG	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5844	403	\N	\N	GH	GH	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5845	403	\N	\N	GI	GI	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5846	403	\N	\N	GL	GL	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5847	403	\N	\N	GM	GM	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5848	403	\N	\N	GN	GN	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5849	403	\N	\N	GP	GP	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5850	403	\N	\N	GQ	GQ	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5851	403	\N	\N	GR	GR	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5852	403	\N	\N	GS	GS	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5853	403	\N	\N	GT	GT	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5854	403	\N	\N	GU	GU	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5855	403	\N	\N	GW	GW	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5856	403	\N	\N	GY	GY	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5857	403	\N	\N	HK	HK	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5858	403	\N	\N	HM	HM	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5859	403	\N	\N	HN	HN	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5860	403	\N	\N	HR	HR	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5861	403	\N	\N	HT	HT	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5862	403	\N	\N	HU	HU	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5863	403	\N	\N	ID	ID	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5864	403	\N	\N	IE	IE	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5865	403	\N	\N	IL	IL	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5866	403	\N	\N	IM	IM	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5867	403	\N	\N	IN	IN	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5868	403	\N	\N	IO	IO	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5869	403	\N	\N	IQ	IQ	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5870	403	\N	\N	IR	IR	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5871	403	\N	\N	IS	IS	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5872	403	\N	\N	IT	IT	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5873	403	\N	\N	JE	JE	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5874	403	\N	\N	JM	JM	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5875	403	\N	\N	JO	JO	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5876	403	\N	\N	JP	JP	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5877	403	\N	\N	KE	KE	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5878	403	\N	\N	KG	KG	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5879	403	\N	\N	KH	KH	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5880	403	\N	\N	KI	KI	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5881	403	\N	\N	KM	KM	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5882	403	\N	\N	KN	KN	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5883	403	\N	\N	KP	KP	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5884	403	\N	\N	KR	KR	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5885	403	\N	\N	KW	KW	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5886	403	\N	\N	KY	KY	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5887	403	\N	\N	KZ	KZ	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5888	403	\N	\N	LA	LA	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5889	403	\N	\N	LB	LB	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5890	403	\N	\N	LC	LC	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5891	403	\N	\N	LI	LI	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5892	403	\N	\N	LK	LK	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5893	403	\N	\N	LR	LR	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5894	403	\N	\N	LS	LS	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5895	403	\N	\N	LT	LT	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5896	403	\N	\N	LU	LU	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5897	403	\N	\N	LV	LV	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5898	403	\N	\N	LY	LY	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5899	403	\N	\N	MA	MA	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5900	403	\N	\N	MC	MC	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5901	403	\N	\N	MD	MD	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5902	403	\N	\N	ME	ME	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5903	403	\N	\N	MF	MF	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5904	403	\N	\N	MG	MG	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5905	403	\N	\N	MH	MH	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5906	403	\N	\N	MK	MK	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5907	403	\N	\N	ML	ML	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5908	403	\N	\N	MM	MM	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5909	403	\N	\N	MN	MN	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5910	403	\N	\N	MO	MO	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5911	403	\N	\N	MP	MP	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5912	403	\N	\N	MQ	MQ	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5913	403	\N	\N	MR	MR	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5914	403	\N	\N	MS	MS	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5915	403	\N	\N	MT	MT	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5916	403	\N	\N	MU	MU	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5917	403	\N	\N	MV	MV	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5918	403	\N	\N	MW	MW	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5919	403	\N	\N	MX	MX	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5920	403	\N	\N	MY	MY	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5921	403	\N	\N	MZ	MZ	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5922	403	\N	\N	NA	NA	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5923	403	\N	\N	NC	NC	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5924	403	\N	\N	NE	NE	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5925	403	\N	\N	NF	NF	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5926	403	\N	\N	NG	NG	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5927	403	\N	\N	NI	NI	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5928	403	\N	\N	NL	NL	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5929	403	\N	\N	NO	NO	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5930	403	\N	\N	NP	NP	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5931	403	\N	\N	NR	NR	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5932	403	\N	\N	NU	NU	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5933	403	\N	\N	NZ	NZ	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5934	403	\N	\N	OM	OM	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5935	403	\N	\N	PA	PA	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5936	403	\N	\N	PE	PE	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5937	403	\N	\N	PF	PF	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5938	403	\N	\N	PG	PG	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5939	403	\N	\N	PH	PH	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5940	403	\N	\N	PK	PK	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5941	403	\N	\N	PL	PL	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5942	403	\N	\N	PM	PM	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5943	403	\N	\N	PN	PN	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5944	403	\N	\N	PR	PR	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5945	403	\N	\N	PS	PS	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5946	403	\N	\N	PT	PT	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5947	403	\N	\N	PW	PW	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5948	403	\N	\N	PY	PY	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5949	403	\N	\N	QA	QA	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5950	403	\N	\N	RE	RE	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5951	403	\N	\N	RO	RO	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5952	403	\N	\N	RS	RS	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5953	403	\N	\N	RU	RU	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5954	403	\N	\N	RW	RW	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5955	403	\N	\N	SA	SA	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5956	403	\N	\N	SB	SB	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5957	403	\N	\N	SC	SC	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5958	403	\N	\N	SD	SD	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5959	403	\N	\N	SE	SE	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5960	403	\N	\N	SG	SG	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5961	403	\N	\N	SH	SH	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5962	403	\N	\N	SI	SI	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5963	403	\N	\N	SJ	SJ	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5964	403	\N	\N	SK	SK	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5965	403	\N	\N	SL	SL	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5966	403	\N	\N	SM	SM	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5967	403	\N	\N	SN	SN	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5968	403	\N	\N	SO	SO	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5969	403	\N	\N	SR	SR	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5970	403	\N	\N	SS	SS	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5971	403	\N	\N	ST	ST	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5972	403	\N	\N	SV	SV	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5973	403	\N	\N	SX	SX	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5974	403	\N	\N	SY	SY	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5975	403	\N	\N	SZ	SZ	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5976	403	\N	\N	TC	TC	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5977	403	\N	\N	TD	TD	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5978	403	\N	\N	TF	TF	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5979	403	\N	\N	TG	TG	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5980	403	\N	\N	TH	TH	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5981	403	\N	\N	TJ	TJ	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5982	403	\N	\N	TK	TK	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5983	403	\N	\N	TL	TL	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5984	403	\N	\N	TM	TM	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5985	403	\N	\N	TN	TN	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5986	403	\N	\N	TO	TO	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5987	403	\N	\N	TR	TR	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5988	403	\N	\N	TT	TT	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5989	403	\N	\N	TV	TV	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5990	403	\N	\N	TW	TW	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5991	403	\N	\N	TZ	TZ	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5992	403	\N	\N	UA	UA	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5993	403	\N	\N	UG	UG	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5994	403	\N	\N	UM	UM	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5995	403	\N	\N	US	US	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5996	403	\N	\N	UY	UY	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5997	403	\N	\N	UZ	UZ	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5998	403	\N	\N	VA	VA	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+5999	403	\N	\N	VC	VC	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6000	403	\N	\N	VE	VE	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6001	403	\N	\N	VG	VG	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6002	403	\N	\N	VI	VI	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6003	403	\N	\N	VN	VN	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6004	403	\N	\N	VU	VU	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6005	403	\N	\N	WF	WF	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6006	403	\N	\N	WS	WS	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6007	403	\N	\N	YE	YE	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6008	403	\N	\N	YT	YT	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6009	403	\N	\N	ZA	ZA	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6010	403	\N	\N	ZM	ZM	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6011	403	\N	\N	ZW	ZW	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6012	404	\N	\N	Fail	Fail	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6013	404	\N	\N	Incomplete	Incomplete	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6014	404	\N	\N	Pass	Pass	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6015	404	\N	\N	Withdrawn	Withdrawn	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6016	405	\N	\N	LEA	LEA	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6017	405	\N	\N	National Organization	National Organization	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6018	405	\N	\N	School	School	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6019	405	\N	\N	SEA	SEA	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6020	406	\N	\N	Applicable	Applicable	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6021	406	\N	\N	Not Applicable	Not Applicable	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6022	406	\N	\N	Weighted	Weighted	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6023	407	\N	\N	CSSC course code	CSSC course code	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6024	407	\N	\N	Intermediate agency course code	Intermediate agency course code	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6025	407	\N	\N	LEA course code	LEA course code	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6026	407	\N	\N	NCES Pilot SNCCS course code	NCES Pilot SNCCS course code	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6027	407	\N	\N	Other	Other	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6028	407	\N	\N	SCED course code	SCED course code	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6029	407	\N	\N	School course code	School course code	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6030	407	\N	\N	State course code	State course code	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6031	407	\N	\N	University course code	University course code	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6032	408	\N	\N	Accepted as high school equivalent	Accepted as high school equivalent	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6033	408	\N	\N	Advanced	Advanced	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6034	408	\N	\N	Advanced Placement	Advanced Placement	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6035	408	\N	\N	Basic	Basic	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6036	408	\N	\N	Career and Technical Education	Career and Technical Education	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6037	408	\N	\N	College-level	College-level	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6038	408	\N	\N	Core Subject	Core Subject	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6039	408	\N	\N	Correspondence	Correspondence	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6040	408	\N	\N	Distance Learning	Distance Learning	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6041	408	\N	\N	Dual Credit	Dual Credit	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6042	408	\N	\N	English Language Learner	English Language Learner	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6043	408	\N	\N	General	General	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6044	408	\N	\N	Gifted and Talented	Gifted and Talented	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6045	408	\N	\N	Graduation Credit	Graduation Credit	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6046	408	\N	\N	Honors	Honors	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6047	408	\N	\N	International Baccalaureate	International Baccalaureate	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6048	408	\N	\N	Magnet	Magnet	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6049	408	\N	\N	Other	Other	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6050	408	\N	\N	Pre-AP	Pre-AP	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6051	408	\N	\N	Pre-IB	Pre-IB	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6052	408	\N	\N	Remedial	Remedial	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6053	408	\N	\N	Students with disabilities	Students with disabilities	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6054	408	\N	\N	Untracked	Untracked	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6055	409	\N	\N	Not Counted Other	Not Counted Other	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6056	409	\N	\N	Repeat Counted	Repeat Counted	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6057	409	\N	\N	Repeat NotCounted	Repeat NotCounted	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6058	409	\N	\N	Repeat Other Institution	Repeat Other Institution	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6059	409	\N	\N	Replaced NotCounted	Replaced NotCounted	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6060	409	\N	\N	Replacement Counted	Replacement Counted	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6061	410	\N	\N	Advanced Placement	Advanced Placement	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6062	410	\N	\N	College Preparatory	College Preparatory	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6063	410	\N	\N	Dual Credit	Dual Credit	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6064	410	\N	\N	General	General	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6065	410	\N	\N	Honors	Honors	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6066	410	\N	\N	International Baccalaureate	International Baccalaureate	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6067	410	\N	\N	Remedial	Remedial	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6068	410	\N	\N	Career and Technical Education	Career and Technical Education	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6069	411	\N	\N	Adult education credit	Adult education credit	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6070	411	\N	\N	Career and Technical Education credit	Career and Technical Education credit	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6071	411	\N	\N	Carnegie unit	Carnegie unit	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6072	411	\N	\N	Converted occupational experience credit	Converted occupational experience credit	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6073	411	\N	\N	Correspondence credit	Correspondence credit	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6074	411	\N	\N	Credit by examination	Credit by examination	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6075	411	\N	\N	Intersession hour credit	Intersession hour credit	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6076	411	\N	\N	Long session hour credit	Long session hour credit	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6077	411	\N	\N	Mini-term hour credit	Mini-term hour credit	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6078	411	\N	\N	Nine month year hour credit	Nine month year hour credit	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6079	411	\N	\N	Other	Other	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6080	411	\N	\N	Quarter hour credit	Quarter hour credit	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6081	411	\N	\N	Quinmester hour credit	Quinmester hour credit	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6082	411	\N	\N	Semester hour credit	Semester hour credit	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6083	411	\N	\N	Summer term hour credit	Summer term hour credit	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6084	411	\N	\N	Trimester hour credit	Trimester hour credit	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6085	411	\N	\N	Twelve month year hour credit	Twelve month year hour credit	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6086	412	\N	\N	Education Organization Network	Education Organization Network	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6087	412	\N	\N	Education Service Center	Education Service Center	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6088	412	\N	\N	Local Education Agency	Local Education Agency	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6089	412	\N	\N	Other	Other	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6090	412	\N	\N	School	School	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6091	412	\N	\N	State Education Agency	State Education Agency	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6092	412	\N	\N	Post Secondary Institution	Post Secondary Institution	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6093	412	\N	\N	Organization Department	Organization Department	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6094	413	\N	\N	ACT	ACT	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6095	413	\N	\N	DUNS	DUNS	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6096	413	\N	\N	Federal	Federal	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6097	413	\N	\N	IPEDS	IPEDS	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6098	413	\N	\N	LEA	LEA	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6099	413	\N	\N	NCES	NCES	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6100	413	\N	\N	Other	Other	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6101	413	\N	\N	Other Federal	Other Federal	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6102	413	\N	\N	School	School	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6103	413	\N	\N	SEA	SEA	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6104	413	\N	\N	USDE - OPE	USDE - OPE	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6105	414	\N	\N	Classroom	Classroom	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6106	414	\N	\N	Homebound	Homebound	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6107	414	\N	\N	Hospital class	Hospital class	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6108	414	\N	\N	In-school suspension	In-school suspension	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6109	414	\N	\N	Laboratory	Laboratory	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6110	414	\N	\N	Mainstream (Special Education)	Mainstream (Special Education)	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6111	414	\N	\N	Off-school center	Off-school center	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6112	414	\N	\N	Pull-out class	Pull-out class	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6113	414	\N	\N	Resource room	Resource room	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6114	414	\N	\N	Self-contained (Special Education)	Self-contained (Special Education)	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6115	414	\N	\N	Self-study	Self-study	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6116	414	\N	\N	Shop	Shop	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6117	414	\N	\N	Single sex classroom	Single sex classroom	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6118	415	\N	\N	Home/Personal	Home/Personal	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6119	415	\N	\N	Organization	Organization	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6120	415	\N	\N	Other	Other	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6121	415	\N	\N	Work	Work	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6122	416	\N	\N	Administration or system failure	Administration or system failure	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6123	416	\N	\N	Catastrophic illness or accident	Catastrophic illness or accident	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6124	416	\N	\N	Cheating	Cheating	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6125	416	\N	\N	Chronic absences	Chronic absences	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6126	416	\N	\N	Cross-enrolled	Cross-enrolled	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6127	416	\N	\N	Earlier truancy	Earlier truancy	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6128	416	\N	\N	Fire alarm	Fire alarm	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6129	416	\N	\N	Foreign exchange student	Foreign exchange student	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6130	416	\N	\N	Home schooled for assessed subjects	Home schooled for assessed subjects	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6131	416	\N	\N	Homebound	Homebound	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6132	416	\N	\N	Incarcerated at adult facility	Incarcerated at adult facility	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6133	416	\N	\N	Left testing	Left testing	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6134	416	\N	\N	Long-term suspension - non-special education	Long-term suspension - non-special education	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6135	416	\N	\N	Non-special ed student used calculator	Non-special ed student used calculator	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6136	416	\N	\N	Only for writing	Only for writing	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6137	416	\N	\N	Other	Other	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6138	416	\N	\N	Other reason for ineligibility	Other reason for ineligibility	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6139	416	\N	\N	Other reason for nonparticipation	Other reason for nonparticipation	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6140	416	\N	\N	Parent refusal	Parent refusal	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6141	416	\N	\N	Psychological factors of emotional trauma	Psychological factors of emotional trauma	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6142	416	\N	\N	Reading passage read to student (IEP)	Reading passage read to student (IEP)	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6143	416	\N	\N	Short-term suspension - non-special education	Short-term suspension - non-special education	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6144	416	\N	\N	Special detention center	Special detention center	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6145	416	\N	\N	Special treatment center	Special treatment center	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6146	416	\N	\N	Student not showing adequate effort	Student not showing adequate effort	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6147	416	\N	\N	Student refusal	Student refusal	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6148	416	\N	\N	Student took this grade level assessment last year	Student took this grade level assessment last year	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6149	416	\N	\N	Student used math journal (non-IEP)	Student used math journal (non-IEP)	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6150	416	\N	\N	Suspension - special education	Suspension - special education	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6151	416	\N	\N	Teacher cheating or mis-admin	Teacher cheating or mis-admin	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6152	416	\N	\N	Truancy - no paperwork filed	Truancy - no paperwork filed	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6153	416	\N	\N	Truancy - paperwork filed	Truancy - paperwork filed	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6154	417	\N	\N	Infant/toddler	Infant/toddler	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6155	417	\N	\N	Preschool	Preschool	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6156	417	\N	\N	Prekindergarten	Prekindergarten	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6157	417	\N	\N	Transitional Kindergarten	Transitional Kindergarten	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6158	417	\N	\N	Kindergarten	Kindergarten	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6159	417	\N	\N	First grade	First grade	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6160	417	\N	\N	Second grade	Second grade	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6161	417	\N	\N	Third grade	Third grade	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6162	417	\N	\N	Fourth grade	Fourth grade	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6163	417	\N	\N	Fifth grade	Fifth grade	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6164	417	\N	\N	Sixth grade	Sixth grade	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6165	417	\N	\N	Seventh grade	Seventh grade	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6166	417	\N	\N	Eighth grade	Eighth grade	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6167	417	\N	\N	Ninth grade	Ninth grade	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6168	417	\N	\N	Tenth grade	Tenth grade	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6169	417	\N	\N	Eleventh grade	Eleventh grade	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6170	417	\N	\N	Twelfth grade	Twelfth grade	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6171	417	\N	\N	Grade 13	Grade 13	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6172	417	\N	\N	Postsecondary	Postsecondary	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6173	417	\N	\N	Ungraded	Ungraded	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6174	417	\N	\N	Other	Other	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6175	417	\N	\N	Out of School	Out of School	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6176	417	\N	\N	Early Education	Early Education	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6177	417	\N	\N	Preschool/Prekindergarten	Preschool/Prekindergarten	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6178	417	\N	\N	No grade level	No grade level	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6179	417	\N	\N	Adult Education	Adult Education	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6180	418	\N	\N	Doubled-up	Doubled-up	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6181	418	\N	\N	Hotels/motels	Hotels/motels	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6182	418	\N	\N	Shelters	Shelters	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6183	418	\N	\N	Unsheltered	Unsheltered	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6184	419	\N	\N	Foreign Citizenship Identification	Foreign Citizenship Identification	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6185	419	\N	\N	Personal Information Verification	Personal Information Verification	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6186	419	\N	\N	US Citizenship Identification	US Citizenship Identification	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6187	420	\N	\N	Active	Active	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6188	420	\N	\N	Expositive	Expositive	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6189	420	\N	\N	Mixed	Mixed	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6190	420	\N	\N	Other	Other	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6191	421	\N	\N	Residential Broadband	Residential Broadband	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6192	421	\N	\N	Cellular Network	Cellular Network	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6193	421	\N	\N	Hot Spot	Hot Spot	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6194	421	\N	\N	Community Provided Wi-Fi	Community Provided Wi-Fi	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6195	421	\N	\N	Satellite	Satellite	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6196	421	\N	\N	Dial-up	Dial-up	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6197	421	\N	\N	Other	Other	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6198	421	\N	\N	None	None	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6199	421	\N	\N	Unknown	Unknown	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6200	422	\N	\N	Yes	Yes	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6201	422	\N	\N	Sometimes	Sometimes	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6202	422	\N	\N	No	No	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6203	423	\N	\N	ady	ady	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6204	423	\N	\N	gsw	gsw	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6205	423	\N	\N	rup	rup	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6206	423	\N	\N	ast	ast	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6207	423	\N	\N	bej	bej	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6208	423	\N	\N	byn	byn	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6209	423	\N	\N	zbl	zbl	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6210	423	\N	\N	spa	spa	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6211	423	\N	\N	nya	nya	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6212	423	\N	\N	zha	zha	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6213	423	\N	\N	rar	rar	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6214	423	\N	\N	crh	crh	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6215	423	\N	\N	chp	chp	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6216	423	\N	\N	div	div	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6217	423	\N	\N	zza	zza	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6218	423	\N	\N	bin	bin	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6219	423	\N	\N	dut	dut	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6220	423	\N	\N	kik	kik	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6221	423	\N	\N	kal	kal	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6222	423	\N	\N	hat	hat	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6223	423	\N	\N	arc	arc	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6224	423	\N	\N	kac	kac	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6225	423	\N	\N	pam	pam	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6226	423	\N	\N	kua	kua	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6227	423	\N	\N	kir	kir	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6228	423	\N	\N	ltz	ltz	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6229	423	\N	\N	lim	lim	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6230	423	\N	\N	nds	nds	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6231	423	\N	\N	arn	arn	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6232	423	\N	\N	mic	mic	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6233	423	\N	\N	hmn	hmn	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6234	423	\N	\N	nav	nav	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6235	423	\N	\N	new	new	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6236	423	\N	\N	nde	nde	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6237	423	\N	\N	nob	nob	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6238	423	\N	\N	iii	iii	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6239	423	\N	\N	nno	nno	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6240	423	\N	\N	ile	ile	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6241	423	\N	\N	pro	pro	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6242	423	\N	\N	xal	xal	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6243	423	\N	\N	nwc	nwc	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6244	423	\N	\N	chu	chu	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6245	423	\N	\N	oss	oss	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6246	423	\N	\N	pus	pus	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6247	423	\N	\N	fil	fil	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6248	423	\N	\N	pan	pan	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6249	423	\N	\N	kho	kho	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6250	423	\N	\N	gla	gla	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6251	423	\N	\N	nso	nso	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6252	423	\N	\N	sin	sin	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6253	423	\N	\N	nbl	nbl	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6254	423	\N	\N	tlh	tlh	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6255	423	\N	\N	uig	uig	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6256	423	\N	\N	cat	cat	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6257	423	\N	\N	him	him	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6258	423	\N	\N	wal	wal	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6259	423	\N	\N	aar	aar	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6260	423	\N	\N	ace	ace	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6261	423	\N	\N	ada	ada	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6262	423	\N	\N	afa	afa	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6263	423	\N	\N	afr	afr	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6264	423	\N	\N	aka	aka	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6265	423	\N	\N	alb	alb	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6266	423	\N	\N	alg	alg	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6267	423	\N	\N	amh	amh	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6268	423	\N	\N	anp	anp	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6269	423	\N	\N	ara	ara	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6270	423	\N	\N	arg	arg	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6271	423	\N	\N	art	art	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6272	423	\N	\N	asm	asm	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6273	423	\N	\N	ath	ath	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6274	423	\N	\N	ava	ava	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6275	423	\N	\N	awa	awa	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6276	423	\N	\N	aze	aze	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6277	423	\N	\N	bai	bai	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6278	423	\N	\N	bal	bal	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6279	423	\N	\N	ban	ban	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6280	423	\N	\N	bas	bas	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6281	423	\N	\N	bem	bem	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6282	423	\N	\N	ber	ber	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6283	423	\N	\N	bih	bih	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6284	423	\N	\N	bla	bla	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6285	423	\N	\N	bos	bos	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6286	423	\N	\N	bre	bre	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6287	423	\N	\N	bua	bua	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6288	423	\N	\N	bul	bul	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6289	423	\N	\N	cai	cai	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6290	423	\N	\N	ceb	ceb	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6291	423	\N	\N	cha	cha	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6292	423	\N	\N	che	che	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6293	423	\N	\N	chi	chi	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6294	423	\N	\N	chm	chm	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6295	423	\N	\N	cho	cho	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6296	423	\N	\N	chr	chr	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6297	423	\N	\N	chv	chv	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6298	423	\N	\N	cmc	cmc	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6299	423	\N	\N	cor	cor	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6300	423	\N	\N	cpe	cpe	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6301	423	\N	\N	cpp	cpp	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6302	423	\N	\N	csb	csb	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6303	423	\N	\N	cze	cze	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6304	423	\N	\N	dan	dan	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6305	423	\N	\N	day	day	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6306	423	\N	\N	den	den	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6307	423	\N	\N	din	din	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6308	423	\N	\N	doi	doi	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6309	423	\N	\N	dsb	dsb	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6310	423	\N	\N	dum	dum	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6311	423	\N	\N	dyu	dyu	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6312	423	\N	\N	efi	efi	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6313	423	\N	\N	eka	eka	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6314	423	\N	\N	eng	eng	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6315	423	\N	\N	epo	epo	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6316	423	\N	\N	ewe	ewe	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6317	423	\N	\N	fan	fan	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6318	423	\N	\N	fat	fat	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6319	423	\N	\N	fiu	fiu	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6320	423	\N	\N	fre	fre	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6321	423	\N	\N	fro	fro	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6322	423	\N	\N	frs	frs	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6323	423	\N	\N	ful	ful	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6324	423	\N	\N	gaa	gaa	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6325	423	\N	\N	gba	gba	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6326	423	\N	\N	geo	geo	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6327	423	\N	\N	gez	gez	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6328	423	\N	\N	glg	glg	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6329	423	\N	\N	gmh	gmh	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6330	423	\N	\N	gon	gon	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6331	423	\N	\N	got	got	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6332	423	\N	\N	grc	grc	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6333	423	\N	\N	grn	grn	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6334	423	\N	\N	guj	guj	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6335	423	\N	\N	hai	hai	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6336	423	\N	\N	hau	hau	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6337	423	\N	\N	heb	heb	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6338	423	\N	\N	hil	hil	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6339	423	\N	\N	hin	hin	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6340	423	\N	\N	hrv	hrv	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6341	423	\N	\N	hun	hun	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6342	423	\N	\N	iba	iba	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6343	423	\N	\N	ice	ice	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6344	423	\N	\N	iku	iku	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6345	423	\N	\N	ilo	ilo	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6346	423	\N	\N	inc	inc	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6347	423	\N	\N	ine	ine	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6348	423	\N	\N	ipk	ipk	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6349	423	\N	\N	iro	iro	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6350	423	\N	\N	jav	jav	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6351	423	\N	\N	jpn	jpn	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6352	423	\N	\N	jrb	jrb	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6353	423	\N	\N	kab	kab	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6354	423	\N	\N	kan	kan	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6355	423	\N	\N	kas	kas	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6356	423	\N	\N	kaw	kaw	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6357	423	\N	\N	kbd	kbd	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6358	423	\N	\N	khi	khi	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6359	423	\N	\N	kin	kin	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6360	423	\N	\N	kmb	kmb	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6361	423	\N	\N	kom	kom	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6362	423	\N	\N	kor	kor	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6363	423	\N	\N	kpe	kpe	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6364	423	\N	\N	krl	krl	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6365	423	\N	\N	kru	kru	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6366	423	\N	\N	kum	kum	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6367	423	\N	\N	kut	kut	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6368	423	\N	\N	lah	lah	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6369	423	\N	\N	lao	lao	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6370	423	\N	\N	lav	lav	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6371	423	\N	\N	lit	lit	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6372	423	\N	\N	loz	loz	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6373	423	\N	\N	lua	lua	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6374	423	\N	\N	lug	lug	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6375	423	\N	\N	lun	lun	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6376	423	\N	\N	lus	lus	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6377	423	\N	\N	mad	mad	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6378	423	\N	\N	mah	mah	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6379	423	\N	\N	mak	mak	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6380	423	\N	\N	man	man	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6381	423	\N	\N	map	map	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6382	423	\N	\N	mas	mas	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6383	423	\N	\N	mdf	mdf	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6384	423	\N	\N	men	men	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6385	423	\N	\N	mis	mis	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6386	423	\N	\N	mlg	mlg	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6387	423	\N	\N	mnc	mnc	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6388	423	\N	\N	mno	mno	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6389	423	\N	\N	mon	mon	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6390	423	\N	\N	mul	mul	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6391	423	\N	\N	mus	mus	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6392	423	\N	\N	mwr	mwr	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6393	423	\N	\N	myv	myv	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6394	423	\N	\N	nai	nai	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6395	423	\N	\N	nau	nau	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6396	423	\N	\N	ndo	ndo	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6397	423	\N	\N	nep	nep	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6398	423	\N	\N	nia	nia	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6399	423	\N	\N	niu	niu	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6400	423	\N	\N	non	non	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6401	423	\N	\N	nqo	nqo	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6402	423	\N	\N	nub	nub	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6403	423	\N	\N	nyn	nyn	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6404	423	\N	\N	nzi	nzi	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6405	423	\N	\N	oji	oji	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6406	423	\N	\N	orm	orm	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6407	423	\N	\N	oto	oto	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6408	423	\N	\N	pag	pag	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6409	423	\N	\N	pap	pap	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6410	423	\N	\N	peo	peo	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6411	423	\N	\N	phi	phi	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6412	423	\N	\N	pli	pli	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6413	423	\N	\N	pon	pon	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6414	423	\N	\N	pra	pra	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6415	423	\N	\N	raj	raj	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6416	423	\N	\N	roh	roh	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6417	423	\N	\N	rum	rum	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6418	423	\N	\N	sad	sad	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6419	423	\N	\N	sah	sah	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6420	423	\N	\N	sal	sal	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6421	423	\N	\N	san	san	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6422	423	\N	\N	sat	sat	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6423	423	\N	\N	sco	sco	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6424	423	\N	\N	sem	sem	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6425	423	\N	\N	sgn	sgn	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6426	423	\N	\N	sid	sid	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6427	423	\N	\N	sio	sio	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6428	423	\N	\N	sla	sla	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6429	423	\N	\N	slv	slv	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6430	423	\N	\N	sme	sme	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6431	423	\N	\N	smj	smj	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6432	423	\N	\N	smo	smo	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6433	423	\N	\N	sna	sna	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6434	423	\N	\N	snk	snk	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6435	423	\N	\N	som	som	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6436	423	\N	\N	sot	sot	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6437	423	\N	\N	srd	srd	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6438	423	\N	\N	srp	srp	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6439	423	\N	\N	ssa	ssa	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6440	423	\N	\N	suk	suk	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6441	423	\N	\N	sus	sus	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6442	423	\N	\N	swa	swa	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6443	423	\N	\N	syc	syc	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6444	423	\N	\N	tah	tah	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6445	423	\N	\N	tam	tam	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6446	423	\N	\N	tel	tel	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6447	423	\N	\N	ter	ter	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6448	423	\N	\N	tgk	tgk	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6449	423	\N	\N	tha	tha	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6450	423	\N	\N	tig	tig	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6451	423	\N	\N	tiv	tiv	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6452	423	\N	\N	tmh	tmh	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6453	423	\N	\N	ton	ton	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6454	423	\N	\N	tsi	tsi	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6455	423	\N	\N	tso	tso	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6456	423	\N	\N	tum	tum	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6457	423	\N	\N	tur	tur	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6458	423	\N	\N	tvl	tvl	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6459	423	\N	\N	tyv	tyv	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6460	423	\N	\N	uga	uga	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6461	423	\N	\N	ukr	ukr	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6462	423	\N	\N	und	und	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6463	423	\N	\N	uzb	uzb	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6464	423	\N	\N	ven	ven	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6465	423	\N	\N	vol	vol	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6466	423	\N	\N	wak	wak	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6467	423	\N	\N	war	war	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6468	423	\N	\N	wel	wel	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6469	423	\N	\N	wln	wln	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6470	423	\N	\N	yao	yao	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6471	423	\N	\N	yid	yid	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6472	423	\N	\N	ypk	ypk	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6473	423	\N	\N	zgh	zgh	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6474	423	\N	\N	znd	znd	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6475	423	\N	\N	zun	zun	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6476	423	\N	\N	abk	abk	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6477	423	\N	\N	ach	ach	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6478	423	\N	\N	afh	afh	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6479	423	\N	\N	ain	ain	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6480	423	\N	\N	akk	akk	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6481	423	\N	\N	ale	ale	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6482	423	\N	\N	alt	alt	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6483	423	\N	\N	ang	ang	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6484	423	\N	\N	apa	apa	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6485	423	\N	\N	arm	arm	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6486	423	\N	\N	arp	arp	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6487	423	\N	\N	arw	arw	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6488	423	\N	\N	aus	aus	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6489	423	\N	\N	ave	ave	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6490	423	\N	\N	aym	aym	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6491	423	\N	\N	bad	bad	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6492	423	\N	\N	bak	bak	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6493	423	\N	\N	bam	bam	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6494	423	\N	\N	baq	baq	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6495	423	\N	\N	bat	bat	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6496	423	\N	\N	bel	bel	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6497	423	\N	\N	ben	ben	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6498	423	\N	\N	bho	bho	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6499	423	\N	\N	bik	bik	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6500	423	\N	\N	bis	bis	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6501	423	\N	\N	bnt	bnt	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6502	423	\N	\N	bra	bra	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6503	423	\N	\N	btk	btk	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6504	423	\N	\N	bug	bug	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6505	423	\N	\N	bur	bur	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6506	423	\N	\N	cad	cad	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6507	423	\N	\N	car	car	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6508	423	\N	\N	cau	cau	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6509	423	\N	\N	cel	cel	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6510	423	\N	\N	chb	chb	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6511	423	\N	\N	chg	chg	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6512	423	\N	\N	chk	chk	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6513	423	\N	\N	chn	chn	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6514	423	\N	\N	chy	chy	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6515	423	\N	\N	cop	cop	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6516	423	\N	\N	cos	cos	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6517	423	\N	\N	cpf	cpf	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6518	423	\N	\N	cre	cre	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6519	423	\N	\N	crp	crp	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6520	423	\N	\N	cus	cus	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6521	423	\N	\N	dak	dak	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6522	423	\N	\N	dar	dar	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6523	423	\N	\N	del	del	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6524	423	\N	\N	dgr	dgr	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6525	423	\N	\N	dra	dra	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6526	423	\N	\N	dua	dua	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6527	423	\N	\N	dzo	dzo	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6528	423	\N	\N	egy	egy	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6529	423	\N	\N	elx	elx	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6530	423	\N	\N	enm	enm	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6531	423	\N	\N	est	est	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6532	423	\N	\N	ewo	ewo	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6533	423	\N	\N	fao	fao	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6534	423	\N	\N	fij	fij	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6535	423	\N	\N	fin	fin	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6536	423	\N	\N	fon	fon	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6537	423	\N	\N	frm	frm	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6538	423	\N	\N	frr	frr	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6539	423	\N	\N	fry	fry	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6540	423	\N	\N	fur	fur	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6541	423	\N	\N	gay	gay	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6542	423	\N	\N	gem	gem	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6543	423	\N	\N	ger	ger	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6544	423	\N	\N	gil	gil	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6545	423	\N	\N	gle	gle	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6546	423	\N	\N	glv	glv	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6547	423	\N	\N	goh	goh	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6548	423	\N	\N	gor	gor	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6549	423	\N	\N	grb	grb	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6550	423	\N	\N	gre	gre	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6551	423	\N	\N	gwi	gwi	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6552	423	\N	\N	haw	haw	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6553	423	\N	\N	her	her	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6554	423	\N	\N	hit	hit	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6555	423	\N	\N	hmo	hmo	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6556	423	\N	\N	hsb	hsb	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6557	423	\N	\N	hup	hup	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6558	423	\N	\N	ibo	ibo	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6559	423	\N	\N	ido	ido	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6560	423	\N	\N	ijo	ijo	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6561	423	\N	\N	ina	ina	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6562	423	\N	\N	ind	ind	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6563	423	\N	\N	inh	inh	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6564	423	\N	\N	ira	ira	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6565	423	\N	\N	ita	ita	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6566	423	\N	\N	jbo	jbo	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6567	423	\N	\N	jpr	jpr	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6568	423	\N	\N	kaa	kaa	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6569	423	\N	\N	kam	kam	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6570	423	\N	\N	kar	kar	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6571	423	\N	\N	kau	kau	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6572	423	\N	\N	kaz	kaz	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6573	423	\N	\N	kha	kha	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6574	423	\N	\N	khm	khm	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6575	423	\N	\N	kok	kok	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6576	423	\N	\N	kon	kon	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6577	423	\N	\N	kos	kos	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6578	423	\N	\N	krc	krc	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6579	423	\N	\N	kro	kro	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6580	423	\N	\N	kur	kur	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6581	423	\N	\N	lad	lad	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6582	423	\N	\N	lam	lam	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6583	423	\N	\N	lat	lat	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6584	423	\N	\N	lez	lez	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6585	423	\N	\N	lin	lin	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6586	423	\N	\N	lol	lol	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6587	423	\N	\N	lub	lub	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6588	423	\N	\N	lui	lui	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6589	423	\N	\N	luo	luo	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6590	423	\N	\N	mac	mac	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6591	423	\N	\N	mag	mag	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6592	423	\N	\N	mai	mai	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6593	423	\N	\N	mal	mal	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6594	423	\N	\N	mao	mao	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6595	423	\N	\N	mar	mar	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6596	423	\N	\N	may	may	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6597	423	\N	\N	mdr	mdr	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6598	423	\N	\N	mga	mga	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6599	423	\N	\N	min	min	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6600	423	\N	\N	mkh	mkh	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6601	423	\N	\N	mlt	mlt	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6602	423	\N	\N	mni	mni	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6603	423	\N	\N	moh	moh	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6604	423	\N	\N	mos	mos	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6605	423	\N	\N	mun	mun	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6606	423	\N	\N	mwl	mwl	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6607	423	\N	\N	myn	myn	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6608	423	\N	\N	nah	nah	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6609	423	\N	\N	nap	nap	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6610	423	\N	\N	nic	nic	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6611	423	\N	\N	nog	nog	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6612	423	\N	\N	nor	nor	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6613	423	\N	\N	nym	nym	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6614	423	\N	\N	nyo	nyo	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6615	423	\N	\N	oci	oci	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6616	423	\N	\N	ori	ori	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6617	423	\N	\N	osa	osa	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6618	423	\N	\N	ota	ota	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6619	423	\N	\N	paa	paa	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6620	423	\N	\N	pal	pal	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6621	423	\N	\N	pau	pau	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6622	423	\N	\N	per	per	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6623	423	\N	\N	phn	phn	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6624	423	\N	\N	pol	pol	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6625	423	\N	\N	por	por	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6626	423	\N	\N	que	que	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6627	423	\N	\N	rap	rap	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6628	423	\N	\N	roa	roa	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6629	423	\N	\N	rom	rom	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6630	423	\N	\N	run	run	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6631	423	\N	\N	rus	rus	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6632	423	\N	\N	sag	sag	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6633	423	\N	\N	sai	sai	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6634	423	\N	\N	sam	sam	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6635	423	\N	\N	sas	sas	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6636	423	\N	\N	scn	scn	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6637	423	\N	\N	sel	sel	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6638	423	\N	\N	sga	sga	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6639	423	\N	\N	shn	shn	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6640	423	\N	\N	sit	sit	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6641	423	\N	\N	slo	slo	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6642	423	\N	\N	sma	sma	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6643	423	\N	\N	smi	smi	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6644	423	\N	\N	smn	smn	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6645	423	\N	\N	sms	sms	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6646	423	\N	\N	snd	snd	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6647	423	\N	\N	sog	sog	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6648	423	\N	\N	son	son	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6649	423	\N	\N	srn	srn	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6650	423	\N	\N	srr	srr	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6651	423	\N	\N	ssw	ssw	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6652	423	\N	\N	sun	sun	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6653	423	\N	\N	sux	sux	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6654	423	\N	\N	swe	swe	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6655	423	\N	\N	syr	syr	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6656	423	\N	\N	tai	tai	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6657	423	\N	\N	tat	tat	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6658	423	\N	\N	tem	tem	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6659	423	\N	\N	tet	tet	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6660	423	\N	\N	tgl	tgl	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6661	423	\N	\N	tib	tib	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6662	423	\N	\N	tir	tir	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6663	423	\N	\N	tkl	tkl	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6664	423	\N	\N	tli	tli	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6665	423	\N	\N	tog	tog	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6666	423	\N	\N	tpi	tpi	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6667	423	\N	\N	tsn	tsn	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6668	423	\N	\N	tuk	tuk	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6669	423	\N	\N	tup	tup	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6670	423	\N	\N	tut	tut	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6671	423	\N	\N	twi	twi	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6672	423	\N	\N	udm	udm	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6673	423	\N	\N	umb	umb	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6674	423	\N	\N	urd	urd	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6675	423	\N	\N	vai	vai	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6676	423	\N	\N	vie	vie	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6677	423	\N	\N	vot	vot	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6678	423	\N	\N	was	was	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6679	423	\N	\N	wen	wen	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6680	423	\N	\N	wol	wol	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6681	423	\N	\N	xho	xho	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6682	423	\N	\N	yap	yap	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6683	423	\N	\N	yor	yor	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6684	423	\N	\N	zap	zap	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6685	423	\N	\N	zen	zen	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6686	423	\N	\N	zul	zul	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6687	424	\N	\N	Correspondence language	Correspondence language	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6688	424	\N	\N	Dominant language	Dominant language	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6689	424	\N	\N	Home language	Home language	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6690	424	\N	\N	Native language	Native language	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6691	424	\N	\N	Other	Other	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6692	424	\N	\N	Other language proficiency	Other language proficiency	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6693	424	\N	\N	Spoken language	Spoken language	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6694	424	\N	\N	Written language	Written language	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6695	425	\N	\N	Associate's Degree (two years or more)	Associate's Degree (two years or more)	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6696	425	\N	\N	Bachelor's	Bachelor's	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6697	425	\N	\N	Did Not Graduate High School	Did Not Graduate High School	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6698	425	\N	\N	Doctorate	Doctorate	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6699	425	\N	\N	High School Diploma	High School Diploma	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6700	425	\N	\N	Master's	Master's	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6701	425	\N	\N	Some College No Degree	Some College No Degree	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6702	426	\N	\N	Limited	Limited	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6703	426	\N	\N	Limited Monitored 1	Limited Monitored 1	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6704	426	\N	\N	Limited Monitored 2	Limited Monitored 2	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6705	426	\N	\N	NotLimited	NotLimited	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6706	427	\N	\N	City-Large	City-Large	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6707	427	\N	\N	City-Midsize	City-Midsize	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6708	427	\N	\N	City-Small	City-Small	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6709	427	\N	\N	Suburban-Large	Suburban-Large	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6710	427	\N	\N	Suburban-Midsize	Suburban-Midsize	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6711	427	\N	\N	Suburban-Small	Suburban-Small	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6712	427	\N	\N	Town-Fringe	Town-Fringe	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6713	427	\N	\N	Town-Distant	Town-Distant	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6714	427	\N	\N	Town-Remote	Town-Remote	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6715	427	\N	\N	Rural-Fringe	Rural-Fringe	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6716	427	\N	\N	Rural-Distant	Rural-Distant	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6717	427	\N	\N	Rural-Remote	Rural-Remote	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6718	428	\N	\N	Center-based instruction	Center-based instruction	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6719	428	\N	\N	Correspondence instruction	Correspondence instruction	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6720	428	\N	\N	Distance Learning (other than online)	Distance Learning (other than online)	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6721	428	\N	\N	Face-to-face instruction	Face-to-face instruction	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6722	428	\N	\N	Independent study	Independent study	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6723	428	\N	\N	Internship	Internship	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6724	428	\N	\N	Other	Other	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6725	428	\N	\N	Other technology-based instruction	Other technology-based instruction	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6726	428	\N	\N	Technology-based instruction in classroom	Technology-based instruction in classroom	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6727	428	\N	\N	Telepresence/video conference	Telepresence/video conference	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6728	428	\N	\N	Televised	Televised	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6729	428	\N	\N	Videotaped/prerecorded video	Videotaped/prerecorded video	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6730	428	\N	\N	Virtual/On-line Distance learning	Virtual/On-line Distance learning	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6731	429	\N	\N	Classroom credit	Classroom credit	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6732	429	\N	\N	Converted occupational experience credit	Converted occupational experience credit	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6733	429	\N	\N	Correspondence credit	Correspondence credit	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6734	429	\N	\N	Credit by examination	Credit by examination	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6735	429	\N	\N	Credit recovery	Credit recovery	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6736	429	\N	\N	Online credit	Online credit	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6737	429	\N	\N	Other	Other	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6738	429	\N	\N	Transfer credit	Transfer credit	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6739	430	\N	\N	Active	Active	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6740	430	\N	\N	Added	Added	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6741	430	\N	\N	Changed	Changed	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6742	430	\N	\N	Closed	Closed	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6743	430	\N	\N	Future	Future	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6744	430	\N	\N	Inactive	Inactive	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6745	430	\N	\N	New	New	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6746	430	\N	\N	Reopened	Reopened	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6747	431	\N	\N	Baptismal or church certificate	Baptismal or church certificate	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6748	431	\N	\N	Birth certificate	Birth certificate	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6749	431	\N	\N	Drivers license	Drivers license	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6750	431	\N	\N	Entry in family Bible	Entry in family Bible	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6751	431	\N	\N	Hospital certificate	Hospital certificate	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6752	431	\N	\N	Immigration document/visa	Immigration document/visa	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6753	431	\N	\N	Life insurance policy	Life insurance policy	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6754	431	\N	\N	Other	Other	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6755	431	\N	\N	Other non-official document	Other non-official document	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6756	431	\N	\N	Other official document	Other official document	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6757	431	\N	\N	Parents affidavit	Parents affidavit	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6758	431	\N	\N	Passport	Passport	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6759	431	\N	\N	Physicians certificate	Physicians certificate	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6760	431	\N	\N	Previously verified school records	Previously verified school records	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6761	431	\N	\N	State-issued ID	State-issued ID	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6762	432	\N	\N	Computer-based	Computer-based	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6763	432	\N	\N	Paper-based	Paper-based	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6764	433	\N	\N	Adult Basic Education Students	Adult Basic Education Students	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6765	433	\N	\N	Bilingual Students	Bilingual Students	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6766	433	\N	\N	Career and Technical Education Students	Career and Technical Education Students	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6767	433	\N	\N	Compensatory/Remedial Education Students	Compensatory/Remedial Education Students	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6768	433	\N	\N	Economic Disadvantaged	Economic Disadvantaged	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6769	433	\N	\N	ESL Students	ESL Students	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6770	433	\N	\N	Gifted and Talented Students	Gifted and Talented Students	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6771	433	\N	\N	Honors Students	Honors Students	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6772	433	\N	\N	Migrant Students	Migrant Students	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6773	433	\N	\N	Regular Students	Regular Students	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6774	433	\N	\N	Special Education Students	Special Education Students	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6775	434	\N	\N	Shared	Shared	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6776	434	\N	\N	Not Shared	Not Shared	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6777	434	\N	\N	Unknown	Unknown	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6778	435	\N	\N	Desktop Computer	Desktop Computer	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6779	435	\N	\N	Laptop Computer	Laptop Computer	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6780	435	\N	\N	Tablet	Tablet	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6781	435	\N	\N	Chromebook	Chromebook	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6782	435	\N	\N	Smartphone	Smartphone	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6783	435	\N	\N	None	None	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6784	435	\N	\N	Other	Other	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6785	436	\N	\N	Personal	Personal	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6786	436	\N	\N	School	School	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6787	436	\N	\N	Other	Other	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6788	437	\N	\N	American Indian - Alaska Native	American Indian - Alaska Native	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6789	437	\N	\N	Asian	Asian	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6790	437	\N	\N	Black - African American	Black - African American	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6791	437	\N	\N	Choose Not to Respond	Choose Not to Respond	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6792	437	\N	\N	Native Hawaiian - Pacific Islander	Native Hawaiian - Pacific Islander	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6793	437	\N	\N	Other	Other	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6794	437	\N	\N	White	White	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6795	438	\N	\N	Absent	Absent	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6796	438	\N	\N	Alternate assessment administered	Alternate assessment administered	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6797	438	\N	\N	Disruptive behavior	Disruptive behavior	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6798	438	\N	\N	Foreign exchange student waiver	Foreign exchange student waiver	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6799	438	\N	\N	LEP exempt	LEP exempt	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6800	438	\N	\N	LEP postponement	LEP postponement	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6801	438	\N	\N	Medical waiver	Medical waiver	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6802	438	\N	\N	Not appropriate (ARD decision)	Not appropriate (ARD decision)	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6803	438	\N	\N	Not tested (ARD decision)	Not tested (ARD decision)	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6804	438	\N	\N	Other	Other	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6805	438	\N	\N	Parental waiver	Parental waiver	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6806	438	\N	\N	Previously passed the examination	Previously passed the examination	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6807	438	\N	\N	Refusal by parent	Refusal by parent	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6808	438	\N	\N	Refusal by student	Refusal by student	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6809	439	\N	\N	Aunt	Aunt	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6810	439	\N	\N	Brother	Brother	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6811	439	\N	\N	BrotherInLaw	BrotherInLaw	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6812	439	\N	\N	CourtAppointedGuardian	CourtAppointedGuardian	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6813	439	\N	\N	Cousin	Cousin	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6814	439	\N	\N	Daughter	Daughter	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6815	439	\N	\N	DaughterInLaw	DaughterInLaw	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6816	439	\N	\N	Emergency	Emergency	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6817	439	\N	\N	Employer	Employer	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6818	439	\N	\N	Father	Father	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6819	439	\N	\N	Father, step	Father, step	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6820	439	\N	\N	FatherInLaw	FatherInLaw	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6821	439	\N	\N	FathersCivilPartner	FathersCivilPartner	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6822	439	\N	\N	FathersSignificantOther	FathersSignificantOther	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6823	439	\N	\N	Fiance	Fiance	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6824	439	\N	\N	Fiancee	Fiancee	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6825	439	\N	\N	Foster parent	Foster parent	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6826	439	\N	\N	Friend	Friend	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6827	439	\N	\N	Godparent	Godparent	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6828	439	\N	\N	Grandfather	Grandfather	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6829	439	\N	\N	Grandmother	Grandmother	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6830	439	\N	\N	Grandparent	Grandparent	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6831	439	\N	\N	Great aunt	Great aunt	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6832	439	\N	\N	Great Grandparent	Great Grandparent	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6833	439	\N	\N	Great uncle	Great uncle	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6834	439	\N	\N	Guardian	Guardian	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6835	439	\N	\N	Husband	Husband	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6836	439	\N	\N	Mother	Mother	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6837	439	\N	\N	Mother, step	Mother, step	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6838	439	\N	\N	MotherInLaw	MotherInLaw	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6839	439	\N	\N	MothersCivilPartner	MothersCivilPartner	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6840	439	\N	\N	MothersSignificantOther	MothersSignificantOther	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6841	439	\N	\N	Neighbor	Neighbor	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6842	439	\N	\N	Nephew	Nephew	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6843	439	\N	\N	Niece	Niece	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6844	439	\N	\N	Other	Other	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6845	439	\N	\N	Parent	Parent	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6846	439	\N	\N	Parent, step	Parent, step	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6847	439	\N	\N	Relative	Relative	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6848	439	\N	\N	Sibling	Sibling	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6849	439	\N	\N	SignificantOther	SignificantOther	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6850	439	\N	\N	Sister	Sister	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6851	439	\N	\N	SisterInLaw	SisterInLaw	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6852	439	\N	\N	Son	Son	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6853	439	\N	\N	SonInLaw	SonInLaw	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6854	439	\N	\N	Spouse	Spouse	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6855	439	\N	\N	Uncle	Uncle	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6856	439	\N	\N	Unknown	Unknown	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6857	439	\N	\N	Ward	Ward	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6858	439	\N	\N	Wife	Wife	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6859	440	\N	\N	Decimal	Decimal	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6860	440	\N	\N	Integer	Integer	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6861	440	\N	\N	Level	Level	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6862	440	\N	\N	Percentage	Percentage	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6863	440	\N	\N	Percentile	Percentile	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6864	440	\N	\N	Range	Range	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6865	441	\N	\N	1st Retest	1st Retest	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6866	441	\N	\N	2nd Retest	2nd Retest	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6867	441	\N	\N	3rd or more Retest	3rd or more Retest	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6868	441	\N	\N	Primary Administration	Primary Administration	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6869	442	\N	\N	1990-1991	1990-1991	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6870	442	\N	\N	1991-1992	1991-1992	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6871	442	\N	\N	1992-1993	1992-1993	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6872	442	\N	\N	1993-1994	1993-1994	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6873	442	\N	\N	1994-1995	1994-1995	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6874	442	\N	\N	1995-1996	1995-1996	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6875	442	\N	\N	1996-1997	1996-1997	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6876	442	\N	\N	1997-1998	1997-1998	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6877	442	\N	\N	1998-1999	1998-1999	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6878	442	\N	\N	1999-2000	1999-2000	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6879	442	\N	\N	2000-2001	2000-2001	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6880	442	\N	\N	2001-2002	2001-2002	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6881	442	\N	\N	2002-2003	2002-2003	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6882	442	\N	\N	2003-2004	2003-2004	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6883	442	\N	\N	2004-2005	2004-2005	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6884	442	\N	\N	2005-2006	2005-2006	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6885	442	\N	\N	2006-2007	2006-2007	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6886	442	\N	\N	2007-2008	2007-2008	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6887	442	\N	\N	2008-2009	2008-2009	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6888	442	\N	\N	2009-2010	2009-2010	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6889	442	\N	\N	2010-2011	2010-2011	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6890	442	\N	\N	2011-2012	2011-2012	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6891	442	\N	\N	2012-2013	2012-2013	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6892	442	\N	\N	2013-2014	2013-2014	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6893	442	\N	\N	2014-2015	2014-2015	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6894	442	\N	\N	2015-2016	2015-2016	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6895	442	\N	\N	2016-2017	2016-2017	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6896	442	\N	\N	2017-2018	2017-2018	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6897	442	\N	\N	2018-2019	2018-2019	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6898	442	\N	\N	2019-2020	2019-2020	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6899	442	\N	\N	2020-2021	2020-2021	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6900	442	\N	\N	2021-2022	2021-2022	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6901	442	\N	\N	2022-2023	2022-2023	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6902	442	\N	\N	2023-2024	2023-2024	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6903	442	\N	\N	2024-2025	2024-2025	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6904	442	\N	\N	2025-2026	2025-2026	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6905	442	\N	\N	2026-2027	2026-2027	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6906	442	\N	\N	2027-2028	2027-2028	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6907	442	\N	\N	2028-2029	2028-2029	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6908	442	\N	\N	2029-2030	2029-2030	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6909	442	\N	\N	2030-2031	2030-2031	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6910	442	\N	\N	2031-2032	2031-2032	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6911	442	\N	\N	2032-2033	2032-2033	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6912	442	\N	\N	2033-2034	2033-2034	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6913	442	\N	\N	2034-2035	2034-2035	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6914	442	\N	\N	2035-2036	2035-2036	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6915	442	\N	\N	2036-2037	2036-2037	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6916	442	\N	\N	2037-2038	2037-2038	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6917	442	\N	\N	2038-2039	2038-2039	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6918	442	\N	\N	2039-2040	2039-2040	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6919	442	\N	\N	2040-2041	2040-2041	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6920	442	\N	\N	2041-2042	2041-2042	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6921	442	\N	\N	2042-2043	2042-2043	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6922	442	\N	\N	2043-2044	2043-2044	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6923	442	\N	\N	2044-2045	2044-2045	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6924	442	\N	\N	2045-2046	2045-2046	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6925	442	\N	\N	2046-2047	2046-2047	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6926	442	\N	\N	2047-2048	2047-2048	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6927	442	\N	\N	2048-2049	2048-2049	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6928	442	\N	\N	2049-2050	2049-2050	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6929	443	\N	\N	Attendance Tracked	Attendance Tracked	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6930	443	\N	\N	Graded Credit Available	Graded Credit Available	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6931	444	\N	\N	Attendance and Credit	Attendance and Credit	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6932	444	\N	\N	Attendance Only	Attendance Only	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6933	444	\N	\N	Credit Only	Credit Only	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6934	445	\N	\N	Female	Female	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6935	445	\N	\N	Male	Male	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6936	445	\N	\N	Non-binary	Non-binary	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6937	445	\N	\N	Not Selected	Not Selected	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6938	446	\N	\N	AA	AA	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6939	446	\N	\N	AE	AE	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6940	446	\N	\N	AK	AK	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6941	446	\N	\N	AL	AL	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6942	446	\N	\N	AP	AP	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6943	446	\N	\N	AR	AR	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6944	446	\N	\N	AS	AS	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6945	446	\N	\N	AZ	AZ	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6946	446	\N	\N	CA	CA	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6947	446	\N	\N	CO	CO	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6948	446	\N	\N	CT	CT	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6949	446	\N	\N	DC	DC	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6950	446	\N	\N	DE	DE	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6951	446	\N	\N	FL	FL	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6952	446	\N	\N	FM	FM	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6953	446	\N	\N	GA	GA	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6954	446	\N	\N	GU	GU	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6955	446	\N	\N	HI	HI	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6956	446	\N	\N	IA	IA	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6957	446	\N	\N	ID	ID	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6958	446	\N	\N	IL	IL	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6959	446	\N	\N	IN	IN	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6960	446	\N	\N	KS	KS	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6961	446	\N	\N	KY	KY	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6962	446	\N	\N	LA	LA	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6963	446	\N	\N	MA	MA	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6964	446	\N	\N	MD	MD	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6965	446	\N	\N	ME	ME	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6966	446	\N	\N	MH	MH	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6967	446	\N	\N	MI	MI	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6968	446	\N	\N	MN	MN	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6969	446	\N	\N	MO	MO	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6970	446	\N	\N	MP	MP	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6971	446	\N	\N	MS	MS	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6972	446	\N	\N	MT	MT	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6973	446	\N	\N	NC	NC	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6974	446	\N	\N	ND	ND	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6975	446	\N	\N	NE	NE	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6976	446	\N	\N	NH	NH	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6977	446	\N	\N	NJ	NJ	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6978	446	\N	\N	NM	NM	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6979	446	\N	\N	NV	NV	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6980	446	\N	\N	NY	NY	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6981	446	\N	\N	OH	OH	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6982	446	\N	\N	OK	OK	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6983	446	\N	\N	OR	OR	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6984	446	\N	\N	PA	PA	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6985	446	\N	\N	PR	PR	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6986	446	\N	\N	PW	PW	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6987	446	\N	\N	RI	RI	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6988	446	\N	\N	SC	SC	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6989	446	\N	\N	SD	SD	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6990	446	\N	\N	TN	TN	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6991	446	\N	\N	TX	TX	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6992	446	\N	\N	UT	UT	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6993	446	\N	\N	VA	VA	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6994	446	\N	\N	VI	VI	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6995	446	\N	\N	VT	VT	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6996	446	\N	\N	WA	WA	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6997	446	\N	\N	WI	WI	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6998	446	\N	\N	WV	WV	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+6999	446	\N	\N	WY	WY	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7000	447	\N	\N	Canadian SIN	Canadian SIN	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7001	447	\N	\N	District	District	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7002	447	\N	\N	Family	Family	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7003	447	\N	\N	Federal	Federal	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7004	447	\N	\N	Local	Local	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7005	447	\N	\N	National Migrant	National Migrant	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7006	447	\N	\N	Other	Other	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7007	447	\N	\N	School	School	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7008	447	\N	\N	SSN	SSN	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7009	447	\N	\N	State	State	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7010	447	\N	\N	State Migrant	State Migrant	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7011	447	\N	\N	Student Number	Student Number	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7012	448	\N	\N	Active Duty	Active Duty	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7013	448	\N	\N	Reserve	Reserve	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7014	448	\N	\N	Veteran	Veteran	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7015	448	\N	\N	DoD Civilian	DoD Civilian	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7016	448	\N	\N	Not Military Connected	Not Military Connected	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7017	448	\N	\N	Unknown	Unknown	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7018	449	\N	\N	Emergency 1	Emergency 1	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7019	449	\N	\N	Emergency 2	Emergency 2	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7020	449	\N	\N	Fax	Fax	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7021	449	\N	\N	Home	Home	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7022	449	\N	\N	Mobile	Mobile	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7023	449	\N	\N	Other	Other	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7024	449	\N	\N	Unlisted	Unlisted	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7025	449	\N	\N	Work	Work	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7026	450	\N	\N	Semester	Semester	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7027	450	\N	\N	Fall Semester	Fall Semester	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7028	450	\N	\N	Spring Semester	Spring Semester	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7029	450	\N	\N	Summer Semester	Summer Semester	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7030	450	\N	\N	Quarter	Quarter	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7031	450	\N	\N	First Quarter	First Quarter	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7032	450	\N	\N	Second Quarter	Second Quarter	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7033	450	\N	\N	Third Quarter	Third Quarter	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7034	450	\N	\N	Fourth Quarter	Fourth Quarter	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7035	450	\N	\N	Trimester	Trimester	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7036	450	\N	\N	First Trimester	First Trimester	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7037	450	\N	\N	Second Trimester	Second Trimester	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7038	450	\N	\N	Third Trimester	Third Trimester	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7039	450	\N	\N	MiniTerm	MiniTerm	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7040	450	\N	\N	Year Round	Year Round	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7041	450	\N	\N	Other	Other	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7042	451	\N	\N	Absentee-Shawnee	Absentee-Shawnee	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7043	451	\N	\N	Afognak	Afognak	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7044	451	\N	\N	Agdaagux	Agdaagux	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7045	451	\N	\N	Agua Caliente	Agua Caliente	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7046	451	\N	\N	Ak Chin	Ak Chin	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7047	451	\N	\N	Akhiok	Akhiok	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7048	451	\N	\N	Akiachak	Akiachak	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7049	451	\N	\N	Akiak	Akiak	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7050	451	\N	\N	Akutan	Akutan	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7051	451	\N	\N	Alabama-Coushatta	Alabama-Coushatta	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7052	451	\N	\N	Alabama-Quassarte	Alabama-Quassarte	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7053	451	\N	\N	Alakanuk	Alakanuk	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7054	451	\N	\N	Alatna	Alatna	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7055	451	\N	\N	Aleknagik	Aleknagik	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7056	451	\N	\N	Algaaciq	Algaaciq	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7057	451	\N	\N	Allakaket	Allakaket	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7058	451	\N	\N	Alturas	Alturas	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7059	451	\N	\N	Alutiiq Tribe of Old Harbor	Alutiiq Tribe of Old Harbor	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7060	451	\N	\N	Ambler	Ambler	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7061	451	\N	\N	Anaktuvuk Pass	Anaktuvuk Pass	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7062	451	\N	\N	Andreafski	Andreafski	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7063	451	\N	\N	Angoon	Angoon	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7064	451	\N	\N	Aniak	Aniak	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7065	451	\N	\N	Anvik	Anvik	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7066	451	\N	\N	Apache	Apache	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7067	451	\N	\N	Arctic Village	Arctic Village	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7068	451	\N	\N	Asa'carsarmiut	Asa'carsarmiut	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7069	451	\N	\N	Assiniboine and Gros Ventre Tribes	Assiniboine and Gros Ventre Tribes	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7070	451	\N	\N	Assiniboine and Sioux	Assiniboine and Sioux	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7071	451	\N	\N	Atka	Atka	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7072	451	\N	\N	Atmautluak	Atmautluak	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7073	451	\N	\N	Augustine	Augustine	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7074	451	\N	\N	Bad River Band	Bad River Band	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7075	451	\N	\N	Barrow	Barrow	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7076	451	\N	\N	Bay Mills	Bay Mills	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7077	451	\N	\N	Bear River	Bear River	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7078	451	\N	\N	Beaver	Beaver	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7079	451	\N	\N	Belkofski	Belkofski	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7080	451	\N	\N	Benton	Benton	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7081	451	\N	\N	Berry Creek	Berry Creek	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7082	451	\N	\N	Big Lagoon	Big Lagoon	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7083	451	\N	\N	Big Pine	Big Pine	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7084	451	\N	\N	Big Sandy	Big Sandy	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7085	451	\N	\N	Big Valley Rancheria	Big Valley Rancheria	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7086	451	\N	\N	Bill Moore's Slough	Bill Moore's Slough	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7087	451	\N	\N	Birch Creek	Birch Creek	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7088	451	\N	\N	Bishop Paiute	Bishop Paiute	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7089	451	\N	\N	Blackfeet	Blackfeet	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7090	451	\N	\N	Blue Lake	Blue Lake	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7091	451	\N	\N	Bois Forte	Bois Forte	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7092	451	\N	\N	Brevig Mission	Brevig Mission	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7093	451	\N	\N	Bridgeport Indian Colony	Bridgeport Indian Colony	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7094	451	\N	\N	Buckland	Buckland	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7095	451	\N	\N	Buena Vista Rancheria	Buena Vista Rancheria	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7096	451	\N	\N	Burns Paiute	Burns Paiute	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7097	451	\N	\N	Cabazon	Cabazon	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7098	451	\N	\N	Cachil DeHe	Cachil DeHe	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7099	451	\N	\N	Caddo	Caddo	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7100	451	\N	\N	Cahto	Cahto	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7101	451	\N	\N	Cahuilla	Cahuilla	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7102	451	\N	\N	California Valley	California Valley	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7103	451	\N	\N	Campo	Campo	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7104	451	\N	\N	Cantwell	Cantwell	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7105	451	\N	\N	Capitan Grande	Capitan Grande	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7106	451	\N	\N	Capitan Grande Band	Capitan Grande Band	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7107	451	\N	\N	Catawba	Catawba	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7108	451	\N	\N	Cayuga Nation of New York	Cayuga Nation of New York	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7109	451	\N	\N	Cedarville	Cedarville	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7110	451	\N	\N	Chalkyitsik	Chalkyitsik	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7111	451	\N	\N	Cheesh-Na	Cheesh-Na	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7112	451	\N	\N	Chefornak	Chefornak	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7113	451	\N	\N	Chehalis	Chehalis	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7114	451	\N	\N	Chemehuevi	Chemehuevi	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7115	451	\N	\N	Chenega	Chenega	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7116	451	\N	\N	Cher-Ae Heights	Cher-Ae Heights	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7117	451	\N	\N	Cherokee	Cherokee	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7118	451	\N	\N	Chevak	Chevak	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7119	451	\N	\N	Cheyenne River	Cheyenne River	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7120	451	\N	\N	Cheyenne River Sioux Tribe	Cheyenne River Sioux Tribe	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7121	451	\N	\N	Chickahominy Indian Tribe, Inc.	Chickahominy Indian Tribe, Inc.	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7122	451	\N	\N	Chickahominy Indians-Eastern Division	Chickahominy Indians-Eastern Division	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7123	451	\N	\N	Chickaloon	Chickaloon	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7124	451	\N	\N	Chickasaw	Chickasaw	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7125	451	\N	\N	Chicken Ranch	Chicken Ranch	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7126	451	\N	\N	Chignik Bay	Chignik Bay	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7127	451	\N	\N	Chignik Lagoon	Chignik Lagoon	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7128	451	\N	\N	Chignik Lake	Chignik Lake	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7129	451	\N	\N	Chilkat	Chilkat	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7130	451	\N	\N	Chilkoot	Chilkoot	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7131	451	\N	\N	Chinik	Chinik	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7132	451	\N	\N	Chippewa-Cree	Chippewa-Cree	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7133	451	\N	\N	Chitimacha	Chitimacha	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7134	451	\N	\N	Chitina	Chitina	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7135	451	\N	\N	Choctaw	Choctaw	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7136	451	\N	\N	Chuathbaluk	Chuathbaluk	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7137	451	\N	\N	Chuloonawick	Chuloonawick	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7138	451	\N	\N	Circle	Circle	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7139	451	\N	\N	Citizen Potawatomi	Citizen Potawatomi	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7140	451	\N	\N	Clark's Point	Clark's Point	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7141	451	\N	\N	Cloverdale	Cloverdale	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7142	451	\N	\N	Cocopah	Cocopah	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7143	451	\N	\N	Coeur D'Alene	Coeur D'Alene	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7144	451	\N	\N	Cold Springs	Cold Springs	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7145	451	\N	\N	Colorado River	Colorado River	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7146	451	\N	\N	Comanche	Comanche	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7147	451	\N	\N	Confederated Colville	Confederated Colville	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7148	451	\N	\N	Confederated Coos	Confederated Coos	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7149	451	\N	\N	Confederated Goshute	Confederated Goshute	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7150	451	\N	\N	Confederated Salish	Confederated Salish	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7151	451	\N	\N	Confederated Yakama	Confederated Yakama	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7152	451	\N	\N	Coquille	Coquille	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7153	451	\N	\N	Cortina	Cortina	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7154	451	\N	\N	Council	Council	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7155	451	\N	\N	Coushatta	Coushatta	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7156	451	\N	\N	Cow Creek	Cow Creek	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7157	451	\N	\N	Cowlitz	Cowlitz	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7158	451	\N	\N	Coyote Valley	Coyote Valley	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7159	451	\N	\N	Craig	Craig	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7160	451	\N	\N	Crooked Creek	Crooked Creek	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7161	451	\N	\N	Crow	Crow	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7162	451	\N	\N	Crow Creek	Crow Creek	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7163	451	\N	\N	Curyung	Curyung	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7164	451	\N	\N	Deering	Deering	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7165	451	\N	\N	Delaware Nation	Delaware Nation	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7166	451	\N	\N	Delaware Tribe	Delaware Tribe	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7167	451	\N	\N	Diomede	Diomede	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7168	451	\N	\N	Dot Lake	Dot Lake	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7169	451	\N	\N	Douglas	Douglas	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7170	451	\N	\N	Dry Creek	Dry Creek	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7171	451	\N	\N	Duckwater	Duckwater	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7172	451	\N	\N	Eagle	Eagle	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7173	451	\N	\N	Eastern Cherokee	Eastern Cherokee	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7174	451	\N	\N	Eastern Shawnee	Eastern Shawnee	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7175	451	\N	\N	Eastern Shoshone	Eastern Shoshone	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7176	451	\N	\N	Eek	Eek	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7177	451	\N	\N	Egegik	Egegik	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7178	451	\N	\N	Eklutna	Eklutna	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7179	451	\N	\N	Ekuk	Ekuk	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7180	451	\N	\N	Ekwok	Ekwok	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7181	451	\N	\N	Elem	Elem	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7182	451	\N	\N	Elim IRA	Elim IRA	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7183	451	\N	\N	Elk Valley	Elk Valley	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7184	451	\N	\N	Ely Shoshone	Ely Shoshone	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7185	451	\N	\N	Emmonak	Emmonak	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7186	451	\N	\N	Enterprise	Enterprise	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7187	451	\N	\N	Evansville	Evansville	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7188	451	\N	\N	Ewiiaapaayp	Ewiiaapaayp	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7189	451	\N	\N	Eyak	Eyak	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7190	451	\N	\N	False Pass	False Pass	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7191	451	\N	\N	Federated Indians of Graton	Federated Indians of Graton	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7192	451	\N	\N	Flandreau	Flandreau	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7193	451	\N	\N	Fond du Lac	Fond du Lac	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7194	451	\N	\N	Forest County	Forest County	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7195	451	\N	\N	Fort Bidwell	Fort Bidwell	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7196	451	\N	\N	Fort Independence	Fort Independence	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7197	451	\N	\N	Fort McDermitt	Fort McDermitt	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7198	451	\N	\N	Fort McDowell	Fort McDowell	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7199	451	\N	\N	Fort Mojave	Fort Mojave	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7200	451	\N	\N	Fort Sill	Fort Sill	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7201	451	\N	\N	Fort Yukon	Fort Yukon	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7202	451	\N	\N	Gakona	Gakona	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7203	451	\N	\N	Galena	Galena	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7204	451	\N	\N	Gambell	Gambell	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7205	451	\N	\N	Georgetown	Georgetown	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7206	451	\N	\N	Gila River	Gila River	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7207	451	\N	\N	Goodnews Bay	Goodnews Bay	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7208	451	\N	\N	Grand Portage	Grand Portage	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7209	451	\N	\N	Grand Ronde Tribes	Grand Ronde Tribes	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7210	451	\N	\N	Grand Traverse	Grand Traverse	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7211	451	\N	\N	Grayling	Grayling	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7212	451	\N	\N	Greenville	Greenville	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7213	451	\N	\N	Grindstone	Grindstone	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7214	451	\N	\N	Guidiville	Guidiville	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7215	451	\N	\N	Gulkana	Gulkana	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7216	451	\N	\N	Habematolel	Habematolel	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7217	451	\N	\N	Hamilton	Hamilton	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7218	451	\N	\N	Hannahville	Hannahville	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7219	451	\N	\N	Havasupai	Havasupai	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7220	451	\N	\N	Healy Lake	Healy Lake	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7221	451	\N	\N	Ho-Chunk	Ho-Chunk	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7222	451	\N	\N	Hoh	Hoh	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7223	451	\N	\N	Holy Cross	Holy Cross	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7224	451	\N	\N	Hoonah	Hoonah	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7225	451	\N	\N	Hoopa	Hoopa	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7226	451	\N	\N	Hooper Bay	Hooper Bay	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7227	451	\N	\N	Hopi	Hopi	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7228	451	\N	\N	Hopland	Hopland	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7229	451	\N	\N	Houlton	Houlton	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7230	451	\N	\N	Hualapai	Hualapai	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7231	451	\N	\N	Hughes	Hughes	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7232	451	\N	\N	Huslia	Huslia	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7233	451	\N	\N	Hydaburg	Hydaburg	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7234	451	\N	\N	Igiugig	Igiugig	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7235	451	\N	\N	Iipay	Iipay	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7236	451	\N	\N	Iliamna	Iliamna	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7237	451	\N	\N	Inaja	Inaja	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7238	451	\N	\N	Inupiat Community of the Arctic Slope	Inupiat Community of the Arctic Slope	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7239	451	\N	\N	Ione	Ione	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7240	451	\N	\N	Iowa of Kansas	Iowa of Kansas	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7241	451	\N	\N	Iowa of Oklahoma	Iowa of Oklahoma	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7242	451	\N	\N	Iqugmiut	Iqugmiut	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7243	451	\N	\N	Ivanof Bay Tribe	Ivanof Bay Tribe	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7244	451	\N	\N	Jackson	Jackson	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7245	451	\N	\N	Jamestown	Jamestown	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7246	451	\N	\N	Jamul	Jamul	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7247	451	\N	\N	Jena	Jena	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7248	451	\N	\N	Jicarilla	Jicarilla	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7249	451	\N	\N	Kaguyuk	Kaguyuk	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7250	451	\N	\N	Kaibab	Kaibab	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7251	451	\N	\N	Kake	Kake	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7252	451	\N	\N	Kaktovik	Kaktovik	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7253	451	\N	\N	Kalispel	Kalispel	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7254	451	\N	\N	Kalskag	Kalskag	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7255	451	\N	\N	Kaltag	Kaltag	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7256	451	\N	\N	Kanatak	Kanatak	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7257	451	\N	\N	Karluk	Karluk	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7258	451	\N	\N	Karuk	Karuk	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7259	451	\N	\N	Kasaan	Kasaan	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7260	451	\N	\N	Kashia	Kashia	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7261	451	\N	\N	Kasigluk	Kasigluk	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7262	451	\N	\N	Kaw	Kaw	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7263	451	\N	\N	Kenaitze	Kenaitze	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7264	451	\N	\N	Ketchikan	Ketchikan	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7265	451	\N	\N	Keweenaw	Keweenaw	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7266	451	\N	\N	Kialegee	Kialegee	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7267	451	\N	\N	Kiana	Kiana	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7268	451	\N	\N	Kickapoo of Kansas	Kickapoo of Kansas	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7269	451	\N	\N	Kickapoo of Oklahoma	Kickapoo of Oklahoma	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7270	451	\N	\N	Kickapoo of Texas	Kickapoo of Texas	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7271	451	\N	\N	King Island	King Island	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7272	451	\N	\N	King Salmon	King Salmon	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7273	451	\N	\N	Kiowa	Kiowa	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7274	451	\N	\N	Kipnuk	Kipnuk	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7275	451	\N	\N	Kivalina	Kivalina	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7276	451	\N	\N	Klamath	Klamath	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7277	451	\N	\N	Klawock	Klawock	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7278	451	\N	\N	Kluti Kaah	Kluti Kaah	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7279	451	\N	\N	Knik	Knik	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7280	451	\N	\N	Kobuk	Kobuk	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7281	451	\N	\N	Koi	Koi	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7282	451	\N	\N	Kokhanok	Kokhanok	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7283	451	\N	\N	Kongiganak	Kongiganak	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7284	451	\N	\N	Kootenai	Kootenai	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7285	451	\N	\N	Kotlik	Kotlik	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7286	451	\N	\N	Kotzebue	Kotzebue	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7287	451	\N	\N	Koyuk	Koyuk	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7288	451	\N	\N	Koyukuk	Koyukuk	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7289	451	\N	\N	Kwethluk	Kwethluk	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7290	451	\N	\N	Kwigillingok	Kwigillingok	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7291	451	\N	\N	Kwinhagak	Kwinhagak	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7292	451	\N	\N	La Jolla	La Jolla	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7293	451	\N	\N	La Posta	La Posta	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7294	451	\N	\N	Lac Courte Oreilles	Lac Courte Oreilles	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7295	451	\N	\N	Lac du Flambeau	Lac du Flambeau	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7296	451	\N	\N	Lac Vieux	Lac Vieux	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7297	451	\N	\N	Larsen Bay	Larsen Bay	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7298	451	\N	\N	Las Vegas	Las Vegas	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7299	451	\N	\N	Leech Lake	Leech Lake	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7300	451	\N	\N	Levelock	Levelock	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7301	451	\N	\N	Lime	Lime	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7302	451	\N	\N	Little River	Little River	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7303	451	\N	\N	Little Shell Tribe	Little Shell Tribe	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7304	451	\N	\N	Little Traverse	Little Traverse	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7305	451	\N	\N	Lone Pine	Lone Pine	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7306	451	\N	\N	Los Coyotes	Los Coyotes	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7307	451	\N	\N	Lovelock	Lovelock	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7308	451	\N	\N	Lower Brule	Lower Brule	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7309	451	\N	\N	Lower Elwha	Lower Elwha	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7310	451	\N	\N	Lower Kalskag	Lower Kalskag	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7311	451	\N	\N	Lower Sioux	Lower Sioux	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7312	451	\N	\N	Lummi	Lummi	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7313	451	\N	\N	Lytton	Lytton	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7314	451	\N	\N	Makah	Makah	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7315	451	\N	\N	Manchester	Manchester	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7316	451	\N	\N	Manley Hot Springs	Manley Hot Springs	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7317	451	\N	\N	Manokotak	Manokotak	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7318	451	\N	\N	Manzanita	Manzanita	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7319	451	\N	\N	Marshall	Marshall	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7320	451	\N	\N	Mary's Igloo	Mary's Igloo	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7321	451	\N	\N	Mashantucket Pequot	Mashantucket Pequot	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7322	451	\N	\N	Mashpee	Mashpee	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7323	451	\N	\N	Match-e-be-nash-she-wish Band	Match-e-be-nash-she-wish Band	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7324	451	\N	\N	Mcgrath	Mcgrath	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7325	451	\N	\N	Mechoopda	Mechoopda	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7326	451	\N	\N	Mekoryuk	Mekoryuk	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7327	451	\N	\N	Menominee	Menominee	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7328	451	\N	\N	Mentasta	Mentasta	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7329	451	\N	\N	Mesa Grande	Mesa Grande	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7330	451	\N	\N	Mescalero Apache	Mescalero Apache	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7331	451	\N	\N	Metlakatla	Metlakatla	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7332	451	\N	\N	Miami of Oklahoma	Miami of Oklahoma	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7333	451	\N	\N	Miccosukee	Miccosukee	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7334	451	\N	\N	Middletown	Middletown	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7335	451	\N	\N	Mi'kmaq Nation	Mi'kmaq Nation	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7336	451	\N	\N	Mille Lacs	Mille Lacs	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7337	451	\N	\N	Minnesota Chippewa	Minnesota Chippewa	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7338	451	\N	\N	Minto	Minto	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7339	451	\N	\N	Mississippi Choctaw	Mississippi Choctaw	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7340	451	\N	\N	Moapa	Moapa	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7341	451	\N	\N	Modoc	Modoc	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7342	451	\N	\N	Mohegan	Mohegan	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7343	451	\N	\N	Monacan Indian Nation	Monacan Indian Nation	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7344	451	\N	\N	Mooretown	Mooretown	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7345	451	\N	\N	Morongo	Morongo	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7346	451	\N	\N	Muckleshoot	Muckleshoot	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7347	451	\N	\N	Muscogee (Creek) Nation	Muscogee (Creek) Nation	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7348	451	\N	\N	Naknek	Naknek	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7349	451	\N	\N	Nansemond Indian Tribe	Nansemond Indian Tribe	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7350	451	\N	\N	Nanwalek	Nanwalek	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7351	451	\N	\N	Napaimute	Napaimute	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7352	451	\N	\N	Napakiak	Napakiak	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7353	451	\N	\N	Napaskiak	Napaskiak	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7354	451	\N	\N	Narragansett	Narragansett	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7355	451	\N	\N	Native Village of Atqasuk	Native Village of Atqasuk	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7356	451	\N	\N	Navajo	Navajo	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7357	451	\N	\N	Nelson Lagoon	Nelson Lagoon	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7358	451	\N	\N	Nenana	Nenana	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7359	451	\N	\N	New Koliganek	New Koliganek	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7360	451	\N	\N	New Stuyahok	New Stuyahok	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7361	451	\N	\N	Newhalen	Newhalen	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7362	451	\N	\N	Newtok	Newtok	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7363	451	\N	\N	Nez Perce	Nez Perce	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7364	451	\N	\N	Nightmute	Nightmute	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7365	451	\N	\N	Nikolai	Nikolai	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7366	451	\N	\N	Nikolski	Nikolski	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7367	451	\N	\N	Ninilchik	Ninilchik	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7368	451	\N	\N	Nisqually	Nisqually	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7369	451	\N	\N	Noatak	Noatak	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7370	451	\N	\N	Nome	Nome	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7371	451	\N	\N	Nondalton	Nondalton	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7372	451	\N	\N	Nooksack	Nooksack	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7373	451	\N	\N	Noorvik	Noorvik	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7374	451	\N	\N	North Fork	North Fork	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7375	451	\N	\N	Northern Arapaho	Northern Arapaho	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7376	451	\N	\N	Northern Cheyenne	Northern Cheyenne	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7377	451	\N	\N	Northway	Northway	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7378	451	\N	\N	Northwestern Shoshone	Northwestern Shoshone	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7379	451	\N	\N	Nottawaseppi Potawatomi	Nottawaseppi Potawatomi	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7380	451	\N	\N	Nuiqsut	Nuiqsut	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7381	451	\N	\N	Nulato	Nulato	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7382	451	\N	\N	Nunakauyarmiut	Nunakauyarmiut	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7383	451	\N	\N	Nunam Iqua	Nunam Iqua	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7384	451	\N	\N	Nunapitchuk	Nunapitchuk	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7385	451	\N	\N	Oglala Sioux	Oglala Sioux	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7386	451	\N	\N	Ohkay Owingeh	Ohkay Owingeh	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7387	451	\N	\N	Ohogamiut	Ohogamiut	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7388	451	\N	\N	Omaha	Omaha	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7389	451	\N	\N	Oneida	Oneida	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7390	451	\N	\N	Oneida Nation (Wisconsin)	Oneida Nation (Wisconsin)	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7391	451	\N	\N	Onondaga	Onondaga	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7392	451	\N	\N	Orutsararmiut	Orutsararmiut	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7393	451	\N	\N	Osage Nation	Osage Nation	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7394	451	\N	\N	Oscarville	Oscarville	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7395	451	\N	\N	Otoe-Missouria	Otoe-Missouria	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7396	451	\N	\N	Ottawa Tribe of Oklahoma	Ottawa Tribe of Oklahoma	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7397	451	\N	\N	Ouzinkie	Ouzinkie	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7398	451	\N	\N	Paimiut	Paimiut	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7399	451	\N	\N	Paiute of Utah	Paiute of Utah	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7400	451	\N	\N	Paiute-Shoshone	Paiute-Shoshone	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7401	451	\N	\N	Pala	Pala	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7402	451	\N	\N	Pamunkey Indian Tribe	Pamunkey Indian Tribe	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7403	451	\N	\N	Pascua Yaqui	Pascua Yaqui	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7404	451	\N	\N	Paskenta	Paskenta	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7405	451	\N	\N	Passamaquoddy Indian Township	Passamaquoddy Indian Township	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7406	451	\N	\N	Passamaquoddy Pleasant Point	Passamaquoddy Pleasant Point	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7407	451	\N	\N	Passamaquoddy Tribe	Passamaquoddy Tribe	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7408	451	\N	\N	Pauloff Harbor	Pauloff Harbor	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7409	451	\N	\N	Pauma	Pauma	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7410	451	\N	\N	Pawnee	Pawnee	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7411	451	\N	\N	Pechanga Band of Indians	Pechanga Band of Indians	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7412	451	\N	\N	Pedro Bay	Pedro Bay	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7413	451	\N	\N	Penobscot	Penobscot	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7414	451	\N	\N	Peoria Tribe of Oklahoma	Peoria Tribe of Oklahoma	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7415	451	\N	\N	Perryville	Perryville	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7416	451	\N	\N	Petersburg	Petersburg	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7417	451	\N	\N	Picayune	Picayune	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7418	451	\N	\N	Pilot Point	Pilot Point	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7419	451	\N	\N	Pilot Station	Pilot Station	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7420	451	\N	\N	Pinoleville	Pinoleville	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7421	451	\N	\N	Pit River	Pit River	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7422	451	\N	\N	Pitka's Point	Pitka's Point	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7423	451	\N	\N	Platinum	Platinum	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7424	451	\N	\N	Poarch	Poarch	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7425	451	\N	\N	Point Hope IRA	Point Hope IRA	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7426	451	\N	\N	Point Lay IRA	Point Lay IRA	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7427	451	\N	\N	Pokagon	Pokagon	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7428	451	\N	\N	Ponca of Nebraska	Ponca of Nebraska	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7429	451	\N	\N	Ponca of Oklahoma	Ponca of Oklahoma	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7430	451	\N	\N	Port Gamble	Port Gamble	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7431	451	\N	\N	Port Graham	Port Graham	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7432	451	\N	\N	Port Heiden	Port Heiden	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7433	451	\N	\N	Port Lions	Port Lions	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7434	451	\N	\N	Portage Creek	Portage Creek	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7435	451	\N	\N	Potter Valley	Potter Valley	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7436	451	\N	\N	Prairie Band	Prairie Band	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7437	451	\N	\N	Prairie Island	Prairie Island	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7438	451	\N	\N	Pribilof Islands Aleut Communities	Pribilof Islands Aleut Communities	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7439	451	\N	\N	Pueblo of Acoma	Pueblo of Acoma	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7440	451	\N	\N	Pueblo of Cochiti	Pueblo of Cochiti	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7441	451	\N	\N	Pueblo of Isleta	Pueblo of Isleta	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7442	451	\N	\N	Pueblo of Jemez	Pueblo of Jemez	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7443	451	\N	\N	Pueblo of Laguna	Pueblo of Laguna	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7444	451	\N	\N	Pueblo of Nambe	Pueblo of Nambe	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7445	451	\N	\N	Pueblo of Picuris	Pueblo of Picuris	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7446	451	\N	\N	Pueblo of Pojoaque	Pueblo of Pojoaque	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7447	451	\N	\N	Pueblo of San Felipe	Pueblo of San Felipe	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7448	451	\N	\N	Pueblo of San Ildefonso	Pueblo of San Ildefonso	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7449	451	\N	\N	Pueblo of Sandia	Pueblo of Sandia	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7450	451	\N	\N	Pueblo of Santa Ana	Pueblo of Santa Ana	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7451	451	\N	\N	Pueblo of Santa Clara	Pueblo of Santa Clara	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7452	451	\N	\N	Pueblo of Taos	Pueblo of Taos	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7453	451	\N	\N	Pueblo of Tesuque	Pueblo of Tesuque	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7454	451	\N	\N	Pueblo of Zia	Pueblo of Zia	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7455	451	\N	\N	Pueblo of Zuni	Pueblo of Zuni	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7456	451	\N	\N	Puyallup	Puyallup	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7457	451	\N	\N	Pyramid Lake	Pyramid Lake	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7458	451	\N	\N	Qagan Tayagungin	Qagan Tayagungin	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7459	451	\N	\N	Qawalangin	Qawalangin	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7460	451	\N	\N	Quapaw Tribe	Quapaw Tribe	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7461	451	\N	\N	Quartz Valley	Quartz Valley	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7462	451	\N	\N	Quechan	Quechan	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7463	451	\N	\N	Quileute	Quileute	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7464	451	\N	\N	Quinault	Quinault	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7465	451	\N	\N	Ramah Navajo Chapter	Ramah Navajo Chapter	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7466	451	\N	\N	Ramona	Ramona	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7467	451	\N	\N	Rampart	Rampart	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7468	451	\N	\N	Rappahannock Tribe, Inc.	Rappahannock Tribe, Inc.	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7469	451	\N	\N	Red Cliff	Red Cliff	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7470	451	\N	\N	Red Devil	Red Devil	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7471	451	\N	\N	Red Lake	Red Lake	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7472	451	\N	\N	Redding	Redding	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7473	451	\N	\N	Redwood Valley	Redwood Valley	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7474	451	\N	\N	Reno-Sparks	Reno-Sparks	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7475	451	\N	\N	Resighini	Resighini	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7476	451	\N	\N	Rincon	Rincon	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7477	451	\N	\N	Robinson	Robinson	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7478	451	\N	\N	Rosebud	Rosebud	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7479	451	\N	\N	Round Valley	Round Valley	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7480	451	\N	\N	Ruby	Ruby	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7481	451	\N	\N	Sac & Fox Nation of Missouri in KS & NE	Sac & Fox Nation of Missouri in KS & NE	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7482	451	\N	\N	Sac & Fox Nation, Oklahoma	Sac & Fox Nation, Oklahoma	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7483	451	\N	\N	Sac & Fox of Mississippi	Sac & Fox of Mississippi	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7484	451	\N	\N	Saginaw Chippewa	Saginaw Chippewa	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7485	451	\N	\N	Saint Paul	Saint Paul	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7486	451	\N	\N	Saint Regis	Saint Regis	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7487	451	\N	\N	Salamatof	Salamatof	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7488	451	\N	\N	Salt River	Salt River	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7489	451	\N	\N	Samish	Samish	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7490	451	\N	\N	San Carlos	San Carlos	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7491	451	\N	\N	San Juan	San Juan	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7492	451	\N	\N	San Pasqual	San Pasqual	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7493	451	\N	\N	Santa Rosa	Santa Rosa	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7494	451	\N	\N	Santa Rosa of Cahuilla	Santa Rosa of Cahuilla	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7495	451	\N	\N	Santa Ynez	Santa Ynez	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7496	451	\N	\N	Santee Sioux	Santee Sioux	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7497	451	\N	\N	Santo Domingo	Santo Domingo	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7498	451	\N	\N	Sauk-Suiattle	Sauk-Suiattle	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7499	451	\N	\N	Sault Ste. Marie	Sault Ste. Marie	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7500	451	\N	\N	Savoonga	Savoonga	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7501	451	\N	\N	Saxman	Saxman	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7502	451	\N	\N	Scammon Bay	Scammon Bay	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7503	451	\N	\N	Scotts Valley	Scotts Valley	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7504	451	\N	\N	Selawik	Selawik	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7505	451	\N	\N	Seldovia	Seldovia	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7506	451	\N	\N	Seminole	Seminole	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7507	451	\N	\N	Seminole Nation of Oklahoma	Seminole Nation of Oklahoma	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7508	451	\N	\N	Seneca	Seneca	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7509	451	\N	\N	Seneca-Cayuga Nation	Seneca-Cayuga Nation	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7510	451	\N	\N	Shageluk	Shageluk	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7511	451	\N	\N	Shakopee	Shakopee	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7512	451	\N	\N	Shaktoolik	Shaktoolik	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7513	451	\N	\N	Shawnee Tribe	Shawnee Tribe	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7514	451	\N	\N	Sherwood Valley	Sherwood Valley	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7515	451	\N	\N	Shingle Springs	Shingle Springs	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7516	451	\N	\N	Shinnecock	Shinnecock	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7517	451	\N	\N	Shishmaref IRA	Shishmaref IRA	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7518	451	\N	\N	Shoalwater	Shoalwater	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7519	451	\N	\N	Shoshone-Bannock	Shoshone-Bannock	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7520	451	\N	\N	Shoshone-Paiute	Shoshone-Paiute	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7521	451	\N	\N	Shungnak	Shungnak	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7522	451	\N	\N	Siletz Tribe	Siletz Tribe	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7523	451	\N	\N	Sisseton-Wahpeton	Sisseton-Wahpeton	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7524	451	\N	\N	Sitka	Sitka	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7525	451	\N	\N	Skagway	Skagway	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7526	451	\N	\N	Skokomish	Skokomish	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7527	451	\N	\N	Skull Valley	Skull Valley	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7528	451	\N	\N	Sleetmute	Sleetmute	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7529	451	\N	\N	Snoqualmie	Snoqualmie	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7530	451	\N	\N	Soboba	Soboba	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7531	451	\N	\N	Sokaogon	Sokaogon	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7532	451	\N	\N	Solomon	Solomon	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7533	451	\N	\N	South Naknek	South Naknek	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7534	451	\N	\N	Southern Ute	Southern Ute	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7535	451	\N	\N	Spirit Lake	Spirit Lake	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7536	451	\N	\N	Spokane	Spokane	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7537	451	\N	\N	Squaxin	Squaxin	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7538	451	\N	\N	St. Croix	St. Croix	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7539	451	\N	\N	St. George	St. George	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7540	451	\N	\N	St. Michael IRA	St. Michael IRA	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7541	451	\N	\N	Standing Rock	Standing Rock	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7542	451	\N	\N	Stebbins	Stebbins	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7543	451	\N	\N	Stevens Village	Stevens Village	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7544	451	\N	\N	Stillaguamish	Stillaguamish	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7545	451	\N	\N	Stockbridge	Stockbridge	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7546	451	\N	\N	Stony River	Stony River	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7547	451	\N	\N	Summit Lake	Summit Lake	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7548	451	\N	\N	Sun'aq	Sun'aq	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7549	451	\N	\N	Suquamish	Suquamish	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7550	451	\N	\N	Susanville	Susanville	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7551	451	\N	\N	Swinomish	Swinomish	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7552	451	\N	\N	Sycuan	Sycuan	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7553	451	\N	\N	Table Mountain	Table Mountain	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7554	451	\N	\N	Takotna	Takotna	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7555	451	\N	\N	Tanacross	Tanacross	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7556	451	\N	\N	Tanana	Tanana	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7557	451	\N	\N	Tangirnaq	Tangirnaq	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7558	451	\N	\N	Tatitlek	Tatitlek	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7559	451	\N	\N	Tazlina	Tazlina	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7560	451	\N	\N	Tejon	Tejon	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7561	451	\N	\N	Telida	Telida	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7562	451	\N	\N	Teller	Teller	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7563	451	\N	\N	Te-Moak	Te-Moak	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7564	451	\N	\N	Tetlin	Tetlin	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7565	451	\N	\N	Thlopthlocco Tribal Town	Thlopthlocco Tribal Town	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7566	451	\N	\N	Three Affiliated	Three Affiliated	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7567	451	\N	\N	Timbi-sha Shoshone	Timbi-sha Shoshone	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7568	451	\N	\N	Tlingit & Haida	Tlingit & Haida	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7569	451	\N	\N	Togiak	Togiak	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7570	451	\N	\N	Tohono O'odham	Tohono O'odham	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7571	451	\N	\N	Tolowa Dee-ni'	Tolowa Dee-ni'	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7572	451	\N	\N	Tonawanda	Tonawanda	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7573	451	\N	\N	Tonkawa	Tonkawa	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7574	451	\N	\N	Tonto Apache	Tonto Apache	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7575	451	\N	\N	Torres Martinez	Torres Martinez	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7576	451	\N	\N	Tulalip	Tulalip	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7577	451	\N	\N	Tule River	Tule River	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7578	451	\N	\N	Tuluksak	Tuluksak	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7579	451	\N	\N	Tunica-Biloxi	Tunica-Biloxi	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7580	451	\N	\N	Tuntutuliak	Tuntutuliak	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7581	451	\N	\N	Tununak	Tununak	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7582	451	\N	\N	Tuolumne	Tuolumne	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7583	451	\N	\N	Turtle Mountain	Turtle Mountain	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7584	451	\N	\N	Tuscarora	Tuscarora	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7585	451	\N	\N	Twenty-Nine Palms	Twenty-Nine Palms	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7586	451	\N	\N	Twin Hills	Twin Hills	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7587	451	\N	\N	Tyonek	Tyonek	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7588	451	\N	\N	Ugashik	Ugashik	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7589	451	\N	\N	Umatilla Tribe	Umatilla Tribe	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7590	451	\N	\N	Umkumiut	Umkumiut	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7591	451	\N	\N	Unalakleet	Unalakleet	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7592	451	\N	\N	Unga	Unga	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7593	451	\N	\N	United Auburn	United Auburn	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7594	451	\N	\N	United Keetoowah Band	United Keetoowah Band	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7595	451	\N	\N	Upper Mattaponi Tribe	Upper Mattaponi Tribe	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7596	451	\N	\N	Upper Sioux	Upper Sioux	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7597	451	\N	\N	Upper Skagit	Upper Skagit	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7598	451	\N	\N	Ute	Ute	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7599	451	\N	\N	Ute Mountain Ute	Ute Mountain Ute	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7600	451	\N	\N	Venetie	Venetie	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7601	451	\N	\N	Venetie IRA	Venetie IRA	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7602	451	\N	\N	Viejas	Viejas	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7603	451	\N	\N	Wainwright	Wainwright	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7604	451	\N	\N	Wales	Wales	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7605	451	\N	\N	Walker River	Walker River	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7606	451	\N	\N	Wampanoag	Wampanoag	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7607	451	\N	\N	Warms Springs Tribe	Warms Springs Tribe	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7608	451	\N	\N	Washoe	Washoe	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7609	451	\N	\N	White Earth	White Earth	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7610	451	\N	\N	White Mountain	White Mountain	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7611	451	\N	\N	White Mountain AK	White Mountain AK	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7612	451	\N	\N	Wichita	Wichita	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7613	451	\N	\N	Wilton	Wilton	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7614	451	\N	\N	Winnebago	Winnebago	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7615	451	\N	\N	Winnemucca	Winnemucca	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7616	451	\N	\N	Wiyot	Wiyot	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7617	451	\N	\N	Wrangell	Wrangell	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7618	451	\N	\N	Wyandotte	Wyandotte	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7619	451	\N	\N	Yakutat	Yakutat	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7620	451	\N	\N	Yankton	Yankton	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7621	451	\N	\N	Yavapai-Apache	Yavapai-Apache	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7622	451	\N	\N	Yavapai-Prescott	Yavapai-Prescott	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7623	451	\N	\N	Yerington	Yerington	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7624	451	\N	\N	Yocha Dehe	Yocha Dehe	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7625	451	\N	\N	Yomba Shoshone	Yomba Shoshone	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7626	451	\N	\N	Ysleta Del Sur	Ysleta Del Sur	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7627	451	\N	\N	Yuhaaviatam of San Manuel Nation	Yuhaaviatam of San Manuel Nation	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7628	451	\N	\N	Yurok	Yurok	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7629	451	\N	\N	Arctic Slope	Arctic Slope	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7630	451	\N	\N	Aroostok	Aroostok	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7631	451	\N	\N	Atqasuk	Atqasuk	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7632	451	\N	\N	Cheyenne-Arapaho	Cheyenne-Arapaho	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7633	451	\N	\N	Chickahominy Indian Tribe	Chickahominy Indian Tribe	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7634	451	\N	\N	Iqurmuit	Iqurmuit	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7635	451	\N	\N	Kewa Pueblo	Kewa Pueblo	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7636	451	\N	\N	Kluti-Kaah	Kluti-Kaah	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7637	451	\N	\N	Mescalero	Mescalero	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7638	451	\N	\N	Muscogee	Muscogee	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7639	451	\N	\N	Northfork	Northfork	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7640	451	\N	\N	Ohkay	Ohkay	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7641	451	\N	\N	Ohogamuit	Ohogamuit	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7642	451	\N	\N	Oneida  Nation of New York	Oneida  Nation of New York	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7643	451	\N	\N	Osage	Osage	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7644	451	\N	\N	Ottawa of Oklahoma	Ottawa of Oklahoma	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7645	451	\N	\N	Passamaquaddy Pleasant Point	Passamaquaddy Pleasant Point	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7646	451	\N	\N	Pechanga	Pechanga	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7647	451	\N	\N	Peoria	Peoria	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7648	451	\N	\N	Quapaw	Quapaw	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7649	451	\N	\N	Ramah	Ramah	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7650	451	\N	\N	Sac and Fox Nation	Sac and Fox Nation	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7651	451	\N	\N	Sac and Fox Nation of Missouri in KS and NE	Sac and Fox Nation of Missouri in KS and NE	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7652	451	\N	\N	Salamatoff	Salamatoff	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7653	451	\N	\N	San Manuel	San Manuel	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7654	451	\N	\N	Santa Rosa of Chuilla	Santa Rosa of Chuilla	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7655	451	\N	\N	Seminole of Oklahoma	Seminole of Oklahoma	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7656	451	\N	\N	Seneca-Cayuga	Seneca-Cayuga	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7657	451	\N	\N	Shawnee	Shawnee	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7658	451	\N	\N	Thlopthlocco	Thlopthlocco	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7659	451	\N	\N	United Keetoowah	United Keetoowah	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7660	451	\N	\N	Ute Mountain	Ute Mountain	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7661	451	\N	\N	Zuni	Zuni	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7662	452	\N	\N	B1 - Business Visa	B1 - Business Visa	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7663	452	\N	\N	B2 - Tourist Visa	B2 - Tourist Visa	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7664	452	\N	\N	F1 - Foreign Student Visa	F1 - Foreign Student Visa	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7665	452	\N	\N	H1 - Employment Visa	H1 - Employment Visa	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7666	452	\N	\N	J1 - Exchange Scholar Visa	J1 - Exchange Scholar Visa	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7667	452	\N	\N	M1 - Foreign Student vocational/non-academic Visa	M1 - Foreign Student vocational/non-academic Visa	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7668	452	\N	\N	Other Visa	Other Visa	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7669	453	\N	\N	Flat Fee	Flat Fee	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
+7670	453	\N	\N	Per Student	Per Student	\N	Ed-Fi v5.0	\N	\N	\N	\N	\N	\N	f	\N	f	6
 \.
 
 
@@ -20150,6 +22676,70 @@ COPY public."ValueSets" ("Id", "Name", "Description", "UseConsiderations", "Data
 190	industryCodeType	\N	\N	3	\N	\N	\N	\N	\N	LIF	f	\N	t	\N
 191	incomeSourceCategory	\N	\N	3	\N	\N	\N	\N	\N	LIF	f	\N	t	\N
 192	employmentTypeStatusCategory	\N	\N	3	\N	\N	\N	\N	\N	LIF	f	\N	t	\N
+390	AcademicSubjectDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/AcademicSubjectDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+391	AccommodationDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/AccommodationDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+392	AddressTypeDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/AddressTypeDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+393	AdministrationEnvironmentDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/AdministrationEnvironmentDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+394	AncestryEthnicOriginDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/AncestryEthnicOriginDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace. No seed descriptor file ships in Ed-Fi-Standard v5.0.0 for this descriptor; values are implementation-defined. Verify before building the value set.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+442	SchoolYearType	Closed enumeration defined by the Ed-Fi v5.0.0 XSD simpleType SchoolYearType. Not extensible.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+395	AssessmentCategoryDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/AssessmentCategoryDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+396	AssessmentReportingMethodDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/AssessmentReportingMethodDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+397	BarrierToInternetAccessInResidenceDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/BarrierToInternetAccessInResidenceDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+398	CareerPathwayDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/CareerPathwayDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+399	CitizenshipStatusDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/CitizenshipStatusDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+400	CompetencyLevelDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/CompetencyLevelDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+401	ContentClassDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/ContentClassDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+402	ContinuationOfServicesReasonDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/ContinuationofServicesReasonDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+403	CountryDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/CountryDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+404	CourseAttemptResultDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/CourseAttemptResultDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+405	CourseDefinedByDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/CourseDefinedByDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+406	CourseGPAApplicabilityDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/CourseGPAApplicabilityDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+407	CourseIdentificationSystemDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/CourseIdentificationSystemDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+408	CourseLevelCharacteristicDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/CourseLevelCharacteristicDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+409	CourseRepeatCodeDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/CourseRepeatCodeDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+410	CreditCategoryDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/CreditCategoryDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+411	CreditTypeDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/CreditTypeDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+412	EducationOrganizationCategoryDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/EducationOrganizationCategoryDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+413	EducationOrganizationIdentificationSystemDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/EducationOrganizationIdentificationSystemDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+414	EducationalEnvironmentDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/EducationalEnvironmentDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+415	ElectronicMailTypeDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/ElectronicMailTypeDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+416	EventCircumstanceDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/EventCircumstanceDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+417	GradeLevelDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/GradeLevelDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+418	HomelessPrimaryNighttimeResidenceDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/HomelessPrimaryNighttimeResidenceDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+419	IdentificationDocumentUseDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/IdentificationDocumentUseDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+420	InteractivityStyleDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/InteractivityStyleDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+421	InternetAccessTypeInResidenceDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/InternetAccessTypeInResidenceDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+422	InternetPerformanceInResidenceDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/InternetPerformanceInResidenceDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+423	LanguageDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/LanguageDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+424	LanguageUseDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/LanguageUseDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+425	LevelOfEducationDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/LevelOfEducationDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+426	LimitedEnglishProficiencyDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/LimitedEnglishProficiencyDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+427	LocaleDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/LocaleDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+428	MediumOfInstructionDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/MediumOfInstructionDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+429	MethodCreditEarnedDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/MethodCreditEarnedDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+430	OperationalStatusDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/OperationalStatusDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+431	PersonalInformationVerificationDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/PersonalInformationVerificationDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+432	PlatformTypeDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/PlatformTypeDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+433	PopulationServedDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/PopulationServedDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+434	PrimaryLearningDeviceAccessDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/PrimaryLearningDeviceAccessDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+435	PrimaryLearningDeviceAwayFromSchoolDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/PrimaryLearningDeviceAwayFromSchoolDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+436	PrimaryLearningDeviceProviderDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/PrimaryLearningDeviceProviderDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+437	RaceDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/RaceDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+438	ReasonNotTestedDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/ReasonNotTestedDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+439	RelationDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/RelationDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+440	ResultDatatypeTypeDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/ResultDatatypeTypeDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+441	RetestIndicatorDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/RetestIndicatorDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+443	SectionCharacteristicDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/SectionCharacteristicDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+444	SectionTypeDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/SectionTypeDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+445	SexDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/SexDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+446	StateAbbreviationDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/StateAbbreviationDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+447	StudentIdentificationSystemDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/StudentIdentificationSystemDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+448	SupporterMilitaryConnectionDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/SupporterMilitaryConnectionDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+449	TelephoneNumberTypeDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/TelephoneNumberTypeDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+450	TermDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/TermDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+452	VisaDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/VisaDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+453	CostRateDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/CostRateDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	\N	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
+451	TribalAffiliationDescriptor	Ed-Fi descriptor namespace uri://ed-fi.org/TribalAffiliationDescriptor. Extensible vocabulary: the Ed-Fi v5.0.0 seed values below, or an implementation-defined value published in the implementer's own descriptor namespace.	Three code values - Little Shell Tribe, Pechanga Band of Indians, Yuhaaviatam of San Manuel Nation - ship with a trailing space in the Ed-Fi v5.0.0 and v5.2.0 seed files. Stored here without it. The trailing space is an Ed-Fi data-entry error, corrected by Ed-Fi in v6.1.0, where all 620 values are clean. Producers emitting values sourced from a v5.x-seeded ODS may send the trailing form; trim on input.	6	\N	\N	\N	\N	\N	\N	f	\N	f	\N
 \.
 
 
@@ -20164,27 +22754,29 @@ COPY tenant_lif_team."Attributes" ("Id", "Name", "UniqueName", "Description", "U
 1338	informationSourceId	Common.Contact.Email.informationSourceId	The indentifier for the Information Source record associated with this entity	\N	17	string	\N	Yes	No	LIF-Addition	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	Public	f	f
 1484	firstName	PersonName.firstName	\N	\N	5	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1582	type	Address.type	\N	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-1827	stateUChildExtAttr	StateUChildExtensionEntity.stateUChildExtAttr	An attribute added to the StateUChildExtensionEntity as an example.	\N	17	string	\N	No	No	LIF-Addition	\N	\N	\N	\N	\N	StateU	t	\N	f	\N	\N	\N	Private	f	f
+755	assessmentMethodDescription	Course.assessmentMethodDescription	Description of the methods used to conduct an assessment.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1585	startDate	Relevancy.startDate	\N	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-622	CourseDropDate	CourseSection->Enrollment.CourseDropDate	The date on which the individual drops or withdraws from the course.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-1835	TestNewPartnerAttribute	TestNewPartnerAttribute	This is a test of creating a new partner attribute	consideration	18	string	\N	No	No	\N	\N	2025-08-19 13:42:40.259+00	2025-08-19 13:42:40.259+00	\N	Mary Gwozdz	Org2	t	\N	f	\N	\N	\N	Private	t	t
-865	name	CertificationTypeAnd/orEducationDegreeType.name	The common name of the certificate and/or Name for the degree.	\N	2	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-1842	TestAttribute2	TestAttribute2	This is a test of creating a new partner attribute	consideration	18	string	\N	No	No	\N	\N	2025-08-19 13:42:40.259+00	2025-08-19 13:42:40.259+00	\N	Mary Gwozdz	Org2	t	\N	f	\N	\N	\N	Public	f	f
-1843	TestAttribute3	TestAttribute3	This is a test of creating a new partner attribute	consideration	18	string	\N	No	No	\N	\N	2025-08-19 13:42:40.259+00	2025-08-19 13:42:40.259+00	\N	Mary Gwozdz	Org2	t	\N	f	\N	\N	\N	Public	t	t
-1096	JobCode	Position.JobCode	\N	\N	1	entity	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	Public	f	f
-1339	Telephone	Common.Contact.Telephone	\N	\N	1	entity	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	Public	f	f
-213	informationSourceId	CompetencyFramework.informationSourceId	\N	\N	1	string	\N	Yes	No	LIF-Addition	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	Public	f	f
+1750	type	OpenBadgeCredential.credentialSubject.type	\N	\N	16	string	\N	\N	Yes	\N	\N	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	Public	f	f
+1010	ExpirationDate	Credential.ExpirationDate	Date beyond which the resource is no longer offered or available.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+756	assessmentMethodType	Course.assessmentMethodType	Type of method used to conduct an assessment; select from an existing enumeration of such types.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+757	availabilityListing	Course.availabilityListing	Entity describing an educational or training opportunity.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+758	availableOnlineAt	Course.availableOnlineAt	Online location where the course can be pursued.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+759	estimatedCost	Course.estimatedCost	Estimated cost of a course.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+760	financialAssistance	Course.financialAssistance	Entity that describes financial assistance for which this course qualifies.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+1027	BadgeClass	OpenBadges2.0.BadgeClass	\N	\N	15	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+1034	narrative	Criteria.narrative	\N	\N	15	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+1035	Image	BadgeClass.Image	Object	\N	15	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+1349	Birth	Person.Birth	\N	\N	1	entity	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	Public	f	f
 1333	informationSourceId	Common.Contact.informationSourceId	\N	\N	17	string	\N	Yes	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	Public	f	f
 1880	type	Image.type	\N	\N	17	string	\N	\N	No	\N	\N	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	Private	f	f
 1858	basisCode	RemunerationPackage.basisCode	\N	\N	17	string	\N	No	No	\N	\N	\N	2025-10-02 20:47:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N	Public	f	f
-1844	TestAttribute4	TestAttribute4	This is a test of creating a new partner attribute	consideration	18	string	\N	No	No	\N	\N	2025-08-19 13:42:40.259+00	2025-08-19 13:42:40.259+00	\N	Mary Gwozdz	Org2	t	\N	f	\N	\N	\N	Public	t	t
-1767	targetCode	achievement.alignment.targetCode	\N	\N	16	string	\N	\N	No	\N	\N	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	Public	f	f
-1845	TestAttribute5	TestAttribute5	This is a test of creating a new partner attribute	consideration	18	string	\N	No	No	\N	\N	2025-08-19 13:42:40.259+00	2025-08-19 13:42:40.259+00	\N	Mary Gwozdz	Org2	t	\N	f	\N	\N	\N	Public	t	t
-1846	TestAttribute6	TestAttribute6	This is a test of creating a new partner attribute	consideration	18	string	\N	No	No	\N	\N	2025-08-19 13:42:40.259+00	2025-08-19 13:42:40.259+00	\N	Mary Gwozdz	Org2	t	\N	f	\N	\N	\N	Public	t	t
-1847	TestAttribute7	TestAttribute7	This is a test of creating a new partner attribute	consideration	18	string	\N	No	No	\N	\N	2025-08-19 13:42:40.259+00	2025-08-19 13:42:40.259+00	\N	Mary Gwozdz	Org2	t	\N	f	\N	\N	\N	Public	f	f
-1771	targetType	achievement.alignment.targetType	\N	\N	16	string	\N	\N	No	\N	\N	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	Public	f	f
-1500	genderCode	PersonBioDemographics.genderCode	\N	\N	5	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-1848	TestAttribute8	TestAttribute8	This is a test of creating a new partner attribute	consideration	18	string	\N	No	No	\N	\N	2025-08-19 13:42:40.259+00	2025-08-19 13:42:40.259+00	\N	Mary Gwozdz	Org2	t	\N	f	\N	\N	\N	Public	f	f
+1876	organizationTypes	Person.employmentPreferences.organizationTypes	The preferred organization types.	\N	17	string	\N	Yes	Yes	\N	\N	\N	2025-10-02 23:37:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N	Private	f	f
+1036	type	Image.type	Type of Image, usually PNG or SVG	\N	15	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+761	inLanguage	Course.inLanguage	The primary language or languages of the entity, even if it makes use of other languages; e.g., a course offered in English to teach Spanish would have an inLanguage of English, while a credential in Quebec could have an inLanguage of both French and English.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+762	keyword	Course.keyword	Keyword or key phrase describing relevant aspects of an entity.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+763	offeredBy	Course.offeredBy	Agent that offers the resource.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+1037	caption	Image.caption	\N	\N	15	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+764	ownedBy	Course.ownedBy	Organization or person with an enforceable claim or legal title to the resource.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1288	emailAddress	Common.Contact.Email.emailAddress	The numbers, letters, and symbols used to identify an electronic mail (Email) address of an individual or person.	Only use if consent has been verified.  Consider how the system will use multiple email addresses for connecting/matching records.\nConsider how we will accommodate in our model for special characters from other languages.\nConsider if we will need a means of verifying an email address.	17	string	\N	Yes	Yes	CEDS-Edited	\N	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	Public	f	f
 1307	addressStreet	Common.Contact.Address.addressStreet	The street number and street name or post office box number of an address.	Only use if consent has been verified.	17	string	\N	Yes	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1309	addressCity	Common.Contact.Address.addressCity	The name of the city in which an address is located.	\N	17	string	\N	Yes	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
@@ -20198,6 +22790,16 @@ COPY tenant_lif_team."Attributes" ("Id", "Name", "UniqueName", "Description", "U
 1348	informationSourceId	Common.Contact.Telephone.informationSourceId	The indentifier for the Information Source record associated with this entity	\N	17	string	\N	Yes	No	LIF-Addition	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	Public	f	f
 1658	specialization	Program.specialization	Words or brief phrases describing the topicality of the entity; select subject terms from an existing enumeration of such terms.	No change	17	string	\N	No	No	CTDL	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1825	org2CustomExtensionAttr	Org2ExtensionEntity.org2CustomExtensionAttr	An attribute added to the Org2ExtensionEntity as an example.	\N	18	string	\N	No	No	LIF-Addition	\N	\N	\N	\N	\N	Org2	t	\N	f	\N	\N	\N	Public	f	f
+765	recognizedBy	Course.recognizedBy	Agent that acknowledges the validity of the course.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+1827	stateUChildExtAttr	StateUChildExtensionEntity.stateUChildExtAttr	An attribute added to the StateUChildExtensionEntity as an example.	\N	17	string	\N	No	No	LIF-Addition	\N	\N	\N	\N	\N	StateU	t	\N	f	\N	\N	\N	Private	f	f
+1835	TestNewPartnerAttribute	TestNewPartnerAttribute	This is a test of creating a new partner attribute	consideration	18	string	\N	No	No	\N	\N	2025-08-19 13:42:40.259+00	2025-08-19 13:42:40.259+00	\N	Mary Gwozdz	Org2	t	\N	f	\N	\N	\N	Private	t	t
+1842	TestAttribute2	TestAttribute2	This is a test of creating a new partner attribute	consideration	18	string	\N	No	No	\N	\N	2025-08-19 13:42:40.259+00	2025-08-19 13:42:40.259+00	\N	Mary Gwozdz	Org2	t	\N	f	\N	\N	\N	Public	f	f
+1843	TestAttribute3	TestAttribute3	This is a test of creating a new partner attribute	consideration	18	string	\N	No	No	\N	\N	2025-08-19 13:42:40.259+00	2025-08-19 13:42:40.259+00	\N	Mary Gwozdz	Org2	t	\N	f	\N	\N	\N	Public	t	t
+1844	TestAttribute4	TestAttribute4	This is a test of creating a new partner attribute	consideration	18	string	\N	No	No	\N	\N	2025-08-19 13:42:40.259+00	2025-08-19 13:42:40.259+00	\N	Mary Gwozdz	Org2	t	\N	f	\N	\N	\N	Public	t	t
+1845	TestAttribute5	TestAttribute5	This is a test of creating a new partner attribute	consideration	18	string	\N	No	No	\N	\N	2025-08-19 13:42:40.259+00	2025-08-19 13:42:40.259+00	\N	Mary Gwozdz	Org2	t	\N	f	\N	\N	\N	Public	t	t
+1846	TestAttribute6	TestAttribute6	This is a test of creating a new partner attribute	consideration	18	string	\N	No	No	\N	\N	2025-08-19 13:42:40.259+00	2025-08-19 13:42:40.259+00	\N	Mary Gwozdz	Org2	t	\N	f	\N	\N	\N	Public	t	t
+1847	TestAttribute7	TestAttribute7	This is a test of creating a new partner attribute	consideration	18	string	\N	No	No	\N	\N	2025-08-19 13:42:40.259+00	2025-08-19 13:42:40.259+00	\N	Mary Gwozdz	Org2	t	\N	f	\N	\N	\N	Public	f	f
+1848	TestAttribute8	TestAttribute8	This is a test of creating a new partner attribute	consideration	18	string	\N	No	No	\N	\N	2025-08-19 13:42:40.259+00	2025-08-19 13:42:40.259+00	\N	Mary Gwozdz	Org2	t	\N	f	\N	\N	\N	Public	f	f
 1849	TestAttribute9	TestAttribute9	This is a test of creating a new partner attribute	consideration	18	string	\N	No	No	\N	\N	2025-08-19 13:42:40.259+00	2025-08-19 13:42:40.259+00	\N	Mary Gwozdz	Org2	t	\N	f	\N	\N	\N	Public	f	f
 1850	TestAttribute10	TestAttribute10	This is a test of creating a new partner attribute	consideration	18	string	\N	No	No	\N	\N	2025-08-19 13:42:40.259+00	2025-08-19 13:42:40.259+00	\N	Mary Gwozdz	Org2	t	\N	f	\N	\N	\N	Private	t	t
 1860	currency	MinimumAmount.currency	\N	\N	17	string	\N	No	No	\N	\N	\N	2025-10-02 20:50:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N	Public	f	f
@@ -20214,7 +22816,6 @@ COPY tenant_lif_team."Attributes" ("Id", "Name", "UniqueName", "Description", "U
 1873	instanceOfCredential	Person.CredentialAward.instanceOfCredential	\N	\N	17	string	\N	\N	\N	\N	\N	\N	2025-10-02 23:35:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N	Public	f	f
 1874	verificationType	Person.CredentialAward.verificationType	\N	\N	17	string	\N	No	No	\N	\N	\N	2025-10-02 23:36:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N	Public	f	f
 1875	organizationNames	Person.EmploymentPreferences.organizationNames	The names of the preferred employment organizations.	\N	17	string	\N	Yes	Yes	\N	\N	\N	2025-10-02 23:36:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N	Public	f	f
-1876	organizationTypes	Person.employmentPreferences.organizationTypes	The preferred organization types.	\N	17	string	\N	Yes	Yes	\N	\N	\N	2025-10-02 23:37:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N	Private	f	f
 1883	channel	Person.Interactions.channel	The mechanism used for interaction between an individual and an organization	\N	17	string	\N	No	No	StateU		\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	Private	f	t
 1884	interactionId	Person.Interactions.interactionId	A unique identifier assigned to each interaction between an individual and an organization, whether through a system or a staff member.	\N	17	string	\N	No	No	StateU		\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	Private	f	t
 1885	channelIdentifier	Person.Interactions.channelIdentifier	A unique identifier that specifies the particular channel through which an individual interacted with the organization or its system	\N	17	string	\N	No	No	StateU		\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	Private	f	t
@@ -20226,10 +22827,11 @@ COPY tenant_lif_team."Attributes" ("Id", "Name", "UniqueName", "Description", "U
 1891	severity	Person.Interactions.severity	A rating indicating the severity of the individual’s situation or need, as assessed in the context of the specific interaction	\N	17	string	\N	No	No	StateU		\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	Private	f	t
 1892	followupRequired	Person.Interactions.followupRequired	An indicator specifying whether a follow-up action is needed to further address or resolve the individual’s concern or request	\N	17	string	\N	No	No	StateU		\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	Private	f	t
 1893	channelIdentifierType	Person.Interactions.channelIdentifierType	Specifies the type of channel identifier used, such as a person or service identifier,  assigned by the educational institution	\N	17	string	\N	No	No	StateU		\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	Private	f	t
+766	regulatedBy	Course.regulatedBy	Quality assurance organization that enforces the legal requirements of the course.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+1038	author	Image.author	\N	\N	15	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1943	identifier	Narrative.identifier	The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.	Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered.	17	string	\N	Yes	No	\N	\N	\N	2025-12-02 15:19:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N	Public	f	f
 1944	identifier	Texts.identifier	The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.	Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered.	17	string	\N	Yes	No	\N	\N	\N	2025-12-02 15:20:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N	Public	f	f
 1945	identifier	EmploymentPreferences.identifier	The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.	Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered.	17	string	\N	Yes	No	\N	\N	\N	2025-12-02 15:21:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N	Public	f	f
-80	specialization	achievement.specialization	Name given to the focus, concentration, or specific area of study defined in the achievement. Examples include 'Entrepreneurship', 'Technical Communication', and 'Finance'.	\N	3	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1946	identifier	PositionPreferences.identifier	The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.	Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered.	17	string	\N	Yes	No	\N	\N	\N	2025-12-02 15:30:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N	Public	f	f
 1947	identifier	Relocation.identifier	The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.	Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered.	17	string	\N	Yes	No	\N	\N	\N	2025-12-02 15:34:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N	Public	f	f
 1948	identifier	RemoteWork.identifier	The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.	Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered.	17	string	\N	Yes	No	\N	\N	\N	2025-12-02 15:35:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N	Public	f	f
@@ -20242,6 +22844,7 @@ COPY tenant_lif_team."Attributes" ("Id", "Name", "UniqueName", "Description", "U
 3	shortName	Assessment.shortName	An abbreviated title for an assessment.	No change	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1237	code	OrgCode.code	\N	\N	5	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1830	TestUpdatedSourceAttribute	TestUpdatedSourceAttribute	This is a test of creating updated Source attribute	consideration	25	string	\N	No	No	\N	\N	2025-08-19 13:42:40.259+00	2025-08-19 13:42:40.259+00	\N	Mary Gwozdz	Unicon	f	\N	t	\N	\N	\N	Public	f	f
+1039	alignment	BadgeClass.alignment	\N	\N	15	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 69	achievementType	achievement.achievementType	The achievement is an assessment if the achievementType = Assessment	\N	3	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 70	id	achievement.id	Icdentifier	\N	3	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 71	name	achievement.name	The name of the achievement.	\N	3	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
@@ -20254,6 +22857,7 @@ COPY tenant_lif_team."Attributes" ("Id", "Name", "UniqueName", "Description", "U
 1828	testNewLIFAttribute	testNewLIFAttribute	This is a test of creating a new LIF attribute	consideration	1	string	\N	No	No	\N	\N	2025-08-19 13:42:40.259+00	2025-08-19 13:42:40.259+00	\N	Mary Gwozdz	LIF	f	\N	t	\N	\N	\N	Public	f	f
 79	@language	achievement.@language	The language of the achievement.	\N	3	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1741	id	OpenBadgeCredential.id	\N	\N	16	string	\N	\N	No	\N	\N	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	Public	f	f
+80	specialization	achievement.specialization	Name given to the focus, concentration, or specific area of study defined in the achievement. Examples include 'Entrepreneurship', 'Technical Communication', and 'Finance'.	\N	3	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 81	achievedLevel	result.achievedLevel	If the result represents an achieved rubric criterion level (e.g. Mastered), the value is the id of the RubricCriterionLevel in linked ResultDescription.	\N	3	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 82	resultDescripton	result.resultDescripton	An achievement can have many result descriptions describing possible results. The value of resultDescription is the id of the result description linked to this result. The linked result description must be in the achievement that is being asserted.	\N	3	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 83	valueMin	resultDescription.valueMin	The minimum possible value that may be asserted in a linked result.	\N	3	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
@@ -20297,7 +22901,6 @@ COPY tenant_lif_team."Attributes" ("Id", "Name", "UniqueName", "Description", "U
 137	AcademicSubject	Assessment.AcademicSubject	The description of the content or subject area (e.g., arts, mathematics, reading, stenography, or a foreign language) of an assessment.	\N	6	string	\N	\N	\N	\N	Reference to AcademicSubjectDescriptor	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 980	type	Evidence.type	The type of the evidence.	\N	7	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 105	AssessmentTypeAdministered	Assessment.AssessmentTypeAdministered	The type of assessment administered	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-432	abbreviatedStatement	CFItem.abbreviatedStatement	An abbreviated version of the Full Statement.	\N	14	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 106	AssessmentScoreMetricType	Assessment.AssessmentScoreMetricType	The specific method used to report the performance and achievement of the assessment. This is the metric that is being used to derive the scores.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 107	AssessmentLanguage	AssessmentForm.AssessmentLanguage	The language in which the assessment form is designed to be delivered	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 108	AssessmentPerformanceLevelIdentifier	AssessmentPerformanceLevel.AssessmentPerformanceLevelIdentifier	A unique number or alphanumeric code assigned to an assessment performance level.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
@@ -20374,6 +22977,7 @@ COPY tenant_lif_team."Attributes" ("Id", "Name", "UniqueName", "Description", "U
 44	industryType	Assessment.industryType	Type of industry; select from an existing enumeration of such types such as the SIC, NAICS, and ISIC classifications.	No change	1	string	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 310	desiredProficiencyLevel	PositionCompetencyType.desiredProficiencyLevel	DefinitionText>An optimum or ideal level of proficiency for a competency with respect to an associated position, role, course, or other item. The proficiency level is expressed as a score, a point scale, or a mark among range of values.	\N	2	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 390	dateValidUntil	CompetencyFramework.dateValidUntil	End date of validity of this competency framework.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+896	tags	Achievement.tags	Tags that describe the type of achievement.	\N	3	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 328	lastChangeDateTime	CFDocument.lastChangeDateTime	A system generated timestamp of the most recent change to this record. This conforms to ISO 8601 dateTime definition [ISO 8601].	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 329	subjectURI	CFDocument.subjectURI	A set of Link URIs denoting the set of subjects for the document as designated by the promulgating agency.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 981	id	Credential.id	\N	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
@@ -20383,7 +22987,6 @@ COPY tenant_lif_team."Attributes" ("Id", "Name", "UniqueName", "Description", "U
 314	CompetencyFrameworkDescription	Competency.CompetencyFrameworkDescription	A textual description of the scope and contents of the competency framework.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 315	CompetencyFrameworkSubject	Competency.CompetencyFrameworkSubject	The topic or academic subject of the competency framework.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 316	CompetencyFrameworkCreator	Competency.CompetencyFrameworkCreator	The person or organization chiefly responsible for the intellectual content of the competency framework.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-1501	ethnicityId	PersonBioDemographics.ethnicityId	\N	\N	5	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 317	CompetencyFrameworkPublisher	Competency.CompetencyFrameworkPublisher	The entity responsible for making the competency framework available.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 318	CompetencyFrameworkPublicationStatus	Competency.CompetencyFrameworkPublicationStatus	The publication status of the competency framework is "Published".	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 319	CompetencyFrameworkPublicationDate	Competency.CompetencyFrameworkPublicationDate	The date on which this content was first published.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
@@ -20410,6 +23013,7 @@ COPY tenant_lif_team."Attributes" ("Id", "Name", "UniqueName", "Description", "U
 336	CompetencyDefinitionRightsHolder	Competency.CompetencyDefinitionRightsHolder	The person or organization owning or managing rights over the competency framework.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 337	CompetencyDefinitionTypeURL	Competency.CompetencyDefinitionTypeURL	The class of statement in the structure of statements in the Competency Framework according to a controlled vocabulary, specified as a URI referencing a controlled vocabulary.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 977	evidenceAccreditation	Evidence.evidenceAccreditation	The accreditation of the evidence.	\N	7	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+213	informationSourceId	CompetencyFramework.informationSourceId	\N	\N	1	string	\N	Yes	No	LIF-Addition	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	Public	f	f
 338	CompetencyDefinitionEducationLevel	Competency.CompetencyDefinitionEducationLevel	The education level, grade level or primary instructional level at which a Competency Definition is intended.	\N	4	\N	38	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 339	CompetencyDefinitionTypicalAgeRangeMinimum	Competency.CompetencyDefinitionTypicalAgeRangeMinimum	The typical minimum age at which a person learns the defined competency.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 341	CompetencyDefinitionLanguage	Competency.CompetencyDefinitionLanguage	The default language of the text used for the content in the competency definition statement.	\N	4	\N	39	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
@@ -20417,7 +23021,6 @@ COPY tenant_lif_team."Attributes" ("Id", "Name", "UniqueName", "Description", "U
 343	CompetencyDefinitionVersion	Competency.CompetencyDefinitionVersion	A label assigned by the publisher indicating the version of the competency framework statement.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 345	CompetencyDefinitionCurrentVersionIndicator	Competency.CompetencyDefinitionCurrentVersionIndicator	Indicates that this is the most current version of the Competency Definition.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 347	CompetencyDefinitionNodeAccessibilityProfile	Competency.CompetencyDefinitionNodeAccessibilityProfile	When the Competency Definition is used as a node in a learning map, this element supports alternative pathways based on a learner's accessibility profile. The type selected indicates which accessibility profile the node is designed to address.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-433	CFItenTypeURL	CFItem.CFItenTypeURL	This is the linked data location for the CFItemType.	\N	14	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 348	CompetencyDefinitionTestabilityType	Competency.CompetencyDefinitionTestabilityType	Indicates if the competency described in the Competency Definition Statement can be tested using one or more assessment items.	\N	4	\N	40	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 349	CompetencyDefinitionTextComplexityMaximumValue	Competency.CompetencyDefinitionTextComplexityMaximumValue	The maximum value in the range of text complexity applicable to a language competency definition using the scaling system defined by Text Complexity System, e.g. Lexile(tm).	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 350	CompetencyDefinitionTextComplexityMinimumValue	Competency.CompetencyDefinitionTextComplexityMinimumValue	The minimum value in the range of text complexity applicable to a language competency definition using the scaling system defined by Text Complexity System, e.g. Lexile(tm).	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
@@ -20452,6 +23055,7 @@ COPY tenant_lif_team."Attributes" ("Id", "Name", "UniqueName", "Description", "U
 397	competencyText	Competency.competencyText	The text of the competency.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 398	competencyLabel	Competency.competencyLabel	Short identifying phrase or name applied to a competency by the creator of the competency framework.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 399	rightsHolder	CompetencyFramework.rightsHolder	An agent owning or managing rights over this resource.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+1767	targetCode	achievement.alignment.targetCode	\N	\N	16	string	\N	\N	No	\N	\N	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	Public	f	f
 400	educationLevelType	Competency.educationLevelType	A general statement describing the education or training context. Alternatively, a more specific statement of the location of the audience in terms of its progression through an education or training context.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 401	inLanguage	Competency.inLanguage	The primary language used in or by this resource.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 402	conceptKeyword	Competency.conceptKeyword	A word or phrase used by the promulgating agency to refine and differentiate individual resources contextually.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
@@ -20461,7 +23065,6 @@ COPY tenant_lif_team."Attributes" ("Id", "Name", "UniqueName", "Description", "U
 380	language(session)	Objective.language(session)	\N	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 360	CompetencyAssociationType	Competency.CompetencyAssociationType	Defines the nature of the association between a Competency Definition and an associated data object such as a Learning Resource, an Assessment Item, or even another Competency Definition.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 361	CompetencyAssociationConnectionCitation	Competency.CompetencyAssociationConnectionCitation	Any citation appropriate to evidence the connection between nodes.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-681	learningObjectives	Course.learningObjectives	\N	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 362	CompetencyAssociationDestinationNodeName	Competency.CompetencyAssociationDestinationNodeName	Name of the destination node when the Competency Association is used as a connector in a learning map.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 363	CompetencyAssociationDestinationNodeURI	Competency.CompetencyAssociationDestinationNodeURI	URI of the destination node when the Competency Association is used as a connector in a learning map.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 364	CompetencyAssociationOriginNodeName	Competency.CompetencyAssociationOriginNodeName	Name of the origin node when the Competency Association is used as a connector in a learning map.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
@@ -20497,6 +23100,8 @@ COPY tenant_lif_team."Attributes" ("Id", "Name", "UniqueName", "Description", "U
 429	humanCodingScheme	CFItem.humanCodingScheme	A human-referenceable code designated by the publisher to identify the item among learning standard items.	\N	14	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 430	fullStatement	CFItem.fullStatement	The text of the statement. The textual content that either describes a specific competency or describes a less granular group of competencies within the taxonomy of the standards document.	\N	14	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 431	alternativeLabel	CFItem.alternativeLabel	An alternate 'term' for Competency. Some institutions may want to render their achievements as outcomes, or objectives, etc. Semantically they are the same as Competencies, but diversity of terms is used. This allows for the flexibility for the institution to define their own term for "Competency" and not being locked into it.	\N	14	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+432	abbreviatedStatement	CFItem.abbreviatedStatement	An abbreviated version of the Full Statement.	\N	14	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+433	CFItenTypeURL	CFItem.CFItenTypeURL	This is the linked data location for the CFItemType.	\N	14	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 434	educationLevel	CFItem.educationLevel	The education level, grade level or primary instructional level at which a CFItem is intended.	\N	14	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 435	language	CFItem.language	The default language of the text used for the content in the learning standard document (use ISO 639-2 [ISO 639]).	\N	14	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 436	conceptKeywords	CFItem.conceptKeywords	The significant topicality of the CFItem using free-text keywords and phrases.	\N	14	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
@@ -20538,8 +23143,6 @@ COPY tenant_lif_team."Attributes" ("Id", "Name", "UniqueName", "Description", "U
 472	targetUrl	AlignmentObject.targetUrl	The URL of a node in an established educational framework.	\N	11	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 39	creditUnitTypeDescription	Assessment.creditUnitTypeDescription	Detailed description of credit unit type.	No change	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 41	ctid	Assessment.ctid	Globally unique Credential Transparency Identifier (CTID) by which the creator, owner or provider of a resource recognizes it in transactions with the external environment (e.g., in verifiable claims involving the resource).	No change	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-682	displayName	Ontology.displayName	\N	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-683	level	CourseEntry.Course.level	\N	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 712	CourseSubjectAbbreviation	Student.AcademicRecord.AcademicSession.Course.CourseSubjectAbbreviation	The alphabetic abbreviation of the academic department or discipline offering the course. It is one part of the total course identifier.	\N	9	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 983	title	Credential.title	\N	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 147	title	LearningAssessmentSpecification.title	The title of the learning assessment specification. One value per language is permitted.	\N	7	\N	\N	Yes	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
@@ -20612,6 +23215,7 @@ COPY tenant_lif_team."Attributes" ("Id", "Name", "UniqueName", "Description", "U
 984	description	Credential.description	\N	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 602	TargetFramework	Alignment.TargetFramework	\N	\N	3	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 606	CourseIdentifier	Course.CourseIdentifier	The actual code that identifies the organization of subject matter and related learning experiences provided for the instruction of students.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+1771	targetType	achievement.alignment.targetType	\N	\N	16	string	\N	\N	No	\N	\N	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	Public	f	f
 607	CourseTitle	Course.CourseTitle	The descriptive name given to a course of study offered in a school or other institution or organization. In departmentalized classes at the elementary, secondary, and postsecondary levels (and for staff development activities), this refers to the name by which a course is identified (e.g., American History, English III). For elementary and other non-departmentalized classes, it refers to any portion of the instruction for which a grade or report is assigned (e.g., reading, composition, spelling, and language arts).	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 608	CourseDescription	Course.CourseDescription	A description of the course content and/or goals. Reference may be made to state or national content standards.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 610	CourseEndDate	Course.CourseEndDate	The year, month and day an instance of a course ends.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
@@ -20619,7 +23223,6 @@ COPY tenant_lif_team."Attributes" ("Id", "Name", "UniqueName", "Description", "U
 615	CourseSubjectAbbreviation	Course.CourseSubjectAbbreviation	The alphabetic abbreviation of the academic department or discipline offering the course. It is one part of the total course identifier number.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 616	CreditValue	Course.CreditValue	The amount of credit available to the student who successfully meets the objectives of the course or learning opportunity based on the units defined by Credit Unit Type.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 617	RelatedCompetencyDefinitions	Course.RelatedCompetencyDefinitions	An indication of the competency definition(s) addressed in the Course Section.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-685	description	CourseEntry.Course.description	\N	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 618	StudentIdentifier	Enrollment.StudentIdentifier	A unique number or alphanumeric code assigned to a student by a school, school system, a state, or other agency or entity.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 611	CourseSectionTimeRequiredForCompletion	CourseSection.CourseSectionTimeRequiredForCompletion	The actual or estimated number of clock minutes required for course completion. This number is especially important for career and technical education course and may represent (in minutes) the clock hour requirement of the course, the number of minutes (or clock hours) of class time per week, times the number of equivalent weeks the class typically meets.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 612	CourseAcademicGradeScaleCode	CourseSection.CourseAcademicGradeScaleCode	The grading scale used by an academic educational institution for an academic course.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
@@ -20656,6 +23259,7 @@ COPY tenant_lif_team."Attributes" ("Id", "Name", "UniqueName", "Description", "U
 660	InstructionalTimePlanned	Course.InstructionalTimePlanned	The planned total number of clock minutes of instruction for this course offering. Generally, this should be at least as many minutes as is required for completion by the related state- or district-defined course.	\N	6	number	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 657	CourseDescription	Course.CourseDescription	A description of the content standards and goals covered in the course. Reference may be made to state or national content standards.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 661	LearningStandard	Course.LearningStandard	Learning standard(s) to be taught by the course.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+1500	genderCode	PersonBioDemographics.genderCode	\N	\N	5	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 655	CourseGPAApplicability	Course.CourseGPAApplicability	An indicator of whether or not the course being described is included in the computation of the student's grade point average, and if so, if it is weighted differently from regular courses.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 663	OfferedGradeLevel	Course.OfferedGradeLevel	This descriptor defines the set of grade levels. The map to known Ed-Fi enumeration values is required.	\N	6	string	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 671	SectionIdentifier	Section.SectionIdentifier	\N	\N	6	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
@@ -20668,6 +23272,11 @@ COPY tenant_lif_team."Attributes" ("Id", "Name", "UniqueName", "Description", "U
 678	totalTargetEffort	Activity.totalTargetEffort	Sections are modelled as Activity entities in the OSIDs	\N	8	\N	\N	\N	\N	\N	this is managed at the Activity/section level but not in the academic record	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 679	gradingOptions	Course.gradingOptions	\N	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 680	course	Subject.course	\N	\N	8	\N	\N	\N	\N	\N	tagging	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+681	learningObjectives	Course.learningObjectives	\N	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+682	displayName	Ontology.displayName	\N	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+683	level	CourseEntry.Course.level	\N	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+685	description	CourseEntry.Course.description	\N	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+622	CourseDropDate	CourseSection->Enrollment.CourseDropDate	The date on which the individual drops or withdraws from the course.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 625	CourseOverrideSchool	CourseSection->Enrollment.CourseOverrideSchool	The school where the credit was earned if different from the institution reporting.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 624	CourseQualityPointsEarned	Enrollment.CourseQualityPointsEarned	The numerical value assigned to a letter grade to provide a basis of quantitative determination of an average.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 684	displayNameOrDisplayLabel	Subject.displayNameOrDisplayLabel	\N	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
@@ -20710,7 +23319,6 @@ COPY tenant_lif_team."Attributes" ("Id", "Name", "UniqueName", "Description", "U
 728	CourseDropDate	Student.AcademicRecord.AcademicSession.Course.CourseDropDate	The date on which the student drops or withdraws from the course.	\N	9	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 729	CourseAcademicGradeStatusCodeType	Student.AcademicRecord.AcademicSession.Course.CourseAcademicGradeStatusCodeType	Special enrollment or completion status of this course	\N	9	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 730	CourseAcademicGrade	Student.AcademicRecord.AcademicSession.Course.CourseAcademicGrade	The final grade awarded for participation in the course.	\N	9	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-769	targetAssessment	Course.targetAssessment	Assessment that provides direct, indirect, formative or summative evaluation or estimation of the nature, ability, or quality for an entity.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 731	CourseQualityPointsEarned	Student.AcademicRecord.AcademicSession.Course.CourseQualityPointsEarned	The numerical value assigned to a letter grade to provide a basis of quantitative determination of an average.	\N	9	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 732	CourseOverrideSchool	Student.AcademicRecord.AcademicSession.Course.CourseOverrideSchool	The school where the credit was earned if diffrerent from the Academic Session School.	\N	9	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 708	CourseEndDate	Course.CourseEndDate	The official end date for this course	\N	9	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
@@ -20734,20 +23342,10 @@ COPY tenant_lif_team."Attributes" ("Id", "Name", "UniqueName", "Description", "U
 752	deliveryType	Course.deliveryType	type of means by which a course is delivered to credential seekers and by which they interact; select from an existing enumeration of such types.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 753	deliveryTypeDescription	Course.deliveryTypeDescription	Detailed description of the delivery type of an assessment or learning opportunity.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 754	teaches	Course.teaches	Competency that the course is intended to teach.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-755	assessmentMethodDescription	Course.assessmentMethodDescription	Description of the methods used to conduct an assessment.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-756	assessmentMethodType	Course.assessmentMethodType	Type of method used to conduct an assessment; select from an existing enumeration of such types.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-757	availabilityListing	Course.availabilityListing	Entity describing an educational or training opportunity.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-758	availableOnlineAt	Course.availableOnlineAt	Online location where the course can be pursued.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-759	estimatedCost	Course.estimatedCost	Estimated cost of a course.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-760	financialAssistance	Course.financialAssistance	Entity that describes financial assistance for which this course qualifies.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-761	inLanguage	Course.inLanguage	The primary language or languages of the entity, even if it makes use of other languages; e.g., a course offered in English to teach Spanish would have an inLanguage of English, while a credential in Quebec could have an inLanguage of both French and English.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-762	keyword	Course.keyword	Keyword or key phrase describing relevant aspects of an entity.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-763	offeredBy	Course.offeredBy	Agent that offers the resource.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-764	ownedBy	Course.ownedBy	Organization or person with an enforceable claim or legal title to the resource.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-765	recognizedBy	Course.recognizedBy	Agent that acknowledges the validity of the course.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-766	regulatedBy	Course.regulatedBy	Quality assurance organization that enforces the legal requirements of the course.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+1501	ethnicityId	PersonBioDemographics.ethnicityId	\N	\N	5	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 767	subject	Course.subject	Words or brief phrases describing the topicality of the entity; select subject terms from an existing enumeration of such terms.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 768	subjectWebpage	Course.subjectWebpage	The webpage that describes this entity.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+769	targetAssessment	Course.targetAssessment	Assessment that provides direct, indirect, formative or summative evaluation or estimation of the nature, ability, or quality for an entity.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 770	targetLearningResource	Course.targetLearningResource	Learning object or resource that is used as part of an learning activity.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 973	owner	EuropeanDigitalCredential.owner	The person (subject) about which claims are made and who owns the credential. This property is inherited from Verifiable Credential.	\N	7	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 746	ceterms-creditLevelType	Course.ValueProfile.ceterms-creditLevelType	Credit Level Type	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
@@ -20780,7 +23378,6 @@ COPY tenant_lif_team."Attributes" ("Id", "Name", "UniqueName", "Description", "U
 1044	targetCode	Alignment.targetCode	If applicable, a locally unique string identifier that identifies the alignment target within its framework and/or targetUrl.	\N	15	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 238	rightsHolder	CompetencyFramework.Competency.rightsHolder	\N	The claim of rights should be assessed and validated prior to use. The origins of competency frameworks are often more complex than captured and this introduces critical bias and inaccuracy into outcomes.	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 54	type	Person.AssessmentLearningExperience.type	\N	No change	1	string	\N	No	No	\N	\N	\N	2025-11-26 22:24:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-1502	veteranTypeKey	PersonBioDemographics.veteranTypeKey	\N	\N	5	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 236	name	CompetencyFramework.Competency.name	\N	The name of the competency should not be used a proxy for what is actually measured in the elements. Care should be taken to avoid biased assumptions about what a competency actually measures from its name.	1	string	\N	Yes	No	CEDS	\N	\N	2025-11-26 23:08:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 286	alignmentType	CompetencyFramework.Competency.CompetencyAlignments.alignmentType	\N	\N	1	string	\N	No	No	\N	List of possible alignment types.	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 246	hasProgressionLevel	CompetencyFramework.Competency.hasProgressionLevel	\N	No change	1	string	\N	No	No	CTDL	A progression level is a member of a progression model. Likely a URI would be used, that points to the source progression level.	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
@@ -20811,6 +23408,8 @@ COPY tenant_lif_team."Attributes" ("Id", "Name", "UniqueName", "Description", "U
 1840	MDRTest2	MDRTest2	This is a test of creating a new Source attribute	consideration	25	enum	343	No	No	\N	\N	2025-08-19 13:42:40.259+00	2025-08-19 13:42:40.259+00	\N	Mary Gwozdz	Unicon	f	\N	f	\N	\N	\N	Public	f	f
 1218	ctidStatus	Common.Accreditation.ctidStatus	A ctid status, which provide details about whether it is missing at will or not applicable.	\N	1	string	36	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	Public	f	f
 292	accessibility	CompetencyFramework.Competency.accessibility	\N	\N	1	entity	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	Public	f	f
+897	fieldOfStudy	Achievement.fieldOfStudy	Category, subject, area of study, discipline, or general branch of knowledge. Examples include Business, Education, Psychology, and Technology.	\N	3	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+1502	veteranTypeKey	PersonBioDemographics.veteranTypeKey	\N	\N	5	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 474	identifier	Person.Consent.identifier	The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.	Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered.	1	string	\N	Yes	No	LIF	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 271	competencyId	CompetencyFramework.Competency.ProficiencyDefinition.ProficiencyLevel.competencyId	The identifier of the competency for which the levels are being defined.	No change	1	string	\N	Yes	Yes	\N	\N	\N	2025-11-26 23:19:00+00	\N	\N	LIF	f	\N	t	\N	\N	\N	Public	f	f
 485	code	Common.LegalCode.code	The code for the law or justification for processing the data or withdrawing consent (e.g., consent, legitimate interest).	\N	1	string	\N	Yes	No	\N	\N	\N	2025-11-26 23:23:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
@@ -20850,11 +23449,10 @@ COPY tenant_lif_team."Attributes" ("Id", "Name", "UniqueName", "Description", "U
 893	narrative	Criteria.narrative	The URI of a webpage that describes in a human-readable format the criteria for the achievement.	\N	3	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 894	id	Criteria.id	\N	\N	3	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 895	image	AchievementCredential.image	The image representing the credential for display purposes in wallets.	\N	3	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-896	tags	Achievement.tags	Tags that describe the type of achievement.	\N	3	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-897	fieldOfStudy	Achievement.fieldOfStudy	Category, subject, area of study, discipline, or general branch of knowledge. Examples include Business, Education, Psychology, and Technology.	\N	3	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+1503	person	PersonRelation.person	\N	\N	5	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 898	Level	Achievement.Level	Text that describes the level of achievement apart from how the achievement was performed or demonstrated. Examples would include 'Level 1', 'Level 2', 'Level 3', or 'Bachelors', 'Masters', 'Doctoral'.	\N	3	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 899	targetUrl	Alignment.targetUrl	The URL of a node in an established educational framework. When the alignment is to a CASE framework and the CASE Service support the CASE JSON-LD binding, the URL should be the 'uri' of the node document, otherwise the URL should be the CASE Service endpoint URL that returns the node JSON.	\N	3	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-1503	person	PersonRelation.person	\N	\N	5	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+865	name	CertificationTypeAnd/orEducationDegreeType.name	The common name of the certificate and/or Name for the degree.	\N	2	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 868	CertificationType.firstIssuedAnd/orEducationDegreeType.date	CertificationTypeAnd/orEducationDegreeType.CertificationType.firstIssuedAnd/orEducationDegreeType.date	The original issue date of the certificate. Often this is useful when the certificates need to be renewed often, and it is important to know how long the certificate has been held.	\N	2	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 900	alignmentType	Alignment.alignmentType	Type of alignment, RSD, CredentialEngine,	\N	3	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 901	humanCode	AchievementCredential.humanCode	Achievement is also extensible	\N	3	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
@@ -20885,10 +23483,10 @@ COPY tenant_lif_team."Attributes" ("Id", "Name", "UniqueName", "Description", "U
 925	CredentialDefinitionMinimumAge	Credential.CredentialDefinitionMinimumAge	The minimum allowed age in years at which a person is eligible for the credential.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 976	embeddedEvidence	Evidence.embeddedEvidence	The embeded evidence.	\N	7	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 926	CredentialDefinitionNAICSIndustryType	Credential.CredentialDefinitionNAICSIndustryType	The North American Industry Classification System (NAICS) class identifier for an industry associated with the credential.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+1031	achievementType	BadgeClass.achievementType	Type of the Achievement or Credential	\N	15	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 927	CredentialImageURL	Credential.CredentialImageURL	The Uniform Resource Locator (URL) for the unique address of an image representing an award or badge associated with the achievement.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 928	CredentialDefinitionKeywords	Credential.CredentialDefinitionKeywords	Keywords or key phrases describing aspects of a credential considered useful for its discovery.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 930	CTDLAudienceLevelType	Credential.CTDLAudienceLevelType	Type of level indicating a point in a progression through an educational or training context, for which the credential is intended; select from an existing enumeration of such types.	\N	4	\N	40	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-996	AcademicAwardLevel	AcademicAwardLevelType.AcademicAwardLevel	The level of the degree, certificate, or award granted for the successful completion of requirements of an academic program.	\N	9	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 931	ClassificationOfInstructionalProgramCode	Credential.ClassificationOfInstructionalProgramCode	A six-digit code in the form xx.xxxx that identifies instructional program specialties within educational institutions.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 942	type	Evidence.type	The type of the evidence.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 943	id	LearningResult.id	\N	\N	5	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
@@ -20929,11 +23527,12 @@ COPY tenant_lif_team."Attributes" ("Id", "Name", "UniqueName", "Description", "U
 965	homepage	LearningAchievementSpecification.homepage	The homepage of the learning achievement specification	\N	7	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 964	influencedBy	LearningAchievementSpecification.influencedBy	Activities that a person can perform to acquire the expected learning outcomes.	\N	7	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 967	maximumDuration	LearningAchievementSpecification.maximumDuration	The maximum duration (in months) that a person may use to complete the learning opportunity for which this learning achievement specification is designed.	\N	7	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+1032	Criteria	BadgeClass.Criteria	Criteria object describing how to earn the achievement.	\N	15	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+1014	Requires->targetCompetency	ConditionProfile.Requires->targetCompetency	A competency relevant to the condition being described.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 966	volumeOfLearning	LearningAchievementSpecification.volumeOfLearning	The estimated number of hours the learner is expected to spend engaged in learning to earn the award. This would include the notional number of hours in, in group work, in practicals, as well as hours engaged in self-motivated study.	\N	7	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 963	methodOfAssessment	LearningAssessment.methodOfAssessment	Method of assessment supervision and ID verification. It should be provided using the EDC Controlled List of Methods Of Supervision And Verification.	\N	7	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 970	validWith	LearningEntitlementSpecification.validWith	The organisation which acknowledges the entitlement (i.e., the organisation offering the learning opportunity, membership or employment opportunity).	\N	7	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-1039	alignment	BadgeClass.alignment	\N	\N	15	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-1504	Address	Contact.Address	\N	\N	5	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+996	AcademicAwardLevel	AcademicAwardLevelType.AcademicAwardLevel	The level of the degree, certificate, or award granted for the successful completion of requirements of an academic program.	\N	9	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 997	LearningOutcomeSkillCode	LearningOutcomeQualificationAssessment.LearningOutcomeSkillCode	Learning Outcome Skill based on DQP intellectual skills. Learning Outcome Skill based on DQP intellectual.	\N	9	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 998	FrameworkSourceReference	AlternateOutcomeFrameworkType.FrameworkSourceReference	URL of the alternative framework that has the outcome taxnomies URI of alternative framework.	\N	9	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 999	NAICS	EmploymentType/OrganizationEntityType.NAICS	NAICS code for industry for an employer (North American Industry Classification System).	\N	9	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
@@ -20964,16 +23563,7 @@ COPY tenant_lif_team."Attributes" ("Id", "Name", "UniqueName", "Description", "U
 1028	id	BadgeClass.id	Unique IRI for the BadgeClass. Most platforms to date can only handle HTTP-based IRIs. Issuers using signed assertions are encouraged to publish BadgeClasses using HTTP IRIs but may instead use ephemeral BadgeClasses that use an id in another scheme such as urn:uuid.	\N	15	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1029	name	BadgeClass.name	The name of the achievement.	\N	15	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1030	description	BadgeClass.description	A short description of the achievement. May be the same as name if no description is available.	\N	15	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-1031	achievementType	BadgeClass.achievementType	Type of the Achievement or Credential	\N	15	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-1032	Criteria	BadgeClass.Criteria	Criteria object describing how to earn the achievement.	\N	15	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-1014	Requires->targetCompetency	ConditionProfile.Requires->targetCompetency	A competency relevant to the condition being described.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-1010	ExpirationDate	Credential.ExpirationDate	Date beyond which the resource is no longer offered or available.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-1027	BadgeClass	OpenBadges2.0.BadgeClass	\N	\N	15	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-1034	narrative	Criteria.narrative	\N	\N	15	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-1035	Image	BadgeClass.Image	Object	\N	15	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-1036	type	Image.type	Type of Image, usually PNG or SVG	\N	15	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-1037	caption	Image.caption	\N	\N	15	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-1038	author	Image.author	\N	\N	15	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+1504	Address	Contact.Address	\N	\N	5	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1040	targetUrl	Alignment.targetUrl	URL linking to the official description of the alignment target, for example an individual standard within a learning framework.	\N	15	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1041	targetName	Alignment.targetName	Name of the alignment.	\N	15	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1042	targetDescription	Alignment.targetDescription	Short description of the alignment target.	\N	15	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
@@ -21522,14 +24112,11 @@ COPY tenant_lif_team."Attributes" ("Id", "Name", "UniqueName", "Description", "U
 480	purpose	Person.Consent.purpose	Description of the purpose for which consent is being obtained. This can be the organization's ethical motivation for obtaiing consent and/or a project-specific reason for obtaining consent and/or a description of the detailed use of data that consent is covering and/or any other.	Consent is obtained for a number of reasons, including the primary goal of the LIF model, which is to benefit learners. There are other purposes for consent, which should be indicated here, particularly in instances where the primary reason for consent is not to benefit the learner. These may include for product development purposes, where data is being used to test out product tools or other applications, it is strongly suggested that this field be used to indicate that consent has been obtained for research purposes - if that is the reason for using learner data in the LIF model, in these instances, it is also advised that the researcher be associated with an IRB to ensure appropriate participant protection practices.	1	string	\N	No	No	LIF	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 64	completionStatus	Person.AssessmentLearningExperience.completionStatus	The completion and scoring status for an instance of a person taking an assessment.	Great care should be made to ensure that missing data should not be penalized in useage. Assuming that all organizations will want to comply with this system will introduce a high level of bias into outcomes	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 501	name	Course.name	The descriptive name given to a course of study offered in a school or other institution or organization. In departmentalized classes at the elementary, secondary, and postsecondary levels (and for staff development activities), this refers to the name by which a course is identified (e.g., American History, English III). For elementary and other non-departmentalized classes, it refers to any portion of the instruction for which a grade or report is assigned (e.g., reading, composition, spelling, and language arts).	No change	1	string	\N	Yes	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-1750	type	OpenBadgeCredential.credentialSubject.type	\N	\N	16	string	\N	\N	Yes	\N	\N	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	Public	f	f
 546	offeredBy	Course.offeredBy	Agent that offers the resource.	Ensure any use incorporates a "not applicable" field as many legitimate courses will not have this and you don't want to accidentaly discard them due to missing data codes.	1	string	\N	No	Yes	CTDL	URI to an organization record in the credential registry	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 575	institution	Person.CourseLearningExperience.institution	The institution to which the person attended.	\N	1	string	\N	No	No	HR Open Standards	Should already have this context based on source of the data?	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 577	currentlyAttendingIndicator	Person.CourseLearningExperience.currentlyAttendingIndicator	Indicator that the person is still attending.	\N	1	string	\N	No	No	HR Open Standards	Couldn't this be derived? It could have been collected while attending and not recollected after the status may have changed?	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1616	instructionalProgramCode	Program.instructionalProgramCode	A six-digit code in the form xx.xxxx that identifies instructional program specialties within educational institutions.	No change	1	string	\N	No	Yes	CEDS	\N	\N	2025-11-26 22:19:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 118	ScoreValue	AssessmentResult.ScoreValue	A meaningful raw score, derived score, or statistical expression of the performance of a person on an assessment. The type of result is indicated by the Assessment Score Metric Type element. The results can be expressed as a number, percentile, range, level, etc. The score relates to all scored items or a sub test scoring one aspect of performance on the test. This value may or may not correspond to one or more Performance Levels.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-1358	dateEnteredUS	Person.Birth.dateEnteredUS	For students born outside of the U.S., the date the student entered the U.S.	\N	1	string	\N	No	No	Ed-Fi	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-1646	creditUnitTypeDescription	Program.creditUnitTypeDescription	Detailed description of credit unit type.	Ensure any use incorporates a "not applicable" field as many legitimate programs will not have this and you don't want to accidentaly discard them due to missing data codes.	1	string	\N	No	No	CTDL	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 477	status	Person.Consent.status	Indicates whether consent has been given, withdrawn, or is pending.	Use in tandem with aditional elements described in description change.	1	string	\N	No	No	LIF	Other categories for consent are included in non-required fields. This includes time/date, purpose for which the consent is obtained, categories for types of data that will be collected, entities with whom the data will be shared, the method used to obtain, language of consent, channels, compliance, and other. Reference should be made to these other non-required fields and these fields should be used when possible.	\N	2025-11-26 22:41:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 808	uri	Credential.Requirements.Criteria.uri	The URI of a webpage that describes in a human-readable format the criteria for the credential.	No change	1	string	\N	Yes	No	Open Badges v2	in programs	\N	2025-11-26 23:21:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 498	identifier	Course.identifier	The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.	Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered.	1	string	\N	Yes	No	CEDS	\N	\N	2025-11-26 22:51:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
@@ -21550,11 +24137,6 @@ COPY tenant_lif_team."Attributes" ("Id", "Name", "UniqueName", "Description", "U
 1759	term	OpenBadgeCredential.credentialSubject.term	\N	\N	16	string	\N	\N	No	\N	\N	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	Public	f	f
 1762	identityType	OpenBadgeCredential.credentialSubject.identifier.identityType	\N	\N	16	string	\N	\N	No	\N	\N	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	Public	f	f
 1323	countyFIPSCode	Person.Residency.countyFIPSCode	The Federal Information Processing Standards (FIPS) numeric code for the county issued by the National Institute of Standards and Technology (NIST). Counties are considered to be the "first-order subdivisions" of each State and statistically equivalent entity, regardless of their local designations (county, parish, borough, etc.) Counties in different States will have the same code. A unique county number is created when combined with the 2-digit FIPS State Code.	\N	1	string	\N	No	No	Ed-Fi	MP: if based on the county, maybe have it derived, rather than stored. As well making generic.	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-1669	endDate	Person.ProgramLearningExperience.endDate	\N	\N	1	string	\N	No	No	\N	The year, month and day on which the program ended.	\N	2025-11-26 22:28:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-1670	exitDate	Person.ProgramLearningExperience.exitDate	\N	\N	1	string	\N	No	No	\N	\N	\N	2025-11-26 22:29:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-1666	personId	Person.ProgramLearningExperience.personId	\N	\N	1	string	\N	No	No	\N	\N	\N	2025-11-26 22:43:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-21	subjectWebpage	Assessment.subjectWebpage	Webpage that describes this entity.	No change	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-23	moreInformation	Assessment.moreInformation	An additional free text note about the learning assessment specification.	No change	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1094	incomeSourceDescription	Person.EmploymentLearningExperience.IncomeSources.incomeSourceDescription	A description of the income source category. For example, for salaryforTeachingAssignmentOnly the description might be "Indicator to determine whether the teacher's base salary includes pay for teaching assignments alone." For titleITargetedAssistanceStaff the description might be "An indication that a staff member is targeted assistance (TAS) program staff funded by Title I, Part A, Section 1115 of ESEA as amended." For migrantEducationProgramPersonnel the description might be "An indication that a staff member's salary is paid by the Title I, Part C Migrant Education Program (MEP) of ESEA as amended". For staffCompensationHealthBenefits the description might be "Contributions made by the school district, municipal, state, federal and other government agencies for the teacher's or early learning provider's health insurance, prorated to the specific school or local provider agency indicated on the record, not including contributions made by the teacher or early learning provider.". For staffCompensationRetirementBenefits the description might be "Contributions made by the school district, municipal, state, federal and other government agencies for the teacher's or early learning provider’s health insurance, prorated to the specific school or local provider agency indicated on the record, not including contributions made by the teacher or early learning provider.". For staffCompensationOtherBenefits the description might be "All other benefits paid by the school district, municipal, state, federal, and other government agencies for the teacher or early learning provider, prorated to the specific school or local provider agency indicated on the record, not including retirement and health insurance benefits or contributions made by the teacher or early learning provider.".	The assignment of eligibility of a person into income source categories should not be used as a proxy for eligiblity for these nor as a proxy for any other social or economic category.	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 281	competencyAssociationOriginName	CompetencyFramework.Association.competencyAssociationOriginName	\N	No change	1	string	\N	No	No	CEDS	\N	\N	2025-11-26 22:12:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 155	language	LearningAssessmentSpecification.language	The language of instruction. It should be provided using the Language Named Authority List	\N	7	\N	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
@@ -21579,6 +24161,13 @@ COPY tenant_lif_team."Attributes" ("Id", "Name", "UniqueName", "Description", "U
 1766	alignment	achievement.alignment	\N	\N	16	entity	\N	\N	No	\N	\N	\N	\N	\N	\N	StateU	f	\N	t	\N	\N	\N	Public	f	f
 1386	qualifyingMoveCity	Person.Demographics.qualifyingMoveCity	The name of the city in which the child resided prior to the qualifying move.	Only use if consent has been verified.	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1852	Test2UpdatedAttribute11	Test2UpdatedAttribute11	This is a test of creating updated attribute	consideration	25	string	\N	No	No	\N	\N	2025-08-19 13:42:40.259+00	2025-08-19 13:42:40.259+00	\N	Mary Gwozdz	Unicon	f	\N	f	\N	12345	\N	Public	f	f
+1358	dateEnteredUS	Person.Birth.dateEnteredUS	For students born outside of the U.S., the date the student entered the U.S.	\N	1	string	\N	No	No	Ed-Fi	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+1646	creditUnitTypeDescription	Program.creditUnitTypeDescription	Detailed description of credit unit type.	Ensure any use incorporates a "not applicable" field as many legitimate programs will not have this and you don't want to accidentaly discard them due to missing data codes.	1	string	\N	No	No	CTDL	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+1669	endDate	Person.ProgramLearningExperience.endDate	\N	\N	1	string	\N	No	No	\N	The year, month and day on which the program ended.	\N	2025-11-26 22:28:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+1670	exitDate	Person.ProgramLearningExperience.exitDate	\N	\N	1	string	\N	No	No	\N	\N	\N	2025-11-26 22:29:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+1666	personId	Person.ProgramLearningExperience.personId	\N	\N	1	string	\N	No	No	\N	\N	\N	2025-11-26 22:43:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+21	subjectWebpage	Assessment.subjectWebpage	Webpage that describes this entity.	No change	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+23	moreInformation	Assessment.moreInformation	An additional free text note about the learning assessment specification.	No change	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 24	otherDocuments	Assessment.otherDocuments	A public web document containing additional documentation about the learning assessment specification.	No change	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 25	specialisationOf	Assessment.specialisationOf	A learning assessment specification (e.g., a standard) of which this specification is a specialisation.	No change	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 8	description	Assessment.description	Statement, characterization or account of the entity.	No change	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
@@ -21723,6 +24312,7 @@ COPY tenant_lif_team."Attributes" ("Id", "Name", "UniqueName", "Description", "U
 835	expirationDate	Person.CredentialAward.expirationDate	The expiration date of the credential, after which the credential will no longer be valid for the awardee.	No change	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 810	estimatedDuration	Credential.Requirements.estimatedDuration	Estimated duration or time to earn the credential.	No change	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1135	hireDate	Person.EmploymentLearningExperience.hireDate	The year, month and day on which a person was hired for a position, or consecutive positions within the same organization and job classification.	\N	1	string	\N	No	No	CEDS	NOTE: given a person can have multiple employment records for an org, then wouldn't make sense to have hireDate on each record. CEDS suggested the position can have a hire date as well. \nFor a position hireDate doesn't make sense\nAlso, how important is hireDate versus startDate?	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+1096	JobCode	Position.JobCode	\N	\N	1	entity	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	Public	f	f
 1112	Membership	Position.Membership	\N	\N	1	entity	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	Public	f	f
 840	Identity	Person.CredentialAward.Identity	\N	\N	1	entity	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	Public	f	f
 1334	Email	Common.Contact.Email	\N	\N	1	entity	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	Public	f	f
@@ -21738,7 +24328,6 @@ COPY tenant_lif_team."Attributes" ("Id", "Name", "UniqueName", "Description", "U
 1147	experienceStartDate	Person.MilitaryLearningExperience.experienceStartDate	\N	\N	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1148	experienceEndDate	Person.MilitaryLearningExperience.experienceEndDate	\N	\N	1	string	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1283	birthDate	Person.Birth.birthDate	The year, month, and day on which a person or individual identifies as their date of birth.	Use to verifiy if age as 18 year or older to comply with FERPA. Only use if consent has been verified.	1	string	\N	Yes	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-1823	refreshServiceUri	Person.CredentialAward.refreshServiceUri	\N	\N	17	string	\N	No	No	Open Badges v3	\N	2025-08-03 19:39:51.760627+00	2025-08-03 19:39:51.760627+00	\N	\N	StateU	t	\N	f	\N	\N	\N	Public	f	f
 1160	dischargeDate	Person.MilitaryLearningExperience.dischargeDate	If this is not a currently held service, the date of discharge.	\N	1	string	\N	No	No	HR Open	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1211	operationalStatusEffectiveDate	Organization.OperationalStatus.operationalStatusEffectiveDate	The effective date for a change in operational status.	No Change	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1215	accreditationAwardDate	Common.Accreditation.accreditationAwardDate	The year, month and day when an accreditation was awarded.	No Change	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
@@ -21762,6 +24351,7 @@ COPY tenant_lif_team."Attributes" ("Id", "Name", "UniqueName", "Description", "U
 1383	startEndDate	Person.Demographics.startEndDate	The last year, month and day when a status applied to an individual.	If this field is used, it is recommended that researchers or other stakeholders consider the variability and nuances that accompany how this field is collected, and how accurate or up-to-date it is. In considering that this may be used for research in evaluating stop-outs, extreme caution should be used when entering this into a statistical or machine learning model for the reasons and observations listed above. There is considerable variability in this field and this has the potential to perpetuate biases or produce inaccurate result	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1625	description	Program.description	Statement, characterization or account of the program.	No change	1	string	\N	No	No	CTDL	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1652	keyword	Program.keyword	Keyword or key phrase describing relevant aspects of an entity.	No change	1	string	\N	No	Yes	CTDL	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+1339	Telephone	Common.Contact.Telephone	\N	\N	1	entity	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	Public	f	f
 1401	expiraryDates	Person.RelationshipContacts.expiraryDates	The expiry date for which the relationship does not apply.	None	1	string	\N	No	No	LIF-Addition	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1400	effectiveDates	Person.RelationshipContacts.effectiveDates	The effective date for which the relationship is valid.	None	1	string	\N	No	No	LIF-Addition	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1224	informationSourceId	Common.Accreditation.informationSourceId	\N	\N	1	string	\N	Yes	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	Public	f	f
@@ -21769,6 +24359,7 @@ COPY tenant_lif_team."Attributes" ("Id", "Name", "UniqueName", "Description", "U
 857	selfAsserted	Person.CredentialAward.selfAsserted	If True, the credential has been Self Asserted	No change	1	boolean	\N	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1629	programDuration	Program.programDuration	The normal length in credit/contact hours of a person's program as published in the institution's catalogue, website, or other official documents.	\N	1	number	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 521	courseCreditValue	Course.courseCreditValue	Number indicating the credit hours that may be earned in the course.	Do not use without two elements to provide specifics on the standards used and who makes the determination. This element is likely to absorb a large amount of bias due to asymetrical power and organizational politics	1	number	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+1295	startDate	Person.Name.startDate	The start date that this name record is effective for the person	\N	1	string	\N	No	No	LIF-Addition	2/20: CM added as part of truing up to model	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1088	compensationBaseSalary	Position.compensationBaseSalary	The salary or wage a person is paid before deductions (excluding differentials) but including annuities, if appopriate in their form of employment.	This metric will be inaccurate for a large number of earners who do not have employment in a specific type of class of employment	1	number	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1620	creditsRequired	Program.creditsRequired	The total number of credits required for a person to graduate from the school of enrollment or complete a program.	No change	1	number	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 814	industryCode	Credential.industryCode	Numeric, and usually a NAICS code for industry for an employer (North American Industry Classification System).	No change	1	number	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
@@ -21790,7 +24381,6 @@ COPY tenant_lif_team."Attributes" ("Id", "Name", "UniqueName", "Description", "U
 1124	EmploymentLearningExperience	Person.EmploymentLearningExperience	\N	\N	1	entity	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	Public	f	f
 1143	MilitaryLearningExperience	Person.MilitaryLearningExperience	\N	\N	1	entity	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	Public	f	f
 1293	Name	Person.Name	\N	In the treatment of a person name by the Learner Information Framework (LIF) and associated technologies, may users of LIF always center the human story of a person's name, how important it is to them, it’s cultural connectedness to people and land, how people traverse multiple ways of “naming” and the impact of “naming” on our stories, experiences and the opportunities it may connect (or disconnect) us to/from.   Using and treating data on people's names can raise several equity issues due to the diversity of naming conventions across cultures and ethnicities. Some of these equity issues include:\n1. Many of the data standards from which LIF draws its normative data model, and as to user of LIF, these systems are designed with Western naming conventions in mind, which can marginalize individuals with non-Western names. This bias can lead to inaccuracies in data analysis and decision-making processes. For example, we made recommendations for the separation of “name” and “name type” as well as inclusion of multiple characters, unlimited character length, etc). \n2. The variety of ways the standards treat “person name” shows limited interoperability between system-standards, which ultimately may lead to multiple records with different ways names are recorded, managed, and/or used. This Inaccurate or incomplete data due to mishandling of names can lead to biased analyses and decision-making, ultimately reinforcing existing disparities in society.\n3. Many of the standards, and the normative model, collapse “name” and “name type” into each other. Given the sensitivities and human implications for name changes, as well as the type of name (e.g., preferred, legal, given/gifted etc), we lean’t into AACRAO report on student identity for recommendations on how learners/students prefer to record and include their names.\n4. Most of the standards systems encourage the standardization of names, which can overlook variations in spelling, pronunciation, and order of names across different cultures. This can result in the erasure of cultural identities and misrepresentation of individuals.\n5. Most of the standards did not include an option for people from indigenous communities to record their Nation Tribe, or their name type as belong to their nation tribe. We leaned into research from the BIA.gov and recommend adding this to the normative model to improve inclusivity and cultural responsiveness to the naming conventions of our first nations peoples.  \n6. Collecting full names without proper consent or understanding of cultural sensitivities can infringe on individuals' privacy rights, especially in contexts where certain names may carry social or political implications. For example, having strict guardrails on when/how “legal name” vs. “preferred name” is used and who has access to the \n\nFor LIF purposes, our recommendation is that IF used in normative model, only names which have been consented to including/use by LIF, be included, with flexibility for their design and formatting to allow for cultural differences. \n\n“Title” “Suffix” and “prefix” components of a person’s name are used to provide additional information about a person's name. Using and treating data on people's titles can raise several equity issues.\n1. One argument for the inclusion of titles in normative data models is they may provide contextual information about an individual's identity and social status, and when used correctly, may ensure that individuals are addressed and identified appropriately, respects their social and professional distinctions.\n2. Traditional titles and honorifics often assume binary gender categories and may not adequately reflect the diversity of gender or social identities, may not be universally understood or used in all cultures or communities; and standardized forms may not accommodate all cultural or social variations in naming practices. For example, "Mr." for men and "Mrs." for married women. These assumptions about gender roles or marital status based on titles may not align with individuals' cultural norms or preferences. This binary classification can exclude and do harm to individuals who do not identify within these categories, such as non-binary or gender non-conforming individuals.\n3. Name suffixes, such as "Jr." or "III," can sometimes reveal familial relationships or generational information. Collecting this data without consent or proper safeguards may infringe on individuals' privacy rights and expose them to risks like identity theft or targeted advertising.\n4. Name suffixes may intersect with other aspects of an individual's identity, such as race, ethnicity, or gender. Failing to consider these intersections can perpetuate systemic inequalities and hinder efforts to promote equity and social justice.\n5. Different cultures may have specific titles or honorifics that hold significance and should be respected in data collection processes. Failing to accommodate these cultural variations can lead to erasure and marginalization of certain communities.\n6. Further, some individuals may not use titles, prefixes, or suffixes at all in their names, or they may have unconventional naming customs that are not recognized by standardized systems.\n6. Inaccurate or incomplete data on titles and prefixes can lead to biased analyses and decision-making, especially in contexts such as healthcare or academic research where precise demographic information is crucial. \n7. Failing to accommodate these variations of the use of “titles, suffix, and/or prefix” can marginalize certain groups and perpetuate cultural biases. \n\nFor LIF purposes, our recommendation is that if used in normative model, only titles, prefix and affix which have been consented to including/use, and which pertain to qualifications, credentials, work, learning, cultural significance and/or honorifics be included, with flexibility for their design and formatting to allow for cultural differences. Titles, prefix and suffix which pertain to social, generational, marital or gender status should not be included to not perpetuate inequalities and expose learner to harm.	1	entity	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	Public	f	f
-1349	Birth	Person.Birth	\N	\N	1	entity	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	Public	f	f
 1361	SexAndGender	Person.SexAndGender	\N	\N	1	entity	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	Public	f	f
 1663	programLearningExperience	Person.programLearningExperience	\N	\N	1	entity	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	Public	f	f
 578	goodStandingIndicator	Person.CourseLearningExperience.goodStandingIndicator	Indicator that the person is currently in good standing according to the rules of the educational institution.	\N	1	boolean	\N	No	No	HR Open Standards	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
@@ -21799,9 +24389,7 @@ COPY tenant_lif_team."Attributes" ("Id", "Name", "UniqueName", "Description", "U
 1296	endDate	Person.Name.endDate	The end date that this name record is effective for the person	\N	1	string	\N	No	No	LIF-Addition	2/20: CM added as part of truing up to model	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1297	lastModificationDate	Person.Name.lastModificationDate	The date when the person (information) was last modified	\N	1	string	\N	No	No	ELM	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1107	employedWhileEnrolled	Person.EmploymentLearningExperience.employedWhileEnrolled	An individual who is a paid employee or works in his or her own business, profession, or farm, as reported through the State Unemployment Insurance Wage Report, FEDES, or WRIS, and at the same time is enrolled in secondary, postsecondary, or adult education or workforce programs.	If you have a verification method for determining whether or not the learner was employed during enrollment, then the LIF model may be extended with additional fields to indcate how this was determined (self reported or otherwise).	1	boolean	\N	No	No	CEDS	could be derived from emp history and course (tbd) history	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-1295	startDate	Person.Name.startDate	The start date that this name record is effective for the person	\N	1	string	\N	No	No	LIF-Addition	2/20: CM added as part of truing up to model	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-1824	refreshServiceType	Person.CredentialAward.refreshServiceType	\N	\N	17	string	\N	No	No	Open Badges v3	\N	2025-08-03 19:39:51.760627+00	2025-08-03 19:39:51.760627+00	\N	\N	StateU	t	\N	f	\N	\N	\N	Public	f	f
-1863	offeredRemunerationPackage	Person.PositionPreferences.offeredRemunerationPackage	\N	\N	17	string	\N	\N	\N	\N	\N	\N	2025-10-02 20:56:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N	Public	f	f
+1161	dischargeDateStatus	Person.MilitaryLearningExperience.dischargeDateStatus	A valid start date status, which provide details about whether it is missing at will or not applicable.	\N	1	string	354	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1109	employedPriorToEnrollment	Person.EmploymentLearningExperience.employedPriorToEnrollment	An individual who is a paid employee or works in his or her own business, profession, or farm, as reported through the State Unemployment Insurance Wage Report, FEDES, or WRIS, before enrolling in secondary, postsecondary, or adult education or workforce programs. Additional information on this field is available (https://ceds.ed.gov/element/001342), and states that usage for this involves  Individual-level data obtained by matching records with wage records, FEDES, or WRIS. The State Education Agency defines the time period for this collection around an exit period and a corresponding period for employment and earnings data to be obtained. The option set includes "Yes" for employment found via one of the resources listed in the source element. These sources won't tell you anything further about employment or unemployment, only that a record was "not found" or "not matched" thus “unknown."	If you have a verification method for determining whether or not the learner was employed prior to enrollment, then the LIF model may be extended with additional fields to indcate how this was determined (self reported or otherwise).	1	boolean	\N	No	No	CEDS	enrollment data	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1836	TestNewSourceAttributeForValueSet	TestNewSourceAttributeForValueSet	This is a test of creating a new Source attribute	consideration	25	enum	337	No	No	\N	\N	2025-08-19 13:42:40.259+00	2025-08-19 13:42:40.259+00	\N	Mary Gwozdz	Unicon	f	\N	f	\N	\N	\N	Public	f	f
 1838	TestAnotherNewSourceAttributeForValueSet	TestAnotherNewSourceAttributeForValueSet	This is a test of creating a new Source attribute	consideration	25	enum	338	No	No	\N	\N	2025-08-19 13:42:40.259+00	2025-08-19 13:42:40.259+00	\N	Mary Gwozdz	Unicon	f	\N	f	\N	\N	\N	Public	f	f
@@ -21822,9 +24410,8 @@ COPY tenant_lif_team."Attributes" ("Id", "Name", "UniqueName", "Description", "U
 290	alignsToText	CompetencyFramework.Competency.CompetencyAlignments.alignsToText	\N	\N	1	string	\N	No	No	\N	Required if no alignsToUri	\N	2025-11-26 22:13:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 346	CompetencyDefinitionLicense	Competency.CompetencyDefinitionLicense	The full text or URL reference to a legal document giving official permission to do something with the competency definition statement.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 847	Evidence	Person.CredentialAward.Evidence	\N	\N	1	entity	\N	No	Yes	CLR v2	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	Public	f	f
-1161	dischargeDateStatus	Person.MilitaryLearningExperience.dischargeDateStatus	A valid start date status, which provide details about whether it is missing at will or not applicable.	\N	1	string	354	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-1761	hashed	OpenBadgeCredential.credentialSubject.identifier.hashed	\N	\N	16	boolean	\N	\N	No	\N	\N	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	Public	f	f
-1773	targetCategory	achievement.alignment.targetCategory	\N	\N	16	string	\N	\N	No	\N	StateU extension to OB3	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	Public	f	f
+794	idType	Credential.idType	Defines the type of identifier used for the credential (definition).	Missing data should not be penalized in useage. Assuming that all organizations will want to comply with this system will introduce a high level of bias into outcomes  A value needs to be added for missing at will and a value needs to be added for not applicable to avoid too much missing data resulting in skewed outcomes	1	string	361	No	No	CTDL	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+1824	refreshServiceType	Person.CredentialAward.refreshServiceType	\N	\N	17	string	\N	No	No	Open Badges v3	\N	2025-08-03 19:39:51.760627+00	2025-08-03 19:39:51.760627+00	\N	\N	StateU	t	\N	f	\N	\N	\N	Public	f	f
 1108	employedAfterExit	Person.EmploymentLearningExperience.employedAfterExit	An individual who is a paid employee or works in his or her own business, profession, or farm, as reported through the State Unemployment Insurance Wage Report, FEDES, or WRIS, after exiting secondary, postsecondary, or adult education or workforce programs.  Additional usage notes for this field from CEDs: Individual-level data obtained by matching records with wage records, FEDES, or WRIS. The State Education Agency defines the time period for this collection around an exit period and a corresponding period for employment and earnings data to be obtained. The option set includes "Yes" for employment found via one of the resources listed in the source element. These sources will provide information about most of the types of jobs that students or former students will become employed in but not all. For that reason when a record is "not found" or "not matched" their employment status is "unknown" for the targeted time base. (https://ceds.ed.gov/element/000988)	If you have a verification method for determining whether or not the learner was employed after exit, then the LIF model may be extended with additional fields to indcate how this was determined (self reported or otherwise).	1	boolean	\N	No	No	CEDS	outcome data?	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 284	competencyAlignments	CompetencyFramework.Competency.competencyAlignments	\N	\N	1	entity	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	Public	f	f
 1214	accreditationStatus	Common.Accreditation.accreditationStatus	An indication of the accreditation status of a higher education institution. This can be any international value. Some potential example for this property could be : Regionally, Programmatic accreditation, Nationally accredited, Faith, Career related, Not accredited, Unknown.	Until the data team updates the normative value set, this element should be used with great caution. It contains a high degree of bias towards generating results and outcomes that will reflect priviledge and marginalization baked into current US accreditation schemes. Recommendation for normative value set from WAC - Current normative set does not provide enough information for the data user or the engineering team to be able to map data or use the LIF results	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	t	\N	\N	\N	Public	f	f
@@ -21846,7 +24433,6 @@ COPY tenant_lif_team."Attributes" ("Id", "Name", "UniqueName", "Description", "U
 478	dateTimeConsentGiven	Person.Consent.dateTimeConsentGiven	Date and time when consent was first given.	\N	1	string	\N	No	No	LIF	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 479	dateTimeConsentUpdated	Person.Consent.dateTimeConsentUpdated	Date and time when consent was updated.	\N	1	string	\N	No	No	LIF	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 494	auditDate	Person.Consent.AuditHistory.auditDate	Timestamp of when the audit took place.	\N	1	string	\N	Yes	No	\N	\N	\N	2025-11-26 23:23:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-1814	sourceType	Organization.sourceType	\N	\N	17	string	\N	No	Yes	Open Badges v3	\N	2025-08-03 19:39:51.760627+00	2025-08-03 19:39:51.760627+00	\N	\N	StateU	t	\N	t	\N	\N	\N	Public	f	f
 1382	startDateStatus	Person.Demographics.startDateStatus	The year, month and day that a status became applicable to an individual.	If this field is used, it is recommended that researchers or other stakeholders consider the variability and nuances that accompany how this field is collected, and how accurate or up-to-date it is. In considering that this may be used for research in evaluating stop-outs, extreme caution should be used when entering this into a statistical or machine learning model for the reasons and observations listed above. There is considerable variability in this field and this has the potential to perpetuate biases or produce inaccurate results.	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1376	familyIncome	Person.Demographics.familyIncome	Total income of family from all sources. Income includes money, wages or salary before deductions; net income from non-farm self-employment; net income from farm self-employment; regular payments from Social Security or railroad retirement; payments from unemployment compensation, strike benefits from union funds, workers’ compensation, veterans benefits (with the exception noted below), public assistance (including Temporary Assistance for Needy Families, Supplemental Security Income, Emergency Assistance money payments, and non-Federally funded General Assistance or General Relief money payments); training stipends; alimony, child support, and military family allotments or other regular support from an absent family member or someone not living in the household; private pensions, government employee pensions (including military retirement pay), and regular insurance or annuity payments; college or university scholarships, grants, fellowships, and assistantships; and dividends, interest, net rental income, net royalties, and periodic receipts from estates or trusts; and net gambling or lottery winnings.	\N	1	number	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1834	TestNewSourceAttribute	TestNewSourceAttribute	This is a test of creating a new Source attribute	consideration	25	enum	337	No	No	\N	\N	2025-08-19 13:42:40.259+00	2025-08-19 13:42:40.259+00	\N	Mary Gwozdz	Unicon	f	\N	f	\N	\N	\N	Public	f	f
@@ -21874,8 +24460,6 @@ COPY tenant_lif_team."Attributes" ("Id", "Name", "UniqueName", "Description", "U
 1144	branch	Person.MilitaryLearningExperience.branch	A branch of the U.S. Military applicable for specifying more details when using Military Connected Student Indicator, Military Active Student Indicator, Military Veteran Student Indicator, and Military Enlistment After Exit elements.	\N	1	string	362	No	Yes	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1089	compensationBaseSalaryStatus	Position.compensationBaseSalaryStatus	A status filed, which provide details about whether it is missing at will or not applicable.	\N	1	string	355	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1087	contractDaysOfServicePerYearStatus	Position.contractDaysOfServicePerYearStatus	A status filed, which provide details about whether it is missing at will or not applicable.	\N	1	string	357	No	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-1818	imageCaption	Organization.imageCaption	\N	\N	17	string	\N	No	No	Open Badges v3	\N	2025-08-03 19:39:51.760627+00	2025-08-03 19:39:51.760627+00	\N	\N	StateU	t	\N	t	\N	\N	\N	Public	f	f
-794	idType	Credential.idType	Defines the type of identifier used for the credential (definition).	Missing data should not be penalized in useage. Assuming that all organizations will want to comply with this system will introduce a high level of bias into outcomes  A value needs to be added for missing at will and a value needs to be added for not applicable to avoid too much missing data resulting in skewed outcomes	1	string	361	No	No	CTDL	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 223	language	CompetencyFramework.language	The default language of the text used for the content in the competency framework.	No change	1	string	351	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 243	language	CompetencyFramework.Competency.language	\N	There should only be one language for a competency and for a framework, but the same framework could be copied and defined in a different language, but that copy  would have unique Ids. Do not overlook this when using this element.	1	string	351	No	No	CEDS	There should only be one language for a competency and for a framework, but the same framework could be copied and defined in a different language, but that copy  would have unique Ids.	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1623	normalTimeCompletionUnits	Program.normalTimeCompletionUnits	The unit of measurement for length of time for completion.	No change	1	string	363	No	No	CEDS	Not sure if this should be part of Credit or Unit?	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
@@ -21895,11 +24479,6 @@ COPY tenant_lif_team."Attributes" ("Id", "Name", "UniqueName", "Description", "U
 1083	otherPayMethods	Position.otherPayMethods	An indication of the other payment methods of the position besides the primary payment method. For example, commission, stipend, piecework, bonus, tips, profit sharing, equity/stock options, or other.	\N	1	string	\N	No	Yes	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1210	operationalStatus	Organization.OperationalStatus.operationalStatus	The current status of the organization's operations, exclusive of scheduled breaks, holidays, or other temporary interruptions.	Ensure your models and systems can ingest the ad-hoc organization types from organizations that reside outside the systems embedded in the current mapping schema	1	string	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1367	americanIndianOrAlaskan	Person.Culture.americanIndianOrAlaskan	A person having origins in any of the original peoples of North and South America (including Central America), and who maintains cultural identification through tribal affiliation or community attachment.	\N	1	string	\N	No	No	CEDS	CM: 2/4: Do we need a normative codelist for race/culture (instead of a fixed set of federal values)?	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-1819	credentialOfficial	Organization.credentialOfficial	\N	\N	17	string	\N	No	No	Open Badges v3	\N	2025-08-03 19:39:51.760627+00	2025-08-03 19:39:51.760627+00	\N	\N	StateU	t	\N	t	\N	\N	\N	Public	f	f
-1815	sourceName	Organization.sourceName	\N	\N	17	string	\N	No	No	Open Badges v3	\N	2025-08-03 19:39:51.760627+00	2025-08-03 19:39:51.760627+00	\N	\N	StateU	t	\N	t	\N	\N	\N	Public	f	f
-1820	schemaType	Credential.schemaType	\N	\N	17	string	\N	No	No	Open Badges v3	\N	2025-08-03 19:39:51.760627+00	2025-08-03 19:39:51.760627+00	\N	\N	StateU	t	\N	f	\N	\N	\N	Public	f	f
-1821	credentialStatusUri	Person.CredentialAward.credentialStatusUri	\N	\N	17	string	\N	No	No	Open Badges v3	\N	2025-08-03 19:39:51.760627+00	2025-08-03 19:39:51.760627+00	\N	\N	StateU	t	\N	f	\N	\N	\N	Public	f	f
-1822	credentialStatusType	Person.CredentialAward.credentialStatusType	\N	\N	17	string	\N	No	No	Open Badges v3	\N	2025-08-03 19:39:51.760627+00	2025-08-03 19:39:51.760627+00	\N	\N	StateU	t	\N	f	\N	\N	\N	Public	f	f
 1381	homeless	Person.Demographics.homeless	Children and youth who lack a fixed, regular, and adequate nighttime residence. Homeless children and youth include: 1) children and youth who are sharing the housing of other persons due to loss of housing, economic hardship, or a similar reason; are living in motels, hotels, trailer parks, or camping grounds due to the lack of alternative adequate accommodations; are living in emergency or transitional shelters; are abandoned in hospitals; or are awaiting foster care placement; 2) children and youth who have a primary nighttime residence that is a public or private place not designed for or originally used as a regular sleeping accommodation for human beings; or 3) children and youths who are living in cars, parks, public spaces, abandoned buildings, substandard housing, bus or train stations, or similar settings. 4) migratory children who qualify as homeless because the children are living in circumstances described in the above. (See Section 103 of the McKinney Act for a more detailed description of this data element).	In use cases where this field may be desired for research purposes, it is not recommended that this field be used, considering the likelihood for missing data, and inconsistencies. It would appear that the likelihood for inaccurate analysis is higher than for research that may benefit a learner.	1	boolean	\N	No	No	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1631	programSponsorType	Program.programSponsorType	A type of organization providing funds for a particular educational or service program or activity or for an individual's participation in the program or activity.	No change	1	string	\N	No	Yes	CEDS	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1638	assessmentMethodType	Program.assessmentMethodType	Type of method used to conduct an assessment; select from an existing enumeration of such types.	Ensure any use incorporates a "not applicable" field as many legitimate programs will not have this and you don't want to accidentaly discard them due to missing data codes.	1	string	\N	No	Yes	CTDL	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
@@ -21939,6 +24518,17 @@ COPY tenant_lif_team."Attributes" ("Id", "Name", "UniqueName", "Description", "U
 1812	role	Person.CredentialAward.role	\N	\N	17	string	\N	No	No	Open Badges v3	\N	2025-08-03 19:39:51.760627+00	2025-08-03 19:39:51.760627+00	\N	\N	StateU	t	\N	f	\N	\N	\N	Public	f	f
 1816	term	Person.CredentialAward.term	\N	\N	17	string	\N	No	No	Open Badges v3	\N	2025-08-03 19:39:51.760627+00	2025-08-03 19:39:51.760627+00	\N	\N	StateU	t	\N	f	\N	\N	\N	Public	f	f
 1859	minimumAmount	Ranges.minimumAmount	\N	\N	17	number	\N	\N	\N	\N	\N	\N	2025-10-02 20:48:00+00	\N	MDRUser	StateU	t	\N	t	\N	\N	\N	Public	f	f
+1814	sourceType	Organization.sourceType	\N	\N	17	string	\N	No	Yes	Open Badges v3	\N	2025-08-03 19:39:51.760627+00	2025-08-03 19:39:51.760627+00	\N	\N	StateU	t	\N	t	\N	\N	\N	Public	f	f
+1818	imageCaption	Organization.imageCaption	\N	\N	17	string	\N	No	No	Open Badges v3	\N	2025-08-03 19:39:51.760627+00	2025-08-03 19:39:51.760627+00	\N	\N	StateU	t	\N	t	\N	\N	\N	Public	f	f
+1819	credentialOfficial	Organization.credentialOfficial	\N	\N	17	string	\N	No	No	Open Badges v3	\N	2025-08-03 19:39:51.760627+00	2025-08-03 19:39:51.760627+00	\N	\N	StateU	t	\N	t	\N	\N	\N	Public	f	f
+1815	sourceName	Organization.sourceName	\N	\N	17	string	\N	No	No	Open Badges v3	\N	2025-08-03 19:39:51.760627+00	2025-08-03 19:39:51.760627+00	\N	\N	StateU	t	\N	t	\N	\N	\N	Public	f	f
+1820	schemaType	Credential.schemaType	\N	\N	17	string	\N	No	No	Open Badges v3	\N	2025-08-03 19:39:51.760627+00	2025-08-03 19:39:51.760627+00	\N	\N	StateU	t	\N	f	\N	\N	\N	Public	f	f
+1821	credentialStatusUri	Person.CredentialAward.credentialStatusUri	\N	\N	17	string	\N	No	No	Open Badges v3	\N	2025-08-03 19:39:51.760627+00	2025-08-03 19:39:51.760627+00	\N	\N	StateU	t	\N	f	\N	\N	\N	Public	f	f
+1822	credentialStatusType	Person.CredentialAward.credentialStatusType	\N	\N	17	string	\N	No	No	Open Badges v3	\N	2025-08-03 19:39:51.760627+00	2025-08-03 19:39:51.760627+00	\N	\N	StateU	t	\N	f	\N	\N	\N	Public	f	f
+1823	refreshServiceUri	Person.CredentialAward.refreshServiceUri	\N	\N	17	string	\N	No	No	Open Badges v3	\N	2025-08-03 19:39:51.760627+00	2025-08-03 19:39:51.760627+00	\N	\N	StateU	t	\N	f	\N	\N	\N	Public	f	f
+1863	offeredRemunerationPackage	Person.PositionPreferences.offeredRemunerationPackage	\N	\N	17	string	\N	\N	\N	\N	\N	\N	2025-10-02 20:56:00+00	\N	MDRUser	StateU	t	\N	f	\N	\N	\N	Public	f	f
+1761	hashed	OpenBadgeCredential.credentialSubject.identifier.hashed	\N	\N	16	boolean	\N	\N	No	\N	\N	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	Public	f	f
+1773	targetCategory	achievement.alignment.targetCategory	\N	\N	16	string	\N	\N	No	\N	StateU extension to OB3	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	Public	f	f
 1789	credentialSubject.achievement.creator.address.geo.longitude	address.credentialSubject.achievement.creator.address.geo.longitude	\N	\N	16	number	\N	\N	No	\N	Deduplication with Organization entity should be considered	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	Public	f	f
 1833	testNewOrgAttribute	testNewOrgAttribute	This is a test of creating a new Org attribute	consideration	17	string	\N	No	No	\N	\N	2025-08-19 13:42:40.259+00	2025-08-19 13:42:40.259+00	\N	Mary Gwozdz	StateU	t	\N	f	\N	\N	\N	Public	f	f
 1788	credentialSubject.achievement.creator.address.geo.latitude	address.credentialSubject.achievement.creator.address.geo.latitude	\N	\N	16	number	\N	\N	No	\N	Deduplication with Organization entity should be considered	\N	\N	\N	\N	StateU	f	\N	f	\N	\N	\N	Public	f	f
@@ -21971,8 +24561,7 @@ COPY tenant_lif_team."Attributes" ("Id", "Name", "UniqueName", "Description", "U
 481	typesOfData	Person.Consent.typesOfData	Categories or types of data that will be collected, processed, or shared. These types of data may include information related to competencies, employment skills and achievements, educational achievements, and other metadata.	Reach out to legal counsel and extend the LIF Model as necessary.	1	string	\N	No	Yes	LIF	PW: This may not be needed, as this entity will be directly associated with the portion(s) of the information model instance to which it applies\nCM: 3/21:	\N	2025-11-26 22:41:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1115	membershipStatus	Position.Membership.membershipStatus	An indication of whether the person is an active member of an association.	The selection of what associations are included as possibilities will severely bias this element	1	boolean	\N	No	No	CEDS	This could now be derived using associationType of union.	\N	2025-11-26 22:43:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1120	startDate	Position.Wage.startDate	Date the validity or usefulness of the information in this resource begins.	\N	1	string	\N	No	No	CTDL	\N	\N	2025-11-26 22:44:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-209	name	CompetencyFramework.name	The name of the competency framework.	The name of the competency framework should not be used a proxy for what is actually measured in the elements. Care should be taken to avoid biased assumptions about what a framework actually measures from its name. When using this field, there are other entitites that include relevant data elemants that allow for inclusion of other elements related to competency.	1	string	\N	Yes	No	CEDS	\N	\N	2025-11-26 22:15:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-1133	name	Person.EmploymentLearningExperience.name	The descriptive name of a person's position.	\N	1	string	\N	Yes	No	CEDS	this can be position specific or "current" on the top level class?	\N	2025-11-26 22:27:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+822	level	Credential.level	The level of the credential.  For reference this is from CEDS: https://ceds.ed.gov/element/001301/#OT	No change	1	string	\N	No	No	CLR v2	in programs	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1097	jobCodeValue	Position.JobCode.jobCodeValue	This property can consist of multipe types of job codes including the following: CEDs Job codes. These codes map to IPEDs (https://ceds.ed.gov/element/000731). IPEDs Job Codes  (https://surveys.nces.ed.gov/ipeds/public/hrsoc-browse) . The International Standard Classification of Occupations (https://ilostat.ilo.org/methods/concepts-and-definitions/classification-occupation/) (ISCO) .  Occupation profiles for the U.S. Burea of Labor Statistics. (https://www.bls.gov/oes/current/oes_stru.htm). These fields can be crosswalked to CIP codes (https://nces.ed.gov/ipeds/cipcode/post3.aspx?y=56).   If there is no jobcode Not Applicable or "missing at will" can be selected.	ISCO categories will provide information that will capture a lot of contextual discrimination and should be used with care. consider controlling for this. If anyone needs more than IPEDS SOC code and wants to use ISCO then add  2 new property "positionIdentifier" and "positionIdentifierType". The Type is coming from ISCO and other one should be the actual value.	1	string	\N	Yes	Yes	CEDS	\N	\N	2025-11-26 23:25:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1911	name	Person.Language.name	\N	\N	1	string	\N	Yes	No	\N	\N	\N	2025-11-26 18:28:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1151	serviceNumber	Person.MilitaryLearningExperience.serviceNumber	The military service number or identifier of the person as defined by the country, branch, and/or division. Use "missing at will" and "not applicable" for missng data to avoid skewed outcomes.	\N	1	string	\N	Yes	Yes	HR Open	\N	\N	2025-11-26 23:29:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
@@ -21991,6 +24580,8 @@ COPY tenant_lif_team."Attributes" ("Id", "Name", "UniqueName", "Description", "U
 1906	identifier	Organization.OperationalStatus.identifier	The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.	Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered.	1	string	\N	Yes	No	\N	\N	\N	2025-11-26 18:23:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N	Public	f	f
 557	personId	Person.CourseLearningExperience.personId	\N	\N	1	string	\N	No	No	\N	N/A if part of a Person graph	\N	2025-11-26 22:42:00+00	\N	\N	LIF	f	\N	t	\N	\N	\N	Public	f	f
 1217	ctid	Common.Accreditation.ctid	Globally unique Credential Transparency Identifier (CTID) by which the creator, owner or provider of a resource recognizes it in transactions with the external environment (e.g., in verifiable claims involving the resource).	Missing data should not be penalized in useage. Assuming that all organizations will want to comply with this system will introduce a high level of bias into outcomes. A mapping option for not applicable and missing at will need to be added to this	1	string	\N	No	No	CEDS	\N	\N	2025-11-26 23:19:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+209	name	CompetencyFramework.name	The name of the competency framework.	The name of the competency framework should not be used a proxy for what is actually measured in the elements. Care should be taken to avoid biased assumptions about what a framework actually measures from its name. When using this field, there are other entitites that include relevant data elemants that allow for inclusion of other elements related to competency.	1	string	\N	Yes	No	CEDS	\N	\N	2025-11-26 22:15:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+1133	name	Person.EmploymentLearningExperience.name	The descriptive name of a person's position.	\N	1	string	\N	Yes	No	CEDS	this can be position specific or "current" on the top level class?	\N	2025-11-26 22:27:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1901	identifier	CompetencyFramework.Association.identifier	The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.	Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered.	1	string	\N	Yes	No	\N	\N	\N	2025-11-26 18:11:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N	Public	f	f
 260	identifier	CompetencyFramework.Competency.ProficiencyDefinition.identifier	The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.	Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered.	1	string	\N	Yes	No	\N	This might should be 0..* if there are more than one proficiency definition for the competency.	\N	2025-11-26 23:19:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1907	identifier	Person.Culture.identifier	The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.	Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered.	1	string	\N	Yes	No	\N	\N	\N	2025-11-26 18:26:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N	Public	f	f
@@ -22005,6 +24596,8 @@ COPY tenant_lif_team."Attributes" ("Id", "Name", "UniqueName", "Description", "U
 230	identifier	CompetencyFramework.identifier	The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.	Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered.	1	string	\N	Yes	No	CASE	\N	\N	2025-12-01 22:14:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1924	identifier	Address.identifier	The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.	Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered.	1	string	\N	Yes	No	\N	\N	\N	2025-12-01 22:14:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1925	identifier	Email.identifier	The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.	Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered.	1	string	\N	Yes	No	\N	\N	\N	2025-12-01 22:14:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N	Public	f	f
+747	creditUnitTypeAndValue	Course.ValueProfile.creditUnitTypeAndValue	A description of value awarded for, required by, or otherwise related to the resource.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+974	proof	EuropeanDigitalCredential.proof	The proof of the european digital credential.	\N	7	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1926	identifier	Telephone.identifier	The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.	Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered.	1	string	\N	Yes	No	\N	\N	\N	2025-12-01 22:15:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1927	identifier	LegalCode.identifier	The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.	Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered.	1	string	\N	Yes	No	\N	\N	\N	2025-12-01 22:15:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1928	identifier	CredentialAlignments.identifier	The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.	Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered.	1	string	\N	Yes	No	\N	\N	\N	2025-12-01 22:17:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N	Public	f	f
@@ -22020,10 +24613,9 @@ COPY tenant_lif_team."Attributes" ("Id", "Name", "UniqueName", "Description", "U
 288	identifier	CompetencyFramework.Competency.CompetencyAlignments.identifier	The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.	Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered.	1	string	\N	Yes	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 556	identifier	Person.CourseLearningExperience.identifier	The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.	Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered.	1	string	\N	Yes	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1132	identifier	Person.EmploymentLearningExperience.identifier	The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.	Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered.	1	string	\N	Yes	No	\N	unique identifier for an employment class	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+1941	identifier	JobCode.identifier	The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.	Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered.	1	string	\N	Yes	No	\N	\N	\N	2025-12-01 22:26:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N	Public	f	f
 55	identifier	Person.AssessmentLearningExperience.identifier	The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.	Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered.	1	string	\N	Yes	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1114	identifier	Position.Membership.identifier	The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.	Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered.	1	string	\N	Yes	No	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-747	creditUnitTypeAndValue	Course.ValueProfile.creditUnitTypeAndValue	A description of value awarded for, required by, or otherwise related to the resource.	\N	10	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-974	proof	EuropeanDigitalCredential.proof	The proof of the european digital credential.	\N	7	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1917	identifier	ProficiencyLevel.identifier	The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.	Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered.	1	string	\N	Yes	No	\N	\N	\N	2025-12-01 16:44:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1918	identifier	Accreditation.identifier	The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.	Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered.	1	string	\N	Yes	No	\N	\N	\N	2025-12-01 17:05:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N	Public	f	f
 296	identifier	Person.Proficiency.identifier	The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.	Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered.	1	string	\N	Yes	No	\N	\N	\N	2025-11-26 22:51:00+00	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
@@ -22035,9 +24627,6 @@ COPY tenant_lif_team."Attributes" ("Id", "Name", "UniqueName", "Description", "U
 1936	identifier	Death.identifier	The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.	Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered.	1	string	\N	Yes	No	\N	\N	\N	2025-12-01 22:22:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1939	identifier	Position.identifier	The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.	Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered.	1	string	\N	Yes	No	\N	\N	\N	2025-12-01 22:25:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1940	identifier	IndustryCode.identifier	The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.	Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered.	1	string	\N	Yes	No	\N	\N	\N	2025-12-01 22:25:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N	Public	f	f
-822	level	Credential.level	The level of the credential.  For reference this is from CEDS: https://ceds.ed.gov/element/001301/#OT	No change	1	string	\N	No	No	CLR v2	in programs	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
-1941	identifier	JobCode.identifier	The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.	Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered.	1	string	\N	Yes	No	\N	\N	\N	2025-12-01 22:26:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N	Public	f	f
-864	id	CertificationTypeAnd/orEducationDegreeType.id	A unique identifier to the certificate as defined by the issuing authority and/or Identifier for the degree.	\N	2	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1942	identifier	Wage.identifier	The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.	Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered.	1	string	\N	Yes	No	\N	\N	\N	2025-12-01 22:26:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1905	identifier	Organization.Contact.identifier	The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.	Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered.	1	string	\N	Yes	No	\N	\N	\N	2025-11-26 18:22:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N	Public	f	f
 1909	identifier	Person.EmploymentLearningExperience.IncomeSources.identifier	The primary key identifier for this entity data in the LIF data model. This value should uniquely identify this particular instance of the entity. The identifier can be created based on external identifiers, a newly created identifier unique to LIF, or a composite of other attributes related to the entity.	Personal or sensitive information should not be used as part of the identifier. If external sources are used to create the identifier, consent should be considered.	1	string	\N	Yes	No	\N	\N	\N	2025-11-26 18:27:00+00	\N	MDRUser	LIF	f	\N	f	\N	\N	\N	Public	f	f
@@ -22056,6 +24645,7 @@ COPY tenant_lif_team."Attributes" ("Id", "Name", "UniqueName", "Description", "U
 590	AchievementType=Course	Achievement.AchievementType=Course	A Course is a course of study that, typically, has a shared curriculum although it may be taught to different students by different teachers. It is likely that several classes of a single course may be taught in a term.  For example, a school runs Grade 9 English in the spring term. There are four classes, each with a different 30 students, taught by 4 different teachers. However the curriculum for each of those four classes is the same – the course curriculum.	\N	3	\N	\N	\N	\N	\N	Not applicable to a course?	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 693	sponsors(OfType)	Course.sponsors(OfType)	\N	\N	8	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 707	CourseBeginDate	Course.CourseBeginDate	The official begin date for this course	\N	9	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
+864	id	CertificationTypeAnd/orEducationDegreeType.id	A unique identifier to the certificate as defined by the issuing authority and/or Identifier for the degree.	\N	2	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 867	CertificationType.statusAnd/orEducationDegreeType.degreeGrantedStatus	CertificationTypeAnd/orEducationDegreeType.CertificationType.statusAnd/orEducationDegreeType.degreeGrantedStatus	The status of the certificate. While this is an open string, common status include active, expired, pending, suspended and/or Current education degree granted status.	\N	2	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 903	awardedDate(orIssuanceDate)	AchievementCredential.awardedDate(orIssuanceDate)	Timestamp of when the credential was awarded. issuanceDate is used to determine the most recent version of a Credential in conjunction with issuer and id. Consequently, the only way to update a Credental is to update the issuanceDate, losing the date when the Credential was originally awarded. awardedDate is meant to keep this original date.	\N	3	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
 932	CompetencyDefinitionURL	Credential.CompetencyDefinitionURL	A network-resolvable Uniform Resource Locator (URL) pointing to the authoritative reference for the competency definition.	\N	4	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	LIF	f	\N	f	\N	\N	\N	Public	f	f
@@ -22739,6 +25329,11 @@ COPY tenant_lif_team."EntityAssociation" ("Id", "ParentEntityId", "ChildEntityId
 --
 
 COPY tenant_lif_team."EntityAttributeAssociation" ("Id", "EntityId", "AttributeId", "Notes", "CreationDate", "ActivationDate", "DeprecationDate", "Contributor", "ContributorOrganization", "Deleted", "ExtendedByDataModelId", "Name", "Array") FROM stdin;
+2219	363	1899	\N	2025-12-02 19:13:00+00	2025-12-02 19:13:00+00	\N	\N	StateU	f	17	informationSourceOrganization	f
+2221	364	1898	\N	2025-12-02 19:14:00+00	2025-12-02 19:14:00+00	\N	\N	StateU	f	17	informationSourceId	f
+2224	131	1954	\N	2025-12-02 19:15:00+00	2025-12-02 19:15:00+00	\N	MDRUser	StateU	f	17	identifier	f
+934	150	947	\N	\N	\N	\N	\N	LIF	f	\N	state	f
+1412	259	1435	\N	\N	\N	\N	\N	LIF	f	\N	gender	f
 28	2	28	\N	\N	\N	\N	\N	LIF	f	\N	identifier	f
 29	2	29	\N	\N	\N	\N	\N	LIF	f	\N	label	f
 30	2	30	\N	\N	\N	\N	\N	LIF	f	\N	performanceLowerLevel	f
@@ -24947,11 +27542,6 @@ COPY tenant_lif_team."EntityAttributeAssociation" ("Id", "EntityId", "AttributeI
 2222	364	1899	\N	2025-12-02 19:14:00+00	2025-12-02 19:14:00+00	\N	\N	StateU	f	17	informationSourceOrganization	f
 2218	363	1898	\N	2025-12-02 19:13:00+00	2025-12-02 19:13:00+00	\N	\N	StateU	f	17	informationSourceId	f
 2223	364	1900	\N	2025-12-02 19:14:00+00	2025-12-02 19:14:00+00	\N	\N	StateU	f	17	informationSourceSystem	f
-2219	363	1899	\N	2025-12-02 19:13:00+00	2025-12-02 19:13:00+00	\N	\N	StateU	f	17	informationSourceOrganization	f
-2221	364	1898	\N	2025-12-02 19:14:00+00	2025-12-02 19:14:00+00	\N	\N	StateU	f	17	informationSourceId	f
-2224	131	1954	\N	2025-12-02 19:15:00+00	2025-12-02 19:15:00+00	\N	MDRUser	StateU	f	17	identifier	f
-934	150	947	\N	\N	\N	\N	\N	LIF	f	\N	state	f
-1412	259	1435	\N	\N	\N	\N	\N	LIF	f	\N	gender	f
 \.
 
 
@@ -37599,7 +40189,7 @@ COPY tenant_lif_team."ValueSets" ("Id", "Name", "Description", "UseConsideration
 -- Name: Attributes_Id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."Attributes_Id_seq"', 3293, true);
+SELECT pg_catalog.setval('public."Attributes_Id_seq"', 3501, true);
 
 
 --
@@ -37634,7 +40224,7 @@ SELECT pg_catalog.setval('public."DeveloperApiKeys_Id_seq"', 1, false);
 -- Name: Entities_Id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."Entities_Id_seq"', 515, true);
+SELECT pg_catalog.setval('public."Entities_Id_seq"', 518, true);
 
 
 --
@@ -37648,7 +40238,7 @@ SELECT pg_catalog.setval('public."EntityAssociation_Id_seq"', 315, true);
 -- Name: EntityAttributeAssociation_Id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."EntityAttributeAssociation_Id_seq"', 3619, true);
+SELECT pg_catalog.setval('public."EntityAttributeAssociation_Id_seq"', 3836, true);
 
 
 --
@@ -37697,14 +40287,14 @@ SELECT pg_catalog.setval('public."ValueSetValueMapping_Id_seq"', 2348, true);
 -- Name: ValueSetValues_Id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."ValueSetValues_Id_seq"', 5586, true);
+SELECT pg_catalog.setval('public."ValueSetValues_Id_seq"', 7670, true);
 
 
 --
 -- Name: ValueSets_Id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."ValueSets_Id_seq"', 389, true);
+SELECT pg_catalog.setval('public."ValueSets_Id_seq"', 453, true);
 
 
 --
@@ -38724,5 +41314,5 @@ ALTER TABLE ONLY tenant_lif_team."TransformationAttributes"
 -- PostgreSQL database dump complete
 --
 
-\unrestrict gLw4oMyxTVHFfndcpfe4D4lbnvudbrd4tHcUiZX8Wt8VBhlhNbkT5lAYN4OidqP
+\unrestrict ZZFu3Wjr54H436r3qBwInDPVD122Qh952Lp2LEOBUqfLiyGz6EQCbtTi3HwOzdk
 
