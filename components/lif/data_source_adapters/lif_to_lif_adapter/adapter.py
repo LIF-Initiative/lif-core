@@ -1,5 +1,4 @@
 import datetime as dt
-import json
 import os
 import re
 import requests
@@ -64,16 +63,20 @@ class LIFToLIFAdapter(LIFDataSourceAdapter):
             "variables": {"identifier": ident, "identifierType": ident_type_value},
         }
 
-        logger.debug(f"GraphQL payload: {json.dumps(payload, indent=2)}")
+        # Names only: the variables' values identify the person.
+        logger.debug(
+            f"GraphQL payload: operationName={payload['operationName']}, variables={sorted(payload['variables'])}"
+        )
 
         response = requests.post(graphql_url, headers=headers, json=payload, timeout=30)
         response.raise_for_status()
         result = response.json()
 
         if "errors" in result:
-            error_msg = f"GraphQL errors: {result['errors']}"
-            logger.error(error_msg)
-            raise Exception(error_msg)
+            errors = result["errors"]
+            # A count only: a source can echo the query variables back in its error messages.
+            logger.error(f"GraphQL returned errors (count: {len(errors) if isinstance(errors, list) else 'unknown'})")
+            raise Exception(f"GraphQL errors: {errors}")
 
         response_data = result.get("data", {})
         output = {
@@ -94,6 +97,8 @@ class LIFToLIFAdapter(LIFDataSourceAdapter):
         )
 
         logger.info("GraphQL query executed successfully")
-        logger.debug(f"Response data: {response_data}")
+        logger.debug(
+            f"Response data keys: {sorted(response_data) if isinstance(response_data, dict) else type(response_data).__name__}"
+        )
 
         return output
