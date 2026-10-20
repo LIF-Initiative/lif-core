@@ -77,11 +77,36 @@ def _get_reader_for(data: Any, format_type: str) -> Reader:
     return reader
 
 
+class _RepeatedKeyError(Exception):
+    def __init__(self, key: str):
+        super().__init__(key)
+        self.key = key
+
+
+def _refuse_repeated_keys(pairs: list[tuple[str, Any]]) -> dict:
+    # Called by json.loads for each JSON object. JSON parsers disagree on which of two repeated keys
+    # wins, so a repeated key is refused rather than one of its values kept silently (§4.2).
+    result: dict = {}
+    for key, value in pairs:
+        if key in result:
+            raise _RepeatedKeyError(key)
+        result[key] = value
+    return result
+
+
 def _parse(text: str | bytes, format_type: str, current: type[FileModel]) -> FileModel:
+    # A leading byte order mark is accepted (§9). json.loads already drops one from bytes but refuses
+    # one in text, so text read without "utf-8-sig" would otherwise fail where the same bytes pass.
+    if isinstance(text, str):
+        text = text.removeprefix("\N{BYTE ORDER MARK}")
     try:
-        data = json.loads(text)
+        data = json.loads(text, object_pairs_hook=_refuse_repeated_keys)
     except (json.JSONDecodeError, UnicodeDecodeError) as error:
         raise _refuse(PortabilityErrorCode.FORMAT_UNKNOWN, "", f"not JSON: {error}") from None
+    except _RepeatedKeyError as error:
+        raise _refuse(
+            PortabilityErrorCode.FIELD_INVALID, error.key, f"the key {error.key!r} appears more than once in one object"
+        ) from None
     reader = _get_reader_for(data, format_type)
     try:
         file = reader.file_class.model_validate(data)
@@ -99,8 +124,19 @@ def _qualified_name(model: type) -> str:
     return f"{model.__module__}.{model.__qualname__}"
 
 
+def _without_union_tags(location: Location, reader: Reader) -> Location:
+    # Drop a segment only when it is a tag right after its union's field. Elsewhere the same text is
+    # a real key, such as an unknown key that happens to be named EntityKey. zip pairs each segment
+    # with the one before it.
+    return tuple(
+        segment
+        for previous, segment in zip((None, *location), location)
+        if (previous, segment) not in reader.union_tags
+    )
+
+
 def _to_portability_error(error: ErrorDetails, data: Any, reader: Reader) -> PortabilityError:
-    location = tuple(segment for segment in error["loc"] if segment not in reader.union_tags)
+    location = _without_union_tags(error["loc"], reader)
     return PortabilityError(
         _choose_error_code(error, location, reader), _generate_element_path(location, data, reader), error["msg"]
     )

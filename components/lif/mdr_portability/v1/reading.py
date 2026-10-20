@@ -53,9 +53,10 @@ LIST_ITEM_KEYS = {
 def _location_specific_code(error: ErrorDetails, location: Location) -> Optional[PortabilityErrorCode]:
     if error["type"] == "literal_error" and location[-1] == "ExpressionLanguage":
         return PortabilityErrorCode.EXPRESSION_LANGUAGE_NOT_PORTABLE
-    # A mapping has exactly one target (§6.2).
+    # A mapping has exactly one target (§6.2). A null target counts as missing, as NULL does for
+    # every required field (§10).
     if len(location) == 3 and location[0] == "Mappings" and location[2] == "Target":
-        if error["type"] == "missing":
+        if error["type"] == "missing" or error["input"] is None:
             return PortabilityErrorCode.MAPPING_TARGET_MISSING
         if isinstance(error["input"], list):
             return PortabilityErrorCode.MAPPING_TARGET_MULTIPLE
@@ -81,7 +82,7 @@ def _reader(file_class: type[BaseModel], model_identity_locations: frozenset[Loc
         deprecated_keys=DEPRECATED_KEYS,
         model_identity_locations=model_identity_locations,
         list_item_keys=LIST_ITEM_KEYS,
-        union_tags=CHILD_KEY_TAGS,
+        union_tags=frozenset(("Child", tag) for tag in CHILD_KEY_TAGS),
         location_specific_code=_location_specific_code,
     )
 

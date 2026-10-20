@@ -95,7 +95,9 @@ form (§9) and the round trip (§3).
 
 - **Parsing is strict.** A key that the file's format version does not define is refused with
   `FIELD_UNKNOWN`, because dropping it silently would make the import lossy. A key listed as
-  deprecated in [§11](#11-deprecated) is refused with `DEPRECATED_FIELD`, naming the key.
+  deprecated in [§11](#11-deprecated) is refused with `DEPRECATED_FIELD`, naming the key. A key
+  that appears more than once in one object is refused with `FIELD_INVALID`, naming the key: JSON
+  parsers disagree on which of the values wins, so keeping one would be a guess.
 - **Every change bumps `Format.Version`**, including adding an optional field. A converter states
   which versions it reads, and refuses any other with `FORMAT_VERSION_UNSUPPORTED`.
 - A new version states how each older version maps into it. The converter keeps reading every
@@ -317,8 +319,8 @@ The rules, from [ADR `metadata_repository/0009`](../design/adr/metadata_reposito
 - **JSONata only.** A rule in any other language is refused with
   `EXPRESSION_LANGUAGE_NOT_PORTABLE`, both when importing a file and when exporting a group. Export
   never quietly drops one.
-- **A mapping is identified by `(group, target path)`.** It has exactly one target: a missing
-  target is refused with `MAPPING_TARGET_MISSING`, and several with `MAPPING_TARGET_MULTIPLE`. No
+- **A mapping is identified by `(group, target path)`.** It has exactly one target: a missing or
+  null target is refused with `MAPPING_TARGET_MISSING`, and several with `MAPPING_TARGET_MULTIPLE`. No
   two mappings in a group may write the same target (`MAPPING_TARGET_SHARED`).
 - **Sources are content, not identity.** A mapping may declare several sources. The content rules
   (the sources cover every field the expression reads, and the expression writes only its target)
@@ -436,6 +438,7 @@ class PortabilityError(Exception): code, element, reason
 ## 9. Canonical form
 
 - **Encoding:** UTF-8 JSON, 2-space indent, `\n` line endings, a trailing newline, no byte order mark (BOM).
+  A leading BOM is accepted on import, since it carries no content, and is never written.
 - **Key order:** the order this spec lists the fields, with `Format` first.
 - **Omitted:** optional fields whose value is NULL, and the optional booleans `Reference`,
   `Required` and `Array` when they are not `true`. Required fields are always written, booleans
@@ -476,7 +479,7 @@ no rows.
 | `FORMAT_UNKNOWN` | No `Format`, or an unrecognized `Format.Type` |
 | `FORMAT_VERSION_UNSUPPORTED` | A `Format.Version` this converter does not read |
 | `FIELD_UNKNOWN` | A key the version does not define |
-| `FIELD_INVALID` | A field that does not match its definition in §5–§7: a required field missing or NULL, a key or name that is empty or only whitespace (§4.3), or a value of the wrong type or outside its allowed set. Used when no more specific code applies |
+| `FIELD_INVALID` | A field that does not match its definition in §5–§7: a required field missing or NULL, a key or name that is empty or only whitespace (§4.3), a key repeated in one object (§4.2), or a value of the wrong type or outside its allowed set. Used when no more specific code applies |
 | `DEPRECATED_FIELD` | A key listed in [§11](#11-deprecated); names the key |
 | `ROW_ID_PRESENT` | A key named `Id` or ending in `Id` (including `OriginalValueId`), or a path segment with a numeric prefix |
 | `MODEL_IDENTITY_INCOMPLETE` | An identity field missing, empty, only whitespace or NULL (seed model 26 has a NULL `ContributorOrganization`; migration sets it to `LIF`) |

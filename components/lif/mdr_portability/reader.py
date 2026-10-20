@@ -28,8 +28,9 @@ class Reader:
     model_identity_locations: frozenset[Location]
     # How an item in each list is named in an error: list name -> the item's key, or None.
     list_item_keys: Mapping[str, Callable[[Any], Optional[str]]]
-    # Tags Pydantic adds to an error's location inside a tagged union; left out of element paths.
-    union_tags: frozenset[str]
+    # (field, tag) for each tag of a tagged-union field. Pydantic puts the tag right after the field
+    # in an error's location, as in ("Child", "EntityKey", "Model"); it is left out of element paths.
+    union_tags: frozenset[tuple[str, str]]
     # Codes that depend on where in this version's files an error is; None when none applies.
     location_specific_code: Callable[[ErrorDetails, Location], Optional[PortabilityErrorCode]]
 

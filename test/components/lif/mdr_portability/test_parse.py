@@ -158,6 +158,14 @@ def test_envelope_is_checked_first(text, code, element):
         (MODEL, _set(["Details", "BaseDataModelId"], 1), Code.ROW_ID_PRESENT, "Details.BaseDataModelId"),
         (MODEL, _set(["Entities", 0, "Array"], "Yes"), Code.DEPRECATED_FIELD, "Entities[Competency].Array"),
         (MODEL, _set(["Format", "ExportedAt"], "2026-10-06T00:00:00Z"), Code.FIELD_UNKNOWN, "Format.ExportedAt"),
+        # A key named like a union tag is still a key, wherever it is
+        (MODEL, _set(["Entities", 0, "EntityKey"], 1), Code.FIELD_UNKNOWN, "Entities[Competency].EntityKey"),
+        (
+            MODEL,
+            _set(["Associations", 0, "Child", "EntityKey"], 1),
+            Code.FIELD_UNKNOWN,
+            "Associations[Competency, Classifier].Child.EntityKey",
+        ),
         # Model identity, wherever a file holds one
         (MODEL, _set(["Details", "Name"], " "), Code.MODEL_IDENTITY_INCOMPLETE, "Details.Name"),
         (
@@ -179,6 +187,7 @@ def test_envelope_is_checked_first(text, code, element):
         (GROUP, _set(["Details", "Name"], " "), Code.FIELD_INVALID, "Details.Name"),
         # Mapping targets (§6.2)
         (GROUP, _delete(["Mappings", 0, "Target"]), Code.MAPPING_TARGET_MISSING, "Mappings[0].Target"),
+        (GROUP, _set(["Mappings", 0, "Target"], None), Code.MAPPING_TARGET_MISSING, "Mappings[0].Target"),
         (
             GROUP,
             _set(["Mappings", 0, "Target"], [{"Path": "A,b"}, {"Path": "A,c"}]),
@@ -226,3 +235,34 @@ def test_every_refusal_in_a_file_is_reported_together():
             (Code.MODEL_IDENTITY_INCOMPLETE, "Details.Name"),
         ]
     )
+
+
+@pytest.mark.parametrize(
+    ("old", "new", "element"),
+    [
+        pytest.param(
+            '"UniqueName": "Competency",',
+            '"UniqueName": "SomethingElse", "UniqueName": "Competency",',
+            "UniqueName",
+            id="in a list item",
+        ),
+        pytest.param('"ValueSets": [', '"Entities": [], "ValueSets": [', "Entities", id="at the top level"),
+        pytest.param('"Version": 1\n', '"Version": 1, "Version": 1\n', "Version", id="same value twice"),
+    ],
+)
+def test_a_repeated_key_is_refused(old, new, element):
+    # Portability Spec §4.2. json.loads would keep the last value without saying so. The error names
+    # the key only: where the object is in the file is not known while it is being read.
+    text = (FIXTURES / MODEL).read_text()
+    assert text.count(old) >= 1
+
+    assert _refusals(MODEL, text.replace(old, new, 1)) == [(Code.FIELD_INVALID, element)]
+
+
+@pytest.mark.parametrize("as_bytes", [False, True], ids=["text", "bytes"])
+def test_a_leading_byte_order_mark_is_accepted(as_bytes):
+    # Portability Spec §9. The file parses the same whether it was read as text or as bytes.
+    text = (FIXTURES / MODEL).read_text()
+    with_bom = ("\N{BYTE ORDER MARK}" + text).encode("utf-8") if as_bytes else "\N{BYTE ORDER MARK}" + text
+
+    assert parse_model_file(with_bom) == parse_model_file(text)
