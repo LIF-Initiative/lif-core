@@ -34,14 +34,17 @@ def make_cognito_id_token(sub: str, email: str = "user@example.com", groups: lis
 
 
 def enable_cognito(monkeypatch) -> None:
+    import lif.auth.cognito as cognito_core
     import lif.mdr_auth.core as auth_module
+    from lif.auth.cognito import CognitoAuthConfig
 
-    monkeypatch.setattr(auth_module, "COGNITO_USER_POOL_ID", TEST_USER_POOL_ID)
-    monkeypatch.setattr(auth_module, "COGNITO_REGION", TEST_REGION)
-    monkeypatch.setattr(auth_module, "COGNITO_SPA_CLIENT_ID", TEST_CLIENT_ID)
+    monkeypatch.setattr(
+        auth_module,
+        "COGNITO_CONFIG",
+        CognitoAuthConfig(user_pool_id=TEST_USER_POOL_ID, region=TEST_REGION, client_id=TEST_CLIENT_ID),
+    )
     monkeypatch.setattr(auth_module, "COGNITO_ENABLED", True)
 
     mock_jwk_client = mock.MagicMock()
     mock_jwk_client.get_signing_key_from_jwt.return_value.key = _private_key.public_key()
-    monkeypatch.setattr(auth_module, "_cognito_jwk_client", mock_jwk_client)
-    monkeypatch.setattr(auth_module, "_get_cognito_jwk_client", lambda: mock_jwk_client)
+    monkeypatch.setattr(cognito_core, "_get_jwk_client", lambda config: mock_jwk_client)

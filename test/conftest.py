@@ -23,6 +23,13 @@ _TEST_ONLY_ENV = {
     "SECRET_KEY": "test-only-not-a-real-secret",
     # Demo login password in the advisor and MDR bases
     "LIF_DEMO_USER_PASSWORD": "test-only-not-a-real-password",
+    # Signs MDR JWTs, workspace cookies and invite tokens in components/lif/mdr_auth
+    "MDR__AUTH__JWT_SECRET_KEY": "test-only-not-a-real-mdr-secret",
+    # MDR has no default service keys (ADR 0007). The MDR tests and the
+    # integration helpers in test/utils send this one as the GraphQL service key.
+    "MDR__AUTH__SERVICE_API_KEY__GRAPHQL": "changeme1",
+    # Shared x-key credential for the Example Data Source REST API
+    "API_TOKEN": "test-only-not-a-real-api-token",
 }
 
 for _name, _value in _TEST_ONLY_ENV.items():

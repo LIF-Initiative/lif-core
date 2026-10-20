@@ -310,7 +310,9 @@
         "readback",
         "Writey",
         "Caddyfile",
-        "retryable"
+        "retryable",
+        "footgun",
+        "redoc"
     ],
     "ignorePaths": [
         ".git/",

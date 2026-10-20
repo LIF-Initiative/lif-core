@@ -11,7 +11,7 @@ from typing import AsyncGenerator
 from fastapi import FastAPI
 from strawberry.fastapi import GraphQLRouter
 
-from lif.api_key_auth import ApiKeyAuthMiddleware, ApiKeyConfig
+from lif.auth import ApiKeyConfig, AuthMiddleware, api_key_strategy
 from lif.lif_schema_config import LIFSchemaConfig
 from lif.logging import get_logger
 from lif.mdr_client import load_openapi_schema
@@ -48,15 +48,25 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     yield
 
 
+def add_api_key_auth(app: FastAPI, config: ApiKeyConfig) -> None:
+    """Compose lif.auth's middleware with the API-key strategy (ADR 0007); no-op without keys."""
+    if not config.is_enabled:
+        logger.info("API key authentication not configured (GRAPHQL_AUTH__API_KEYS not set)")
+        return
+    app.add_middleware(
+        AuthMiddleware,
+        strategies=[api_key_strategy(config)],
+        public_paths=config.public_paths,
+        public_prefixes=config.public_path_prefixes,
+        methods=config.methods_requiring_auth,
+        challenge=config.header,
+    )
+    logger.info("API key authentication enabled for GraphQL (%d keys)", len(config.api_keys))
+
+
 # Load API key auth configuration from environment
 # Set GRAPHQL_AUTH__API_KEYS="key1:client1,key2:client2" to enable authentication
 auth_config = ApiKeyConfig.from_environment(prefix="GRAPHQL_AUTH")
 
 app = FastAPI(lifespan=lifespan)
-
-# Add API key authentication middleware if configured
-if auth_config.is_enabled:
-    app.add_middleware(ApiKeyAuthMiddleware, config=auth_config)
-    logger.info("API key authentication enabled for GraphQL")
-else:
-    logger.info("API key authentication not configured (GRAPHQL_AUTH__API_KEYS not set)")
+add_api_key_auth(app, auth_config)

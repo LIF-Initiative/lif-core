@@ -8,7 +8,7 @@ A small set of CRUD-style endpoints over a sample person dataset, gated by `x-ke
 `GET /health` is exempt from auth.
 
 ## Composes
-- `auth` — `verify_token` helper for API-key validation
+- `auth` — `AuthMiddleware` + `api_key_strategy` on the `x-key` header (`API_TOKEN`)
 - `example_data_source_service` — sample data + business logic
 - `logging`
 
