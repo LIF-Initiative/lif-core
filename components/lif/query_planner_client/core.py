@@ -14,6 +14,12 @@ DEFAULT_QUERY_PLANNER_CLIENT_TIMEOUT_SECONDS = 30
 LIF_CLIENT_HEADERS = {"X-LIF-Client": "learner-data-export"}
 
 
+def _get_query_planner_headers() -> dict[str, str]:
+    """This caller's name, plus the Query Planner's API key when one is configured (#1108)."""
+    api_key = os.getenv("LIF_QUERY_PLANNER_API_KEY", "").strip()
+    return {**LIF_CLIENT_HEADERS, "X-API-Key": api_key} if api_key else LIF_CLIENT_HEADERS
+
+
 def _get_query_planner_timeout_seconds() -> int:
     return int(os.getenv("QUERY_PLANNER_CLIENT_TIMEOUT_SECONDS", str(DEFAULT_QUERY_PLANNER_CLIENT_TIMEOUT_SECONDS)))
 
@@ -42,7 +48,7 @@ async def fetch_query_from_query_planner(base_url: str, query: dict) -> list[dic
 
     try:
         async for client in _get_query_planner_client():
-            response = await client.post(url, json=query, headers=LIF_CLIENT_HEADERS)
+            response = await client.post(url, json=query, headers=_get_query_planner_headers())
     except httpx.TimeoutException as e:
         msg = f"Query Planner request timed out due to: {e}"
         logger.error(msg)
