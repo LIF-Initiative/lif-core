@@ -39,6 +39,7 @@
         "checkpointing",
         "cachetools",
         "caplog",
+        "capfd",
         "dedupe",
         "dedup",
         "dedups",
