@@ -21,8 +21,9 @@ Location = tuple[str | int, ...]
 class Reader:
     # The model this version's files are validated against.
     file_class: type[BaseModel]
-    # Keys this version lists as deprecated (§11), refused with DEPRECATED_FIELD.
-    deprecated_keys: frozenset[str]
+    # Keys this version lists as deprecated (§11), refused with DEPRECATED_FIELD, by the object they are
+    # deprecated on: the name of the list or object a key sits in, or "" for the top level.
+    deprecated_keys: Mapping[str, frozenset[str]]
     # Every location of a model identity (§2): each object holding one, and each of its identity
     # fields. An error at one of them is refused with MODEL_IDENTITY_INCOMPLETE.
     model_identity_locations: frozenset[Location]

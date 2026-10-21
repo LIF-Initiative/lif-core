@@ -34,7 +34,7 @@ def test_reference_files_dump_back_byte_for_byte(parse, fixture):
 @pytest.mark.parametrize(("parse", "fixture"), REFERENCE_FILES)
 def test_list_order_does_not_change_the_bytes(parse, fixture):
     data = (FIXTURES / fixture).read_bytes()
-    shuffled = json.dumps(_reversed_lists(json.loads(data)))
+    shuffled = json.dumps(_reversed_lists(json.loads(data))).encode("utf-8")
 
     assert dump_canonical(parse(shuffled)) == data
 

@@ -27,9 +27,12 @@ def _load(name: str) -> dict:
 
 
 def _refusals(fixture: str, data) -> list[tuple[PortabilityErrorCode, str]]:
-    text = data if isinstance(data, (str, bytes)) else json.dumps(data)
+    # data is a dict, text or bytes; the parsers take bytes, so the first two are encoded as UTF-8.
+    if isinstance(data, dict):
+        data = json.dumps(data)
+    content = data.encode("utf-8") if isinstance(data, str) else data
     with pytest.raises(PortabilityErrorGroup) as exc_info:
-        PARSERS[fixture](text)
+        PARSERS[fixture](content)
     return [(error.code, error.element) for error in exc_info.value.exceptions]
 
 
@@ -65,10 +68,7 @@ def _delete(path: list):
     ],
 )
 def test_reference_files_parse(parse, fixture, file_class):
-    text = (FIXTURES / fixture).read_text()
-
-    assert isinstance(parse(text), file_class)
-    assert isinstance(parse(text.encode("utf-8")), file_class)
+    assert isinstance(parse((FIXTURES / fixture).read_bytes()), file_class)
 
 
 @pytest.mark.parametrize(
@@ -157,6 +157,36 @@ def test_envelope_is_checked_first(text, code, element):
         ),
         (MODEL, _set(["Details", "BaseDataModelId"], 1), Code.ROW_ID_PRESENT, "Details.BaseDataModelId"),
         (MODEL, _set(["Entities", 0, "Array"], "Yes"), Code.DEPRECATED_FIELD, "Entities[Competency].Array"),
+        # Deprecated only on the objects §11 lists them on; elsewhere the same key is just unknown
+        (MODEL, _set(["DataModelConstraints"], []), Code.DEPRECATED_FIELD, "DataModelConstraints"),
+        (
+            MODEL,
+            _set(["ValueSets", 0, "Values", 0, "Extension"], True),
+            Code.DEPRECATED_FIELD,
+            "ValueSets[AddressType].Values[Postal].Extension",
+        ),
+        (
+            GROUP,
+            _set(["Mappings", 0, "InputAttributesCount"], 1),
+            Code.DEPRECATED_FIELD,
+            "Mappings[Course,AccreditedBy,name].InputAttributesCount",
+        ),
+        (
+            GROUP,
+            _set(["Mappings", 0, "Target", "Extension"], True),
+            Code.DEPRECATED_FIELD,
+            "Mappings[Course,AccreditedBy,name].Target.Extension",
+        ),
+        (MODEL, _set(["Entities", 0, "Type"], "OrgLIF"), Code.FIELD_UNKNOWN, "Entities[Competency].Type"),
+        (MODEL, _set(["ValueSets", 0, "Array"], "Yes"), Code.FIELD_UNKNOWN, "ValueSets[AddressType].Array"),
+        (
+            MODEL,
+            _set(["Associations", 0, "Child", "Placement"], "Reference"),
+            Code.FIELD_UNKNOWN,
+            "Associations[Competency, Classifier].Child.Placement",
+        ),
+        (GROUP, _set(["Mappings", 0, "Type"], "x"), Code.FIELD_UNKNOWN, "Mappings[Course,AccreditedBy,name].Type"),
+        (CROSSWALK, _set(["Entries", 0, "Extension"], True), Code.FIELD_UNKNOWN, "Entries[Home].Extension"),
         (MODEL, _set(["Format", "ExportedAt"], "2026-10-06T00:00:00Z"), Code.FIELD_UNKNOWN, "Format.ExportedAt"),
         # A key named like a union tag is still a key, wherever it is
         (MODEL, _set(["Entities", 0, "EntityKey"], 1), Code.FIELD_UNKNOWN, "Entities[Competency].EntityKey"),
@@ -181,6 +211,13 @@ def test_envelope_is_checked_first(text, code, element):
             Code.MODEL_IDENTITY_INCOMPLETE,
             "Details.Target.Model.Name",
         ),
+        (
+            CROSSWALK,
+            _set(["Details", "Source", "Model", "Version"], " "),
+            Code.MODEL_IDENTITY_INCOMPLETE,
+            "Details.Source.Model.Version",
+        ),
+        (CROSSWALK, _delete(["Details", "Source", "Model"]), Code.MODEL_IDENTITY_INCOMPLETE, "Details.Source.Model"),
         # Fields beside an identity are not part of it
         (MODEL, _set(["Details", "State"], 5), Code.FIELD_INVALID, "Details.State"),
         (GROUP, _set(["Details", "Version"], "v1"), Code.FIELD_INVALID, "Details.Version"),
@@ -188,6 +225,8 @@ def test_envelope_is_checked_first(text, code, element):
         # Mapping targets (§6.2)
         (GROUP, _delete(["Mappings", 0, "Target"]), Code.MAPPING_TARGET_MISSING, "Mappings[0].Target"),
         (GROUP, _set(["Mappings", 0, "Target"], None), Code.MAPPING_TARGET_MISSING, "Mappings[0].Target"),
+        (GROUP, _set(["Mappings", 0, "Target"], []), Code.MAPPING_TARGET_MISSING, "Mappings[0].Target"),
+        (GROUP, _set(["Mappings", 0, "Target"], [{"Path": "A,b"}]), Code.FIELD_INVALID, "Mappings[0].Target"),
         (
             GROUP,
             _set(["Mappings", 0, "Target"], [{"Path": "A,b"}, {"Path": "A,c"}]),
@@ -259,10 +298,106 @@ def test_a_repeated_key_is_refused(old, new, element):
     assert _refusals(MODEL, text.replace(old, new, 1)) == [(Code.FIELD_INVALID, element)]
 
 
-@pytest.mark.parametrize("as_bytes", [False, True], ids=["text", "bytes"])
-def test_a_leading_byte_order_mark_is_accepted(as_bytes):
-    # Portability Spec §9. The file parses the same whether it was read as text or as bytes.
-    text = (FIXTURES / MODEL).read_text()
-    with_bom = ("\N{BYTE ORDER MARK}" + text).encode("utf-8") if as_bytes else "\N{BYTE ORDER MARK}" + text
+def test_a_leading_byte_order_mark_is_accepted():
+    # Portability Spec §9. A UTF-8 byte order mark carries no content.
+    content = (FIXTURES / MODEL).read_bytes()
 
-    assert parse_model_file(with_bom) == parse_model_file(text)
+    assert parse_model_file(b"\xef\xbb\xbf" + content) == parse_model_file(content)
+
+
+@pytest.mark.parametrize(
+    "value",
+    [
+        pytest.param("9" * 4301, id="an integer longer than Python converts"),
+        pytest.param("[" * 10_000 + "]" * 10_000, id="nesting deeper than Python reads"),
+    ],
+)
+def test_json_python_cannot_read_is_refused(value):
+    # Both are refused like any other unreadable file, so a caller only ever catches PortabilityErrorGroup.
+    original = (FIXTURES / MODEL).read_text()
+    text = original.replace('"Name": "Competency"', f'"Name": "Competency", "Notes": {value}', 1)
+    assert text != original
+
+    assert _refusals(MODEL, text) == [(Code.FORMAT_UNKNOWN, "")]
+
+
+@pytest.mark.parametrize(
+    "encode",
+    [
+        pytest.param(lambda text: text.encode("utf-16"), id="UTF-16"),
+        pytest.param(lambda text: text.encode("utf-32"), id="UTF-32"),
+        pytest.param(lambda text: text.encode("utf-8") + b"\xff", id="not valid UTF-8"),
+    ],
+)
+def test_bytes_that_are_not_utf8_are_refused(encode):
+    # Portability Spec §9: files are UTF-8, whichever encoding a JSON reader could guess.
+    assert _refusals(MODEL, encode((FIXTURES / MODEL).read_text())) == [(Code.FORMAT_UNKNOWN, "")]
+
+
+@pytest.mark.parametrize(
+    ("escape", "refused"),
+    [
+        pytest.param(r"\ud800", True, id="lone high surrogate"),
+        pytest.param(r"\udc00", True, id="lone low surrogate"),
+        pytest.param(r"😀", False, id="a surrogate pair is one character"),
+    ],
+)
+def test_text_utf8_cannot_encode_is_refused(escape, refused):
+    # Portability Spec §9. A lone surrogate can be read but never written back out as UTF-8.
+    original = (FIXTURES / MODEL).read_text()
+    text = original.replace('"Name": "Competency"', f'"Name": "Competency", "Notes": "a{escape}b"', 1)
+    assert text != original
+
+    if refused:
+        assert _refusals(MODEL, text) == [(Code.FIELD_INVALID, "")]
+    else:
+        assert parse_model_file(text.encode("utf-8")).Entities[0].Notes == "a\N{GRINNING FACE}b"
+
+
+def test_a_lone_surrogate_in_a_key_is_refused():
+    original = (FIXTURES / MODEL).read_text()
+    text = original.replace('"Name": "Competency"', r'"Name": "Competency", "\ud800": 1', 1)
+
+    assert _refusals(MODEL, text) == [(Code.FIELD_INVALID, "")]
+
+
+@pytest.mark.parametrize(
+    "value",
+    [
+        pytest.param(1700000000, id="Unix time"),
+        pytest.param("1700000000", id="Unix time as text"),
+        pytest.param("2026-02-11T10:04:02.1234567Z", id="seven fractional digits"),
+        pytest.param("2026-02-11 10:04:02Z", id="space for T"),
+        pytest.param("2026-02-11T10:04Z", id="no seconds"),
+        pytest.param("2026-02-11", id="date only"),
+        pytest.param("2026-02-11T10:04:02", id="no time zone"),
+    ],
+)
+def test_a_timestamp_that_is_not_rfc_3339_is_refused(value):
+    # Portability Spec §9: RFC 3339, up to microseconds. Nothing is guessed or cut short.
+    data = _load(MODEL)
+    data["Entities"][0]["ActivationDate"] = value
+
+    assert _refusals(MODEL, data) == [(Code.FIELD_INVALID, "Entities[Competency].ActivationDate")]
+
+
+def test_items_that_share_a_key_are_named_by_index():
+    # Two entities with the same UniqueName (refused later as DUPLICATE_KEY) cannot be told apart by
+    # their key, so each is named by its position.
+    data = _load(MODEL)
+    data["Entities"][1]["UniqueName"] = data["Entities"][0]["UniqueName"]
+    data["Entities"][0]["LevelOfAccess"] = "Secret"
+    data["Entities"][1]["LevelOfAccess"] = "Secret"
+
+    assert _refusals(MODEL, data) == [
+        (Code.FIELD_INVALID, "Entities[0].LevelOfAccess"),
+        (Code.FIELD_INVALID, "Entities[1].LevelOfAccess"),
+    ]
+
+
+def test_a_key_with_brackets_is_named_by_index():
+    data = _load(MODEL)
+    data["Entities"][0]["UniqueName"] = "a]b"
+    data["Entities"][0]["LevelOfAccess"] = "Secret"
+
+    assert _refusals(MODEL, data) == [(Code.FIELD_INVALID, "Entities[0].LevelOfAccess")]

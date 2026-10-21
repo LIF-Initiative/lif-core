@@ -1,4 +1,5 @@
 import json
+from datetime import datetime, timezone
 from pathlib import Path
 
 import pytest
@@ -131,7 +132,7 @@ def _delete(path: list):
         pytest.param(_set(["Entities", 0, "Required"], "Yes"), "bool_type", id="free-text Required"),
         pytest.param(_set(["Entities", 0, "LevelOfAccess"], "Secret"), "enum", id="unknown LevelOfAccess"),
         pytest.param(
-            _set(["Entities", 0, "ActivationDate"], "2026-10-06T00:00:00"), "timezone_aware", id="naive timestamp"
+            _set(["Entities", 0, "ActivationDate"], "2026-10-06T00:00:00"), "value_error", id="naive timestamp"
         ),
         pytest.param(
             _set(["Entities", 0, "CreationDate"], "2026-10-06T00:00:00Z"), "extra_forbidden", id="creation date"
@@ -181,3 +182,21 @@ def test_crosswalk_value_set_reference_requires_full_model_identity():
         CrosswalkFile.model_validate(data)
 
     assert exc_info.value.errors()[0]["loc"] == ("Details", "Source", "Model", "Version")
+
+
+@pytest.mark.parametrize(
+    "value",
+    ["2026-02-11T10:04:02.123456Z", "2026-02-11t10:04:02z", "2026-02-11T12:04:02+02:00"],
+    ids=["six fractional digits", "lower-case t and z", "offset"],
+)
+def test_rfc_3339_timestamps_are_read(value):
+    entry = CrosswalkEntry.model_validate({"Source": "F", "Target": "Female", "ActivationDate": value})
+
+    assert entry.ActivationDate is not None
+
+
+def test_a_timestamp_from_a_stored_row_is_accepted():
+    # Export builds the models from rows, whose timestamps are datetimes rather than text.
+    stored = datetime(2026, 2, 11, 10, 4, 2, tzinfo=timezone.utc)
+
+    assert CrosswalkEntry(Source="F", Target="Female", ActivationDate=stored).ActivationDate == stored

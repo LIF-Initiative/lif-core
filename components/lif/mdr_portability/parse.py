@@ -13,7 +13,8 @@ Rules that span elements (keys, references, cycles, paths) are not checked here.
 """
 
 import json
-from typing import Any, TypeVar
+from collections.abc import Callable
+from typing import Any, Optional, TypeVar
 
 from pydantic import BaseModel, ValidationError
 from pydantic_core import ErrorDetails
@@ -35,16 +36,20 @@ _READERS: dict[tuple[str, int], Reader] = {
 }
 
 
-def parse_model_file(text: str | bytes) -> ModelFile:
-    return _parse(text, "lif-mdr-model", ModelFile)
+# The parsers take the file's bytes, not text, because the encoding rules (UTF-8, an optional BOM,
+# §9) are rules about bytes: a caller that decoded the file has already chosen its encoding.
 
 
-def parse_mapping_group_file(text: str | bytes) -> MappingGroupFile:
-    return _parse(text, "lif-mdr-mapping-group", MappingGroupFile)
+def parse_model_file(content: bytes) -> ModelFile:
+    return _parse(content, "lif-mdr-model", ModelFile)
 
 
-def parse_crosswalk_file(text: str | bytes) -> CrosswalkFile:
-    return _parse(text, "lif-mdr-crosswalk", CrosswalkFile)
+def parse_mapping_group_file(content: bytes) -> MappingGroupFile:
+    return _parse(content, "lif-mdr-mapping-group", MappingGroupFile)
+
+
+def parse_crosswalk_file(content: bytes) -> CrosswalkFile:
+    return _parse(content, "lif-mdr-crosswalk", CrosswalkFile)
 
 
 def _group(errors: list[PortabilityError]) -> PortabilityErrorGroup:
@@ -94,20 +99,54 @@ def _refuse_repeated_keys(pairs: list[tuple[str, Any]]) -> dict:
     return result
 
 
-def _parse(text: str | bytes, format_type: str, current: type[FileModel]) -> FileModel:
-    # A leading byte order mark is accepted (§9). json.loads already drops one from bytes but refuses
-    # one in text, so text read without "utf-8-sig" would otherwise fail where the same bytes pass.
-    if isinstance(text, str):
-        text = text.removeprefix("\N{BYTE ORDER MARK}")
+def _has_text_utf8_cannot_encode(data: Any) -> bool:
+    # True if any key or string holds a lone surrogate, which only a JSON escape such as \ud800 can
+    # produce. UTF-8 cannot encode one, so the file could never be written out again (§9). An explicit
+    # stack rather than recursion, because the data may be nested thousands of levels deep.
+    stack = [data]
+    while stack:
+        node = stack.pop()
+        if isinstance(node, str):
+            try:
+                node.encode("utf-8")
+            except UnicodeEncodeError:
+                return True
+        elif isinstance(node, dict):
+            stack.extend(node.keys())
+            stack.extend(node.values())
+        elif isinstance(node, list):
+            stack.extend(node)
+        # Numbers, booleans and null hold no text, so there is nothing to check.
+    return False
+
+
+def _parse(content: bytes, format_type: str, current: type[FileModel]) -> FileModel:
+    # Files are UTF-8 (§9). The bytes are decoded here rather than by json.loads, which would also
+    # accept UTF-16 and UTF-32.
+    try:
+        text = content.decode("utf-8")
+    except UnicodeDecodeError as error:
+        raise _refuse(PortabilityErrorCode.FORMAT_UNKNOWN, "", f"not UTF-8: {error}") from None
+    # A leading byte order mark is accepted (§9).
+    text = text.removeprefix("\N{BYTE ORDER MARK}")
     try:
         data = json.loads(text, object_pairs_hook=_refuse_repeated_keys)
-    except (json.JSONDecodeError, UnicodeDecodeError) as error:
-        raise _refuse(PortabilityErrorCode.FORMAT_UNKNOWN, "", f"not JSON: {error}") from None
+    # ValueError covers malformed JSON (JSONDecodeError is a ValueError) and an integer too long for
+    # Python to convert. RecursionError is nesting too deep to read. Every one is a refusal, never an
+    # exception the caller has to know about.
+    except (ValueError, RecursionError) as error:
+        raise _refuse(PortabilityErrorCode.FORMAT_UNKNOWN, "", f"could not be read as JSON: {error}") from None
     except _RepeatedKeyError as error:
         raise _refuse(
             PortabilityErrorCode.FIELD_INVALID, error.key, f"the key {error.key!r} appears more than once in one object"
         ) from None
     reader = _get_reader_for(data, format_type)
+    if _has_text_utf8_cannot_encode(data):
+        raise _refuse(
+            PortabilityErrorCode.FIELD_INVALID,
+            "",
+            "a string holds a lone surrogate (an unpaired escape such as \\ud800), which UTF-8 cannot encode",
+        )
     try:
         file = reader.file_class.model_validate(data)
     except ValidationError as validation_error:
@@ -142,18 +181,36 @@ def _to_portability_error(error: ErrorDetails, data: Any, reader: Reader) -> Por
     )
 
 
+def _containing_object(location: Location) -> str:
+    # The name of the list or object a key sits in, skipping list positions: "Entities" for
+    # ("Entities", 0, "Type"), "Details" for ("Details", "Type"), and "" for a top-level key.
+    return next((segment for segment in reversed(location[:-1]) if isinstance(segment, str)), "")
+
+
 def _choose_error_code(error: ErrorDetails, location: Location, reader: Reader) -> PortabilityErrorCode:
     if error["type"] == "extra_forbidden":
         key = str(location[-1])
         # No row IDs, in any version (§3).
         if key == "Id" or key.endswith("Id"):
             return PortabilityErrorCode.ROW_ID_PRESENT
-        if key in reader.deprecated_keys:
+        if key in reader.deprecated_keys.get(_containing_object(location), frozenset()):
             return PortabilityErrorCode.DEPRECATED_FIELD
         return PortabilityErrorCode.FIELD_UNKNOWN
     if location in reader.model_identity_locations:
         return PortabilityErrorCode.MODEL_IDENTITY_INCOMPLETE
     return reader.location_specific_code(error, location) or PortabilityErrorCode.FIELD_INVALID
+
+
+def _names_one_item(key: Any, items: list[Any], item_key: Callable[[Any], Optional[str]]) -> bool:
+    # A key names one item when it is a non-blank string, holds no brackets that would make the path
+    # unreadable (Entities[a]b]), and no other item in the same list has it. Two items sharing a key
+    # are refused later (DUPLICATE_KEY); until then, an index is the only way to tell them apart.
+    if not isinstance(key, str) or not key.strip():
+        return False
+    if "[" in key or "]" in key:
+        return False
+    keys_in_list = [item_key(other) for other in items if isinstance(other, dict)]
+    return keys_in_list.count(key) == 1
 
 
 def _generate_element_path(location: Location, data: Any, reader: Reader) -> str:
@@ -171,9 +228,10 @@ def _generate_element_path(location: Location, data: Any, reader: Reader) -> str
             item_key = reader.list_item_keys.get(list_name) if list_name else None
             # The item's key, such as "Competency", if the list has a key and the item is an object.
             key = item_key(item) if item_key and isinstance(item, dict) else None
-            # Name the item by its key ("Entities[Competency]"), or by its index ("Entities[0]") when the
-            # key is missing, not a string, or blank.
-            parts[-1] += f"[{key}]" if isinstance(key, str) and key.strip() else f"[{segment}]"
+            # Name the item by its key ("Entities[Competency]") when that names exactly one item, or by
+            # its index ("Entities[0]") otherwise.
+            named = isinstance(node, list) and item_key is not None and _names_one_item(key, node, item_key)
+            parts[-1] += f"[{key}]" if named else f"[{segment}]"
             # Continue from the item, for the segments that follow it.
             node = item
         else:

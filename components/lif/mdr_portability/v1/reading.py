@@ -9,24 +9,29 @@ from lif.mdr_portability.errors import PortabilityErrorCode
 from lif.mdr_portability.reader import Location, Reader, get_nested
 from lif.mdr_portability.v1.models import CHILD_KEY_TAGS, CrosswalkFile, MappingGroupFile, ModelFile
 
-# Keys listed in §11. A key named Id or ending in Id is refused as a row ID first, so the many
-# deprecated *Id columns need no entry here. Array is deprecated on entities and attributes only;
-# on an association it is a defined key and never reaches this check.
-DEPRECATED_KEYS = frozenset(
-    {
-        "Array",
-        "Constraints",
-        "DataModelConstraints",
-        "ExtMappedValueSet",
-        "Extension",
-        "ExtensionNotes",
-        "InputAttributesCount",
-        "OutputAttributesCount",
-        "Placement",
-        "Relationship",
-        "Type",
-    }
-)
+# Keys listed in §11, by the object they are deprecated on: the list or object a key sits in, or ""
+# for the top level. Each follows the table that held the column (mdr_sql_model), so Type is
+# deprecated on Details only, not on an entity. A key named Id or ending in Id is refused as a row ID
+# first, so the many deprecated *Id columns need no entry here.
+_EXTENSION = frozenset({"Extension", "ExtensionNotes"})
+
+MODEL_DEPRECATED_KEYS = {
+    "": frozenset({"DataModelConstraints", "ExtMappedValueSet"}),
+    "Details": frozenset({"Type"}),
+    "ValueSets": _EXTENSION,
+    "Values": _EXTENSION,
+    "Entities": _EXTENSION | {"Array"},
+    "Attributes": _EXTENSION | {"Array", "Constraints"},
+    "Associations": _EXTENSION | {"Placement", "Relationship"},
+}
+MAPPING_GROUP_DEPRECATED_KEYS = {
+    "Details": _EXTENSION,
+    "Mappings": _EXTENSION | {"InputAttributesCount", "OutputAttributesCount"},
+    "Target": _EXTENSION,
+    "Sources": _EXTENSION,
+}
+# The value-mapping table has no Extension column, so nothing in a crosswalk file is deprecated.
+CROSSWALK_DEPRECATED_KEYS: dict[str, frozenset[str]] = {}
 
 MODEL_IDENTITY_FIELDS = frozenset({"Name", "Version", "ContributorOrganization"})
 
@@ -54,11 +59,13 @@ def _location_specific_code(error: ErrorDetails, location: Location) -> Optional
     if error["type"] == "literal_error" and location[-1] == "ExpressionLanguage":
         return PortabilityErrorCode.EXPRESSION_LANGUAGE_NOT_PORTABLE
     # A mapping has exactly one target (§6.2). A null target counts as missing, as NULL does for
-    # every required field (§10).
+    # every required field (§10), and so does an empty list. A list of one is a single target in the
+    # wrong shape, so it falls through to FIELD_INVALID.
     if len(location) == 3 and location[0] == "Mappings" and location[2] == "Target":
-        if error["type"] == "missing" or error["input"] is None:
+        target = error["input"]
+        if error["type"] == "missing" or target is None or target == []:
             return PortabilityErrorCode.MAPPING_TARGET_MISSING
-        if isinstance(error["input"], list):
+        if isinstance(target, list) and len(target) > 1:
             return PortabilityErrorCode.MAPPING_TARGET_MULTIPLE
     return None
 
@@ -76,10 +83,14 @@ def _model_identity_locations(*identity_objects: Location) -> frozenset[Location
     return frozenset(locations)
 
 
-def _reader(file_class: type[BaseModel], model_identity_locations: frozenset[Location]) -> Reader:
+def _reader(
+    file_class: type[BaseModel],
+    deprecated_keys: dict[str, frozenset[str]],
+    model_identity_locations: frozenset[Location],
+) -> Reader:
     return Reader(
         file_class=file_class,
-        deprecated_keys=DEPRECATED_KEYS,
+        deprecated_keys=deprecated_keys,
         model_identity_locations=model_identity_locations,
         list_item_keys=LIST_ITEM_KEYS,
         union_tags=frozenset(("Child", tag) for tag in CHILD_KEY_TAGS),
@@ -87,10 +98,16 @@ def _reader(file_class: type[BaseModel], model_identity_locations: frozenset[Loc
     )
 
 
-MODEL_READER = _reader(ModelFile, _model_identity_locations(("Details",), ("Details", "CopiedFrom")))
+MODEL_READER = _reader(
+    ModelFile, MODEL_DEPRECATED_KEYS, _model_identity_locations(("Details",), ("Details", "CopiedFrom"))
+)
 MAPPING_GROUP_READER = _reader(
-    MappingGroupFile, _model_identity_locations(("Details", "Source"), ("Details", "Target"))
+    MappingGroupFile,
+    MAPPING_GROUP_DEPRECATED_KEYS,
+    _model_identity_locations(("Details", "Source"), ("Details", "Target")),
 )
 CROSSWALK_READER = _reader(
-    CrosswalkFile, _model_identity_locations(("Details", "Source", "Model"), ("Details", "Target", "Model"))
+    CrosswalkFile,
+    CROSSWALK_DEPRECATED_KEYS,
+    _model_identity_locations(("Details", "Source", "Model"), ("Details", "Target", "Model")),
 )

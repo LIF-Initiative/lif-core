@@ -13,6 +13,7 @@ ActivationDate with the creation time, which makes it closer to an install-local
 CreationDate is not carried: import sets it to the import time, so the round trip stays exact.
 """
 
+import re
 from datetime import datetime, timezone
 from typing import Annotated, List, Literal, Optional, Union
 
@@ -64,7 +65,22 @@ def _format_timestamp(value: datetime) -> str:
     return text + "Z"
 
 
-Timestamp = Annotated[AwareDatetime, PlainSerializer(_format_timestamp, when_used="json")]
+# RFC 3339 date-time, with at most microseconds (§9), which is all a stored timestamp holds.
+_RFC_3339 = re.compile(r"\d{4}-\d{2}-\d{2}[Tt]\d{2}:\d{2}:\d{2}(\.\d{1,6})?([Zz]|[+-]\d{2}:\d{2})")
+
+
+def _require_rfc_3339(value: object) -> object:
+    # Pydantic alone would also read a Unix time (1700000000), a space for the T, a time without
+    # seconds, and silently drop a seventh fractional digit. A datetime passes, for models built
+    # from stored rows on export.
+    if isinstance(value, datetime) or (isinstance(value, str) and _RFC_3339.fullmatch(value)):
+        return value
+    raise ValueError("must be an RFC 3339 timestamp such as 2026-02-11T10:04:02.843Z, with at most 6 fractional digits")
+
+
+Timestamp = Annotated[
+    AwareDatetime, BeforeValidator(_require_rfc_3339), PlainSerializer(_format_timestamp, when_used="json")
+]
 
 
 # --- Envelope (§4.1) ---

@@ -95,9 +95,11 @@ form (§9) and the round trip (§3).
 
 - **Parsing is strict.** A key that the file's format version does not define is refused with
   `FIELD_UNKNOWN`, because dropping it silently would make the import lossy. A key listed as
-  deprecated in [§11](#11-deprecated) is refused with `DEPRECATED_FIELD`, naming the key. A key
-  that appears more than once in one object is refused with `FIELD_INVALID`, naming the key: JSON
-  parsers disagree on which of the values wins, so keeping one would be a guess.
+  deprecated in [§11](#11-deprecated) is refused with `DEPRECATED_FIELD`, naming the key, on the
+  object §11 lists it for (`Type` on a model's `Details`, `Placement` on an association); the same
+  key anywhere else is `FIELD_UNKNOWN`. A key that appears more than once in one object is refused
+  with `FIELD_INVALID`, naming the key: JSON parsers disagree on which of the values wins, so keeping
+  one would be a guess.
 - **Every change bumps `Format.Version`**, including adding an optional field. A converter states
   which versions it reads, and refuses any other with `FORMAT_VERSION_UNSUPPORTED`.
 - A new version states how each older version maps into it. The converter keeps reading every
@@ -320,8 +322,9 @@ The rules, from [ADR `metadata_repository/0009`](../design/adr/metadata_reposito
   `EXPRESSION_LANGUAGE_NOT_PORTABLE`, both when importing a file and when exporting a group. Export
   never quietly drops one.
 - **A mapping is identified by `(group, target path)`.** It has exactly one target: a missing or
-  null target is refused with `MAPPING_TARGET_MISSING`, and several with `MAPPING_TARGET_MULTIPLE`. No
-  two mappings in a group may write the same target (`MAPPING_TARGET_SHARED`).
+  null target, or an empty list, is refused with `MAPPING_TARGET_MISSING`, and a list of several with
+  `MAPPING_TARGET_MULTIPLE`. No two mappings in a group may write the same target
+  (`MAPPING_TARGET_SHARED`).
 - **Sources are content, not identity.** A mapping may declare several sources. The content rules
   (the sources cover every field the expression reads, and the expression writes only its target)
   depend on an expression checker that NEW-I (in the [portability plan](../operations/proposals/mdr-import-export-portability.md)) will define. Until it exists, the converter carries
@@ -438,16 +441,21 @@ class PortabilityError(Exception): code, element, reason
 ## 9. Canonical form
 
 - **Encoding:** UTF-8 JSON, 2-space indent, `\n` line endings, a trailing newline, no byte order mark (BOM).
-  A leading BOM is accepted on import, since it carries no content, and is never written.
+  A leading BOM is accepted on import, since it carries no content, and is never written. A file in
+  any other encoding is refused with `FORMAT_UNKNOWN`.
 - **Key order:** the order this spec lists the fields, with `Format` first.
 - **Omitted:** optional fields whose value is NULL, and the optional booleans `Reference`,
   `Required` and `Array` when they are not `true`. Required fields are always written, booleans
   included. A file with `"Reference": false` (or `Required` or `Array`) imports correctly but is not
   canonical.
-- **Strings** are carried exactly: no trimming, and `""` is not the same as NULL.
+- **Strings** are carried exactly: no trimming, and `""` is not the same as NULL. A string that
+  UTF-8 cannot encode, from an unpaired surrogate escape such as `\uD800`, is refused with
+  `FIELD_INVALID`, because it could never be written out again.
 - **Timestamps** are RFC 3339 in UTC with `Z`. Fractional seconds are written only when non-zero, up
   to microseconds, with trailing zeros dropped: `2026-02-11T10:04:02.843Z`, and
-  `2026-02-11T00:00:00Z` for a whole second.
+  `2026-02-11T00:00:00Z` for a whole second. Import reads any RFC 3339 date-time with at most six
+  fractional digits, in any offset. Anything else, such as a Unix time or a date with no time, is
+  refused with `FIELD_INVALID`.
 - **List order:** sorted by key, comparing strings by Unicode code point.
 
   | List | Sorted by |

@@ -20,7 +20,7 @@ from lif.mdr_portability import (
 | `ModelFile` | One self-contained data model (Portability Spec §5) |
 | `MappingGroupFile` | One transformation group, JSONata rules only (Portability Spec §6) |
 | `CrosswalkFile` | Value mappings from one value set to another (Portability Spec §7) |
-| `parse_model_file(text)`, `parse_mapping_group_file(text)`, `parse_crosswalk_file(text)` | Read a file. Checks the envelope first, then the file's shape, and raises every refusal at once as a `PortabilityErrorGroup` |
+| `parse_model_file(content)`, `parse_mapping_group_file(content)`, `parse_crosswalk_file(content)` | Read a file from its bytes, which must be UTF-8. Checks the envelope first, then the file's shape, and raises every refusal at once as a `PortabilityErrorGroup` |
 | `dump_canonical(file)` | The file as canonical UTF-8 bytes, with lists sorted (Portability Spec §9) |
 | `PortabilityError` | One refusal: `code`, `element` (by key or path, e.g. `Entities[Student].Id`) and `reason` |
 | `PortabilityErrorGroup` | An `ExceptionGroup` of the `PortabilityError`s found in one file |
