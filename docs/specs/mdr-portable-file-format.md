@@ -119,7 +119,7 @@ form (§9) and the round trip (§3).
 In a model file, a reference is resolved in the file's own model, and has no way to name another
 one. The one exception is a crosswalk (§7), whose two value-set references each name their model by
 identity. If no live element with that key exists, the reference is refused with
-`REFERENCE_UNRESOLVED`.
+`ELEMENT_REFERENCE_UNRESOLVED`.
 
 **Element keys** follow the database's unique indexes:
 
@@ -495,7 +495,7 @@ no rows.
 | `MODEL_MISSING` | A model named by a mapping group or crosswalk is not installed |
 | `ASSOCIATION_CYCLE` | A cycle of containing associations (§5.4) |
 | `REFERENCE_INVALID` | `Reference` on an association whose child is an attribute (§5.4) |
-| `REFERENCE_UNRESOLVED` | No live element with that key in the model |
+| `ELEMENT_REFERENCE_UNRESOLVED` | No live element with that key in the model |
 | `DUPLICATE_KEY` | Two entries in one list share a key |
 | `ASSOCIATION_NAME_TAKEN` | A parent already has a child under that `Name` |
 | `UNASSOCIATED_ATTRIBUTE` | An attribute is in no association |

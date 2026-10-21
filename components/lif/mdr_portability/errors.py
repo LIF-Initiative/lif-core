@@ -17,7 +17,7 @@ class PortabilityErrorCode(str, Enum):
     MODEL_MISSING = "MODEL_MISSING"
     ASSOCIATION_CYCLE = "ASSOCIATION_CYCLE"
     REFERENCE_INVALID = "REFERENCE_INVALID"
-    REFERENCE_UNRESOLVED = "REFERENCE_UNRESOLVED"
+    ELEMENT_REFERENCE_UNRESOLVED = "ELEMENT_REFERENCE_UNRESOLVED"
     DUPLICATE_KEY = "DUPLICATE_KEY"
     ASSOCIATION_NAME_TAKEN = "ASSOCIATION_NAME_TAKEN"
     UNASSOCIATED_ATTRIBUTE = "UNASSOCIATED_ATTRIBUTE"
@@ -42,3 +42,8 @@ class PortabilityError(Exception):
 
 class PortabilityErrorGroup(ExceptionGroup[PortabilityError]):
     """Every refusal found in one file, so a caller can report them all at once."""
+
+
+def error_group(errors: list[PortabilityError]) -> PortabilityErrorGroup:
+    # The message is only for logs and tracebacks; callers read the errors themselves.
+    return PortabilityErrorGroup(f"{len(errors)} portability error{'s' if len(errors) != 1 else ''}", errors)

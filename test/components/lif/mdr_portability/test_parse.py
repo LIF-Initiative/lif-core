@@ -26,7 +26,7 @@ def _load(name: str) -> dict:
     return json.loads((FIXTURES / name).read_text())
 
 
-def _refusals(fixture: str, data) -> list[tuple[PortabilityErrorCode, str]]:
+def _collect_refusals(fixture: str, data) -> list[tuple[PortabilityErrorCode, str]]:
     # data is a dict, text or bytes; the parsers take bytes, so the first two are encoded as UTF-8.
     if isinstance(data, dict):
         data = json.dumps(data)
@@ -108,7 +108,7 @@ def test_reference_files_parse(parse, fixture, file_class):
 )
 def test_envelope_is_checked_first(text, code, element):
     # Portability Spec §4.1, §4.2: nothing past the envelope is reported for a file of the wrong format.
-    assert _refusals(MODEL, text) == [(code, element)]
+    assert _collect_refusals(MODEL, text) == [(code, element)]
 
 
 @pytest.mark.parametrize(
@@ -258,7 +258,7 @@ def test_envelope_is_checked_first(text, code, element):
     ],
 )
 def test_refusals_are_named(fixture, mutate, code, element):
-    assert _refusals(fixture, mutate(_load(fixture))) == [(code, element)]
+    assert _collect_refusals(fixture, mutate(_load(fixture))) == [(code, element)]
 
 
 def test_every_refusal_in_a_file_is_reported_together():
@@ -267,7 +267,7 @@ def test_every_refusal_in_a_file_is_reported_together():
     data["Entities"][0]["Id"] = 133
     data["Details"]["Name"] = ""
 
-    assert sorted(_refusals(MODEL, data)) == sorted(
+    assert sorted(_collect_refusals(MODEL, data)) == sorted(
         [
             (Code.FIELD_UNKNOWN, "Includes"),
             (Code.ROW_ID_PRESENT, "Entities[Competency].Id"),
@@ -295,7 +295,7 @@ def test_a_repeated_key_is_refused(old, new, element):
     text = (FIXTURES / MODEL).read_text()
     assert text.count(old) >= 1
 
-    assert _refusals(MODEL, text.replace(old, new, 1)) == [(Code.FIELD_INVALID, element)]
+    assert _collect_refusals(MODEL, text.replace(old, new, 1)) == [(Code.FIELD_INVALID, element)]
 
 
 def test_a_leading_byte_order_mark_is_accepted():
@@ -318,7 +318,7 @@ def test_json_python_cannot_read_is_refused(value):
     text = original.replace('"Name": "Competency"', f'"Name": "Competency", "Notes": {value}', 1)
     assert text != original
 
-    assert _refusals(MODEL, text) == [(Code.FORMAT_UNKNOWN, "")]
+    assert _collect_refusals(MODEL, text) == [(Code.FORMAT_UNKNOWN, "")]
 
 
 @pytest.mark.parametrize(
@@ -331,7 +331,7 @@ def test_json_python_cannot_read_is_refused(value):
 )
 def test_bytes_that_are_not_utf8_are_refused(encode):
     # Portability Spec §9: files are UTF-8, whichever encoding a JSON reader could guess.
-    assert _refusals(MODEL, encode((FIXTURES / MODEL).read_text())) == [(Code.FORMAT_UNKNOWN, "")]
+    assert _collect_refusals(MODEL, encode((FIXTURES / MODEL).read_text())) == [(Code.FORMAT_UNKNOWN, "")]
 
 
 @pytest.mark.parametrize(
@@ -349,7 +349,7 @@ def test_text_utf8_cannot_encode_is_refused(escape, refused):
     assert text != original
 
     if refused:
-        assert _refusals(MODEL, text) == [(Code.FIELD_INVALID, "")]
+        assert _collect_refusals(MODEL, text) == [(Code.FIELD_INVALID, "")]
     else:
         assert parse_model_file(text.encode("utf-8")).Entities[0].Notes == "a\N{GRINNING FACE}b"
 
@@ -358,7 +358,7 @@ def test_a_lone_surrogate_in_a_key_is_refused():
     original = (FIXTURES / MODEL).read_text()
     text = original.replace('"Name": "Competency"', r'"Name": "Competency", "\ud800": 1', 1)
 
-    assert _refusals(MODEL, text) == [(Code.FIELD_INVALID, "")]
+    assert _collect_refusals(MODEL, text) == [(Code.FIELD_INVALID, "")]
 
 
 @pytest.mark.parametrize(
@@ -378,7 +378,7 @@ def test_a_timestamp_that_is_not_rfc_3339_is_refused(value):
     data = _load(MODEL)
     data["Entities"][0]["ActivationDate"] = value
 
-    assert _refusals(MODEL, data) == [(Code.FIELD_INVALID, "Entities[Competency].ActivationDate")]
+    assert _collect_refusals(MODEL, data) == [(Code.FIELD_INVALID, "Entities[Competency].ActivationDate")]
 
 
 def test_items_that_share_a_key_are_named_by_index():
@@ -389,7 +389,7 @@ def test_items_that_share_a_key_are_named_by_index():
     data["Entities"][0]["LevelOfAccess"] = "Secret"
     data["Entities"][1]["LevelOfAccess"] = "Secret"
 
-    assert _refusals(MODEL, data) == [
+    assert _collect_refusals(MODEL, data) == [
         (Code.FIELD_INVALID, "Entities[0].LevelOfAccess"),
         (Code.FIELD_INVALID, "Entities[1].LevelOfAccess"),
     ]
@@ -400,4 +400,4 @@ def test_a_key_with_brackets_is_named_by_index():
     data["Entities"][0]["UniqueName"] = "a]b"
     data["Entities"][0]["LevelOfAccess"] = "Secret"
 
-    assert _refusals(MODEL, data) == [(Code.FIELD_INVALID, "Entities[0].LevelOfAccess")]
+    assert _collect_refusals(MODEL, data) == [(Code.FIELD_INVALID, "Entities[0].LevelOfAccess")]
