@@ -76,6 +76,7 @@ class LIFToLIFAdapter(LIFDataSourceAdapter):
             errors = result["errors"]
             # A count only: a source can echo the query variables back in its error messages.
             logger.error(f"GraphQL returned errors (count: {len(errors) if isinstance(errors, list) else 'unknown'})")
+            # Carries the source's errors: the caller must not log or store the message.
             raise Exception(f"GraphQL errors: {errors}")
 
         response_data = result.get("data", {})

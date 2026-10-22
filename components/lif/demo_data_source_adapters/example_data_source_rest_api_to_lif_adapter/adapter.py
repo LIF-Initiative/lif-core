@@ -32,6 +32,7 @@ class ExampleDataSourceRestAPIToLIFAdapter(LIFDataSourceAdapter):
         logger.info(f"Example Data Source REST API request to {self.scheme}://{self.host}")
 
         response = requests.get(source_url, headers=headers, timeout=30)
+        # The HTTPError names the URL, which ends in the identifier: the caller must not log or store it.
         response.raise_for_status()
         result = response.json()
 
@@ -41,6 +42,7 @@ class ExampleDataSourceRestAPIToLIFAdapter(LIFDataSourceAdapter):
             logger.error(
                 f"Example Data Source REST API returned errors (count: {len(errors) if isinstance(errors, list) else 'unknown'})"
             )
+            # Carries the source's errors: the caller must not log or store the message.
             raise Exception(f"Example Data Source REST API errors: {errors}")
 
         logger.info("Example Data Source REST API query executed successfully")
