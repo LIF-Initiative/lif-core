@@ -13,12 +13,23 @@ ActivationDate with the creation time, which makes it closer to an install-local
 CreationDate is not carried: import sets it to the import time, so the round trip stays exact.
 """
 
+import re
 from datetime import datetime, timezone
 from typing import Annotated, List, Literal, Optional, Union
 
 from lif.mdr_dto.transformation_group_dto import reject_non_numeric_group_version
 from lif.mdr_sql_model.core import AccessType
-from pydantic import AfterValidator, AwareDatetime, BaseModel, BeforeValidator, ConfigDict, PlainSerializer, StrictBool
+from pydantic import (
+    AfterValidator,
+    AwareDatetime,
+    BaseModel,
+    BeforeValidator,
+    ConfigDict,
+    Discriminator,
+    PlainSerializer,
+    StrictBool,
+    Tag,
+)
 
 # Parsing is strict: a key the format version does not define is refused (§4.2).
 _STRICT = ConfigDict(extra="forbid")
@@ -54,7 +65,22 @@ def _format_timestamp(value: datetime) -> str:
     return text + "Z"
 
 
-Timestamp = Annotated[AwareDatetime, PlainSerializer(_format_timestamp, when_used="json")]
+# RFC 3339 date-time, with at most microseconds (§9), which is all a stored timestamp holds.
+_RFC_3339 = re.compile(r"\d{4}-\d{2}-\d{2}[Tt]\d{2}:\d{2}:\d{2}(\.\d{1,6})?([Zz]|[+-]\d{2}:\d{2})")
+
+
+def _require_rfc_3339(value: object) -> object:
+    # Pydantic alone would also read a Unix time (1700000000), a space for the T, a time without
+    # seconds, and silently drop a seventh fractional digit. A datetime passes, for models built
+    # from stored rows on export.
+    if isinstance(value, datetime) or (isinstance(value, str) and _RFC_3339.fullmatch(value)):
+        return value
+    raise ValueError("must be an RFC 3339 timestamp such as 2026-02-11T10:04:02.843Z, with at most 6 fractional digits")
+
+
+Timestamp = Annotated[
+    AwareDatetime, BeforeValidator(_require_rfc_3339), PlainSerializer(_format_timestamp, when_used="json")
+]
 
 
 # --- Envelope (§4.1) ---
@@ -108,6 +134,29 @@ class ValueSetKey(BaseModel):
     model_config = _STRICT
 
     ValueSet: str
+
+
+# Tags naming the two kinds of association end. Pydantic puts the tag into an error's location
+# (Child.EntityKey.Model), so parse.py removes these to report the path as written (Child.Model).
+CHILD_KEY_TAGS = frozenset({EntityKey.__name__, AttributeKey.__name__})
+
+
+def _child_kind(value: object) -> Optional[str]:
+    # An association end states its kind by its key, so the matching model is chosen directly. Without
+    # this, one bad end is reported once per kind it might have been.
+    if isinstance(value, dict):
+        if "Entity" in value:
+            return EntityKey.__name__
+        if "Attribute" in value:
+            return AttributeKey.__name__
+        return None
+    return type(value).__name__
+
+
+ChildKey = Annotated[
+    Union[Annotated[EntityKey, Tag(EntityKey.__name__)], Annotated[AttributeKey, Tag(AttributeKey.__name__)]],
+    Discriminator(_child_kind),
+]
 
 
 # --- Model file (§5) ---
@@ -209,7 +258,7 @@ class Association(BaseModel):
     model_config = _STRICT
 
     Parent: EntityKey
-    Child: Union[EntityKey, AttributeKey]
+    Child: ChildKey
     Name: NonBlankStr
     Array: StrictBool = False
     Reference: StrictBool = False
