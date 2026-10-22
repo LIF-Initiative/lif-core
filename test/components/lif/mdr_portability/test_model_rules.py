@@ -143,6 +143,13 @@ def test_two_children_under_one_parent_with_the_same_name_are_refused():
     assert _collect_refusals(file) == [(Code.ASSOCIATION_NAME_TAKEN, "Associations[Course, AccreditedBy]")]
 
 
+def test_an_entity_child_and_an_attribute_child_with_the_same_name_are_refused():
+    # Under one parent, a Name is taken whatever the kind of child holds it.
+    file = _load()
+    _find_association(file, "Competency", "classifier").Name = "Classifier"
+    assert _collect_refusals(file) == [(Code.ASSOCIATION_NAME_TAKEN, "Associations[Competency, Classifier]")]
+
+
 def test_association_names_need_only_be_unique_under_their_parent():
     # The target model already has the same child under two names (roles), the same Name under two
     # parents, and two names that differ only by case.
@@ -182,6 +189,35 @@ def test_a_cycle_through_several_entities_is_refused_naming_them_in_order(parent
     file = _load()
     _add_containing_association(file, parent, "Person", "Owner")
     assert _collect_cycle_errors(file) == [(f"Associations[{parent}, Owner]", cycle)]
+
+
+def test_a_cycle_below_the_first_entity_walked_leaves_that_entity_out():
+    # The walk starts at Person, but the cycle is between two entities below it.
+    file = _load()
+    _add_containing_association(file, "Person.Contact.Address", "Person.Contact", "Back")
+    assert _collect_cycle_errors(file) == [
+        ("Associations[Person.Contact.Address, Back]", "'Person.Contact', 'Person.Contact.Address', 'Person.Contact'")
+    ]
+
+
+def test_a_cycle_on_a_shared_entity_is_reported_once():
+    # Identifier is contained by both Organization and Person, but is walked once.
+    file = _load()
+    _add_containing_association(file, "Identifier", "Identifier", "Self")
+    assert _collect_cycle_errors(file) == [("Associations[Identifier, Self]", "'Identifier', 'Identifier'")]
+
+
+def test_a_cycle_inside_an_entity_reached_only_by_reference_is_refused():
+    # Organization's only parents, Course's AccreditedBy and ApprovedBy, are references. A reference
+    # is not followed, but every entity is walked, so a cycle inside Organization is still found.
+    file = _load()
+    assert all(
+        association.Reference
+        for association in file.Associations
+        if association.Child == EntityKey(Entity="Organization")
+    )
+    _add_containing_association(file, "Organization", "Organization", "Branch")
+    assert _collect_cycle_errors(file) == [("Associations[Organization, Branch]", "'Organization', 'Organization'")]
 
 
 def test_each_cycle_is_reported():
