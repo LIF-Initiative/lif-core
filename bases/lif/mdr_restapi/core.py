@@ -1,9 +1,11 @@
+import uuid
 from http import HTTPStatus
 from typing import Any, Dict, List
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from lif.mdr_auth.core import AuthMiddleware, create_access_token, create_refresh_token, decode_jwt
+from lif.auth.jwt import mint_access, mint_refresh, verify
+from lif.mdr_auth.core import JWT_CONFIG, add_mdr_auth
 from lif.mdr_restapi import (
     admin_endpoints,
     attribute_endpoints,
@@ -345,7 +347,7 @@ class HealthCheck(BaseModel):
     message: str
 
 
-app.add_middleware(AuthMiddleware)
+add_mdr_auth(app)
 
 # Configure CORS middleware
 cors_origins = [origin.strip() for origin in settings.cors_allow_origins.split(",") if origin.strip()]
@@ -415,8 +417,9 @@ async def login(request: LoginRequest) -> LoginResponse:
     logger.info(f"Login successful for username: {request.username}")
 
     # Create tokens
-    access_token = create_access_token(data={"sub": user["username"]})
-    refresh_token = create_refresh_token(data={"sub": user["username"]})
+    access_token = mint_access(JWT_CONFIG, {"sub": user["username"], "type": "access"})
+    # jti: JWT ID for token tracking
+    refresh_token = mint_refresh(JWT_CONFIG, {"sub": user["username"], "type": "refresh", "jti": str(uuid.uuid4())})
 
     # Store refresh token
     refresh_tokens_store[user["username"]] = refresh_token
@@ -444,18 +447,14 @@ async def login(request: LoginRequest) -> LoginResponse:
 async def refresh_token(request: RefreshTokenRequest) -> RefreshTokenResponse:
     """Refresh access token using refresh token"""
     try:
-        payload = decode_jwt(request.refresh_token)
-
-        # Validate token type
-        if payload.get("type") != "refresh":
-            raise HTTPException(status_code=401, detail="Invalid token type")
+        payload = verify(JWT_CONFIG, request.refresh_token, expected_type="refresh")
 
         username = payload.get("sub")
         if not username or refresh_tokens_store.get(username) != request.refresh_token:
             raise HTTPException(status_code=401, detail="Invalid refresh token")
 
         # Create new access token
-        access_token = create_access_token(data={"sub": username})
+        access_token = mint_access(JWT_CONFIG, {"sub": username, "type": "access"})
 
         return RefreshTokenResponse(access_token=access_token)
 

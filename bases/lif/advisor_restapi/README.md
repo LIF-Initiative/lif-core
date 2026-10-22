@@ -13,7 +13,7 @@ FastAPI base for the LIF Advisor: a conversational interface that lets a user qu
 - `GET  /health`
 
 ## Auth
-HS256 JWTs minted/validated by `lif.auth.core`. Demo-grade — the user list (`users_db`) and password (`LIF_DEMO_USER_PASSWORD`) are hard-coded for demo purposes; not the self-serve auth path (see `docs/design/cross-cutting/self-serve-tenant-auth.md`).
+HS256 JWTs minted/validated with `lif.auth.jwt` (`JWT_CONFIG`, signed with `SECRET_KEY`), enforced by `lif.auth.AuthMiddleware` on every route except `/login`, `/refresh-token` and `/health`. Demo-grade — the user list (`users_db`) and password (`LIF_DEMO_USER_PASSWORD`) are hard-coded for demo purposes; not the self-serve auth path (see `docs/design/cross-cutting/self-serve-tenant-auth.md`).
 
 ## Composes
 - `auth` — JWT helpers

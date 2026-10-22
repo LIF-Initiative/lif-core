@@ -9,6 +9,7 @@ on:
       - bases/lif/learner_data_export_api/**
       - cloudformation/dev-lif-learner-data-export-api.params
       - cloudformation/lif-learner-data-export-api-taskdef-includes.yml
+      - components/lif/auth/**
       - components/lif/datatypes/**
       - components/lif/exceptions/**
       - components/lif/lif_schema_config/**
@@ -24,8 +25,6 @@ on:
       - components/lif/translator_client/**
       - projects/lif_learner_data_export_api/**
       - .github/workflows/_deploy-service.yml
-      - components/lif/api_key_auth/**
-      - components/lif/cognito_auth/**
 
 permissions:
   id-token: write

@@ -148,12 +148,12 @@ The service follows today's no-server-side-streaming, request/response design: e
 
 ## Configuration
 
-Read by the Advisor itself — `langchain_agent/core.py:31-48`, `advisor_restapi/core.py:17`, and `lif/auth/core.py:34` through the shared `auth` brick:
+Read by the Advisor itself — `langchain_agent/core.py:31-48`, and `advisor_restapi/core.py:17` and `:42` (the latter through the shared `auth` brick's `JwtConfig`):
 
 | Env var | Default | Purpose |
 |---|---|---|
 | `OPENAI_API_KEY` | — (required) | Consumed by `ChatOpenAI` via `langchain-openai`. The service starts without it and fails on the first turn. ECS injects it from Secrets Manager (`cloudformation/lif-advisor-api-taskdef-includes.yml:20-23`); compose passes the host value through. |
-| `SECRET_KEY` | — (required) | Signs the Advisor's JWTs (`lif/auth/core.py:34` — `_require_env`, no fallback since #1191) |
+| `SECRET_KEY` | — (required) | Signs the Advisor's JWTs (`advisor_restapi/core.py:42` — `JwtConfig.from_environment`, which fails at startup when it is unset or a published placeholder; no fallback since #1191, ADR 0007) |
 | `LIF_DEMO_USER_PASSWORD` | — (required) | Demo-persona login (`advisor_restapi/core.py:17` — no fallback since #1191) |
 | `LIF_SEMANTIC_SEARCH_MCP_SERVER_URL` | — (required) | MCP endpoint for schema-leaf retrieval (`langchain_agent/core.py:31`) |
 | `LIF_ADVISOR_AGENT_TASKS` | `load_profile,continue_conversation,save_interaction_summary` | Agent task types; `ValueError` if unset |

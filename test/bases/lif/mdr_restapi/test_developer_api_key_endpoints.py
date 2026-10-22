@@ -25,7 +25,8 @@ from fastapi import FastAPI  # noqa: E402
 from httpx import ASGITransport, AsyncClient  # noqa: E402
 from lif import developer_keys  # noqa: E402
 from lif.developer_keys import CreatedDeveloperApiKeyDTO, DeveloperApiKeyDTO  # noqa: E402
-from lif.mdr_auth.core import AuthMiddleware, create_access_token  # noqa: E402
+from lif.auth.jwt import mint_access  # noqa: E402
+from lif.mdr_auth.core import JWT_CONFIG, add_mdr_auth  # noqa: E402
 from lif.mdr_restapi import developer_api_key_endpoints  # noqa: E402
 from test.utils.lif.mdr.cognito import enable_cognito, make_cognito_id_token  # noqa: E402
 
@@ -60,7 +61,7 @@ def brick(monkeypatch):
 @pytest.fixture
 async def client(brick):
     app = FastAPI()
-    app.add_middleware(AuthMiddleware)
+    add_mdr_auth(app)
 
     async def fake_session():
         yield mock.MagicMock()  # handed to the mocked brick functions, never used
@@ -75,7 +76,11 @@ def _stub_cognito_user(monkeypatch, cognito_sub: str):
     """Make every request arrive as a signed-in Cognito user, without a real Cognito JWT.
 
     The JWT plumbing has its own tests in test_middleware.py."""
+    from lif.auth import middleware as auth_middleware
     from lif.mdr_auth import core as auth_core
+
+    async def pass_through(self, request, call_next):
+        return await call_next(request)
 
     async def fake_dispatch(self, request, call_next):
         request.state.principal = "user@example.com"
@@ -84,7 +89,8 @@ def _stub_cognito_user(monkeypatch, cognito_sub: str):
         request.state.tenant_schema = None
         return await call_next(request)
 
-    monkeypatch.setattr(auth_core.AuthMiddleware, "dispatch", fake_dispatch)
+    monkeypatch.setattr(auth_middleware.AuthMiddleware, "dispatch", pass_through)
+    monkeypatch.setattr(auth_core.TenantMiddleware, "dispatch", fake_dispatch)
 
 
 @pytest.mark.parametrize("method, path, body", ROUTES)
@@ -97,7 +103,10 @@ async def test_no_auth_returns_401(client, method, path, body):
 @pytest.mark.parametrize(
     "headers",
     [
-        pytest.param({"Authorization": f"Bearer {create_access_token({'sub': 'alice@example.com'})}"}, id="legacy-jwt"),
+        pytest.param(
+            {"Authorization": f"Bearer {mint_access(JWT_CONFIG, {'sub': 'alice@example.com', 'type': 'access'})}"},
+            id="legacy-jwt",
+        ),
         pytest.param({"X-API-Key": VALID_SERVICE_KEY}, id="service-key"),
     ],
 )

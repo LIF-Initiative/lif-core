@@ -8,7 +8,7 @@ the browser and is validated server-side on every request.
 Security model
 --------------
 The cookie carries a Cognito group name plus an expiry, signed with an
-HMAC over the same secret used for HS256 JWTs (settings.mdr__auth__jwt_secret_key).
+HMAC over the same secret used for HS256 JWTs (``mdr_auth.core.SECRET_KEY``, from MDR__AUTH__JWT_SECRET_KEY).
 The middleware *additionally* re-checks that the group is in the user's
 ``cognito:groups`` claim before honoring the selection — so a stolen or
 forged cookie naming a group the user doesn't belong to is silently

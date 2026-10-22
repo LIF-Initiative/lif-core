@@ -9,13 +9,13 @@ on:
       - bases/lif/api_graphql/**
       - cloudformation/dev-lif-graphql.params
       - cloudformation/lif-graphql-taskdef-includes.yml
+      - components/lif/auth/**
       - components/lif/mdr_client/**
       - components/lif/openapi_to_graphql/**
       - components/lif/string_utils/**
       - components/lif/logging/**
       - projects/lif_graphql_api/**
       - .github/workflows/_deploy-service.yml
-      - components/lif/api_key_auth/**
       - components/lif/exceptions/**
       - components/lif/lif_schema_config/**
 

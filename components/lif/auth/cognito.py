@@ -1,42 +1,41 @@
-"""Reusable Cognito JWT authentication — a single-purpose *decoration* brick.
+"""Cognito identity provider: RS256/JWKS validation plus a strategy (ADR 0007).
 
-Per ADR 0004, this is bare capability: an MDR-/tenant-/LDE-independent validator
-that answers only "is this a valid Cognito JWT from the configured user pool, and
-who is it?" Any service can compose it. The Cognito-verification logic is ported
-from `mdr_auth`, decoupled from MDR settings so it is configured per-service via
-`CognitoAuthConfig.from_environment(prefix=...)` (mirroring `api_key_auth`). See #1034.
+Answers only "is this a valid Cognito JWT from the configured user pool, and who
+is it?" with no MDR, tenant, or LDE concerns (ADR 0004). Configured per service
+via ``CognitoAuthConfig.from_environment(prefix=...)``. See #1034.
 
 Public surface:
 - ``CognitoAuthConfig`` — per-service config (from env).
 - ``decode_cognito_jwt(token, config)`` — verify + decode (raises on invalid).
 - ``authenticate_request(request, config)`` — extract Bearer + decode; returns
-  the claims dict or ``None``. This is the composable *strategy* a composite
-  middleware calls (e.g. the LDE "signed key OR Cognito JWT" dispatch).
-- ``CognitoAuthMiddleware`` — optional standalone middleware for Cognito-only services.
+  the claims dict or ``None``, never raises.
+- ``cognito_strategy(config)`` — the same check as a strategy for
+  ``lif.auth.middleware.AuthMiddleware``; the principal id is the token's ``sub``.
+
+Not re-exported from ``lif.auth`` because it imports ``jwt``.
 """
 
 from __future__ import annotations
 
 import logging
 import os
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Any, Optional
 
 import jwt
 import jwt.algorithms  # ensure the submodule is imported for `jwt.algorithms.has_crypto`
-from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
-from starlette.responses import JSONResponse
+
+from lif.auth.principal import Principal, Strategy
+from lif.auth.request import extract_bearer_token
 
 logger = logging.getLogger(__name__)
-
-_BEARER_PREFIX = "Bearer "
 
 # Cache PyJWKClient per (region, pool) so JWKS keys are fetched once per process.
 _jwk_clients: dict[tuple[str, str], jwt.PyJWKClient] = {}
 
 
-def _require_crypto() -> None:
+def require_crypto() -> None:
     """Fail loudly at startup if pyjwt lacks the crypto backend for RS256 (see #1093).
 
     Cognito tokens are RS256; without `cryptography` (the ``pyjwt[crypto]`` extra) every
@@ -46,7 +45,7 @@ def _require_crypto() -> None:
     """
     if not jwt.algorithms.has_crypto:
         raise RuntimeError(
-            "cognito_auth requires the 'cryptography' package for RS256 JWT verification. "
+            "lif.auth.cognito requires the 'cryptography' package for RS256 JWT verification. "
             "Depend on `pyjwt[crypto]` (plain `pyjwt` ships without it and silently rejects "
             "every Cognito token). See #1093."
         )
@@ -59,8 +58,6 @@ class CognitoAuthConfig:
     user_pool_id: str = ""
     region: str = "us-east-1"
     client_id: str = ""
-    public_paths: set[str] = field(default_factory=lambda: {"/health", "/health-check"})
-    public_path_prefixes: set[str] = field(default_factory=lambda: {"/docs", "/openapi.json"})
 
     @property
     def is_enabled(self) -> bool:
@@ -80,7 +77,7 @@ class CognitoAuthConfig:
         """Load config from ``{PREFIX}__USER_POOL_ID`` / ``__REGION`` / ``__CLIENT_ID``.
 
         Auth self-disables when ``USER_POOL_ID`` is unset (matching the
-        ``api_key_auth`` "no keys → disabled" pattern), so a bare deployment
+        ``lif.auth.api_key`` "no keys → disabled" pattern), so a bare deployment
         runs without Cognito.
         """
         config = cls(
@@ -89,7 +86,7 @@ class CognitoAuthConfig:
             client_id=os.environ.get(f"{prefix}__CLIENT_ID", ""),
         )
         if config.is_enabled:
-            _require_crypto()
+            require_crypto()
         return config
 
 
@@ -126,20 +123,13 @@ def decode_cognito_jwt(token: str, config: CognitoAuthConfig) -> dict[str, Any]:
     return payload
 
 
-def _extract_bearer(request: Request) -> Optional[str]:
-    header = request.headers.get("Authorization", "")
-    if header.startswith(_BEARER_PREFIX):
-        return header[len(_BEARER_PREFIX) :].strip() or None
-    return None
-
-
 def authenticate_request(request: Request, config: CognitoAuthConfig) -> Optional[dict[str, Any]]:
     """Composable strategy: return the Cognito claims for a valid Bearer JWT, else ``None``.
 
     Never raises — a composite (e.g. LDE's "signed key OR Cognito JWT" dispatch)
     calls this and falls through to the next strategy on ``None``.
     """
-    token = _extract_bearer(request)
+    token = extract_bearer_token(request)
     if not token:
         return None
     try:
@@ -149,28 +139,18 @@ def authenticate_request(request: Request, config: CognitoAuthConfig) -> Optiona
         return None
 
 
-class CognitoAuthMiddleware(BaseHTTPMiddleware):
-    """Standalone Cognito-only middleware for services that want just Cognito.
+def cognito_strategy(config: CognitoAuthConfig) -> Strategy:
+    """Authenticate a Cognito bearer token; the principal id is its ``sub``.
 
-    Services needing "Cognito JWT *or* something else" should compose
-    ``authenticate_request`` in a composite instead (see the LDE base).
+    Returns ``None`` (rather than raising) for a missing or invalid token, because a
+    bearer token may belong to another strategy in the same middleware, e.g. an
+    HS256 token alongside Cognito.
     """
 
-    def __init__(self, app, config: CognitoAuthConfig) -> None:
-        super().__init__(app)
-        if config.is_enabled:
-            _require_crypto()
-        self.config = config
+    def authenticate(request: Request) -> Optional[Principal]:
+        claims = authenticate_request(request, config)
+        if claims is None or not claims.get("sub"):
+            return None
+        return Principal(id=claims["sub"], method="cognito", claims=claims)
 
-    def _is_public(self, path: str) -> bool:
-        return path in self.config.public_paths or any(path.startswith(p) for p in self.config.public_path_prefixes)
-
-    async def dispatch(self, request: Request, call_next):
-        if self._is_public(request.url.path):
-            return await call_next(request)
-        claims = authenticate_request(request, self.config)
-        if claims is None:
-            return JSONResponse(status_code=401, content={"detail": "Invalid or missing Cognito token"})
-        request.state.cognito_claims = claims
-        request.state.cognito_sub = claims.get("sub")
-        return await call_next(request)
+    return authenticate

@@ -7,6 +7,7 @@ class PortabilityErrorCode(str, Enum):
     FORMAT_UNKNOWN = "FORMAT_UNKNOWN"
     FORMAT_VERSION_UNSUPPORTED = "FORMAT_VERSION_UNSUPPORTED"
     FIELD_UNKNOWN = "FIELD_UNKNOWN"
+    FIELD_INVALID = "FIELD_INVALID"
     DEPRECATED_FIELD = "DEPRECATED_FIELD"
     ROW_ID_PRESENT = "ROW_ID_PRESENT"
     MODEL_IDENTITY_INCOMPLETE = "MODEL_IDENTITY_INCOMPLETE"
@@ -20,7 +21,6 @@ class PortabilityErrorCode(str, Enum):
     DUPLICATE_KEY = "DUPLICATE_KEY"
     ASSOCIATION_NAME_TAKEN = "ASSOCIATION_NAME_TAKEN"
     UNASSOCIATED_ATTRIBUTE = "UNASSOCIATED_ATTRIBUTE"
-    VALUE_NAME_MISSING = "VALUE_NAME_MISSING"
     EXPRESSION_LANGUAGE_NOT_PORTABLE = "EXPRESSION_LANGUAGE_NOT_PORTABLE"
     MAPPING_TARGET_MISSING = "MAPPING_TARGET_MISSING"
     MAPPING_TARGET_MULTIPLE = "MAPPING_TARGET_MULTIPLE"
@@ -28,3 +28,17 @@ class PortabilityErrorCode(str, Enum):
     PATH_INVALID = "PATH_INVALID"
     CROSSWALK_SOURCE_DUPLICATE = "CROSSWALK_SOURCE_DUPLICATE"
     NOT_MIGRATED = "NOT_MIGRATED"
+
+
+class PortabilityError(Exception):
+    """One refusal: its code, the element it concerns (by key or path), and why (spec §10)."""
+
+    def __init__(self, code: PortabilityErrorCode, element: str, reason: str):
+        super().__init__(f"{code.value} at {element or '(file)'}: {reason}")
+        self.code = code
+        self.element = element
+        self.reason = reason
+
+
+class PortabilityErrorGroup(ExceptionGroup[PortabilityError]):
+    """Every refusal found in one file, so a caller can report them all at once."""

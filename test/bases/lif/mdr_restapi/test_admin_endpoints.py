@@ -21,12 +21,12 @@ from unittest import mock  # noqa: E402
 import pytest  # noqa: E402
 from fastapi import FastAPI  # noqa: E402
 from httpx import ASGITransport, AsyncClient  # noqa: E402
-from lif.mdr_auth.core import AuthMiddleware  # noqa: E402
+from lif.mdr_auth.core import add_mdr_auth  # noqa: E402
 from lif.mdr_restapi import admin_endpoints  # noqa: E402
 
 pytestmark = pytest.mark.asyncio
 
-VALID_SERVICE_KEY = "changeme1"  # matches settings.mdr__auth__service_api_key__graphql default
+VALID_SERVICE_KEY = "changeme1"  # matches MDR__AUTH__SERVICE_API_KEY__GRAPHQL in test/conftest.py
 
 APPLIED = [
     {"version": "1.6", "description": "attributes target entity id", "success": True, "installed_on": "2026-09-14"},
@@ -36,7 +36,7 @@ APPLIED = [
 
 def _build_app(applied, schemas) -> FastAPI:
     app = FastAPI()
-    app.add_middleware(AuthMiddleware)
+    add_mdr_auth(app)
 
     async def fake_session():
         yield mock.MagicMock()

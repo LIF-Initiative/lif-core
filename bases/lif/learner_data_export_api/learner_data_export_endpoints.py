@@ -63,7 +63,7 @@ async def get_data(
             "dataModelName: %s, dataModelVersion: %s, "
             "dataModelContributorOrganization: %s"
         ),
-        getattr(request.state, "api_client", "unknown"),
+        getattr(request.state, "principal", "unknown"),
         data_model_name,
         data_model_version,
         data_model_contributor_organization,
@@ -182,7 +182,7 @@ async def get_available_data_formats(request: Request):
 
     logger.info(
         "Received request for available data formats as %s, source model id = %s",
-        getattr(request.state, "api_client", "unknown"),
+        getattr(request.state, "principal", "unknown"),
         source_schema_id,
     )
 

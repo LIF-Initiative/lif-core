@@ -13,7 +13,9 @@ from cryptography.hazmat.primitives.asymmetric import rsa
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 from httpx import ASGITransport, AsyncClient
-from lif.mdr_auth.core import AuthMiddleware, create_access_token
+from lif.auth.cognito import CognitoAuthConfig
+from lif.auth.jwt import mint_access, mint_refresh
+from lif.mdr_auth.core import JWT_CONFIG, add_mdr_auth
 
 # ---- RSA key pair for test Cognito tokens ----
 
@@ -48,13 +50,17 @@ def _make_cognito_id_token(
     return pyjwt.encode(payload, _private_key, algorithm="RS256", headers={"kid": "test-key-id"})
 
 
-# ---- Minimal FastAPI app with AuthMiddleware ----
+def _access_token(sub: str) -> str:
+    return mint_access(JWT_CONFIG, {"sub": sub, "type": "access"})
+
+
+# ---- Minimal FastAPI app with MDR auth ----
 
 
 def _create_test_app() -> FastAPI:
-    """Create a minimal app with AuthMiddleware and an echo endpoint."""
+    """Create a minimal app with MDR auth and an echo endpoint."""
     app = FastAPI()
-    app.add_middleware(AuthMiddleware)
+    add_mdr_auth(app)
 
     @app.get("/protected")
     async def protected(request: Request):
@@ -68,8 +74,14 @@ def _create_test_app() -> FastAPI:
         )
 
     @app.get("/health-check")
-    async def health():
-        return {"status": "ok"}
+    async def health(request: Request):
+        return {
+            "status": "ok",
+            "principal": request.state.principal,
+            "cognito_groups": request.state.cognito_groups,
+            "cognito_sub": request.state.cognito_sub,
+            "tenant_schema": request.state.tenant_schema,
+        }
 
     return app
 
@@ -77,11 +89,14 @@ def _create_test_app() -> FastAPI:
 @pytest.fixture(autouse=True)
 def _enable_cognito(monkeypatch):
     """Enable Cognito auth and mock the JWKS client for all tests."""
+    import lif.auth.cognito as cognito_core
     import lif.mdr_auth.core as auth_module
 
-    monkeypatch.setattr(auth_module, "COGNITO_USER_POOL_ID", TEST_USER_POOL_ID)
-    monkeypatch.setattr(auth_module, "COGNITO_REGION", TEST_REGION)
-    monkeypatch.setattr(auth_module, "COGNITO_SPA_CLIENT_ID", TEST_CLIENT_ID)
+    monkeypatch.setattr(
+        auth_module,
+        "COGNITO_CONFIG",
+        CognitoAuthConfig(user_pool_id=TEST_USER_POOL_ID, region=TEST_REGION, client_id=TEST_CLIENT_ID),
+    )
     monkeypatch.setattr(auth_module, "COGNITO_ENABLED", True)
 
     mock_jwk_client = mock.MagicMock()
@@ -89,8 +104,7 @@ def _enable_cognito(monkeypatch):
     mock_signing_key.key = _public_key
     mock_jwk_client.get_signing_key_from_jwt.return_value = mock_signing_key
 
-    monkeypatch.setattr(auth_module, "_cognito_jwk_client", mock_jwk_client)
-    monkeypatch.setattr(auth_module, "_get_cognito_jwk_client", lambda: mock_jwk_client)
+    monkeypatch.setattr(cognito_core, "_get_jwk_client", lambda config: mock_jwk_client)
 
 
 @pytest.fixture
@@ -137,7 +151,7 @@ class TestMiddlewareCognitoPath:
         token = _make_cognito_id_token(exp_offset=-60)
         resp = await client.get("/protected", headers={"Authorization": f"Bearer {token}"})
         assert resp.status_code == 401
-        assert "expired" in resp.json()["detail"].lower()
+        assert resp.json()["detail"] == "Token has expired"
 
     async def test_cognito_token_wrong_audience_returns_401(self, client):
         token = _make_cognito_id_token(aud="wrong-client")
@@ -154,16 +168,14 @@ class TestMiddlewareLegacyPath:
     """Legacy HS256 tokens flowing through the full middleware."""
 
     async def test_valid_legacy_token_sets_principal(self, client):
-        token = create_access_token({"sub": "demo-user@example.com"})
+        token = _access_token("demo-user@example.com")
         resp = await client.get("/protected", headers={"Authorization": f"Bearer {token}"})
         assert resp.status_code == 200
         assert resp.json()["principal"] == "demo-user@example.com"
 
     async def test_legacy_refresh_token_rejected(self, client):
         """Refresh tokens (type != 'access') must not be accepted."""
-        from lif.mdr_auth.core import create_refresh_token
-
-        token = create_refresh_token({"sub": "demo-user"})
+        token = mint_refresh(JWT_CONFIG, {"sub": "demo-user", "type": "refresh"})
         resp = await client.get("/protected", headers={"Authorization": f"Bearer {token}"})
         assert resp.status_code == 401
         assert "token type" in resp.json()["detail"].lower()
@@ -181,6 +193,13 @@ class TestMiddlewareApiKeyPath:
         resp = await client.get("/protected", headers={"X-API-Key": "bogus-key"})
         assert resp.status_code == 401
 
+    async def test_invalid_api_key_is_rejected_even_with_valid_bearer(self, client):
+        """An unknown key is a 401 rather than a fall-through to the Bearer token (ADR 0007)."""
+        headers = {"X-API-Key": "bogus-key", "Authorization": f"Bearer {_access_token('demo-user')}"}
+        resp = await client.get("/protected", headers=headers)
+        assert resp.status_code == 401
+        assert resp.json()["detail"] == "Invalid API key."
+
 
 class TestMiddlewareEdgeCases:
     """Edge cases and error handling."""
@@ -188,7 +207,8 @@ class TestMiddlewareEdgeCases:
     async def test_no_credentials_returns_401(self, client):
         resp = await client.get("/protected")
         assert resp.status_code == 401
-        assert "Authentication required" in resp.json()["detail"]
+        assert resp.json()["detail"] == "Missing or invalid credentials"
+        assert resp.headers["WWW-Authenticate"] == "Bearer, X-API-Key"
 
     async def test_garbage_bearer_token_returns_401(self, client):
         resp = await client.get("/protected", headers={"Authorization": "Bearer not-a-jwt"})
@@ -197,6 +217,11 @@ class TestMiddlewareEdgeCases:
     async def test_public_path_bypasses_auth(self, client):
         resp = await client.get("/health-check")
         assert resp.status_code == 200
+        body = resp.json()
+        assert body["principal"] is None
+        assert body["cognito_groups"] == []
+        assert body["cognito_sub"] is None
+        assert body["tenant_schema"] is None
 
     async def test_cognito_disabled_falls_through_to_legacy(self, monkeypatch, client):
         """When COGNITO_ENABLED is False, RS256 tokens with kid are rejected (not validated)."""
@@ -253,7 +278,7 @@ class TestMiddlewareTenantRouting:
 
     async def test_legacy_hs256_user_routes_to_service_schema(self, routing_on, client):
         """Legacy demo users (pre-Cognito) share the service schema until they migrate."""
-        token = create_access_token({"sub": "demo-user@example.com"})
+        token = _access_token("demo-user@example.com")
         resp = await client.get("/protected", headers={"Authorization": f"Bearer {token}"})
         assert resp.status_code == 200
         assert resp.json()["tenant_schema"] == "tenant_lif_team"
@@ -278,7 +303,7 @@ class TestMiddlewareTenantRouting:
         """Unauthenticated endpoints skip the auth block; tenant_schema stays None."""
         resp = await client.get("/health-check")
         assert resp.status_code == 200
-        # /health-check doesn't echo request.state, so nothing to assert here beyond 200.
+        assert resp.json()["tenant_schema"] is None
 
 
 class TestMiddlewareWorkspaceCookie:
