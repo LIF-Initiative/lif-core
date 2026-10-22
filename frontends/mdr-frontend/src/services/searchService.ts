@@ -1,4 +1,4 @@
-import api from './api';
+import api from "./api";
 
 const apiBaseUrl = import.meta.env.VITE_API_URL;
 interface ApiResponse<T> {

@@ -1,10 +1,9 @@
 from typing import Optional
 
-from fastapi import APIRouter, Depends, FastAPI, HTTPException
+from fastapi import APIRouter, FastAPI, HTTPException
 from fastapi.responses import JSONResponse
-from fastapi.security import APIKeyHeader
 
-from lif.api_token_auth.core import verify_token
+from lif.auth import DEFAULT_PUBLIC_PATH_PREFIXES, ApiKeyConfig, AuthMiddleware, api_key_strategy, require_env
 from lif.example_data_source_service import core as service
 from lif.logging import get_logger
 
@@ -15,19 +14,23 @@ app = FastAPI(
     version="1.0.0",
 )
 
-header_scheme = APIKeyHeader(name="x-key")
-logger.info(header_scheme)
+# Inbound auth (ADR 0007): the x-key header must equal API_TOKEN. Read at import so a
+# missing token fails at startup. API_TOKEN is a shared credential, not a signing
+# secret, and the local demo value is "changeme" on both ends (compose and the Dagster
+# adapter), so placeholders are allowed here.
+_api_key_config = ApiKeyConfig(
+    api_keys={require_env("API_TOKEN", reject_placeholders=False): "default"}, header="x-key"
+)
+app.add_middleware(
+    AuthMiddleware,
+    strategies=[api_key_strategy(_api_key_config)],
+    public_paths={"/health"},
+    public_prefixes=DEFAULT_PUBLIC_PATH_PREFIXES | {"/redoc"},
+    challenge="x-key",
+)
 
-
-def require_api_key(key: str = Depends(header_scheme)) -> str:
-    """
-    Extracts x-key header then verifies the token.
-    """
-    verify_token(key)
-    return key
-
-
-authenticated = APIRouter(dependencies=[Depends(require_api_key)])
+# Routes that need the x-key; AuthMiddleware enforces it.
+authenticated = APIRouter()
 
 
 @app.get("/health")

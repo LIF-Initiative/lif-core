@@ -39,6 +39,7 @@
         "checkpointing",
         "cachetools",
         "caplog",
+        "capfd",
         "dedupe",
         "dedup",
         "dedups",
@@ -309,7 +310,9 @@
         "readback",
         "Writey",
         "Caddyfile",
-        "retryable"
+        "retryable",
+        "footgun",
+        "redoc"
     ],
     "ignorePaths": [
         ".git/",

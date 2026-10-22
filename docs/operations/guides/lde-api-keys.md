@@ -1,8 +1,8 @@
 # Learner Data Export (LDE) API Key Authentication
 
 The LDE API authenticates inbound callers (downstream applications, integrators, workshop
-attendees) with API keys, using the shared [`api_key_auth`](../../../components/lif/api_key_auth/)
-middleware — the same component the GraphQL API uses (see [graphql-api-keys.md](graphql-api-keys.md)).
+attendees) with API keys, using the shared [`auth`](../../../components/lif/auth/) brick's
+`AuthMiddleware` with `api_key_strategy` — the same component the GraphQL API uses (see [graphql-api-keys.md](graphql-api-keys.md)).
 
 > This is the **interim** model (#1000). The target adds Cognito sign-in + self-service,
 > per-user key minting from a UI; this static-key flow evolves into it (the middleware stays,

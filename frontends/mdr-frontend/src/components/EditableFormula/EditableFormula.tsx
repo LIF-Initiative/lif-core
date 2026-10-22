@@ -1,9 +1,9 @@
-import { IconButton, ThickCheckIcon } from '@radix-ui/themes';
-import { TrashIcon } from '@radix-ui/react-icons';
-import React, { useCallback, useEffect, useState } from 'react';
-import DOMPurify from 'dompurify';
+import { IconButton, ThickCheckIcon } from "@radix-ui/themes";
+import { TrashIcon } from "@radix-ui/react-icons";
+import React, { useCallback, useEffect, useState } from "react";
+import DOMPurify from "dompurify";
 
-import './EditableFormula.css';
+import "./EditableFormula.css";
 
 interface EditableFormulaProps {
     formula: string;

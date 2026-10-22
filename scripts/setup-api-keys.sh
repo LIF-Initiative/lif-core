@@ -4,7 +4,7 @@
 #
 # Service-agnostic generalization of the GraphQL temporary-key flow. Writes a
 # "key:label" CSV to /<env>/<service>/ApiKeys (SecureString), which the service's
-# task definition injects as <PREFIX>__API_KEYS for the api_key_auth middleware.
+# task definition injects as <PREFIX>__API_KEYS for lif.auth's API-key strategy.
 #
 # Existing entries whose label matches the prefix are replaced; other entries are
 # preserved (so service keys and prior batches survive). The raw keys are printed

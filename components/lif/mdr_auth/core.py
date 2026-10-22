@@ -1,14 +1,19 @@
 """
-Core authentication module with JWT token handling, API key support, and Cognito JWT validation
+MDR's inbound auth, composed from lif.auth (ADR 0007): service API key, Cognito and
+HS256 strategies in lif.auth's AuthMiddleware, then MDR's tenant step.
 """
 
-import uuid
-from datetime import datetime, timedelta, timezone
-from typing import Any, Dict, Optional
+from datetime import timedelta
+from typing import Dict, Optional
 
 import jwt
-from fastapi import HTTPException, Request, status
+from fastapi import FastAPI, HTTPException, Request, status
 from fastapi.responses import JSONResponse
+from lif.auth import ApiKeyConfig, AuthError, AuthMiddleware, Principal, api_key_strategy
+from lif.auth.config import resolve_secret
+from lif.auth.cognito import CognitoAuthConfig, decode_cognito_jwt, require_crypto
+from lif.auth.jwt import JwtConfig, jwt_strategy
+from lif.auth.request import API_KEY_HEADER, extract_bearer_token
 from lif.mdr_auth.workspace_cookie import COOKIE_NAME, decode_workspace_cookie
 from lif.mdr_services.workspace_service import find_workspace
 from lif.mdr_utils.collection_utils import convert_csv_to_set
@@ -21,74 +26,89 @@ logger = get_logger(__name__)
 
 settings = get_settings()
 
-# JWT configuration
-SECRET_KEY = settings.mdr__auth__jwt_secret_key
-ALGORITHM = "HS256"
+# HS256 configuration. The secret also signs the workspace cookie and invite tokens.
+JWT_CONFIG = JwtConfig(
+    secret=resolve_secret(settings.mdr__auth__jwt_secret_key, "MDR__AUTH__JWT_SECRET_KEY"),
+    access_token_expires=timedelta(minutes=settings.mdr__auth__access_token_expire_minutes),
+    refresh_token_expires=timedelta(days=settings.mdr__auth__refresh_token_expire_days),
+)
+SECRET_KEY = JWT_CONFIG.secret
 
-API_KEY_HEADER_NAME = "X-API-Key"
+
+def _build_api_keys(configured: Dict[str, tuple[Optional[str], str]]) -> Dict[str, str]:
+    """Map each configured service API key to its service name, skipping unset ones.
+
+    There are no default keys: an unset key is simply not accepted, and the
+    variable is named in a startup warning so the gap is visible (ADR 0007).
+    """
+    api_keys: Dict[str, str] = {}
+    for env_name, (key, service_name) in configured.items():
+        if key and key.strip():
+            api_keys[key] = service_name
+        else:
+            logger.warning("%s is not set; API-key requests from %s will be rejected", env_name, service_name)
+    return api_keys
+
+
 # Recommended to use hard-to-guess names for the API keys.
-API_KEYS = {
-    settings.mdr__auth__service_api_key__graphql: "graphql-service",
-    settings.mdr__auth__service_api_key__semantic_search: "semantic-search-service",
-    settings.mdr__auth__service_api_key__translator: "translator-service",
-    settings.mdr__auth__service_api_key__post_confirm: "post-confirm-service",
-    settings.mdr__auth__service_api_key__learner_data_export: "learner-data-export-service",
-}
+API_KEYS = _build_api_keys(
+    {
+        "MDR__AUTH__SERVICE_API_KEY__GRAPHQL": (settings.mdr__auth__service_api_key__graphql, "graphql-service"),
+        "MDR__AUTH__SERVICE_API_KEY__SEMANTIC_SEARCH": (
+            settings.mdr__auth__service_api_key__semantic_search,
+            "semantic-search-service",
+        ),
+        "MDR__AUTH__SERVICE_API_KEY__TRANSLATOR": (
+            settings.mdr__auth__service_api_key__translator,
+            "translator-service",
+        ),
+        "MDR__AUTH__SERVICE_API_KEY__POST_CONFIRM": (
+            settings.mdr__auth__service_api_key__post_confirm,
+            "post-confirm-service",
+        ),
+        "MDR__AUTH__SERVICE_API_KEY__LEARNER_DATA_EXPORT": (
+            settings.mdr__auth__service_api_key__learner_data_export,
+            "learner-data-export-service",
+        ),
+    }
+)
+# Service callers authenticate as "service:<name>"; endpoints and the tenant step key on that prefix.
+API_KEY_CONFIG = ApiKeyConfig(
+    api_keys={key: f"service:{name}" for key, name in API_KEYS.items()}, header=API_KEY_HEADER
+)
 
-# Cognito configuration
-COGNITO_USER_POOL_ID = settings.mdr__auth__cognito_user_pool_id
-COGNITO_REGION = settings.mdr__auth__cognito_region
-COGNITO_SPA_CLIENT_ID = settings.mdr__auth__cognito_spa_client_id
-COGNITO_ENABLED = bool(COGNITO_USER_POOL_ID)
+# Cognito configuration — validation itself is delegated to lif.auth.cognito.
+COGNITO_CONFIG = CognitoAuthConfig(
+    user_pool_id=settings.mdr__auth__cognito_user_pool_id,
+    region=settings.mdr__auth__cognito_region,
+    client_id=settings.mdr__auth__cognito_spa_client_id,
+)
+COGNITO_ENABLED = COGNITO_CONFIG.is_enabled
 
 # Tenant routing (issue #883) — read at request time via _tenant_routing_config
 # so tests can monkeypatch the settings object without re-importing this module.
 TENANT_ROUTING_ENABLED = settings.mdr__tenant_routing__enabled
 TENANT_SERVICE_SCHEMA = settings.mdr__tenant_routing__service_schema
 
-_cognito_jwk_client: Optional[jwt.PyJWKClient] = None
 
+def _validate_cognito_config(config: CognitoAuthConfig) -> None:
+    """Fail loudly at startup if Cognito is enabled without an SPA client id.
 
-def _get_cognito_jwk_client() -> jwt.PyJWKClient:
-    """Lazily initialize and cache the Cognito JWKS client."""
-    global _cognito_jwk_client  # noqa: PLW0603
-    if _cognito_jwk_client is None:
-        jwks_url = f"https://cognito-idp.{COGNITO_REGION}.amazonaws.com/{COGNITO_USER_POOL_ID}/.well-known/jwks.json"
-        _cognito_jwk_client = jwt.PyJWKClient(jwks_url, cache_keys=True, lifespan=3600)
-    return _cognito_jwk_client
-
-
-def decode_cognito_jwt(token: str) -> Dict[str, Any]:
-    """Decode and validate a Cognito-issued JWT (RS256 with JWKS).
-
-    Validates issuer, audience (for ID tokens) or client_id (for access tokens),
-    and token_use claims.
+    ``lif.auth.cognito`` skips the client check when ``client_id`` is empty, which would
+    accept tokens minted for *any* app client in the pool. MDR must only accept
+    its own SPA's tokens, so a pool without a client id is a misconfiguration.
     """
-    expected_issuer = f"https://cognito-idp.{COGNITO_REGION}.amazonaws.com/{COGNITO_USER_POOL_ID}"
+    if not config.is_enabled:
+        return
+    if not config.client_id:
+        raise RuntimeError(
+            "MDR__AUTH__COGNITO_USER_POOL_ID is set but MDR__AUTH__COGNITO_SPA_CLIENT_ID is empty. "
+            "Set the SPA client id, or unset the user pool id to disable Cognito auth."
+        )
+    require_crypto()
 
-    jwk_client = _get_cognito_jwk_client()
-    signing_key = jwk_client.get_signing_key_from_jwt(token)
 
-    payload = jwt.decode(
-        token,
-        signing_key.key,
-        algorithms=["RS256"],
-        issuer=expected_issuer,
-        options={"verify_aud": False},  # Cognito access tokens use client_id, not aud
-    )
-
-    # Validate the token is from our SPA client
-    token_use = payload.get("token_use")
-    if token_use == "id":
-        if payload.get("aud") != COGNITO_SPA_CLIENT_ID:
-            raise jwt.InvalidTokenError("ID token audience does not match SPA client ID")
-    elif token_use == "access":
-        if payload.get("client_id") != COGNITO_SPA_CLIENT_ID:
-            raise jwt.InvalidTokenError("Access token client_id does not match SPA client ID")
-    else:
-        raise jwt.InvalidTokenError(f"Unexpected token_use: {token_use}")
-
-    return payload
+_validate_cognito_config(COGNITO_CONFIG)
 
 
 METHODS_TO_REQUIRE_AUTH = convert_csv_to_set(settings.mdr__auth__methods_to_require_auth)
@@ -98,159 +118,60 @@ PUBLIC_ALLOWLIST_EXACT: set[str] = convert_csv_to_set(settings.mdr__auth__public
 PUBLIC_ALLOWLIST_STARTS_WITH: set[str] = convert_csv_to_set(settings.mdr__auth__public_allowlist_starts_with)
 
 
-def create_access_token(data: Dict[str, Any], expires_delta: Optional[timedelta] = None) -> str:
-    """Create JWT access token"""
-    to_encode = data.copy()
-    if expires_delta:
-        expire = datetime.now(timezone.utc) + expires_delta
-    else:
-        expire = datetime.now(timezone.utc) + timedelta(minutes=settings.mdr__auth__access_token_expire_minutes)
+def _cognito_strategy(request: Request) -> Optional[Principal]:
+    """Authenticate a Cognito RS256 bearer token (one whose header has a ``kid``).
 
-    to_encode.update({"exp": expire, "type": "access"})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-    return encoded_jwt
-
-
-def create_refresh_token(data: Dict[str, Any]) -> str:
-    """Create JWT refresh token"""
-    to_encode = data.copy()
-    expire = datetime.now(timezone.utc) + timedelta(days=settings.mdr__auth__refresh_token_expire_days)
-    to_encode.update(
-        {
-            "exp": expire,
-            "type": "refresh",
-            "jti": str(uuid.uuid4()),  # JWT ID for token tracking
-        }
-    )
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-    return encoded_jwt
-
-
-def decode_jwt(token: str) -> Dict[str, Any]:
-    """Decode and validate JWT token"""
-    try:
-        return jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-    except jwt.ExpiredSignatureError as error:
-        logger.warning("Auth Bearer token has expired")
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail="Token has expired", headers={"WWW-Authenticate": "Bearer"}
-        ) from error
-    except jwt.InvalidTokenError as error:
-        logger.warning("Auth Bearer token is invalid")
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Could not validate credentials",
-            headers={"WWW-Authenticate": "Bearer"},
-        ) from error
-
-
-def _is_public_path(path: str) -> bool:
-    return path in PUBLIC_ALLOWLIST_EXACT or any(path.startswith(prefix) for prefix in PUBLIC_ALLOWLIST_STARTS_WITH)
-
-
-def _extract_bearer_token(request: Request) -> Optional[str]:
-    auth_header = request.headers.get("Authorization")
-    if not auth_header:
+    MDR's adapter over ``lif.auth.cognito``: the principal is the email (falling
+    back to sub), and an invalid Cognito token is rejected with a specific message
+    rather than handed to the HS256 strategy. Reads ``COGNITO_ENABLED`` and
+    ``COGNITO_CONFIG`` per request so tests can patch them.
+    """
+    if not COGNITO_ENABLED:
         return None
-    parts = auth_header.split()
-    if len(parts) == 2 and parts[0].lower() == "bearer":
-        return parts[1]
-    return None
+    token = extract_bearer_token(request)
+    if not token:
+        return None
+    try:
+        if not jwt.get_unverified_header(token).get("kid"):
+            return None
+    except jwt.DecodeError:
+        return None
+    try:
+        payload = decode_cognito_jwt(token, COGNITO_CONFIG)
+    except jwt.ExpiredSignatureError as error:
+        logger.warning("Cognito token has expired")
+        raise AuthError("Token has expired") from error
+    except Exception as error:
+        logger.warning("Cognito token validation failed: %s", error)
+        raise AuthError("Could not validate credentials") from error
+    principal = payload.get("email") or payload.get("sub")
+    if not principal:
+        logger.warning("Auth token 'sub'/'email' is missing")
+        raise AuthError("Could not validate credentials")
+    return Principal(id=principal, method="cognito", claims=payload)
 
 
-def _extract_api_key(request: Request) -> Optional[str]:
-    return request.headers.get(API_KEY_HEADER_NAME)
+class TenantMiddleware(BaseHTTPMiddleware):
+    """MDR's step after authentication: Cognito fields, tenant schema and workspace cookie.
 
+    Runs inside lif.auth's ``AuthMiddleware`` (see ``add_mdr_auth``), so a principal
+    is set only for authenticated requests. Every request gets the ``request.state``
+    defaults MDR's endpoints read.
+    """
 
-def _verify_api_key(api_key: Optional[str]) -> Optional[str]:
-    """Verify API key and return service name if valid"""
-
-    if api_key in API_KEYS:
-        service_name = API_KEYS[api_key]
-        logger.info("API key authenticated for service: %s", service_name)
-        return service_name
-
-    return None
-
-
-def _build_unauthorized(detail: str) -> JSONResponse:
-    return JSONResponse(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        content={"detail": detail},
-        headers={"WWW-Authenticate": "Bearer, X-API-Key"},
-    )
-
-
-class AuthMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
-        """
-        Get current user from JWT token OR authenticate via API key
-        Returns username for JWT or service name for API key
-        """
-        request.state.principal = None
-        request.state.cognito_groups = []
-        request.state.cognito_sub = None
+        if not hasattr(request.state, "principal"):
+            request.state.principal = None
+        claims = getattr(request.state, "claims", None) or {}
+        is_cognito = getattr(request.state, "auth_method", None) == "cognito"
+        request.state.cognito_groups = claims.get("cognito:groups", []) if is_cognito else []
+        request.state.cognito_sub = claims.get("sub") if is_cognito else None
         request.state.tenant_schema = None
 
-        if request.method not in METHODS_TO_REQUIRE_AUTH or _is_public_path(request.url.path):
+        if request.state.principal is None:
             return await call_next(request)
 
         try:
-            # Try API key authentication first
-            api_key = _extract_api_key(request)
-            if api_key:
-                service_name = _verify_api_key(api_key)
-                if service_name:
-                    logger.info("Auth API key verified for service: %s", service_name)
-                    request.state.principal = f"service:{service_name}"
-                else:
-                    logger.warning("Auth API key unknown or invalid. Trying Bearer token...")
-
-            if getattr(request.state, "principal", None) is None:
-                # Fall back to Bearer token authentication
-                credentials = _extract_bearer_token(request)
-                if not credentials:
-                    logger.warning("Auth blocked due to no credentials provided")
-                    return _build_unauthorized(detail="Authentication required: Provide either Bearer token or API key")
-
-                # Determine token type by inspecting the JWT header
-                try:
-                    header = jwt.get_unverified_header(credentials)
-                except jwt.DecodeError:
-                    return _build_unauthorized(detail="Could not validate credentials")
-
-                if COGNITO_ENABLED and header.get("kid"):
-                    # RS256 token with key ID — try Cognito validation
-                    try:
-                        payload = decode_cognito_jwt(credentials)
-                    except jwt.ExpiredSignatureError:
-                        logger.warning("Cognito token has expired")
-                        return _build_unauthorized(detail="Token has expired")
-                    except (jwt.InvalidTokenError, Exception) as e:
-                        logger.warning("Cognito token validation failed: %s", e)
-                        return _build_unauthorized(detail="Could not validate credentials")
-
-                    # Extract principal from Cognito claims. We surface the
-                    # raw sub separately so endpoints that need a stable
-                    # identity (e.g. Cognito Admin API calls) don't have to
-                    # guess whether principal is an email or a sub.
-                    request.state.principal = payload.get("email") or payload.get("sub")
-                    request.state.cognito_groups = payload.get("cognito:groups", [])
-                    request.state.cognito_sub = payload.get("sub")
-                else:
-                    # Legacy HS256 token (no kid) — existing local JWT validation
-                    payload = decode_jwt(credentials)
-
-                    if payload.get("type") != "access":
-                        logger.warning("Auth Bearer token 'type' is not 'access'")
-                        return _build_unauthorized(detail="Invalid token type")
-
-                    request.state.principal = payload.get("sub")
-
-                if request.state.principal is None:
-                    logger.warning("Auth token 'sub'/'email' is missing")
-                    return _build_unauthorized(detail="Could not validate credentials")
-
             # Default tenant from JWT groups (or service-schema fallback for
             # API-key callers and group-less Cognito users).
             is_service_principal = isinstance(request.state.principal, str) and request.state.principal.startswith(
@@ -269,7 +190,7 @@ class AuthMiddleware(BaseHTTPMiddleware):
             request.state.tenant_schema = resolve_tenant_schema(
                 enabled=TENANT_ROUTING_ENABLED,
                 is_service_principal=is_service_principal,
-                cognito_groups=getattr(request.state, "cognito_groups", None),
+                cognito_groups=request.state.cognito_groups,
                 service_schema=TENANT_SERVICE_SCHEMA,
                 service_schema_override=service_schema_override,
             )
@@ -279,7 +200,7 @@ class AuthMiddleware(BaseHTTPMiddleware):
             # theirs. The Cognito JWT remains the ground truth for membership;
             # a stale or stolen cookie can't grant access to a group the user
             # no longer belongs to.
-            cognito_groups = getattr(request.state, "cognito_groups", None)
+            cognito_groups = request.state.cognito_groups
 
             # Early exit for callers who can never match a workspace cookie:
             # service principals (API-key auth) and HS256 legacy users both
@@ -307,3 +228,24 @@ class AuthMiddleware(BaseHTTPMiddleware):
             return JSONResponse(status_code=500, content={"detail": "Internal authentication error"})
 
         return await call_next(request)
+
+
+def add_mdr_auth(app: FastAPI) -> None:
+    """Wire MDR's inbound auth: lif.auth's ``AuthMiddleware`` with MDR's strategies, then the tenant step.
+
+    Starlette runs the last-added middleware first, so ``TenantMiddleware`` is added
+    before ``AuthMiddleware`` to run after it.
+    """
+    app.add_middleware(TenantMiddleware)
+    app.add_middleware(
+        AuthMiddleware,
+        strategies=[
+            api_key_strategy(API_KEY_CONFIG),
+            _cognito_strategy,
+            jwt_strategy(JWT_CONFIG, expected_type="access"),
+        ],
+        public_paths=PUBLIC_ALLOWLIST_EXACT,
+        public_prefixes=PUBLIC_ALLOWLIST_STARTS_WITH,
+        methods=METHODS_TO_REQUIRE_AUTH,
+        challenge=f"Bearer, {API_KEY_HEADER}",
+    )

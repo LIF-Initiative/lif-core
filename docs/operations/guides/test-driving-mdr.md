@@ -41,8 +41,6 @@ git clone https://github.com/lif-initiative/lif-core.git
 cd lif-core
 ```
 
-Build from a fresh clone. The MDR UI image has no `.dockerignore`, so a stale `frontends/mdr-frontend/node_modules` left by a local `npm install` gets copied over the image's clean install and can fail the build with TypeScript errors.
-
 ## 2. Create the logins
 
 Generate a hash for each person. The script prompts twice and prints the hash:
@@ -64,10 +62,11 @@ Compose reads `.env` from the directory it runs in, and the file is gitignored. 
 MDR__AUTH__LOCAL_USERS=alice@example.org=scrypt:...,bob@example.org=scrypt:...
 
 # --- Secrets: replace every value ------------------------------------------
-# Signs MDR sign-in tokens (compose default: change4).
+# Signs MDR sign-in tokens. Required: compose won't start without it, and MDR
+# refuses to start if it is left as this placeholder or another published one.
 MDR__AUTH__JWT_SECRET_KEY=replace-with-a-long-random-string
 # Service API keys. Anyone holding one gets service-level API access
-# (defaults: changeme1, changeme2, changeme3, changeme5, changeme6).
+# (compose defaults: changeme1, changeme2, changeme3, changeme5, changeme6).
 MDR__AUTH__SERVICE_API_KEY__GRAPHQL=replace
 MDR__AUTH__SERVICE_API_KEY__SEMANTIC_SEARCH=replace
 MDR__AUTH__SERVICE_API_KEY__TRANSLATOR=replace

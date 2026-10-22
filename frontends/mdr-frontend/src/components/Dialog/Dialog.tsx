@@ -1,9 +1,9 @@
 import { Button, Dialog, Flex, Select, TextField, Text, AlertDialog, Spinner, Switch } from "@radix-ui/themes";
 import { useState, useEffect, useRef } from "react";
-import { errorToString } from "../../utils/errorUtils";
+import { errorToString } from "@/utils/errorUtils";
 // import { tr } from "@faker-js/faker";
 // import { on } from "events";
-import './Dialog.css';
+import "./Dialog.css";
 import { create } from "domain";
 
 const FileDEBUG = false;

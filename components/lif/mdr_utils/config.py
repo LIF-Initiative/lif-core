@@ -10,18 +10,22 @@ class Settings(BaseSettings):
     cors_allow_credentials: bool = True
     cors_allow_methods: str = "GET,POST,PUT,DELETE,OPTIONS,PATCH"
     cors_allow_headers: str = "*"
-    # Authentication configuration
-    mdr__auth__jwt_secret_key: str = "changeme4"
+    # Authentication configuration. Secrets and service keys have no defaults:
+    # mdr_auth resolves them at import and fails loudly (secret) or rejects the
+    # key (service keys) when unset, so a deployment can never run on a public
+    # placeholder (ADR 0007). Other services load these Settings too, which is
+    # why the check lives in mdr_auth rather than here.
+    mdr__auth__jwt_secret_key: str | None = None
     mdr__auth__access_token_expire_minutes: int = 30
     mdr__auth__refresh_token_expire_days: int = 7
     mdr__auth__methods_to_require_auth: str = "GET,POST,PUT,DELETE"
-    mdr__auth__service_api_key__graphql: str = "changeme1"
-    mdr__auth__service_api_key__semantic_search: str = "changeme2"
-    mdr__auth__service_api_key__translator: str = "changeme3"
-    mdr__auth__service_api_key__learner_data_export: str = "changeme6"
+    mdr__auth__service_api_key__graphql: str | None = None
+    mdr__auth__service_api_key__semantic_search: str | None = None
+    mdr__auth__service_api_key__translator: str | None = None
+    mdr__auth__service_api_key__learner_data_export: str | None = None
     # Used by the Cognito post-confirmation Lambda to call POST /tenants/provision
     # when a new user registers (issue #883 PR 4b).
-    mdr__auth__service_api_key__post_confirm: str = "changeme5"
+    mdr__auth__service_api_key__post_confirm: str | None = None
     mdr__auth__public_allowlist_exact: str = "/login,/refresh-token,/health-check,/health"
     mdr__auth__public_allowlist_starts_with: str = "/docs,/openapi.json"
     # Cognito configuration (empty user_pool_id = Cognito auth disabled)

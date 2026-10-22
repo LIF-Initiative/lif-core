@@ -31,7 +31,7 @@ async def test_available_data_formats_401():
         response = await client.get("/available-data-formats")
         assert response.status_code == 401
         response_json = response.json()
-        expected_response = {"detail": "Missing API key. Provide X-API-Key header."}
+        expected_response = {"detail": "Missing or invalid credentials"}
         assert response_json == expected_response
 
 
@@ -293,7 +293,7 @@ async def test_export_401():
         response = await client.get("/exports")
         assert response.status_code == 401
         response_json = response.json()
-        expected_response = {"detail": "Missing API key. Provide X-API-Key header."}
+        expected_response = {"detail": "Missing or invalid credentials"}
         assert response_json == expected_response
 
 

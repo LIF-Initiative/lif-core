@@ -17,8 +17,8 @@ function loadGtag(): void {
 
   window.dataLayer = window.dataLayer || [];
   // gtag.js expects the `arguments` object to be pushed into dataLayer (not a rest-parameter array)
-  // eslint-disable-next-line prefer-rest-params
   window.gtag = function () {
+    // eslint-disable-next-line prefer-rest-params
     window.dataLayer.push(arguments);
   };
   window.gtag('js', new Date());

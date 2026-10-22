@@ -1,0 +1,162 @@
+{
+  "Format": {
+    "Type": "lif-mdr-model",
+    "Version": 1
+  },
+  "Details": {
+    "Name": "District SIS",
+    "Version": "1.0",
+    "ContributorOrganization": "District"
+  },
+  "ValueSets": [
+    {
+      "Name": "AddressTypeDescriptor",
+      "Values": [
+        {
+          "ValueName": "Home",
+          "Value": "H"
+        },
+        {
+          "ValueName": "Mailing",
+          "Value": "M"
+        },
+        {
+          "ValueName": "Physical",
+          "Value": "P"
+        }
+      ]
+    }
+  ],
+  "Entities": [
+    {
+      "UniqueName": "Course",
+      "Name": "Course",
+      "LevelOfAccess": "Public",
+      "Queryable": true,
+      "Modifiable": false
+    },
+    {
+      "UniqueName": "School",
+      "Name": "School",
+      "LevelOfAccess": "Public",
+      "Queryable": true,
+      "Modifiable": false
+    },
+    {
+      "UniqueName": "Student",
+      "Name": "Student",
+      "LevelOfAccess": "Public",
+      "Queryable": true,
+      "Modifiable": false
+    },
+    {
+      "UniqueName": "Student.Address",
+      "Name": "Address",
+      "LevelOfAccess": "Public",
+      "Queryable": true,
+      "Modifiable": false
+    }
+  ],
+  "Attributes": [
+    {
+      "UniqueName": "Course.courseTitle",
+      "Name": "courseTitle",
+      "DataType": "string",
+      "LevelOfAccess": "Public",
+      "Queryable": true,
+      "Modifiable": false
+    },
+    {
+      "UniqueName": "School.nameOfInstitution",
+      "Name": "nameOfInstitution",
+      "DataType": "string",
+      "LevelOfAccess": "Public",
+      "Queryable": true,
+      "Modifiable": false
+    },
+    {
+      "UniqueName": "Student.Address.addressTypeDescriptor",
+      "Name": "addressTypeDescriptor",
+      "DataType": "string",
+      "ValueSet": {
+        "ValueSet": "AddressTypeDescriptor"
+      },
+      "LevelOfAccess": "Public",
+      "Queryable": true,
+      "Modifiable": false
+    },
+    {
+      "UniqueName": "Student.Address.city",
+      "Name": "city",
+      "DataType": "string",
+      "LevelOfAccess": "Public",
+      "Queryable": true,
+      "Modifiable": false
+    },
+    {
+      "UniqueName": "Student.studentUniqueId",
+      "Name": "studentUniqueId",
+      "DataType": "string",
+      "LevelOfAccess": "Public",
+      "Queryable": true,
+      "Modifiable": false
+    }
+  ],
+  "Associations": [
+    {
+      "Parent": {
+        "Entity": "Course"
+      },
+      "Child": {
+        "Attribute": "Course.courseTitle"
+      },
+      "Name": "courseTitle"
+    },
+    {
+      "Parent": {
+        "Entity": "School"
+      },
+      "Child": {
+        "Attribute": "School.nameOfInstitution"
+      },
+      "Name": "nameOfInstitution"
+    },
+    {
+      "Parent": {
+        "Entity": "Student"
+      },
+      "Child": {
+        "Entity": "Student.Address"
+      },
+      "Name": "Address",
+      "Array": true
+    },
+    {
+      "Parent": {
+        "Entity": "Student"
+      },
+      "Child": {
+        "Attribute": "Student.studentUniqueId"
+      },
+      "Name": "studentUniqueId"
+    },
+    {
+      "Parent": {
+        "Entity": "Student.Address"
+      },
+      "Child": {
+        "Attribute": "Student.Address.addressTypeDescriptor"
+      },
+      "Name": "addressTypeDescriptor"
+    },
+    {
+      "Parent": {
+        "Entity": "Student.Address"
+      },
+      "Child": {
+        "Attribute": "Student.Address.city"
+      },
+      "Name": "city"
+    }
+  ]
+}
