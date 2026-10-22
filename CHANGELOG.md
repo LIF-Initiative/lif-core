@@ -124,6 +124,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   every `tenant_*` schema that lacks them (locally, the seed's `tenant_lif_team`, whose attribute
   queries failed on the missing column). A no-op on dev and demo, which were fixed by hand
   (issue #1386)
+- MDR database migration `V1.9`: fills association `Name` and `Array` (both association tables, in
+  `public` and every `tenant_*` schema) on rows an MDR image without them created as NULL, using
+  V1.7's rules. Only NULL rows are touched. Apply it after the MDR image that writes these columns
+  is deployed; applied earlier, rows created in between stay NULL (issue #1386)
 
 ### Security
 
