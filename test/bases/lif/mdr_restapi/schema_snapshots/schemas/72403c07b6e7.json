@@ -1,0 +1,1306 @@
+{
+  "components": {
+    "schemas": {
+      "AddressType": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 2,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 255,
+        "Name": "AddressType",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "AddressType",
+        "UseConsiderations": null,
+        "properties": {
+          "city": {
+            "description": "Assumed definition: the city.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "countryCode": {
+            "description": "Two letter country codes as defined by ISO 3166-1:2013.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "countrySubDivisions": {
+            "description": "Qualifies the further divisions of the Country. These may be Districts, Regions, States, Provinces etc.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "formattedAddress": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "geoLocation": {
+            "description": "Assumed definition: Geo location.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "line": {
+            "description": "Street line address",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "postalCode": {
+            "description": "Assumed definition: postal code.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "BaseHistoryType": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 2,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 197,
+        "Name": "BaseHistoryType",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "BaseHistoryType",
+        "UseConsiderations": null,
+        "properties": {
+          "current": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "descriptions": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "end": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "start": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "CertificationType": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 2,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 138,
+        "Name": "CertificationType",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "CertificationType",
+        "UseConsiderations": null,
+        "properties": {
+          "descriptions": {
+            "description": "Assumed Definition: the descriptions.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "issuingAuthority": {
+            "description": "The organization that issued the certificate.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "type": {
+            "description": "The type of the certificate.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "CertificationTypeAnd/orEducationDegreeType": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 2,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 137,
+        "Name": "CertificationTypeAnd/orEducationDegreeType",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "CertificationTypeAnd/orEducationDegreeType",
+        "UseConsiderations": null,
+        "properties": {
+          "CertificationType.firstIssuedAnd/orEducationDegreeType.date": {
+            "description": "The original issue date of the certificate. Often this is useful when the certificates need to be renewed often, and it is important to know how long the certificate has been held.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "CertificationType.statusAnd/orEducationDegreeType.degreeGrantedStatus": {
+            "description": "The status of the certificate. While this is an open string, common status include active, expired, pending, suspended and/or Current education degree granted status.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "id": {
+            "description": "A unique identifier to the certificate as defined by the issuing authority and/or Identifier for the degree.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "name": {
+            "description": "The common name of the certificate and/or Name for the degree.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "CommunicationItemInclusion": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 2,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 254,
+        "Name": "CommunicationItemInclusion",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "CommunicationItemInclusion",
+        "UseConsiderations": null,
+        "properties": {
+          "availablePeriod": {
+            "description": "Single period between date/times.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "preference": {
+            "description": "Provide priority for given communication item.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "useCode": {
+            "description": "Code identifying the usage of the contact point e.g. business, private, etc.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "DateType": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 2,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 50,
+        "Name": "DateType",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "DateType",
+        "UseConsiderations": null,
+        "properties": {
+          "date": {
+            "description": "Date representation according ISO 8601 standard.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "DeploymentType": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 2,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 196,
+        "Name": "DeploymentType",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "DeploymentType",
+        "UseConsiderations": null,
+        "properties": {
+          "assignmentReasonCode": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "fullTimeEquivalentRatio": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "EducationAttendanceType": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 2,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 81,
+        "Name": "EducationAttendanceType",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "EducationAttendanceType",
+        "UseConsiderations": null,
+        "properties": {
+          "currentlyAttendingIndicator": {
+            "description": "Indicator that the person is still attending.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "department": {
+            "description": "The department at the institution to which the person attended.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "educationLevelCodes": {
+            "description": "The identifier to the level of the education attendance. This could be country-specific or industry-specific classifications.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "end": {
+            "description": "The end date of the additional attendance period if known.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "goodStandingIndicator": {
+            "description": "Indicator that the person is currently in good standing according to the rules of the educational institution.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "institution": {
+            "description": "The institution to which the person attended.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "programs": {
+            "description": "The list of programs to which the person attended.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "start": {
+            "description": "The start date of the additional attendance period if known.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "EducationAttendanceType.": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 2,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 82,
+        "Name": "EducationAttendanceType.",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "EducationAttendanceType.",
+        "UseConsiderations": null,
+        "properties": {},
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "EducationDegreeType": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 2,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 260,
+        "Name": "EducationDegreeType",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "EducationDegreeType",
+        "UseConsiderations": null,
+        "properties": {
+          "iscedEducationLevelCode": {
+            "description": "ISCED: International Standard Classification of Education - is the standard classification of the education level of this attendance.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "EmailType": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 2,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 253,
+        "Name": "EmailType",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "EmailType",
+        "UseConsiderations": null,
+        "properties": {
+          "address": {
+            "description": "Actual email address.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "EmployerHistoryType": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 2,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 194,
+        "Name": "EmployerHistoryType",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "EmployerHistoryType",
+        "UseConsiderations": null,
+        "properties": {
+          "jobCategories": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "title": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "EmploymentEstablishmentType": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 2,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 218,
+        "Name": "EmploymentEstablishmentType",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "EmploymentEstablishmentType",
+        "UseConsiderations": null,
+        "properties": {
+          "tradeName": {
+            "description": "Trade name of the establishment or doing-business as (DBA).",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "EntityType": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 2,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 217,
+        "Name": "EntityType",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "EntityType",
+        "UseConsiderations": null,
+        "properties": {
+          "name": {
+            "description": "Free text description for that entity.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "IdentifierType": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 2,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 48,
+        "Name": "IdentifierType",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "IdentifierType",
+        "UseConsiderations": null,
+        "properties": {
+          "agencyURI": {
+            "description": "The URI that identifies where the identification scheme is located.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "description": {
+            "description": "The description of the identifier.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "schemeAgencyID": {
+            "description": "The identification of the agency that manages the identifier scheme.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "schemeId": {
+            "description": "The identification of the identifier scheme.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "schemeLink": {
+            "description": "The URI that identifies where the identification scheme data is located.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "schemeVersionId": {
+            "description": "The identification of the version of the identifier scheme.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "value": {
+            "description": "The identifier.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "OrganizationReferenceType": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 2,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 219,
+        "Name": "OrganizationReferenceType",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "OrganizationReferenceType",
+        "UseConsiderations": null,
+        "properties": {
+          "responsibilityCode": {
+            "description": "The level or the responsibility at which the organization operates.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "OrganizationType": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 2,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 216,
+        "Name": "OrganizationType",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "OrganizationType",
+        "UseConsiderations": null,
+        "properties": {
+          "1.EntityType-id2.OrganizationType-taxId3.OrganizationType-legalId": {
+            "description": "1. A unique identifier which cannot be expressed as enumeration.\n2. A government assigned identifier to distinguish organization. This typically is a country-level tax code. For example, Federal Employer Identification Number (FEIN) in the USA.\n3. An identifier of the organization for legal purposes. This could be a company, state, or other kind of identifier. For example, Data Universal Numbering System, abbreviated as DUNS.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "description": {
+            "description": "A description or quick summary of the organization.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "industryIdentifiers": {
+            "description": "The types of industry to which the organization belongs. The Industry identifiers could be referenced to a standard taxonomy (such as NAICS) or a custom taxonomy.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "PersonBaseType": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 2,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 251,
+        "Name": "PersonBaseType",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "PersonBaseType",
+        "UseConsiderations": null,
+        "properties": {
+          "birthDate": {
+            "description": "The birth date of a person.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "citizenship": {
+            "description": "The citizenships that a person holds. This is a legal citizenship in a country (as opposed to nationality which may or may not be a country).",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "formattedAddress": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "gender": {
+            "description": "The gender of a person.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "PersonLegalInclusion": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 2,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 257,
+        "Name": "PersonLegalInclusion",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "PersonLegalInclusion",
+        "UseConsiderations": null,
+        "properties": {
+          "birthPlace": {
+            "description": "The birth place of the person.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "deathDate": {
+            "description": "If the person is deceased, the legal date that the person died.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "PersonLegalInclusion\n/PersonBaseType": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 2,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 259,
+        "Name": "PersonLegalInclusion\n/PersonBaseType",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "PersonLegalInclusion\n/PersonBaseType",
+        "UseConsiderations": null,
+        "properties": {
+          "gender": {
+            "description": "The gender of a person.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "PersonLegalInclusion/PersonBaseType": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 2,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 258,
+        "Name": "PersonLegalInclusion/PersonBaseType",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "PersonLegalInclusion/PersonBaseType",
+        "UseConsiderations": null,
+        "properties": {
+          "PersonBaseType-ethnicity": {
+            "description": "ethnicity: The ethnicity (or ethnicities) of a person. A country may define which of these terms (race, nationality, ethnicity) be used and how they are defined. One or more properties may be used by a country. A predefined country list allows a person to specify their ethnicity.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "PersonLegalInclusion-racePersonBaseType-ethnicity": {
+            "description": "race (v4.3) : The identified race(s) of the person. A race is defined as a group of people sharing the same culture, history, language, etc./The ethnicity (or ethnicities) of a person. Ethnicity is an ethnic group or a social group that shares a common and distinctive culture, religion, and/or language.\nrace (v4.4): \"The identified race(s) of the person. A country may define which of these terms (race, nationality, ethnicity) will be used and how they are defined. One or more properties may be used by a country. A predefined country list allows a person to specify their race.\",",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "PersonNameType": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 2,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 252,
+        "Name": "PersonNameType",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "PersonNameType",
+        "UseConsiderations": null,
+        "properties": {
+          "family": {
+            "description": "The family name (or surname) of a person.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "generationAffixCode": {
+            "description": "The generational designation attached to the end of a person's name (such as Jr., Sr., II, III).",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "given": {
+            "description": "\"The given name of a person.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "initials": {
+            "description": "The initials of a person.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "middle": {
+            "description": "The middle names or initials of a person.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "preferredSalutationCode": {
+            "description": "The salutation used to address a person (such as Dr., Mr., Mrs.).",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "qualificationAffixCode": {
+            "description": "The professional designation attached to the end of a person's name (such as M.Sc., Ph.D).",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "titleAffixCode": {
+            "description": "The title affix attached to a person's name (such as Esq., K.B.E.).",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "PersonReferenceType": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 2,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 261,
+        "Name": "PersonReferenceType",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "PersonReferenceType",
+        "UseConsiderations": null,
+        "properties": {
+          "primaryLanguage": {
+            "description": "This list is based on Internet Engineering Task Force (IETF) RFC 4646 and RFC 4647 for language tags. This tag system is extensible to region, dialect, and private designations. The IANA Language Subtag Registry is a source of the tag values. See http://www.iana.org/assignments/language-subtag-registry",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "PhoneType": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 2,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 256,
+        "Name": "PhoneType",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "PhoneType",
+        "UseConsiderations": null,
+        "properties": {
+          "areaDialogCode+dialNumber+phoneExtension": {
+            "description": "The area dialing code for a communication number +\nThe communication number, not including country dialing or area dialing codes + \nhe extension of the associated communication number.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "PositionCompetencyType": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 2,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 52,
+        "Name": "PositionCompetencyType",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "PositionCompetencyType",
+        "UseConsiderations": null,
+        "properties": {
+          "desiredProficiencyLevel": {
+            "description": "DefinitionText>An optimum or ideal level of proficiency for a competency with respect to an associated position, role, course, or other item. The proficiency level is expressed as a score, a point scale, or a mark among range of values.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "PositionType": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 2,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 195,
+        "Name": "PositionType",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "PositionType",
+        "UseConsiderations": null,
+        "properties": {
+          "positionScheduleType": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "SpecifiedCompetency": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 2,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 49,
+        "Name": "SpecifiedCompetency",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "SpecifiedCompetency",
+        "UseConsiderations": null,
+        "properties": {
+          "name": {
+            "description": "Competency name.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "proficiencyAcquistionDifficulty": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 2,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 53,
+        "Name": "proficiencyAcquistionDifficulty",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "proficiencyAcquistionDifficulty",
+        "UseConsiderations": null,
+        "properties": {
+          "ARatingOrScoreRepresentingTheDifficultyOfTheParticularCompetencyToAcquire.": {
+            "description": "A rating or score representing the difficulty of the particular competency to acquire.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "requiredProficiencyLevel": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 2,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 51,
+        "Name": "requiredProficiencyLevel",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "requiredProficiencyLevel",
+        "UseConsiderations": null,
+        "properties": {
+          "AMinimumLevelOfProficiencyForACompetencyAssociatedWithAPosition-Role-Course-OrOtherItem.": {
+            "description": "A minimum level of proficiency for a competency  associated with a position, role, course, or other item.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      }
+    }
+  },
+  "info": {
+    "description": "OpenAPI Spec",
+    "title": "Machine-Readable Schema for HR Open",
+    "version": "1.0"
+  },
+  "openapi": "3.0.0",
+  "paths": {}
+}

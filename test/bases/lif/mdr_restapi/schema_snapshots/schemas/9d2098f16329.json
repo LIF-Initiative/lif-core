@@ -1,0 +1,6 @@
+{
+  "x-snapshot-http-error": {
+    "detail": "Inclusion not found for Attribute ID 1290 in Extension Data Model ID 17",
+    "status_code": 404
+  }
+}

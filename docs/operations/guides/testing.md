@@ -24,6 +24,22 @@ Write tests that earn their keep. Every test should justify its existence by ver
 - Run specific module tests: `uv run pytest test/components/lif/<module>/`
 - **Avoid `importlib.reload()` in tests** — reloading a module creates new class objects, breaking `isinstance()` checks and `pytest.raises()` matching. Use `mock.patch.object(module, "VAR_NAME", value)` to override module-level variables instead.
 
+## Generated-Schema Snapshots
+
+`test/bases/lif/mdr_restapi/test_schema_snapshots.py` pins what `generate_openapi_schema` returns for every non-deleted model in `projects/lif_mdr_database/backup.sql`, across all 16 combinations of `include_attr_md`, `include_entity_md`, `public_only` and `full_export`. It is the baseline for the pass criterion in [ADR data_model/0004](../../design/adr/data_model/0004-retire-overlays-variants-as-copies.md): a converted model must generate the same schema as before. Any change to generated output fails the test, and so does adding or removing a live seed model.
+
+- Fixtures live in `test/bases/lif/mdr_restapi/schema_snapshots/`. `manifest.json` maps model → flag combination → file. Identical outputs share one file under `schemas/`, named by content hash.
+- Each output is JSON-encoded the way the `/datamodels/open_api_schema` endpoint encodes it. A combination the generator rejects with an `HTTPException` (today, some Org2 LIF and StateU LIF combinations return 404) is recorded as `{"x-snapshot-http-error": ...}`.
+- The tests run against their own freshly loaded copy of the seed, so other tests' writes don't affect them. They need a local PostgreSQL server and skip without one, like the other `mdr_restapi` tests.
+
+To regenerate after an intended change:
+
+```bash
+LIF_UPDATE_SCHEMA_SNAPSHOTS=1 uv run pytest test/bases/lif/mdr_restapi/test_schema_snapshots.py
+```
+
+The run rewrites the fixtures, deletes files nothing references any more, and then fails on purpose so the update can't pass unnoticed. It also refuses to run when `CI` is set. Review the fixture diff, re-run without the variable, and say in the PR why the generated schema changed.
+
 ## Integration Tests
 
 Integration tests are in `integration_tests/` and verify data consistency across the full service stack.
