@@ -35,12 +35,15 @@ deprecated:
   - the highest version gets ActivationDate = now()
   - the older versions get DeprecationDate = now()
   - if the pair already has an active dated version, only a higher version
-    can be activated; the ones at or below it get DeprecationDate = now(),
-    so the pair never gains a second active row
+    can be activated; the ones at or below it get DeprecationDate = now()
+  - active dated versions below the version the pair keeps (the newly
+    activated one, else the pair's highest active one) get
+    DeprecationDate = now(), as POST /transformation_groups/{id}/activate
+    does, so the pair ends with exactly one active row
 
 Versions compare numerically with trailing zeros dropped ("1.10" > "1.9",
-"1" = "1.0"), the same order the MDR's active-set read uses. Groups that
-already have an ActivationDate are never touched. An activated group that
+"1" = "1.0"), the same order the MDR's active-set read uses. A group that
+already has an ActivationDate is only ever deprecated, never activated. An activated group that
 keeps a future DeprecationDate is flagged in the output, since its pair goes
 dark on that date. These are reported and left alone:
   - free-text versions (the active-set read ignores them)
@@ -135,8 +138,7 @@ main() {
 backfill_sql() {
     cat <<'SQL'
 WITH live_dated AS (
-    -- The highest numeric version per pair that is already active. An undated version at or below
-    -- it must not become a second active row.
+    -- The highest numeric version per pair that is already active.
     SELECT "SourceDataModelId", "TargetDataModelId",
            max(string_to_array(regexp_replace("GroupVersion", '(\.0+)+$', ''), '.')::numeric[]) AS active_key
     FROM :"schema"."TransformationsGroup"
@@ -165,6 +167,33 @@ WITH live_dated AS (
     SELECT *, count(*) FILTER (WHERE version_key = top_key)
                   OVER (PARTITION BY "SourceDataModelId", "TargetDataModelId") AS top_count
     FROM ranked
+), dated_below AS (
+    -- Active dated versions below the version the pair keeps (the newly activated one, else its
+    -- highest active one) are deprecated, as /activate does, so the pair ends with one active row.
+    -- Pairs whose undated top is tied are skipped whole.
+    SELECT g."Id"
+    FROM :"schema"."TransformationsGroup" AS g
+    JOIN live_dated AS d USING ("SourceDataModelId", "TargetDataModelId")
+    LEFT JOIN (SELECT DISTINCT "SourceDataModelId", "TargetDataModelId", top_key, top_count FROM counted) AS p
+        USING ("SourceDataModelId", "TargetDataModelId")
+    WHERE g."Deleted" IS NOT TRUE
+      AND g."ActivationDate" <= now()
+      AND (g."DeprecationDate" IS NULL OR g."DeprecationDate" > now())
+      AND g."GroupVersion" ~ '^[0-9]+(\.[0-9]+)*$'
+      AND coalesce(p.top_count, 0) <= 1
+      AND string_to_array(regexp_replace(g."GroupVersion", '(\.0+)+$', ''), '.')::numeric[]
+          < coalesce(p.top_key, d.active_key)
+), changes AS (
+    SELECT "Id", version_key = top_key AS activate,
+           CASE
+               WHEN version_key = top_key THEN 'activated'
+               WHEN version_key <= active_key THEN 'deprecated: at or below the active version'
+               ELSE 'deprecated'
+           END AS action
+    FROM counted WHERE top_count <= 1
+    UNION ALL
+    SELECT "Id", false, 'deprecated: was active, below the version the pair keeps'
+    FROM dated_below
 ), skipped AS (
     SELECT "Id", "SourceDataModelId", "TargetDataModelId", "GroupVersion",
            'skipped: highest version is tied' AS action
@@ -179,18 +208,15 @@ WITH live_dated AS (
       AND ("GroupVersion" IS NULL OR "GroupVersion" !~ '^[0-9]+(\.[0-9]+)*$')
 ), updated AS (
     UPDATE :"schema"."TransformationsGroup" AS g
-    SET "ActivationDate"  = CASE WHEN c.version_key = c.top_key THEN now() ELSE g."ActivationDate" END,
-        "DeprecationDate" = CASE WHEN c.version_key IS DISTINCT FROM c.top_key THEN now() ELSE g."DeprecationDate" END
-    FROM counted AS c
-    WHERE g."Id" = c."Id" AND c.top_count <= 1
+    SET "ActivationDate"  = CASE WHEN c.activate THEN now() ELSE g."ActivationDate" END,
+        "DeprecationDate" = CASE WHEN c.activate THEN g."DeprecationDate" ELSE now() END
+    FROM changes AS c
+    WHERE g."Id" = c."Id"
     RETURNING g."Id", g."SourceDataModelId", g."TargetDataModelId", g."GroupVersion",
               CASE
-                  WHEN c.version_key IS DISTINCT FROM c.top_key AND c.version_key <= c.active_key
-                      THEN 'deprecated: at or below the active version'
-                  WHEN c.version_key IS DISTINCT FROM c.top_key THEN 'deprecated'
-                  WHEN g."DeprecationDate" IS NOT NULL
+                  WHEN c.activate AND g."DeprecationDate" IS NOT NULL
                       THEN 'activated: keeps its future DeprecationDate ' || g."DeprecationDate"
-                  ELSE 'activated'
+                  ELSE c.action
               END AS action
 )
 SELECT :'schema' AS schema, "SourceDataModelId" AS source, "TargetDataModelId" AS target,
