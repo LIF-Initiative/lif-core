@@ -89,6 +89,9 @@ class DataModel(SQLModel, table=True):
     Deleted: Optional[bool]
     State: Optional[StateType]
     Tags: Optional[str]
+    CopiedFromName: Optional[str] = None
+    CopiedFromVersion: Optional[str] = None
+    CopiedFromContributorOrganization: Optional[str] = None
 
     # entities: List["Entity"] = Relationship(back_populates="data_model")
 
@@ -115,6 +118,9 @@ class Entity(SQLModel, table=True):
     Deleted: bool = Field(default=False)
     Tags: Optional[str]
     Common: Optional[bool] = None
+    LevelOfAccess: AccessType = Field(default=AccessType.Public)
+    Queryable: bool = Field(default=False)
+    Modifiable: bool = Field(default=False)
 
     # data_model: Optional["DataModel"] = Relationship(back_populates="entities")
 
@@ -138,6 +144,8 @@ class EntityAssociation(SQLModel, table=True):
     Extension: bool = False
     ExtensionNotes: Optional[str]
     ExtendedByDataModelId: Optional[int] = Field(foreign_key="DataModels.Id")
+    Name: Optional[str] = None
+    Array: Optional[bool] = None
 
     # parent_entity: Optional["Entity"] = Relationship(
     #     sa_relationship_kwargs={"foreign_keys": "[EntityAssociation.ParentEntityId]"}
@@ -221,6 +229,9 @@ class Attribute(SQLModel, table=True):
     Tags: Optional[str]
     Example: Optional[str] = None
     Common: Optional[bool] = None
+    LevelOfAccess: AccessType = Field(default=AccessType.Public)
+    Queryable: bool = Field(default=False)
+    Modifiable: bool = Field(default=False)
 
     # data_model: Optional["DataModel"] = Relationship(back_populates="attributes")
     # value_set: Optional["ValueSet"] = Relationship(back_populates="attributes")
@@ -239,6 +250,8 @@ class EntityAttributeAssociation(SQLModel, table=True):
     ContributorOrganization: Optional[str]
     Deleted: bool = Field(default=False)
     ExtendedByDataModelId: Optional[int] = Field(foreign_key="DataModels.Id")
+    Name: Optional[str] = None
+    Array: Optional[bool] = None
 
     # entity: Optional["Entity"] = Relationship(back_populates="attributes_association")
     # attribute: Optional["Attribute"] = Relationship(back_populates="entities_association")

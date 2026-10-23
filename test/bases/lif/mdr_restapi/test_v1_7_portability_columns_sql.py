@@ -9,20 +9,12 @@ backup.sql (loaded by conftest's postgres_server) already contains V1.7's result
 clones a tenant with data, drops the new columns there, and re-runs V1.7 to backfill it from scratch.
 """
 
-import os
-import subprocess
 import uuid
-from pathlib import Path
-from urllib.parse import urlparse
 
-import psycopg2
 import pytest
 from lif.mdr_services.schema_generation_service import embedded_property_key
 
-_V1_7 = (
-    Path(__file__).parent.parent.parent.parent.parent
-    / "sam/mdr-database/flyway/flyway-files/flyway/sql/mdr/V1.7__portability_columns.sql"
-)
+V1_7 = "V1.7__portability_columns.sql"
 
 NEW_COLUMNS = {
     "Entities": ["LevelOfAccess", "Queryable", "Modifiable"],
@@ -56,49 +48,6 @@ def expected_name(relationship, placement, child_name):
     if placement == "Reference":
         return ref_key(relationship, child_name)
     return embedded_property_key(relationship, child_name)
-
-
-def apply_v1_7(postgres_server):
-    parsed = urlparse(postgres_server.url())
-    env = os.environ.copy()
-    env["PGPASSWORD"] = parsed.password or ""
-    result = subprocess.run(
-        [
-            "psql",
-            "-h",
-            parsed.hostname,
-            "-p",
-            str(parsed.port),
-            "-U",
-            parsed.username,
-            "-d",
-            parsed.path.lstrip("/"),
-            "-v",
-            "ON_ERROR_STOP=1",
-            "-f",
-            str(_V1_7),
-        ],
-        env=env,
-        capture_output=True,
-        text=True,
-    )
-    if result.returncode != 0:
-        pytest.fail(f"Failed to apply V1.7: {result.stderr}")
-
-
-@pytest.fixture
-def pg_conn(postgres_server):
-    parsed = urlparse(postgres_server.url())
-    conn = psycopg2.connect(
-        host=parsed.hostname,
-        port=parsed.port,
-        user=parsed.username,
-        password=parsed.password or "",
-        dbname=parsed.path.lstrip("/"),
-    )
-    conn.autocommit = True
-    yield conn
-    conn.close()
 
 
 @pytest.fixture
@@ -140,8 +89,8 @@ def _new_column_values(cur, schema):
 
 
 class TestV17Backfill:
-    def test_entity_association_name_and_array_follow_the_generator(self, postgres_server, pg_conn, bare_tenant):
-        apply_v1_7(postgres_server)
+    def test_entity_association_name_and_array_follow_the_generator(self, apply_migration, pg_conn, bare_tenant):
+        apply_migration(V1_7)
         with pg_conn.cursor() as cur:
             cur.execute(
                 f'SELECT ea."Relationship", ea."Placement", c."Name", c."Array", ea."Name", ea."Array" '
@@ -153,8 +102,8 @@ class TestV17Backfill:
             assert name == expected_name(relationship, placement, child_name), (relationship, placement, child_name)
             assert array is (child_array == "Yes")
 
-    def test_attribute_association_name_is_the_attribute_name(self, postgres_server, pg_conn, bare_tenant):
-        apply_v1_7(postgres_server)
+    def test_attribute_association_name_is_the_attribute_name(self, apply_migration, pg_conn, bare_tenant):
+        apply_migration(V1_7)
         with pg_conn.cursor() as cur:
             cur.execute(
                 f'SELECT a."Name", a."Array", x."Name", x."Array" FROM "{bare_tenant}"."EntityAttributeAssociation" x '
@@ -166,8 +115,8 @@ class TestV17Backfill:
             assert name == attribute_name
             assert array is (attribute_array == "Yes")
 
-    def test_flags_come_from_the_models_own_inclusion_row_else_the_default(self, postgres_server, pg_conn, bare_tenant):
-        apply_v1_7(postgres_server)
+    def test_flags_come_from_the_models_own_inclusion_row_else_the_default(self, apply_migration, pg_conn, bare_tenant):
+        apply_migration(V1_7)
         with pg_conn.cursor() as cur:
             for table, element_type in (("Entities", "Entity"), ("Attributes", "Attribute")):
                 cur.execute(
@@ -188,8 +137,8 @@ class TestV17Backfill:
                     expected = (inc_access, inc_queryable, inc_modifiable) if inc_access else ("Public", False, False)
                     assert tuple(flags) == expected, table
 
-    def test_lineage_is_not_backfilled(self, postgres_server, pg_conn, bare_tenant):
-        apply_v1_7(postgres_server)
+    def test_lineage_is_not_backfilled(self, apply_migration, pg_conn, bare_tenant):
+        apply_migration(V1_7)
         with pg_conn.cursor() as cur:
             cur.execute(
                 f'SELECT count(*) FROM "{bare_tenant}"."DataModels" WHERE "CopiedFromName" IS NOT NULL '
@@ -200,9 +149,9 @@ class TestV17Backfill:
 
 class TestV17Defaults:
     def test_new_elements_get_the_flag_defaults_and_associations_get_no_name(
-        self, postgres_server, pg_conn, bare_tenant
+        self, apply_migration, pg_conn, bare_tenant
     ):
-        apply_v1_7(postgres_server)
+        apply_migration(V1_7)
         with pg_conn.cursor() as cur:
             cur.execute(f'SELECT "Id" FROM "{bare_tenant}"."DataModels" ORDER BY "Id" LIMIT 1')
             data_model_id = cur.fetchone()[0]
@@ -223,17 +172,17 @@ class TestV17Defaults:
 
 
 class TestV17Replay:
-    def test_replay_changes_nothing(self, postgres_server, pg_conn, bare_tenant):
-        apply_v1_7(postgres_server)
+    def test_replay_changes_nothing(self, apply_migration, pg_conn, bare_tenant):
+        apply_migration(V1_7)
         with pg_conn.cursor() as cur:
             first = {schema: _new_column_values(cur, schema) for schema in ("public", bare_tenant)}
-        apply_v1_7(postgres_server)
+        apply_migration(V1_7)
         with pg_conn.cursor() as cur:
             second = {schema: _new_column_values(cur, schema) for schema in ("public", bare_tenant)}
         assert first == second
 
-    def test_every_tenant_schema_has_every_new_column(self, postgres_server, pg_conn, bare_tenant):
-        apply_v1_7(postgres_server)
+    def test_every_tenant_schema_has_every_new_column(self, apply_migration, pg_conn, bare_tenant):
+        apply_migration(V1_7)
         with pg_conn.cursor() as cur:
             cur.execute("SELECT nspname FROM pg_namespace WHERE nspname = 'public' OR nspname ~ '^tenant_'")
             schemas = [row[0] for row in cur.fetchall()]

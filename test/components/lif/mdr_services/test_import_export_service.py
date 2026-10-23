@@ -12,7 +12,7 @@ from unittest.mock import ANY, AsyncMock, MagicMock, create_autospec
 import pytest
 from fastapi import HTTPException
 
-from lif.mdr_sql_model.core import DataModel, DataModelType, DatamodelElementType
+from lif.mdr_sql_model.core import AccessType, Attribute, DataModel, DataModelType, DatamodelElementType, Entity
 from lif.mdr_dto.datamodel_dto import CreateDataModelDTO
 from lif.mdr_dto.import_export_dto import (
     CreateCloneDTO,
@@ -194,6 +194,67 @@ async def test_clone_uniqueness_check_matches_inserted_tuple(monkeypatch):
     assert (inserted.Name, inserted.DataModelVersion, inserted.Type) == ("ClonedDM", "2.0", DataModelType.OrgLIF)
     assert inserted.ContributorOrganization is None
     assert inserted.BaseDataModelId == SOURCE_DATA_MODEL_ID  # OrgLIF clones point at their source
+
+
+def _clone_helper_session(rows):
+    """A session whose one query returns ``rows`` through both scalars().all() and fetchall()."""
+    result = MagicMock()
+    result.scalars.return_value.all.return_value = rows
+    result.fetchall.return_value = rows
+    session = MagicMock()
+    session.execute = AsyncMock(return_value=result)
+    session.get = AsyncMock()
+    session.commit = AsyncMock()
+    session.refresh = AsyncMock()
+    return session
+
+
+async def test_clone_copies_the_v1_7_element_flags():
+    """#1386 (Q5): a clone keeps each entity's and attribute's LevelOfAccess, Queryable and Modifiable."""
+    flags = {"LevelOfAccess": AccessType.Restricted, "Queryable": True, "Modifiable": True}
+    entity_session = _clone_helper_session([Entity(Id=1, Name="Course", UniqueName="Course", DataModelId=9, **flags)])
+    attribute_session = _clone_helper_session(
+        [Attribute(Id=2, Name="title", UniqueName="Course.title", DataModelId=9, **flags)]
+    )
+
+    await svc.clone_entities(entity_session, source_data_model_id=9, new_data_model_id=NEW_DATA_MODEL_ID)
+    await svc.clone_attributes(
+        attribute_session, source_data_model_id=9, new_data_model_id=NEW_DATA_MODEL_ID, value_set_id_map={}
+    )
+
+    for session in (entity_session, attribute_session):
+        clone = session.add.call_args.args[0]
+        assert (clone.LevelOfAccess, clone.Queryable, clone.Modifiable) == (AccessType.Restricted, True, True)
+
+
+async def test_clone_recomputes_association_name_and_array_from_the_cloned_child():
+    """#1386 (Q5): Name/Array are recomputed from the cloned row and its cloned child, not copied."""
+    source = types.SimpleNamespace(
+        ParentEntityId=1,
+        ChildEntityId=2,
+        EntityId=1,
+        AttributeId=3,
+        Contributor=None,
+        ContributorOrganization=None,
+        Extension=False,
+        ExtensionNotes=None,
+    )
+    entity_session = _clone_helper_session([source])
+    entity_session.get.return_value = types.SimpleNamespace(Name="Course", Array="Yes")
+    attribute_session = _clone_helper_session([source])
+    attribute_session.get.return_value = types.SimpleNamespace(Name="title", Array=None)
+
+    await svc.clone_entity_association(entity_session, entity_id_map={1: 11, 2: 12}, source_data_model_id=9)
+    await svc.clone_entity_attribute_association(
+        attribute_session, entity_id_map={1: 11}, attribute_id_map={3: 13}, source_data_model_id=9
+    )
+
+    entity_session.get.assert_awaited_once_with(svc.Entity, 12)
+    entity_clone = entity_session.add.call_args.args[0]
+    assert (entity_clone.Name, entity_clone.Array) == ("Course", True)
+    attribute_session.get.assert_awaited_once_with(svc.Attribute, 13)
+    attribute_clone = attribute_session.add.call_args.args[0]
+    assert (attribute_clone.Name, attribute_clone.Array) == ("title", False)
 
 
 # --- export_datamodel (Issue #1210) --------------------------------------------------------------

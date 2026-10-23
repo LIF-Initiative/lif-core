@@ -7,6 +7,7 @@ from lif.mdr_dto.entity_attribute_association_dto import (
     EntityAttributeAssociationDTO,
     UpdateEntityAttributeAssociationDTO,
 )
+from lif.mdr_services.association_name import association_array, recomputed
 from lif.mdr_services.helper_service import check_attribute_by_id, check_datamodel_by_id, check_entity_by_id
 from lif.mdr_utils.logger_config import get_logger
 from sqlalchemy import Select, func, or_, select
@@ -68,7 +69,9 @@ async def create_entity_attribute_association(session: AsyncSession, data: Creat
         raise HTTPException(status_code=400, detail="Association already exists between the entity and attribute")
 
     # Create the new EntityAssociation
-    entity_attribute_association = EntityAttributeAssociation(**data.dict())
+    entity_attribute_association = EntityAttributeAssociation(
+        **data.dict(), Name=attribute.Name, Array=association_array(attribute.Array)
+    )
     session.add(entity_attribute_association)
     await session.commit()
     await session.refresh(entity_attribute_association)
@@ -137,8 +140,18 @@ async def update_entity_attribute_association(
                 detail="EntityAttributeAssociation with the same EntityId and AttributeId already exists.",
             )
 
+    # Name and Array follow the attribute, which may change here, while they are still the rule's (#1386).
+    old_attribute = await session.get(Attribute, entity_attribute_association.AttributeId)
+    name_before, array_before = old_attribute.Name, association_array(old_attribute.Array)
+
     for key, value in data.dict(exclude_unset=True).items():
         setattr(entity_attribute_association, key, value)
+
+    attribute = await session.get(Attribute, entity_attribute_association.AttributeId)
+    entity_attribute_association.Name = recomputed(entity_attribute_association.Name, name_before, attribute.Name)
+    entity_attribute_association.Array = recomputed(
+        entity_attribute_association.Array, array_before, association_array(attribute.Array)
+    )
 
     session.add(entity_attribute_association)
     await session.commit()
