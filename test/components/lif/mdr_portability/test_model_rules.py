@@ -3,7 +3,7 @@ from pathlib import Path
 import pytest
 
 from lif.mdr_portability import ModelFile, PortabilityErrorCode, PortabilityErrorGroup, check_model_file
-from lif.mdr_portability.v1.models import Association, AttributeKey, EntityKey
+from lif.mdr_portability.v1.models import Association, AttributeKey, EntityKey, ValueSetKey
 
 Code = PortabilityErrorCode
 FIXTURES = Path(__file__).parent / "fixtures"
@@ -68,7 +68,7 @@ def test_keys_are_compared_exactly():
     file = _load()
     entity = file.Entities[0]
     for unique_name in (entity.UniqueName.lower(), f"{entity.UniqueName} ", f" {entity.UniqueName}"):
-        file.Entities.append(entity.model_copy(update={"UniqueName": unique_name}))
+        file.Entities.append(entity.model_copy(update={"UniqueName": unique_name, "Name": unique_name}))
     check_model_file(file)
 
 
@@ -158,6 +158,35 @@ def test_association_names_need_only_be_unique_under_their_parent():
     assert roles == [EntityKey(Entity="Organization")] * 2
     assert _find_association(file, "Organization", "Identifier") and _find_association(file, "Person", "Identifier")
     assert _find_association(file, "Competency", "Classifier") and _find_association(file, "Competency", "classifier")
+    check_model_file(file)
+
+
+def _add_organization_copy(file: ModelFile, unique_name: str) -> None:
+    # Another entity with Organization's Name, and no associations.
+    organization = next(entity for entity in file.Entities if entity.UniqueName == "Organization")
+    file.Entities.append(organization.model_copy(update={"UniqueName": unique_name}))
+
+
+def test_two_entities_with_no_parent_and_the_same_name_are_refused():
+    # Organization's only parents are references, which do not give it a parent (§5.4).
+    file = _load()
+    assert all(
+        association.Reference
+        for association in file.Associations
+        if association.Child == EntityKey(Entity="Organization")
+    )
+    _add_organization_copy(file, "Organization.Copy")
+    with pytest.raises(PortabilityErrorGroup) as exc_info:
+        check_model_file(file)
+    [error] = exc_info.value.exceptions
+    assert (error.code, error.element) == (Code.TOP_LEVEL_NAME_TAKEN, "Entities[Organization]")
+    assert error.reason == "2 entities with no parent have the Name 'Organization': 'Organization', 'Organization.Copy'"
+
+
+def test_an_entity_with_a_parent_may_share_a_name_with_one_without():
+    file = _load()
+    _add_organization_copy(file, "Person.Employer")
+    _add_containing_association(file, "Person", "Person.Employer", "Employer")
     check_model_file(file)
 
 
@@ -287,3 +316,68 @@ def test_an_attribute_whose_association_has_a_missing_parent_is_refused_only_as_
     file = _load()
     _find_association(file, "Person", "ssn").Parent = EntityKey(Entity="Missing")
     assert _collect_refusals(file) == [(Code.ELEMENT_REFERENCE_UNRESOLVED, "Associations[Missing, ssn].Parent")]
+
+
+# A key holding a bracket would make a path unreadable (Entities[a]b]), so the item is named by its
+# position instead, as parse_model_file names it.
+
+
+def test_a_duplicate_key_holding_a_bracket_is_named_by_its_first_position():
+    file = _load()
+    first_position = len(file.Entities)
+    file.Entities.extend(file.Entities[0].model_copy(update={"UniqueName": "a]b", "Name": "a]b"}) for _ in range(2))
+    assert _collect_refusals(file) == [(Code.DUPLICATE_KEY, f"Entities[{first_position}]")]
+
+
+def test_a_value_set_whose_name_holds_a_bracket_is_named_by_its_position_in_a_value_path():
+    file = _load()
+    value_set = file.ValueSets[0]
+    value_set.Name = "Address[Type]"
+    for attribute in file.Attributes:
+        if attribute.ValueSet and attribute.ValueSet.ValueSet == "AddressType":
+            attribute.ValueSet.ValueSet = value_set.Name
+    value_set.Values.append(value_set.Values[0].model_copy())
+    assert _collect_refusals(file) == [(Code.DUPLICATE_KEY, f"ValueSets[0].Values[{value_set.Values[0].ValueName}]")]
+
+
+def _find_attribute_position(file: ModelFile, unique_name: str) -> int:
+    return next(position for position, attribute in enumerate(file.Attributes) if attribute.UniqueName == unique_name)
+
+
+def test_an_unresolved_value_set_on_an_attribute_whose_key_holds_a_bracket_is_named_by_its_position():
+    file = _load()
+    position = _find_attribute_position(file, "Person.lunchStatus")
+    file.Attributes[position].UniqueName = "lunch[Status]"
+    _find_association(file, "Person", "lunchStatus").Child = AttributeKey(Attribute="lunch[Status]")
+    file.Attributes[position].ValueSet = ValueSetKey(ValueSet="Missing")
+    assert _collect_refusals(file) == [(Code.ELEMENT_REFERENCE_UNRESOLVED, f"Attributes[{position}].ValueSet")]
+
+
+def test_an_unassociated_attribute_whose_key_holds_a_bracket_is_named_by_its_position():
+    file = _load()
+    position = _find_attribute_position(file, "Person.ssn")
+    file.Attributes[position].UniqueName = "ssn[1]"
+    _remove_association(file, "Person", "ssn")
+    assert _collect_refusals(file) == [(Code.UNASSOCIATED_ATTRIBUTE, f"Attributes[{position}]")]
+
+
+def _find_association_position(file: ModelFile, parent: str, name: str) -> int:
+    return file.Associations.index(_find_association(file, parent, name))
+
+
+def test_associations_whose_name_holds_a_bracket_are_named_by_their_position():
+    file = _load()
+    first_position = _find_association_position(file, "Course", "AccreditedBy")
+    second_position = _find_association_position(file, "Course", "ApprovedBy")
+    attribute_position = _find_association_position(file, "Competency", "classifier")
+    for position in (first_position, second_position):
+        file.Associations[position].Name = "By[Organization]"
+    file.Associations[attribute_position].Name = "classifier[]"
+    file.Associations[attribute_position].Reference = True
+    _add_containing_association(file, "Person", "Person", "Self[]")
+    cycle_position = len(file.Associations) - 1
+    assert _collect_refusals(file) == [
+        (Code.REFERENCE_INVALID, f"Associations[{attribute_position}].Reference"),
+        (Code.ASSOCIATION_NAME_TAKEN, f"Associations[{first_position}]"),
+        (Code.ASSOCIATION_CYCLE, f"Associations[{cycle_position}]"),
+    ]
