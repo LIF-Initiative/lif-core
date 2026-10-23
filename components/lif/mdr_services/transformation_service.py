@@ -814,8 +814,9 @@ async def get_active_transformations_for_data_models(
     """The mapping set the Translator applies for a (source, target) pair (#1350): the JSONata rules of the
     latest active version of the pair's group, never a merge of versions.
 
-    A group is active when its ActivationDate is null or not after now and its DeprecationDate is null or
-    after now. Returns (group, total_count, transformations); there is no pagination, so nothing is cut off.
+    A group is active when it has an ActivationDate that is not after now and its DeprecationDate is null or
+    after now. A group with no ActivationDate has not been activated (see activate_transformation_group).
+    Returns (group, total_count, transformations); there is no pagination, so nothing is cut off.
     """
     await check_datamodel_by_id(session=session, id=source_data_model_id)
     await check_datamodel_by_id(session=session, id=target_data_model_id)
@@ -825,7 +826,7 @@ async def get_active_transformations_for_data_models(
         TransformationGroup.SourceDataModelId == source_data_model_id,
         TransformationGroup.TargetDataModelId == target_data_model_id,
         TransformationGroup.Deleted == False,
-        or_(TransformationGroup.ActivationDate.is_(None), TransformationGroup.ActivationDate <= now),
+        TransformationGroup.ActivationDate <= now,
         or_(TransformationGroup.DeprecationDate.is_(None), TransformationGroup.DeprecationDate > now),
     )
     result = await session.execute(query)
@@ -1491,6 +1492,55 @@ async def update_transformation_group(
     return transformation_group_dto
 
 
+async def activate_transformation_group(
+    session: AsyncSession, transformation_group_id: int, activation_date: datetime | None = None
+) -> TransformationGroupDTO:
+    """Make a group the live version of its (source, target) pair from activation_date (default now) (#1350).
+
+    Sets the group's ActivationDate and clears its DeprecationDate. The pair's other versions that would be
+    active at that time are deprecated at exactly that time, so a scheduled activation leaves no gap.
+    Rollback is activating the older version.
+    """
+    now = datetime.now(timezone.utc)
+    if activation_date is None:
+        activation_date = now
+    elif activation_date.tzinfo is None:
+        raise HTTPException(status_code=422, detail="activation_date must include a timezone offset")
+    elif activation_date < now:
+        raise HTTPException(status_code=422, detail="activation_date must not be in the past")
+
+    group = await session.get(TransformationGroup, transformation_group_id)
+    if not group or group.Deleted:
+        raise HTTPException(status_code=404, detail=f"Transformation group with ID {transformation_group_id} not found")
+    # The active-set read skips such a group, so activating it would only deprecate the live version.
+    if not (group.GroupVersion and GROUP_VERSION_PATTERN.fullmatch(group.GroupVersion)):
+        raise HTTPException(
+            status_code=422,
+            detail=f"GroupVersion {group.GroupVersion!r} is not dotted integers; fix it before activating",
+        )
+
+    others = await session.execute(
+        select(TransformationGroup).where(
+            TransformationGroup.SourceDataModelId == group.SourceDataModelId,
+            TransformationGroup.TargetDataModelId == group.TargetDataModelId,
+            TransformationGroup.Id != group.Id,
+            TransformationGroup.Deleted == False,
+            TransformationGroup.ActivationDate <= activation_date,
+            or_(TransformationGroup.DeprecationDate.is_(None), TransformationGroup.DeprecationDate > activation_date),
+        )
+    )
+    for other in others.scalars().all():
+        other.DeprecationDate = activation_date
+        session.add(other)
+
+    group.ActivationDate = activation_date
+    group.DeprecationDate = None
+    session.add(group)
+    await session.commit()
+    await session.refresh(group)
+    return TransformationGroupDTO.from_orm(group)
+
+
 async def soft_delete_transformation_group(session: AsyncSession, transformation_group_id: int) -> dict:
     # Check if the transformation exists
     transformation_group = await session.get(TransformationGroup, transformation_group_id)
@@ -1875,7 +1925,8 @@ async def import_transformation_group(
             Description=data.Description if data.Description is not None else reference_group.Description,
             Notes=data.Notes if data.Notes is not None else reference_group.Notes,
             CreationDate=data.CreationDate,
-            ActivationDate=data.ActivationDate,
+            # An import arrives inactive whatever the file says; activate it on purpose (#1350).
+            ActivationDate=None,
             DeprecationDate=data.DeprecationDate,
             Contributor=data.Contributor if data.Contributor is not None else reference_group.Contributor,
             ContributorOrganization=(

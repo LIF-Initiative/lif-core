@@ -1,0 +1,880 @@
+{
+  "components": {
+    "schemas": {
+      "Activity": {
+        "properties": {
+          "genusType": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "totalTargetEffort": {
+            "description": "Sections are modelled as Activity entities in the OSIDs",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "type": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "ActivityRegistration.Activity": {
+        "properties": {
+          "id": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "Address": {
+        "properties": {
+          "(extendedThroughTypeDefinition)": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "(formatted)Address": {
+            "description": "complete address text",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "type": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "Appointment": {
+        "properties": {
+          "endReason": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "expirationDate": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "salary": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "startDate": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "Assessment": {
+        "properties": {
+          "id": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "level": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "name": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "AssessmentTaken": {
+        "properties": {
+          "Grade.id": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "Grade.name": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "feedback": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "Assesssment": {
+        "properties": {
+          "rubric": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "Contact": {
+        "properties": {},
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "Course": {
+        "properties": {
+          "creditAmounts": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "description": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "genusType": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "gradingOptions": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "learningObjectives": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "sponsors(OfType)": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "title": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "CourseCatalog": {
+        "properties": {
+          "id": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "CourseEntry": {
+        "properties": {
+          "genusType": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "grade": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "score": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "CourseEntry.Course": {
+        "properties": {
+          "code": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "description": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "level": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "levels": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "number": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "sponsors.displayName": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "CourseEntry.Grade": {
+        "properties": {
+          "gradeSystem": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "CourseEntry.Term": {
+        "properties": {
+          "classesEnd": {
+            "description": "The classes end date of a Term in which courses are offered.  Needs to be accessed through CourseEntry since we need to determine which term the course start date refers to",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "classesStart": {
+            "description": "The classes start date of a Term in which courses are offered.  Needs to be accessed through CourseEntry since we need to determine which term the course start date refers to",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "CourseRegistration": {
+        "properties": {
+          "endDate": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "endReason": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "genusType": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "startDate": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "type": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "Credential": {
+        "properties": {
+          "description": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "genusType": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "id": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "name": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "title": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "CredentialEntry": {
+        "properties": {
+          "awardDate": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "endDate": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "student": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "Item": {
+        "properties": {
+          "learningObjectives": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "JobAppointments": {
+        "properties": {
+          "description": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "Obective": {
+        "properties": {
+          "description": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "Objective": {
+        "properties": {
+          "assessment": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "language(session)": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "name": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "ObjectiveBank": {
+        "properties": {
+          "description": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "language(session)": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "license": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "name": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "source": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "OfferingEnabler": {
+        "properties": {
+          "cyclicTimePeriod": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "Ontology": {
+        "properties": {
+          "Subject": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "Subject.position": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "definedThroughTaggingOfAttributes": {
+            "description": "not explicit in spec",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "displayName": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "subject": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "Organization": {
+        "properties": {
+          "displayName": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "type": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "Person": {
+        "properties": {
+          "birthDate": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "generationQualifier\nqualificationSuffix": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "givenName": {
+            "description": "Given name. In the U.S., the first name of a Person. This can be used along with familyName instead of the name property.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "institutionalIdentifier": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "middleNames": {
+            "description": "list of middle names",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "salutation": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "surname": {
+            "description": "Family name. In the U.S., the last name of an Person. This can be used along with givenName instead of the name property.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "Position": {
+        "properties": {
+          "title": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "Program": {
+        "properties": {
+          "adminOrgs": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "code": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "completionRequirements": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "description": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "duration": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "duration.type": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "learningObjective": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "name": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "ProgramOffering": {
+        "properties": {
+          "effectiveDates": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "Relevancy": {
+        "properties": {
+          "endDate": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "startDate": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "State": {
+        "properties": {
+          "state": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      },
+      "Subject": {
+        "properties": {
+          "course": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "displayNameOrDisplayLabel": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": ""
+      }
+    }
+  },
+  "info": {
+    "description": "OpenAPI Spec",
+    "title": "Machine-Readable Schema for OSID / CampusAPI",
+    "version": "1.0"
+  },
+  "openapi": "3.0.0",
+  "paths": {}
+}
