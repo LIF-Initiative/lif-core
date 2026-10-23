@@ -10,13 +10,18 @@
 
 ## `docs/overview/` — Overview (orientation)
 
+- [`data-model-guide.md`](overview/data-model-guide.md) — Draft guide to the Base LIF data model: how it was built, technical structure, FAQs, and designing an organization data model.
 - [`mdr-overview.md`](overview/mdr-overview.md) — MDR overview for external evaluators: what the Metadata Repository does, how schemas flow, demo pointers.
 - [`services-overview.md`](overview/services-overview.md) — High-level catalog of LIF microservices and how they fit together.
+- [`use-cases.md`](overview/use-cases.md) — Three LIF use cases in brief: learner wallets, dual enrollment, and contextual data for AI tools.
+- [`why-we-created-a-new-data-model.md`](overview/why-we-created-a-new-data-model.md) — Why LIF created a normative data model that brings existing learner data standards together.
 
 ---
 
 ## `docs/specs/` — Specs (contracts)
 
+- [`data-model-extensions-guide.md`](specs/data-model-extensions-guide.md) — Proposing Base LIF changes vs. building extensions, and the ten rules every extension must follow.
+- [`data-model-identifiers.md`](specs/data-model-identifiers.md) — Definitions and usage rules for `identifier` and the `informationSource*` fields.
 - [`data-model-rules.md`](specs/data-model-rules.md) — LIF data model rules, capitalization conventions, reserved-word recognition by MDR.
 - [`mdr-portable-file-format.md`](specs/mdr-portable-file-format.md) — MDR portable file formats (v1) for models, mapping groups and value-set crosswalks on the simplified data model (one self-contained model per file, with `CopiedFrom` lineage; ADR data_model/0004), with the deprecations, errors, canonical form and converter contract (#1333).
 
@@ -98,8 +103,10 @@
 - [`deploying-lif-at-your-institution.md`](operations/guides/deploying-lif-at-your-institution.md) — Adopter-facing hub guide for standing up your own LIF instance: deployment shapes, stack bring-up, data model in MDR, source wiring, auth/tenancy, ops; links the detailed spokes and flags self-host gaps (#1004).
 - [`deployment.md`](operations/guides/deployment.md) — Deployment scripts, env config (dev vs. demo), MDR schema migrations, Docker build dependency resolution, ECS/CloudWatch debugging, querying the MDR API.
 - [`graphql-api-keys.md`](operations/guides/graphql-api-keys.md) — GraphQL org1 API key authentication: SSM key storage, `X-API-Key` flow, `setup-graphql-api-keys.sh` service/workshop modes.
+- [`jsonata-quick-start-guide.md`](operations/guides/jsonata-quick-start-guide.md) — JSONata quick start for MDR mappings: patterns, how fragments merge, testing, troubleshooting.
 - [`lde-api-keys.md`](operations/guides/lde-api-keys.md) — Learner Data Export API key authentication: shared `lif.auth` middleware + `api_key_strategy`, `LDE_AUTH__API_KEYS` SSM flow, `setup-api-keys.sh` generation, deploy-ordering gotcha.
 - [`load-testing.md`](operations/guides/load-testing.md) — Load testing notes for LIF services.
+- [`mdr-guide.md`](operations/guides/mdr-guide.md) — Draft MDR user guide: concepts, local setup, managing org data models, mappings, and transformation editing.
 - [`mdr-ui-e2e-playwright.md`](operations/guides/mdr-ui-e2e-playwright.md) — Driving the MDR UI end-to-end with Playwright: scratchpad setup, Cognito hosted-UI login automation + the duplicate-responsive-input gotcha, persisting login state, when to prefer the API instead.
 - [`self-serve-registration-walkthrough.md`](operations/guides/self-serve-registration-walkthrough.md) — End-to-end walkthrough of the #884 self-serve flow (register → workspace → invite → switch); tester checklist + admin/operator notes for verifying it on dev or demo.
 - [`test-driving-mdr.md`](operations/guides/test-driving-mdr.md) — Run MDR alone on any Docker host (no AWS/Cognito): configured scrypt-hashed logins, `.env` secrets template, measured sizing, a Caddy HTTPS recipe with loopback-only ports (#1316).
@@ -124,7 +131,9 @@
 
 ## `docs/external/` — Non-technical artifact archive
 
-*Empty until external one-pagers and briefings are imported by the docs-team partner.*
+- [`ai-agent-implementation-pattern.md`](external/ai-agent-implementation-pattern.md) — Handout: using LIF to give AI agents and tools rich learner context and shared memory, with data-flow diagram.
+- [`ecosystem-enablers-one-pager.md`](external/ecosystem-enablers-one-pager.md) — One-pager for enabling partners: what LIF is, why it matters, working components, what it unlocks.
+- [`lif-fact-sheet.md`](external/lif-fact-sheet.md) — Fact sheet: what LIF is and isn't, who benefits, contributing organizations, three example uses.
 
 ---
 
@@ -146,4 +155,4 @@
 - `*/README.md` — directory guides (entry points, not content). Top-level `docs/README.md` is the structural overview.
 - `docs/external_refs/` — outside-LIF reference material (third-party standards, vendor docs); separate from curated content.
 - `docs/media/` — image and diagram assets; referenced from other docs by relative link.
-- `docs/external/` — non-technical artifacts in mixed formats (`.docx`, `.pdf`, `.pptx`); not enumerated entry-by-entry.
+- `docs/external/` — non-Markdown artifacts in mixed formats (`.docx`, `.pdf`, `.pptx`); not enumerated entry-by-entry.
