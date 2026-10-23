@@ -114,6 +114,14 @@ async def test_update_paths_recompute_name_and_array(test_db_session, request):
     await update_entity_association(session, reference_id, UpdateEntityAssociationDTO(Relationship="hasIssuer"))
     assert await _entity_association(session, reference_id) == ("RefOrganization", False)
 
+    # A Placement edit turns the embedded key into a reference key.
+    await update_entity_association(session, embedded_id, UpdateEntityAssociationDTO(Placement="Reference"))
+    assert await _entity_association(session, embedded_id) == ("enrolledInRefClass", False)
+
+    # Pointing the association at another child takes that child's Name and Array.
+    await update_entity_association(session, reference_id, UpdateEntityAssociationDTO(ChildEntityId=rows["course"].Id))
+    assert await _entity_association(session, reference_id) == ("RefClass", False)
+
 
 async def test_update_paths_leave_values_that_did_not_come_from_the_rule(test_db_session, request):
     """A Name/Array written some other way (as a model import or #1388 will) survives later edits."""
