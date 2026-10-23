@@ -9,62 +9,11 @@ a tenant, takes away what V1.6 would have left out, and re-runs V1.8.
 """
 # cspell:ignore confdeltype
 
-import os
-import subprocess
 import uuid
-from pathlib import Path
-from urllib.parse import urlparse
 
-import psycopg2
 import pytest
 
-_V1_8 = (
-    Path(__file__).parent.parent.parent.parent.parent
-    / "sam/mdr-database/flyway/flyway-files/flyway/sql/mdr/V1.8__tenant_attributes_target_entity_id.sql"
-)
-
-
-def apply_v1_8(postgres_server):
-    parsed = urlparse(postgres_server.url())
-    env = os.environ.copy()
-    env["PGPASSWORD"] = parsed.password or ""
-    result = subprocess.run(
-        [
-            "psql",
-            "-h",
-            parsed.hostname,
-            "-p",
-            str(parsed.port),
-            "-U",
-            parsed.username,
-            "-d",
-            parsed.path.lstrip("/"),
-            "-v",
-            "ON_ERROR_STOP=1",
-            "-f",
-            str(_V1_8),
-        ],
-        env=env,
-        capture_output=True,
-        text=True,
-    )
-    if result.returncode != 0:
-        pytest.fail(f"Failed to apply V1.8: {result.stderr}")
-
-
-@pytest.fixture
-def pg_conn(postgres_server):
-    parsed = urlparse(postgres_server.url())
-    conn = psycopg2.connect(
-        host=parsed.hostname,
-        port=parsed.port,
-        user=parsed.username,
-        password=parsed.password or "",
-        dbname=parsed.path.lstrip("/"),
-    )
-    conn.autocommit = True
-    yield conn
-    conn.close()
+V1_8 = "V1.8__tenant_attributes_target_entity_id.sql"
 
 
 def _clone_tenant(pg_conn):
@@ -135,9 +84,9 @@ def _assert_complete(cur, schema):
 
 class TestV18:
     def test_adds_column_fk_and_index_to_a_tenant_without_the_column(
-        self, postgres_server, pg_conn, tenant_without_column
+        self, apply_migration, pg_conn, tenant_without_column
     ):
-        apply_v1_8(postgres_server)
+        apply_migration(V1_8)
         with pg_conn.cursor() as cur:
             _assert_complete(cur, tenant_without_column)
             cur.execute(
@@ -145,32 +94,32 @@ class TestV18:
             )
             assert cur.fetchone()[0] == 0  # Not backfilled: the target was never recorded for this tenant.
 
-    def test_adds_the_fk_when_only_public_has_one_of_that_name(self, postgres_server, pg_conn, tenant_without_fk):
-        apply_v1_8(postgres_server)
+    def test_adds_the_fk_when_only_public_has_one_of_that_name(self, apply_migration, pg_conn, tenant_without_fk):
+        apply_migration(V1_8)
         with pg_conn.cursor() as cur:
             _assert_complete(cur, tenant_without_fk)
 
-    def test_leaves_public_and_its_targets_unchanged(self, postgres_server, pg_conn, tenant_without_column):
+    def test_leaves_public_and_its_targets_unchanged(self, apply_migration, pg_conn, tenant_without_column):
         with pg_conn.cursor() as cur:
             cur.execute('SELECT "Id", "TargetEntityId" FROM public."Attributes" WHERE "TargetEntityId" IS NOT NULL')
             before = sorted(cur.fetchall())
         assert before  # The seed records Open Badges v3 targets (V1.6).
-        apply_v1_8(postgres_server)
+        apply_migration(V1_8)
         with pg_conn.cursor() as cur:
             _assert_complete(cur, "public")
             cur.execute('SELECT "Id", "TargetEntityId" FROM public."Attributes" WHERE "TargetEntityId" IS NOT NULL')
             assert sorted(cur.fetchall()) == before
 
-    def test_replay_changes_nothing(self, postgres_server, pg_conn, tenant_without_column):
-        apply_v1_8(postgres_server)
+    def test_replay_changes_nothing(self, apply_migration, pg_conn, tenant_without_column):
+        apply_migration(V1_8)
         with pg_conn.cursor() as cur:
             first = _target_entity_state(cur, tenant_without_column)
-        apply_v1_8(postgres_server)
+        apply_migration(V1_8)
         with pg_conn.cursor() as cur:
             assert _target_entity_state(cur, tenant_without_column) == first
 
-    def test_every_schema_is_complete(self, postgres_server, pg_conn, tenant_without_column):
-        apply_v1_8(postgres_server)
+    def test_every_schema_is_complete(self, apply_migration, pg_conn, tenant_without_column):
+        apply_migration(V1_8)
         with pg_conn.cursor() as cur:
             cur.execute("SELECT nspname FROM pg_namespace WHERE nspname = 'public' OR nspname ~ '^tenant_'")
             schemas = [row[0] for row in cur.fetchall()]

@@ -3,6 +3,7 @@ import subprocess
 from pathlib import Path
 from urllib.parse import urlparse
 
+import psycopg2
 import pytest
 import testing.postgresql
 from httpx import ASGITransport, AsyncClient
@@ -72,6 +73,62 @@ def postgres_server():
         os.environ["POSTGRESQL_DB"] = parsed.path.lstrip("/")
 
         yield postgresql
+
+
+_MIGRATIONS_DIR = (
+    Path(__file__).parent.parent.parent.parent.parent / "sam/mdr-database/flyway/flyway-files/flyway/sql/mdr"
+)
+
+
+@pytest.fixture
+def apply_migration(postgres_server):
+    """Run a Flyway migration file (e.g. "V1.7__portability_columns.sql") through psql, the way
+    local docker-compose applies it."""
+
+    def apply(filename):
+        parsed = urlparse(postgres_server.url())
+        env = os.environ.copy()
+        env["PGPASSWORD"] = parsed.password or ""
+        result = subprocess.run(
+            [
+                "psql",
+                "-h",
+                parsed.hostname,
+                "-p",
+                str(parsed.port),
+                "-U",
+                parsed.username,
+                "-d",
+                parsed.path.lstrip("/"),
+                "-v",
+                "ON_ERROR_STOP=1",
+                "-f",
+                str(_MIGRATIONS_DIR / filename),
+            ],
+            env=env,
+            capture_output=True,
+            text=True,
+        )
+        if result.returncode != 0:
+            pytest.fail(f"Failed to apply {filename}: {result.stderr}")
+
+    return apply
+
+
+@pytest.fixture
+def pg_conn(postgres_server):
+    """Autocommit psycopg2 connection to the test database."""
+    parsed = urlparse(postgres_server.url())
+    conn = psycopg2.connect(
+        host=parsed.hostname,
+        port=parsed.port,
+        user=parsed.username,
+        password=parsed.password or "",
+        dbname=parsed.path.lstrip("/"),
+    )
+    conn.autocommit = True
+    yield conn
+    conn.close()
 
 
 @pytest.fixture(scope="function")
