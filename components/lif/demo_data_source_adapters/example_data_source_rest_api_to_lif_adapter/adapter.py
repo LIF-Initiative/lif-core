@@ -28,17 +28,23 @@ class ExampleDataSourceRestAPIToLIFAdapter(LIFDataSourceAdapter):
 
         source_url = f"{self.scheme}://{self.host}/r1-demo/users/{ident}"  # f"/graphql"
 
-        logger.info(f"Example Data Source REST API URL: {source_url}")
+        # The host only: the URL ends in the person identifier.
+        logger.info(f"Example Data Source REST API request to {self.scheme}://{self.host}")
 
         response = requests.get(source_url, headers=headers, timeout=30)
+        # The HTTPError names the URL, which ends in the identifier: the caller must not log or store it.
         response.raise_for_status()
         result = response.json()
 
         if "errors" in result:
-            error_msg = f"Example Data Source REST API errors: {result['errors']}"
-            logger.error(error_msg)
-            raise Exception(error_msg)
+            errors = result["errors"]
+            # A count only: a source can echo the requested identifier back in its error messages.
+            logger.error(
+                f"Example Data Source REST API returned errors (count: {len(errors) if isinstance(errors, list) else 'unknown'})"
+            )
+            # Carries the source's errors: the caller must not log or store the message.
+            raise Exception(f"Example Data Source REST API errors: {errors}")
 
         logger.info("Example Data Source REST API query executed successfully")
-        logger.debug(f"Response JSON: {result}")
+        logger.debug(f"Response JSON keys: {sorted(result) if isinstance(result, dict) else type(result).__name__}")
         return result
