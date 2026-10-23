@@ -10,7 +10,7 @@ requires-python = ">=3.13,<3.14"
 
 dependencies = [
     "pydantic~=2.11",
-    "dagster~=1.11",
+    "dagster==1.11.12",
     "dagster-cloud~=1.11",
     "httpx~=0.28",
     "jsonpath-ng~=1.7",
