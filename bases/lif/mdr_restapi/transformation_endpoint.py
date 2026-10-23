@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response, status
@@ -416,6 +417,15 @@ async def add_transformations_to_group(
         session, transformation_group_id, data
     )
     return transformation_group
+
+
+@router.post("/{transformation_group_id}/activate", response_model=TransformationGroupDTO)
+async def activate_transformation_group(
+    transformation_group_id: int,
+    activation_date: Optional[datetime] = Query(None, description="When it goes live; defaults to now"),
+    session: AsyncSession = Depends(get_session),
+):
+    return await transformation_service.activate_transformation_group(session, transformation_group_id, activation_date)
 
 
 # exclude_unset: PUT never sets Transformations, so omit it rather than send "Transformations": null to
