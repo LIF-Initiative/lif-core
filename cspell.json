@@ -186,6 +186,8 @@
         "openpyxl",
         "orglif",
         "PGDATABASE",
+        "pgpass",
+        "PGPASSFILE",
         "pgpassword",
         "PGHOST",
         "PGPORT",

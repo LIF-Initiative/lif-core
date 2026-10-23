@@ -34,11 +34,15 @@ non-deleted groups that have no ActivationDate and are not already
 deprecated:
   - the highest version gets ActivationDate = now()
   - the older versions get DeprecationDate = now()
+  - if the pair already has an active dated version, only a higher version
+    can be activated; the ones at or below it get DeprecationDate = now(),
+    so the pair never gains a second active row
 
 Versions compare numerically with trailing zeros dropped ("1.10" > "1.9",
 "1" = "1.0"), the same order the MDR's active-set read uses. Groups that
-already have an ActivationDate are never touched. These are reported and
-left alone:
+already have an ActivationDate are never touched. An activated group that
+keeps a future DeprecationDate is flagged in the output, since its pair goes
+dark on that date. These are reported and left alone:
   - free-text versions (the active-set read ignores them)
   - pairs whose highest version is tied, e.g. "1" and "1.0" (choose one by
     hand with POST /transformation_groups/{id}/activate)
@@ -56,8 +60,9 @@ Environment:
   POSTGRESQL_DB accepted as fallback to match the MDR API's env var naming)
 
 Examples:
-  # Preview: prints every change per schema, then rolls back
-  PGHOST=localhost PGUSER=postgres PGPASSWORD=postgres PGDATABASE=LIF $0
+  # Preview: prints every change per schema, then rolls back. Keep the password
+  # out of shell history with ~/.pgpass (or PGPASSFILE) rather than PGPASSWORD.
+  PGHOST=localhost PGUSER=postgres PGDATABASE=LIF $0
 
   # Apply
   PGHOST=... $0 --apply
@@ -129,16 +134,31 @@ main() {
 # row in a run gets the same timestamp.
 backfill_sql() {
     cat <<'SQL'
-WITH candidates AS (
-    SELECT "Id", "SourceDataModelId", "TargetDataModelId", "GroupVersion",
-           string_to_array(regexp_replace("GroupVersion", '(\.0+)+$', ''), '.')::numeric[] AS version_key
+WITH live_dated AS (
+    -- The highest numeric version per pair that is already active. An undated version at or below
+    -- it must not become a second active row.
+    SELECT "SourceDataModelId", "TargetDataModelId",
+           max(string_to_array(regexp_replace("GroupVersion", '(\.0+)+$', ''), '.')::numeric[]) AS active_key
     FROM :"schema"."TransformationsGroup"
     WHERE "Deleted" IS NOT TRUE
-      AND "ActivationDate" IS NULL
+      AND "ActivationDate" <= now()
       AND ("DeprecationDate" IS NULL OR "DeprecationDate" > now())
       AND "GroupVersion" ~ '^[0-9]+(\.[0-9]+)*$'
+    GROUP BY "SourceDataModelId", "TargetDataModelId"
+), candidates AS (
+    SELECT g."Id", g."SourceDataModelId", g."TargetDataModelId", g."GroupVersion",
+           string_to_array(regexp_replace(g."GroupVersion", '(\.0+)+$', ''), '.')::numeric[] AS version_key,
+           d.active_key
+    FROM :"schema"."TransformationsGroup" AS g
+    LEFT JOIN live_dated AS d USING ("SourceDataModelId", "TargetDataModelId")
+    WHERE g."Deleted" IS NOT TRUE
+      AND g."ActivationDate" IS NULL
+      AND (g."DeprecationDate" IS NULL OR g."DeprecationDate" > now())
+      AND g."GroupVersion" ~ '^[0-9]+(\.[0-9]+)*$'
 ), ranked AS (
-    SELECT *, max(version_key) OVER pair AS top_key
+    -- Only versions above the active one can be activated. top_key is NULL when there are none,
+    -- and then every candidate in the pair is deprecated.
+    SELECT *, max(version_key) FILTER (WHERE active_key IS NULL OR version_key > active_key) OVER pair AS top_key
     FROM candidates
     WINDOW pair AS (PARTITION BY "SourceDataModelId", "TargetDataModelId")
 ), counted AS (
@@ -160,11 +180,18 @@ WITH candidates AS (
 ), updated AS (
     UPDATE :"schema"."TransformationsGroup" AS g
     SET "ActivationDate"  = CASE WHEN c.version_key = c.top_key THEN now() ELSE g."ActivationDate" END,
-        "DeprecationDate" = CASE WHEN c.version_key < c.top_key THEN now() ELSE g."DeprecationDate" END
+        "DeprecationDate" = CASE WHEN c.version_key IS DISTINCT FROM c.top_key THEN now() ELSE g."DeprecationDate" END
     FROM counted AS c
-    WHERE g."Id" = c."Id" AND c.top_count = 1
+    WHERE g."Id" = c."Id" AND c.top_count <= 1
     RETURNING g."Id", g."SourceDataModelId", g."TargetDataModelId", g."GroupVersion",
-              CASE WHEN c.version_key = c.top_key THEN 'activated' ELSE 'deprecated' END AS action
+              CASE
+                  WHEN c.version_key IS DISTINCT FROM c.top_key AND c.version_key <= c.active_key
+                      THEN 'deprecated: at or below the active version'
+                  WHEN c.version_key IS DISTINCT FROM c.top_key THEN 'deprecated'
+                  WHEN g."DeprecationDate" IS NOT NULL
+                      THEN 'activated: keeps its future DeprecationDate ' || g."DeprecationDate"
+                  ELSE 'activated'
+              END AS action
 )
 SELECT :'schema' AS schema, "SourceDataModelId" AS source, "TargetDataModelId" AS target,
        "Id" AS group_id, "GroupVersion" AS version, action
