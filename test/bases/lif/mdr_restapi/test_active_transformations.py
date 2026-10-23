@@ -1,12 +1,19 @@
 """The Translator's read: only the latest active version of a (source, target) group, and only its JSONata
 rules (#1350). A group with no ActivationDate is not activated; activating one makes it the live version."""
 
+import asyncio
 import inspect
 import logging
 from datetime import datetime, timedelta, timezone
+from unittest import mock
+from urllib.parse import urlparse
 
 import pytest
+from sqlalchemy import text
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+from sqlalchemy.orm import sessionmaker
 
+from lif.mdr_services.transformation_service import activate_transformation_group
 from lif.mdr_sql_model.core import TransformationGroup
 from test.utils.lif.datasets.transform_with_embeddings.loader import DatasetTransformWithEmbeddings
 from test.utils.lif.mdr.api import create_transformation, import_transformation_group
@@ -465,3 +472,106 @@ async def test_an_import_arrives_inactive_whatever_the_file_says(async_client_md
     assert imported["ActivationDate"] is None
     active = await _get_active(async_client_mdr, dataset, mdr_api_headers)
     assert active.json()["TransformationGroupId"] == dataset.transformation_group_id
+
+
+@pytest.mark.asyncio
+async def test_reactivating_a_live_group_keeps_its_activation_date(async_client_mdr, mdr_api_headers):
+    """Re-activating the live version is a no-op, so the record of when it went live survives (#1414)."""
+    dataset, _ = await _prepare(async_client_mdr, inspect.currentframe().f_code.co_name)
+
+    response = await _activate(async_client_mdr, mdr_api_headers, dataset.transformation_group_id)
+
+    assert response.status_code == 200, response.text
+    assert _parse(response.json()["ActivationDate"]) == _parse(PAST)
+    assert response.json()["DeprecationDate"] is None
+
+
+@pytest.mark.asyncio
+async def test_rescheduling_a_live_group_is_a_409(async_client_mdr, mdr_api_headers):
+    """Moving a live version's ActivationDate into the future would leave its pair with nothing live (#1414)."""
+    dataset, _ = await _prepare(async_client_mdr, inspect.currentframe().f_code.co_name)
+
+    response = await _activate(
+        async_client_mdr, mdr_api_headers, dataset.transformation_group_id, activation_date=_iso(timedelta(days=1))
+    )
+
+    assert response.status_code == 409, response.text
+    v1 = await _get_group(async_client_mdr, mdr_api_headers, dataset, dataset.transformation_group_id)
+    assert _parse(v1["ActivationDate"]) == _parse(PAST)
+    active = await _get_active(async_client_mdr, dataset, mdr_api_headers)
+    assert active.json()["TransformationGroupId"] == dataset.transformation_group_id
+
+
+@pytest.mark.asyncio
+async def test_activate_in_a_tenant_schema_leaves_public_alone(async_client_mdr, mdr_api_headers, test_db_session):
+    """With the session on a tenant's search_path, as get_session sets it for X-API-Tenant-Schema, /activate
+    reads and deprecates that tenant's groups only (#1414). The header-to-search_path step has its own tests."""
+    snapshot = 'SELECT "Id", "ActivationDate", "DeprecationDate" FROM public."TransformationsGroup" ORDER BY "Id"'
+    public_before = (await test_db_session.execute(text(snapshot))).all()
+    await test_db_session.execute(text("SET search_path TO tenant_lif_team, public"))
+    dataset, _ = await _prepare(async_client_mdr, inspect.currentframe().f_code.co_name)
+    v2_id = await _add_group(async_client_mdr, dataset, mdr_api_headers, "2.0", ActivationDate=None)
+
+    response = await _activate(async_client_mdr, mdr_api_headers, v2_id)
+
+    assert response.status_code == 200, response.text
+    tenant_v1 = await test_db_session.execute(
+        text('SELECT "DeprecationDate" FROM tenant_lif_team."TransformationsGroup" WHERE "Id" = :id'),
+        {"id": dataset.transformation_group_id},
+    )
+    assert tenant_v1.scalar_one() is not None
+    assert (await test_db_session.execute(text(snapshot))).all() == public_before
+
+
+@pytest.mark.asyncio
+async def test_concurrent_activations_leave_one_active_version(
+    async_client_mdr, mdr_api_headers, postgres_server, test_db_session
+):
+    """Two /activate calls on different versions of one pair, at once and on separate connections, must
+    not both find the other inactive and both go live (#1414)."""
+    dataset, _ = await _prepare(async_client_mdr, inspect.currentframe().f_code.co_name)
+    v2_id = await _add_group(async_client_mdr, dataset, mdr_api_headers, "2.0", ActivationDate=None)
+    v3_id = await _add_group(async_client_mdr, dataset, mdr_api_headers, "3.0", ActivationDate=None)
+    parsed = urlparse(postgres_server.url())
+    engine = create_async_engine(
+        f"postgresql+asyncpg://{parsed.username}:{parsed.password or ''}@{parsed.hostname}:{parsed.port}{parsed.path}"
+    )
+    make_session = sessionmaker(bind=engine, class_=AsyncSession, expire_on_commit=False)
+    # Hold each commit until both calls have read the pair (or 1s has passed), so without a lock both read
+    # before either writes. With the lock, the second call waits at the lock, and the first commits on timeout.
+    reads_done = 0
+    both_read = asyncio.Event()
+
+    async def activate(group_id: int):
+        async with make_session() as session:
+            commit = session.commit
+
+            async def commit_after_both_read():
+                nonlocal reads_done
+                reads_done += 1
+                if reads_done == 2:
+                    both_read.set()
+                try:
+                    await asyncio.wait_for(both_read.wait(), timeout=1)
+                except TimeoutError:
+                    pass
+                await commit()
+
+            with mock.patch.object(session, "commit", commit_after_both_read):
+                return await activate_transformation_group(session, group_id)
+
+    try:
+        await asyncio.gather(activate(v2_id), activate(v3_id))
+    finally:
+        await engine.dispose()
+
+    # clock_timestamp(), not now(): this session's transaction may have begun before the activations.
+    active = await test_db_session.execute(
+        text(
+            'SELECT "Id" FROM public."TransformationsGroup" WHERE "SourceDataModelId" = :source '
+            'AND "TargetDataModelId" = :target AND "ActivationDate" <= clock_timestamp() '
+            'AND ("DeprecationDate" IS NULL OR "DeprecationDate" > clock_timestamp())'
+        ),
+        {"source": dataset.source_data_model_id, "target": dataset.target_data_model_id},
+    )
+    assert len(active.scalars().all()) == 1
