@@ -56,15 +56,23 @@ def _refusal(call) -> tuple[PortabilityErrorCode, str, str]:
     "path, resolved",
     [
         ("Course,title", ResolvedPath("1,-11", COURSE, TITLE)),
-        ("Course,AccreditedBy,name", ResolvedPath("1,2,-12", ORGANIZATION, NAME)),
-        ("Course,ApprovedBy,name", ResolvedPath("1,2,-12", ORGANIZATION, NAME)),
         ("Person,Contact,city", ResolvedPath("3,4,-13", CONTACT, CITY)),
-        # Through a reference, then into the referenced entity's roles.
-        ("Student,RefCourse,AccreditedBy,name", ResolvedPath("5,1,2,-12", ORGANIZATION, NAME)),
+        ("Student,RefCourse,title", ResolvedPath("5,1,-11", COURSE, TITLE)),
     ],
 )
 def test_to_entity_id_path_resolves_each_segment_by_association_name(path, resolved):
     assert to_entity_id_path(path, _model(), ELEMENT) == resolved
+
+
+@pytest.mark.parametrize(
+    "path", ["Course,AccreditedBy,name", "Course,ApprovedBy,name", "Student,RefCourse,AccreditedBy,name"]
+)
+def test_to_entity_id_path_refuses_a_role_an_entity_id_path_cannot_tell_apart(path):
+    # Both roles would store 1,2,-12, which export refuses, so the file could not round-trip. Import
+    # refuses them too until a stored path can tell roles apart.
+    code, element, reason = _refusal(lambda: to_entity_id_path(path, _model(), ELEMENT))
+    assert (code, element) == (Code.PATH_INVALID, ELEMENT)
+    assert "'Course' reaches 'Organization' by 2 associations ('AccreditedBy', 'ApprovedBy')" in reason
 
 
 @pytest.mark.parametrize(

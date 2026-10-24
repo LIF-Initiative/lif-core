@@ -101,6 +101,21 @@ def to_entity_id_path(path: str, model: ModelPaths, element: str) -> ResolvedPat
             raise PortabilityError(
                 PortabilityErrorCode.PATH_INVALID, element, f"{segment!r} is an entity; a path ends at an attribute"
             )
+        same_child = [
+            other
+            for other in model.associations.get(parent_id, [])
+            if other.child_id == end.child_id and other.child_is_attribute == end.child_is_attribute
+        ]
+        if len(same_child) > 1:
+            # Two roles store the same EntityIdPath, which export refuses (to_file_path), so refuse here too.
+            child = (model.attribute_names if end.child_is_attribute else model.entity_names)[end.child_id]
+            names = ", ".join(repr(other.name) for other in same_child)
+            raise PortabilityError(
+                PortabilityErrorCode.PATH_INVALID,
+                element,
+                f"the path cannot be stored unambiguously: {parent!r} reaches {child!r} by {len(same_child)} "
+                f"associations ({names})",
+            )
         ids.append(end.child_id)
 
     *entity_ids, attribute_id = ids
