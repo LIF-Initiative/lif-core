@@ -24,6 +24,8 @@ import {
     existsTransformationGroup,
     updateTransformationAttributes,
     exportTransformationsForGroup,
+    activateTransformationGroup,
+    getActiveGroupIdForPair,
 } from "@/services/transformationsService";
 import {
     getModelDetailsWithTree,
@@ -60,6 +62,7 @@ import ExpressionEditorDialog from "./components/ExpressionEditorDialog";
 import EditGroupDialog from "./components/EditGroupDialog";
 import ImportGroupDialog from "./components/ImportGroupDialog";
 import ForkGroupDialog from "./components/ForkGroupDialog";
+import ActivateGroupDialog from "./components/ActivateGroupDialog";
 import DetachSourcesDialog from "./components/DetachSourcesDialog";
 import BulkTransformationsDialog from "./components/BulkTransformationsDialog";
 import { trackEvent } from "@/utils/analytics";
@@ -236,6 +239,9 @@ const MappingsView: React.FC = () => {
     const [editGroupOpen, setEditGroupOpen] = useState(false);
     const [importDialogOpen, setImportDialogOpen] = useState(false);
     const [forkDialogOpen, setForkDialogOpen] = useState(false);
+    const [activateDialogOpen, setActivateDialogOpen] = useState(false);
+    // The pair's live group, as the Translator reads it: undefined while loading, null when there is none.
+    const [activeGroupId, setActiveGroupId] = useState<number | null | undefined>(undefined);
     const [bulkDialogOpen, setBulkDialogOpen] = useState(false);
     const [editingTransformation, setEditingTransformation] =
         useState<DisplayTransformationData | null>(null);
@@ -245,7 +251,7 @@ const MappingsView: React.FC = () => {
     const [forkBump, setForkBump] = useState<'major' | 'minor'>('major');
     const [forkPreview, setForkPreview] = useState<string>('');
     // Aggregate dialog open state
-    const anyDialogOpen = deleteDialogOpen || exprDialogOpen || editGroupOpen || importDialogOpen || forkDialogOpen || bulkDialogOpen;
+    const anyDialogOpen = deleteDialogOpen || exprDialogOpen || editGroupOpen || importDialogOpen || forkDialogOpen || activateDialogOpen || bulkDialogOpen;
     // Detach sources dialog state
     const [detachDialogOpen, setDetachDialogOpen] = useState(false);
     const [pendingDetach, setPendingDetach] = useState<null | { transId: number; srcAttrIds: number[]; willDelete: boolean }>(null);
@@ -685,6 +691,25 @@ const MappingsView: React.FC = () => {
             [group.Id]: group.GroupVersion,
         }));
     }, [group]);
+
+    // Which version of this pair is live, for the Activate button and the version picker
+    const groupSourceId = group?.SourceDataModelId;
+    const groupTargetId = group?.TargetDataModelId;
+    const refreshActiveGroup = useCallback(async () => {
+        if (groupSourceId == null || groupTargetId == null) return;
+        try {
+            setActiveGroupId(await getActiveGroupIdForPair(groupSourceId, groupTargetId));
+        } catch (e) {
+            // e.g. a 409 when two active versions tie: show no live version rather than guess
+            console.error('Failed to read the live version for this pair', e);
+            setActiveGroupId(null);
+        }
+    }, [groupSourceId, groupTargetId]);
+
+    useEffect(() => {
+        setActiveGroupId(undefined);
+        refreshActiveGroup();
+    }, [refreshActiveGroup]);
 
     // When we have group + all groups, ensure we know versions for same source/target pairs
     useEffect(() => {
@@ -2170,6 +2195,27 @@ const MappingsView: React.FC = () => {
         }
     }, [group, forkBump, navigate]);
 
+    const onActivateVersion = useCallback(async () => {
+        if (!group) return;
+        try {
+            const activated = await activateTransformationGroup(group.Id);
+            setGroup((prev) =>
+                prev && prev.Id === activated.Id
+                    ? {
+                          ...prev,
+                          ActivationDate: activated.ActivationDate,
+                          DeprecationDate: activated.DeprecationDate,
+                      }
+                    : prev
+            );
+            await refreshActiveGroup();
+            showToast(`v${activated.GroupVersion} is now the live version`, 'success');
+        } catch (e) {
+            // e.g. a free-text GroupVersion, which the API refuses with a readable reason
+            showToast(errorToString(e), 'error');
+        }
+    }, [group, refreshActiveGroup, showToast]);
+
     const samePairGroups = useMemo(() => {
         if (!group || !allGroups) return [] as TranformationGroupData[];
         const normalize = (id?: number) => (id && id > 0 ? id : 1);
@@ -2490,6 +2536,10 @@ const MappingsView: React.FC = () => {
                                                 {versionByGroupId[
                                                     g.TransformationGroupId
                                                 ] || '?'}
+                                                {g.TransformationGroupId ===
+                                                activeGroupId
+                                                    ? ' (active)'
+                                                    : ''}
                                             </option>
                                         ))}
                                 </select>
@@ -2502,6 +2552,19 @@ const MappingsView: React.FC = () => {
                             >
                                 ⎘ Fork
                             </button>
+                            {activeGroupId !== undefined &&
+                                activeGroupId !== group.Id && (
+                                    <button
+                                        type="button"
+                                        className="mappings-fork-btn"
+                                        title="Make this version the live one"
+                                        onClick={() =>
+                                            setActivateDialogOpen(true)
+                                        }
+                                    >
+                                        ✓ Activate
+                                    </button>
+                                )}
                         </div>
 
                         {/* Row 3: Status badges */}
@@ -2949,6 +3012,24 @@ const MappingsView: React.FC = () => {
                 onFork={async () => {
                     setForkDialogOpen(false);
                     await onForkVersion();
+                }}
+            />
+            <ActivateGroupDialog
+                open={activateDialogOpen}
+                version={group?.GroupVersion}
+                hasLiveVersion={
+                    activeGroupId != null && activeGroupId !== group?.Id
+                }
+                activeVersion={
+                    activeGroupId != null
+                        ? versionByGroupId[activeGroupId]
+                        : undefined
+                }
+                onOpenChange={setActivateDialogOpen}
+                onCancel={() => setActivateDialogOpen(false)}
+                onActivate={async () => {
+                    setActivateDialogOpen(false);
+                    await onActivateVersion();
                 }}
             />
             <DetachSourcesDialog

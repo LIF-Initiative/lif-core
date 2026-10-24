@@ -234,6 +234,28 @@ export const updateTransformationGroup = async (
     return result.data;
 };
 
+// Make this version the live one for its pair; the pair's other active versions are deprecated (#1350).
+export const activateTransformationGroup = async (id: number) => {
+    const url = `${apiBaseUrl}/transformation_groups/${id}/activate`;
+    const result = await api.post(url);
+    return result.data as TransformationGroupDetails;
+};
+
+// The live version's group Id for a pair, as the Translator reads it, or null when the pair has none.
+export const getActiveGroupIdForPair = async (
+    sourceDataModelId: number,
+    targetDataModelId: number
+): Promise<number | null> => {
+    const url = `${apiBaseUrl}/transformation_groups/active_transformations_for_data_models/?source_data_model_id=${sourceDataModelId}&target_data_model_id=${targetDataModelId}`;
+    try {
+        const res = await api.get(url);
+        return res.data.TransformationGroupId as number;
+    } catch (e) {
+        if ((e as { response?: { status?: number } })?.response?.status === 404) return null;
+        throw e;
+    }
+};
+
 export const deleteTransformationGroup = async (id: number) => {
     const url = `${apiBaseUrl}/transformation_groups/${id}`;
     const res = await api.delete(url);
