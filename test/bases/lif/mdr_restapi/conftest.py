@@ -22,48 +22,69 @@ def mdr_api_headers():
     return {"X-API-Key": "changeme1"}
 
 
-@pytest.fixture(scope="session")
-def postgres_server():
-    """Start a PostgreSQL server for testing (no Docker required).
+BACKUP_SQL_PATH = Path(__file__).parent.parent.parent.parent.parent / "projects/lif_mdr_database/backup.sql"
+
+
+def _start_postgres():
+    """Start a throwaway PostgreSQL server (no Docker required), or skip.
 
     Requires PostgreSQL to be installed locally (e.g., `brew install postgresql` on macOS).
     """
-
-    # Get the absolute path to the SQL file that is used to initialize the database
-    backup_sql_path = Path(__file__).parent.parent.parent.parent.parent / "projects/lif_mdr_database/backup.sql"
-
     try:
-        postgresql = testing.postgresql.Postgresql()
+        return testing.postgresql.Postgresql()
     except RuntimeError as e:
         pytest.skip(f"PostgreSQL not available locally: {e}")
 
-    with postgresql:
-        # Initialize database with backup.sql using psql command
-        # (psycopg2 can't handle COPY ... FROM stdin with inline data)
-        parsed = urlparse(postgresql.url())
-        env = os.environ.copy()
-        env["PGPASSWORD"] = parsed.password or ""
 
-        result = subprocess.run(
-            [
-                "psql",
-                "-h",
-                parsed.hostname,
-                "-p",
-                str(parsed.port),
-                "-U",
-                parsed.username,
-                "-d",
-                parsed.path.lstrip("/"),
-                "-f",
-                str(backup_sql_path),
-            ],
-            env=env,
-            capture_output=True,
-            text=True,
-        )
-        if result.returncode != 0:
-            pytest.fail(f"Failed to load backup.sql: {result.stderr}")
+def _load_seed(postgresql):
+    """Initialize the database with backup.sql using the psql command.
+
+    psycopg2 can't handle COPY ... FROM stdin with inline data.
+    """
+    parsed = urlparse(postgresql.url())
+    env = os.environ.copy()
+    env["PGPASSWORD"] = parsed.password or ""
+
+    result = subprocess.run(
+        [
+            "psql",
+            "-h",
+            parsed.hostname,
+            "-p",
+            str(parsed.port),
+            "-U",
+            parsed.username,
+            "-d",
+            parsed.path.lstrip("/"),
+            "-f",
+            str(BACKUP_SQL_PATH),
+        ],
+        env=env,
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0:
+        pytest.fail(f"Failed to load backup.sql: {result.stderr}")
+
+
+def _async_session_maker(postgresql):
+    # Convert psycopg2 URL to asyncpg URL format
+    parsed = urlparse(postgresql.url())
+    DATABASE_URL = (
+        f"postgresql+asyncpg://{parsed.username}:{parsed.password or ''}@{parsed.hostname}:{parsed.port}{parsed.path}"
+    )
+
+    echo = os.getenv("SQLALCHEMY_ECHO", "false").lower() == "true"
+    engine = create_async_engine(DATABASE_URL, echo=echo)
+    return engine, sessionmaker(bind=engine, class_=AsyncSession, expire_on_commit=False)
+
+
+@pytest.fixture(scope="session")
+def postgres_server():
+    """Start a PostgreSQL server for testing, loaded with backup.sql."""
+    with _start_postgres() as postgresql:
+        _load_seed(postgresql)
+        parsed = urlparse(postgresql.url())
 
         # Set environment variables for MDR
         os.environ["POSTGRESQL_USER"] = parsed.username or "postgres"
@@ -73,6 +94,30 @@ def postgres_server():
         os.environ["POSTGRESQL_DB"] = parsed.path.lstrip("/")
 
         yield postgresql
+
+
+@pytest.fixture(scope="module")
+def seed_postgres():
+    """A separate PostgreSQL server holding the untouched seed.
+
+    Tests sharing postgres_server write to it, so anything that must see exactly
+    backup.sql (e.g. the generated-schema snapshots) uses this instead. It does not
+    touch the MDR environment variables.
+    """
+    with _start_postgres() as postgresql:
+        _load_seed(postgresql)
+        yield postgresql
+
+
+@pytest.fixture(scope="function")
+async def seed_db_session(seed_postgres):
+    """A fresh session on the untouched seed database."""
+    engine, async_session_maker = _async_session_maker(seed_postgres)
+
+    async with async_session_maker() as session:
+        yield session
+
+    await engine.dispose()
 
 
 _MIGRATIONS_DIR = (
@@ -134,15 +179,7 @@ def pg_conn(postgres_server):
 @pytest.fixture(scope="function")
 async def test_db_session(postgres_server):
     """Create a new database session for each test."""
-    # Convert psycopg2 URL to asyncpg URL format
-    parsed = urlparse(postgres_server.url())
-    DATABASE_URL = (
-        f"postgresql+asyncpg://{parsed.username}:{parsed.password or ''}@{parsed.hostname}:{parsed.port}{parsed.path}"
-    )
-
-    echo = os.getenv("SQLALCHEMY_ECHO", "false").lower() == "true"
-    engine = create_async_engine(DATABASE_URL, echo=echo)
-    async_session_maker = sessionmaker(bind=engine, class_=AsyncSession, expire_on_commit=False)
+    engine, async_session_maker = _async_session_maker(postgres_server)
 
     async with async_session_maker() as session:
         yield session

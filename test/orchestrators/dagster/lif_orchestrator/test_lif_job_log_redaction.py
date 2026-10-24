@@ -1,8 +1,9 @@
 """
-The Dagster LIF job keeps learner data out of its logs and step keys (#1359).
+The Dagster LIF job keeps learner data out of its logs, step keys and stored errors (#1359, #1407).
 
-Dagster stores every ``context.log`` message in its event log as well as printing it, and a
-dynamic output's mapping key becomes part of each step key, so both are checked here.
+Dagster stores every ``context.log`` message in its event log as well as printing it, a dynamic
+output's mapping key becomes part of each step key, and an exception raised out of an op is stored
+with its message in Dagster's own step events, so all three are checked here.
 
 The orchestrator is its own uv project, not a Polylith brick, so the root environment can't import
 it and its own ``tests/`` don't run in CI (#1341). Its source is added to ``sys.path`` instead; the
@@ -15,6 +16,7 @@ from unittest import mock
 
 import dagster as dg
 import pytest
+import requests
 
 from lif.data_source_adapters import _EXTERNAL_ADAPTERS, ADAPTER_REGISTRY
 
@@ -75,15 +77,17 @@ def _run(monkeypatch, parts, adapter_run, translator_response, callback_response
     return instance.all_logs(result.run_id)
 
 
+def _stored(entries) -> str:
+    # Every entry as Dagster stores it, including the error info in its own step events.
+    return "\n".join(dg.serialize_value(entry) for entry in entries)
+
+
 def _assert_no_learner_data(entries, capfd):
-    # Every field of the job's own log entries, and the step key of every entry. Dagster's own step
-    # events are otherwise left out: when an op raises, Dagster stores the exception's message in
-    # them, which is not one of the job's log lines.
-    stored = [repr(entry) for entry in entries if entry.dagster_event is None]
+    stored = _stored(entries)
     step_keys = [entry.step_key for entry in entries if entry.step_key]
     printed = capfd.readouterr()
     for sentinel in SENTINELS:
-        assert not [e for e in stored if sentinel in e], sentinel
+        assert sentinel not in stored, sentinel
         assert not [k for k in step_keys if sentinel in k], sentinel
         assert sentinel not in printed.out + printed.err, sentinel
 
@@ -128,6 +132,37 @@ def test_failed_adapter_logs_no_learner_data(monkeypatch, capfd):
     )
 
     assert "run_lif_adapter failed" in "\n".join(entry.user_message for entry in entries)
+    _assert_no_learner_data(entries, capfd)
+
+
+def test_invalid_query_plan_part_stores_no_learner_data(monkeypatch, capfd):
+    # Pydantic's message quotes the input, which holds the person identifier.
+    part = _part()
+    del part["lif_fragment_paths"]
+
+    entries = _run(
+        monkeypatch, parts=[part], adapter_run=dict, translator_response=_response(), callback_response=_response()
+    )
+
+    assert "create_dynamic_pipelines failed: ValidationError" in _stored(entries)
+    _assert_no_learner_data(entries, capfd)
+
+
+def test_failed_callback_keeps_its_http_status(monkeypatch, capfd):
+    callback = _response(ok=False)
+    callback.raise_for_status.side_effect = requests.HTTPError(
+        f"503 Server Error for url: https://qp.example/{PERSON_ID}", response=mock.Mock(status_code=503)
+    )
+
+    entries = _run(
+        monkeypatch,
+        parts=[_part()],
+        adapter_run=lambda: {"Person": {"Name": [{"firstName": SOURCE_VALUE}]}},
+        translator_response=_response(body={"Person": [{"Name": [{"firstName": TRANSLATED_VALUE}]}]}),
+        callback_response=callback,
+    )
+
+    assert "send_results_to_query_planner failed: HTTPError 503" in _stored(entries)
     _assert_no_learner_data(entries, capfd)
 
 

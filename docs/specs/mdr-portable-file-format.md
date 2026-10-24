@@ -119,7 +119,7 @@ form (§9) and the round trip (§3).
 In a model file, a reference is resolved in the file's own model, and has no way to name another
 one. The one exception is a crosswalk (§7), whose two value-set references each name their model by
 identity. If no live element with that key exists, the reference is refused with
-`REFERENCE_UNRESOLVED`.
+`ELEMENT_REFERENCE_UNRESOLVED`.
 
 **Element keys** follow the database's unique indexes:
 
@@ -210,6 +210,11 @@ including 89 of the 106 source value sets that value mappings refer to (§7).
 | `Required` | | Boolean; absent means `false`. Puts the element in its parent's `required` list |
 | `Description`, `UseConsiderations`, `SourceModel`, `Notes`, `Contributor`, `ContributorOrganization`, `Tags`, `Common` | | Descriptive text; `Common` is a nullable boolean |
 | `ActivationDate`, `DeprecationDate` | | Timestamps |
+
+An entity that is the child of no containing association has no parent: it appears at the top level
+of the generated schema, under its `Name`. A reference does not give its child a parent (§5.4). Two
+entities with no parent and the same `Name` would appear under the same key, so the import is
+refused with `TOP_LEVEL_NAME_TAKEN`. Entities with a parent may share a `Name`.
 
 **Attribute**
 
@@ -495,9 +500,10 @@ no rows.
 | `MODEL_MISSING` | A model named by a mapping group or crosswalk is not installed |
 | `ASSOCIATION_CYCLE` | A cycle of containing associations (§5.4) |
 | `REFERENCE_INVALID` | `Reference` on an association whose child is an attribute (§5.4) |
-| `REFERENCE_UNRESOLVED` | No live element with that key in the model |
+| `ELEMENT_REFERENCE_UNRESOLVED` | No live element with that key in the model |
 | `DUPLICATE_KEY` | Two entries in one list share a key |
 | `ASSOCIATION_NAME_TAKEN` | A parent already has a child under that `Name` |
+| `TOP_LEVEL_NAME_TAKEN` | Two entities with no parent have the same `Name` (§5.3) |
 | `UNASSOCIATED_ATTRIBUTE` | An attribute is in no association |
 | `EXPRESSION_LANGUAGE_NOT_PORTABLE` | A rule that is not JSONata |
 | `MAPPING_TARGET_MISSING`, `MAPPING_TARGET_MULTIPLE`, `MAPPING_TARGET_SHARED` | §6.2 |
@@ -729,6 +735,7 @@ with no service. Both constraint tables trace to roadmap items that were never b
 | `{ "Model": "State LIF", "Entity": "Student" }` as an association end | `FIELD_UNKNOWN` (`Model`) |
 | `Student` → `Student` without `Reference` | `ASSOCIATION_CYCLE` (`Student`) |
 | Two associations under `Course` named `AccreditedBy` | `ASSOCIATION_NAME_TAKEN` (`Course`, `AccreditedBy`) |
+| Two entities with no parent, both with `Name` `Student` | `TOP_LEVEL_NAME_TAKEN` (`Student`) |
 | Two entities with `UniqueName` `Student` | `DUPLICATE_KEY` (`Student`) |
 | `"ExpressionLanguage": "LIF_Pseudo_Code"` | `EXPRESSION_LANGUAGE_NOT_PORTABLE` (the mapping's target path) |
 | Two mappings with target `Assessment,identifier` | `MAPPING_TARGET_SHARED` |
