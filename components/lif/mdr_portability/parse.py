@@ -19,7 +19,7 @@ from typing import Any, Optional, TypeVar
 from pydantic import BaseModel, ValidationError
 from pydantic_core import ErrorDetails
 
-from lif.mdr_portability.errors import PortabilityError, PortabilityErrorCode, PortabilityErrorGroup
+from lif.mdr_portability.errors import PortabilityError, PortabilityErrorCode, PortabilityErrorGroup, error_group
 from lif.mdr_portability.reader import Location, Reader
 from lif.mdr_portability.v1 import reading as v1
 from lif.mdr_portability.v1.models import CrosswalkFile, MappingGroupFile, ModelFile
@@ -52,13 +52,8 @@ def parse_crosswalk_file(content: bytes) -> CrosswalkFile:
     return _parse(content, "lif-mdr-crosswalk", CrosswalkFile)
 
 
-def _group(errors: list[PortabilityError]) -> PortabilityErrorGroup:
-    # The message is only for logs and tracebacks; callers read the errors themselves.
-    return PortabilityErrorGroup(f"{len(errors)} portability error{'s' if len(errors) != 1 else ''}", errors)
-
-
 def _refuse(code: PortabilityErrorCode, element: str, reason: str) -> PortabilityErrorGroup:
-    return _group([PortabilityError(code, element, reason)])
+    return error_group([PortabilityError(code, element, reason)])
 
 
 def _get_reader_for(data: Any, format_type: str) -> Reader:
@@ -150,7 +145,7 @@ def _parse(content: bytes, format_type: str, current: type[FileModel]) -> FileMo
     try:
         file = reader.file_class.model_validate(data)
     except ValidationError as validation_error:
-        raise _group([_to_portability_error(error, data, reader) for error in validation_error.errors()]) from None
+        raise error_group([_to_portability_error(error, data, reader) for error in validation_error.errors()]) from None
     # An older version's file would be upgraded here, one version at a time. Only version 1 exists,
     # so its model is the current one. A reader added without its upgrade step fails here.
     if not isinstance(file, current):
