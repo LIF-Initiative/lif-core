@@ -38,6 +38,7 @@ Utility scripts for managing deployments, credentials, and data. AWS scripts req
 | `provision-mdr-tenant.sh` | Create a `tenant_{name}` PostgreSQL schema by cloning DDL (and optionally data) from `public`. Supports MDR self-serve multi-tenancy (issue #883). Uses libpq env vars (`PG*`) for connectivity — caller manages network access. |
 | `backfill-transformation-group-activation.sh` | One-time backfill for #1350: dates the highest undated version of each transformation group pair and deprecates the older ones (dated or not), so each pair ends with one active row, in `public` and every `tenant_*` schema. Dry-run by default (runs and rolls back), `--apply` to commit; idempotent. Uses libpq env vars (`PG*`). |
 | `backfill_transformation_group_activation.py` | The same backfill through `asyncpg`, for hosts without `psql` (the `mdr-api` container via ECS exec). Runs the shell script's SQL unchanged (a test keeps them equal). Uses the MDR's `POSTGRESQL_*` env vars. |
+| `measure_overlay_conversion.py` | Read-only sizing for #1388: for each overlay model in `public` and every `tenant_*` schema, counts what converting it to a self-contained model would touch (inclusion rows, overrides, `UniqueName` clashes, value sets, `ExtendedBy` links, unassociated attributes, and the mapping rows to re-point). Changes nothing. Uses the MDR's `POSTGRESQL_*` env vars, so it runs in the `mdr-api` container via ECS exec. |
 
 ## Demo Release
 
