@@ -1499,8 +1499,9 @@ async def activate_transformation_group(
 
     Sets the group's ActivationDate and clears its DeprecationDate. The pair's other versions that would be
     active at that time are deprecated at exactly that time, so a scheduled activation leaves no gap.
-    Rollback is activating the older version. Activating the live version is a no-op, and rescheduling it
-    is a 409 (#1414).
+    Rollback is activating the older version. Activating the live version keeps its ActivationDate and still
+    deprecates the pair's other live versions; it is a no-op only when it is the sole live version.
+    Rescheduling a live version is a 409 (#1414).
     """
     if activation_date is not None:
         if activation_date.tzinfo is None:
@@ -1535,20 +1536,17 @@ async def activate_transformation_group(
     now = datetime.now(timezone.utc)
     if activation_date is None:
         activation_date = now
-    if (
+    already_live = bool(
         group.ActivationDate
         and group.ActivationDate <= now
         and not (group.DeprecationDate and group.DeprecationDate <= now)
-    ):
-        if activation_date > now:
-            raise HTTPException(
-                status_code=409,
-                detail=f"Transformation group {transformation_group_id} is already live; rescheduling it would "
-                "leave its pair with no live version until then",
-            )
-        live_group = TransformationGroupDTO.from_orm(group)
-        await session.rollback()  # releases the lock; nothing changed
-        return live_group
+    )
+    if already_live and activation_date > now:
+        raise HTTPException(
+            status_code=409,
+            detail=f"Transformation group {transformation_group_id} is already live; rescheduling it would "
+            "leave its pair with no live version until then",
+        )
 
     others = await session.execute(
         select(TransformationGroup).where(
@@ -1560,12 +1558,20 @@ async def activate_transformation_group(
             or_(TransformationGroup.DeprecationDate.is_(None), TransformationGroup.DeprecationDate > activation_date),
         )
     )
-    for other in others.scalars().all():
+    others = others.scalars().all()
+    # A live group keeps its ActivationDate but still deprecates any other live version, so re-activating
+    # it repairs a pair with two active rows. Only the pair's sole live version is a no-op.
+    if already_live and not others:
+        live_group = TransformationGroupDTO.from_orm(group)
+        await session.rollback()  # releases the lock; nothing changed
+        return live_group
+    for other in others:
         other.DeprecationDate = activation_date
         session.add(other)
 
-    group.ActivationDate = activation_date
-    group.DeprecationDate = None
+    if not already_live:
+        group.ActivationDate = activation_date
+        group.DeprecationDate = None
     session.add(group)
     await session.commit()
     await session.refresh(group)

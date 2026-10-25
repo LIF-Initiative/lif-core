@@ -487,6 +487,25 @@ async def test_reactivating_a_live_group_keeps_its_activation_date(async_client_
 
 
 @pytest.mark.asyncio
+async def test_reactivating_a_live_group_still_deprecates_the_other_live_versions(async_client_mdr, mdr_api_headers):
+    """Two live rows (legacy, or a dated POST/PUT): re-activating the lower one is the repair, so it must
+    deprecate the higher one while keeping its own ActivationDate (#1414 review)."""
+    dataset, v1_rule_id = await _prepare(async_client_mdr, inspect.currentframe().f_code.co_name)
+    v2_id = await _add_group(async_client_mdr, dataset, mdr_api_headers, "2.0")
+    assert (await _get_active(async_client_mdr, dataset, mdr_api_headers)).json()["TransformationGroupId"] == v2_id
+
+    response = await _activate(async_client_mdr, mdr_api_headers, dataset.transformation_group_id)
+
+    assert response.status_code == 200, response.text
+    assert _parse(response.json()["ActivationDate"]) == _parse(PAST)
+    assert response.json()["DeprecationDate"] is None
+    active = (await _get_active(async_client_mdr, dataset, mdr_api_headers)).json()
+    assert active["TransformationGroupId"] == dataset.transformation_group_id
+    assert [row["TransformationId"] for row in active["data"]] == [v1_rule_id]
+    assert (await _get_group(async_client_mdr, mdr_api_headers, dataset, v2_id))["DeprecationDate"] is not None
+
+
+@pytest.mark.asyncio
 async def test_rescheduling_a_live_group_is_a_409(async_client_mdr, mdr_api_headers):
     """Moving a live version's ActivationDate into the future would leave its pair with nothing live (#1414)."""
     dataset, _ = await _prepare(async_client_mdr, inspect.currentframe().f_code.co_name)
