@@ -123,7 +123,7 @@ const GroupDetailsEditor: React.FC<GroupDetailsEditorProps> = ({
                     value={activationDate}
                     readOnly
                     disabled
-                    title="Use Activate to make a version live"
+                    aria-describedby="ged-dates-hint"
                 />
 
                 <label
@@ -139,8 +139,13 @@ const GroupDetailsEditor: React.FC<GroupDetailsEditorProps> = ({
                     value={deprecationDate}
                     readOnly
                     disabled
-                    title="Set when another version is activated"
+                    aria-describedby="ged-dates-hint"
                 />
+                {/* Visible text, not a tooltip: disabled inputs can't take keyboard focus */}
+                <p id="ged-dates-hint" className="group-editor__hint">
+                    Dates are set by the Activate button. Activating a version
+                    deprecates the version it replaces.
+                </p>
 
                 <label
                     className="group-editor__label group-editor__label--block"

@@ -25,8 +25,9 @@ import {
     updateTransformationAttributes,
     exportTransformationsForGroup,
     activateTransformationGroup,
-    getActiveGroupIdForPair,
+    getLiveVersionForPair,
 } from "@/services/transformationsService";
+import type { LiveVersionState } from "@/services/transformationsService";
 import {
     getModelDetailsWithTree,
     listModels,
@@ -240,8 +241,9 @@ const MappingsView: React.FC = () => {
     const [importDialogOpen, setImportDialogOpen] = useState(false);
     const [forkDialogOpen, setForkDialogOpen] = useState(false);
     const [activateDialogOpen, setActivateDialogOpen] = useState(false);
-    // The pair's live group, as the Translator reads it: undefined while loading, null when there is none.
-    const [activeGroupId, setActiveGroupId] = useState<number | null | undefined>(undefined);
+    // The pair's live version, as the Translator reads it: undefined while loading.
+    const [liveVersion, setLiveVersion] = useState<LiveVersionState | undefined>(undefined);
+    const activeGroupId = liveVersion?.status === 'live' ? liveVersion.groupId : undefined;
     const [bulkDialogOpen, setBulkDialogOpen] = useState(false);
     const [editingTransformation, setEditingTransformation] =
         useState<DisplayTransformationData | null>(null);
@@ -697,17 +699,11 @@ const MappingsView: React.FC = () => {
     const groupTargetId = group?.TargetDataModelId;
     const refreshActiveGroup = useCallback(async () => {
         if (groupSourceId == null || groupTargetId == null) return;
-        try {
-            setActiveGroupId(await getActiveGroupIdForPair(groupSourceId, groupTargetId));
-        } catch (e) {
-            // e.g. a 409 when two active versions tie: show no live version rather than guess
-            console.error('Failed to read the live version for this pair', e);
-            setActiveGroupId(null);
-        }
+        setLiveVersion(await getLiveVersionForPair(groupSourceId, groupTargetId));
     }, [groupSourceId, groupTargetId]);
 
     useEffect(() => {
-        setActiveGroupId(undefined);
+        setLiveVersion(undefined);
         refreshActiveGroup();
     }, [refreshActiveGroup]);
 
@@ -2552,7 +2548,9 @@ const MappingsView: React.FC = () => {
                             >
                                 ⎘ Fork
                             </button>
-                            {activeGroupId !== undefined &&
+                            {/* Not offered while the live version is unknown: the dialog couldn't say what it replaces */}
+                            {liveVersion !== undefined &&
+                                liveVersion.status !== 'error' &&
                                 activeGroupId !== group.Id && (
                                     <button
                                         type="button"
@@ -2565,6 +2563,16 @@ const MappingsView: React.FC = () => {
                                         ✓ Activate
                                     </button>
                                 )}
+                            {liveVersion?.status === 'tie' && (
+                                <span className="status-badge status-badge--soon">
+                                    Two versions are live
+                                </span>
+                            )}
+                            {liveVersion?.status === 'error' && (
+                                <span className="status-badge status-badge--deprecated">
+                                    Live version unknown
+                                </span>
+                            )}
                         </div>
 
                         {/* Row 3: Status badges */}
@@ -3017,8 +3025,12 @@ const MappingsView: React.FC = () => {
             <ActivateGroupDialog
                 open={activateDialogOpen}
                 version={group?.GroupVersion}
-                hasLiveVersion={
-                    activeGroupId != null && activeGroupId !== group?.Id
+                currentLive={
+                    liveVersion?.status === 'tie'
+                        ? 'tie'
+                        : activeGroupId != null && activeGroupId !== group?.Id
+                          ? 'other'
+                          : 'none'
                 }
                 activeVersion={
                     activeGroupId != null
