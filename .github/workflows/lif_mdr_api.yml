@@ -12,6 +12,7 @@ on:
       - components/lif/developer_keys/**
       - components/lif/mdr_auth/**
       - components/lif/mdr_dto/**
+      - components/lif/mdr_portability/**
       - components/lif/mdr_sql_model/**
       - components/lif/mdr_services/**
       - components/lif/mdr_utils/**
