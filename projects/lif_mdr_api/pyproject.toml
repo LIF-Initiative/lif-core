@@ -47,6 +47,7 @@ packages = ["lif"]
 "../../components/lif/mdr_auth" = "lif/mdr_auth"
 "../../components/lif/developer_keys" = "lif/developer_keys"
 "../../components/lif/mdr_dto" = "lif/mdr_dto"
+"../../components/lif/mdr_portability" = "lif/mdr_portability"
 "../../components/lif/mdr_services" = "lif/mdr_services"
 "../../components/lif/mdr_sql_model" = "lif/mdr_sql_model"
 "../../components/lif/mdr_utils" = "lif/mdr_utils"
