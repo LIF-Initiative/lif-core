@@ -14,6 +14,7 @@ from sqlalchemy import text
 from test.utils.lif.datasets.transform_deep_literal_attribute.loader import DatasetTransformDeepLiteralAttribute
 from test.utils.lif.datasets.transform_with_embeddings.loader import DatasetTransformWithEmbeddings
 from test.utils.lif.mdr.api import (
+    activate_transformation_group,
     convert_unique_names_to_id_path,
     create_transformation,
     delete_transformation,
@@ -79,6 +80,11 @@ async def test_transforms_deep_literal_attribute(async_client_mdr, async_client_
         transformation_name="User.Skills.Genre",
     )
 
+    await activate_transformation_group(
+        async_client_mdr=async_client_mdr,
+        transformation_group_id=dataset_transform_deep_literal_attribute.transformation_group_id,
+    )
+
     # Use the transform via the Translator endpoint
 
     translated_json = await create_translation(
@@ -130,6 +136,11 @@ async def test_transforms_into_target_entity(async_client_mdr, async_client_tran
         ),
         mapping_expression='{ "User": Person.Courses.Grade }',
         transformation_name="User.Skills.Genre",
+    )
+
+    await activate_transformation_group(
+        async_client_mdr=async_client_mdr,
+        transformation_group_id=dataset_transform_deep_literal_attribute.transformation_group_id,
     )
 
     # Use the transform via the Translator endpoint
@@ -240,7 +251,8 @@ async def test_transforms_with_embeddings(async_client_mdr, async_client_transla
     # but using the full format to avoid timezone issues with testing
     group_creation_date = "2026-03-01T00:00:00Z"
     group_activation_date = "2026-03-02T00:00:00Z"
-    group_deprecation_date = "2026-03-03T00:00:00Z"
+    # In the future, so the group is active: the Translator applies only the active version (#1350).
+    group_deprecation_date = "2099-03-03T00:00:00Z"
 
     dataset_transform_with_embeddings = await DatasetTransformWithEmbeddings.prepare(
         async_client_mdr=async_client_mdr,
@@ -765,6 +777,11 @@ async def test_update_transform_only_expression(async_client_mdr, async_client_t
         target_entity_path=dataset_transform_deep_literal_attribute.target_entity_id_path,
         mapping_expression='{ "User": { "Skills": { "Genre": Person.Courses.Grade } } }',
         transformation_name="User.Skills.Genre",
+    )
+
+    await activate_transformation_group(
+        async_client_mdr=async_client_mdr,
+        transformation_group_id=dataset_transform_deep_literal_attribute.transformation_group_id,
     )
 
     # Use the transform via the Translator endpoint to prove original translation
@@ -1603,6 +1620,8 @@ async def test_import_hand_edited_group_then_translate_reflects_all_changes(
     await delete_transformation_group(
         async_client_mdr=async_client_mdr, transformation_group_id=dataset.transformation_group_id
     )
+
+    await activate_transformation_group(async_client_mdr=async_client_mdr, transformation_group_id=imported_group_id)
 
     translated_json = await create_translation(
         async_client_translator=async_client_translator,
