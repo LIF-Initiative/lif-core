@@ -181,7 +181,7 @@ def test_get_data_model_transformation(mock_get):
     mock_response = _create_mock_response(
         200,
         {"total": 1, "data": [{"TransformationExpression": "person.name = name"}]},
-        "https://api.example.com/transformation_groups/transformations_for_data_models/?source_data_model_id=25&target_data_model_id=17",
+        "https://api.example.com/transformation_groups/active_transformations_for_data_models/?source_data_model_id=25&target_data_model_id=17",
     )
     mock_get.return_value = mock_response
 
@@ -199,11 +199,29 @@ def test_get_data_model_transformation(mock_get):
 
 
 @patch("httpx.AsyncClient.get")
+def test_get_data_model_transformation_reads_the_active_mapping_set(mock_get):
+    # #1350: the Translator must get only the latest active group version's JSONata rules, never the
+    # merged listing of every live version, and the active endpoint is unpaginated.
+    mock_get.return_value = _create_mock_response(
+        200,
+        {"total": 1, "TransformationGroupId": 7, "GroupVersion": "2.0", "data": [{"TransformationExpression": "x"}]},
+        "https://api.example.com/transformation_groups/active_transformations_for_data_models/",
+    )
+
+    asyncio.run(core.get_data_model_transformation("25", "17"))
+
+    url = mock_get.call_args.args[0]
+    assert url.endswith(
+        "/transformation_groups/active_transformations_for_data_models/?source_data_model_id=25&target_data_model_id=17"
+    )
+
+
+@patch("httpx.AsyncClient.get")
 def test_get_data_model_transformation_no_results_workaround(mock_get):
     mock_response = _create_mock_response(
         200,
         {"total": 0, "data": []},
-        "https://api.example.com/transformation_groups/transformations_for_data_models/?source_data_model_id=25&target_data_model_id=17",
+        "https://api.example.com/transformation_groups/active_transformations_for_data_models/?source_data_model_id=25&target_data_model_id=17",
     )
     mock_get.return_value = mock_response
 
@@ -219,8 +237,8 @@ def test_get_data_model_transformation_no_results_workaround(mock_get):
 def test_get_data_model_transformation_not_found(mock_get):
     mock_response = _create_mock_response(
         404,
-        {"detail": "Transformation not found"},
-        "https://api.example.com/transformation_groups/transformations_for_data_models/?source_data_model_id=25&target_data_model_id=17",
+        {"detail": "No active transformation group for source data model 25 and target data model 17"},
+        "https://api.example.com/transformation_groups/active_transformations_for_data_models/?source_data_model_id=25&target_data_model_id=17",
     )
     mock_get.return_value = mock_response
 
