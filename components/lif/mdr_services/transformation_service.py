@@ -1499,15 +1499,15 @@ async def activate_transformation_group(
 
     Sets the group's ActivationDate and clears its DeprecationDate. The pair's other versions that would be
     active at that time are deprecated at exactly that time, so a scheduled activation leaves no gap.
-    Rollback is activating the older version.
+    Rollback is activating the older version. Activating the live version keeps its ActivationDate and still
+    deprecates the pair's other live versions; it is a no-op only when it is the sole live version.
+    Rescheduling a live version is a 409 (#1414).
     """
-    now = datetime.now(timezone.utc)
-    if activation_date is None:
-        activation_date = now
-    elif activation_date.tzinfo is None:
-        raise HTTPException(status_code=422, detail="activation_date must include a timezone offset")
-    elif activation_date < now:
-        raise HTTPException(status_code=422, detail="activation_date must not be in the past")
+    if activation_date is not None:
+        if activation_date.tzinfo is None:
+            raise HTTPException(status_code=422, detail="activation_date must include a timezone offset")
+        if activation_date < datetime.now(timezone.utc):
+            raise HTTPException(status_code=422, detail="activation_date must not be in the past")
 
     group = await session.get(TransformationGroup, transformation_group_id)
     if not group or group.Deleted:
@@ -1517,6 +1517,35 @@ async def activate_transformation_group(
         raise HTTPException(
             status_code=422,
             detail=f"GroupVersion {group.GroupVersion!r} is not dotted integers; fix it before activating",
+        )
+
+    # Lock the pair's rows, in Id order, before reading which versions are active, so a concurrent
+    # activation of another version waits and then sees this one (#1414). populate_existing refreshes the
+    # rows already loaded, including the group itself.
+    await session.execute(
+        select(TransformationGroup)
+        .where(
+            TransformationGroup.SourceDataModelId == group.SourceDataModelId,
+            TransformationGroup.TargetDataModelId == group.TargetDataModelId,
+        )
+        .order_by(TransformationGroup.Id)
+        .with_for_update()
+        .execution_options(populate_existing=True)
+    )
+    # Taken after the lock, so a version activated while this call waited is in the past, not scheduled.
+    now = datetime.now(timezone.utc)
+    if activation_date is None:
+        activation_date = now
+    already_live = bool(
+        group.ActivationDate
+        and group.ActivationDate <= now
+        and not (group.DeprecationDate and group.DeprecationDate <= now)
+    )
+    if already_live and activation_date > now:
+        raise HTTPException(
+            status_code=409,
+            detail=f"Transformation group {transformation_group_id} is already live; rescheduling it would "
+            "leave its pair with no live version until then",
         )
 
     others = await session.execute(
@@ -1529,12 +1558,20 @@ async def activate_transformation_group(
             or_(TransformationGroup.DeprecationDate.is_(None), TransformationGroup.DeprecationDate > activation_date),
         )
     )
-    for other in others.scalars().all():
+    others = others.scalars().all()
+    # A live group keeps its ActivationDate but still deprecates any other live version, so re-activating
+    # it repairs a pair with two active rows. Only the pair's sole live version is a no-op.
+    if already_live and not others:
+        live_group = TransformationGroupDTO.from_orm(group)
+        await session.rollback()  # releases the lock; nothing changed
+        return live_group
+    for other in others:
         other.DeprecationDate = activation_date
         session.add(other)
 
-    group.ActivationDate = activation_date
-    group.DeprecationDate = None
+    if not already_live:
+        group.ActivationDate = activation_date
+        group.DeprecationDate = None
     session.add(group)
     await session.commit()
     await session.refresh(group)
