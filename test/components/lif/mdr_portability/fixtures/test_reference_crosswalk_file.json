@@ -1,0 +1,43 @@
+{
+  "Format": {
+    "Type": "lif-mdr-crosswalk",
+    "Version": 1
+  },
+  "Details": {
+    "Source": {
+      "Model": {
+        "Name": "District SIS",
+        "Version": "1.0",
+        "ContributorOrganization": "District"
+      },
+      "ValueSet": "AddressTypeDescriptor"
+    },
+    "Target": {
+      "Model": {
+        "Name": "District LIF",
+        "Version": "1.0",
+        "ContributorOrganization": "District"
+      },
+      "ValueSet": "AddressType"
+    }
+  },
+  "Entries": [
+    {
+      "Source": "Home",
+      "Target": "Residence"
+    },
+    {
+      "Source": "Mailing",
+      "Target": "Postal"
+    },
+    {
+      "Source": "Physical",
+      "Target": "Residence",
+      "Description": "No physical type in LIF",
+      "Notes": "Treated as a residence",
+      "Contributor": "District data team",
+      "ContributorOrganization": "District",
+      "ActivationDate": "2026-10-06T00:00:00Z"
+    }
+  ]
+}

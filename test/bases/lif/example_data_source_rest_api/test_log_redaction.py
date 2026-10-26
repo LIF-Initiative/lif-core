@@ -3,12 +3,13 @@ The Example Data Source API keeps user identifiers and search values out of its 
 """
 
 import logging
+import os
 
 import pytest
 from httpx import ASGITransport, AsyncClient
 from lif.example_data_source_rest_api import core
 
-API_TOKEN = "test-example-key"
+API_TOKEN = os.environ["API_TOKEN"]  # set in test/conftest.py; core reads it at import
 IDENTIFIER = "SENTINEL-ID-4471"
 NUMERIC_IDENTIFIER = "447144714"
 
@@ -21,8 +22,7 @@ NUMERIC_IDENTIFIER = "447144714"
         ("/students/", {"name": IDENTIFIER, "name_like": IDENTIFIER}, IDENTIFIER, "Filter keys"),
     ],
 )
-async def test_request_log_has_no_learner_value(monkeypatch, caplog, path, params, sentinel, logged):
-    monkeypatch.setenv("API_TOKEN", API_TOKEN)
+async def test_request_log_has_no_learner_value(caplog, path, params, sentinel, logged):
     with caplog.at_level(logging.INFO, logger="lif.example_data_source_rest_api.core"):
         async with AsyncClient(transport=ASGITransport(app=core.app), base_url="http://test") as client:
             response = await client.get(path, params=params, headers={"x-key": API_TOKEN})

@@ -11,6 +11,7 @@ from lif.mdr_sql_model.core import (
     ExtInclusionsFromBaseDM,
 )
 from lif.mdr_dto.entity_dto import ChildEntityDTO, CreateEntityDTO, EntityDTO, UpdateEntityDTO
+from lif.mdr_services.association_name import association_array, entity_association_name, recomputed
 from lif.mdr_services.attribute_service import soft_delete_attribute
 from lif.mdr_services.helper_service import check_datamodel_by_id
 from lif.mdr_utils.logger_config import get_logger
@@ -106,8 +107,26 @@ async def update_entity(session: AsyncSession, id: int, data: UpdateEntityDTO):
                 detail=f"Entity with UniqueName {updated_unique_name} already exists for DataModel {updated_data_model_id}.",
             )
 
-    for key, value in data.dict(exclude_unset=True).items():
+    updates = data.dict(exclude_unset=True)
+    name_before, array_before = entity.Name, entity.Array
+    for key, value in updates.items():
         setattr(entity, key, value)
+
+    # Every association where this entity is the child stores its Name and Array, which follow a rename
+    # or an Array change while they are still the rule's (#1386).
+    if "Name" in updates or "Array" in updates:
+        result = await session.execute(select(EntityAssociation).where(EntityAssociation.ChildEntityId == id))
+        for association in result.scalars().all():
+            association.Name = recomputed(
+                association.Name,
+                entity_association_name(association.Relationship, association.Placement, name_before),
+                entity_association_name(association.Relationship, association.Placement, entity.Name),
+            )
+            association.Array = recomputed(
+                association.Array, association_array(array_before), association_array(entity.Array)
+            )
+            session.add(association)
+
     logger.info(f"Updated entity : {entity}")
     session.add(entity)
     await session.commit()
@@ -277,17 +296,27 @@ async def get_list_of_entities_for_data_model(
     org_ext_only: bool = False,
     this_organization: str = "LIF",
     public_only: bool = False,
+    check_base: bool = True,
 ):
+    """List a data model's entities.
+
+    For an OrgLIF or PartnerLIF, `check_base=True` (the default) returns the entities the model
+    includes from its base model; `check_base=False` returns only the entities the model owns
+    (`DataModelId == data_model_id`), which is what export wants.
+
+    `partner_only`, `org_ext_only` and `public_only` filter that inclusion path only. They are
+    ignored for a BaseLIF or SourceSchema, and when `check_base=False`.
+    """
     # Check for data model id and for extension
     data_model_id_list: List[int] = []
     data_model = await check_datamodel_by_id(session=session, id=data_model_id)
     data_model_id_list.append(data_model.Id)
-    if data_model.Type == DataModelType.OrgLIF or data_model.Type == DataModelType.PartnerLIF:
+    if check_base and (data_model.Type == DataModelType.OrgLIF or data_model.Type == DataModelType.PartnerLIF):
         base_data_model = await check_datamodel_by_id(session=session, id=data_model.BaseDataModelId)
         data_model_id_list.append(base_data_model.Id)
 
     # Step 1: If this org's LIF or a partner's LIF, filter to only entities included for this org's data model
-    if data_model.Type == DataModelType.OrgLIF or data_model.Type == DataModelType.PartnerLIF:
+    if check_base and (data_model.Type == DataModelType.OrgLIF or data_model.Type == DataModelType.PartnerLIF):
         # Query to fetch IncludedElementId from ExtInclusionsFromBaseDM table where ExtDataModelId in data_model_id_list and ElementType = Entity
         ext_inclusions_query = select(ExtInclusionsFromBaseDM.IncludedElementId).where(
             ExtInclusionsFromBaseDM.ExtDataModelId.in_(data_model_id_list),

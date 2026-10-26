@@ -27,6 +27,7 @@ dependencies = [
     "python-multipart~=0.0",
     "pyyaml~=6.0",
     "requests~=2.31",
+    "sqlalchemy[asyncio]~=2.0",
     "sqlmodel~=0.0",
     "uvicorn~=0.23",
 ]
@@ -40,10 +41,13 @@ packages = ["lif"]
 
 [tool.polylith.bricks]
 "../../bases/lif/mdr_restapi" = "lif/mdr_restapi"
+"../../components/lif/auth" = "lif/auth"
+"../../components/lif/datatypes" = "lif/datatypes"
 "../../components/lif/demo_personas" = "lif/demo_personas"
 "../../components/lif/mdr_auth" = "lif/mdr_auth"
 "../../components/lif/developer_keys" = "lif/developer_keys"
 "../../components/lif/mdr_dto" = "lif/mdr_dto"
+"../../components/lif/mdr_portability" = "lif/mdr_portability"
 "../../components/lif/mdr_services" = "lif/mdr_services"
 "../../components/lif/mdr_sql_model" = "lif/mdr_sql_model"
 "../../components/lif/mdr_utils" = "lif/mdr_utils"

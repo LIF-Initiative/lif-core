@@ -28,6 +28,7 @@ from lif.mdr_dto.import_export_dto import (
 )
 from lif.mdr_dto.value_set_values_dto import CreateValuesWithValueSetDTO
 from lif.mdr_dto.valueset_dto import CreateValueSetDTO, CreateValueSetWithValuesDTO
+from lif.mdr_services.association_name import association_array, entity_association_name
 from lif.mdr_services.attribute_service import create_attribute, get_list_of_attributes_for_data_model
 from lif.mdr_services.datamodel_constraints_service import (
     create_data_model_constraint,
@@ -139,9 +140,7 @@ async def get_export_dto(session: AsyncSession, data_model_id: int):
     transformations = await get_transformations_by_data_model_id(session=session, data_model_id=data_model_id)
 
     # Getting Entity associations
-    entity_associations = await get_entity_associations_by_data_model_id(
-        session=session, data_model_id=data_model_id, check_base=False
-    )
+    entity_associations = await get_entity_associations_by_data_model_id(session=session, data_model_id=data_model_id)
 
     total_association, entity_attribute_associations = await get_entity_attribute_associations_by_data_model_id(
         session=session, data_model_id=data_model_id, pagination=False
@@ -376,6 +375,9 @@ async def clone_entities(session: AsyncSession, source_data_model_id: int, new_d
             Extension=entity.Extension,
             ExtensionNotes=entity.ExtensionNotes,
             Tags=entity.Tags,
+            LevelOfAccess=entity.LevelOfAccess,
+            Queryable=entity.Queryable,
+            Modifiable=entity.Modifiable,
         )
         session.add(new_entity)
         await session.commit()
@@ -409,6 +411,9 @@ async def clone_attributes(
             Extension=attribute.Extension,
             ExtensionNotes=attribute.ExtensionNotes,
             Tags=attribute.Tags,
+            LevelOfAccess=attribute.LevelOfAccess,
+            Queryable=attribute.Queryable,
+            Modifiable=attribute.Modifiable,
         )
         if attribute.ValueSetId:
             new_attribute.ValueSetId = value_set_id_map[attribute.ValueSetId]
@@ -476,6 +481,10 @@ async def clone_entity_attribute_association(
             Contributor=association.Contributor,
             ContributorOrganization=association.ContributorOrganization,
         )
+        # Recomputed from the cloned attribute rather than copied (#1386).
+        attribute = await session.get(Attribute, attribute_id)
+        new_association.Name = attribute.Name
+        new_association.Array = association_array(attribute.Array)
         session.add(new_association)
         await session.commit()
 
@@ -523,6 +532,12 @@ async def clone_entity_association(session: AsyncSession, entity_id_map: dict[in
             Extension=association.Extension,
             ExtensionNotes=association.ExtensionNotes,
         )
+        # Recomputed from the cloned row and child rather than copied (#1386).
+        child_entity = await session.get(Entity, child_entity_id)
+        new_association.Name = entity_association_name(
+            new_association.Relationship, new_association.Placement, child_entity.Name
+        )
+        new_association.Array = association_array(child_entity.Array)
         session.add(new_association)
         await session.commit()
 

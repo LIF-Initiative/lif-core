@@ -1,9 +1,9 @@
-import React, { useMemo, useState, useCallback } from 'react';
-import type { TransformationGroupDetails, TransformationData } from '../../../../services/transformationsService';
-import './BulkTransformationsBody.css';
-import { generateSampleDataFromSchema } from '../../../../services/modelService';
-import { evaluateAndCombineExpressions } from '../../../../utils/jsonataUtils';
-import { validateAgainstSchema } from '../../../../utils/schemaValidation';
+import React, { useMemo, useState, useCallback } from "react";
+import type { TransformationGroupDetails, TransformationData } from "@/services/transformationsService";
+import "./BulkTransformationsBody.css";
+import { generateSampleDataFromSchema } from "@/services/modelService";
+import { evaluateAndCombineExpressions } from "@/utils/jsonataUtils";
+import { validateAgainstSchema } from "@/utils/schemaValidation";
 
 export interface BulkTransformationsBodyProps {
   group: TransformationGroupDetails | null;

@@ -22,7 +22,8 @@ from unittest import mock  # noqa: E402
 import pytest  # noqa: E402
 from fastapi import FastAPI  # noqa: E402
 from httpx import ASGITransport, AsyncClient  # noqa: E402
-from lif.mdr_auth.core import AuthMiddleware  # noqa: E402
+from lif.auth.jwt import mint_access  # noqa: E402
+from lif.mdr_auth.core import JWT_CONFIG, add_mdr_auth  # noqa: E402
 from lif.mdr_restapi import tenant_endpoints  # noqa: E402
 from lif.mdr_services.tenant_service import (  # noqa: E402
     InvalidGroupNameError,
@@ -32,18 +33,18 @@ from test.utils.lif.mdr.cognito import enable_cognito, make_cognito_id_token  # 
 
 pytestmark = pytest.mark.asyncio
 
-VALID_SERVICE_KEY = "changeme1"  # matches settings.mdr__auth__service_api_key__graphql in defaults
+VALID_SERVICE_KEY = "changeme1"  # matches MDR__AUTH__SERVICE_API_KEY__GRAPHQL in test/conftest.py
 
 
 def _build_app(mock_provision: mock.AsyncMock) -> FastAPI:
-    """Create a minimal app with AuthMiddleware and the tenant router.
+    """Create a minimal app with MDR auth and the tenant router.
 
     Overrides both provision_tenant (the service function) and get_session
     (so we don't need a real DB engine). The middleware's Cognito-JWT and
     API-key paths are exercised as-is.
     """
     app = FastAPI()
-    app.add_middleware(AuthMiddleware)
+    add_mdr_auth(app)
 
     async def fake_session():
         yield mock.MagicMock()  # session instance is never touched in these tests
@@ -80,9 +81,7 @@ class TestProvisionEndpointAuth:
         """Users with a valid Cognito/legacy JWT must not be able to provision
         tenants — only internal services. Simulated here with a plain bearer
         token that the middleware accepts as the legacy HS256 path."""
-        from lif.mdr_auth.core import create_access_token
-
-        token = create_access_token({"sub": "alice@example.com"})
+        token = mint_access(JWT_CONFIG, {"sub": "alice@example.com", "type": "access"})
         resp = await client.post(
             "/tenants/provision", json={"group_name": "lif-team"}, headers={"Authorization": f"Bearer {token}"}
         )
@@ -147,9 +146,7 @@ class TestProvisionEndpointErrorHandling:
 
 def _hs256_user_token(sub: str = "alice@example.com") -> str:
     """Create a legacy HS256 token. Not Cognito — has no cognito:groups."""
-    from lif.mdr_auth.core import create_access_token
-
-    return create_access_token({"sub": sub})
+    return mint_access(JWT_CONFIG, {"sub": sub, "type": "access"})
 
 
 def _stub_cognito_principal(
@@ -161,9 +158,11 @@ def _stub_cognito_principal(
     The actual JWT plumbing has its own integration tests in
     test_middleware.py; here we want to exercise endpoint behavior given
     a known authenticated request, not re-validate the JWT plumbing."""
+    from lif.auth import middleware as auth_middleware
     from lif.mdr_auth import core as auth_core
 
-    original_dispatch = auth_core.AuthMiddleware.dispatch
+    async def pass_through(self, request, call_next):
+        return await call_next(request)
 
     async def fake_dispatch(self, request, call_next):
         request.state.principal = principal
@@ -172,8 +171,8 @@ def _stub_cognito_principal(
         request.state.tenant_schema = None
         return await call_next(request)
 
-    monkeypatch.setattr(auth_core.AuthMiddleware, "dispatch", fake_dispatch)
-    return original_dispatch
+    monkeypatch.setattr(auth_middleware.AuthMiddleware, "dispatch", pass_through)
+    monkeypatch.setattr(auth_core.TenantMiddleware, "dispatch", fake_dispatch)
 
 
 class TestListMyWorkspaces:
@@ -315,10 +314,11 @@ class TestAcceptInvite:
         return fake
 
     def _make_token(self, group: str = "acme-univ", inviter_sub: str = "inviter-sub", max_age: int = 3600) -> str:
+        from lif.mdr_auth.core import SECRET_KEY
         from lif.mdr_auth.invite_token import encode_invite_token
 
-        # Match the default jwt secret used by the endpoint
-        return encode_invite_token(group, inviter_sub, secret="changeme4", max_age_seconds=max_age)
+        # Sign with the same secret the endpoint verifies with
+        return encode_invite_token(group, inviter_sub, secret=SECRET_KEY, max_age_seconds=max_age)
 
     async def test_no_auth_returns_401(self, client, mock_cognito):
         resp = await client.post("/tenants/invite/accept", json={"token": self._make_token()})

@@ -75,7 +75,7 @@ export const throwCustomError = async (response: Response) => {
 export const obj2Str = (e: object) => {
   if (!e || typeof e !== 'object') { console.warn("obj2Str called with non-object:", e); return ""; }
   const mapped = Object.keys(e).sort().map(k => {
-    let v = (e as any)[k];
+    const v = (e as any)[k];
     const showLength = Array.isArray(v);
     return ` ${showLength ? `${k}.length` : k}: ${showLength ? v.length : v}`;
   });

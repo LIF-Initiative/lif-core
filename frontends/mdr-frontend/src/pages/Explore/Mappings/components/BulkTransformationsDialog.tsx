@@ -1,14 +1,14 @@
-import React, { useState, useMemo } from 'react';
-import { Dialog } from '@radix-ui/themes';
+import React, { useState, useMemo } from "react";
+import { Dialog } from "@radix-ui/themes";
 import type {
     TransformationGroupDetails,
     TransformationData,
-} from '../../../../services/transformationsService';
-import BulkTransformationsBody from './BulkTransformationsBody.tsx';
+} from "@/services/transformationsService";
+import BulkTransformationsBody from "./BulkTransformationsBody";
 import {
     deleteTransformation,
     updateTransformation,
-} from '../../../../services/transformationsService';
+} from "@/services/transformationsService";
 
 export interface BulkTransformationsDialogProps {
     open: boolean;

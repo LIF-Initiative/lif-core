@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Tabs, Box } from "@radix-ui/themes";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import './TabLayout.css';
+import "./TabLayout.css";
 
 const TabLayout: React.FC = () => {
   const location = useLocation();

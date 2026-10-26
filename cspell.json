@@ -39,6 +39,7 @@
         "checkpointing",
         "cachetools",
         "caplog",
+        "capfd",
         "dedupe",
         "dedup",
         "dedups",
@@ -186,6 +187,8 @@
         "openpyxl",
         "orglif",
         "PGDATABASE",
+        "pgpass",
+        "PGPASSFILE",
         "pgpassword",
         "PGHOST",
         "PGPORT",
@@ -277,6 +280,8 @@
         "aiomysql",
         "aiosqlite",
         "asyncmy",
+        "asyncpg",
+        "fetchval",
         "GIL",
         "mariadb",
         "sqlalchemy",
@@ -310,7 +315,10 @@
         "readback",
         "Writey",
         "Caddyfile",
-        "retryable"
+        "retryable",
+        "footgun",
+        "redoc",
+        "lineterm"
     ],
     "ignorePaths": [
         ".git/",
@@ -339,5 +347,7 @@
         "projects/lif_mdr_database/dataset/init.sql",
         "sam/mdr-database/flyway/flyway-files/flyway/sql/mdr/V1.1__metadata_repository_init.sql",
         "test/scripts/postman/LIF_MDR.postman_collection.json",
+        // Generated MDR schema snapshots (#1387): data emitted by the generator, not prose.
+        "test/bases/lif/mdr_restapi/schema_snapshots/",
     ]
 }

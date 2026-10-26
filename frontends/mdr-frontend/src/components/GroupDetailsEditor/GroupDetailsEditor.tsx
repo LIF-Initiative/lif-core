@@ -1,9 +1,9 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState } from "react";
 import {
     CreateTransformationGroup,
     TransformationGroupDetails,
-} from '../../services/transformationsService';
-import './GroupDetailsEditor.css';
+} from "@/services/transformationsService";
+import "./GroupDetailsEditor.css";
 
 export interface GroupDetailsEditorProps {
     group: TransformationGroupDetails;
@@ -22,12 +22,14 @@ const GroupDetailsEditor: React.FC<GroupDetailsEditorProps> = ({
     const [name, setName] = useState(group.Name ?? '');
     const [description, setDescription] = useState(group.Description ?? '');
     const [notes, setNotes] = useState(group.Notes ?? '');
-    const [activationDate, setActivationDate] = useState(
-        group.ActivationDate ? group.ActivationDate.substring(0, 10) : ''
-    );
-    const [deprecationDate, setDeprecationDate] = useState(
-        group.DeprecationDate ? group.DeprecationDate.substring(0, 10) : ''
-    );
+    // Shown, not edited: dates set here would skip deprecating the pair's other versions, so the
+    // Activate button sets them (#1350).
+    const activationDate = group.ActivationDate
+        ? group.ActivationDate.substring(0, 10)
+        : '';
+    const deprecationDate = group.DeprecationDate
+        ? group.DeprecationDate.substring(0, 10)
+        : '';
     const [saving, setSaving] = useState(false);
 
     const readonly = useMemo(
@@ -53,8 +55,6 @@ const GroupDetailsEditor: React.FC<GroupDetailsEditorProps> = ({
                 Name: name,
                 Description: description,
                 Notes: notes,
-                ActivationDate: activationDate || undefined,
-                DeprecationDate: deprecationDate || undefined,
             };
             await onSave(updates);
         } finally {
@@ -121,7 +121,9 @@ const GroupDetailsEditor: React.FC<GroupDetailsEditorProps> = ({
                     className="group-editor__input"
                     type="date"
                     value={activationDate}
-                    onChange={(e) => setActivationDate(e.target.value)}
+                    readOnly
+                    disabled
+                    aria-describedby="ged-dates-hint"
                 />
 
                 <label
@@ -135,8 +137,15 @@ const GroupDetailsEditor: React.FC<GroupDetailsEditorProps> = ({
                     className="group-editor__input"
                     type="date"
                     value={deprecationDate}
-                    onChange={(e) => setDeprecationDate(e.target.value)}
+                    readOnly
+                    disabled
+                    aria-describedby="ged-dates-hint"
                 />
+                {/* Visible text, not a tooltip: disabled inputs can't take keyboard focus */}
+                <p id="ged-dates-hint" className="group-editor__hint">
+                    Dates are set by the Activate button. Activating a version
+                    deprecates the version it replaces.
+                </p>
 
                 <label
                     className="group-editor__label group-editor__label--block"

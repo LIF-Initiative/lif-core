@@ -72,7 +72,9 @@ def get_credentials_for_adapter(adapter_id: str, information_source_id: str) -> 
     return credentials
 
 
-def generate_mapping_key(part: dict) -> str:
+def generate_mapping_key(part: dict, index: int) -> str:
+    # The mapping key becomes part of every step key, which Dagster logs and shows in its UI, so it
+    # carries the part's position rather than the learner identifier (#1359).
     if (
         part.get("adapter_id") is None
         or part.get("information_source_id") is None
@@ -81,19 +83,47 @@ def generate_mapping_key(part: dict) -> str:
         raise ValueError(
             "Part must contain 'adapter_id', 'information_source_id', and 'person_id.identifier' to generate mapping key."
         )
-    base_key = f"{part['adapter_id'].replace('-', '_')}__{part['information_source_id'].replace('-', '_')}__{part['person_id']['identifier']}"
+    base_key = f"{part['adapter_id'].replace('-', '_')}__{part['information_source_id'].replace('-', '_')}__{index}"
     unique_suffix = str(time.time()).replace(".", "_")
     short_hash = hashlib.sha256(unique_suffix.encode()).hexdigest()[:8]
 
     return f"{base_key}__{short_hash}"
 
 
+# Log helpers: describe learner data by its shape only, never its values (#1359).
+def _shape(data) -> str:
+    if isinstance(data, dict):
+        return f"a dict with {len(data)} keys"
+    if isinstance(data, list):
+        return f"a list of {len(data)} items"
+    return type(data).__name__
+
+
+def _fragment_counts(fragments: List[LIFFragment]) -> str:
+    return ", ".join(f"{f.fragment_path} ({len(f.fragment)} items)" for f in fragments) or "no fragments"
+
+
+def _withheld(op_name: str, error: Exception) -> dg.Failure:
+    # Dagster stores a raised exception's message and traceback in its step events, and the message
+    # can hold learner data (an adapter's URL, a Pydantic input). Raise this `from None` instead: it
+    # names only the type, plus the status of an HTTP error, and keeps the original out (#1407).
+    detail = type(error).__name__
+    if isinstance(error, requests.HTTPError) and error.response is not None:
+        detail += f" {error.response.status_code}"
+    return dg.Failure(description=f"{op_name} failed: {detail}")
+
+
 @dg.op(out=dg.DynamicOut())
 def create_dynamic_pipelines(context: dg.OpExecutionContext, config_resource: SharedOpConfig):
-    for part in config_resource.lif_query_plan_parts:
-        query_plan_part = LIFQueryPlanPart(**part)
-        context.log.info(f"Creating dynamic pipeline for part: {part}")
-        yield dg.DynamicOutput(query_plan_part, mapping_key=generate_mapping_key(part))
+    try:
+        for index, part in enumerate(config_resource.lif_query_plan_parts):
+            query_plan_part = LIFQueryPlanPart(**part)
+            context.log.info(
+                f"Creating dynamic pipeline for adapter '{query_plan_part.adapter_id}' with source '{query_plan_part.information_source_id}'"
+            )
+            yield dg.DynamicOutput(query_plan_part, mapping_key=generate_mapping_key(part, index))
+    except Exception as e:
+        raise _withheld("create_dynamic_pipelines", e) from None
 
 
 @dg.op(out=dg.Out(is_required=False), retry_policy=RETRY_POLICY_SUBGRAPH)
@@ -113,18 +143,17 @@ def run_lif_adapter(context: dg.OpExecutionContext, lif_query_plan_part: LIFQuer
 
         result = adapter.run()
 
-        context.log.info(f"Adapter '{adapter_id}' executed successfully with data: {result}")
+        context.log.info(f"Adapter '{adapter_id}' executed successfully, returning {_shape(result)}")
 
         return SubgraphResult(lif_query_plan_part=lif_query_plan_part, data=result)
     except Exception as e:
         if context.retry_number >= MAX_RETRIES_SUBGRAPH - 1:
             context.log.error(
-                f"run_lif_adapter failed after {context.retry_number} retries for adapter_id={adapter_id} information_source_id={information_source_id}: {e}",
-                exc_info=True,
+                f"run_lif_adapter failed after {context.retry_number} retries for adapter_id={adapter_id} information_source_id={information_source_id}: {type(e).__name__}"
             )
             return SubgraphResult(lif_query_plan_part=lif_query_plan_part, data=None)
         else:
-            raise
+            raise _withheld("run_lif_adapter", e) from None
 
 
 @dg.op(out=dg.Out(is_required=False), retry_policy=RETRY_POLICY_SUBGRAPH)
@@ -139,7 +168,10 @@ def run_translation(
         context.log.info("Skipping Translation as there is no data from the adapter.")
         return SubgraphResult(lif_query_plan_part=upstream_input.lif_query_plan_part, data=None)
 
-    context.log.info(f"Running Translation with data: {upstream_input.data}")
+    translation = upstream_input.lif_query_plan_part.translation
+    context.log.info(
+        f"Running Translation from schema {translation.source_schema_id} to {translation.target_schema_id} on {_shape(upstream_input.data)}"
+    )
 
     try:
         # Translation logic goes here (currently pass-through)
@@ -150,24 +182,24 @@ def run_translation(
 
         response = requests.post(url, json=upstream_input.data, headers=headers)
         if not response.ok:
-            context.log.info(f"Response {response.status_code}: {response.text}")
+            context.log.info(f"Response {response.status_code}")
         response.raise_for_status()
 
         translated_data = response.json()
 
-        context.log.info(f"Translation API response: {translated_data}")
+        context.log.info(f"Translation API response: {_shape(translated_data)}")
 
         # temporary method to extract fragments based on requested paths
         person_all_fragment = LIFFragment(fragment_path="person.all", fragment=[translated_data])
-
-        context.log.info(f"Person all fragment: {person_all_fragment}")
 
         req_fragments_in_translated = adjust_lif_fragments_for_initial_orchestrator_simplification(
             lif_fragments=[person_all_fragment],
             desired_fragment_paths=upstream_input.lif_query_plan_part.lif_fragment_paths,
         )
 
-        context.log.info(f"Requested fragments in translated data: {req_fragments_in_translated}")
+        context.log.info(
+            f"Requested fragments in translated data: {[f.fragment_path for f in req_fragments_in_translated]}"
+        )
 
         fragments = []
 
@@ -189,16 +221,16 @@ def run_translation(
             error=None,
         )
 
-        context.log.info(f"Translation result: {result}")
+        context.log.info(f"Translation result: {_fragment_counts(fragments)}")
 
         return SubgraphResult(lif_query_plan_part=upstream_input.lif_query_plan_part, data=result)
 
     except Exception as e:
         if context.retry_number >= MAX_RETRIES_SUBGRAPH - 1:
-            context.log.error(f"run_translation failed after {context.retry_number} retries: {e}", exc_info=True)
+            context.log.error(f"run_translation failed after {context.retry_number} retries: {type(e).__name__}")
             return SubgraphResult(lif_query_plan_part=upstream_input.lif_query_plan_part, data=None)
         else:
-            raise
+            raise _withheld("run_translation", e) from None
 
 
 @dg.graph
@@ -213,55 +245,66 @@ def process_pipeline_subgraph(lif_query_plan_part):
 def send_results_to_query_planner(
     context: dg.OpExecutionContext, config_resource: SharedOpConfig, results: List[SubgraphResult]
 ) -> None:
-    # Fan-in operation that receives all results from dynamic pipelines
+    try:
+        # Fan-in operation that receives all results from dynamic pipelines
 
-    # Build query plan part results. Ensure all expected parts are represented.
-    query_plan_part_results = []
-    for p in config_resource.lif_query_plan_parts:
-        part = LIFQueryPlanPart(**p)
-        matching_results = [
-            # Filter out None entries (pipelines that failed or were skipped) before matching
-            res
-            for res in results
-            if res is not None
-            and res.data is not None
-            and res.lif_query_plan_part.information_source_id == part.information_source_id
-            and res.lif_query_plan_part.adapter_id == part.adapter_id
-        ]
+        # Build query plan part results. Ensure all expected parts are represented.
+        query_plan_part_results = []
+        for p in config_resource.lif_query_plan_parts:
+            part = LIFQueryPlanPart(**p)
+            matching_results = [
+                # Filter out None entries (pipelines that failed or were skipped) before matching
+                res
+                for res in results
+                if res is not None
+                and res.data is not None
+                and res.lif_query_plan_part.information_source_id == part.information_source_id
+                and res.lif_query_plan_part.adapter_id == part.adapter_id
+            ]
 
-        if len(matching_results) > 1:
-            context.log.warning(f"Multiple results found for part {part}. Using the first one.")
-
-        if matching_results:
-            query_plan_part_results.append(matching_results[0].data)
-        else:
-            query_plan_part_results.append(
-                OrchestratorJobQueryPlanPartResults(
-                    information_source_id=part.information_source_id,
-                    adapter_id=part.adapter_id,
-                    data_timestamp=None,
-                    person_id=part.person_id,
-                    fragments=[],
-                    error="Pipeline did not run or failed.",
+            if len(matching_results) > 1:
+                context.log.warning(
+                    f"Multiple results found for adapter '{part.adapter_id}' with source '{part.information_source_id}'. Using the first one."
                 )
+
+            if matching_results:
+                query_plan_part_results.append(matching_results[0].data)
+            else:
+                query_plan_part_results.append(
+                    OrchestratorJobQueryPlanPartResults(
+                        information_source_id=part.information_source_id,
+                        adapter_id=part.adapter_id,
+                        data_timestamp=None,
+                        person_id=part.person_id,
+                        fragments=[],
+                        error="Pipeline did not run or failed.",
+                    )
+                )
+
+        # build the final job results
+        job_results = OrchestratorJobResults(run_id=context.run_id, query_plan_part_results=query_plan_part_results)
+
+        # TODO: Change to debug level once stable
+        context.log.info(
+            "Final Orchestrator Job Results: "
+            + "; ".join(
+                f"{r.adapter_id}/{r.information_source_id}: {_fragment_counts(r.fragments)}, error={r.error}"
+                for r in query_plan_part_results
             )
+        )
 
-    # build the final job results
-    job_results = OrchestratorJobResults(run_id=context.run_id, query_plan_part_results=query_plan_part_results)
+        endpoint = f"{QUERY_PLANNER_RESULTS_BASE_URL}/orchestration/results"
+        headers = {"Content-Type": "application/json", "User-Agent": "LIF-Orchestrator"}
+        if QUERY_PLANNER_RESULTS_TOKEN:
+            headers["Authorization"] = f"Bearer {QUERY_PLANNER_RESULTS_TOKEN}"
 
-    # TODO: Change to debug level once stable
-    context.log.info(f"Final Orchestrator Job Results: \n\n{job_results.model_dump_json(indent=2)}")
-
-    endpoint = f"{QUERY_PLANNER_RESULTS_BASE_URL}/orchestration/results"
-    headers = {"Content-Type": "application/json", "User-Agent": "LIF-Orchestrator"}
-    if QUERY_PLANNER_RESULTS_TOKEN:
-        headers["Authorization"] = f"Bearer {QUERY_PLANNER_RESULTS_TOKEN}"
-
-    response = requests.post(endpoint, json=job_results.model_dump(), headers=headers)
-    if not response.ok:
-        context.log.info(f"Response {response.status_code}: {response.text}")
-    response.raise_for_status()
-    context.log.debug(f"Results successfully sent to Query Planner at {endpoint}")
+        response = requests.post(endpoint, json=job_results.model_dump(), headers=headers)
+        if not response.ok:
+            context.log.info(f"Response {response.status_code}")
+        response.raise_for_status()
+        context.log.debug(f"Results successfully sent to Query Planner at {endpoint}")
+    except Exception as e:
+        raise _withheld("send_results_to_query_planner", e) from None
 
 
 @dg.graph

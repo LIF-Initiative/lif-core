@@ -1,0 +1,444 @@
+{
+  "Format": {
+    "Type": "lif-mdr-model",
+    "Version": 1
+  },
+  "Details": {
+    "Name": "District LIF",
+    "Version": "1.0",
+    "ContributorOrganization": "District",
+    "CopiedFrom": {
+      "Name": "State LIF",
+      "Version": "1.0",
+      "ContributorOrganization": "State"
+    },
+    "Description": "District variant of State LIF",
+    "Contributor": "District data team",
+    "State": "Draft",
+    "Tags": "district,reference",
+    "ActivationDate": "2026-10-06T00:00:00Z"
+  },
+  "ValueSets": [
+    {
+      "Name": "AddressType",
+      "Values": [
+        {
+          "ValueName": "Postal",
+          "Value": "postal"
+        },
+        {
+          "ValueName": "Residence",
+          "Value": "residence"
+        }
+      ]
+    },
+    {
+      "Name": "GradeLevel",
+      "Values": []
+    },
+    {
+      "Name": "LunchStatus",
+      "Values": [
+        {
+          "ValueName": "Free",
+          "Value": "F",
+          "Description": "Free lunch — no cost, “as served”",
+          "ActivationDate": "2026-02-11T10:04:02.843Z"
+        },
+        {
+          "ValueName": "Reduced",
+          "Value": "R"
+        }
+      ]
+    },
+    {
+      "Name": "TransportationMode",
+      "Values": [
+        {
+          "ValueName": "Bus",
+          "Value": "B"
+        },
+        {
+          "ValueName": "Walk",
+          "Value": "W"
+        }
+      ]
+    }
+  ],
+  "Entities": [
+    {
+      "UniqueName": "Competency",
+      "Name": "Competency",
+      "LevelOfAccess": "Public",
+      "Queryable": true,
+      "Modifiable": false
+    },
+    {
+      "UniqueName": "Competency.Classifier",
+      "Name": "Classifier",
+      "LevelOfAccess": "Public",
+      "Queryable": true,
+      "Modifiable": false
+    },
+    {
+      "UniqueName": "Course",
+      "Name": "Course",
+      "LevelOfAccess": "Public",
+      "Queryable": true,
+      "Modifiable": false,
+      "Description": "",
+      "Common": false,
+      "DeprecationDate": "2027-06-30T00:00:00Z"
+    },
+    {
+      "UniqueName": "Identifier",
+      "Name": "Identifier",
+      "LevelOfAccess": "Public",
+      "Queryable": true,
+      "Modifiable": false,
+      "Common": true
+    },
+    {
+      "UniqueName": "Organization",
+      "Name": "Organization",
+      "LevelOfAccess": "Internal",
+      "Queryable": true,
+      "Modifiable": false
+    },
+    {
+      "UniqueName": "Person",
+      "Name": "Person",
+      "LevelOfAccess": "Public",
+      "Queryable": true,
+      "Modifiable": false
+    },
+    {
+      "UniqueName": "Person.Contact",
+      "Name": "Contact",
+      "LevelOfAccess": "Restricted",
+      "Queryable": true,
+      "Modifiable": true,
+      "Required": true
+    },
+    {
+      "UniqueName": "Person.Contact.Address",
+      "Name": "Address",
+      "LevelOfAccess": "Restricted",
+      "Queryable": true,
+      "Modifiable": true
+    }
+  ],
+  "Attributes": [
+    {
+      "UniqueName": "Competency.Classifier",
+      "Name": "classifier",
+      "DataType": "string",
+      "LevelOfAccess": "Public",
+      "Queryable": true,
+      "Modifiable": false
+    },
+    {
+      "UniqueName": "Competency.Classifier.code",
+      "Name": "code",
+      "DataType": "string",
+      "LevelOfAccess": "Public",
+      "Queryable": true,
+      "Modifiable": false
+    },
+    {
+      "UniqueName": "Competency.identifier",
+      "Name": "identifier",
+      "DataType": "string",
+      "LevelOfAccess": "Public",
+      "Queryable": true,
+      "Modifiable": false
+    },
+    {
+      "UniqueName": "Course.credits",
+      "Name": "credits",
+      "DataType": "number",
+      "LevelOfAccess": "Public",
+      "Queryable": true,
+      "Modifiable": false
+    },
+    {
+      "UniqueName": "Course.online",
+      "Name": "online",
+      "DataType": "boolean",
+      "LevelOfAccess": "Public",
+      "Queryable": true,
+      "Modifiable": false
+    },
+    {
+      "UniqueName": "Course.title",
+      "Name": "title",
+      "DataType": "string",
+      "LevelOfAccess": "Public",
+      "Queryable": true,
+      "Modifiable": false
+    },
+    {
+      "UniqueName": "Identifier.identifier",
+      "Name": "identifier",
+      "DataType": "string",
+      "LevelOfAccess": "Public",
+      "Queryable": true,
+      "Modifiable": false,
+      "Required": true,
+      "Common": true
+    },
+    {
+      "UniqueName": "Identifier.identifierType",
+      "Name": "identifierType",
+      "DataType": "string",
+      "LevelOfAccess": "Public",
+      "Queryable": true,
+      "Modifiable": false
+    },
+    {
+      "UniqueName": "Organization.name",
+      "Name": "name",
+      "DataType": "string",
+      "LevelOfAccess": "Public",
+      "Queryable": true,
+      "Modifiable": false
+    },
+    {
+      "UniqueName": "Person.Contact.Address.addressType",
+      "Name": "addressType",
+      "DataType": "string",
+      "ValueSet": {
+        "ValueSet": "AddressType"
+      },
+      "LevelOfAccess": "Restricted",
+      "Queryable": true,
+      "Modifiable": false
+    },
+    {
+      "UniqueName": "Person.Contact.Address.city",
+      "Name": "city",
+      "DataType": "string",
+      "LevelOfAccess": "Restricted",
+      "Queryable": true,
+      "Modifiable": false
+    },
+    {
+      "UniqueName": "Person.lunchStatus",
+      "Name": "lunchStatus",
+      "DataType": "string",
+      "ValueSet": {
+        "ValueSet": "LunchStatus"
+      },
+      "LevelOfAccess": "Restricted",
+      "Queryable": true,
+      "Modifiable": true
+    },
+    {
+      "UniqueName": "Person.ssn",
+      "Name": "ssn",
+      "DataType": "string",
+      "LevelOfAccess": "Private",
+      "Queryable": false,
+      "Modifiable": false
+    }
+  ],
+  "Associations": [
+    {
+      "Parent": {
+        "Entity": "Competency"
+      },
+      "Child": {
+        "Entity": "Competency.Classifier"
+      },
+      "Name": "Classifier"
+    },
+    {
+      "Parent": {
+        "Entity": "Competency"
+      },
+      "Child": {
+        "Entity": "Competency"
+      },
+      "Name": "Entails",
+      "Array": true,
+      "Reference": true
+    },
+    {
+      "Parent": {
+        "Entity": "Competency"
+      },
+      "Child": {
+        "Attribute": "Competency.Classifier"
+      },
+      "Name": "classifier"
+    },
+    {
+      "Parent": {
+        "Entity": "Competency"
+      },
+      "Child": {
+        "Attribute": "Competency.identifier"
+      },
+      "Name": "identifier"
+    },
+    {
+      "Parent": {
+        "Entity": "Competency.Classifier"
+      },
+      "Child": {
+        "Attribute": "Competency.Classifier.code"
+      },
+      "Name": "code"
+    },
+    {
+      "Parent": {
+        "Entity": "Course"
+      },
+      "Child": {
+        "Entity": "Organization"
+      },
+      "Name": "AccreditedBy",
+      "Reference": true
+    },
+    {
+      "Parent": {
+        "Entity": "Course"
+      },
+      "Child": {
+        "Entity": "Organization"
+      },
+      "Name": "ApprovedBy",
+      "Reference": true,
+      "Notes": "State approval"
+    },
+    {
+      "Parent": {
+        "Entity": "Course"
+      },
+      "Child": {
+        "Attribute": "Course.credits"
+      },
+      "Name": "credits"
+    },
+    {
+      "Parent": {
+        "Entity": "Course"
+      },
+      "Child": {
+        "Attribute": "Course.online"
+      },
+      "Name": "online"
+    },
+    {
+      "Parent": {
+        "Entity": "Course"
+      },
+      "Child": {
+        "Attribute": "Course.title"
+      },
+      "Name": "title"
+    },
+    {
+      "Parent": {
+        "Entity": "Identifier"
+      },
+      "Child": {
+        "Attribute": "Identifier.identifier"
+      },
+      "Name": "identifier"
+    },
+    {
+      "Parent": {
+        "Entity": "Identifier"
+      },
+      "Child": {
+        "Attribute": "Identifier.identifierType"
+      },
+      "Name": "identifierType"
+    },
+    {
+      "Parent": {
+        "Entity": "Organization"
+      },
+      "Child": {
+        "Entity": "Identifier"
+      },
+      "Name": "Identifier"
+    },
+    {
+      "Parent": {
+        "Entity": "Organization"
+      },
+      "Child": {
+        "Attribute": "Organization.name"
+      },
+      "Name": "name"
+    },
+    {
+      "Parent": {
+        "Entity": "Person"
+      },
+      "Child": {
+        "Entity": "Person.Contact"
+      },
+      "Name": "Contact",
+      "Array": true
+    },
+    {
+      "Parent": {
+        "Entity": "Person"
+      },
+      "Child": {
+        "Entity": "Identifier"
+      },
+      "Name": "Identifier",
+      "Array": true
+    },
+    {
+      "Parent": {
+        "Entity": "Person"
+      },
+      "Child": {
+        "Attribute": "Person.lunchStatus"
+      },
+      "Name": "lunchStatus"
+    },
+    {
+      "Parent": {
+        "Entity": "Person"
+      },
+      "Child": {
+        "Attribute": "Person.ssn"
+      },
+      "Name": "ssn"
+    },
+    {
+      "Parent": {
+        "Entity": "Person.Contact"
+      },
+      "Child": {
+        "Entity": "Person.Contact.Address"
+      },
+      "Name": "Address",
+      "Array": true
+    },
+    {
+      "Parent": {
+        "Entity": "Person.Contact.Address"
+      },
+      "Child": {
+        "Attribute": "Person.Contact.Address.addressType"
+      },
+      "Name": "addressType"
+    },
+    {
+      "Parent": {
+        "Entity": "Person.Contact.Address"
+      },
+      "Child": {
+        "Attribute": "Person.Contact.Address.city"
+      },
+      "Name": "city"
+    }
+  ]
+}
