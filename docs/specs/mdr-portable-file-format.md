@@ -169,7 +169,8 @@ All the field tables below share one format. **Req.** means the field must be pr
 |---|---|---|
 | `Name`, `Version`, `ContributorOrganization` | ✓ | This model's identity |
 | `CopiedFrom` | | Lineage: the identity (`Name`, `Version`, `ContributorOrganization`) of the model this one was copied from, written inline. Absent means the model is not a copy. The named model need not be installed, and is not checked |
-| `Description`, `UseConsiderations`, `Notes`, `Contributor`, `State`, `Tags` | | Descriptive text |
+| `Description`, `UseConsiderations`, `Notes`, `Contributor`, `Tags` | | Descriptive text |
+| `State` | | `Published`, `Draft`, `Work_In_Progress`, `Active` or `Inactive` |
 | `ActivationDate`, `DeprecationDate` | | Timestamps |
 
 An import is refused with `MODEL_EXISTS` when a live model with the same identity is already

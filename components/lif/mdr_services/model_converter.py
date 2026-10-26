@@ -1,7 +1,7 @@
 """Convert between a data model's rows and a portable model file (issue #1333).
 
-Portability Spec §5 and §8: export_model reads a model into a ModelFile. Neither function commits;
-the caller owns the transaction.
+Portability Spec §5 and §8: export_model reads a model into a ModelFile, and import_model writes one as
+a new model. Neither function commits; the caller owns the transaction.
 
 Export refuses a model that still uses a construct §11 deprecates (NOT_MIGRATED), naming the
 construct and the element, rather than turning old content into new. Such a model is refused before
@@ -19,13 +19,23 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import Any, NamedTuple, Optional, Union
 
-from lif.mdr_portability import ModelFile, PortabilityError, PortabilityErrorCode, check_model_file, parse_model_file
+from lif.mdr_portability import (
+    ModelFile,
+    PortabilityError,
+    PortabilityErrorCode,
+    PortabilityErrorGroup,
+    check_model_file,
+    parse_model_file,
+)
+from lif.mdr_portability.v1.models import Association as FileAssociation
+from lif.mdr_portability.v1.models import AttributeKey, EntityKey
 from lif.mdr_portability.errors import error_group
 from lif.mdr_sql_model.core import (
     Attribute,
     Constraint,
     DataModel,
     DataModelConstraints,
+    DataModelType,
     Entity,
     EntityAssociation,
     EntityAttributeAssociation,
@@ -434,3 +444,195 @@ def _to_json(value: Any) -> str:
     if isinstance(value, datetime):
         return value.isoformat()
     raise TypeError(f"{type(value).__name__} is not JSON serializable")
+
+
+async def import_model(session: AsyncSession, file: ModelFile) -> int:
+    """Write a portable file as a new model, and return its Id.
+
+    Create-only: a live model with the same identity is refused with MODEL_EXISTS (§5.2). Every rule is
+    checked before the first row is written, so a refusal writes nothing.
+    """
+    errors: list[PortabilityError] = []
+    try:
+        check_model_file(file)
+    except PortabilityErrorGroup as group:
+        errors.extend(group.exceptions)
+    details = file.Details
+    existing = (
+        await session.execute(
+            select(DataModel.Id).where(
+                DataModel.Name == details.Name,
+                DataModel.DataModelVersion == details.Version,
+                DataModel.ContributorOrganization == details.ContributorOrganization,
+                DataModel.Deleted.is_not(True),
+            )
+        )
+    ).first()
+    if existing is not None:
+        errors.append(
+            PortabilityError(
+                Code.MODEL_EXISTS,
+                "Details",
+                f"model {existing.Id} already has this Name, Version and ContributorOrganization",
+            )
+        )
+    if errors:
+        raise error_group(errors)
+
+    copied_from = details.CopiedFrom
+    model = DataModel(
+        Name=details.Name,
+        DataModelVersion=details.Version,
+        ContributorOrganization=details.ContributorOrganization,
+        # Type is required by the table but no longer means anything (§11): every model is one kind.
+        Type=DataModelType.SourceSchema,
+        CopiedFromName=copied_from.Name if copied_from else None,
+        CopiedFromVersion=copied_from.Version if copied_from else None,
+        CopiedFromContributorOrganization=copied_from.ContributorOrganization if copied_from else None,
+        Description=details.Description,
+        UseConsiderations=details.UseConsiderations,
+        Notes=details.Notes,
+        Contributor=details.Contributor,
+        State=details.State,
+        Tags=details.Tags,
+        ActivationDate=details.ActivationDate,
+        DeprecationDate=details.DeprecationDate,
+        Deleted=False,
+    )
+    session.add(model)
+    await session.flush()
+
+    value_set_ids = await _import_value_sets(session, file, model.Id)
+    entity_ids, attribute_ids = await _import_elements(session, file, model.Id, value_set_ids)
+    for association in file.Associations:
+        session.add(_import_association(association, entity_ids, attribute_ids))
+    await session.flush()
+    return model.Id
+
+
+async def _import_value_sets(session: AsyncSession, file: ModelFile, data_model_id: int) -> dict[str, int]:
+    value_set_rows = [
+        ValueSet(
+            Name=value_set.Name,
+            DataModelId=data_model_id,
+            Description=value_set.Description,
+            UseConsiderations=value_set.UseConsiderations,
+            Notes=value_set.Notes,
+            Contributor=value_set.Contributor,
+            ContributorOrganization=value_set.ContributorOrganization,
+            Tags=value_set.Tags,
+            ActivationDate=value_set.ActivationDate,
+            DeprecationDate=value_set.DeprecationDate,
+        )
+        for value_set in file.ValueSets
+    ]
+    session.add_all(value_set_rows)
+    await session.flush()
+    for value_set, value_set_row in zip(file.ValueSets, value_set_rows):
+        session.add_all(
+            ValueSetValue(
+                ValueSetId=value_set_row.Id,
+                DataModelId=data_model_id,
+                ValueName=value.ValueName,
+                Value=value.Value,
+                Description=value.Description,
+                UseConsiderations=value.UseConsiderations,
+                Source=value.Source,
+                Notes=value.Notes,
+                Contributor=value.Contributor,
+                ContributorOrganization=value.ContributorOrganization,
+                ActivationDate=value.ActivationDate,
+                DeprecationDate=value.DeprecationDate,
+            )
+            for value in value_set.Values
+        )
+    return {value_set_row.Name: value_set_row.Id for value_set_row in value_set_rows}
+
+
+def _to_yes_no(flag: bool) -> str:
+    # Required and Array are free text on the element rows; "Yes" is the only true value (§11).
+    return "Yes" if flag else "No"
+
+
+async def _import_elements(
+    session: AsyncSession, file: ModelFile, data_model_id: int, value_set_ids: dict[str, int]
+) -> tuple[dict[str, int], dict[str, int]]:
+    # The schema generator still reads Array from the element, not from the association, so an element
+    # is stored as an array when any association places it as one. An element that is a list under one
+    # parent and single under another can't be generated that way until the generator reads the
+    # association.
+    entities_in_arrays = {
+        association.Child.Entity
+        for association in file.Associations
+        if isinstance(association.Child, EntityKey) and association.Array
+    }
+    attributes_in_arrays = {
+        association.Child.Attribute
+        for association in file.Associations
+        if isinstance(association.Child, AttributeKey) and association.Array
+    }
+
+    def element_fields(element: Any, in_array: bool) -> dict:
+        return {
+            "UniqueName": element.UniqueName,
+            "Name": element.Name,
+            "DataModelId": data_model_id,
+            "LevelOfAccess": element.LevelOfAccess,
+            "Queryable": element.Queryable,
+            "Modifiable": element.Modifiable,
+            "Required": _to_yes_no(element.Required),
+            "Array": _to_yes_no(in_array),
+            "Description": element.Description,
+            "UseConsiderations": element.UseConsiderations,
+            "SourceModel": element.SourceModel,
+            "Notes": element.Notes,
+            "Contributor": element.Contributor,
+            "ContributorOrganization": element.ContributorOrganization,
+            "Tags": element.Tags,
+            "Common": element.Common,
+            "ActivationDate": element.ActivationDate,
+            "DeprecationDate": element.DeprecationDate,
+        }
+
+    entities = [Entity(**element_fields(entity, entity.UniqueName in entities_in_arrays)) for entity in file.Entities]
+    attributes = [
+        Attribute(
+            **element_fields(attribute, attribute.UniqueName in attributes_in_arrays),
+            DataType=attribute.DataType,
+            ValueSetId=value_set_ids[attribute.ValueSet.ValueSet] if attribute.ValueSet else None,
+            Example=attribute.Example,
+        )
+        for attribute in file.Attributes
+    ]
+    session.add_all([*entities, *attributes])
+    await session.flush()
+    return (
+        {entity.UniqueName: entity.Id for entity in entities},
+        {attribute.UniqueName: attribute.Id for attribute in attributes},
+    )
+
+
+def _import_association(
+    association: FileAssociation, entity_ids: dict[str, int], attribute_ids: dict[str, int]
+) -> AnyAssociation:
+    # Relationship is left NULL: the association's Name replaces it (§11), and the generator moves to
+    # reading Name in #1395.
+    fields = {
+        "Name": association.Name,
+        "Array": association.Array,
+        "Notes": association.Notes,
+        "Contributor": association.Contributor,
+        "ContributorOrganization": association.ContributorOrganization,
+        "ActivationDate": association.ActivationDate,
+        "DeprecationDate": association.DeprecationDate,
+    }
+    parent_id = entity_ids[association.Parent.Entity]
+    child = association.Child
+    if isinstance(child, EntityKey):
+        return EntityAssociation(
+            ParentEntityId=parent_id,
+            ChildEntityId=entity_ids[child.Entity],
+            Placement=EntityPlacementType.Reference if association.Reference else EntityPlacementType.Embedded,
+            **fields,
+        )
+    return EntityAttributeAssociation(EntityId=parent_id, AttributeId=attribute_ids[child.Attribute], **fields)
