@@ -25,5 +25,5 @@ packages = ["lif"]
 
 [tool.polylith.bricks]
 "../../bases/lif/control_plane_restapi" = "lif/control_plane_restapi"
-"../../components/lif/cognito_auth" = "lif/cognito_auth"
+"../../components/lif/auth" = "lif/auth"
 "../../components/lif/logging" = "lif/logging"

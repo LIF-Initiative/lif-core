@@ -13,8 +13,8 @@ from unittest import mock  # noqa: E402
 import pytest  # noqa: E402
 from httpx import ASGITransport, AsyncClient  # noqa: E402
 
-import lif.cognito_auth.core as cognito_core  # noqa: E402
-from lif.cognito_auth import CognitoAuthConfig  # noqa: E402
+import lif.auth.cognito as cognito_core  # noqa: E402
+from lif.auth.cognito import CognitoAuthConfig  # noqa: E402
 from lif.control_plane_restapi import core  # noqa: E402
 
 

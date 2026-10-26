@@ -4,17 +4,18 @@ The service and its own database, without the developer-key endpoints yet (#1182
 waits on the workspace and owner questions in #1190.
 
 Config: ``CONTROL_PLANE__DATABASE_URL`` (required) and Cognito via ``CONTROL_PLANE_AUTH__*``
-(``cognito_auth``). Nothing from the MDR domain is imported or configured here.
+(``lif.auth.cognito``). Nothing from the MDR domain is imported or configured here.
 """
 
 import os
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncEngine, create_async_engine
 
-from lif.cognito_auth import CognitoAuthConfig, CognitoAuthMiddleware
+from lif.auth import AuthMiddleware
+from lif.auth.cognito import CognitoAuthConfig, cognito_strategy
 from lif.logging import get_logger
 
 logger = get_logger(__name__)
@@ -33,24 +34,15 @@ def require_env(name: str) -> str:
 def create_app(engine: AsyncEngine, cognito_config: CognitoAuthConfig) -> FastAPI:
     app = FastAPI(title="LIF Control Plane API", description="LIF control-plane service", version="0.1.0")
 
-    if cognito_config.is_enabled:
-        app.add_middleware(CognitoAuthMiddleware, config=cognito_config)
-    else:
-        # Fail closed: without a user pool nobody can be authenticated, so everything but the
-        # public paths is refused. CognitoAuthMiddleware itself would try to fetch JWKS for an
-        # empty pool on every request that carries a token.
+    # Fail closed: without a user pool nobody can be authenticated, so with no strategies every
+    # non-public path is refused. An empty pool is never handed to cognito_strategy, which would
+    # try to fetch JWKS for it on every request that carries a token.
+    if not cognito_config.is_enabled:
         logger.warning(
             "Cognito auth NOT configured (CONTROL_PLANE_AUTH__USER_POOL_ID unset): non-public paths return 401"
         )
-
-        @app.middleware("http")
-        async def deny_without_cognito(request: Request, call_next):
-            path = request.url.path
-            if path in cognito_config.public_paths or any(
-                path.startswith(p) for p in cognito_config.public_path_prefixes
-            ):
-                return await call_next(request)
-            return JSONResponse(status_code=401, content={"detail": "Cognito auth is not configured"})
+    strategies = [cognito_strategy(cognito_config)] if cognito_config.is_enabled else []
+    app.add_middleware(AuthMiddleware, strategies=strategies)
 
     @app.get("/health-check")
     async def health_check():
