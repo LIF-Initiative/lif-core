@@ -38,7 +38,7 @@ const ActivateGroupDialog: React.FC<ActivateGroupDialogProps> = ({
         )}
         {currentLive === 'tie' && (
           <p className="mappings-dialog-text">
-            Two versions are live with the same version number, so the Translator can't pick one. Every other live
+            More than one version is live with the same version number, so the Translator can't pick one. Every other live
             version will be deprecated now.
           </p>
         )}
