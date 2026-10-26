@@ -537,6 +537,7 @@ existing content onto the simplified model is migration work, not this spec's.
 | Free-text `Required` and `Array` (`Yes` / `No` / NULL / `""`) on entities and attributes | Booleans: `Yes` becomes `true`; everything else is absent, as the schema generator already reads it (`== "Yes"`). `Required` stays on the element; `Array` moves to every association whose child is that element | Entities: `Required` 7 `Yes`, `Array` 92 `Yes`. Attributes: `Required` 295 `Yes`, `Array` 232 `Yes`. All other values are `No`, NULL or `""` |
 | `Relationship` and the `has*`/`relevant*` naming rule | The required association `Name` | 212 entity associations and 2,544 attribute associations need a `Name`; 163 entity associations have no relationship today (115 NULL, 48 empty) |
 | Attributes with `DataType = 'entity'` and `TargetEntityId` (`V1.6`) | An association to the entity; an attribute with no target is dropped | 109 attributes. 41 have a target, all in Open Badges v3. 68 have none (CLR v2: 55, CASE: 13) |
+| Attributes with no `DataType` (NULL) | `string`, which schema upload already writes when a schema gives no type | 921 attributes in 11 models: CEDS 168, CTDL 140, Schema.org 102, EagleApps 98, OSID / CampusAPI 93, ELM 75, HR Open 72, PESC v1.8 62, CLR v2 48, Open Badges v2 36, CLR v1 27 |
 | Attributes in no association | Dropped on migration; `UNASSOCIATED_ATTRIBUTE` on import | 99 attributes: CLR v2 48, model 17 14, Open Badges v2 12, Ed-Fi v5 9, EagleApps 7, model 25 4, PESC v1.8 2, LIF 2, OSID / CampusAPI 1 |
 | Value mappings' group membership (`TransformationGroupId`), and `SourceValueSetId` / `TargetValueSetId` | The crosswalk file (§7) | 2 rows name a group. The two value-set columns are NULL or disagree with the values' own value sets on 2,345 rows |
 | A source value mapped to several targets | `CROSSWALK_SOURCE_DUPLICATE` | 0 among live value mappings. The 8 such values are all on mappings to soft-deleted targets |
@@ -561,6 +562,11 @@ existing content onto the simplified model is migration work, not this spec's.
   `Ref` keys do not change in the same step as the conversion. Retiring them is a separate, later
   step. For an attribute child: the attribute's `Name`.
 - **`Array`.** Each association takes its child's current `Array` value.
+- **`DataType`.** An attribute with no `DataType` gets `string`. The generator writes a NULL
+  `DataType` as `"type": ""` today, or, for an array, as `"type": "array"` with `"format": ""`
+  (`schema_generation_service.py`). So the generated `type`, or an array's `format`, becomes
+  `string` for the 851 such attributes that are in an association, in 10 models. CLR v2's 48 are
+  all in no association, and are dropped instead.
 - **Dropped.** Attributes in no association (99), which do not appear in the generated schema
   today. Entity-typed attributes with no `TargetEntityId` (68), which today appear as attributes of
   type `entity` in CLR v2 and CASE (the generator's `!= "Entity"` check misses the lowercase stored
