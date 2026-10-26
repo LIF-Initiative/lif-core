@@ -234,6 +234,39 @@ export const updateTransformationGroup = async (
     return result.data;
 };
 
+// Make this version the live one for its pair; the pair's other active versions are deprecated (#1350).
+export const activateTransformationGroup = async (id: number) => {
+    const url = `${apiBaseUrl}/transformation_groups/${id}/activate`;
+    const result = await api.post(url);
+    return result.data as TransformationGroupDetails;
+};
+
+// A pair's live version as the Translator reads it. 'tie' is the API's 409: two active versions
+// compare equal (e.g. "1" and "1.0"), so there is no single live version. 'error' is any other failure,
+// when the live version is unknown.
+export type LiveVersionState =
+    | { status: 'live'; groupId: number }
+    | { status: 'none' }
+    | { status: 'tie' }
+    | { status: 'error' };
+
+export const getLiveVersionForPair = async (
+    sourceDataModelId: number,
+    targetDataModelId: number
+): Promise<LiveVersionState> => {
+    const url = `${apiBaseUrl}/transformation_groups/active_transformations_for_data_models/?source_data_model_id=${sourceDataModelId}&target_data_model_id=${targetDataModelId}`;
+    try {
+        const res = await api.get(url);
+        return { status: 'live', groupId: res.data.TransformationGroupId as number };
+    } catch (e) {
+        const status = (e as { response?: { status?: number } })?.response?.status;
+        if (status === 404) return { status: 'none' };
+        if (status === 409) return { status: 'tie' };
+        console.error('Failed to read the live version for this pair', e);
+        return { status: 'error' };
+    }
+};
+
 export const deleteTransformationGroup = async (id: number) => {
     const url = `${apiBaseUrl}/transformation_groups/${id}`;
     const res = await api.delete(url);

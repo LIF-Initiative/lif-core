@@ -9,6 +9,7 @@
 .group-editor__label--block { grid-column: 1 / -1; margin-top: 6px; }
 .group-editor__input, .group-editor__textarea { width: 100%; border: 1px solid #cbd5e1; border-radius: 6px; padding: 8px 10px; font-size: 14px; box-sizing: border-box; }
 .group-editor__textarea { resize: vertical; }
+.group-editor__hint { grid-column: 1 / -1; margin: -4px 0 0; font-size: 12px; color: #475569; }
 .group-editor__textarea--block { grid-column: 1 / -1; }
 .group-editor__actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 16px; }
 .group-editor__btn { border: 1px solid #cbd5e1; background: #fff; padding: 6px 12px; border-radius: 6px; cursor: pointer; }
