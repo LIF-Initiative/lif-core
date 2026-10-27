@@ -112,8 +112,9 @@ def _keys(node):
 
 
 async def test_generated_schema_leaves_out_the_new_entity_fields(test_db_session):
-    # The generator copies each entity's fields when include_entity_md is set. Emitting the V1.7 flags is
-    # #1395's change, so until then they must not appear (model 1 covers both of the generator's copy sites).
+    # The generator copies each entity's fields when include_entity_md is set. The V1.7 flags are emitted
+    # only as x-mutable / x-queryable (#1395), never as metadata (model 1 covers both of the generator's
+    # copy sites).
     schema = await generate_openapi_schema(test_db_session, 1, include_attr_md=True, include_entity_md=True)
     keys = set(_keys(schema))
     assert "UniqueName" in keys  # Entity metadata was emitted, so the check below can fail.
