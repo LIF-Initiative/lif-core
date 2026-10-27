@@ -52,6 +52,10 @@ class _Attr:
         self.DataType = "string"
         self.Array = "No"
         self.ValueSetId = None
+        self.LevelOfAccess = "Public"
+        self.Queryable = False
+        self.Modifiable = False
+        self.AssociationName = None
 
     def dict(self):
         return {
@@ -66,6 +70,13 @@ class _Attr:
             "Array": self.Array,
             "ValueSetId": self.ValueSetId,
         }
+
+
+@pytest.fixture(autouse=True)
+def _self_contained_model(monkeypatch):
+    """The generator asks whether the model still has inclusion rows (#1395); these tests build
+    self-contained models, so answer without consuming one of their scripted query results."""
+    monkeypatch.setattr(svc, "is_overlay_model", AsyncMock(return_value=False))
 
 
 @pytest.fixture
@@ -92,7 +103,7 @@ async def test_find_ancestors_simple_chain(fake_session):
     ]
 
     out = await svc.find_ancestors(
-        fake_session, child_id=3, data_model_type="BaseLIF", data_model_id=999, included_entity_ids=[]
+        fake_session, child_id=3, is_overlay=False, data_model_id=999, included_entity_ids=[]
     )
     assert out == [[1, 2]]
 
@@ -108,7 +119,7 @@ async def test_find_ancestors_multiple_roots(fake_session):
     ]
 
     out = await svc.find_ancestors(
-        fake_session, child_id=30, data_model_type="BaseLIF", data_model_id=555, included_entity_ids=[]
+        fake_session, child_id=30, is_overlay=False, data_model_id=555, included_entity_ids=[]
     )
     assert out == [[10], [20]]
     assert fake_session.execute.await_count == 3
@@ -255,7 +266,9 @@ async def test_generate_openapi_schema_baselif_minimal(fake_session, monkeypatch
     )
     monkeypatch.setattr(svc, "get_datamodel_by_id", AsyncMock(return_value=dm))
 
-    entity_obj = types.SimpleNamespace(Id=1, Name="Learner", Array="No", UseConsiderations=None, Deleted=False)
+    entity_obj = types.SimpleNamespace(
+        Id=1, Name="Learner", Array="No", UseConsiderations=None, Deleted=False, Queryable=False, Modifiable=False
+    )
     monkeypatch.setattr(svc, "get_entity_by_id", AsyncMock(return_value=entity_obj))
 
     monkeypatch.setattr(svc, "get_attributes_with_association_metadata_for_entity", AsyncMock(return_value=([])))
@@ -298,7 +311,9 @@ async def test_generate_openapi_schema_enum_values_on_attribute(fake_session, mo
     )
     monkeypatch.setattr(svc, "get_datamodel_by_id", AsyncMock(return_value=dm))
 
-    ent = types.SimpleNamespace(Id=10, Name="Thing", Array="No", UseConsiderations=None, Deleted=False)
+    ent = types.SimpleNamespace(
+        Id=10, Name="Thing", Array="No", UseConsiderations=None, Deleted=False, Queryable=False, Modifiable=False
+    )
     monkeypatch.setattr(svc, "get_entity_by_id", AsyncMock(return_value=ent))
 
     class _Attr:
@@ -309,6 +324,10 @@ async def test_generate_openapi_schema_enum_values_on_attribute(fake_session, mo
             self.DataType = "string"
             self.Array = "No"
             self.ValueSetId = 777
+            self.LevelOfAccess = "Public"
+            self.Queryable = False
+            self.Modifiable = False
+            self.AssociationName = None
 
         def dict(self):
             return {
@@ -361,10 +380,24 @@ async def test_generate_openapi_schema_has_sub_entity_required_fields(fake_sessi
     def get_entity_by_id_side_effect(session=None, id=None, **_):
         if id == 101:
             return types.SimpleNamespace(
-                Id=101, Name="CompetencyFramework", Array="No", UseConsiderations=None, Deleted=False
+                Id=101,
+                Name="CompetencyFramework",
+                Array="No",
+                UseConsiderations=None,
+                Deleted=False,
+                Queryable=False,
+                Modifiable=False,
             )
         elif id == 202:
-            return types.SimpleNamespace(Id=202, Name="Association", Array="Yes", UseConsiderations=None, Deleted=False)
+            return types.SimpleNamespace(
+                Id=202,
+                Name="Association",
+                Array="Yes",
+                UseConsiderations=None,
+                Deleted=False,
+                Queryable=False,
+                Modifiable=False,
+            )
         else:
             raise ValueError(f"Unexpected entity_id {id}")
 
@@ -393,7 +426,7 @@ async def test_generate_openapi_schema_has_sub_entity_required_fields(fake_sessi
         # build df_entity (include both entities)
         _FetchallResult([RowIN(101, "CompetencyFramework"), RowIN(202, "Association")]),
         # find_children: get detailed association rows via .scalars().all()
-        _ScalarListResult([types.SimpleNamespace(Relationship=None)]),
+        _ScalarListResult([types.SimpleNamespace(Relationship=None, Name=None)]),
         # enums for attributes (none)
         _FetchallResult([]),
         _FetchallResult([]),
@@ -434,11 +467,24 @@ async def test_generate_openapi_schema_has_sub_entity_required_entity(fake_sessi
     def get_entity_by_id_side_effect(session=None, id=None, **_):
         if id == 101:
             return types.SimpleNamespace(
-                Id=101, Name="CompetencyFramework", Array="No", UseConsiderations=None, Deleted=False
+                Id=101,
+                Name="CompetencyFramework",
+                Array="No",
+                UseConsiderations=None,
+                Deleted=False,
+                Queryable=False,
+                Modifiable=False,
             )
         elif id == 202:
             return types.SimpleNamespace(
-                Id=202, Name="Association", Array="Yes", UseConsiderations=None, Deleted=False, Required="Yes"
+                Id=202,
+                Name="Association",
+                Array="Yes",
+                UseConsiderations=None,
+                Deleted=False,
+                Required="Yes",
+                Queryable=False,
+                Modifiable=False,
             )
         else:
             raise ValueError(f"Unexpected entity_id {id}")
@@ -468,7 +514,7 @@ async def test_generate_openapi_schema_has_sub_entity_required_entity(fake_sessi
         # build df_entity (include both entities)
         _FetchallResult([RowIN(101, "CompetencyFramework"), RowIN(202, "Association")]),
         # find_children: get detailed association rows via .scalars().all()
-        _ScalarListResult([types.SimpleNamespace(Relationship=None)]),
+        _ScalarListResult([types.SimpleNamespace(Relationship=None, Name=None)]),
         # enums for attributes (none)
         _FetchallResult([]),
         _FetchallResult([]),
@@ -507,9 +553,25 @@ async def test_generate_openapi_schema_full_export(fake_session, monkeypatch):
 
     def get_entity_by_id_side_effect(session=None, id=None, **_):
         if id == 100:
-            return types.SimpleNamespace(Id=100, Name="Parent", Array="No", UseConsiderations=None, Deleted=False)
+            return types.SimpleNamespace(
+                Id=100,
+                Name="Parent",
+                Array="No",
+                UseConsiderations=None,
+                Deleted=False,
+                Queryable=False,
+                Modifiable=False,
+            )
         elif id == 200:
-            return types.SimpleNamespace(Id=200, Name="Child", Array="Yes", UseConsiderations=None, Deleted=False)
+            return types.SimpleNamespace(
+                Id=200,
+                Name="Child",
+                Array="Yes",
+                UseConsiderations=None,
+                Deleted=False,
+                Queryable=False,
+                Modifiable=False,
+            )
         else:
             raise ValueError(f"Unexpected entity_id {id}")
 
@@ -523,6 +585,10 @@ async def test_generate_openapi_schema_full_export(fake_session, monkeypatch):
             self.DataType = "string"
             self.Array = "No"
             self.ValueSetId = 777
+            self.LevelOfAccess = "Public"
+            self.Queryable = False
+            self.Modifiable = False
+            self.AssociationName = None
 
         def dict(self):
             return {
@@ -579,6 +645,7 @@ async def test_generate_openapi_schema_full_export(fake_session, monkeypatch):
                     ParentEntityId=100,
                     ChildEntityId=200,
                     Relationship=None,
+                    Name=None,
                     Placement="Embedded",
                     Notes=None,
                     CreationDate=None,
@@ -637,9 +704,25 @@ async def test_generate_openapi_schema_full_export_parent_and_child_valuesets(fa
 
     def get_entity_by_id_side_effect(session=None, id=None, **_):
         if id == 300:
-            return types.SimpleNamespace(Id=300, Name="Parent2", Array="No", UseConsiderations=None, Deleted=False)
+            return types.SimpleNamespace(
+                Id=300,
+                Name="Parent2",
+                Array="No",
+                UseConsiderations=None,
+                Deleted=False,
+                Queryable=False,
+                Modifiable=False,
+            )
         elif id == 400:
-            return types.SimpleNamespace(Id=400, Name="Child2", Array="Yes", UseConsiderations=None, Deleted=False)
+            return types.SimpleNamespace(
+                Id=400,
+                Name="Child2",
+                Array="Yes",
+                UseConsiderations=None,
+                Deleted=False,
+                Queryable=False,
+                Modifiable=False,
+            )
         else:
             raise ValueError(f"Unexpected entity_id {id}")
 
@@ -653,6 +736,10 @@ async def test_generate_openapi_schema_full_export_parent_and_child_valuesets(fa
             self.DataType = "string"
             self.Array = "No"
             self.ValueSetId = 9001
+            self.LevelOfAccess = "Public"
+            self.Queryable = False
+            self.Modifiable = False
+            self.AssociationName = None
 
         def dict(self):
             return {
@@ -680,6 +767,10 @@ async def test_generate_openapi_schema_full_export_parent_and_child_valuesets(fa
             self.DataType = "string"
             self.Array = "No"
             self.ValueSetId = 9002
+            self.LevelOfAccess = "Public"
+            self.Queryable = False
+            self.Modifiable = False
+            self.AssociationName = None
 
         def dict(self):
             return {
@@ -735,6 +826,7 @@ async def test_generate_openapi_schema_full_export_parent_and_child_valuesets(fa
                     ParentEntityId=300,
                     ChildEntityId=400,
                     Relationship=None,
+                    Name=None,
                     Placement="Embedded",
                     Notes=None,
                     CreationDate=None,
@@ -831,7 +923,7 @@ async def test_find_ancestors_orglif_filters_to_included_entity_ids(fake_session
     out = await svc.find_ancestors(
         fake_session,
         child_id=500,
-        data_model_type="OrgLIF",
+        is_overlay=True,
         data_model_id=9999,
         included_entity_ids=[50, 100, 500],  # excluded parent 200 not present
     )
@@ -962,7 +1054,7 @@ async def test_find_children_records_the_key_it_writes(monkeypatch):
     the threading (generate_openapi_schema -> find_children -> add_ref) could break
     and every other test would still pass while production still 500s.
     """
-    assoc = types.SimpleNamespace(Relationship="CFItems", ParentEntityId=1, ChildEntityId=2)
+    assoc = types.SimpleNamespace(Relationship="CFItems", Name=None, ParentEntityId=1, ChildEntityId=2)
 
     class _Associations:
         def scalars(self):
@@ -977,7 +1069,9 @@ async def test_find_children_records_the_key_it_writes(monkeypatch):
     session = MagicMock()
     session.execute = AsyncMock(return_value=_Associations())
 
-    child_entity = types.SimpleNamespace(Name="CFItem", Array="No", UseConsiderations=None)
+    child_entity = types.SimpleNamespace(
+        Name="CFItem", Array="No", UseConsiderations=None, Queryable=False, Modifiable=False
+    )
     monkeypatch.setattr(svc, "get_entity_by_id", AsyncMock(return_value=child_entity))
     monkeypatch.setattr(svc, "get_attributes_with_association_metadata_for_entity", AsyncMock(return_value=[]))
 

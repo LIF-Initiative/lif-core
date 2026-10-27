@@ -1,0 +1,883 @@
+{
+  "components": {
+    "schemas": {
+      "Acceditation": {
+        "properties": {
+          "Organization.shortName": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "organization": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "Address": {
+        "properties": {},
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "Contact": {
+        "properties": {
+          "Address": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "type": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "Exam": {
+        "properties": {
+          "id": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "name": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "resultValuesGroups": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "type": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "unitsContentOwner": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "JobAppointment": {
+        "properties": {
+          "description": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "effectiveDate": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "expirationDate": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "state": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "title": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "LearningResult": {
+        "properties": {
+          "description": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "id": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "name": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "state": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "Lo": {
+        "properties": {
+          "description": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "name": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "LoRepository": {
+        "properties": {
+          "description": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "name": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "OrgCode": {
+        "properties": {
+          "code": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "Organization": {
+        "properties": {
+          "name": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "shortName": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "state": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "type": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "PersonBioDemographics": {
+        "properties": {
+          "birthDate": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "ethnicityId": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "genderCode": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "residencyId": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "veteranTypeKey": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "PersonIdentifier": {
+        "properties": {
+          "Identifier": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "type": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "PersonName": {
+        "properties": {
+          "firstName": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "lastName": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "middleName": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "namePrefix": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "nameSuffix-nameTitle": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "PersonRelation": {
+        "properties": {
+          "person": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "type": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "Proficiency": {
+        "properties": {
+          "learningObjective": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "Program": {
+        "properties": {
+          "adminOrgs": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "audience": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "code": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "completionRequirements": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "description": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "duration": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "duration.type": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "learningObjective": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "name": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "requirement": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "url": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "ProgramOffering": {
+        "properties": {
+          "effectiveDates": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "ProgramOfferingEnabler": {
+        "properties": {
+          "atpTypeKeys": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "Revision": {
+        "properties": {
+          "dates": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "StudentCourseRecord": {
+        "properties": {
+          "calculatedGrade": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "calculatedGradeScale": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "calculatedGradeScaleKey": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "certifyingOrg": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "certifyingOrg.type": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "courseBeginDate": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "courseCode": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "courseEndDate": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "courseTitle": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "effectiveDate": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "expirationDate": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "gpqQualityPoints": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "isRepeated": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "lastAttendanceDate": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "levelValue.type": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "sectionCode": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "state": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "type": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "StudentCourseRecord.Course": {
+        "properties": {
+          "courseCodeSuffix": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "description": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "isHonors": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "levelValue.name": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "repeatableForCreditRule": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "unitsContentOwner": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "StudentCourseRecord.Course.SubjectArea": {
+        "properties": {
+          "code": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "StudentCourseRecord.StudentCourseUsage": {
+        "properties": {
+          "program": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "program.countsTowardGPA": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "StudentCredentialRecord": {
+        "properties": {
+          "awardDate/effectiveDate": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "expirationDate": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "studentId": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "supportingPrograms": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "Taxonomy": {
+        "properties": {
+          "Classifier": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "Classifier.job": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "classifier": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "Taxonomy.Classifier": {
+        "properties": {
+          "course": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      }
+    }
+  },
+  "info": {
+    "description": "OpenAPI Spec",
+    "title": "Machine-Readable Schema for EagleApps",
+    "version": "1.0"
+  },
+  "openapi": "3.0.0",
+  "paths": {}
+}
