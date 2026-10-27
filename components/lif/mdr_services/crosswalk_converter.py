@@ -8,19 +8,27 @@ so a refusal writes nothing.
 
 A crosswalk has no group (§7), so imported value mappings get no TransformationGroupId, like most of the
 seed's. A value mapping counts as live only when it, both of its values, and its group (if it has one)
-are live (§2).
+are live (§2). Export's file goes through parse_crosswalk_file and check_crosswalk_file, so export never
+produces a file that import would refuse, and stored values the format does not allow (a blank Name, a
+NULL ValueName) are refused by name.
 
-This lives here, beside the existing value-mapping services, until the converter module for every file
-kind (§8) exists; it moves there then.
+Callers reach it through portability_converter, the converter module for every file kind (§8).
 """
 
+import json
 from typing import Optional
 
-from lif.mdr_portability import CrosswalkFile, PortabilityError, PortabilityErrorCode, PortabilityErrorGroup
-from lif.mdr_portability.crosswalk_rules import check_crosswalk_file, duplicate_source_errors
+from lif.mdr_portability import (
+    CrosswalkFile,
+    PortabilityError,
+    PortabilityErrorCode,
+    PortabilityErrorGroup,
+    parse_crosswalk_file,
+)
+from lif.mdr_portability.crosswalk_rules import check_crosswalk_file
 from lif.mdr_portability.errors import error_group
-from lif.mdr_services.mapping_group_converter import _find_model, _identity, _without_nulls
-from lif.mdr_services.valueset_service import get_value_set_by_id
+from lif.mdr_services.mapping_group_converter import _find_model, _without_nulls
+from lif.mdr_services.model_converter import _to_json
 from lif.mdr_sql_model.core import DataModel, TransformationGroup, ValueSet, ValueSetValue, ValueSetValueMapping
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import aliased
@@ -29,7 +37,7 @@ from sqlmodel import select
 Code = PortabilityErrorCode
 
 
-async def _live_mappings(
+async def _list_live_mappings(
     session: AsyncSession, source_value_set_id: int, target_value_set_id: int, limit: Optional[int] = None
 ):
     """The live value mappings from one value set to another, with both values' names.
@@ -59,65 +67,59 @@ async def _live_mappings(
 
 
 async def export_crosswalk(session: AsyncSession, source_value_set_id: int, target_value_set_id: int) -> CrosswalkFile:
-    """Read the live value mappings between two value sets into a portable file.
-
-    A value set that is missing or deleted raises a 404, as export_mapping_group does for its group.
-    Anything else that can't be written out is refused with every reason at once.
-    """
+    """Read the live value mappings between two value sets into a portable file, or refuse with every
+    reason at once."""
     errors: list[PortabilityError] = []
-
     details: dict = {}
     for side, value_set_id in (("Source", source_value_set_id), ("Target", target_value_set_id)):
         element = f"Details.{side}"
-        value_set = await get_value_set_by_id(session=session, id=value_set_id)
+        value_set = await session.get(ValueSet, value_set_id)
+        if value_set is None or value_set.Deleted:
+            errors.append(
+                PortabilityError(
+                    Code.ELEMENT_REFERENCE_UNRESOLVED, f"{element}.ValueSet", f"value set {value_set_id} is not live"
+                )
+            )
+            continue
         model = await session.get(DataModel, value_set.DataModelId)
         if model is None or model.Deleted:
             errors.append(
-                PortabilityError(Code.MODEL_MISSING, element, f"model {value_set.DataModelId} is not installed")
+                PortabilityError(
+                    Code.MODEL_MISSING, f"{element}.Model", f"model {value_set.DataModelId} is not installed"
+                )
             )
             continue
-        identity, identity_errors = _identity(model, f"{element}.Model")
-        errors.extend(identity_errors)
-        if not (value_set.Name or "").strip():
-            errors.append(PortabilityError(Code.FIELD_INVALID, f"{element}.ValueSet", "the value set has no Name"))
+        identity = {
+            "Name": model.Name,
+            "Version": model.DataModelVersion,
+            "ContributorOrganization": model.ContributorOrganization,
+        }
         details[side] = {"Model": identity, "ValueSet": value_set.Name}
-
-    entries = []
-    for mapping, source_name, target_name in await _live_mappings(session, source_value_set_id, target_value_set_id):
-        element = f"ValueMappings[{mapping.Id}]"
-        unnamed = [
-            side for side, name in (("source", source_name), ("target", target_name)) if not (name or "").strip()
-        ]
-        if unnamed:
-            errors.append(
-                PortabilityError(Code.FIELD_INVALID, element, f"the {' and '.join(unnamed)} value has no ValueName")
-            )
-            continue
-        entries.append(
-            {
-                "Source": source_name,
-                "Target": target_name,
-                "Description": mapping.Description,
-                "UseConsiderations": mapping.UseConsiderations,
-                "Notes": mapping.Notes,
-                "Contributor": mapping.Contributor,
-                "ContributorOrganization": mapping.ContributorOrganization,
-                "ActivationDate": mapping.ActivationDate,
-                "DeprecationDate": mapping.DeprecationDate,
-            }
-        )
-
-    # A source value with two live mappings into the pair can't be written out (§7).
-    errors.extend(duplicate_source_errors(entry["Source"] for entry in entries))
     if errors:
         raise error_group(errors)
-    return CrosswalkFile.model_validate(
+
+    entries = [
         {
-            "Format": {"Type": "lif-mdr-crosswalk", "Version": 1},
-            "Details": details,
-            "Entries": [_without_nulls(entry) for entry in entries],
+            "Source": source_name,
+            "Target": target_name,
+            "Description": mapping.Description,
+            "UseConsiderations": mapping.UseConsiderations,
+            "Notes": mapping.Notes,
+            "Contributor": mapping.Contributor,
+            "ContributorOrganization": mapping.ContributorOrganization,
+            "ActivationDate": mapping.ActivationDate,
+            "DeprecationDate": mapping.DeprecationDate,
         }
-    )
+        for mapping, source_name, target_name in await _list_live_mappings(
+            session, source_value_set_id, target_value_set_id
+        )
+    ]
+    content = {"Format": {"Type": "lif-mdr-crosswalk", "Version": 1}, "Details": details, "Entries": entries}
+    # Through the parser, so stored values the format does not allow (a blank Name or ValueName, an
+    # incomplete model identity) are refused by name, then the rule that a source maps once (§7).
+    file = parse_crosswalk_file(json.dumps(_without_nulls(content), default=_to_json).encode("utf-8"))
+    check_crosswalk_file(file)
+    return file
 
 
 async def import_crosswalk(session: AsyncSession, file: CrosswalkFile) -> int:
@@ -143,7 +145,7 @@ async def import_crosswalk(session: AsyncSession, file: CrosswalkFile) -> int:
             errors.append(
                 PortabilityError(
                     Code.MODEL_MISSING,
-                    element,
+                    f"{element}.Model",
                     f"no installed model is {identity.Name!r} {identity.Version} by {identity.ContributorOrganization!r}",
                 )
             )
@@ -177,7 +179,7 @@ async def import_crosswalk(session: AsyncSession, file: CrosswalkFile) -> int:
         value_ids[side] = {row.ValueName: row.Id for row in values}
 
     if len(value_sets) == 2:
-        existing = await _live_mappings(session, value_sets["Source"].Id, value_sets["Target"].Id, limit=1)
+        existing = await _list_live_mappings(session, value_sets["Source"].Id, value_sets["Target"].Id, limit=1)
         if existing:
             errors.append(
                 PortabilityError(

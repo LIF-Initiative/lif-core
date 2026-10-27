@@ -17,6 +17,7 @@ Business logic for the MDR API. Each `*_service.py` module owns a slice of MDR f
 | `portability_converter.py` | The converter between MDR rows and portable files (#1333): one interface, in both directions, for every file kind |
 | `model_converter.py` | Model rows ↔ portable model file |
 | `mapping_group_converter.py` | Transformation group rows ↔ portable mapping-group file (#1389) |
+| `crosswalk_converter.py` | One value-set pair's value mappings ↔ portable crosswalk file (#1390) |
 | `inclusions_service.py` | Reusable attribute groups (Contact, Address, etc.) |
 | `jinja_helper_service.py`, `jinja_translation_service.py` | Jinja-based template + translation generation |
 | `schema_generation_service.py` | Builds OpenAPI schemas from MDR content (the schema `mdr_client` fetches) |

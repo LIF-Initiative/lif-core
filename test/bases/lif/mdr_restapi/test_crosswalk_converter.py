@@ -97,6 +97,10 @@ def _codes(error: PortabilityErrorGroup) -> list:
     return sorted(e.code for e in error.exceptions)
 
 
+def _refusals(error: PortabilityErrorGroup) -> list:
+    return [(e.code, e.element) for e in error.exceptions]
+
+
 def _add_mapping(session, installed, source: str, target: str) -> ValueSetValueMapping:
     mapping = ValueSetValueMapping(
         SourceValueId=installed["Source"][2][source].Id, TargetValueId=installed["Target"][2][target].Id, Deleted=False
@@ -143,31 +147,44 @@ async def test_a_crosswalk_round_trips_between_installs_byte_for_byte(test_db_se
 
 
 @pytest.mark.parametrize(
-    "tag, entries, details, codes",
+    "tag, entries, details, refusals",
     [
-        ("dup", ENTRIES + [{"Source": "F", "Target": "Unknown"}], {}, [Code.CROSSWALK_SOURCE_DUPLICATE]),
+        (
+            "dup",
+            ENTRIES + [{"Source": "F", "Target": "Unknown"}],
+            {},
+            [(Code.CROSSWALK_SOURCE_DUPLICATE, "Entries[F]")],
+        ),
         (
             "missing_value",
             [{"Source": "Z", "Target": "Female"}, {"Source": "F", "Target": "Woman"}],
             {},
-            [Code.ELEMENT_REFERENCE_UNRESOLVED, Code.ELEMENT_REFERENCE_UNRESOLVED],
+            [
+                (Code.ELEMENT_REFERENCE_UNRESOLVED, "Entries[F].Target"),
+                (Code.ELEMENT_REFERENCE_UNRESOLVED, "Entries[Z].Source"),
+            ],
         ),
         (
             "missing_set",
             ENTRIES,
             {"Target": _key("Target", "missing_set") | {"ValueSet": "Gender"}},
-            [Code.ELEMENT_REFERENCE_UNRESOLVED],
+            [(Code.ELEMENT_REFERENCE_UNRESOLVED, "Details.Target.ValueSet")],
         ),
-        ("missing_model", ENTRIES, {"Source": _key("Source", "elsewhere")}, [Code.MODEL_MISSING]),
+        (
+            "missing_model",
+            ENTRIES,
+            {"Source": _key("Source", "elsewhere")},
+            [(Code.MODEL_MISSING, "Details.Source.Model")],
+        ),
     ],
 )
-async def test_a_refused_import_writes_nothing(test_db_session, tag, entries, details, codes):
+async def test_a_refused_import_writes_nothing(test_db_session, tag, entries, details, refusals):
     session = test_db_session
     await _install(session, tag)
     before = await _mapping_count(session)
     with pytest.raises(PortabilityErrorGroup) as exc_info:
         await import_crosswalk(session, parse_crosswalk_file(_file(tag, entries, **details)))
-    assert _codes(exc_info.value) == codes
+    assert sorted((e.code, e.element) for e in exc_info.value.exceptions) == refusals
     # Counted in the same session, before the rollback, so a flushed partial write would show.
     assert await _mapping_count(session) == before
     await session.rollback()
@@ -251,11 +268,10 @@ async def test_export_leaves_out_mappings_that_are_not_live(test_db_session):
     assert [(entry.Source, entry.Target) for entry in file.Entries] == [("X", "Unknown")]
 
 
-async def test_export_refuses_every_reason_at_once(test_db_session):
+async def test_export_refuses_stored_values_the_format_does_not_allow(test_db_session):
     session = test_db_session
-    installed = await _install(session, "export_refusals")
+    installed = await _install(session, "export_blanks")
     _add_mapping(session, installed, "F", "Female")
-    _add_mapping(session, installed, "F", "Male")
     _add_mapping(session, installed, "X", "Unknown")
     installed["Target"][2]["Unknown"].ValueName = ""
     installed["Source"][1].Name = "  "
@@ -263,13 +279,44 @@ async def test_export_refuses_every_reason_at_once(test_db_session):
 
     with pytest.raises(PortabilityErrorGroup) as exc_info:
         await export_crosswalk(session, *_ids(installed))
-    refusals = sorted((e.code, e.element.split("[")[0]) for e in exc_info.value.exceptions)
-    assert refusals == [
-        (Code.CROSSWALK_SOURCE_DUPLICATE, "Entries"),
+    # Named by key, never by row Id (§10).
+    assert sorted(_refusals(exc_info.value)) == [
         (Code.FIELD_INVALID, "Details.Source.ValueSet"),
-        (Code.FIELD_INVALID, "ValueMappings"),
+        (Code.FIELD_INVALID, "Entries[X].Target"),
     ]
-    assert [e.element for e in exc_info.value.exceptions if e.code == Code.CROSSWALK_SOURCE_DUPLICATE] == ["Entries[F]"]
+
+
+async def test_export_refuses_a_source_mapped_twice(test_db_session):
+    session = test_db_session
+    installed = await _install(session, "export_dup")
+    _add_mapping(session, installed, "F", "Female")
+    _add_mapping(session, installed, "F", "Male")
+    await session.commit()
+
+    with pytest.raises(PortabilityErrorGroup) as exc_info:
+        await export_crosswalk(session, *_ids(installed))
+    assert _refusals(exc_info.value) == [(Code.CROSSWALK_SOURCE_DUPLICATE, "Entries[F]")]
+
+
+@pytest.mark.parametrize(
+    "tag, field, value",
+    [
+        # Seed model 26 has no ContributorOrganization.
+        ("identity_null", "ContributorOrganization", None),
+        ("identity_blank", "DataModelVersion", " "),
+    ],
+)
+async def test_export_refuses_a_model_with_an_incomplete_identity(test_db_session, tag, field, value):
+    session = test_db_session
+    installed = await _install(session, tag)
+    _add_mapping(session, installed, "F", "Female")
+    setattr(installed["Target"][0], field, value)
+    await session.commit()
+
+    with pytest.raises(PortabilityErrorGroup) as exc_info:
+        await export_crosswalk(session, *_ids(installed))
+    file_field = "Version" if field == "DataModelVersion" else field
+    assert _refusals(exc_info.value) == [(Code.MODEL_IDENTITY_INCOMPLETE, f"Details.Target.Model.{file_field}")]
 
 
 async def test_export_refuses_a_value_set_whose_model_is_deleted(test_db_session):
@@ -281,7 +328,31 @@ async def test_export_refuses_a_value_set_whose_model_is_deleted(test_db_session
 
     with pytest.raises(PortabilityErrorGroup) as exc_info:
         await export_crosswalk(session, *_ids(installed))
-    assert [(e.code, e.element) for e in exc_info.value.exceptions] == [(Code.MODEL_MISSING, "Details.Source")]
+    assert _refusals(exc_info.value) == [(Code.MODEL_MISSING, "Details.Source.Model")]
+
+
+async def test_export_refuses_a_value_set_that_is_missing_or_deleted(test_db_session):
+    session = test_db_session
+    installed = await _install(session, "export_set")
+    installed["Target"][1].Deleted = True
+    await session.commit()
+    source_id, target_id = _ids(installed)
+
+    for ids in ((source_id, target_id), (source_id, -1)):
+        with pytest.raises(PortabilityErrorGroup) as exc_info:
+            await export_crosswalk(session, *ids)
+        assert _refusals(exc_info.value) == [(Code.ELEMENT_REFERENCE_UNRESOLVED, "Details.Target.ValueSet")]
+
+
+async def test_a_pair_with_no_live_mappings_exports_no_entries_and_imports_nothing(test_db_session):
+    session = test_db_session
+    installed = await _install(session, "empty")
+    file = await export_crosswalk(session, *_ids(installed))
+    assert file.Entries == []
+
+    before = await _mapping_count(session)
+    assert await import_crosswalk(session, parse_crosswalk_file(dump_canonical(file))) == 0
+    assert await _mapping_count(session) == before
 
 
 async def test_every_seed_crosswalk_exports_and_round_trips(seed_db_session):

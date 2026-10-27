@@ -6,24 +6,25 @@ PortabilityErrorGroup.
 """
 
 from collections import Counter
-from collections.abc import Iterable
+from collections.abc import Iterator
 
 from lif.mdr_portability.errors import PortabilityError, PortabilityErrorCode, error_group
 from lif.mdr_portability.v1.models import CrosswalkFile
 
 
 def check_crosswalk_file(file: CrosswalkFile) -> None:
-    errors = duplicate_source_errors(entry.Source for entry in file.Entries)
+    errors = list(_check_for_duplicate_sources(file))
     if errors:
         raise error_group(errors)
 
 
-def duplicate_source_errors(sources: Iterable[str]) -> list[PortabilityError]:
+def _check_for_duplicate_sources(file: CrosswalkFile) -> Iterator[PortabilityError]:
     # Each source value maps to exactly one target value (§7). Several sources may share a target.
-    return [
-        PortabilityError(
-            PortabilityErrorCode.CROSSWALK_SOURCE_DUPLICATE, f"Entries[{source}]", f"{count} entries map this source"
-        )
-        for source, count in Counter(sources).items()
-        if count > 1
-    ]
+    sources = Counter(entry.Source for entry in file.Entries)
+    for source, count in sources.items():
+        if count > 1:
+            yield PortabilityError(
+                PortabilityErrorCode.CROSSWALK_SOURCE_DUPLICATE,
+                f"Entries[{source}]",
+                f"{count} entries map this source",
+            )
