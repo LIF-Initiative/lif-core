@@ -317,7 +317,8 @@
         "retryable",
         "footgun",
         "redoc",
-        "lineterm"
+        "lineterm",
+        "outerjoin"
     ],
     "ignorePaths": [
         ".git/",
