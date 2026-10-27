@@ -76,7 +76,7 @@ LIF enables automatic, secure transcript exchange between institutions and their
 
 - LIF Translator converts data across institutions into one shared format
 - LIF tools securely retrieve course records once a student authorizes sharing
-- Metadata Repository (MDR) enforces consent—what can be shared, who can access it, and how
+- Metadata Repository (MDR) defines what can be shared: which data elements are in your organization's data model and how each one is exposed
 
 **Benefits:**
 
@@ -98,7 +98,7 @@ The Learner Information Framework (LIF) enables AI tools to access rich, student
 
 - LIF aggregates learner data from multiple institutional systems into a portable context layer
 - Provenance tracking documents where each data element originates and how it may be used
-- Consent and policy rules ensure AI tools only access approved information
+- AI tools run in your institution's trusted environment and handle authentication and consent; LIF exposes only the data elements included in your organization's data model
 - Standardized interfaces allow any LIF-compatible AI tool to plug in without custom integrations
 
 **Benefits:**

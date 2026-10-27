@@ -26,14 +26,14 @@ LIF provides a translation layer across multiple standards (CEDS, 1EdTech CLR/CA
 
 ## Tangible Technology Solutions
 
-LIF isn't just a concept — it already includes working technology components:
+LIF isn't just a concept — it already includes working technology components, with more planned:
 
 - **Metadata Repository** – maintains mappings and translation rules across more than a dozen standards and includes a front-end interface where individuals can align data elements of their choice without deep technical expertise.
 - **Orchestrator** – fetches data across multiple source systems, assembles it, and routes it through translation pipelines.
 - **Translator** – converts diverse data inputs into the standardized LIF format using configurable instructions.
-- **Source System Adaptors** – connectors to common platforms (student information systems, LMS, HR systems, credentialing platforms).
-- **Lightweight Viewer** – a front-end tool that enables learners and employers to view verifiable achievements and skills in a consistent format.
-- **Learner Wallets & Credential Integration** – enable individuals to store and share portable records aligned with Open Badges, LER-RS, and other standards.
+- **Source System Adaptors** – an adapter framework with a LIF-to-LIF adapter and demo adapters today; connectors to common platforms (student information systems, LMS, HR systems, credentialing platforms) are planned.
+- **Lightweight Viewer (planned)** – a front-end tool that enables learners and employers to view verifiable achievements and skills in a consistent format.
+- **Learner Wallets & Credential Integration (planned)** – enable individuals to store and share portable records aligned with Open Badges, LER-RS, and other standards.
 - **AI Tool Connector (MCP)** – enable organizations to leverage their (or connected) LIF data to inform AI agent interactions.
 - **Advisor** – sample AI agent that can interact with LIF data.
 

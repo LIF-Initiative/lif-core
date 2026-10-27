@@ -52,7 +52,7 @@ Designers must ensure:
 - Entities use UpperCamelCase
 - Attributes and value sets use camelCase
 - Values/enums use UpperCamelCase
-- dateEffective, endDate, deletedDate, and deletedStatus follow standard fields and ISO formats
+- dateEffective, dateEnd, deletedDate, and deletedStatus follow standard fields and ISO formats
 - Common elements (Identifier, Contact, LegalCode, etc.) are reused where appropriate
 - Arrays and cardinality follow the LIF rules for structure
 
@@ -84,7 +84,7 @@ Designers should avoid:
 - Adding multiple entities that express the same idea
 - Creating attributes that compete with existing base ones ("addressStreet2", "altIdentifier", etc.)
 - Creating deeply nested structures that break LIF's readability and interoperability
-- Introducing new patterns that contradict LIF norms (for example, inventing new date fields instead of using dateEffective/endDate)
+- Introducing new patterns that contradict LIF norms (for example, inventing new date fields instead of using dateEffective/dateEnd)
 
 The goal is to extend the model without fragmenting it.
 

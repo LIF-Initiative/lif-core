@@ -102,7 +102,7 @@ The screenshot below of lif-sample.json shows the root-level entities in the Bas
 
 The [lif-data-model](https://github.com/LIF-Initiative/lif-data-model) GitHub repository is accessible to the public. The OpenAPI schema for the LIF data model is in the lif.json file. The MDR generates OpenAPI schema files that show what a sample LIF record looks like.
 
-The MDR (MetaData Repository) is included in the [lif-main GitHub repository](https://github.com/LIF-Initiative/lif-main).
+The MDR (MetaData Repository) is included in the [lif-core GitHub repository](https://github.com/LIF-Initiative/lif-core).
 
 ### Accessing the Data Model
 
@@ -112,7 +112,7 @@ Using the MDR (MetaData Repository), the Base LIF Data model can be accessed, vi
 
 ### How do you extend the data model?
 
-See the [video and instructions in the English Translations section of the technical Translator documentation](https://docs.google.com/document/d/1vY_tSPto2E6ywaZ0iHirs1CGtj_dxLlkmXxMAyUABL4/edit#heading=h.h4i16uok9ka0).
+See the [LIF Data Model Extensions Guide](../specs/data-model-extensions-guide.md) for the rules an extension must follow, and [Add New Elements in the MDR Getting Started guide](../external/mdr-getting-started.md#step-4-add-new-elements-optional) for how to add entities and attributes in the MDR.
 
 ### What elements make up the LIF data model?
 
@@ -164,10 +164,10 @@ As an example, the required fields in AssessmentLearningExperience are type, ide
         {
             "AssessmentLearningExperience": [
                 {
-                    "type": "string"
+                    "type": "string",
                     "identifier": "Exam2024-104",
                     "informationSourceId": "123456789",
-                    "informationSourceOrganization": "StateU SIS"
+                    "informationSourceOrganization": "StateU SIS",
                     "completionStatus": "Completed",
                     "deliveryDeviceDetails": "Online",
                     "endDate": "2024-05-20T16:00:00Z",
@@ -179,7 +179,7 @@ As an example, the required fields in AssessmentLearningExperience are type, ide
                     "scoreType": "Final Exam",
                     "scoreValue": "85",
                     "startDate": "2024-05-20T09:00:00Z",
-                    "timeAssessed": "7 hours",
+                    "timeAssessed": "7 hours"
                 }
             ],
             "CourseLearningExperience": [
@@ -188,10 +188,10 @@ As an example, the required fields in AssessmentLearningExperience are type, ide
                         "identifier": "Exam2024-104",
                         "informationSourceId": "123456789"
                     },
-                    "type": "array"
+                    "type": "array",
                     "identifier": "CS101-2024",
                     "informationSourceId": "123456789",
-                    "informationSourceOrganization": "StateU SIS"
+                    "informationSourceOrganization": "StateU SIS",
                     "courseSectionID": ["CS101-Spring2024", "CS102-Fall2024"],
                     "courseSectionNumber": 104,
                     "courseTotal": 5,
@@ -208,7 +208,7 @@ As an example, the required fields in AssessmentLearningExperience are type, ide
                     "ownedBy": "Department of Natural Science",
                     "personId": "123e4567-e89b-12d3-a456-426614174000",
                     "singleSexClassStatus": ["NotSingleSex"],
-                    "startDate": "2024-08-01",
+                    "startDate": "2024-08-01"
                 }
             ]
         }

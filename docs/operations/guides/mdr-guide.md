@@ -30,7 +30,7 @@ The information in this guide assumes that the reader has:
 
 This guide focuses on how to use the MDR for managing data models, mapping, and transformations. It does not cover:
 
-- A full conceptual overview of the LIF Data Model. [The LIF Data Model Guide can be found here](https://docs.google.com/document/d/1MaCo8gGHTW00Ax9ARphus55SJGgUNjoz7QmbMX_B8iU/edit?usp=sharing).
+- A full conceptual overview of the LIF Data Model. [The LIF Data Model Guide can be found here](../../overview/data-model-guide.md).
 - Detailed justification for the data model design decisions. [The LIF Data Model Rules can be found here](../../specs/data-model-rules.md).
 - Instruction on JSONata beyond what is required to edit transformations. [More on JSONata can be found here](https://jsonata.org/).
 - Guidance on building downstream LIF services or applications
@@ -83,7 +83,7 @@ The MDR serves as the authoritative source for all schema definitions and data m
 2. data mappings - which fields in one data model correspond to fields in another
 3. transformation logic - JSONata expressions that specify how data should be modified when moving between formats.
 
-The MDR's authoritative role means that changes made in the MDR, such as excluding an attribute from the Organization data model or updating a transformation mapping, determine what becomes possible throughout the system. The GraphQL API cannot expose a field for querying unless it exists in the MDR schema. The Translator cannot transform source system data into LIF format without mappings defined in the MDR. The Semantic Search MCP Server cannot build search indexes without schema metadata from the MDR. This centralized approach provides a single point of control for data governance, enables non-technical users to manage data structure through a graphical interface, and ensures consistency across all LIF services. [Please see this document for more detailed information about MDR's relationships with specific services and why it is the authoritative source](https://docs.google.com/document/d/1PN4sDqIt1Cb-mgEijU84LPCSnzGwynZSP0TXLGhbOwc/edit?usp=sharing).
+The MDR's authoritative role means that changes made in the MDR, such as excluding an attribute from the Organization data model or updating a transformation mapping, determine what becomes possible throughout the system. The GraphQL API cannot expose a field for querying unless it exists in the MDR schema. The Translator cannot transform source system data into LIF format without mappings defined in the MDR. The Semantic Search MCP Server cannot build search indexes without schema metadata from the MDR. This centralized approach provides a single point of control for data governance, enables non-technical users to manage data structure through a graphical interface, and ensures consistency across all LIF services. [See the LIF Microservices Overview for more on the MDR's relationships with specific services](../../overview/services-overview.md).
 
 ## MDR Setup
 
@@ -96,7 +96,7 @@ The MDR includes several data models, including the base LIF data model, Source 
 
 ### Base LIF Data Model
 
-The base LIF data model is the foundation of all LIF data models. It incorporates data points from multiple sources. More about the LIF data model can be found here: [LIF Data Model Manual (Draft)](https://docs.google.com/document/d/1MaCo8gGHTW00Ax9ARphus55SJGgUNjoz7QmbMX_B8iU/edit?tab=t.0#heading=h.dvmmzem12q7i)
+The base LIF data model is the foundation of all LIF data models. It incorporates data points from multiple sources. More about the LIF data model can be found here: [LIF Data Model Guide](../../overview/data-model-guide.md)
 
 ### Organization's Data Model
 

@@ -22,7 +22,9 @@ There are two ways to use the LIF MDR. One way is to use it alone without any ot
 
 ### Step 1: Open the Registration Page
 
-Navigate to the MDR registration page: <https://demo-mdr-selfserve.auth.us-east-1.amazoncognito.com/signup>
+1. Navigate to the LIF MDR demo: <https://mdr.demo.lif.unicon.net>
+2. Click 'Sign In / Register' on the landing page.
+3. When the sign-in page loads, click 'Sign up'.
 
 ### Step 2: Enter Required Information
 
@@ -50,7 +52,7 @@ Once verified, you will be logged into the MDR. Your workspace and Org Data Mode
 
 ### What to Expect After Login
 
-- A private workspace is created for you, unless you've invited collaborators.
+- A private workspace is created for you. Every new account gets its own workspace, including accounts created from an invite link.
 - The base LIF data model and Source data models are preloaded.
 
 ### Sharing a Workspace
@@ -62,20 +64,23 @@ If you have others on your team that you would like to invite to share your work
 3. Click switch workspace
 4. You will see a list of workspaces, you may only have one workspace
 5. Click the Invite button.
-6. Click the Generate invite link. This will generate a URL that you can share with someone. When they click the link, they'll be prompted to register but will be assigned to your workspace.
+6. Click the Generate invite link. This will generate a URL that you can share with someone. When they open the link, they'll be asked to sign in or register, then accept the invite. Your workspace then appears alongside their own, and they can open it from the workspace list.
 7. To return to your workspace after sending the invite link, click Open next to the workspace you want to return to
 
 ### Joining a Shared Workspace (Optional)
 
-If you received an invite link:
+If you received an invite link, you still need your own LIF MDR account. Follow these steps:
 
-- Do not register using the above method, instead register using the invite link sent to you by someone who already has a workspace set up.
-- You will automatically join an existing workspace after going through registration
-- No additional setup is required
+1. Open the invite link. If you are not signed in, you will be sent to the sign-in page. Sign in, or click 'Sign up' and register using the steps above.
+2. After signing in, you will return to the invite page. Click 'Accept invite'.
+3. Click 'Sign in again to refresh' and sign in once more. This updates your account with the new workspace.
+4. You will now see both your own workspace and the shared workspace. Click Open next to the shared workspace to start working in it.
+
+Invite links expire after 7 days. If yours has expired, ask the workspace owner to generate a new one.
 
 ### Joining a Shared Workspace if you have already registered as a new user
 
-If you registered as a new user but want to join another user or group in a shared workspace instead, please reach out to the LIF team via [LinkedIn](https://www.linkedin.com/groups/16986005/), and we can move you to the other workspace. Please keep in mind that your Org LIF and any changes you've made in your workspace will not be transferred to the new workspace. We will need the email address of the user who owns the workspace that you want to join.
+If you already have an account and want to join a shared workspace, ask the workspace owner for an invite link and follow the steps above. Your own workspace stays as it is, and any changes you've made in it are not copied to the shared workspace. For a detailed walkthrough of the registration and invite flow, see the [Self-Serve Registration Walkthrough](../operations/guides/self-serve-registration-walkthrough.md).
 
 ## Creating an Organizational Data Model
 
