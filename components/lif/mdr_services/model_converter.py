@@ -193,6 +193,9 @@ async def _load_rows(session: AsyncSession, data_model_id: int) -> _ModelRows:
         for association in [*entity_associations, *attribute_associations]
         if association.ExtendedByDataModelId is not None
     }
+    # Only an overlay with a BaseDataModelId has a single model it overlays. One found only by its
+    # inclusion rows can include from several, so it owns nothing inside them by this rule; no known
+    # overlay has that shape (17, 18 and 28 all have a BaseDataModelId).
     overlays = await session.execute(
         select(DataModel.Id, DataModel.BaseDataModelId).where(
             DataModel.Id.in_(declaring_model_ids), DataModel.BaseDataModelId.is_not(None)
@@ -614,7 +617,7 @@ async def _import_elements(
     # The schema generator still reads Array from the element, not from the association, so an element
     # is stored as an array when any association places it as one. An element that is a list under one
     # parent and single under another can't be generated that way until the generator reads the
-    # association.
+    # association (#1429).
     #
     # An entity with no parent carries its own Array in the file (§5.3).
     entities_in_arrays = {entity.UniqueName for entity in file.Entities if entity.Array}
@@ -673,8 +676,7 @@ async def _import_elements(
 def _import_association(
     association: FileAssociation, entity_ids: dict[str, int], attribute_ids: dict[str, int]
 ) -> AnyAssociation:
-    # Relationship is left NULL: the association's Name replaces it (§11), and the generator moves to
-    # reading Name in #1395.
+    # Relationship is left NULL: the association's Name replaces it (§11), and the generator reads Name.
     fields = {
         "Name": association.Name,
         "Array": association.Array,

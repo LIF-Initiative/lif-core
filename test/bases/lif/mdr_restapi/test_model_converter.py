@@ -536,7 +536,7 @@ async def test_a_model_round_trips_between_installs_byte_for_byte(test_db_sessio
 
 
 async def test_import_stores_what_the_schema_generator_reads(test_db_session):
-    # Until the generator reads the new columns (#1395), an element's Array is true when any
+    # Until the generator reads Array from the association (#1429), an element's Array is true when any
     # association places it as a list, and Required and Array are stored as Yes or No.
     session, tag = test_db_session, "stored"
     model_id = await import_model(session, parse_model_file(_model_file(tag)))

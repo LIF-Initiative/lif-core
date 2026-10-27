@@ -209,7 +209,7 @@ including 89 of the 106 source value sets that value mappings refer to (§7).
 | `LevelOfAccess` | ✓ | `Public`, `Internal`, `Restricted` or `Private` |
 | `Queryable`, `Modifiable` | ✓ | Booleans. They become `x-queryable` and `x-mutable` in the generated schema, which GraphQL and semantic search use to build filters and mutations |
 | `Required` | | Boolean; absent means `false`. Puts the element in its parent's `required` list |
-| `Array` | | Boolean; absent means `false`. Only on an entity with no parent: makes its top-level schema a list. An entity with a parent takes its list setting from each association (§5.4), so `Array` on non-top-level entity is refused with `FIELD_INVALID` |
+| `Array` | | Boolean; absent means `false`. Only on an entity with no parent: makes its top-level schema a list. An entity with a parent takes its list setting from each association (§5.4), so `Array` on an entity with a parent is refused with `FIELD_INVALID` |
 | `Description`, `UseConsiderations`, `SourceModel`, `Notes`, `Contributor`, `ContributorOrganization`, `Tags`, `Common` | | Descriptive text; `Common` is a nullable boolean |
 | `ActivationDate`, `DeprecationDate` | | Timestamps |
 
