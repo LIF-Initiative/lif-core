@@ -169,7 +169,8 @@ All the field tables below share one format. **Req.** means the field must be pr
 |---|---|---|
 | `Name`, `Version`, `ContributorOrganization` | ✓ | This model's identity |
 | `CopiedFrom` | | Lineage: the identity (`Name`, `Version`, `ContributorOrganization`) of the model this one was copied from, written inline. Absent means the model is not a copy. The named model need not be installed, and is not checked |
-| `Description`, `UseConsiderations`, `Notes`, `Contributor`, `State`, `Tags` | | Descriptive text |
+| `Description`, `UseConsiderations`, `Notes`, `Contributor`, `Tags` | | Descriptive text |
+| `State` | | `Published`, `Draft`, `Work_In_Progress`, `Active` or `Inactive` |
 | `ActivationDate`, `DeprecationDate` | | Timestamps |
 
 An import is refused with `MODEL_EXISTS` when a live model with the same identity is already
@@ -208,6 +209,7 @@ including 89 of the 106 source value sets that value mappings refer to (§7).
 | `LevelOfAccess` | ✓ | `Public`, `Internal`, `Restricted` or `Private` |
 | `Queryable`, `Modifiable` | ✓ | Booleans. They become `x-queryable` and `x-mutable` in the generated schema, which GraphQL and semantic search use to build filters and mutations |
 | `Required` | | Boolean; absent means `false`. Puts the element in its parent's `required` list |
+| `Array` | | Boolean; absent means `false`. Only on an entity with no parent: makes its top-level schema a list. An entity with a parent takes its list setting from each association (§5.4), so `Array` on an entity with a parent is refused with `FIELD_INVALID` |
 | `Description`, `UseConsiderations`, `SourceModel`, `Notes`, `Contributor`, `ContributorOrganization`, `Tags`, `Common` | | Descriptive text; `Common` is a nullable boolean |
 | `ActivationDate`, `DeprecationDate` | | Timestamps |
 
@@ -526,17 +528,18 @@ existing content onto the simplified model is migration work, not this spec's.
 | Inclusion rows (`ExtInclusionsFromBaseDM`) on a model's **own** elements | Flags on the element itself | 83 live rows whose element is live |
 | Inclusion rows (`ExtInclusionsFromBaseDM`) on **another** model's elements | The element, copied into the model | 207 live rows whose element is live, all in models 17 and 18. A further 10 (5 of each kind) name a soft-deleted element and count as absent; 300 live rows in all |
 | Constraint and Transformation inclusions | — | 0 rows |
-| `ExtendedByDataModelId` on both association tables | Both ends in one model (§5.4): the declaring model is always the owner | 16 + 167 rows |
+| `ExtendedByDataModelId` on both association tables | Both ends in one model (§5.4). Until migrated, the declaring model owns the association when it owns an end, or when it is an overlay and both ends are in the model it overlays; see the row below for the rest | 16 + 167 rows |
 | Associations between elements of different models | Both ends in one model | 55: 54 involve models 17 or 18, and 1 links model 1 to model 16 |
-| Associations where neither end is owned by the declaring model | — | 61 rows. 60 link two elements of one other model (59 in model 16, 1 in model 25) and belong to that model. 1 (`Credential.Image` → OB3's `image.id`) has no owner |
+| Associations where neither end is owned by the declaring model, which does not overlay the model they are in | — | 61 rows. 60 link two elements of one other model (59 in model 16, 1 in model 25) and belong to that model. 1 (`Credential.Image` → OB3's `image.id`) links two models and has no owner; export refuses it (`NOT_MIGRATED`) for both, rather than drop it |
 | `Extension` / `ExtensionNotes` (on 8 tables, including `Entities`, `Attributes`, `ValueSets` and `EntityAssociation`) | — | Set only in models 17 and 18: 80 entities and attributes |
 | Overrides (an element reusing an inherited `UniqueName`) | — (a model sees only its own elements) | 1 (`Criteria.identifier`, model 17) |
 | An attribute using another model's value set | The value set, copied into the model | 1 attribute |
 | The `Ref` property keys (`<relationship>Ref<Type>`) | The required association `Name`, plus `"Reference": true`. Retired in a separate step after model 17 is converted; until then a reference association's `Name` keeps the `Ref` spelling (*Migration defaults*) | 24 `Ref` keys in `lif-schema.json`; 21 sample-data, query and config files |
 | `Placement` (`Embedded` / `Reference` / NULL) | `"Reference": true` for `Reference`; absent for `Embedded` and NULL. The schema generator already treats NULL as `Embedded`; the Jinja generation code does not (`jinja_helper_service.py`) | 96 `Reference`, 36 `Embedded`, 78 NULL |
-| Free-text `Required` and `Array` (`Yes` / `No` / NULL / `""`) on entities and attributes | Booleans: `Yes` becomes `true`; everything else is absent, as the schema generator already reads it (`== "Yes"`). `Required` stays on the element; `Array` moves to every association whose child is that element | Entities: `Required` 7 `Yes`, `Array` 92 `Yes`. Attributes: `Required` 295 `Yes`, `Array` 232 `Yes`. All other values are `No`, NULL or `""` |
+| Free-text `Required` and `Array` (`Yes` / `No` / NULL / `""`) on entities and attributes | Booleans: `Yes` becomes `true`; everything else is absent, as the schema generator already reads it (`== "Yes"`). `Required` stays on the element; `Array` moves to every association whose child is that element, but stays on top-level entities | Entities: `Required` 7 `Yes`, `Array` 92 `Yes`. Attributes: `Required` 295 `Yes`, `Array` 232 `Yes`. All other values are `No`, NULL or `""` |
 | `Relationship` and the `has*`/`relevant*` naming rule | The required association `Name` | 212 entity associations and 2,544 attribute associations need a `Name`; 163 entity associations have no relationship today (115 NULL, 48 empty) |
 | Attributes with `DataType = 'entity'` and `TargetEntityId` (`V1.6`) | An association to the entity; an attribute with no target is dropped | 109 attributes. 41 have a target, all in Open Badges v3. 68 have none (CLR v2: 55, CASE: 13) |
+| Attributes with no `DataType` (NULL) | `string`, which schema upload already writes when a schema gives no type | 921 attributes in 11 models: CEDS 168, CTDL 140, Schema.org 102, EagleApps 98, OSID / CampusAPI 93, ELM 75, HR Open 72, PESC v1.8 62, CLR v2 48, Open Badges v2 36, CLR v1 27 |
 | Attributes in no association | Dropped on migration; `UNASSOCIATED_ATTRIBUTE` on import | 99 attributes: CLR v2 48, model 17 14, Open Badges v2 12, Ed-Fi v5 9, EagleApps 7, model 25 4, PESC v1.8 2, LIF 2, OSID / CampusAPI 1 |
 | Value mappings' group membership (`TransformationGroupId`), and `SourceValueSetId` / `TargetValueSetId` | The crosswalk file (§7) | 2 rows name a group. The two value-set columns are NULL or disagree with the values' own value sets on 2,345 rows |
 | A source value mapped to several targets | `CROSSWALK_SOURCE_DUPLICATE` | 0 among live value mappings. The 8 such values are all on mappings to soft-deleted targets |
@@ -560,7 +563,13 @@ existing content onto the simplified model is migration work, not this spec's.
   today's key, `<Relationship>Ref<Name>`, or `Ref<Name>` with no relationship, so the 24 published
   `Ref` keys do not change in the same step as the conversion. Retiring them is a separate, later
   step. For an attribute child: the attribute's `Name`.
-- **`Array`.** Each association takes its child's current `Array` value.
+- **`Array`.** Each association takes its child's current `Array` value. An entity with no parent
+  keeps its own: all 9 of model 1's are lists.
+- **`DataType`.** An attribute with no `DataType` gets `string`. The generator writes a NULL
+  `DataType` as `"type": ""` today, or, for an array, as `"type": "array"` with `"format": ""`
+  (`schema_generation_service.py`). So the generated `type`, or an array's `format`, becomes
+  `string` for the 851 such attributes that are in an association, in 10 models. CLR v2's 48 are
+  all in no association, and are dropped instead.
 - **Dropped.** Attributes in no association (99), which do not appear in the generated schema
   today. Entity-typed attributes with no `TargetEntityId` (68), which today appear as attributes of
   type `entity` in CLR v2 and CASE (the generator's `!= "Entity"` check misses the lowercase stored

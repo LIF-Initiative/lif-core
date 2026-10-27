@@ -131,6 +131,7 @@ def _delete(path: list):
         pytest.param(_delete(["Entities", 0, "Queryable"]), "missing", id="missing flag"),
         pytest.param(_set(["Entities", 0, "Required"], "Yes"), "bool_type", id="free-text Required"),
         pytest.param(_set(["Entities", 0, "LevelOfAccess"], "Secret"), "enum", id="unknown LevelOfAccess"),
+        pytest.param(_set(["Details", "State"], "Final"), "enum", id="unknown State"),
         pytest.param(
             _set(["Entities", 0, "ActivationDate"], "2026-10-06T00:00:00"), "value_error", id="naive timestamp"
         ),
