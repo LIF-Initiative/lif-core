@@ -15,7 +15,7 @@ echo 'SQL Backup restored successfully!'
 # local dev — no edits to this script needed per migration.
 MIGRATIONS_DIR=/flyway-migrations
 if [ -d "$MIGRATIONS_DIR" ]; then
-    for sql in $(ls "$MIGRATIONS_DIR"/V1.*.sql 2>/dev/null | sort); do
+    for sql in $(ls "$MIGRATIONS_DIR"/V1.*.sql 2>/dev/null | sort -V); do
         name=$(basename "$sql")
         case "$name" in
             V1.1__*) continue ;;

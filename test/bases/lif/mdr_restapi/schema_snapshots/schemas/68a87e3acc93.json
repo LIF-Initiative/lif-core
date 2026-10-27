@@ -1,0 +1,38 @@
+{
+  "components": {
+    "schemas": {
+      "TestChildSourceEntity": {
+        "properties": {},
+        "required": [],
+        "type": "array",
+        "use_recommendations": "Test considerations",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "TestNewSourceEntity": {
+        "properties": {
+          "RefTestChildSourceEntity": {
+            "properties": {},
+            "required": [],
+            "type": "object",
+            "use_recommendations": "Test considerations",
+            "x-mutable": false,
+            "x-queryable": false
+          }
+        },
+        "required": [],
+        "type": "array",
+        "use_recommendations": "Test considerations",
+        "x-mutable": false,
+        "x-queryable": false
+      }
+    }
+  },
+  "info": {
+    "description": "OpenAPI Spec",
+    "title": "Machine-Readable Schema for Test2UpdatedSourceModel",
+    "version": "1.0"
+  },
+  "openapi": "3.0.0",
+  "paths": {}
+}
