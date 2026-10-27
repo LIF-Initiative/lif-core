@@ -450,8 +450,8 @@ REFERENCE_MODEL = (
 )
 
 
-def _model_file(tag, mutate=None) -> bytes:
-    """The reference target model, named for the test, in canonical form.
+def _model_content(tag, mutate=None) -> bytes:
+    """The reference target model, named for the test, as a file's bytes; mutate may make it invalid.
 
     It covers what #1333 asks a round trip to: a copy with CopiedFrom, non-default flags, Required and
     Array, references including a recursive one, two roles under one parent, a shared entity, value sets
@@ -462,7 +462,16 @@ def _model_file(tag, mutate=None) -> bytes:
     content["Details"]["Name"] = f"RT_{tag}"
     if mutate:
         mutate(content)
-    return dump_canonical(parse_model_file(json.dumps(content).encode()))
+    return json.dumps(content).encode()
+
+
+def _model_file(tag, mutate=None) -> bytes:
+    """The same model in canonical form."""
+    return dump_canonical(parse_model_file(_model_content(tag, mutate)))
+
+
+def _remove_copied_from(content):
+    del content["Details"]["CopiedFrom"]
 
 
 def _count_id_keys(node) -> int:
@@ -473,9 +482,10 @@ def _count_id_keys(node) -> int:
     return 0
 
 
-async def test_a_model_round_trips_between_installs_byte_for_byte(test_db_session):
-    session, tag = test_db_session, "roundtrip"
-    file_a = _model_file(tag)
+@pytest.mark.parametrize("mutate", [None, _remove_copied_from], ids=["copy", "plain model"])
+async def test_a_model_round_trips_between_installs_byte_for_byte(test_db_session, mutate):
+    session, tag = test_db_session, f"roundtrip_{mutate.__name__ if mutate else 'copy'}"
+    file_a = _model_file(tag, mutate)
 
     model_1 = await import_model(session, parse_model_file(file_a))
     await session.commit()
@@ -551,9 +561,41 @@ def _use_a_missing_value_set(content):
             attribute["ValueSet"] = {"ValueSet": "Missing"}
 
 
+def _add_row_id(content):
+    content["Entities"][0]["Id"] = 7
+
+
+def _set_format_type(content):
+    content["Format"]["Type"] = "lif-mdr-mapping-group"
+
+
+def _set_format_version(content):
+    content["Format"]["Version"] = 2
+
+
+def _add_unknown_field(content):
+    content["Entities"][0]["Color"] = "blue"
+
+
+def _add_deprecated_field(content):
+    content["Entities"][0]["Extension"] = True
+
+
+def _remove_value_name(content):
+    del content["ValueSets"][0]["Values"][0]["ValueName"]
+
+
+# #1333's refusals. The first six are refused when the file is read, the rest by the model rules
+# import checks; either way, as a caller imports a file, nothing is written.
 @pytest.mark.parametrize(
     "mutate, code",
     [
+        (_add_row_id, Code.ROW_ID_PRESENT),
+        (_set_format_type, Code.FORMAT_UNKNOWN),
+        (_set_format_version, Code.FORMAT_VERSION_UNSUPPORTED),
+        (_add_unknown_field, Code.FIELD_UNKNOWN),
+        (_add_deprecated_field, Code.DEPRECATED_FIELD),
+        (_remove_value_name, Code.FIELD_INVALID),
         (_add_cycle, Code.ASSOCIATION_CYCLE),
         (_reference_an_attribute, Code.REFERENCE_INVALID),
         (_use_a_missing_value_set, Code.ELEMENT_REFERENCE_UNRESOLVED),
@@ -561,10 +603,10 @@ def _use_a_missing_value_set(content):
 )
 async def test_a_refused_import_writes_nothing(test_db_session, mutate, code):
     session, tag = test_db_session, f"refused_{mutate.__name__}"
-    tables = (DataModel, Entity, Attribute, ValueSet, EntityAssociation, EntityAttributeAssociation)
+    tables = (DataModel, Entity, Attribute, ValueSet, ValueSetValue, EntityAssociation, EntityAttributeAssociation)
     counts = [await _count_rows(session, model_class) for model_class in tables]
     with pytest.raises(PortabilityErrorGroup) as exc_info:
-        await import_model(session, parse_model_file(_model_file(tag, mutate)))
+        await import_model(session, parse_model_file(_model_content(tag, mutate)))
     await session.commit()
     assert {error.code for error in exc_info.value.exceptions} == {code}
     assert [await _count_rows(session, model_class) for model_class in tables] == counts

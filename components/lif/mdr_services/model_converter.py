@@ -9,8 +9,7 @@ its file is built, since the file could not describe it faithfully. Otherwise th
 parse_model_file and check_model_file, so export never produces a file that import would refuse, and
 stored values the format does not allow (a blank Name, a NULL ValueName) are refused by name.
 
-This lives here, beside mapping_group_converter, until the converter module for every file kind (§8)
-exists.
+Callers reach it through portability_converter, the converter module for every file kind (§8).
 """
 
 import json

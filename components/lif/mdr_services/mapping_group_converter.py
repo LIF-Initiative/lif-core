@@ -5,8 +5,7 @@ import_mapping_group writes one as a new group. Paths are translated by lif.mdr_
 over each model's own live rows. Neither function commits; the caller owns the transaction. Import
 checks every rule and resolves every path before it writes the first row, so a refusal writes nothing.
 
-This lives here, beside the existing transformation services, until the converter module for every
-file kind (§8) exists; it moves there then.
+Callers reach it through portability_converter, the converter module for every file kind (§8).
 """
 
 from typing import Optional
