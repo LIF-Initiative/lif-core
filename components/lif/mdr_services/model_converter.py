@@ -26,9 +26,9 @@ from lif.mdr_portability import (
     check_model_file,
     parse_model_file,
 )
+from lif.mdr_portability.errors import error_group
 from lif.mdr_portability.v1.models import Association as FileAssociation
 from lif.mdr_portability.v1.models import AttributeKey, EntityKey
-from lif.mdr_portability.errors import error_group
 from lif.mdr_sql_model.core import (
     Attribute,
     Constraint,
@@ -68,7 +68,7 @@ class _ModelRows:
     attributes: list[Attribute]
     entity_associations: list[EntityAssociation]
     attribute_associations: list[EntityAttributeAssociation]
-    # The last four fields guard export against content the format cannot hold (§11).
+    # The last five fields guard export against content the format cannot hold (§11).
     #
     # Every live entity, attribute and value set those rows name, from any model, resolved from its Id.
     # An element in another model is refused as NOT_MIGRATED, unless the association belongs to that
@@ -76,6 +76,9 @@ class _ModelRows:
     resolved_entities: dict[int, _ResolvedElement]
     resolved_attributes: dict[int, _ResolvedElement]
     resolved_value_sets: dict[int, _ResolvedElement]
+    # Overlay Id -> the Id of the model it overlays (its BaseDataModelId), for the overlays that declared
+    # any of those associations. An overlay owns what it declared inside its base (_get_association_owner).
+    overlay_bases: dict[int, int]
     # Constraint and DataModelConstraints rows; any at all are refused as NOT_MIGRATED.
     constraint_count: int
 
@@ -94,11 +97,12 @@ async def export_model(session: AsyncSession, data_model_id: int) -> ModelFile:
     if not_migrated:
         raise error_group(not_migrated)
 
+    contained_entity_ids = _gather_contained_entity_ids(rows)
     content = {
         "Format": {"Type": "lif-mdr-model", "Version": 1},
         "Details": _export_details(model),
         "ValueSets": [_export_value_set(value_set, rows.values.get(value_set.Id, [])) for value_set in rows.value_sets],
-        "Entities": [_export_entity(entity) for entity in rows.entities],
+        "Entities": [_export_entity(entity, contained_entity_ids) for entity in rows.entities],
         "Attributes": [_export_attribute(attribute, rows) for attribute in rows.attributes],
         "Associations": [_export_association(association, rows) for association in _list_own_associations(rows)],
     }
@@ -184,6 +188,16 @@ async def _load_rows(session: AsyncSession, data_model_id: int) -> _ModelRows:
 
     resolved_entities = await resolve(Entity, Entity.UniqueName, entity_ids_to_resolve)
     resolved_attributes = await resolve(Attribute, Attribute.UniqueName, attribute_ids_to_resolve)
+    declaring_model_ids = {
+        association.ExtendedByDataModelId
+        for association in [*entity_associations, *attribute_associations]
+        if association.ExtendedByDataModelId is not None
+    }
+    overlays = await session.execute(
+        select(DataModel.Id, DataModel.BaseDataModelId).where(
+            DataModel.Id.in_(declaring_model_ids), DataModel.BaseDataModelId.is_not(None)
+        )
+    )
     # An association to a soft-deleted element counts as absent (§2), so only those are dropped here.
     # Ends in other models are kept for the ownership and NOT_MIGRATED checks.
     return _ModelRows(
@@ -205,6 +219,7 @@ async def _load_rows(session: AsyncSession, data_model_id: int) -> _ModelRows:
         resolved_entities=resolved_entities,
         resolved_attributes=resolved_attributes,
         resolved_value_sets=await resolve(ValueSet, ValueSet.Name, used_value_set_ids),
+        overlay_bases={row.Id: row.BaseDataModelId for row in overlays},
         constraint_count=constraint_count,
     )
 
@@ -219,17 +234,26 @@ def _get_association_elements(
 
 
 def _get_association_owner(rows: _ModelRows, association: AnyAssociation) -> Optional[int]:
-    # The model an association belongs to (§11). Undeclared, it is its parent's. Declared
-    # (ExtendedByDataModelId) by a model that owns one of its ends, it is the declarer's, as an
-    # overlay's additions to its base model are. Declared by a model that owns neither end, it belongs
-    # to the model both ends are in, and to no model if the ends are in two.
+    # The model an association belongs to (§11), or None when it belongs to none:
+    # - undeclared, it is its parent's;
+    # - declared (ExtendedByDataModelId) by a model that owns one of its ends, it is the declarer's, as
+    #   an overlay's additions to its base model are;
+    # - declared by an overlay inside the model it overlays, it is the overlay's too: converting the
+    #   overlay copies the base's elements, and the association moves to the copies (#1388);
+    # - declared by another model that owns neither end, it is the model both ends are in;
+    # - with its ends in two models it owns neither of, it belongs to no model.
     parent, child = _get_association_elements(rows, association)
     declared_by = association.ExtendedByDataModelId
     if declared_by is None:
         return parent.model_id
     if declared_by in (parent.model_id, child.model_id):
         return declared_by
-    return parent.model_id if parent.model_id == child.model_id else None
+    if parent.model_id != child.model_id:
+        return None
+    # Is the declarer an overlay of the model this association sits in?
+    if rows.overlay_bases.get(declared_by) == parent.model_id:
+        return declared_by
+    return parent.model_id
 
 
 def _get_association_path(rows: _ModelRows, association: AnyAssociation) -> str:
@@ -245,9 +269,14 @@ def _list_own_associations(rows: _ModelRows) -> Iterator[AnyAssociation]:
             yield association
 
 
-async def _check_for_overlay(session: AsyncSession, model: DataModel) -> list[PortabilityError]:
-    # An overlay reads its elements through its base model and inclusion rows, so its own rows don't
-    # describe it. It is detected by those, not by its Type (§8: no type names).
+async def is_overlay(session: AsyncSession, model: DataModel) -> bool:
+    """Whether a model is an overlay: built on a base model (BaseDataModelId), or reading elements
+    through inclusion rows. Its own rows don't describe it, so no converter can export it until it is
+    converted to a self-contained copy (ADR data_model/0004). It is detected by those, not by its Type
+    (§8: no type names). Shared by every converter, so they agree on which models are overlays.
+    """
+    if model.BaseDataModelId is not None:
+        return True
     inclusion = (
         await session.execute(
             select(ExtInclusionsFromBaseDM.Id)
@@ -255,7 +284,11 @@ async def _check_for_overlay(session: AsyncSession, model: DataModel) -> list[Po
             .limit(1)
         )
     ).first()
-    if model.BaseDataModelId is None and inclusion is None:
+    return inclusion is not None
+
+
+async def _check_for_overlay(session: AsyncSession, model: DataModel) -> list[PortabilityError]:
+    if not await is_overlay(session, model):
         return []
     return [_not_migrated("Details", f"{model.Name!r} is an overlay; convert it to a copy first (ADR data_model/0004)")]
 
@@ -305,6 +338,16 @@ def _check_for_deprecated_content(rows: _ModelRows) -> Iterator[PortabilityError
             yield _not_migrated(element, "the association uses Extension")
         if not association.Name:
             yield _not_migrated(element, f"the association to {child.key!r} has no Name; V1.7 sets one")
+
+    # An association that belongs to no model can't be left out quietly: it would drop from every
+    # model it touches. Its declarer's conversion has to decide it.
+    for association in [*rows.entity_associations, *rows.attribute_associations]:
+        if _get_association_owner(rows, association) is None:
+            yield _not_migrated(
+                _get_association_path(rows, association),
+                f"model {association.ExtendedByDataModelId} declared it between two models it does not own,"
+                " so it belongs to no model",
+            )
 
     if rows.constraint_count:
         yield _not_migrated("Details", f"the model has {rows.constraint_count} constraint rows")
@@ -393,8 +436,20 @@ def _export_element_fields(element: Union[Entity, Attribute]) -> dict:
     }
 
 
-def _export_entity(entity: Entity) -> dict:
-    return _export_element_fields(entity)
+def _export_entity(entity: Entity, contained_entity_ids: set[int]) -> dict:
+    # An entity with no parent keeps its own Array, for its top-level schema. One with a parent has its
+    # list setting on each association instead (§5.3), so its own is not written.
+    has_parent = entity.Id in contained_entity_ids
+    return {**_export_element_fields(entity), "Array": True if not has_parent and entity.Array == "Yes" else None}
+
+
+def _gather_contained_entity_ids(rows: _ModelRows) -> set[int]:
+    # The model's entities that are the child of one of its own containing associations (§5.4).
+    return {
+        association.ChildEntityId
+        for association in _list_own_associations(rows)
+        if isinstance(association, EntityAssociation) and association.Placement != EntityPlacementType.Reference
+    }
 
 
 def _export_attribute(attribute: Attribute, rows: _ModelRows) -> dict:
@@ -560,7 +615,11 @@ async def _import_elements(
     # is stored as an array when any association places it as one. An element that is a list under one
     # parent and single under another can't be generated that way until the generator reads the
     # association.
-    entities_in_arrays = {
+    #
+    # An entity with no parent carries its own Array in the file (§5.3).
+    entities_in_arrays = {entity.UniqueName for entity in file.Entities if entity.Array}
+    # And every entity an association places as a list.
+    entities_in_arrays |= {
         association.Child.Entity
         for association in file.Associations
         if isinstance(association.Child, EntityKey) and association.Array

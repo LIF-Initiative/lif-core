@@ -282,7 +282,9 @@ def test_containment_thousands_of_levels_deep_is_walked():
     # Deeper than Python's recursion limit, which a recursive walk would hit.
     file = _load()
     chain = [f"Level{depth}" for depth in range(2000)]
-    file.Entities.extend(file.Entities[0].model_copy(update={"UniqueName": name, "Name": name}) for name in chain)
+    file.Entities.extend(
+        file.Entities[0].model_copy(update={"UniqueName": name, "Name": name, "Array": False}) for name in chain
+    )
     for parent, child in zip(chain, chain[1:]):
         _add_containing_association(file, parent, child, child)
     check_model_file(file)
@@ -381,3 +383,28 @@ def test_associations_whose_name_holds_a_bracket_are_named_by_their_position():
         (Code.ASSOCIATION_NAME_TAKEN, f"Associations[{first_position}]"),
         (Code.ASSOCIATION_CYCLE, f"Associations[{cycle_position}]"),
     ]
+
+
+def test_array_on_an_entity_with_no_parent_is_allowed():
+    # Competency's only parent association is a reference, so it has no parent, and the target model
+    # makes its top-level schema a list.
+    file = _load()
+    competency = next(entity for entity in file.Entities if entity.UniqueName == "Competency")
+    assert competency.Array
+    check_model_file(file)
+
+
+def test_array_on_an_entity_with_a_parent_is_refused():
+    # Person.Contact's list setting is on its association with Person.
+    file = _load()
+    contact = next(entity for entity in file.Entities if entity.UniqueName == "Person.Contact")
+    contact.Array = True
+    assert _collect_refusals(file) == [(Code.FIELD_INVALID, "Entities[Person.Contact].Array")]
+
+
+def test_array_on_an_entity_reached_only_by_reference_is_allowed():
+    # A reference does not give its child a parent, so Organization has none (§5.4).
+    file = _load()
+    organization = next(entity for entity in file.Entities if entity.UniqueName == "Organization")
+    organization.Array = True
+    check_model_file(file)

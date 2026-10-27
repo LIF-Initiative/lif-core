@@ -289,6 +289,22 @@ async def _declare_an_association_by_a_model_owning_neither_end(session, rows):
     return [(Code.NOT_MIGRATED, "Associations[Course, Students]")]
 
 
+async def _add_association_belonging_to_no_model(session, rows):
+    # Declared by a third model that owns neither end, with its ends in two models (§11).
+    third = await _add_model(session, f"MCThird_{rows['model'].Name}")
+    await _add(
+        session,
+        EntityAttributeAssociation(
+            EntityId=rows["Course"].Id,
+            AttributeId=rows["Other.thing"].Id,
+            Name="thing",
+            Array=False,
+            ExtendedByDataModelId=third.Id,
+        ),
+    )
+    return [(Code.NOT_MIGRATED, "Associations[Course, thing]")]
+
+
 async def _add_constraint(session, rows):
     await _add(
         session, Constraint(Name="max", ConstraintType=ConstraintType.MaxValue, AttributeId=rows["Course.title"].Id)
@@ -348,6 +364,7 @@ async def _add_model_constraint(session, rows):
         _add_cross_model_child,
         _declare_an_association_by_extension,
         _declare_an_association_by_a_model_owning_neither_end,
+        _add_association_belonging_to_no_model,
         _add_constraint,
     ],
 )
@@ -378,35 +395,47 @@ async def test_export_refuses_an_overlay_found_by_its_inclusion_rows(test_db_ses
     assert await _collect_refusals(session, rows["model"].Id) == [(Code.NOT_MIGRATED, "Details")]
 
 
-async def test_export_leaves_out_associations_the_model_does_not_own(test_db_session):
-    # An undeclared association is its parent's model's, here the other model's. One declared by a model
-    # that owns neither end, with ends in two models, belongs to no model (§11).
-    session, tag = test_db_session, "not_owned"
-    rows = await _install(session, tag)
-    third = await _add(
+async def _add_model(session, name, **extra):
+    return await _add(
         session,
         DataModel(
-            Name=f"MCThird_{tag}",
+            Name=name,
             Type=DataModelType.SourceSchema,
             DataModelVersion="1.0",
             ContributorOrganization="UniconQA",
             Deleted=False,
+            **extra,
         ),
     )
+
+
+async def test_export_leaves_out_an_undeclared_association_from_another_models_entity(test_db_session):
+    # An undeclared association is its parent's model's, here the other model's (§11).
+    session, tag = test_db_session, "not_owned"
+    rows = await _install(session, tag)
     await _add(
         session,
         EntityAssociation(
             ParentEntityId=rows["Other"].Id, ChildEntityId=rows["Student"].Id, Name="Student", Array=False
         ),
     )
+    assert dump_canonical(await export_model(session, rows["model"].Id)) == _expected_file(tag)
+
+
+async def test_export_leaves_out_an_overlays_addition_inside_its_base(test_db_session):
+    # Declared by an overlay of this model, between two of this model's entities: the overlay's content,
+    # which moves to its copies of those entities when it is converted (§11, #1388).
+    session, tag = test_db_session, "overlay_addition"
+    rows = await _install(session, tag)
+    overlay = await _add_model(session, f"MCOverlay_{tag}", BaseDataModelId=rows["model"].Id)
     await _add(
         session,
-        EntityAttributeAssociation(
-            EntityId=rows["Course"].Id,
-            AttributeId=rows["Other.thing"].Id,
-            Name="thing",
+        EntityAssociation(
+            ParentEntityId=rows["Student"].Id,
+            ChildEntityId=rows["Organization"].Id,
+            Name="School",
             Array=False,
-            ExtendedByDataModelId=third.Id,
+            ExtendedByDataModelId=overlay.Id,
         ),
     )
     assert dump_canonical(await export_model(session, rows["model"].Id)) == _expected_file(tag)
@@ -686,3 +715,27 @@ async def test_another_version_of_an_installed_model_imports(test_db_session):
         select(func.count()).select_from(DataModel).where(DataModel.Name == f"RT_{tag}", DataModel.Deleted.is_not(True))
     )
     assert (await session.execute(live)).scalar_one() == 2
+
+
+async def test_a_root_entity_keeps_its_list_setting_through_export_and_import(test_db_session):
+    # Starting from rows, not from a file. Course has no parent, so its own Array is its top-level
+    # schema's, and the file carries it. Student has a parent: its list setting is on its association,
+    # and its own stored Array is not written.
+    session, tag = test_db_session, "root_array"
+    rows = await _install(session, tag)
+    await _set(session, rows["Course"], Array="Yes")
+    await _set(session, rows["Student"], Array="Yes")
+
+    file_b = await export_model(session, rows["model"].Id)
+    exported = {entity.UniqueName: entity.Array for entity in file_b.Entities}
+    assert (exported["Course"], exported["Student"]) == (True, False)
+
+    await _set(session, rows["model"], Deleted=True)
+    model_id = await import_model(session, file_b)
+    await session.commit()
+    stored = {
+        entity.UniqueName: entity.Array
+        for entity in (await session.execute(select(Entity).where(Entity.DataModelId == model_id))).scalars()
+    }
+    assert (stored["Course"], stored["Organization"], stored["Student"]) == ("Yes", "No", "Yes")
+    assert dump_canonical(await export_model(session, model_id)) == dump_canonical(file_b)

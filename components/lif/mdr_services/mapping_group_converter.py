@@ -11,6 +11,7 @@ Callers reach it through portability_converter, the converter module for every f
 from typing import Optional
 
 from lif.mdr_portability import MappingGroupFile, PortabilityError, PortabilityErrorCode, PortabilityErrorGroup
+from lif.mdr_portability.errors import error_group
 from lif.mdr_portability.mapping_group_rules import check_mapping_group_file
 from lif.mdr_portability.mapping_paths import (
     AssociationEnd,
@@ -22,6 +23,7 @@ from lif.mdr_portability.mapping_paths import (
 )
 from lif.mdr_dto.transformation_group_dto import GROUP_VERSION_PATTERN
 from lif.mdr_portability.v1.models import ModelIdentity
+from lif.mdr_services.model_converter import is_overlay
 from lif.mdr_services.transformation_service import get_transformation_group_by_id
 from lif.mdr_sql_model.core import (
     Attribute,
@@ -32,7 +34,6 @@ from lif.mdr_sql_model.core import (
     EntityAttributeAssociation,
     EntityPlacementType,
     ExpressionLanguageType,
-    ExtInclusionsFromBaseDM,
     Transformation,
     TransformationAttribute,
     TransformationGroup,
@@ -41,10 +42,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
 
 Code = PortabilityErrorCode
-
-
-def _error_group(errors: list[PortabilityError]) -> PortabilityErrorGroup:
-    return PortabilityErrorGroup(f"{len(errors)} portability error{'s' if len(errors) != 1 else ''}", errors)
 
 
 async def load_model_paths(session: AsyncSession, data_model_id: int) -> ModelPaths:
@@ -115,19 +112,6 @@ async def load_model_paths(session: AsyncSession, data_model_id: int) -> ModelPa
     )
 
 
-async def _is_overlay(session: AsyncSession, data_model_id: int) -> bool:
-    # An overlay still reads its elements through inclusion rows (ADR data_model/0004), so its paths
-    # don't resolve in its own rows. It is detected by those rows, not by its Type (§8: no type names).
-    inclusion = (
-        await session.execute(
-            select(ExtInclusionsFromBaseDM.Id)
-            .where(ExtInclusionsFromBaseDM.ExtDataModelId == data_model_id, ExtInclusionsFromBaseDM.Deleted == False)
-            .limit(1)
-        )
-    ).first()
-    return inclusion is not None
-
-
 def _identity(model: DataModel, element: str) -> tuple[Optional[dict], list[PortabilityError]]:
     identity = {
         "Name": model.Name,
@@ -169,7 +153,8 @@ async def export_mapping_group(session: AsyncSession, group_id: int) -> MappingG
         identity, identity_errors = _identity(model, element)
         errors.extend(identity_errors)
         details[side] = identity
-        if await _is_overlay(session, model_id):
+        # An overlay's elements are in its base model, so its paths can't be resolved from its own rows.
+        if await is_overlay(session, model):
             errors.append(
                 PortabilityError(
                     Code.NOT_MIGRATED, element, f"{model.Name!r} is an overlay; convert it first (ADR data_model/0004)"
@@ -260,7 +245,7 @@ async def export_mapping_group(session: AsyncSession, group_id: int) -> MappingG
         )
 
     if errors:
-        raise _error_group(errors)
+        raise error_group(errors)
     file = MappingGroupFile.model_validate(
         {
             "Format": {"Type": "lif-mdr-mapping-group", "Version": 1},
@@ -376,7 +361,7 @@ async def import_mapping_group(session: AsyncSession, file: MappingGroupFile) ->
             resolved.append((target, sources))
 
     if errors:
-        raise _error_group(errors)
+        raise error_group(errors)
 
     details = file.Details
     group = TransformationGroup(

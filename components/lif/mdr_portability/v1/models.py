@@ -219,6 +219,9 @@ class Entity(BaseModel):
     Queryable: StrictBool
     Modifiable: StrictBool
     Required: StrictBool = False
+    # Only for an entity with no parent: whether its top-level schema is a list. An entity with a parent
+    # takes its list setting from each association (§5.3).
+    Array: StrictBool = False
     Description: Optional[str] = None
     UseConsiderations: Optional[str] = None
     SourceModel: Optional[str] = None
