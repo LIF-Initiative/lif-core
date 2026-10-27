@@ -1,0 +1,256 @@
+{
+  "components": {
+    "schemas": {
+      "Achievement": {
+        "properties": {
+          "Criteria": {
+            "description": "Criteria object describing how to earn the achievement.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "Image": {
+            "description": "IRI of an image representing the achievement. May be a Data URI or the URL where the image may be found.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "Level": {
+            "description": "Text that describes the level of achievement apart from how the achievement was performed or demonstrated. Examples would include 'Level 1', 'Level 2', 'Level 3', or 'Bachelors', 'Masters', 'Doctoral'.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "achievementType": {
+            "description": "Type of the Achievement",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "description": {
+            "description": "A short description of the achievement. May be the same as name if no description is available.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "extensions": {
+            "description": "The Achievement object can be extended with additional properties., such as CIP codes.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "fieldOfStudy": {
+            "description": "Category, subject, area of study, discipline, or general branch of knowledge. Examples include Business, Education, Psychology, and Technology.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "id": {
+            "description": "Unique IRI for the Achievement. If the ID is a URL it must be the location of an Achievement document.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "name": {
+            "description": "The name of the achievement.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "tags": {
+            "description": "Tags that describe the type of achievement.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "Address": {
+        "properties": {
+          "addressCountry": {
+            "description": "The country. For example, USA. You can also provide the two-letter ISO 3166-1 alpha-2 country code.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "addressLocality": {
+            "description": "The locality. For example, Mountain View.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "addressRegion": {
+            "description": "The region. For example, CA.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "postalCode": {
+            "description": "The postal code. For example, 94043.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "streetAddress": {
+            "description": "The street address. For example, 1600 Amphitheatre Pkwy.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "Alignment": {
+        "properties": {
+          "targetUrl": {
+            "description": "The URL of a node in an established educational framework. When the alignment is to a CASE framework and the CASE Service support the CASE JSON-LD binding, the URL should be the 'uri' of the node document, otherwise the URL should be the CASE Service endpoint URL that returns the node JSON.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "Assertion": {
+        "properties": {
+          "endDate": {
+            "description": "Expiry date of the assertion.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "evidence": {
+            "description": "Evidence describing the work that the recipient did to earn the achievement. This can be a webpage that links out to other pages if linking directly to the work is infeasible.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "issuedOn": {
+            "description": "Timestamp of when the achievement was awarded. Required unless the assertion is revoked.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "verification": {
+            "description": "Instructions for third parties to verify this assertion.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "Evidence": {
+        "properties": {
+          "description": {
+            "description": "A longer description of the evidence.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "type": {
+            "description": "Type of Evidence",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "Profile": {
+        "properties": {
+          "email": {
+            "description": "A contact email address for the individual or organization.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "image": {
+            "description": "IRI of an image representing the individual or organization. May be a DATA URI or the URL where the image may be found.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "name": {
+            "description": "The name of the individual or organization.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "studentId": {
+            "description": "An institution's student identifier for the person.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "telephone": {
+            "description": "Primary phone number for the individual or organization.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      }
+    }
+  },
+  "info": {
+    "description": "OpenAPI Spec",
+    "title": "Machine-Readable Schema for CLR v1",
+    "version": "1.0"
+  },
+  "openapi": "3.0.0",
+  "paths": {}
+}

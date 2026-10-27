@@ -96,6 +96,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Bearer token, MDR answers missing credentials with `Missing or invalid credentials`, and the
   Advisor answers a missing token with 401 instead of 403. See ADR 0007 and
   `docs/operations/guides/auth-configuration.md` (issue #548)
+- MDR schema generator: a model is generated as an overlay only while it has inclusion rows, not by
+  its `Type`, so models 17 and 18 can be converted in place. Self-contained models take
+  `x-mutable` / `x-queryable` from the element's own `Modifiable` / `Queryable` (every such model now
+  emits them, `false` throughout the seed), filter `public_only` by the element's own
+  `LevelOfAccess`, and key every child by its association `Name`. Overlays generate as before, except
+  that `public_only` now reaches two inclusion lookups it had missed (issue #1395)
+- MDR database migration `V1.10`: copies element flags from each model's live inclusion row on its
+  own element again, as `V1.7` did, so inclusion edits made since then reach the flags the generator
+  now reads. Apply it after the MDR image that reads them is deployed (issue #1395)
+- Local docker-compose applies MDR migrations in version order (`sort -V`), so `V1.10` runs after
+  `V1.9` as it does under Flyway (issue #1395)
 
 ### Deprecated
 

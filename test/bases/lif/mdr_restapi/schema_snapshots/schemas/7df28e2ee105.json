@@ -1,0 +1,1584 @@
+{
+  "components": {
+    "schemas": {
+      "Activity": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 8,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 111,
+        "Name": "Activity",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "Activity",
+        "UseConsiderations": null,
+        "properties": {
+          "genusType": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "totalTargetEffort": {
+            "description": "Sections are modelled as Activity entities in the OSIDs",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "type": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "ActivityRegistration.Activity": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 8,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 116,
+        "Name": "ActivityRegistration.Activity",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "ActivityRegistration.Activity",
+        "UseConsiderations": null,
+        "properties": {
+          "id": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "Address": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 8,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 294,
+        "Name": "Address",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "Address",
+        "UseConsiderations": null,
+        "properties": {
+          "(extendedThroughTypeDefinition)": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "(formatted)Address": {
+            "description": "complete address text",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "type": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "Appointment": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 8,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 200,
+        "Name": "Appointment",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "Appointment",
+        "UseConsiderations": null,
+        "properties": {
+          "endReason": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "expirationDate": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "salary": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "startDate": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "Assessment": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 8,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 31,
+        "Name": "Assessment",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "Assessment",
+        "UseConsiderations": null,
+        "properties": {
+          "id": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "level": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "name": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "AssessmentTaken": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 8,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 35,
+        "Name": "AssessmentTaken",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "AssessmentTaken",
+        "UseConsiderations": null,
+        "properties": {
+          "Grade.id": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "Grade.name": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "feedback": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "Assesssment": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 8,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 34,
+        "Name": "Assesssment",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "Assesssment",
+        "UseConsiderations": null,
+        "properties": {
+          "rubric": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "Contact": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 8,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 296,
+        "Name": "Contact",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "Contact",
+        "UseConsiderations": null,
+        "properties": {},
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "Course": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 8,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 109,
+        "Name": "Course",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "Course",
+        "UseConsiderations": null,
+        "properties": {
+          "creditAmounts": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "description": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "genusType": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "gradingOptions": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "learningObjectives": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "sponsors(OfType)": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "title": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "CourseCatalog": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 8,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 107,
+        "Name": "CourseCatalog",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "CourseCatalog",
+        "UseConsiderations": null,
+        "properties": {
+          "id": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "CourseEntry": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 8,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 114,
+        "Name": "CourseEntry",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "CourseEntry",
+        "UseConsiderations": null,
+        "properties": {
+          "genusType": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "grade": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "score": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "CourseEntry.Course": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 8,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 108,
+        "Name": "CourseEntry.Course",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "CourseEntry.Course",
+        "UseConsiderations": null,
+        "properties": {
+          "code": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "description": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "level": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "levels": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "number": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "sponsors.displayName": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "CourseEntry.Grade": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 8,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 113,
+        "Name": "CourseEntry.Grade",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "CourseEntry.Grade",
+        "UseConsiderations": null,
+        "properties": {
+          "gradeSystem": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "CourseEntry.Term": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 8,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 110,
+        "Name": "CourseEntry.Term",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "CourseEntry.Term",
+        "UseConsiderations": null,
+        "properties": {
+          "classesEnd": {
+            "description": "The classes end date of a Term in which courses are offered.  Needs to be accessed through CourseEntry since we need to determine which term the course start date refers to",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "classesStart": {
+            "description": "The classes start date of a Term in which courses are offered.  Needs to be accessed through CourseEntry since we need to determine which term the course start date refers to",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "CourseRegistration": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 8,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 115,
+        "Name": "CourseRegistration",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "CourseRegistration",
+        "UseConsiderations": null,
+        "properties": {
+          "endDate": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "endReason": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "genusType": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "startDate": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "type": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "Credential": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 8,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 159,
+        "Name": "Credential",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "Credential",
+        "UseConsiderations": null,
+        "properties": {
+          "description": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "genusType": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "id": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "name": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "title": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "CredentialEntry": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 8,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 161,
+        "Name": "CredentialEntry",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "CredentialEntry",
+        "UseConsiderations": null,
+        "properties": {
+          "awardDate": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "endDate": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "student": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "Item": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 8,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 32,
+        "Name": "Item",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "Item",
+        "UseConsiderations": null,
+        "properties": {
+          "learningObjectives": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "JobAppointments": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 8,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 202,
+        "Name": "JobAppointments",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "JobAppointments",
+        "UseConsiderations": null,
+        "properties": {
+          "description": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "Obective": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 8,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 60,
+        "Name": "Obective",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "Obective",
+        "UseConsiderations": null,
+        "properties": {
+          "description": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "Objective": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 8,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 61,
+        "Name": "Objective",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "Objective",
+        "UseConsiderations": null,
+        "properties": {
+          "assessment": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "language(session)": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "name": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "ObjectiveBank": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 8,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 59,
+        "Name": "ObjectiveBank",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "ObjectiveBank",
+        "UseConsiderations": null,
+        "properties": {
+          "description": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "language(session)": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "license": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "name": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "source": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "OfferingEnabler": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 8,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 312,
+        "Name": "OfferingEnabler",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "OfferingEnabler",
+        "UseConsiderations": null,
+        "properties": {
+          "cyclicTimePeriod": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "Ontology": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 8,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 33,
+        "Name": "Ontology",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "Ontology",
+        "UseConsiderations": null,
+        "properties": {
+          "Subject": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "Subject.position": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "definedThroughTaggingOfAttributes": {
+            "description": "not explicit in spec",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "displayName": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "subject": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "Organization": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 8,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 229,
+        "Name": "Organization",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "Organization",
+        "UseConsiderations": null,
+        "properties": {
+          "displayName": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "type": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "Person": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 8,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 293,
+        "Name": "Person",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "Person",
+        "UseConsiderations": null,
+        "properties": {
+          "birthDate": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "generationQualifier\nqualificationSuffix": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "givenName": {
+            "description": "Given name. In the U.S., the first name of a Person. This can be used along with familyName instead of the name property.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "institutionalIdentifier": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "middleNames": {
+            "description": "list of middle names",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "salutation": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "surname": {
+            "description": "Family name. In the U.S., the last name of an Person. This can be used along with givenName instead of the name property.",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "Position": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 8,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 201,
+        "Name": "Position",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "Position",
+        "UseConsiderations": null,
+        "properties": {
+          "title": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "Program": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 8,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 160,
+        "Name": "Program",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "Program",
+        "UseConsiderations": null,
+        "properties": {
+          "adminOrgs": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "code": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "completionRequirements": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "description": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "duration": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "duration.type": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "learningObjective": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "name": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "ProgramOffering": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 8,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 311,
+        "Name": "ProgramOffering",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "ProgramOffering",
+        "UseConsiderations": null,
+        "properties": {
+          "effectiveDates": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "Relevancy": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 8,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 295,
+        "Name": "Relevancy",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "Relevancy",
+        "UseConsiderations": null,
+        "properties": {
+          "endDate": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "startDate": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "State": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 8,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 230,
+        "Name": "State",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "State",
+        "UseConsiderations": null,
+        "properties": {
+          "state": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "Subject": {
+        "ActivationDate": null,
+        "Array": null,
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 8,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 112,
+        "Name": "Subject",
+        "Notes": null,
+        "Required": null,
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "Subject",
+        "UseConsiderations": null,
+        "properties": {
+          "course": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          },
+          "displayNameOrDisplayLabel": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      }
+    }
+  },
+  "info": {
+    "description": "OpenAPI Spec",
+    "title": "Machine-Readable Schema for OSID / CampusAPI",
+    "version": "1.0"
+  },
+  "openapi": "3.0.0",
+  "paths": {}
+}

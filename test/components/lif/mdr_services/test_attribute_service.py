@@ -412,6 +412,7 @@ async def test_get_attributes_with_association_metadata_for_entity_base(fake_ses
             ContributorOrganization="OrgA",
             Deleted=False,
             ExtendedByDataModelId=None,
+            Name="a1",
         ),
         types.SimpleNamespace(
             Id=901,
@@ -425,6 +426,7 @@ async def test_get_attributes_with_association_metadata_for_entity_base(fake_ses
             ContributorOrganization="OrgB",
             Deleted=False,
             ExtendedByDataModelId=None,
+            Name="a2",
         ),
     ]
     attr_rows = [
@@ -458,6 +460,9 @@ async def test_get_attributes_with_association_metadata_for_entity_base(fake_ses
     assert by_id[2].EntityAttributeAssociationId == 901
     assert by_id[1].AssociationNotes == "n1"
     assert by_id[2].AssociationContributor == "bob"
+    # The schema generator keys each attribute by its association's Name (#1395).
+    assert by_id[1].AssociationName == "a1"
+    assert by_id[2].AssociationName == "a2"
 
 
 async def test_get_attributes_with_association_metadata_for_entity_none(fake_session):
@@ -483,6 +488,7 @@ async def test_get_attributes_with_association_metadata_for_entity_orglif_public
             ContributorOrganization=None,
             Deleted=False,
             ExtendedByDataModelId=None,
+            Name=None,
         ),
         types.SimpleNamespace(
             Id=911,
@@ -496,6 +502,7 @@ async def test_get_attributes_with_association_metadata_for_entity_orglif_public
             ContributorOrganization=None,
             Deleted=False,
             ExtendedByDataModelId=999,  # extended by this data model
+            Name=None,
         ),
     ]
     # ext inclusion returns only attribute 4 (public filtering simulated)
