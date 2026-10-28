@@ -399,6 +399,7 @@ async def get_list_of_attributes_for_entity(
     if data_model_type == DataModelType.OrgLIF or data_model_type == DataModelType.PartnerLIF:
         # Query to fetch IncludedElementId from ExtInclusionsFromBaseDM table where ElementType = Attribute and IncludedElementId in attribute_ids
         ext_inclusions_query = select(ExtInclusionsFromBaseDM.IncludedElementId).where(
+            ExtInclusionsFromBaseDM.ExtDataModelId == data_model_id,
             ExtInclusionsFromBaseDM.ElementType == "Attribute",
             ExtInclusionsFromBaseDM.IncludedElementId.in_(attribute_ids),
             ExtInclusionsFromBaseDM.Deleted == False,
