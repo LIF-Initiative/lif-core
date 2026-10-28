@@ -317,6 +317,13 @@
         "retryable",
         "footgun",
         "redoc",
+        "Europass",
+        "Marsal",
+        "CETIS",
+        "Xtera",
+        "Motlow",
+        "Trovares",
+        "learnerinfoframework",
         "lineterm"
     ],
     "ignorePaths": [
