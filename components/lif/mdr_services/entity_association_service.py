@@ -1,7 +1,7 @@
 from typing import List, Optional, Sequence
 
 from fastapi import HTTPException
-from lif.mdr_sql_model.core import DataModel, DataModelType, Entity, EntityAssociation, ExtInclusionsFromBaseDM
+from lif.mdr_sql_model.core import DataModel, Entity, EntityAssociation, ExtInclusionsFromBaseDM
 from lif.mdr_dto.entity_association_dto import (
     CreateEntityAssociationDTO,
     EntityAssociationDTO,
@@ -10,6 +10,7 @@ from lif.mdr_dto.entity_association_dto import (
 from lif.mdr_services.association_name import association_array, entity_association_name, recomputed
 from lif.mdr_services.entity_service import get_entity_by_id
 from lif.mdr_services.helper_service import check_datamodel_by_id, check_entity_by_id
+from lif.mdr_services.model_converter import is_overlay
 from lif.mdr_utils.logger_config import get_logger
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import aliased
@@ -236,7 +237,7 @@ async def get_entity_associations_by_data_model_id(session: AsyncSession, data_m
     data_model = await check_datamodel_by_id(session=session, id=data_model_id)
 
     entity_associations = []
-    if data_model.Type == DataModelType.OrgLIF or data_model.Type == DataModelType.PartnerLIF:
+    if await is_overlay(session, data_model):
         included_entities_query = select(ExtInclusionsFromBaseDM.IncludedElementId).where(
             ExtInclusionsFromBaseDM.ExtDataModelId == data_model_id,
             ExtInclusionsFromBaseDM.ElementType == "Entity",
