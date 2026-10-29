@@ -12,6 +12,9 @@ DataModels table, in this order:
     model_26_org      set model 26 (R1 Demo Source Data Model) ContributorOrganization to 'LIF'
     transformation_1189
                       soft-delete transformation 1189 in group 3: no expression, no source, no target
+    value_3649_extension
+                      clear Extension on value 3649 (Kindergarten, model 1): a stray flag with no
+                      notes, which its twin in model 4 and every other Kindergarten value don't have
 
 Overlay models (a BaseDataModelId, or live inclusion rows) are left alone in every rule: converting
 them is #1388's. The ExtendedBy, cross-model and ownerless associations export also refuses are
@@ -147,6 +150,16 @@ WHERE t."Id" = 1189 AND t."TransformationGroupId" = 3 AND t."Deleted" = false
       SELECT 1 FROM {schema}."TransformationAttributes" ta WHERE ta."TransformationId" = t."Id" AND ta."Deleted" = false
   )
 RETURNING t."Id", t."TransformationGroupId"
+""",
+    ),
+    (
+        "value_3649_extension",
+        """
+UPDATE {schema}."ValueSetValues" v SET "Extension" = false
+WHERE v."Id" = 3649 AND v."ValueSetId" = 290 AND v."DataModelId" = 1 AND v."Value" = 'Kindergarten'
+  AND v."Deleted" IS NOT TRUE AND v."Extension" = true
+  AND trim(coalesce(v."ExtensionNotes", '')) = ''
+RETURNING v."Id", v."ValueSetId"
 """,
     ),
 ]

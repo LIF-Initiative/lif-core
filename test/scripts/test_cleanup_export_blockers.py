@@ -121,12 +121,12 @@ async def test_cleanup_clears_its_refusals_and_leaves_the_rest_to_1388(seed_conn
         "group_name": 0,
         "model_26_org": 1,
         "transformation_1189": 1,
+        "value_3649_extension": 1,
     }
     assert (before["public"].models_exported, after["public"].models_exported) == (1, 12)
     assert (before["public"].groups_exported, after["public"].groups_exported) == (2, 3)
     # What's left is the seed's entity-typed attributes, #1388's associations and overlay groups,
-    # model 25's one attribute associated only through a row another model owns, and model 1's
-    # Extension value, which is still to decide.
+    # and model 25's one attribute associated only through a row another model owns.
     assert {key: len(refused) for key, refused in after["public"].refusals.items()} == {
         "NOT_MIGRATED: the attribute has DataType entity; it becomes an association to the entity": 190,
         "NOT_MIGRATED: the association is declared with ExtendedByDataModelId": 62,
@@ -134,7 +134,6 @@ async def test_cleanup_clears_its_refusals_and_leaves_the_rest_to_1388(seed_conn
         "NOT_MIGRATED: … is an overlay; convert it first (ADR data_model/0004)": 6,
         "NOT_MIGRATED: model N declared it between two models it does not own, so it belongs to no model": 2,
         "NOT_MIGRATED: the attribute is in no association; migration drops it": 1,
-        "NOT_MIGRATED: the value uses Extension": 1,
     }
 
 
@@ -221,3 +220,14 @@ async def test_cleanup_keeps_1189_once_it_has_an_expression(seed_conn):
 
     assert results["public"]["transformation_1189"] == []
     assert await conn.fetchval('SELECT "Deleted" FROM "Transformations" WHERE "Id" = 1189') is False
+
+
+async def test_cleanup_keeps_3649_extension_once_it_has_notes(seed_conn):
+    # A flag someone has since explained is no longer the stray one the decision named.
+    conn, url = seed_conn
+    await conn.execute('UPDATE "ValueSetValues" SET "ExtensionNotes" = \'why\' WHERE "Id" = 3649')
+
+    results = await cleanup.cleanup(conn, apply=True)
+
+    assert results["public"]["value_3649_extension"] == []
+    assert await conn.fetchval('SELECT "Extension" FROM "ValueSetValues" WHERE "Id" = 3649') is True
