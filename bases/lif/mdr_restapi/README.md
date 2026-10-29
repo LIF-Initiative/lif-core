@@ -19,7 +19,8 @@ The base is split into many endpoint modules (one per concern) which `core.py` m
 | `/value_mappings` | `value_mapping_endpoints` | Code/value crosswalks used during transformation |
 | `/search` | `search_endpoint` | MDR-wide full-text search |
 | `/datamodel_constraints` | `datamodel_constraints_endpoints` | Constraint rules per model |
-| `/import_export` | `import_export_endpoints` | Bulk import/export of MDR content |
+| `/import_export` | `import_export_endpoints` | Bulk import/export of MDR content (deprecated: use `/portable`) |
+| `/portable` | `portable_endpoints` | Export and import a model, mapping group or crosswalk as a portable file, with no row IDs ([spec](../../../docs/specs/mdr-portable-file-format.md), #1408) |
 | `/generate_jinja` | `generate_jinja_endpoint` | Template generation for derived schemas |
 | `/tenants` | `tenant_endpoints` | Self-serve tenant lifecycle (#883/#884): provision, workspace listing/selection, invite tokens |
 
