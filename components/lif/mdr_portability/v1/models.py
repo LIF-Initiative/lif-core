@@ -347,7 +347,7 @@ class CrosswalkValueSetKey(BaseModel):
     model_config = _STRICT
 
     Model: ModelIdentity
-    ValueSet: str
+    ValueSet: NonBlankStr
 
 
 class CrosswalkDetails(BaseModel):
@@ -361,8 +361,8 @@ class CrosswalkDetails(BaseModel):
 class CrosswalkEntry(BaseModel):
     model_config = _STRICT
 
-    Source: str
-    Target: str
+    Source: NonBlankStr
+    Target: NonBlankStr
     Description: Optional[str] = None
     UseConsiderations: Optional[str] = None
     Notes: Optional[str] = None
