@@ -98,6 +98,7 @@ FROM {schema}."Entities" WHERE "DataModelId" = $1 AND "Deleted" IS NOT TRUE
 UNION ALL
 SELECT 'Attribute', a."UniqueName", v."DataModelId",
        EXISTS (SELECT 1 FROM {schema}."EntityAttributeAssociation" x
+               JOIN {schema}."Entities" e ON e."Id" = x."EntityId" AND e."Deleted" IS NOT TRUE
                WHERE x."AttributeId" = a."Id" AND x."Deleted" IS NOT TRUE)
 FROM {schema}."Attributes" a
 LEFT JOIN {schema}."ValueSets" v ON v."Id" = a."ValueSetId"
@@ -128,7 +129,8 @@ LEFT JOIN {schema}."TransformationAttributes" ta ON ta."TransformationId" = t."I
 WHERE g."Deleted" IS NOT TRUE AND $1 IN (g."SourceDataModelId", g."TargetDataModelId")
 """
 
-# Attributes the conversion keeps: the live ones the model includes, and its own associated ones
+# Attributes the conversion keeps: the live ones the model includes, and its own ones associated to a live
+# entity, as export reads them
 # (its own unassociated ones are dropped, Q1).
 ODD_TYPES_SQL = """
 SELECT count(*) FILTER (WHERE a."DataType" IS NULL) AS null_type,
@@ -140,6 +142,7 @@ WHERE a."Deleted" IS NOT TRUE
                   WHERE i."ExtDataModelId" = $1 AND i."ElementType"::text = 'Attribute' AND i."Deleted" IS NOT TRUE)
        OR (a."DataModelId" = $1
            AND EXISTS (SELECT 1 FROM {schema}."EntityAttributeAssociation" x
+                       JOIN {schema}."Entities" e ON e."Id" = x."EntityId" AND e."Deleted" IS NOT TRUE
                        WHERE x."AttributeId" = a."Id" AND x."Deleted" IS NOT TRUE)))
 """
 

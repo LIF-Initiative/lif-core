@@ -284,3 +284,33 @@ async def test_measure_reports_the_seed_overlays_in_every_schema(seed_url):
         ] == [[(i, 1, 17) for i in (1263, 1282, 1284, 1285, 1286, 1288, 1315, 1619)], []]
         # Model 25 is a source model, not an overlay, yet declares two ExtendedBy attribute links.
         assert {m: measure._pair(c) for m, c in other_extended.items()} == {25: "0/2"}
+
+
+async def test_measure_does_not_count_an_association_to_a_soft_deleted_entity(seed_url):
+    # Export, and #1444's cleanup, only count an attribute as associated through a live entity.
+    conn = await asyncpg.connect(seed_url)
+    transaction = conn.transaction()
+    await transaction.start()
+    try:
+        # Copies of seed rows: a model-17 attribute with no DataType, associated only to a soft-deleted entity.
+        for table, changes in (
+            ("Entities", """"UniqueName" = 'Soft.deleted', "Deleted" = true"""),
+            ("Attributes", """"UniqueName" = 'Soft.deleted', "DataType" = NULL, "Deleted" = false"""),
+            (
+                "EntityAttributeAssociation",
+                '"EntityId" = 900000, "AttributeId" = 900000, "ExtendedByDataModelId" = NULL, "Deleted" = false',
+            ),
+        ):
+            model = "" if table == "EntityAttributeAssociation" else 'WHERE "DataModelId" = 17'
+            await conn.execute(
+                f'CREATE TEMP TABLE copy_row AS SELECT * FROM "{table}" {model} ORDER BY "Id" LIMIT 1;'
+                f' UPDATE copy_row SET "Id" = 900000, {changes};'
+                f' INSERT INTO "{table}" OVERRIDING SYSTEM VALUE SELECT * FROM copy_row; DROP TABLE copy_row'
+            )
+        models, _ = await measure.measure_schema(conn, "public")
+    finally:
+        await transaction.rollback()
+        await conn.close()
+
+    model_17 = next(row for row in models if row["model"] == "17 StateU LIF")
+    assert (model_17["odd types"], model_17["unassociated"]) == ("0/0/0", 15)
