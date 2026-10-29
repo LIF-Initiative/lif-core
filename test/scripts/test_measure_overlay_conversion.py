@@ -115,6 +115,8 @@ def test_check_model_sorts_extended_by_rows_by_where_their_ends_are():
         _association("Attribute", 6, 18, 132, 1, 7, 1),  # another overlay's row inside this render set
         _association("Attribute", 7, 18, 132, 1, 8, 1),  # another overlay's row, attribute 8 not shown
         _association("Attribute", 8, 25, 132, 1, 7, 1),  # a non-overlay's row is not cross-overlay
+        _association("Attribute", 9, None, 132, 1, 41, 17),  # no ExtendedBy, base entity -> own attribute
+        _association("Attribute", 10, None, 132, 1, 902, 16),  # no ExtendedBy, but no end in this model
     ]
     result = measure.check_model(17, 1, {17, 18}, inclusions, associations, [])
     assert {k: v for k, v in result.items() if k.startswith(("ext ", "cross"))} == {
@@ -125,9 +127,11 @@ def test_check_model_sorts_extended_by_rows_by_where_their_ends_are():
         "ext no owner": "0/1",
         "ext no owner shown": "0/1",
         "ext absent": "0/1",
+        "ext null cross": "0/1",
         "cross overlay": "0/1",
     }
     assert [row["Id"] for row in result["no owner rows"]] == [4]
+    assert [row["Id"] for row in result["null cross rows"]] == [9]
 
 
 def test_check_model_finds_mapping_nodes_outside_the_render_set():
@@ -246,6 +250,7 @@ async def test_measure_reports_the_seed_overlays_in_every_schema(seed_url):
                 "ext no owner": "0/1",
                 "ext no owner shown": "0/1",
                 "ext absent": "2/15",
+                "ext null cross": "0/8",
                 "cross overlay": "0/0",
                 "paths outside": 0,
                 "paths invalid": 0,
@@ -260,6 +265,7 @@ async def test_measure_reports_the_seed_overlays_in_every_schema(seed_url):
                 "ext no owner": "0/0",
                 "ext no owner shown": "0/0",
                 "ext absent": "0/0",
+                "ext null cross": "0/0",
                 "cross overlay": "0/0",
                 "paths outside": 0,
                 "paths invalid": 0,
@@ -272,5 +278,9 @@ async def test_measure_reports_the_seed_overlays_in_every_schema(seed_url):
             ]
             for row in models
         ] == [[(1846, 132, 1, 1745, 16)], []]
+        # Model 1's own associations, with no ExtendedBy, to attributes model 17 owns. Model 1's schema shows them.
+        assert [
+            [(a["Id"], a["ParentModelId"], a["ChildModelId"]) for a in row["null cross rows"]] for row in models
+        ] == [[(i, 1, 17) for i in (1263, 1282, 1284, 1285, 1286, 1288, 1315, 1619)], []]
         # Model 25 is a source model, not an overlay, yet declares two ExtendedBy attribute links.
         assert {m: measure._pair(c) for m, c in other_extended.items()} == {25: "0/2"}

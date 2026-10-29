@@ -33,12 +33,15 @@ model's schema shows: the live elements its live inclusion rows name.
     ext other       ExtendedBy rows of the model with both ends in one other model, which owns them
     ext no owner    ExtendedBy rows of the model with ends in two models, neither of them this one
     ext absent      ExtendedBy rows of the model with a missing or soft-deleted end
+    ext null cross  rows with no ExtendedBy and one end in the model, the other in another model; the
+                    other model's schema shows them (model 1's shows 17's Common.Contact attributes)
     ... shown       of those, the ones the render set displays (both ends in it)
     cross overlay   ExtendedBy rows of another overlay with both ends in this model's render set
     paths outside   live mapping rows on the model's side with a node outside the render set
     paths invalid   live mapping rows on the model's side whose EntityIdPath is not a list of IDs
 
-After it, each "ext no owner" row is listed with its ends, since the conversion recreates each one.
+After it, each "ext no owner" and "ext null cross" row is listed with its ends, since the conversion
+has to place each one.
 
 Reads `public` and every `tenant_*` schema with a DataModels table in one read-only transaction.
 It changes nothing and exits 0; it exits 1 only when it cannot connect or find a schema.
@@ -150,8 +153,8 @@ SELECT count(*) AS n FROM (
 ) conflicts
 """
 
-# Every live ExtendedBy association with the models of its ends. An end that is missing or
-# soft-deleted has no model, and such a row counts as absent.
+# Every live association that is ExtendedBy, or that links two models, with the models of its ends. An
+# end that is missing or soft-deleted has no model, and such a row counts as absent.
 EXTENDED_ASSOCIATIONS_SQL = """
 SELECT 'Entity' AS "ElementType", x."Id", x."ExtendedByDataModelId",
        x."ParentEntityId" AS "ParentId", p."DataModelId" AS "ParentModelId",
@@ -159,14 +162,14 @@ SELECT 'Entity' AS "ElementType", x."Id", x."ExtendedByDataModelId",
 FROM {schema}."EntityAssociation" x
 LEFT JOIN {schema}."Entities" p ON p."Id" = x."ParentEntityId" AND p."Deleted" IS NOT TRUE
 LEFT JOIN {schema}."Entities" c ON c."Id" = x."ChildEntityId" AND c."Deleted" IS NOT TRUE
-WHERE x."Deleted" IS NOT TRUE AND x."ExtendedByDataModelId" IS NOT NULL
+WHERE x."Deleted" IS NOT TRUE AND (x."ExtendedByDataModelId" IS NOT NULL OR p."DataModelId" <> c."DataModelId")
 UNION ALL
 SELECT 'Attribute', x."Id", x."ExtendedByDataModelId",
        x."EntityId", p."DataModelId", x."AttributeId", c."DataModelId"
 FROM {schema}."EntityAttributeAssociation" x
 LEFT JOIN {schema}."Entities" p ON p."Id" = x."EntityId" AND p."Deleted" IS NOT TRUE
 LEFT JOIN {schema}."Attributes" c ON c."Id" = x."AttributeId" AND c."Deleted" IS NOT TRUE
-WHERE x."Deleted" IS NOT TRUE AND x."ExtendedByDataModelId" IS NOT NULL
+WHERE x."Deleted" IS NOT TRUE AND (x."ExtendedByDataModelId" IS NOT NULL OR p."DataModelId" <> c."DataModelId")
 ORDER BY 1, 2
 """
 
@@ -212,6 +215,7 @@ CHECK_COLUMNS = (
     "ext no owner",
     "ext no owner shown",
     "ext absent",
+    "ext null cross",
     "cross overlay",
     "paths outside",
     "paths invalid",
@@ -290,13 +294,20 @@ def check_model(
         if row["OwnerId"] is not None and not row["ElementDeleted"]
     }
     kinds = {
-        name: Counter() for name in ("base", "own", "other", "other shown", "no owner", "no owner shown", "absent")
+        name: Counter()
+        for name in ("base", "own", "other", "other shown", "no owner", "no owner shown", "absent", "null cross")
     }
     cross_overlay = Counter()
-    no_owner = []
+    no_owner, null_cross = [], []
     for row in associations:
         kind, parent_model, child_model = row["ElementType"], row["ParentModelId"], row["ChildModelId"]
         displayed = ("Entity", row["ParentId"]) in shown and (kind, row["ChildId"]) in shown
+        if row["ExtendedByDataModelId"] is None:
+            # The query returns these only when the ends' models differ.
+            if model_id in (parent_model, child_model):
+                kinds["null cross"][kind] += 1
+                null_cross.append(row)
+            continue
         if row["ExtendedByDataModelId"] != model_id:
             if row["ExtendedByDataModelId"] in overlay_ids and displayed:
                 cross_overlay[kind] += 1
@@ -328,6 +339,7 @@ def check_model(
         "paths outside": outside,
         "paths invalid": invalid,
         "no owner rows": no_owner,
+        "null cross rows": null_cross,
     }
 
 
@@ -432,9 +444,12 @@ async def main(argv: list[str]) -> int:
                 if row[label]:
                     names = ", ".join(f"{kind} {name}" for kind, name in row[label])
                     print(f"{row['model']} {title}: {names}")
-            for association in row["no owner rows"]:
+            for label, association in [
+                *(("no-owner", a) for a in row["no owner rows"]),
+                *(("ExtendedBy-NULL cross-model", a) for a in row["null cross rows"]),
+            ]:
                 print(
-                    f"{row['model']} no-owner {association['ElementType']} association {association['Id']}: "
+                    f"{row['model']} {label} {association['ElementType']} association {association['Id']}: "
                     f"entity {association['ParentId']} (model {association['ParentModelId']}) -> "
                     f"{association['ElementType'].lower()} {association['ChildId']} (model {association['ChildModelId']})"
                 )
