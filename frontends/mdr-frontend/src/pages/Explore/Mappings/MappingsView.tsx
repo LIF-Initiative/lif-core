@@ -61,9 +61,11 @@ import ExpressionEditorDialog from "./components/ExpressionEditorDialog";
 import EditGroupDialog from "./components/EditGroupDialog";
 import ImportPortableFileDialog from "@/components/PortableFile/ImportPortableFileDialog";
 import PortableFailureDialog from "@/components/PortableFile/PortableFailureDialog";
+import CrosswalkDialog, { type CrosswalkModel } from "./components/CrosswalkDialog";
 import {
     describePortableFailure,
     exportPortableMappingGroup,
+    importPortableCrosswalk,
     importPortableMappingGroup,
     type PortableFailure,
 } from "@/services/portableService";
@@ -73,7 +75,7 @@ import DetachSourcesDialog from "./components/DetachSourcesDialog";
 import BulkTransformationsDialog from "./components/BulkTransformationsDialog";
 import { trackEvent } from "@/utils/analytics";
 import { downloadBlobFile } from "@/utils/downloadJsonFile";
-import { Pencil2Icon, LayersIcon, UploadIcon, DownloadIcon } from "@radix-ui/react-icons";
+import { Pencil2Icon, LayersIcon, UploadIcon, DownloadIcon, TableIcon } from "@radix-ui/react-icons";
 import { useToast } from "@/context/ToastContext";
 import { errorToString } from "@/utils/errorUtils";
 
@@ -88,6 +90,15 @@ interface DisplayTransformationData extends TransformationData {
  */
 const getFirstModelIdOtherThan = (models: Array<{ Id: number }>, sourceId: number | null): number | null =>
     models.find((m) => m.Id !== sourceId)?.Id ?? null;
+
+/** A loaded model's name and value sets, for the crosswalk dialog. */
+const toCrosswalkModel = (model: DataModelWithDetailsWithTree | null): CrosswalkModel | null =>
+    model
+        ? {
+              name: model.DataModel?.Name ?? '',
+              valueSets: (model.ValueSets ?? []).map(({ ValueSet }) => ({ Id: ValueSet.Id, Name: ValueSet.Name })),
+          }
+        : null;
 
 const MappingsView: React.FC = () => {
     const REASSIGN_DRAG_THRESHOLD = 20;
@@ -248,6 +259,8 @@ const MappingsView: React.FC = () => {
     const [exprDialogOpen, setExprDialogOpen] = useState(false);
     const [editGroupOpen, setEditGroupOpen] = useState(false);
     const [importDialogOpen, setImportDialogOpen] = useState(false);
+    const [crosswalkDialogOpen, setCrosswalkDialogOpen] = useState(false);
+    const [crosswalkImportOpen, setCrosswalkImportOpen] = useState(false);
     const [forkDialogOpen, setForkDialogOpen] = useState(false);
     const [activateDialogOpen, setActivateDialogOpen] = useState(false);
     // The pair's live version, as the Translator reads it: undefined while loading.
@@ -262,7 +275,7 @@ const MappingsView: React.FC = () => {
     const [forkBump, setForkBump] = useState<'major' | 'minor'>('major');
     const [forkPreview, setForkPreview] = useState<string>('');
     // Aggregate dialog open state
-    const anyDialogOpen = deleteDialogOpen || exprDialogOpen || editGroupOpen || importDialogOpen || forkDialogOpen || activateDialogOpen || bulkDialogOpen;
+    const anyDialogOpen = deleteDialogOpen || exprDialogOpen || editGroupOpen || importDialogOpen || forkDialogOpen || activateDialogOpen || bulkDialogOpen || crosswalkDialogOpen || crosswalkImportOpen;
     // Detach sources dialog state
     const [detachDialogOpen, setDetachDialogOpen] = useState(false);
     const [pendingDetach, setPendingDetach] = useState<null | { transId: number; srcAttrIds: number[]; willDelete: boolean }>(null);
@@ -2423,6 +2436,9 @@ const MappingsView: React.FC = () => {
                                 <button type="button" className="mappings-icon-btn" title="Import a portable mapping-group file" onClick={() => setImportDialogOpen(true)}>
                                     <UploadIcon />
                                 </button>
+                                <button type="button" className="mappings-icon-btn" title="Crosswalks: export or import the value mappings between two value sets" onClick={() => setCrosswalkDialogOpen(true)}>
+                                    <TableIcon />
+                                </button>
                                 <button type="button" className="mappings-icon-btn" title="Edit details" onClick={onEditDetails}>
                                     <Pencil2Icon />
                                 </button>
@@ -2657,6 +2673,10 @@ const MappingsView: React.FC = () => {
                             {/* A portable file names its own models, so it can be imported before any group exists. */}
                             <button type="button" className="mappings-icon-btn" title="Import a portable mapping-group file" onClick={() => setImportDialogOpen(true)}>
                                 <UploadIcon />
+                            </button>
+                            {/* A crosswalk belongs to no group, so it is available before one exists. */}
+                            <button type="button" className="mappings-icon-btn" title="Crosswalks: export or import the value mappings between two value sets" onClick={() => setCrosswalkDialogOpen(true)}>
+                                <TableIcon />
                             </button>
                         </div>
                     </div>
@@ -2979,6 +2999,24 @@ const MappingsView: React.FC = () => {
                 onImported={(result) => {
                     // A full load, so the version list and forks include the new group.
                     window.location.href = `/explore/data-mappings/${result.Id}`;
+                }}
+            />
+            <CrosswalkDialog
+                open={crosswalkDialogOpen}
+                onOpenChange={setCrosswalkDialogOpen}
+                source={toCrosswalkModel(sourceModel)}
+                target={toCrosswalkModel(targetModel)}
+                onImport={() => setCrosswalkImportOpen(true)}
+                onExported={(message) => showToast(message, 'success')}
+            />
+            <ImportPortableFileDialog
+                open={crosswalkImportOpen}
+                onOpenChange={setCrosswalkImportOpen}
+                title="Import a Portable Crosswalk File"
+                description="Import a crosswalk exported as a portable file. Both of its value sets must be installed, and no value mappings may already exist between them."
+                importFile={importPortableCrosswalk}
+                onImported={(result, file) => {
+                    showToast(`Imported ${file.name}: ${result.Created} value mapping${result.Created === 1 ? '' : 's'} created`, 'success');
                 }}
             />
             <PortableFailureDialog
