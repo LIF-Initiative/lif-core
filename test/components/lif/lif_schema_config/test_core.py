@@ -65,6 +65,9 @@ class TestLIFSchemaConfig:
             "LIF_GRAPHQL_ROOT_NODES": "RefA,RefB",
             "LIF_QUERY_PLANNER_URL": "http://test:9000",
             "SEMANTIC_SEARCH__TOP_K": "50",
+            "OPENAPI_DATA_MODEL_NAME": "StateU LIF",
+            "OPENAPI_DATA_MODEL_VERSION": "1.0",
+            "OPENAPI_DATA_MODEL_CONTRIBUTOR_ORGANIZATION": "StateU",
         }
         with patch.dict(os.environ, env_vars, clear=False):
             config = LIFSchemaConfig.from_environment()
@@ -73,6 +76,9 @@ class TestLIFSchemaConfig:
             assert config.reference_data_roots == {"RefA", "RefB"}  # derived from additional_root_types
             assert config.query_planner_base_url == "http://test:9000"
             assert config.semantic_search_top_k == 50
+            assert config.openapi_data_model_name == "StateU LIF"
+            assert config.openapi_data_model_version == "1.0"
+            assert config.openapi_data_model_contributor_organization == "StateU"
 
     def test_from_environment_reads_graphql_client_timeout_var(self):
         """Issue #1203: query_timeout_seconds reads LIF_GRAPHQL_CLIENT_TIMEOUT_SECONDS,

@@ -11,12 +11,14 @@ from lif.mdr_client.core import (
     get_openapi_lif_data_model_sync,
     get_transformation_groups_from_mdr,
     load_openapi_schema,
+    resolve_data_model_id,
 )
 
 __all__ = [
     # Config-based functions (preferred)
     "load_openapi_schema",
     "fetch_schema_from_mdr",
+    "resolve_data_model_id",
     "get_transformation_groups_from_mdr",
     # File loading
     "get_openapi_lif_data_model_from_file",

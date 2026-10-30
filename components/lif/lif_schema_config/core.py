@@ -77,7 +77,10 @@ class LIFSchemaConfig:
         # MDR Configuration
         mdr_api_url: Master Data Registry API URL
         mdr_api_auth_token: MDR authentication token
-        openapi_data_model_id: MDR data model ID (if fetching from MDR)
+        openapi_data_model_id: MDR data model ID (fallback when no identity is set)
+        openapi_data_model_name: MDR data model name (identity, with version and organization)
+        openapi_data_model_version: MDR data model version
+        openapi_data_model_contributor_organization: MDR data model contributor organization
         openapi_json_filename: Fallback filename for local OpenAPI file
         use_openapi_from_file: Force use of local file instead of MDR
 
@@ -103,6 +106,9 @@ class LIFSchemaConfig:
     mdr_api_auth_token: str = "no_auth_token_set"
     mdr_timeout_seconds: int = 30
     openapi_data_model_id: Optional[str] = None
+    openapi_data_model_name: Optional[str] = None
+    openapi_data_model_version: Optional[str] = None
+    openapi_data_model_contributor_organization: Optional[str] = None
     openapi_json_filename: str = "openapi_constrained_with_interactions.json"
     use_openapi_from_file: bool = False
 
@@ -161,7 +167,10 @@ class LIFSchemaConfig:
             LIF_MDR_API_URL: MDR API URL
             LIF_MDR_API_AUTH_TOKEN: MDR authentication token
             MDR_TIMEOUT_SECONDS: Timeout for MDR API calls (default: 30)
-            OPENAPI_DATA_MODEL_ID: MDR data model ID
+            OPENAPI_DATA_MODEL_ID: MDR data model ID (fallback when no identity is set)
+            OPENAPI_DATA_MODEL_NAME: MDR data model name
+            OPENAPI_DATA_MODEL_VERSION: MDR data model version
+            OPENAPI_DATA_MODEL_CONTRIBUTOR_ORGANIZATION: MDR data model contributor organization
             OPENAPI_JSON_FILENAME: Local OpenAPI filename
             USE_OPENAPI_DATA_MODEL_FROM_FILE: Use local file instead of MDR
             SEMANTIC_SEARCH__MODEL_NAME: SentenceTransformer model name
@@ -197,6 +206,9 @@ class LIFSchemaConfig:
             mdr_api_auth_token=os.getenv("LIF_MDR_API_AUTH_TOKEN", "no_auth_token_set"),
             mdr_timeout_seconds=int(os.getenv("MDR_TIMEOUT_SECONDS", "30")),
             openapi_data_model_id=os.getenv("OPENAPI_DATA_MODEL_ID"),
+            openapi_data_model_name=os.getenv("OPENAPI_DATA_MODEL_NAME"),
+            openapi_data_model_version=os.getenv("OPENAPI_DATA_MODEL_VERSION"),
+            openapi_data_model_contributor_organization=os.getenv("OPENAPI_DATA_MODEL_CONTRIBUTOR_ORGANIZATION"),
             openapi_json_filename=os.getenv("OPENAPI_JSON_FILENAME", "openapi_constrained_with_interactions.json"),
             use_openapi_from_file=os.getenv("USE_OPENAPI_DATA_MODEL_FROM_FILE", "false").lower() == "true",
             # Semantic search

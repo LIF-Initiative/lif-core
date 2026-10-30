@@ -41,7 +41,10 @@ The Semantic Search MCP Server loads its schema from MDR at startup. It uses the
 |----------|-------------|---------|
 | `LIF_MDR_API_URL` | MDR API base URL | `http://localhost:8012` |
 | `LIF_MDR_API_AUTH_TOKEN` | API key for MDR authentication | Required |
-| `OPENAPI_DATA_MODEL_ID` | MDR data model ID to fetch | Required |
+| `OPENAPI_DATA_MODEL_NAME` | Name of the MDR data model to load | Required (with version and organization) |
+| `OPENAPI_DATA_MODEL_VERSION` | Version of the MDR data model to load | Required (with name and organization) |
+| `OPENAPI_DATA_MODEL_CONTRIBUTOR_ORGANIZATION` | Contributor organization of the MDR data model to load | Required (with name and version) |
+| `OPENAPI_DATA_MODEL_ID` | MDR data model ID; fallback used only when the three identity vars are unset | Optional |
 | `USE_OPENAPI_DATA_MODEL_FROM_FILE` | Force use of bundled file | `false` |
 
 ## AWS Deployment Setup

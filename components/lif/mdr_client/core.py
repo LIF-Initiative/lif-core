@@ -104,6 +104,70 @@ def get_openapi_lif_data_model_from_file(filename: Optional[str] = None) -> dict
 # =============================================================================
 
 
+def resolve_data_model_id(config: "LIFSchemaConfig") -> str:
+    """
+    Resolve the MDR data model ID this service should load.
+
+    When OPENAPI_DATA_MODEL_NAME, OPENAPI_DATA_MODEL_VERSION and
+    OPENAPI_DATA_MODEL_CONTRIBUTOR_ORGANIZATION are set, the model is looked up
+    by that identity in whichever tenant MDR routes this service to. Otherwise
+    OPENAPI_DATA_MODEL_ID is used as a fallback during the transition (#1392).
+
+    Args:
+        config: LIFSchemaConfig instance with MDR settings
+
+    Returns:
+        The data model ID as a string
+
+    Raises:
+        MDRConfigurationError: If the identity is partially set, or nothing is set
+        ResourceNotFoundException: If no data model matches the identity
+        MDRClientException: If MDR is unavailable, or more than one data model matches
+    """
+    name = config.openapi_data_model_name
+    version = config.openapi_data_model_version
+    organization = config.openapi_data_model_contributor_organization
+
+    if not (name or version or organization):
+        if not config.openapi_data_model_id:
+            raise MDRConfigurationError(
+                "OPENAPI_DATA_MODEL_NAME, OPENAPI_DATA_MODEL_VERSION and OPENAPI_DATA_MODEL_CONTRIBUTOR_ORGANIZATION "
+                "(or OPENAPI_DATA_MODEL_ID) must be set when USE_OPENAPI_DATA_MODEL_FROM_FILE is false."
+            )
+        return config.openapi_data_model_id
+
+    if not (name and version and organization):
+        missing = [
+            var
+            for var, value in (
+                ("OPENAPI_DATA_MODEL_NAME", name),
+                ("OPENAPI_DATA_MODEL_VERSION", version),
+                ("OPENAPI_DATA_MODEL_CONTRIBUTOR_ORGANIZATION", organization),
+            )
+            if not value
+        ]
+        raise MDRConfigurationError(f"Data model identity is incomplete; missing {', '.join(missing)}.")
+
+    label = f"'{name}' version '{version}' from '{organization}'"
+
+    if config.openapi_data_model_id:
+        logger.warning(f"OPENAPI_DATA_MODEL_ID is ignored because data model {label} is configured by identity")
+
+    matches = fetch_data_models_from_mdr(config, name, version, organization).get("data", [])
+
+    if not matches:
+        raise ResourceNotFoundException(
+            resource_id=label, message=f"No data model {label} found in this service's MDR tenant."
+        )
+    if len(matches) > 1:
+        ids = ", ".join(str(match.get("Id")) for match in matches)
+        raise MDRClientException(f"Multiple data models match {label}: IDs {ids}.")
+
+    data_model_id = str(matches[0]["Id"])
+    logger.info(f"Resolved data model {label} to ID {data_model_id}")
+    return data_model_id
+
+
 def fetch_schema_from_mdr(
     config: "LIFSchemaConfig", include_attr_md: bool = True, include_entity_md: bool = False
 ) -> dict:
@@ -123,24 +187,20 @@ def fetch_schema_from_mdr(
 
     Raises:
         MDRClientException: If MDR is unavailable or returns an error
-        MDRConfigurationError: If OPENAPI_DATA_MODEL_ID is not configured
+        MDRConfigurationError: If neither the data model identity nor OPENAPI_DATA_MODEL_ID is configured
         ResourceNotFoundException: If the data model is not found
     """
-    if not config.openapi_data_model_id:
-        raise MDRConfigurationError(
-            "OPENAPI_DATA_MODEL_ID must be set when USE_OPENAPI_DATA_MODEL_FROM_FILE is false. "
-            "Either set OPENAPI_DATA_MODEL_ID or set USE_OPENAPI_DATA_MODEL_FROM_FILE=true."
-        )
+    data_model_id = resolve_data_model_id(config)
 
     url = (
-        f"{config.mdr_api_url}/datamodels/open_api_schema/{config.openapi_data_model_id}"
+        f"{config.mdr_api_url}/datamodels/open_api_schema/{data_model_id}"
         f"?include_attr_md={str(include_attr_md).lower()}"
         f"&include_entity_md={str(include_entity_md).lower()}"
     )
 
     headers = _build_mdr_headers(config.mdr_api_auth_token)
 
-    logger.info(f"Fetching OpenAPI schema from MDR: {config.openapi_data_model_id}")
+    logger.info(f"Fetching OpenAPI schema from MDR: {data_model_id}")
 
     try:
         with _create_sync_client(config.mdr_timeout_seconds) as client:
@@ -163,8 +223,7 @@ def fetch_schema_from_mdr(
         logger.error(f"MDR HTTP error: {e.response.status_code} - {e.response.text}")
         if e.response.status_code == 404:
             raise ResourceNotFoundException(
-                resource_id=config.openapi_data_model_id,
-                message=f"Data model '{config.openapi_data_model_id}' not found in MDR.",
+                resource_id=data_model_id, message=f"Data model '{data_model_id}' not found in MDR."
             )
         raise MDRClientException(f"MDR returned HTTP {e.response.status_code}: {e.response.text}")
 
@@ -220,8 +279,6 @@ def fetch_data_models_from_mdr(
 
     Raises:
         MDRClientException: If MDR is unavailable or returns an error
-        MDRConfigurationError: If OPENAPI_DATA_MODEL_ID is not configured
-        ResourceNotFoundException: If the data model is not found
     """
     url = f"{config.mdr_api_url}/datamodels/"
     params: dict[str, str | bool] = {

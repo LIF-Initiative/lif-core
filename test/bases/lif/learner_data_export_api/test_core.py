@@ -5,6 +5,7 @@ import pytest
 from deepdiff import DeepDiff
 from httpx import ASGITransport, AsyncClient
 from lif.learner_data_export_api import core
+from lif.exceptions.core import ResourceNotFoundException
 from lif.mdr_client import MDRClientException
 from lif.query_planner_client import QueryPlannerException
 from lif.translator_client import TranslatorException
@@ -602,3 +603,41 @@ async def test_export_query_params_are_trimmed():
     assert mdr_mock.call_args.args[1:4] == ("OpenBadges", "3.0", "OB")
     query_filter = qp_mock.call_args.args[1]["filter"]["Person"]["Identifier"][0]
     assert query_filter["identifier"] == "learner-123"
+
+
+async def test_export_uses_source_model_resolved_by_identity():
+    """Issue #1392: the source model ID comes from resolve_data_model_id, not the raw config ID."""
+    translate = mock.AsyncMock(return_value={"name": "John Doe"})
+    with (
+        mock.patch.object(_ep, "resolve_data_model_id", return_value="17") as resolve,
+        mock.patch.object(_ep, "fetch_data_models_from_mdr", return_value=_MDR_RESPONSE),
+        mock.patch.object(
+            _ep, "fetch_query_from_query_planner", new=mock.AsyncMock(return_value=[{"Person": {"firstName": "J"}}])
+        ),
+        mock.patch.object(_ep, "translate_learner_data", new=translate),
+        mock.patch.object(_ep.CONFIG, "openapi_data_model_id", None),
+    ):
+        async with get_client() as client:
+            response = await client.get("/exports", headers={"X-API-Key": DEFAULT_API_KEY}, params=_EXPORT_PARAMS)
+
+    assert response.status_code == 200, response.text
+    resolve.assert_called_once_with(_ep.CONFIG)
+    assert translate.call_args.kwargs["source_schema_id"] == "17"
+
+
+@pytest.mark.parametrize("path", ["/exports", "/available-data-formats"])
+@pytest.mark.parametrize(
+    "exc",
+    [
+        ResourceNotFoundException(resource_id="StateU LIF", message="not found"),
+        MDRClientException("Multiple data models match"),
+    ],
+)
+async def test_unresolvable_source_model_returns_500(path, exc):
+    """Issue #1392: a missing or ambiguous source model identity returns 500 without leaking details."""
+    with mock.patch.object(_ep, "resolve_data_model_id", side_effect=exc):
+        async with get_client() as client:
+            response = await client.get(path, headers={"X-API-Key": DEFAULT_API_KEY}, params=_EXPORT_PARAMS)
+
+    assert response.status_code == 500
+    assert response.json()["detail"] == "Unable to resolve source data model"
