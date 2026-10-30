@@ -11,8 +11,12 @@ Environment:
     Value: 300
   - Name: LIF_GRAPHQL_KEEPALIVE_SECONDS
     Value: 300
-  - Name: OPENAPI_DATA_MODEL_ID
-    Value: "17"
+  - Name: OPENAPI_DATA_MODEL_NAME
+    Value: "StateU LIF"
+  - Name: OPENAPI_DATA_MODEL_VERSION
+    Value: "1.0"
+  - Name: OPENAPI_DATA_MODEL_CONTRIBUTOR_ORGANIZATION
+    Value: "StateU"
   - Name: OPENAPI_JSON_FILENAME
     Value: "openapi_constrained_with_interactions.json"
   - Name: USE_OPENAPI_DATA_MODEL_FROM_FILE
