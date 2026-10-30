@@ -833,8 +833,7 @@ const ModelTree: React.FC<ModelTreeProps> = ({
   const handlePortableExport = async () => {
     try {
       const file = await exportPortableModel(model.Id);
-      const fileName = `${model.Name}_${model.DataModelVersion}.lif-mdr-model.json`;
-      downloadBlobFile(file, fileName);
+      const fileName = downloadBlobFile(file, model.Name, `_${model.DataModelVersion}.lif-mdr-model.json`);
       showToast(`${fileName} downloaded successfully`, 'success');
     } catch (e) {
       setPortableFailure(describePortableFailure(e));

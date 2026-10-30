@@ -8,7 +8,6 @@ import {
   EntityWithAttributesDTO,
   EntityTreeNode,
   DataModelWithDetailsWithTree,
-  StateType,
 } from "../types";
 import { downloadJsonFile } from "../utils/downloadJsonFile";
 
@@ -665,38 +664,6 @@ export const getModelConstraints = async (modelId: number) => {
     return response.data;
   } catch (error) {
     console.error("!!!Error fetching model constraints:", error);
-    throw error;
-  }
-};
-
-/**
- * Fetch OrgLIF extension data models.
- * Optional filters:
- *  - contributor_organization: string
- *  - state: string (matches backend StateType values)
- * Returns a plain list of DataModel (no ApiResponse wrapper).
- */
-export const listOrgLifModels = async (
-  filters?: { contributor_organization?: string; state?: StateType }
-): Promise<DataModel[]> => {
-  try {
-    const response = await api.get<DataModel[]>(`${apiBaseUrl}/datamodels/orglif/`, {
-      params: {
-        contributor_organization: filters?.contributor_organization,
-        state: filters?.state,
-      },
-      // Avoid sending undefined params
-      paramsSerializer: {
-        serialize: (params) => {
-          const entries = Object.entries(params).filter(([, v]) => v !== undefined && v !== null && String(v).length > 0);
-          const usp = new URLSearchParams(entries as [string, string][]);
-          return usp.toString();
-        },
-      },
-    });
-    return response.data ?? [];
-  } catch (error) {
-    console.error("Error fetching OrgLIF data models:", error);
     throw error;
   }
 };
