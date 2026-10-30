@@ -7,7 +7,6 @@ from lif.mdr_sql_model.core import (
     AttributeType,
     DataModel,
     DatamodelElementType,
-    DataModelType,
     Entity,
     EntityAttributeAssociation,
     ExpressionLanguageType,
@@ -42,6 +41,7 @@ from lif.mdr_services.entity_attribute_association_service import retrieve_all_e
 from lif.mdr_services.entity_service import get_unique_entity
 from lif.mdr_services.helper_service import check_attribute_by_id, check_datamodel_by_id, check_entity_by_id
 from lif.mdr_services.inclusions_service import check_existing_inclusion
+from lif.mdr_services.model_converter import is_overlay
 from lif.mdr_utils.logger_config import get_logger
 from sqlalchemy import and_, or_
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -100,12 +100,13 @@ async def check_transformation_attribute(session: AsyncSession, anchor_data_mode
 
     - The path must be in the correct format and contain at least one ID.
     - The path may end with a non-deleted attribute, and the rest be non-deleted entities.
-    - If the anchor data model is a Base LIF or Source Schema, all entities and attributes in the path must originate from the anchor data model.
-    - For Org LIF and Partner LIF anchor data models, the entities and attributes must be included in the anchor data model.
+    - If the anchor data model is self-contained (not an overlay, whatever its Type), all entities and attributes in the path must originate from the anchor data model.
+    - For overlay anchor data models (model_converter.is_overlay), the entities and attributes must be included in the anchor data model.
     - Entities and attributes via (Entity/Attribute.DataModelId) must belong to the anchor data model or be included in (ExtInclusionFromBaseDM.ExtDataModelId).
     - Entities and attributes must 'chain' together via the association tables. This is different based on the type of the anchor data model.
     """
     transformation_path_ids = parse_transformation_path(id_path)
+    is_self_contained_anchor_model = not await is_overlay(session, anchor_data_model)
     previous_node = None
     current_node = None
     for i, raw_node_id in enumerate(transformation_path_ids):
@@ -133,7 +134,6 @@ async def check_transformation_attribute(session: AsyncSession, anchor_data_mode
         initial_signature = f"Node {raw_node_id}({cleaned_node_id}) with originating data model ({node_data_model_id}) in the entityIdPath ({id_path})"
 
         anchor_data_model_id = anchor_data_model.Id
-        is_self_contained_anchor_model = anchor_data_model.Type in [DataModelType.BaseLIF, DataModelType.SourceSchema]
         originates_in_anchor = anchor_data_model_id == node_data_model_id
         if node_type == DatamodelElementType.Entity and raw_node_id < 0:
             message = f"{initial_signature} - Invalid EntityIdPath format. Only the last ID in the path can be an attribute ID (negative value)."

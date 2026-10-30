@@ -19,6 +19,7 @@ from lif.mdr_dto.attribute_dto import (
 )
 from lif.mdr_services.association_name import association_array, recomputed
 from lif.mdr_services.helper_service import check_datamodel_by_id, check_entity_by_id
+from lif.mdr_services.model_converter import is_overlay
 from lif.mdr_services.value_set_values_service import check_value_set_exists_by_id
 from lif.mdr_utils.logger_config import get_logger
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -533,7 +534,7 @@ async def get_list_of_attributes_for_data_model(
     data_model_id_list: List[int] = []
     data_model = await check_datamodel_by_id(session=session, id=data_model_id)
     data_model_id_list.append(data_model.Id)
-    if check_base and (data_model.Type == DataModelType.OrgLIF or data_model.Type == DataModelType.PartnerLIF):
+    if check_base and await is_overlay(session, data_model):
         base_data_model = await check_datamodel_by_id(session=session, id=data_model.BaseDataModelId)
         data_model_id_list.append(base_data_model.Id)
 

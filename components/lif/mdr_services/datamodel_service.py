@@ -28,6 +28,7 @@ from lif.mdr_services.entity_service import (
     soft_delete_entity,
 )
 from lif.mdr_services.inclusions_service import soft_delete_data_model_ext_inclusions
+from lif.mdr_services.model_converter import is_overlay
 from lif.mdr_services.transformation_service import get_transformations_by_data_model_id
 from lif.mdr_services.value_set_values_service import get_list_of_values_for_value_set, soft_delete_value_set_value
 from lif.mdr_services.valueset_service import get_value_sets_by_data_model_id_and_attributes, soft_delete_value_set
@@ -136,6 +137,8 @@ async def get_datamodel_with_details_by_id(
         raise HTTPException(status_code=404, detail=f"Data Model with ID {id} is deleted")
     data_model_dto = DataModelDTO.from_orm(datamodel)
     this_org = data_model_dto.ContributorOrganization
+    # The overlay branches read inclusion rows, so a self-contained model gets no type (as schema generation does).
+    data_model_type = datamodel.Type if await is_overlay(session, datamodel) else None
 
     # Get entities and attributes for those attributes:
     entity_attribute_list: List[EntityAttributeExportDTO] = []
@@ -155,7 +158,7 @@ async def get_datamodel_with_details_by_id(
             entity_id=entity.Id,
             data_model_id=id,
             pagination=False,
-            data_model_type=datamodel.Type,
+            data_model_type=data_model_type,
             partner_only=partner_only,
             this_organization=this_org,
             public_only=public_only,
@@ -169,7 +172,7 @@ async def get_datamodel_with_details_by_id(
             public_only=public_only,
             this_organization=this_org,
             data_model_id=id,
-            data_model_type=datamodel.Type,
+            data_model_type=data_model_type,
         )
         # children
         child_entities = await get_filtered_entity_children(
@@ -180,7 +183,7 @@ async def get_datamodel_with_details_by_id(
             public_only=public_only,
             this_organization=this_org,
             data_model_id=id,
-            data_model_type=datamodel.Type,
+            data_model_type=data_model_type,
         )
         entity_attribute_dto = EntityAttributeExportDTO(
             Entity=entity, Attributes=attributes, ParentEntities=parent_entities, ChildEntities=child_entities
