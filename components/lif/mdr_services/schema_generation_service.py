@@ -21,9 +21,11 @@ INCLUDED_FIELDS_MAP = {
     "DataType": "type",
 }
 
-# Stored since V1.7 (#1386) but not emitted yet: how the generator uses them is #1395's change,
-# and until then the generated schema must not change (ADR data_model/0004).
+# Element flags (V1.7, #1386) are emitted only as x-mutable / x-queryable, never as metadata, so
+# include_entity_md / include_attr_md output is what it was before the columns existed (#1395).
 ENTITY_FIELDS_NOT_EMITTED = {"LevelOfAccess", "Queryable", "Modifiable"}
+# AssociationName is emitted as the attribute's property key instead (#1395).
+ATTRIBUTE_FIELDS_NOT_EMITTED = ENTITY_FIELDS_NOT_EMITTED | {"AssociationName"}
 
 ATTRIBUTE_ASSOCIATION_FIELDS = [
     "EntityAttributeAssociationId",
@@ -40,6 +42,46 @@ ATTRIBUTE_ASSOCIATION_FIELDS = [
 ]
 
 
+async def is_overlay_model(session, data_model_id):
+    """Whether the model still has live inclusion rows, i.e. is an unconverted overlay.
+
+    The generator used to branch on ``Type in ["OrgLIF", "PartnerLIF"]``. ADR data_model/0004
+    converts overlays in place (#1388), so the type name stops meaning "has inclusions"; the rows
+    themselves are what the overlay branches read (#1395).
+    """
+    query = (
+        select(ExtInclusionsFromBaseDM.Id)
+        .where(ExtInclusionsFromBaseDM.ExtDataModelId == data_model_id, ExtInclusionsFromBaseDM.Deleted == False)
+        .limit(1)
+    )
+    result = await session.execute(query)
+    return result.first() is not None
+
+
+def _non_public_entity_ids():
+    """Subquery of entities a self-contained model leaves out under ``public_only`` (#1395).
+
+    An exclusion rather than "this model's Public entities", because a model's associations can
+    reach another model's entities, and those stay in the schema as they do today.
+    """
+    return select(Entity.Id).where(Entity.LevelOfAccess != "Public")
+
+
+def _attribute_dict(attribute_with_assoc_md):
+    return {k: v for k, v in attribute_with_assoc_md.dict().items() if k not in ATTRIBUTE_FIELDS_NOT_EMITTED}
+
+
+def _attribute_key(attribute_with_assoc_md):
+    """The key an attribute appears under in its entity: its association's Name (#1395).
+
+    NULL until V1.9 is applied to rows an older MDR image created, which the rule's own value
+    (the attribute's Name) stands in for.
+    """
+    if attribute_with_assoc_md.AssociationName is not None:
+        return attribute_with_assoc_md.AssociationName
+    return attribute_with_assoc_md.Name
+
+
 async def find_children(
     tree,
     parent,
@@ -53,11 +95,12 @@ async def find_children(
     public_only,
     full_export,
     property_key_map=None,
+    is_overlay=False,
 ):
     if parent in tree:
         parent_properties = parent_schema["properties"]
         for x in tree[parent]:
-            if data_model.Type in ["OrgLIF", "PartnerLIF"]:
+            if is_overlay:
                 child_association_query = select(EntityAssociation).where(
                     EntityAssociation.ParentEntityId == parent,
                     EntityAssociation.ChildEntityId == x,
@@ -80,8 +123,12 @@ async def find_children(
             for child_association in child_associations:
                 entity_data = await get_entity_by_id(session=session, id=x)
 
-                # Shared with add_ref's chain walks so the two cannot drift apart (#1252).
-                entity_name = embedded_property_key(child_association.Relationship, entity_data.Name)
+                # The association's Name (#1395); the rule's value stands in while it is NULL
+                # (rows an older MDR image created, until V1.9 fills them).
+                if child_association.Name is not None:
+                    entity_name = child_association.Name
+                else:
+                    entity_name = embedded_property_key(child_association.Relationship, entity_data.Name)
 
                 # Record what was actually written, rather than re-deriving it later:
                 # add_ref navigates this exact structure, and a key recorded at the point
@@ -129,7 +176,7 @@ async def find_children(
                             child_association.ExtendedByDataModelId
                         )
 
-                if data_model.Type in ["OrgLIF", "PartnerLIF"]:
+                if is_overlay:
                     inclusions_query = select(ExtInclusionsFromBaseDM).where(
                         ExtInclusionsFromBaseDM.ExtDataModelId == data_model_id,
                         ExtInclusionsFromBaseDM.IncludedElementId == x,
@@ -148,6 +195,9 @@ async def find_children(
                             status_code=404,
                             detail=f"Inclusion not found for Entity ID {parent} in Extension Data Model ID {data_model_id}",
                         )
+                else:
+                    parent_properties[entity_name]["x-mutable"] = entity_data.Modifiable
+                    parent_properties[entity_name]["x-queryable"] = entity_data.Queryable
 
                 parent_properties[entity_name]["properties"] = {}
 
@@ -155,12 +205,12 @@ async def find_children(
                     session=session,
                     entity_id=x,
                     data_model_id=data_model_id,
-                    data_model_type=data_model.Type,
+                    data_model_type=data_model.Type if is_overlay else None,
                     public_only=public_only,
                 )
                 logger.info(f"attributes for entity id {x} : {attributes_with_assoc_md}")
 
-                if data_model.Type in ["OrgLIF", "PartnerLIF"]:
+                if is_overlay:
                     inclusions_query = select(ExtInclusionsFromBaseDM).where(
                         ExtInclusionsFromBaseDM.ExtDataModelId == data_model_id,
                         ExtInclusionsFromBaseDM.ElementType == "Attribute",
@@ -173,9 +223,12 @@ async def find_children(
 
                 if len(attributes_with_assoc_md) > 0:
                     for attribute_with_assoc_md in attributes_with_assoc_md:
-                        attribute_dict = attribute_with_assoc_md.dict()
+                        if public_only and not is_overlay and attribute_with_assoc_md.LevelOfAccess != "Public":
+                            continue
+                        attribute_dict = _attribute_dict(attribute_with_assoc_md)
+                        attribute_key = _attribute_key(attribute_with_assoc_md)
                         if attribute_with_assoc_md.Required == "Yes":
-                            required_elements.append(attribute_with_assoc_md.Name)
+                            required_elements.append(attribute_key)
                         if attribute_with_assoc_md.DataType != "Entity":
                             if not include_attr_md:
                                 if attribute_with_assoc_md.Array == "Yes":
@@ -193,7 +246,7 @@ async def find_children(
                                 attribute_dict = {
                                     k: (v if v is not None else "") for k, v in attribute_dict.items()
                                 }  # Using empty string instead of null to make it easier to diff w/ P1 lif.json schema
-                            elif data_model.Type in ["OrgLIF", "PartnerLIF"]:
+                            elif is_overlay:
                                 # Find value in inclusion_attributes where IncludedElementId matches attribute.Id
                                 inclusion_attribute = next(
                                     (
@@ -211,12 +264,15 @@ async def find_children(
                                         status_code=404,
                                         detail=f"Inclusion not found for Attribute ID {attribute_with_assoc_md.Id} in Extension Data Model ID {data_model_id}",
                                     )
+                            else:
+                                attribute_dict["x-mutable"] = attribute_with_assoc_md.Modifiable
+                                attribute_dict["x-queryable"] = attribute_with_assoc_md.Queryable
                             if not full_export:
                                 # Remove fields related to association metadata
                                 for field in ATTRIBUTE_ASSOCIATION_FIELDS:
                                     if field in attribute_dict:
                                         del attribute_dict[field]
-                            parent_properties[entity_name]["properties"][attribute_with_assoc_md.Name] = attribute_dict
+                            parent_properties[entity_name]["properties"][attribute_key] = attribute_dict
                             # Adding enums
                             if attribute_with_assoc_md.ValueSetId:
                                 # cur.execute('select "Value" FROM public."ValueSetValues"  where "ValueSetId" = ' + str(attribute_data["ValueSetId"]))
@@ -228,9 +284,7 @@ async def find_children(
                                 )
                                 result = await session.execute(query)
                                 values = result.scalars().all()
-                                parent_properties[entity_name]["properties"][attribute_with_assoc_md.Name]["enum"] = (
-                                    values
-                                )
+                                parent_properties[entity_name]["properties"][attribute_key]["enum"] = values
                                 if full_export:
                                     query = select(ValueSet).where(
                                         ValueSet.Id == attribute_with_assoc_md.ValueSetId, ValueSet.Deleted == False
@@ -238,23 +292,21 @@ async def find_children(
                                     result = await session.execute(query)
                                     valueset = result.scalars().first()
                                     if valueset:
-                                        parent_properties[entity_name]["properties"][attribute_with_assoc_md.Name][
-                                            "ValueSet"
-                                        ] = {}
+                                        parent_properties[entity_name]["properties"][attribute_key]["ValueSet"] = {}
                                         for key, value in valueset.__dict__.items():
                                             if key != "Deleted":
-                                                parent_properties[entity_name]["properties"][
-                                                    attribute_with_assoc_md.Name
-                                                ]["ValueSet"][key] = value
+                                                parent_properties[entity_name]["properties"][attribute_key]["ValueSet"][
+                                                    key
+                                                ] = value
                                         query = select(ValueSetValue).where(
                                             ValueSetValue.ValueSetId == attribute_with_assoc_md.ValueSetId,
                                             ValueSetValue.Deleted == False,
                                         )
                                         result = await session.execute(query)
                                         valueset_values_full = result.scalars().all()
-                                        parent_properties[entity_name]["properties"][attribute_with_assoc_md.Name][
-                                            "ValueSet"
-                                        ]["Values"] = valueset_values_full
+                                        parent_properties[entity_name]["properties"][attribute_key]["ValueSet"][
+                                            "Values"
+                                        ] = valueset_values_full
                     parent_properties[entity_name]["required"] = required_elements
 
                 await find_children(
@@ -270,21 +322,24 @@ async def find_children(
                     public_only=public_only,
                     full_export=full_export,
                     property_key_map=property_key_map,
+                    is_overlay=is_overlay,
                 )
 
 
-async def find_ancestors(session, child_id, data_model_type, data_model_id, included_entity_ids):
+async def find_ancestors(session, child_id, is_overlay, data_model_id, included_entity_ids, public_only=False):
     """
     Recursively fetch every ancestor chain for a given entity.
 
     Args:
         session: Async database session used to query `EntityAssociation` records.
         child_id: Identifier of the entity whose ancestors should be discovered.
-        data_model_type: Data model variant (e.g. `OrgLIF`, `PartnerLIF`) that determines
-            which associations are valid in the lookup.
+        is_overlay: Whether the model still has inclusion rows (`is_overlay_model`), which
+            determines which associations are valid in the lookup.
         data_model_id: Identifier of the active data model to respect extension rules.
         included_entity_ids: Entity ids that are eligible to act as parents when
             resolving Org/Partner LIF hierarchies.
+        public_only: For a self-contained model, only Public entities are eligible parents,
+            as the overlay's `included_entity_ids` already are when it is filtered to Public.
 
     Returns:
         list[list[int]]: Each list contains ancestor entity ids ordered from the root
@@ -293,7 +348,7 @@ async def find_ancestors(session, child_id, data_model_type, data_model_id, incl
     """
     ancestors = []
     ancestor_id = child_id
-    if data_model_type in ["OrgLIF", "PartnerLIF"]:
+    if is_overlay:
         query = select(EntityAssociation).where(
             EntityAssociation.ParentEntityId.in_(included_entity_ids),
             EntityAssociation.ChildEntityId == ancestor_id,
@@ -311,13 +366,17 @@ async def find_ancestors(session, child_id, data_model_type, data_model_id, incl
             or_(EntityAssociation.Placement.is_(None), EntityAssociation.Placement == "Embedded"),
             EntityAssociation.ExtendedByDataModelId.is_(None),
         )
+        if public_only:
+            query = query.where(EntityAssociation.ParentEntityId.notin_(_non_public_entity_ids()))
     result = await session.execute(query)
     entity_associations = result.scalars().all()
     # First set of ancestors is ParentEntityId of all associations
     for entity_association in entity_associations:
         parent_id = entity_association.ParentEntityId
         logger.debug(f"Finding ancestors for parent_id : {parent_id}")
-        parent_ancestors = await find_ancestors(session, parent_id, data_model_type, data_model_id, included_entity_ids)
+        parent_ancestors = await find_ancestors(
+            session, parent_id, is_overlay, data_model_id, included_entity_ids, public_only
+        )
         logger.debug(f"Found ancestors for parent_id {parent_id} : {parent_ancestors}")
         if len(parent_ancestors) == 0:
             ancestors.append([parent_id])
@@ -505,8 +564,9 @@ async def generate_openapi_schema(
 
     query = None
     included_entity_ids = []
-    # If data model type is OrgLIF or PartnerLIF, find only included entity ids
-    if data_model.Type in ["OrgLIF", "PartnerLIF"]:
+    is_overlay = await is_overlay_model(session, data_model_id)
+    # If the model is an overlay (has inclusion rows), find only included entity ids
+    if is_overlay:
         ext_inclusions_query = select(ExtInclusionsFromBaseDM.IncludedElementId).where(
             ExtInclusionsFromBaseDM.ExtDataModelId == data_model_id,
             ExtInclusionsFromBaseDM.ElementType == "Entity",
@@ -542,6 +602,11 @@ async def generate_openapi_schema(
                 or_(EntityAssociation.Placement.is_(None), EntityAssociation.Placement == "Embedded"),
             )
         )
+        if public_only:
+            query = query.where(
+                EntityAssociation.ParentEntityId.notin_(_non_public_entity_ids()),
+                EntityAssociation.ChildEntityId.notin_(_non_public_entity_ids()),
+            )
 
     result = await session.execute(query)
     entity_associations = result.fetchall()
@@ -577,7 +642,7 @@ async def generate_openapi_schema(
     logger.info(f"All entity IDs with embedded associations: {all_entity_ids_with_embedded_associations}")
 
     # Main query
-    if data_model.Type in ["OrgLIF", "PartnerLIF"]:
+    if is_overlay:
         query = select(Entity.Id).where(
             and_(
                 Entity.Id.notin_(
@@ -597,6 +662,8 @@ async def generate_openapi_schema(
                 Entity.Deleted == False,
             )
         )
+        if public_only:
+            query = query.where(Entity.LevelOfAccess == "Public")
 
     # Execute the query
     result = await session.execute(query)
@@ -605,7 +672,7 @@ async def generate_openapi_schema(
     for row in entities:
         logger.info(f" --- row : {row}")
         parent = row[0]
-        if data_model.Type in ["OrgLIF", "PartnerLIF"] and parent not in included_entity_ids:
+        if is_overlay and parent not in included_entity_ids:
             continue
         tree[parent] = []
         top_level_parents.append(parent)
@@ -659,7 +726,7 @@ async def generate_openapi_schema(
                 if key == "Required" and value == "Yes":
                     required_elements.append(parent_entity.Name)
 
-        if data_model.Type in ["OrgLIF", "PartnerLIF"]:
+        if is_overlay:
             inclusions_query = select(ExtInclusionsFromBaseDM).where(
                 ExtInclusionsFromBaseDM.ExtDataModelId == data_model_id,
                 ExtInclusionsFromBaseDM.IncludedElementId == parent,
@@ -667,7 +734,7 @@ async def generate_openapi_schema(
                 ExtInclusionsFromBaseDM.Deleted == False,
             )
             if public_only:
-                ext_inclusions_query = ext_inclusions_query.where(ExtInclusionsFromBaseDM.LevelOfAccess == "Public")
+                inclusions_query = inclusions_query.where(ExtInclusionsFromBaseDM.LevelOfAccess == "Public")
             inclusions_result = await session.execute(inclusions_query)
             inclusion = inclusions_result.scalars().first()
             if inclusion:
@@ -678,24 +745,27 @@ async def generate_openapi_schema(
                     status_code=404,
                     detail=f"Inclusion not found for Entity ID {parent} in Extension Data Model ID {data_model_id}",
                 )
+        else:
+            openapi_spec["components"]["schemas"][parent_entity.Name]["x-mutable"] = parent_entity.Modifiable
+            openapi_spec["components"]["schemas"][parent_entity.Name]["x-queryable"] = parent_entity.Queryable
 
         attributes_with_assoc_md = await get_attributes_with_association_metadata_for_entity(
             session=session,
             entity_id=parent,
             data_model_id=data_model_id,
-            data_model_type=data_model.Type,
+            data_model_type=data_model.Type if is_overlay else None,
             public_only=public_only,
         )
         logger.info(f"attributes for entity id {entity_id} : {attributes_with_assoc_md}")
 
-        if data_model.Type in ["OrgLIF", "PartnerLIF"]:
+        if is_overlay:
             inclusions_query = select(ExtInclusionsFromBaseDM).where(
                 ExtInclusionsFromBaseDM.ExtDataModelId == data_model_id,
                 ExtInclusionsFromBaseDM.ElementType == "Attribute",
                 ExtInclusionsFromBaseDM.Deleted == False,
             )
             if public_only:
-                ext_inclusions_query = ext_inclusions_query.where(ExtInclusionsFromBaseDM.LevelOfAccess == "Public")
+                inclusions_query = inclusions_query.where(ExtInclusionsFromBaseDM.LevelOfAccess == "Public")
             inclusions_result = await session.execute(inclusions_query)
             inclusion_attributes = inclusions_result.scalars().all()
 
@@ -703,9 +773,12 @@ async def generate_openapi_schema(
         openapi_spec["components"]["schemas"][parent_entity.Name]["properties"] = {}
         if len(attributes_with_assoc_md) > 0:
             for attribute_with_assoc_md in attributes_with_assoc_md:
-                attribute_dict = attribute_with_assoc_md.dict()
+                if public_only and not is_overlay and attribute_with_assoc_md.LevelOfAccess != "Public":
+                    continue
+                attribute_dict = _attribute_dict(attribute_with_assoc_md)
+                attribute_key = _attribute_key(attribute_with_assoc_md)
                 if attribute_with_assoc_md.Required == "Yes":
-                    required_elements.append(attribute_with_assoc_md.Name)
+                    required_elements.append(attribute_key)
                 if attribute_with_assoc_md.DataType != "Entity":
                     if not include_attr_md:
                         if attribute_with_assoc_md.Array == "Yes":
@@ -723,7 +796,7 @@ async def generate_openapi_schema(
                         attribute_dict = {
                             k: (v if v is not None else "") for k, v in attribute_dict.items()
                         }  # Using empty string instead of null to make it easier to diff w/ P1 lif.json schema
-                    elif data_model.Type in ["OrgLIF", "PartnerLIF"]:
+                    elif is_overlay:
                         # Find value in inclusion_attributes where IncludedElementId matches attribute.Id
                         inclusion_attribute = next(
                             (
@@ -741,14 +814,17 @@ async def generate_openapi_schema(
                                 status_code=404,
                                 detail=f"Inclusion not found for Attribute ID {attribute_with_assoc_md.Id} in Extension Data Model ID {data_model_id}",
                             )
+                    else:
+                        attribute_dict["x-mutable"] = attribute_with_assoc_md.Modifiable
+                        attribute_dict["x-queryable"] = attribute_with_assoc_md.Queryable
                     if not full_export:
                         # Remove fields related to association metadata
                         for field in ATTRIBUTE_ASSOCIATION_FIELDS:
                             if field in attribute_dict:
                                 del attribute_dict[field]
-                    openapi_spec["components"]["schemas"][parent_entity.Name]["properties"][
-                        attribute_with_assoc_md.Name
-                    ] = attribute_dict
+                    openapi_spec["components"]["schemas"][parent_entity.Name]["properties"][attribute_key] = (
+                        attribute_dict
+                    )
                     # Adding enums
                     if attribute_with_assoc_md.ValueSetId:
                         query = select(ValueSetValue.Value).where(
@@ -759,9 +835,9 @@ async def generate_openapi_schema(
                         values = result.fetchall()
                         # logger.info(f"values :{values}")
                         valueset_values = [row[0] for row in values]
-                        openapi_spec["components"]["schemas"][parent_entity.Name]["properties"][
-                            attribute_with_assoc_md.Name
-                        ]["enum"] = valueset_values
+                        openapi_spec["components"]["schemas"][parent_entity.Name]["properties"][attribute_key][
+                            "enum"
+                        ] = valueset_values
                         if full_export:
                             query = select(ValueSet).where(
                                 ValueSet.Id == attribute_with_assoc_md.ValueSetId, ValueSet.Deleted == False
@@ -769,13 +845,13 @@ async def generate_openapi_schema(
                             result = await session.execute(query)
                             valueset = result.scalars().first()
                             if valueset:
-                                openapi_spec["components"]["schemas"][parent_entity.Name]["properties"][
-                                    attribute_with_assoc_md.Name
-                                ]["ValueSet"] = {}
+                                openapi_spec["components"]["schemas"][parent_entity.Name]["properties"][attribute_key][
+                                    "ValueSet"
+                                ] = {}
                                 for key, value in valueset.__dict__.items():
                                     if key != "Deleted":
                                         openapi_spec["components"]["schemas"][parent_entity.Name]["properties"][
-                                            attribute_with_assoc_md.Name
+                                            attribute_key
                                         ]["ValueSet"][key] = value
                                 query = select(ValueSetValue).where(
                                     ValueSetValue.ValueSetId == attribute_with_assoc_md.ValueSetId,
@@ -783,9 +859,9 @@ async def generate_openapi_schema(
                                 )
                                 result = await session.execute(query)
                                 valueset_values_full = result.scalars().all()
-                                openapi_spec["components"]["schemas"][parent_entity.Name]["properties"][
-                                    attribute_with_assoc_md.Name
-                                ]["ValueSet"]["Values"] = valueset_values_full
+                                openapi_spec["components"]["schemas"][parent_entity.Name]["properties"][attribute_key][
+                                    "ValueSet"
+                                ]["Values"] = valueset_values_full
 
             openapi_spec["components"]["schemas"][parent_entity.Name]["required"] = required_elements
 
@@ -802,6 +878,7 @@ async def generate_openapi_schema(
             public_only=public_only,
             full_export=full_export,
             property_key_map=property_key_map,
+            is_overlay=is_overlay,
         )
 
     # logger.info("openapi_spec ----------- ")
@@ -809,13 +886,14 @@ async def generate_openapi_schema(
 
     # Processing Inter-entity links - Now Updated to just process Reference placement
     query = None
-    if data_model.Type in ["OrgLIF", "PartnerLIF"]:
+    if is_overlay:
         query = (
             select(
                 EntityAssociation.ParentEntityId,
                 EntityAssociation.ChildEntityId,
                 EntityAssociation.Relationship,
                 EntityAssociation.Placement,
+                EntityAssociation.Name,
             )
             .join(Entity, Entity.Id == EntityAssociation.ParentEntityId)
             .where(
@@ -836,6 +914,7 @@ async def generate_openapi_schema(
                 EntityAssociation.ChildEntityId,
                 EntityAssociation.Relationship,
                 EntityAssociation.Placement,
+                EntityAssociation.Name,
             )
             .join(Entity, Entity.Id == EntityAssociation.ParentEntityId)
             .where(
@@ -845,6 +924,11 @@ async def generate_openapi_schema(
                 EntityAssociation.ExtendedByDataModelId.is_(None),
             )
         )
+        if public_only:
+            query = query.where(
+                EntityAssociation.ParentEntityId.notin_(_non_public_entity_ids()),
+                EntityAssociation.ChildEntityId.notin_(_non_public_entity_ids()),
+            )
 
     result = await session.execute(query)
     inter_entity_associations = result.fetchall()
@@ -872,12 +956,21 @@ async def generate_openapi_schema(
         logger.info(f" relationship : {relationship}")
         logger.info(f" placement : {placement}")
 
-        parent_ancestors = await find_ancestors(session, parent_id, data_model.Type, data_model_id, included_entity_ids)
-        child_ancestors = await find_ancestors(session, child_id, data_model.Type, data_model_id, included_entity_ids)
+        parent_ancestors = await find_ancestors(
+            session, parent_id, is_overlay, data_model_id, included_entity_ids, public_only
+        )
+        child_ancestors = await find_ancestors(
+            session, child_id, is_overlay, data_model_id, included_entity_ids, public_only
+        )
         logger.info(f" parent_ancestors : {parent_ancestors}")
         logger.info(f" child_ancestors : {child_ancestors}")
 
-        key = reference_property_key(relationship, child_entity_name)
+        # The association's Name (#1395), which keeps today's Ref spelling until the Ref keys are
+        # retired (spec §11); the rule's value stands in while it is NULL.
+        if pd.notna(row["Name"]):
+            key = row["Name"]
+        else:
+            key = reference_property_key(relationship, child_entity_name)
         # logger.info(f"Key : {key}")
 
         if parent_id in child_ancestors:

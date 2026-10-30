@@ -7,7 +7,6 @@ from lif.mdr_sql_model.core import (
     AttributeType,
     DataModel,
     DatamodelElementType,
-    DataModelType,
     Entity,
     EntityAttributeAssociation,
     ExpressionLanguageType,
@@ -42,6 +41,7 @@ from lif.mdr_services.entity_attribute_association_service import retrieve_all_e
 from lif.mdr_services.entity_service import get_unique_entity
 from lif.mdr_services.helper_service import check_attribute_by_id, check_datamodel_by_id, check_entity_by_id
 from lif.mdr_services.inclusions_service import check_existing_inclusion
+from lif.mdr_services.model_converter import is_overlay
 from lif.mdr_utils.logger_config import get_logger
 from sqlalchemy import and_, or_
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -100,12 +100,13 @@ async def check_transformation_attribute(session: AsyncSession, anchor_data_mode
 
     - The path must be in the correct format and contain at least one ID.
     - The path may end with a non-deleted attribute, and the rest be non-deleted entities.
-    - If the anchor data model is a Base LIF or Source Schema, all entities and attributes in the path must originate from the anchor data model.
-    - For Org LIF and Partner LIF anchor data models, the entities and attributes must be included in the anchor data model.
+    - If the anchor data model is self-contained (not an overlay, whatever its Type), all entities and attributes in the path must originate from the anchor data model.
+    - For overlay anchor data models (model_converter.is_overlay), the entities and attributes must be included in the anchor data model.
     - Entities and attributes via (Entity/Attribute.DataModelId) must belong to the anchor data model or be included in (ExtInclusionFromBaseDM.ExtDataModelId).
     - Entities and attributes must 'chain' together via the association tables. This is different based on the type of the anchor data model.
     """
     transformation_path_ids = parse_transformation_path(id_path)
+    is_self_contained_anchor_model = not await is_overlay(session, anchor_data_model)
     previous_node = None
     current_node = None
     for i, raw_node_id in enumerate(transformation_path_ids):
@@ -133,7 +134,6 @@ async def check_transformation_attribute(session: AsyncSession, anchor_data_mode
         initial_signature = f"Node {raw_node_id}({cleaned_node_id}) with originating data model ({node_data_model_id}) in the entityIdPath ({id_path})"
 
         anchor_data_model_id = anchor_data_model.Id
-        is_self_contained_anchor_model = anchor_data_model.Type in [DataModelType.BaseLIF, DataModelType.SourceSchema]
         originates_in_anchor = anchor_data_model_id == node_data_model_id
         if node_type == DatamodelElementType.Entity and raw_node_id < 0:
             message = f"{initial_signature} - Invalid EntityIdPath format. Only the last ID in the path can be an attribute ID (negative value)."
@@ -1499,15 +1499,15 @@ async def activate_transformation_group(
 
     Sets the group's ActivationDate and clears its DeprecationDate. The pair's other versions that would be
     active at that time are deprecated at exactly that time, so a scheduled activation leaves no gap.
-    Rollback is activating the older version.
+    Rollback is activating the older version. Activating the live version keeps its ActivationDate and still
+    deprecates the pair's other live versions; it is a no-op only when it is the sole live version.
+    Rescheduling a live version is a 409 (#1414).
     """
-    now = datetime.now(timezone.utc)
-    if activation_date is None:
-        activation_date = now
-    elif activation_date.tzinfo is None:
-        raise HTTPException(status_code=422, detail="activation_date must include a timezone offset")
-    elif activation_date < now:
-        raise HTTPException(status_code=422, detail="activation_date must not be in the past")
+    if activation_date is not None:
+        if activation_date.tzinfo is None:
+            raise HTTPException(status_code=422, detail="activation_date must include a timezone offset")
+        if activation_date < datetime.now(timezone.utc):
+            raise HTTPException(status_code=422, detail="activation_date must not be in the past")
 
     group = await session.get(TransformationGroup, transformation_group_id)
     if not group or group.Deleted:
@@ -1517,6 +1517,35 @@ async def activate_transformation_group(
         raise HTTPException(
             status_code=422,
             detail=f"GroupVersion {group.GroupVersion!r} is not dotted integers; fix it before activating",
+        )
+
+    # Lock the pair's rows, in Id order, before reading which versions are active, so a concurrent
+    # activation of another version waits and then sees this one (#1414). populate_existing refreshes the
+    # rows already loaded, including the group itself.
+    await session.execute(
+        select(TransformationGroup)
+        .where(
+            TransformationGroup.SourceDataModelId == group.SourceDataModelId,
+            TransformationGroup.TargetDataModelId == group.TargetDataModelId,
+        )
+        .order_by(TransformationGroup.Id)
+        .with_for_update()
+        .execution_options(populate_existing=True)
+    )
+    # Taken after the lock, so a version activated while this call waited is in the past, not scheduled.
+    now = datetime.now(timezone.utc)
+    if activation_date is None:
+        activation_date = now
+    already_live = bool(
+        group.ActivationDate
+        and group.ActivationDate <= now
+        and not (group.DeprecationDate and group.DeprecationDate <= now)
+    )
+    if already_live and activation_date > now:
+        raise HTTPException(
+            status_code=409,
+            detail=f"Transformation group {transformation_group_id} is already live; rescheduling it would "
+            "leave its pair with no live version until then",
         )
 
     others = await session.execute(
@@ -1529,12 +1558,20 @@ async def activate_transformation_group(
             or_(TransformationGroup.DeprecationDate.is_(None), TransformationGroup.DeprecationDate > activation_date),
         )
     )
-    for other in others.scalars().all():
+    others = others.scalars().all()
+    # A live group keeps its ActivationDate but still deprecates any other live version, so re-activating
+    # it repairs a pair with two active rows. Only the pair's sole live version is a no-op.
+    if already_live and not others:
+        live_group = TransformationGroupDTO.from_orm(group)
+        await session.rollback()  # releases the lock; nothing changed
+        return live_group
+    for other in others:
         other.DeprecationDate = activation_date
         session.add(other)
 
-    group.ActivationDate = activation_date
-    group.DeprecationDate = None
+    if not already_live:
+        group.ActivationDate = activation_date
+        group.DeprecationDate = None
     session.add(group)
     await session.commit()
     await session.refresh(group)

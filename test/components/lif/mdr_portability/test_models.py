@@ -131,6 +131,7 @@ def _delete(path: list):
         pytest.param(_delete(["Entities", 0, "Queryable"]), "missing", id="missing flag"),
         pytest.param(_set(["Entities", 0, "Required"], "Yes"), "bool_type", id="free-text Required"),
         pytest.param(_set(["Entities", 0, "LevelOfAccess"], "Secret"), "enum", id="unknown LevelOfAccess"),
+        pytest.param(_set(["Details", "State"], "Final"), "enum", id="unknown State"),
         pytest.param(
             _set(["Entities", 0, "ActivationDate"], "2026-10-06T00:00:00"), "value_error", id="naive timestamp"
         ),
@@ -172,6 +173,24 @@ def test_mapping_group_file_shape_refusals(mutate, error_type):
         MappingGroupFile.model_validate(data)
 
     assert error_type in {error["type"] for error in exc_info.value.errors()}
+
+
+@pytest.mark.parametrize(
+    "mutate",
+    [
+        pytest.param(_set(["Details", "Source", "ValueSet"], " "), id="blank value set key"),
+        pytest.param(_set(["Entries", 0, "Source"], ""), id="empty source value"),
+        pytest.param(_set(["Entries", 0, "Target"], "  "), id="blank target value"),
+    ],
+)
+def test_crosswalk_file_refuses_blank_keys(mutate):
+    # Export refuses a blank stored Name or ValueName, so import must refuse it in a file (#1426).
+    data = mutate(_load("test_reference_crosswalk_file.json"))
+
+    with pytest.raises(ValidationError) as exc_info:
+        CrosswalkFile.model_validate(data)
+
+    assert "value_error" in {error["type"] for error in exc_info.value.errors()}
 
 
 def test_crosswalk_value_set_reference_requires_full_model_identity():

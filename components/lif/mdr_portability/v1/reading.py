@@ -20,7 +20,7 @@ MODEL_DEPRECATED_KEYS = {
     "Details": frozenset({"Type"}),
     "ValueSets": _EXTENSION,
     "Values": _EXTENSION,
-    "Entities": _EXTENSION | {"Array"},
+    "Entities": _EXTENSION,
     "Attributes": _EXTENSION | {"Array", "Constraints"},
     "Associations": _EXTENSION | {"Placement", "Relationship"},
 }

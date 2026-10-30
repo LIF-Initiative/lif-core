@@ -18,7 +18,7 @@ from datetime import datetime, timezone
 from typing import Annotated, List, Literal, Optional, Union
 
 from lif.mdr_dto.transformation_group_dto import reject_non_numeric_group_version
-from lif.mdr_sql_model.core import AccessType
+from lif.mdr_sql_model.core import AccessType, StateType
 from pydantic import (
     AfterValidator,
     AwareDatetime,
@@ -173,7 +173,8 @@ class DataModelDetails(BaseModel):
     UseConsiderations: Optional[str] = None
     Notes: Optional[str] = None
     Contributor: Optional[str] = None
-    State: Optional[str] = None
+    # DataModels.State is a database enum, so a value outside it could not be stored.
+    State: Optional[StateType] = None
     Tags: Optional[str] = None
     ActivationDate: Optional[Timestamp] = None
     DeprecationDate: Optional[Timestamp] = None
@@ -218,6 +219,9 @@ class Entity(BaseModel):
     Queryable: StrictBool
     Modifiable: StrictBool
     Required: StrictBool = False
+    # Only for an entity with no parent: whether its top-level schema is a list. An entity with a parent
+    # takes its list setting from each association (§5.3).
+    Array: StrictBool = False
     Description: Optional[str] = None
     UseConsiderations: Optional[str] = None
     SourceModel: Optional[str] = None
@@ -343,7 +347,7 @@ class CrosswalkValueSetKey(BaseModel):
     model_config = _STRICT
 
     Model: ModelIdentity
-    ValueSet: str
+    ValueSet: NonBlankStr
 
 
 class CrosswalkDetails(BaseModel):
@@ -357,8 +361,8 @@ class CrosswalkDetails(BaseModel):
 class CrosswalkEntry(BaseModel):
     model_config = _STRICT
 
-    Source: str
-    Target: str
+    Source: NonBlankStr
+    Target: NonBlankStr
     Description: Optional[str] = None
     UseConsiderations: Optional[str] = None
     Notes: Optional[str] = None

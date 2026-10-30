@@ -322,6 +322,7 @@ async def test_get_list_of_entities_for_data_model_baselif_branch(fake_session, 
     dm_type = getattr(svc, "DataModelType")
     dm = types.SimpleNamespace(Id=200, Type=dm_type.BaseLIF, BaseDataModelId=None)
     monkeypatch.setattr(svc, "check_datamodel_by_id", AsyncMock(return_value=dm))
+    monkeypatch.setattr(svc, "is_overlay", AsyncMock(return_value=False))
 
     fake_session.execute.side_effect = [
         _CountResult(1),  # count

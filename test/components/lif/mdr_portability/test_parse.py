@@ -156,7 +156,12 @@ def test_envelope_is_checked_first(text, code, element):
             "ValueSets[AddressType].Values[Postal].OriginalValueId",
         ),
         (MODEL, _set(["Details", "BaseDataModelId"], 1), Code.ROW_ID_PRESENT, "Details.BaseDataModelId"),
-        (MODEL, _set(["Entities", 0, "Array"], "Yes"), Code.DEPRECATED_FIELD, "Entities[Competency].Array"),
+        (
+            MODEL,
+            _set(["Attributes", 0, "Array"], "Yes"),
+            Code.DEPRECATED_FIELD,
+            "Attributes[Competency.Classifier].Array",
+        ),
         # Deprecated only on the objects §11 lists them on; elsewhere the same key is just unknown
         (MODEL, _set(["DataModelConstraints"], []), Code.DEPRECATED_FIELD, "DataModelConstraints"),
         (

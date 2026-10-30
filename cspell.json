@@ -317,7 +317,15 @@
         "retryable",
         "footgun",
         "redoc",
-        "lineterm"
+        "Europass",
+        "Marsal",
+        "CETIS",
+        "Xtera",
+        "Motlow",
+        "Trovares",
+        "learnerinfoframework",
+        "lineterm",
+        "outerjoin"
     ],
     "ignorePaths": [
         ".git/",
