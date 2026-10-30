@@ -61,7 +61,11 @@ async def get_value_mappings(
     return {"total": total_count, "data": mappings}
 
 
-@router.get("/by_transformation_group/{transformation_group_id}", response_model=List[ValueSetValueMappingDTO])
+@router.get(
+    "/by_transformation_group/{transformation_group_id}",
+    response_model=List[ValueSetValueMappingDTO],
+    deprecated=True,  # Value mappings are not grouped; a crosswalk is identified by its value sets (#1440)
+)
 async def get_value_mappings_by_transformation_group_id(
     transformation_group_id: int, session: AsyncSession = Depends(get_session)
 ):
