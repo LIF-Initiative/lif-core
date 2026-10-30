@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useCallback } from "react";
-import { MinusIcon, PlusIcon, Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
+import { MinusIcon, PlusIcon, Pencil2Icon, TrashIcon, UploadIcon } from "@radix-ui/react-icons";
 import "./SimpleTree.css";
 
 /**
@@ -23,6 +23,8 @@ export interface SimpleTreeProps {
   headerStr?: string;
   searchFilter?: boolean; // toggles search box
   onAddNew?: () => void; // optional top-level [+]
+  onImport?: () => void; // optional top-level import, beside [+]
+  importLabel?: string; // the import button's accessible name and tooltip
   initiallyExpandedIds?: Array<string | number>; // nodes expanded on mount
   hideToggleSpacer?: boolean; // if true, hides the expand/collapse toggle buttons
   typeHandlers?: Record<string, (node: SimpleTreeNode) => void>; // static functions per type for label click
@@ -89,6 +91,8 @@ export const SimpleTree: React.FC<SimpleTreeProps> = ({
   headerStr,
   searchFilter = false,
   onAddNew,
+  onImport,
+  importLabel = "Import",
   initiallyExpandedIds,
   className,
   hideToggleSpacer = false,
@@ -156,6 +160,7 @@ export const SimpleTree: React.FC<SimpleTreeProps> = ({
       <div className="col-head">
         <div className="head-group">
           {onAddNew ? <button className="addNew" onClick={onAddNew} aria-label="Add New"><PlusIcon /></button> : null}
+          {onImport ? <button className="addNew importNew" onClick={onImport} aria-label={importLabel} title={importLabel}><UploadIcon /></button> : null}
           {headerStr ? <h2 className="col-title">{headerStr}</h2> : null}
           {searchFilter ? (
             <div className="tree-search">

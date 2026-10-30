@@ -14,6 +14,7 @@
     }
     .addNew:hover,
     .addNew:focus-visible { background:#5e739d; }
+    .importNew { margin-right:.25rem; }
     .tree-search { width:100%;}
     .head-group .tree-search { margin-top:18px;}
     .tree-search input { width: 96%; border:1px solid #e5e7eb; border-radius:.375rem; padding:.25rem .5rem; }
