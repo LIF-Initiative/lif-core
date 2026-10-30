@@ -4,7 +4,14 @@ from typing import Annotated, Any, Dict
 from fastapi import APIRouter, HTTPException, Query, Request
 from lif.datatypes.core import TargetTransformationDataModelDTO, TargetTransformationDataModelsDTO
 from lif.lif_schema_config.core import LIFSchemaConfig
-from lif.mdr_client.core import MDRClientException, fetch_data_models_from_mdr, get_transformation_groups_from_mdr
+from lif.exceptions.core import ResourceNotFoundException
+from lif.mdr_client.core import (
+    MDRClientException,
+    MDRConfigurationError,
+    fetch_data_models_from_mdr,
+    get_transformation_groups_from_mdr,
+    resolve_data_model_id,
+)
 from lif.mdr_dto.mdr_consumer_dto import MdrRetrieveDataModelsDTO
 from lif.mdr_utils.logger_config import get_logger
 from lif.query_planner_client import QueryPlannerException, fetch_query_from_query_planner
@@ -69,11 +76,16 @@ async def get_data(
         data_model_contributor_organization,
     )
 
-    source_schema_id = CONFIG.openapi_data_model_id
-    if source_schema_id is None:
+    try:
+        source_schema_id = resolve_data_model_id(CONFIG)
+    except MDRConfigurationError as e:
         raise HTTPException(
             status_code=HTTPStatus.INTERNAL_SERVER_ERROR, detail="OPENAPI_DATA_MODEL_ID is not configured"
-        )
+        ) from e
+    except (ResourceNotFoundException, MDRClientException) as e:
+        raise HTTPException(
+            status_code=HTTPStatus.INTERNAL_SERVER_ERROR, detail="Unable to resolve source data model"
+        ) from e
 
     try:
         data_models_raw = fetch_data_models_from_mdr(
@@ -173,12 +185,17 @@ def _version_sort_key(version: str) -> list[tuple[int, object]]:
 
 @router.get("/available-data-formats", response_model=TargetTransformationDataModelsDTO)
 async def get_available_data_formats(request: Request):
-    source_schema_id = CONFIG.openapi_data_model_id
-    if source_schema_id is None:
+    try:
+        source_schema_id = resolve_data_model_id(CONFIG)
+    except MDRConfigurationError as e:
         raise HTTPException(
             status_code=HTTPStatus.INTERNAL_SERVER_ERROR,
             detail="OPENAPI_DATA_MODEL_ID is not configured. Unable to retrieve available data formats",
-        )
+        ) from e
+    except (ResourceNotFoundException, MDRClientException) as e:
+        raise HTTPException(
+            status_code=HTTPStatus.INTERNAL_SERVER_ERROR, detail="Unable to resolve source data model"
+        ) from e
 
     logger.info(
         "Received request for available data formats as %s, source model id = %s",

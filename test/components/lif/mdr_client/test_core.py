@@ -265,6 +265,122 @@ async def test_get_transformation_groups_from_mdr_raises_on_http_error(mock_get)
         await core.get_transformation_groups_from_mdr(config=config, source_data_model_id="17")
 
 
+def _model_config(**overrides):
+    values = {
+        "mdr_api_url": "http://api.example.com",
+        "mdr_api_auth_token": "secret-token",
+        "mdr_timeout_seconds": 30,
+        "openapi_data_model_id": None,
+        "openapi_data_model_name": None,
+        "openapi_data_model_version": None,
+        "openapi_data_model_contributor_organization": None,
+    }
+    values.update(overrides)
+    return types.SimpleNamespace(**values)
+
+
+_IDENTITY = {
+    "openapi_data_model_name": "StateU LIF",
+    "openapi_data_model_version": "1.0",
+    "openapi_data_model_contributor_organization": "StateU",
+}
+
+
+def _mock_sync_client(*responses):
+    mock_client = MagicMock()
+    mock_client.__enter__ = MagicMock(return_value=mock_client)
+    mock_client.__exit__ = MagicMock(return_value=False)
+    mock_client.get.side_effect = list(responses)
+    return mock_client
+
+
+@patch("lif.mdr_client.core._create_sync_client")
+def test_resolve_data_model_id_by_identity(mock_client_class):
+    mock_client = _mock_sync_client(
+        _create_mock_response(200, {"total": 1, "data": [{"Id": 17}]}, "http://api.example.com/datamodels/")
+    )
+    mock_client_class.return_value = mock_client
+
+    assert core.resolve_data_model_id(_model_config(**_IDENTITY)) == "17"
+
+    assert mock_client.get.call_args.args[0] == "http://api.example.com/datamodels/"
+    params = mock_client.get.call_args.kwargs["params"]
+    assert params["name"] == "StateU LIF"
+    assert params["version"] == "1.0"
+    assert params["contributor_organization"] == "StateU"
+
+
+@patch("lif.mdr_client.core._create_sync_client")
+def test_resolve_data_model_id_missing_identity_raises_not_found(mock_client_class):
+    mock_client_class.return_value = _mock_sync_client(
+        _create_mock_response(200, {"total": 0, "data": []}, "http://api.example.com/datamodels/")
+    )
+
+    with pytest.raises(ResourceNotFoundException) as exc_info:
+        core.resolve_data_model_id(_model_config(**_IDENTITY))
+    assert "StateU LIF" in str(exc_info.value)
+
+
+@patch("lif.mdr_client.core._create_sync_client")
+def test_resolve_data_model_id_ambiguous_identity_raises(mock_client_class):
+    mock_client_class.return_value = _mock_sync_client(
+        _create_mock_response(200, {"total": 2, "data": [{"Id": 17}, {"Id": 99}]}, "http://api.example.com/datamodels/")
+    )
+
+    with pytest.raises(core.MDRClientException) as exc_info:
+        core.resolve_data_model_id(_model_config(**_IDENTITY))
+    assert "17" in str(exc_info.value)
+    assert "99" in str(exc_info.value)
+
+
+@patch("lif.mdr_client.core._create_sync_client")
+def test_resolve_data_model_id_partial_identity_raises_config_error(mock_client_class):
+    config = _model_config(openapi_data_model_name="StateU LIF", openapi_data_model_id="17")
+
+    with pytest.raises(core.MDRConfigurationError) as exc_info:
+        core.resolve_data_model_id(config)
+    assert "OPENAPI_DATA_MODEL_VERSION" in str(exc_info.value)
+    assert "OPENAPI_DATA_MODEL_CONTRIBUTOR_ORGANIZATION" in str(exc_info.value)
+    mock_client_class.assert_not_called()
+
+
+@patch("lif.mdr_client.core._create_sync_client")
+def test_resolve_data_model_id_falls_back_to_id(mock_client_class):
+    assert core.resolve_data_model_id(_model_config(openapi_data_model_id="17")) == "17"
+    mock_client_class.assert_not_called()
+
+
+@patch("lif.mdr_client.core._create_sync_client")
+def test_resolve_data_model_id_identity_wins_over_id(mock_client_class, caplog):
+    mock_client_class.return_value = _mock_sync_client(
+        _create_mock_response(200, {"total": 1, "data": [{"Id": 17}]}, "http://api.example.com/datamodels/")
+    )
+
+    with caplog.at_level("WARNING"):
+        result = core.resolve_data_model_id(_model_config(openapi_data_model_id="5", **_IDENTITY))
+
+    assert result == "17"
+    assert "OPENAPI_DATA_MODEL_ID" in caplog.text
+
+
+def test_resolve_data_model_id_nothing_configured_raises_config_error():
+    with pytest.raises(core.MDRConfigurationError):
+        core.resolve_data_model_id(_model_config())
+
+
+@patch("lif.mdr_client.core._create_sync_client")
+def test_fetch_schema_from_mdr_uses_resolved_id(mock_client_class):
+    mock_client = _mock_sync_client(
+        _create_mock_response(200, {"total": 1, "data": [{"Id": 17}]}, "http://api.example.com/datamodels/"),
+        _create_mock_response(200, {"openapi": "3.0.0"}, "http://api.example.com/datamodels/open_api_schema/17"),
+    )
+    mock_client_class.return_value = mock_client
+
+    assert core.fetch_schema_from_mdr(_model_config(**_IDENTITY)) == {"openapi": "3.0.0"}
+
+    assert mock_client.get.call_args.args[0].startswith("http://api.example.com/datamodels/open_api_schema/17?")
+
+
 def _create_mock_response(status_code: int, json_data, uri: str):
     mock_response = MagicMock()
     mock_response.status_code = status_code
