@@ -315,6 +315,7 @@ async def test_export_base_model_requests_own_rows_only(monkeypatch):
     TypeError (HTTP 500) before any DTO was built."""
     base = DataModel(Id=BASE_DATA_MODEL_ID, Name="Base", Type=DataModelType.BaseLIF)
     mocks = _autospec_export_services(monkeypatch, base)
+    monkeypatch.setattr(svc, "is_overlay", AsyncMock(return_value=False))
 
     result = await svc.export_datamodel(session=AsyncMock(), id=BASE_DATA_MODEL_ID)
 

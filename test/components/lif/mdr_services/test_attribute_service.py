@@ -364,6 +364,7 @@ async def test_get_list_of_attributes_for_entity_baselif_path(fake_session, monk
 async def test_get_list_of_attributes_for_data_model_baselif(fake_session, monkeypatch):
     dm = types.SimpleNamespace(Id=200, Type=getattr(svc, "DataModelType").BaseLIF, BaseDataModelId=None)
     monkeypatch.setattr(svc, "check_datamodel_by_id", AsyncMock(return_value=dm))
+    monkeypatch.setattr(svc, "is_overlay", AsyncMock(return_value=False))
 
     fake_session.execute.side_effect = [
         _CountResult(1),

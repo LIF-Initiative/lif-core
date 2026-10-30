@@ -14,6 +14,7 @@ from lif.mdr_dto.entity_dto import ChildEntityDTO, CreateEntityDTO, EntityDTO, U
 from lif.mdr_services.association_name import association_array, entity_association_name, recomputed
 from lif.mdr_services.attribute_service import soft_delete_attribute
 from lif.mdr_services.helper_service import check_datamodel_by_id
+from lif.mdr_services.model_converter import is_overlay
 from lif.mdr_utils.logger_config import get_logger
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import case, func, or_, select
@@ -311,12 +312,13 @@ async def get_list_of_entities_for_data_model(
     data_model_id_list: List[int] = []
     data_model = await check_datamodel_by_id(session=session, id=data_model_id)
     data_model_id_list.append(data_model.Id)
-    if check_base and (data_model.Type == DataModelType.OrgLIF or data_model.Type == DataModelType.PartnerLIF):
+    overlay = check_base and await is_overlay(session, data_model)
+    if overlay:
         base_data_model = await check_datamodel_by_id(session=session, id=data_model.BaseDataModelId)
         data_model_id_list.append(base_data_model.Id)
 
     # Step 1: If this org's LIF or a partner's LIF, filter to only entities included for this org's data model
-    if check_base and (data_model.Type == DataModelType.OrgLIF or data_model.Type == DataModelType.PartnerLIF):
+    if overlay:
         # Query to fetch IncludedElementId from ExtInclusionsFromBaseDM table where ExtDataModelId in data_model_id_list and ElementType = Entity
         ext_inclusions_query = select(ExtInclusionsFromBaseDM.IncludedElementId).where(
             ExtInclusionsFromBaseDM.ExtDataModelId.in_(data_model_id_list),
