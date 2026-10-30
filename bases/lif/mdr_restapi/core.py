@@ -19,6 +19,7 @@ from lif.mdr_restapi import (
     generate_jinja_endpoint,
     import_export_endpoints,
     inclusions_endpoints,
+    portable_endpoints,
     search_endpoint,
     tenant_endpoints,
     transformation_endpoint,
@@ -507,6 +508,9 @@ app.include_router(value_mapping_endpoints.router, prefix="/value_mappings")
 
 
 app.include_router(import_export_endpoints.router, prefix="/import_export")
+
+# Portable files: export and import a model, mapping group or crosswalk by name, with no row IDs (#1408).
+app.include_router(portable_endpoints.router, prefix="/portable")
 
 app.include_router(generate_jinja_endpoint.router, prefix="/generate_jinja")
 

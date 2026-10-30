@@ -50,4 +50,4 @@ The package exports the current version's models under version-free names (`Mode
 version 1 model to version 2, so that `parse_*` always return the current version (spec §4.2).
 
 ## Used by
-- Nothing yet. The converter (Portability Spec §8) is the intended first consumer.
+- `lif.mdr_services.portability_converter` (Portability Spec §8), served by `bases/lif/mdr_restapi/portable_endpoints.py` (#1408).

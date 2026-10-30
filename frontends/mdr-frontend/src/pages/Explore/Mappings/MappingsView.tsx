@@ -23,7 +23,6 @@ import {
     forkTransformationGroup,
     existsTransformationGroup,
     updateTransformationAttributes,
-    exportTransformationsForGroup,
     activateTransformationGroup,
     getLiveVersionForPair,
 } from "@/services/transformationsService";
@@ -31,7 +30,6 @@ import type { LiveVersionState } from "@/services/transformationsService";
 import {
     getModelDetailsWithTree,
     listModels,
-    listOrgLifModels,
     generateJsonSchema,
 } from "@/services/modelService";
 import { buildDefaultAssignmentExpression } from "@/utils/jsonataUtils";
@@ -61,14 +59,23 @@ import useSearchItems from "./hooks/useSearchItems";
 import DeleteTransformationsDialog from "./components/DeleteTransformationsDialog";
 import ExpressionEditorDialog from "./components/ExpressionEditorDialog";
 import EditGroupDialog from "./components/EditGroupDialog";
-import ImportGroupDialog from "./components/ImportGroupDialog";
+import ImportPortableFileDialog from "@/components/PortableFile/ImportPortableFileDialog";
+import PortableFailureDialog from "@/components/PortableFile/PortableFailureDialog";
+import CrosswalkDialog, { type CrosswalkModel } from "./components/CrosswalkDialog";
+import {
+    describePortableFailure,
+    exportPortableMappingGroup,
+    importPortableCrosswalk,
+    importPortableMappingGroup,
+    type PortableFailure,
+} from "@/services/portableService";
 import ForkGroupDialog from "./components/ForkGroupDialog";
 import ActivateGroupDialog from "./components/ActivateGroupDialog";
 import DetachSourcesDialog from "./components/DetachSourcesDialog";
 import BulkTransformationsDialog from "./components/BulkTransformationsDialog";
 import { trackEvent } from "@/utils/analytics";
-import { downloadJsonFile } from "@/utils/downloadJsonFile";
-import { Pencil2Icon, LayersIcon, UploadIcon, DownloadIcon } from "@radix-ui/react-icons";
+import { downloadBlobFile } from "@/utils/downloadJsonFile";
+import { Pencil2Icon, LayersIcon, UploadIcon, DownloadIcon, TableIcon } from "@radix-ui/react-icons";
 import { useToast } from "@/context/ToastContext";
 import { errorToString } from "@/utils/errorUtils";
 
@@ -76,6 +83,22 @@ interface DisplayTransformationData extends TransformationData {
     SourceEntity?: EntityDTO;
     TargetEntity?: EntityDTO;
 }
+
+/**
+ * The default target: the first model that isn't the source, as the target list shows them. Every model is
+ * one kind (ADR data_model/0004), so Base LIF and Org LIF are names, and the default no longer picks by type.
+ */
+const getFirstModelIdOtherThan = (models: Array<{ Id: number }>, sourceId: number | null): number | null =>
+    models.find((m) => m.Id !== sourceId)?.Id ?? null;
+
+/** A loaded model's name and value sets, for the crosswalk dialog. */
+const toCrosswalkModel = (model: DataModelWithDetailsWithTree | null): CrosswalkModel | null =>
+    model
+        ? {
+              name: model.DataModel?.Name ?? '',
+              valueSets: (model.ValueSets ?? []).map(({ ValueSet }) => ({ Id: ValueSet.Id, Name: ValueSet.Name })),
+          }
+        : null;
 
 const MappingsView: React.FC = () => {
     const REASSIGN_DRAG_THRESHOLD = 20;
@@ -90,9 +113,6 @@ const MappingsView: React.FC = () => {
     const [groupId, setGroupId] = useState<number>(-1);
     const [group, setGroup] = useState<TransformationGroupDetails | null>(null);
     const [allModels, setAllModels] = useState<
-        Array<{ Id: number; Name: string }>
-    >([]);
-    const [orgLifModels, setOrgLifModels] = useState<
         Array<{ Id: number; Name: string }>
     >([]);
     const [selectedSourceId, setSelectedSourceId] = useState<number | null>(
@@ -239,6 +259,8 @@ const MappingsView: React.FC = () => {
     const [exprDialogOpen, setExprDialogOpen] = useState(false);
     const [editGroupOpen, setEditGroupOpen] = useState(false);
     const [importDialogOpen, setImportDialogOpen] = useState(false);
+    const [crosswalkDialogOpen, setCrosswalkDialogOpen] = useState(false);
+    const [crosswalkImportOpen, setCrosswalkImportOpen] = useState(false);
     const [forkDialogOpen, setForkDialogOpen] = useState(false);
     const [activateDialogOpen, setActivateDialogOpen] = useState(false);
     // The pair's live version, as the Translator reads it: undefined while loading.
@@ -253,7 +275,7 @@ const MappingsView: React.FC = () => {
     const [forkBump, setForkBump] = useState<'major' | 'minor'>('major');
     const [forkPreview, setForkPreview] = useState<string>('');
     // Aggregate dialog open state
-    const anyDialogOpen = deleteDialogOpen || exprDialogOpen || editGroupOpen || importDialogOpen || forkDialogOpen || activateDialogOpen || bulkDialogOpen;
+    const anyDialogOpen = deleteDialogOpen || exprDialogOpen || editGroupOpen || importDialogOpen || forkDialogOpen || activateDialogOpen || bulkDialogOpen || crosswalkDialogOpen || crosswalkImportOpen;
     // Detach sources dialog state
     const [detachDialogOpen, setDetachDialogOpen] = useState(false);
     const [pendingDetach, setPendingDetach] = useState<null | { transId: number; srcAttrIds: number[]; willDelete: boolean }>(null);
@@ -500,18 +522,13 @@ const MappingsView: React.FC = () => {
                 if (transId) { navigate(`/explore/data-mappings/${transId}`); return; }
             }
 
-            // No group selected: clear group and transformations, but ensure models are loaded based on source selection and default target (1)
+            // No group selected: clear group and transformations, but ensure models are loaded based on source selection and default target
             if (seq !== loadSeqRef.current) return;
             setGroup(null);
             setTransformations([]);
             const srcId =
                 selectedSourceId ?? (allModels.length ? allModels[0]?.Id : null);
-            const fallbackTarget =
-                selectedTargetId ??
-                (orgLifModels.length === 1
-                    ? orgLifModels[0]?.Id
-                    : orgLifModels[0]?.Id ?? null);
-            const tgtId = fallbackTarget ?? null;
+            const tgtId = selectedTargetId ?? getFirstModelIdOtherThan(allModels, srcId);
             if (!srcId) return;
             if (!tgtId) return;
 
@@ -574,11 +591,11 @@ const MappingsView: React.FC = () => {
         const groupData = transformationsResponse.data;
         setGroup(groupData);
 
-        // Normalize target model id to default to 1 unless explicitly set by the group
+        // The group's target, else the selected or default target
         const effectiveTargetModelId =
             groupData.TargetDataModelId && groupData.TargetDataModelId > 0
                 ? groupData.TargetDataModelId
-                : selectedTargetId ?? (orgLifModels.length ? orgLifModels[0].Id : 1);
+                : selectedTargetId ?? getFirstModelIdOtherThan(allModels, groupData.SourceDataModelId);
 
         // Only fetch model details if the Source/Target model IDs changed
         const needSrc = loadedSourceModelId !== groupData.SourceDataModelId || !sourceModel;
@@ -644,7 +661,6 @@ const MappingsView: React.FC = () => {
         groupId,
         selectedSourceId,
         allModels,
-        orgLifModels,
         loadedSourceModelId,
         loadedTargetModelId,
         sourceModel,
@@ -712,12 +728,10 @@ const MappingsView: React.FC = () => {
         const ensurePairVersions = async () => {
             // console.log('Ensuring pair versions for group', group, allGroups);
             if (!group || !allGroups) return;
-            const normalize = (id?: number) => (id && id > 0 ? id : 1);
             const pair = allGroups.filter(
                 (g) =>
                     g.SourceDataModelId === group.SourceDataModelId &&
-                    normalize(g.TargetDataModelId) ===
-                        normalize(group.TargetDataModelId)
+                    g.TargetDataModelId === group.TargetDataModelId
             );
             const missing = pair
                 .map((g) => g.TransformationGroupId)
@@ -801,42 +815,18 @@ const MappingsView: React.FC = () => {
                         String(a.Name || '').localeCompare(String(b.Name || ''))
                     );
                 setAllModels(sorted);
-                if (selectedSourceId == null && sorted.length) {
-                    setSelectedSourceId(sorted[0].Id);
+                const sourceId = selectedSourceId ?? sorted[0]?.Id ?? null;
+                if (selectedSourceId == null && sourceId != null) {
+                    setSelectedSourceId(sourceId);
+                }
+                if (selectedTargetId == null) {
+                    setSelectedTargetId(getFirstModelIdOtherThan(sorted, sourceId));
                 }
             } catch (e) {
                 console.error('Failed to load models', e);
             }
         };
         loadModels();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    // Load OrgLIF target models
-    useEffect(() => {
-        const loadTargets = async () => {
-            try {
-                const data = await listOrgLifModels();
-                const list = Array.isArray(data)
-                    ? (data as any[]).map((m) => ({ Id: m.Id, Name: m.Name }))
-                    : [];
-                const sorted = list
-                    .slice()
-                    .sort((a, b) =>
-                        String(a.Name || '').localeCompare(String(b.Name || ''))
-                    );
-                setOrgLifModels(sorted);
-                // Auto-select when single; otherwise keep existing selection or choose first
-                if (sorted.length === 1) {
-                    setSelectedTargetId(sorted[0].Id);
-                } else if (selectedTargetId == null && sorted.length > 0) {
-                    setSelectedTargetId(sorted[0].Id);
-                }
-            } catch (e) {
-                console.error('Failed to load OrgLIF target models', e);
-            }
-        };
-        loadTargets();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -862,11 +852,10 @@ const MappingsView: React.FC = () => {
     const latestVersionGroupForPair = useCallback(
         (sourceId: number, targetId: number) => {
             if (!allGroups || !allGroups.length) return null;
-            const normalize = (id?: number) => (id && id > 0 ? id : 1);
             const filtered = allGroups.filter(
                 (g) =>
                     g.SourceDataModelId === sourceId &&
-                    normalize(g.TargetDataModelId) === normalize(targetId)
+                    g.TargetDataModelId === targetId
             );
             if (!filtered.length) return null;
             const parseParts = (v?: string) => {
@@ -927,10 +916,8 @@ const MappingsView: React.FC = () => {
             cleanupSelection();
 
             // Anchor to selected target when switching sources
-            const targetId =
-                selectedTargetId ??
-                (orgLifModels.length ? orgLifModels[0].Id : 1);
-            const latest = latestVersionGroupForPair(nextId, targetId);
+            const targetId = selectedTargetId ?? getFirstModelIdOtherThan(allModels, nextId);
+            const latest = targetId != null ? latestVersionGroupForPair(nextId, targetId) : null;
             if (latest) {
                 navigate(
                     `/explore/data-mappings/${latest.TransformationGroupId}`
@@ -945,7 +932,7 @@ const MappingsView: React.FC = () => {
             navigate,
             cleanupSelection,
             selectedTargetId,
-            orgLifModels,
+            allModels,
         ]
     );
 
@@ -989,9 +976,7 @@ const MappingsView: React.FC = () => {
     const handleCreateNewMapping = useCallback(async () => {
         const srcId =
             selectedSourceId ?? (allModels.length ? allModels[0]?.Id : null);
-        const tgtId =
-            selectedTargetId ??
-            (orgLifModels.length ? orgLifModels[0]?.Id : null);
+        const tgtId = selectedTargetId ?? getFirstModelIdOtherThan(allModels, srcId);
         if (!srcId || !tgtId) return;
         try {
             // Determine next free MAJOR version for Source/Target (including deleted groups)
@@ -1013,7 +998,7 @@ const MappingsView: React.FC = () => {
                 allModels.find((m) => m.Id === srcId)?.Name || ''
             ).trim();
             const tgtName = (
-                orgLifModels.find((m) => m.Id === tgtId)?.Name || ''
+                allModels.find((m) => m.Id === tgtId)?.Name || ''
             ).trim();
             const defaultGroupName =
                 srcName && tgtName ? `${srcName}_${tgtName}` : '';
@@ -2214,13 +2199,10 @@ const MappingsView: React.FC = () => {
 
     const samePairGroups = useMemo(() => {
         if (!group || !allGroups) return [] as TranformationGroupData[];
-        const normalize = (id?: number) => (id && id > 0 ? id : 1);
-        const currentSourceId = group.SourceDataModelId;
-        const currentTargetId = normalize(group.TargetDataModelId as any);
         return allGroups.filter(
             (g) =>
-                g.SourceDataModelId === currentSourceId &&
-                normalize(g.TargetDataModelId as any) === currentTargetId
+                g.SourceDataModelId === group.SourceDataModelId &&
+                g.TargetDataModelId === group.TargetDataModelId
         );
     }, [group, allGroups]);
 
@@ -2230,16 +2212,18 @@ const MappingsView: React.FC = () => {
     }, [group]);
 
 
+    // A refused export (such as NOT_MIGRATED for an overlay model) lists every reason in a dialog.
+    const [portableFailure, setPortableFailure] = useState<PortableFailure | null>(null);
     const onExportGroup = useCallback(async () => {
         if (!group) return;
         try {
-            const result = await exportTransformationsForGroup(group.Id);
-            const filename = `${result.Name ? result.Name : 'transformation_group_'}_v${result.GroupVersion}.json`;
-            downloadJsonFile(result, filename);
+            const file = await exportPortableMappingGroup(group.Id);
+            const filename = downloadBlobFile(
+                file, group.Name || 'mapping_group', `_v${group.GroupVersion}.lif-mdr-mapping-group.json`
+            );
             showToast(`${filename} downloaded successfully`, 'success');
         } catch (e) {
-            // console.log("Failed to export transformations for group", e);
-            showToast(errorToString(e), 'error');
+            setPortableFailure(describePortableFailure(e));
         }
     }, [group]);
 
@@ -2446,11 +2430,14 @@ const MappingsView: React.FC = () => {
                                 })()}
                             </div>
                             <div className="mappings-group-header__actions">
-                                <button type="button" className="mappings-icon-btn" title="Export transformation group" onClick={onExportGroup}>
+                                <button type="button" className="mappings-icon-btn" title="Export this group as a portable mapping-group file" onClick={onExportGroup}>
                                     <DownloadIcon />
                                 </button>
-                                <button type="button" className="mappings-icon-btn" title="Import transformation group" onClick={() => setImportDialogOpen(true)}>
+                                <button type="button" className="mappings-icon-btn" title="Import a portable mapping-group file" onClick={() => setImportDialogOpen(true)}>
                                     <UploadIcon />
+                                </button>
+                                <button type="button" className="mappings-icon-btn" title="Crosswalks: export or import the value mappings between two value sets" onClick={() => setCrosswalkDialogOpen(true)}>
+                                    <TableIcon />
                                 </button>
                                 <button type="button" className="mappings-icon-btn" title="Edit details" onClick={onEditDetails}>
                                     <Pencil2Icon />
@@ -2682,6 +2669,14 @@ const MappingsView: React.FC = () => {
                                 onClick={handleCreateNewMapping}
                             >
                                 + Create
+                            </button>
+                            {/* A portable file names its own models, so it can be imported before any group exists. */}
+                            <button type="button" className="mappings-icon-btn" title="Import a portable mapping-group file" onClick={() => setImportDialogOpen(true)}>
+                                <UploadIcon />
+                            </button>
+                            {/* A crosswalk belongs to no group, so it is available before one exists. */}
+                            <button type="button" className="mappings-icon-btn" title="Crosswalks: export or import the value mappings between two value sets" onClick={() => setCrosswalkDialogOpen(true)}>
+                                <TableIcon />
                             </button>
                         </div>
                     </div>
@@ -2995,19 +2990,40 @@ const MappingsView: React.FC = () => {
                     }
                 }}
             />
-            <ImportGroupDialog
+            <ImportPortableFileDialog
                 open={importDialogOpen}
-                group={group}
                 onOpenChange={setImportDialogOpen}
-                onCancel={() => setImportDialogOpen(false)}
-                onSaved={async () => {
-                    if (!group) return;
-                    try {
-                        // fetchTransformations(); // ALH: Not updating the forks, so:
-                        window.location.href = `/explore/data-mappings/${group.Id}`;
-                    }
-                    finally { setImportDialogOpen(false); }
+                title="Import a Portable Mapping Group File"
+                description="Import a mapping group exported as a portable file. Its source and target models must be installed. It is created as a new, inactive group; activate it before the Translator uses it."
+                importFile={importPortableMappingGroup}
+                onImported={(result) => {
+                    // A full load, so the version list and forks include the new group.
+                    window.location.href = `/explore/data-mappings/${result.Id}`;
                 }}
+            />
+            <CrosswalkDialog
+                open={crosswalkDialogOpen}
+                onOpenChange={setCrosswalkDialogOpen}
+                source={toCrosswalkModel(sourceModel)}
+                target={toCrosswalkModel(targetModel)}
+                onImport={() => setCrosswalkImportOpen(true)}
+                onExported={(message) => showToast(message, 'success')}
+            />
+            <ImportPortableFileDialog
+                open={crosswalkImportOpen}
+                onOpenChange={setCrosswalkImportOpen}
+                title="Import a Portable Crosswalk File"
+                description="Import a crosswalk exported as a portable file. Both of its value sets must be installed, and no value mappings may already exist between them."
+                importFile={importPortableCrosswalk}
+                onImported={(result, file) => {
+                    showToast(`Imported ${file.name}: ${result.Created} value mapping${result.Created === 1 ? '' : 's'} created`, 'success');
+                }}
+            />
+            <PortableFailureDialog
+                title={`${group?.Name || 'This mapping group'} can't be exported`}
+                failure={portableFailure}
+                action="export"
+                onClose={() => setPortableFailure(null)}
             />
             <ForkGroupDialog
                 open={forkDialogOpen}
