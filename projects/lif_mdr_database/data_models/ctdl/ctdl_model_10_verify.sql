@@ -1,0 +1,76 @@
+-- Verification for the CTDL (DataModelId 10) rebuild, work order v7 §6.1 counts and §6.2 structural checks.
+-- Every row prints check / expected / actual; a build passes when every "ok" column is true.
+-- cspell:ignore ctdl
+SET search_path TO public;
+WITH live_e AS (SELECT * FROM "Entities" WHERE "DataModelId" = 10 AND "Deleted" IS NOT TRUE),
+     live_a AS (SELECT * FROM "Attributes" WHERE "DataModelId" = 10 AND "Deleted" IS NOT TRUE),
+     live_ea AS (SELECT ea.* FROM "EntityAssociation" ea JOIN live_e p ON p."Id" = ea."ParentEntityId" WHERE ea."Deleted" IS NOT TRUE),
+     live_eaa AS (SELECT x.* FROM "EntityAttributeAssociation" x JOIN live_e p ON p."Id" = x."EntityId" WHERE x."Deleted" IS NOT TRUE),
+     live_vs AS (SELECT * FROM "ValueSets" WHERE "DataModelId" = 10 AND "Deleted" IS NOT TRUE),
+     live_vsv AS (SELECT v.* FROM "ValueSetValues" v JOIN live_vs s ON s."Id" = v."ValueSetId" WHERE v."Deleted" IS NOT TRUE),
+     checks(ord, label, expected, actual) AS (
+  SELECT 1, '6.1 entities live', 142, (SELECT count(*) FROM live_e)
+  UNION ALL SELECT 2, '6.1 reference associations', 5402, (SELECT count(*) FROM live_ea)
+  UNION ALL SELECT 3, '6.1 attribute rows (7,753 - 5,402 + 10 retained)', 2361, (SELECT count(*) FROM live_a)
+  UNION ALL SELECT 4, '6.1 attribute associations', 2361, (SELECT count(*) FROM live_eaa)
+  UNION ALL SELECT 5, '6.1 entities with subClassOf notes', 96, (SELECT count(*) FROM live_e WHERE "Notes" LIKE '%subClassOf:%')
+  UNION ALL SELECT 6, '6.1 propertyless entities (no attribute, no reference out)', 10,
+      (SELECT count(*) FROM live_e e WHERE NOT EXISTS (SELECT 1 FROM live_eaa x WHERE x."EntityId" = e."Id") AND NOT EXISTS (SELECT 1 FROM live_ea a WHERE a."ParentEntityId" = e."Id"))
+  UNION ALL SELECT 7, '6.1 value sets live', 36, (SELECT count(*) FROM live_vs)
+  UNION ALL SELECT 8, '6.1 value set values live', 457, (SELECT count(*) FROM live_vsv)
+  UNION ALL SELECT 9, '6.1 attribute Array = Yes (915 + 6 retained)', 921, (SELECT count(*) FROM live_a WHERE "Array" = 'Yes')
+  UNION ALL SELECT 10, '6.1 attribute Array = No (1,433 + 4 retained)', 1437, (SELECT count(*) FROM live_a WHERE "Array" = 'No')
+  UNION ALL SELECT 11, '6.1 attribute Array null', 3, (SELECT count(*) FROM live_a WHERE "Array" IS NULL)
+  UNION ALL SELECT 12, '6.1 attribute Array = Yes on domain rows only', 915, (SELECT count(*) FROM live_a WHERE "Array" = 'Yes' AND "UniqueName" NOT LIKE 'Competency.%' AND "UniqueName" NOT LIKE 'CompetencyFramework.%')
+  UNION ALL SELECT 13, '6.1 reference notes multivalue: true', 4929, (SELECT count(*) FROM live_ea WHERE "Notes" LIKE 'multivalue: true%')
+  UNION ALL SELECT 14, '6.1 reference notes multivalue: false', 321, (SELECT count(*) FROM live_ea WHERE "Notes" LIKE 'multivalue: false%')
+  UNION ALL SELECT 15, '6.1 reference notes multivalue: unknown', 152, (SELECT count(*) FROM live_ea WHERE "Notes" LIKE 'multivalue: unknown%')
+  UNION ALL SELECT 16, '6.1 rows with no resolvable range, typed string', 140, (SELECT count(*) FROM live_a WHERE "DataType" = 'string' AND "Notes" LIKE '%[out of model]%')
+  UNION ALL SELECT 17, '6.1 ... across properties', 13, (SELECT count(DISTINCT "Name") FROM live_a WHERE "DataType" = 'string' AND "Notes" LIKE '%[out of model]%')
+  UNION ALL SELECT 18, '6.1 reference rows carrying an unresolved range', 295, (SELECT count(*) FROM live_ea WHERE "Notes" LIKE '%unresolvedRanges:%')
+  UNION ALL SELECT 19, '6.1 ... across properties', 21, (SELECT count(DISTINCT "Name") FROM live_ea WHERE "Notes" LIKE '%unresolvedRanges:%')
+  UNION ALL SELECT 20, '6.1 attributes with null DataType', 0, (SELECT count(*) FROM live_a WHERE "DataType" IS NULL)
+  UNION ALL SELECT 21, '6.1 value-set links (rows)', 21, (SELECT count(*) FROM live_a WHERE "ValueSetId" IS NOT NULL)
+  UNION ALL SELECT 22, '6.1 value-set links (properties)', 16, (SELECT count(DISTINCT "Name") FROM live_a WHERE "ValueSetId" IS NOT NULL)
+  UNION ALL SELECT 23, '6.1 old value sets soft-deleted', 27, (SELECT count(*) FROM "ValueSets" WHERE "DataModelId" = 10 AND "Deleted" IS TRUE AND "Id" < 453)
+  UNION ALL SELECT 24, '6.1 old value set values soft-deleted', 112, (SELECT count(*) FROM "ValueSetValues" WHERE "DataModelId" = 10 AND "Deleted" IS TRUE AND "Id" < 7670)
+  UNION ALL SELECT 25, '6.1 mapping rows from old CTDL values soft-deleted', 115, (SELECT count(*) FROM "ValueSetValueMapping" m JOIN "ValueSetValues" v ON v."Id" = m."SourceValueId" WHERE v."DataModelId" = 10 AND m."Deleted" IS TRUE)
+  UNION ALL SELECT 26, '6.1 mapping rows still live from CTDL values', 0, (SELECT count(*) FROM "ValueSetValueMapping" m JOIN "ValueSetValues" v ON v."Id" = m."SourceValueId" WHERE v."DataModelId" = 10 AND m."Deleted" IS NOT TRUE)
+  UNION ALL SELECT 27, '6.1 transformation group 9 deleted', 1, (SELECT count(*) FROM "TransformationsGroup" WHERE "Id" = 9 AND "Deleted" IS TRUE)
+  UNION ALL SELECT 28, '6.1 transformations in group 9 deleted', 176, (SELECT count(*) FROM "Transformations" WHERE "TransformationGroupId" = 9 AND "Deleted" IS TRUE)
+  UNION ALL SELECT 29, '6.1 transformation attributes in group 9 deleted', 352, (SELECT count(*) FROM "TransformationAttributes" ta JOIN "Transformations" t ON t."Id" = ta."TransformationId" WHERE t."TransformationGroupId" = 9 AND ta."Deleted" IS TRUE)
+  UNION ALL SELECT 30, '6.1 LIF value set 52 still live', 1, (SELECT count(*) FROM "ValueSets" WHERE "Id" = 52 AND "Deleted" IS NOT TRUE)
+  UNION ALL SELECT 31, '6.1 old entities 14 soft-deleted', 14, (SELECT count(*) FROM "Entities" WHERE "DataModelId" = 10 AND "Deleted" IS TRUE AND "Id" < 518)
+  UNION ALL SELECT 32, '6.1 old attributes 140 soft-deleted', 140, (SELECT count(*) FROM "Attributes" WHERE "DataModelId" = 10 AND "Deleted" IS TRUE AND "Id" < 3501)
+  UNION ALL SELECT 33, '6.2.1 (parent, Name) duplicated among references', 0, (SELECT count(*) FROM (SELECT 1 FROM live_ea GROUP BY "ParentEntityId", "Name" HAVING count(*) > 1) d)
+  UNION ALL SELECT 34, '6.2.1 (entity, Name) duplicated among attribute associations', 0, (SELECT count(*) FROM (SELECT 1 FROM live_eaa GROUP BY "EntityId", "Name" HAVING count(*) > 1) d)
+  UNION ALL SELECT 35, '6.2.1 Name shared by a reference and an attribute on one entity', 0, (SELECT count(*) FROM live_ea a JOIN live_eaa x ON x."EntityId" = a."ParentEntityId" AND x."Name" = a."Name")
+  UNION ALL SELECT 36, '6.2.2 duplicate (entity, attribute) associations', 0, (SELECT count(*) FROM (SELECT 1 FROM live_eaa GROUP BY "EntityId", "AttributeId" HAVING count(*) > 1) d)
+  UNION ALL SELECT 37, '6.2.2 attributes with no association', 0, (SELECT count(*) FROM live_a a WHERE NOT EXISTS (SELECT 1 FROM live_eaa x WHERE x."AttributeId" = a."Id"))
+  UNION ALL SELECT 38, '6.2.2 attributes shared by two entities', 0, (SELECT count(*) FROM (SELECT 1 FROM live_eaa GROUP BY "AttributeId" HAVING count(*) > 1) d)
+  UNION ALL SELECT 39, '6.2.3 DataType = entity', 0, (SELECT count(*) FROM live_a WHERE "DataType" = 'entity')
+  UNION ALL SELECT 40, '6.2.3 DataType outside string/enum/number/boolean', 0, (SELECT count(*) FROM live_a WHERE "DataType" NOT IN ('string','enum','number','boolean'))
+  UNION ALL SELECT 41, '6.2.3 TargetEntityId set', 0, (SELECT count(*) FROM live_a WHERE "TargetEntityId" IS NOT NULL)
+  UNION ALL SELECT 42, '6.2.4 associations not Reference', 0, (SELECT count(*) FROM live_ea WHERE "Placement" IS DISTINCT FROM 'Reference')
+  UNION ALL SELECT 43, '6.2.4 associations with Relationship or Array set', 0, (SELECT count(*) FROM live_ea WHERE "Relationship" IS NOT NULL OR "Array" IS NOT NULL)
+  UNION ALL SELECT 44, '6.2.4 associations without a Name', 0, (SELECT count(*) FROM live_ea WHERE "Name" IS NULL)
+  UNION ALL SELECT 45, '6.2.4 associations whose child is outside model 10', 0, (SELECT count(*) FROM live_ea a WHERE NOT EXISTS (SELECT 1 FROM live_e c WHERE c."Id" = a."ChildEntityId"))
+  UNION ALL SELECT 46, '6.2.5 root entities with Array = Yes', 0, (SELECT count(*) FROM live_e WHERE "Array" = 'Yes')
+  UNION ALL SELECT 47, '6.2.5 entities with Required set', 0, (SELECT count(*) FROM live_e WHERE "Required" IS NOT NULL)
+  UNION ALL SELECT 48, '6.2.6 DataModel 10 live, Name CTDL', 1, (SELECT count(*) FROM "DataModels" WHERE "Id" = 10 AND "Name" = 'CTDL' AND "Deleted" IS NOT TRUE)
+  UNION ALL SELECT 49, '6.2.7 attribute UniqueName not <Entity>.<Name>', 0, (SELECT count(*) FROM live_a a JOIN live_eaa x ON x."AttributeId" = a."Id" JOIN live_e e ON e."Id" = x."EntityId" WHERE a."UniqueName" <> e."UniqueName" || '.' || a."Name")
+  UNION ALL SELECT 50, '6.2.7 duplicate attribute UniqueName', 0, (SELECT count(*) FROM (SELECT 1 FROM live_a GROUP BY "UniqueName" HAVING count(*) > 1) d)
+  UNION ALL SELECT 51, '6.2.7 duplicate entity UniqueName', 0, (SELECT count(*) FROM (SELECT 1 FROM live_e GROUP BY "UniqueName" HAVING count(*) > 1) d)
+  UNION ALL SELECT 52, '6.2 entity Name <> UniqueName', 0, (SELECT count(*) FROM live_e WHERE "Name" <> "UniqueName")
+  UNION ALL SELECT 53, '6.2 EAA Name <> attribute Name', 0, (SELECT count(*) FROM live_eaa x JOIN live_a a ON a."Id" = x."AttributeId" WHERE x."Name" IS DISTINCT FROM a."Name")
+  UNION ALL SELECT 54, '6.2 EAA Array disagrees with attribute Array', 0, (SELECT count(*) FROM live_eaa x JOIN live_a a ON a."Id" = x."AttributeId" WHERE x."Array" IS DISTINCT FROM (CASE a."Array" WHEN 'Yes' THEN true WHEN 'No' THEN false END))
+  UNION ALL SELECT 55, '5.1 attributes Required = Yes', 242, (SELECT count(*) FROM live_a WHERE "Required" = 'Yes')
+  UNION ALL SELECT 56, '5.1 live entities with attributes but none Required (the two retained deprecated classes, never referenced)', 2,
+      (SELECT count(*) FROM live_e e WHERE EXISTS (SELECT 1 FROM live_eaa x WHERE x."EntityId" = e."Id") AND NOT EXISTS (SELECT 1 FROM live_eaa x JOIN live_a a ON a."Id" = x."AttributeId" WHERE x."EntityId" = e."Id" AND a."Required" = 'Yes'))
+  UNION ALL SELECT 57, '5.2 deprecated entities', 2, (SELECT count(*) FROM live_e WHERE "DeprecationDate" IS NOT NULL)
+  UNION ALL SELECT 58, '5.2 deprecated attributes', 10, (SELECT count(*) FROM live_a WHERE "DeprecationDate" IS NOT NULL)
+  UNION ALL SELECT 59, '4.2 enum attributes without a ValueSetId (96 scheme-not-in-file + 4 retained)', 100, (SELECT count(*) FROM live_a WHERE "DataType" = 'enum' AND "ValueSetId" IS NULL)
+  UNION ALL SELECT 60, '4.2 non-enum attributes with a ValueSetId', 0, (SELECT count(*) FROM live_a WHERE "DataType" <> 'enum' AND "ValueSetId" IS NOT NULL)
+  UNION ALL SELECT 61, 'temp functions dropped', 0, (SELECT count(*) FROM pg_proc WHERE proname LIKE 'ctdl_tmp_%')
+)
+SELECT ord, label, expected, actual, expected = actual AS ok FROM checks ORDER BY ord;
