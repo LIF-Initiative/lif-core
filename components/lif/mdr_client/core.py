@@ -536,7 +536,7 @@ async def get_data_model_transformation(
     source_data_model_id: str, target_data_model_id: str, tenant_schema: Optional[str] = None
 ) -> dict:
     mdr_api_url = _get_mdr_api_url()
-    url: str = f"{mdr_api_url}/transformation_groups/transformations_for_data_models/?source_data_model_id={source_data_model_id}&target_data_model_id={target_data_model_id}&size=1000"
+    url: str = f"{mdr_api_url}/transformation_groups/active_transformations_for_data_models/?source_data_model_id={source_data_model_id}&target_data_model_id={target_data_model_id}"
     try:
         async for client in _get_mdr_client():
             response = await client.get(url, headers=_build_mdr_headers(tenant_schema=tenant_schema))
