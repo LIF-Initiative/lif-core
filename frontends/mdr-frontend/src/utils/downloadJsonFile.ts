@@ -5,9 +5,13 @@ export const downloadJsonFile = (jsonData: unknown, filename: string = 'data.jso
     return;
   }
 
-  const safeFilename = sanitizeFilename(filename, 'data.json');
   const jsonString = JSON.stringify(jsonData, null, 2);
-  const blob = new Blob([jsonString], { type: 'application/json;charset=utf-8' });
+  downloadBlobFile(new Blob([jsonString], { type: 'application/json;charset=utf-8' }), filename);
+};
+
+/** Download a blob as a .json file without re-encoding it, so its bytes are kept exactly */
+export const downloadBlobFile = (blob: Blob, filename: string = 'data.json'): void => {
+  const safeFilename = sanitizeFilename(filename, 'data.json');
   const url = URL.createObjectURL(blob);
 
   try {
