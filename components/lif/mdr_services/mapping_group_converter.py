@@ -22,8 +22,8 @@ from lif.mdr_portability.mapping_paths import (
     to_file_path,
 )
 from lif.mdr_dto.transformation_group_dto import GROUP_VERSION_PATTERN
-from lif.mdr_portability.v1.models import ModelIdentity
 from lif.mdr_services.model_converter import is_overlay
+from lif.mdr_services.portability_helpers import find_model, without_nulls
 from lif.mdr_services.transformation_service import get_transformation_group_by_id
 from lif.mdr_sql_model.core import (
     Attribute,
@@ -249,8 +249,8 @@ async def export_mapping_group(session: AsyncSession, group_id: int) -> MappingG
     file = MappingGroupFile.model_validate(
         {
             "Format": {"Type": "lif-mdr-mapping-group", "Version": 1},
-            "Details": _without_nulls(details),
-            "Mappings": [_without_nulls(mapping) for mapping in mappings],
+            "Details": without_nulls(details),
+            "Mappings": [without_nulls(mapping) for mapping in mappings],
         }
     )
     # Two stored transformations writing one target, or a source listed twice, can't be written out.
@@ -273,36 +273,6 @@ def _export_path(
         return None
 
 
-def _without_nulls(item: dict) -> dict:
-    # Optional fields are left out when NULL, as the canonical form writes them (§9).
-    cleaned = {}
-    for key, value in item.items():
-        if isinstance(value, dict):
-            value = _without_nulls(value)
-        elif isinstance(value, list):
-            value = [_without_nulls(entry) if isinstance(entry, dict) else entry for entry in value]
-        if value is not None:
-            cleaned[key] = value
-    return cleaned
-
-
-async def _find_model(session: AsyncSession, identity: ModelIdentity) -> Optional[DataModel]:
-    return (
-        (
-            await session.execute(
-                select(DataModel).where(
-                    DataModel.Name == identity.Name,
-                    DataModel.DataModelVersion == identity.Version,
-                    DataModel.ContributorOrganization == identity.ContributorOrganization,
-                    DataModel.Deleted.is_not(True),
-                )
-            )
-        )
-        .scalars()
-        .first()
-    )
-
-
 async def import_mapping_group(session: AsyncSession, file: MappingGroupFile) -> int:
     """Write a portable file as a new, inactive transformation group, and return its Id.
 
@@ -318,7 +288,7 @@ async def import_mapping_group(session: AsyncSession, file: MappingGroupFile) ->
     models: dict[str, DataModel] = {}
     paths: dict[str, ModelPaths] = {}
     for side, identity in (("Source", file.Details.Source), ("Target", file.Details.Target)):
-        model = await _find_model(session, identity)
+        model = await find_model(session, identity)
         if model is None:
             errors.append(
                 PortabilityError(
