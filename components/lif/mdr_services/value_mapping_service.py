@@ -1,5 +1,5 @@
 from fastapi import HTTPException
-from lif.mdr_sql_model.core import ValueSetValueMapping
+from lif.mdr_sql_model.core import ValueSetValue, ValueSetValueMapping
 from lif.mdr_dto.value_mapping_dto import (
     CreateValueSetValueMappingDTO,
     UpdateValueSetValueMappingDTO,
@@ -10,6 +10,7 @@ from lif.mdr_services.value_set_values_service import get_value_set_value_by_id
 from lif.mdr_services.valueset_service import get_value_set_by_id
 from lif.mdr_utils.logger_config import get_logger
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import aliased
 from sqlmodel import select, func
 
 logger = get_logger(__name__)
@@ -18,8 +19,9 @@ logger = get_logger(__name__)
 async def create_value_set_value_mapping(
     session: AsyncSession, data: CreateValueSetValueMappingDTO
 ) -> ValueSetValueMappingDTO:
-    # Check if transformation group exists
-    await get_transformation_group_by_id(session=session, id=data.TransformationGroupId)
+    # Check if transformation group exists; a value mapping needs no group
+    if data.TransformationGroupId is not None:
+        await get_transformation_group_by_id(session=session, id=data.TransformationGroupId)
 
     # Check if the source ValueSetValueId exists
     source_value = await get_value_set_value_by_id(session=session, id=data.SourceValueId)
@@ -114,6 +116,8 @@ async def get_value_mappings_by_value_ids(
 async def get_value_mappings_by_value_set_ids(
     session: AsyncSession, source_value_set_id: int = None, target_value_set_id: int = None
 ):
+    """The pair is read from the values' ValueSetId, not from the mapping's SourceValueSetId and
+    TargetValueSetId, which are NULL or disagree with the values on most of the seed's rows."""
     # Validate source and/or target value sets exist
     if source_value_set_id is not None:
         await get_value_set_by_id(session=session, id=source_value_set_id)
@@ -122,9 +126,15 @@ async def get_value_mappings_by_value_set_ids(
 
     query = select(ValueSetValueMapping).where(ValueSetValueMapping.Deleted == False)
     if source_value_set_id is not None:
-        query = query.where(ValueSetValueMapping.SourceValueSetId == source_value_set_id)
+        source_value = aliased(ValueSetValue)
+        query = query.join(source_value, source_value.Id == ValueSetValueMapping.SourceValueId).where(
+            source_value.ValueSetId == source_value_set_id
+        )
     if target_value_set_id is not None:
-        query = query.where(ValueSetValueMapping.TargetValueSetId == target_value_set_id)
+        target_value = aliased(ValueSetValue)
+        query = query.join(target_value, target_value.Id == ValueSetValueMapping.TargetValueId).where(
+            target_value.ValueSetId == target_value_set_id
+        )
 
     result = await session.execute(query)
     mappings = result.scalars().all()
