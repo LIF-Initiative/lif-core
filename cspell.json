@@ -351,6 +351,10 @@
         "development/patrick/dagster-test/dagster_test/defs/graphql_query_all_fields_org3.graphql",
         "bases/lif/example_data_source_rest_api/core.py",
         "projects/lif_mdr_database/backup.sql",
+        // Data-model rebuild inputs and generated SQL (CTDL): vocabulary terms and generated
+        // statements, not prose. The generator and README beside them stay linted.
+        "projects/lif_mdr_database/data_models/**/*.json",
+        "projects/lif_mdr_database/data_models/**/*.sql",
         "projects/lif_mdr_database/dataset/init.sql",
         "sam/mdr-database/flyway/flyway-files/flyway/sql/mdr/V1.1__metadata_repository_init.sql",
         "test/scripts/postman/LIF_MDR.postman_collection.json",
