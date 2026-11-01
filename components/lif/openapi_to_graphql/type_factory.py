@@ -606,7 +606,8 @@ def dict_to_dataclass(cls: Any, data: Any) -> Any:
             logger.warning(f"dict_to_dataclass: Expected a list or dict for {cls}, got bool. Skipping.")
             return []
         if not isinstance(data, list):
-            raise TypeError(f"Expected a list or dict for {cls}, got {type(data)}: {data}")
+            # The type, not the data: the data is a learner record (#1351).
+            raise TypeError(f"Expected a list or dict for {cls}, got {type(data).__name__}")
         result = []
         for item in data:
             try:
@@ -626,7 +627,8 @@ def dict_to_dataclass(cls: Any, data: Any) -> Any:
     # Handle dataclasses and Strawberry types
     if is_known_type or can_instantiate:
         if not isinstance(data, dict):
-            raise TypeError(f"Expected dict for {cls}, got {type(data)}: {data}")
+            # The type, not the data: the data is a learner record (#1351).
+            raise TypeError(f"Expected dict for {cls}, got {type(data).__name__}")
 
         # Get field info - try dataclasses.fields first, fall back to __annotations__
         field_types = {}
@@ -664,7 +666,10 @@ def dict_to_dataclass(cls: Any, data: Any) -> Any:
                         value = convert_to_date(value)
                 instance_data[field_name] = value
             except Exception as exc:
-                logger.warning(f"dict_to_dataclass: Error in field '{field_name}' of {cls}: {exc}. Field set to None.")
+                # The type, not the message: a parse error quotes the learner's value (#1351).
+                logger.warning(
+                    f"dict_to_dataclass: Error in field '{field_name}' of {cls}: {type(exc).__name__}. Field set to None."
+                )
                 instance_data[field_name] = None
         try:
             return actual_cls(**instance_data)
@@ -900,9 +905,9 @@ def build_root_query_type(
                 # learner who genuinely has no data, so every backend failure looked like a
                 # successful empty result to the caller (#1264). Strawberry turns this into a
                 # GraphQL `errors` entry, matching what the update mutation below already does.
-                # The body stays in the log only: the QP builds it from str(e), and Strawberry
-                # relays the exception message to the caller verbatim.
-                logger.error(f"Query failed: {response.status_code} {response.text}")
+                # The body goes nowhere: Strawberry relays the exception message to the caller
+                # verbatim, and a 422 body echoes the filter, so not the log either (#1351).
+                logger.error(f"Query failed: {response.status_code} ({len(response.text)}-byte body)")
                 raise Exception(f"Query failed: {response.status_code}")
 
         is_nested_list: bool = type_class._name == "List"
@@ -1004,9 +1009,8 @@ def build_root_mutation_type(
             else:
                 raise Exception("Mutation succeeded but response missing object.")
         else:
-            # The body stays in the log only, as on the query path above (#1309): the QP builds
-            # it from str(e), and Strawberry relays the exception message to the caller verbatim.
-            logger.error(f"Mutation failed: {response.status_code} {response.text}")
+            # The body goes nowhere, as on the query path above (#1309, #1351).
+            logger.error(f"Mutation failed: {response.status_code} ({len(response.text)}-byte body)")
             raise Exception(f"Mutation failed: {response.status_code}")
 
     update_resolver.__annotations__ = {
