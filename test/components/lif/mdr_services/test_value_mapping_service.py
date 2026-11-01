@@ -6,7 +6,7 @@ pytestmark = pytest.mark.asyncio
 
 svc = pytest.importorskip("lif.mdr_services.value_mapping_service")
 
-from lif.mdr_dto.value_mapping_dto import UpdateValueSetValueMappingDTO  # noqa: E402
+from lif.mdr_dto.value_mapping_dto import CreateValueSetValueMappingDTO, UpdateValueSetValueMappingDTO  # noqa: E402
 
 
 class _ScalarListResult:
@@ -98,3 +98,32 @@ async def test_update_mapping_leaves_unset_ids_alone(fake_session, monkeypatch, 
     get_group.assert_not_awaited()
     assert existing_mapping.TransformationGroupId == 3
     assert existing_mapping.Notes == "untouched"
+
+
+async def test_create_mapping_without_a_group_skips_the_group_check(fake_session, monkeypatch):
+    """A value mapping needs no group: the crosswalk import writes TransformationGroupId as NULL (#1440)."""
+    get_group = AsyncMock()
+    monkeypatch.setattr(svc, "get_transformation_group_by_id", get_group)
+    monkeypatch.setattr(svc, "get_value_set_value_by_id", AsyncMock())
+
+    dto = CreateValueSetValueMappingDTO(SourceValueSetId=11, SourceValueId=21, TargetValueSetId=12, TargetValueId=22)
+    mapping = await svc.create_value_set_value_mapping(fake_session, dto)
+
+    get_group.assert_not_awaited()
+    assert mapping.TransformationGroupId is None
+
+
+async def test_create_mapping_with_a_group_still_checks_it_exists(fake_session, monkeypatch):
+    monkeypatch.setattr(
+        svc, "get_transformation_group_by_id", AsyncMock(side_effect=svc.HTTPException(status_code=404))
+    )
+    monkeypatch.setattr(svc, "get_value_set_value_by_id", AsyncMock())
+
+    dto = CreateValueSetValueMappingDTO(
+        SourceValueSetId=11, SourceValueId=21, TargetValueSetId=12, TargetValueId=22, TransformationGroupId=99
+    )
+    with pytest.raises(svc.HTTPException) as exc:
+        await svc.create_value_set_value_mapping(fake_session, dto)
+
+    assert exc.value.status_code == 404
+    fake_session.add.assert_not_called()
