@@ -1,9 +1,15 @@
-from unittest.mock import AsyncMock, patch
+import logging
+from types import SimpleNamespace
+from unittest.mock import AsyncMock, MagicMock, patch
 
+import pytest
 from fastapi.testclient import TestClient
+from pymongo.errors import OperationFailure
 
+from lif.datatypes import LIFPersonIdentifier, LIFPersonIdentifiers, LIFQueryFilter, LIFQueryPersonFilter
 from lif.exceptions.core import InvalidInputException
 from lif.query_cache_restapi import core
+from lif.query_cache_service import core as service_core
 
 
 def test_sample():
@@ -19,3 +25,102 @@ def test_update_answers_422_for_invalid_input():
 
     assert response.status_code == 422
     assert response.json()["detail"] == message
+
+
+# -------------------------------------------------------------------------
+# #1360: a 404 or 500 answers with fixed text, and the failure is still logged.
+# A Mongo error's message can quote the document, and the API returned it as the body.
+# These run the real service against a stubbed collection, so the service's own log is checked too.
+# -------------------------------------------------------------------------
+SENTINEL = "SENTINEL-NAME-4471"
+SERVICE_LOGGER = "lif.query_cache_service.core"
+_MONGO_ERROR = OperationFailure(f'Document failed validation: {{ firstName: "{SENTINEL}" }}')
+_FILTER = LIFQueryFilter(
+    root=LIFQueryPersonFilter(
+        person=LIFPersonIdentifiers(
+            Identifier=LIFPersonIdentifier(identifier=SENTINEL, identifierType="School-assigned number")
+        )
+    )
+).model_dump(mode="json", by_alias=True)
+_UPDATE = {
+    "updatePerson": {
+        "filter": {"Person": {"Identifier": {"identifier": SENTINEL}}},
+        "input": {"Person": {"nickname": "x"}},
+    }
+}
+_RECORD = {"Person": [{"Identifier": [{"identifier": SENTINEL}]}]}
+
+
+def _post(path, payload, collection, caplog):
+    with patch.object(service_core, "collection", collection), caplog.at_level(logging.ERROR, logger=SERVICE_LOGGER):
+        return TestClient(core.app).post(path, json=payload)
+
+
+def _assert_fixed_response(response, status_code, detail, caplog, logged):
+    assert response.status_code == status_code
+    assert response.json() == {"detail": detail}
+    assert SENTINEL not in response.text
+    # Replacing the body must not drop the error: the service logs its type and stack.
+    assert logged in caplog.text
+    assert SENTINEL not in caplog.text
+
+
+@pytest.mark.parametrize(
+    "path, payload, method, detail, logged",
+    [
+        (
+            "/query",
+            {"filter": _FILTER, "selected_fields": ["Person.Name"]},
+            "find",
+            "Error processing query",
+            "Query Exception: OperationFailure",
+        ),
+        ("/update", _UPDATE, "find_one_and_update", "Error processing update", "Update Exception: OperationFailure"),
+        ("/add", _RECORD, "insert_one", "Error adding record", "Add Exception: OperationFailure"),
+        (
+            "/save",
+            {"lif_query_filter": _FILTER, "lif_fragments": []},
+            "find",
+            "Error saving record",
+            "Save Exception: OperationFailure",
+        ),
+    ],
+)
+def test_a_500_does_not_return_the_error_message(path, payload, method, detail, logged, caplog):
+    collection = MagicMock()
+    # find is synchronous on the async client (it returns a cursor); the others are awaited.
+    setattr(
+        collection,
+        method,
+        MagicMock(side_effect=_MONGO_ERROR) if method == "find" else AsyncMock(side_effect=_MONGO_ERROR),
+    )
+
+    response = _post(path, payload, collection, caplog)
+
+    _assert_fixed_response(response, 500, detail, caplog, logged)
+
+
+def test_update_with_no_match_answers_a_fixed_404(caplog):
+    collection = MagicMock()
+    collection.find_one_and_update = AsyncMock(return_value=None)
+
+    response = _post("/update", _UPDATE, collection, caplog)
+
+    _assert_fixed_response(
+        response, 404, "No matching record after update", caplog, "Update Exception: ResourceNotFoundException"
+    )
+
+
+def test_add_with_no_inserted_id_answers_a_fixed_404(caplog):
+    collection = MagicMock()
+    collection.insert_one = AsyncMock(return_value=SimpleNamespace(inserted_id=None))
+
+    response = _post("/add", _RECORD, collection, caplog)
+
+    _assert_fixed_response(
+        response,
+        404,
+        "Failed to add record, no inserted ID returned",
+        caplog,
+        "Add Exception: ResourceNotFoundException",
+    )
