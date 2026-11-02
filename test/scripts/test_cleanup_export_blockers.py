@@ -102,6 +102,7 @@ async def _snapshot(conn):
         await conn.fetch('SELECT "Id", "Name" FROM "TransformationsGroup" ORDER BY "Id"'),
         await conn.fetch('SELECT "Id", "ContributorOrganization" FROM "DataModels" ORDER BY "Id"'),
         await conn.fetch('SELECT "Id", "Deleted" FROM "Transformations" ORDER BY "Id"'),
+        await conn.fetch('SELECT "Id", "Deleted" FROM "TransformationAttributes" ORDER BY "Id"'),
     )
 
 
@@ -122,6 +123,8 @@ async def test_cleanup_clears_its_refusals_and_leaves_the_rest_to_1388(seed_conn
         "model_26_org": 1,
         "transformation_1189": 1,
         "value_3649_extension": 1,
+        # The seed has no copy of 1760; dev has one in every schema.
+        "transformation_1761": 0,
     }
     assert (before["public"].models_exported, after["public"].models_exported) == (1, 12)
     assert (before["public"].groups_exported, after["public"].groups_exported) == (2, 3)
@@ -231,3 +234,79 @@ async def test_cleanup_keeps_3649_extension_once_it_has_notes(seed_conn):
 
     assert results["public"]["value_3649_extension"] == []
     assert await conn.fetchval('SELECT "Extension" FROM "ValueSetValues" WHERE "Id" = 3649') is True
+
+
+async def _add_1760_and_its_copy(conn):
+    # What dev has in group 3 (CEDS to LIF): 1760, and 1761 copying it field for field, both mapping
+    # source attribute 93 to target attribute 54. The seed has neither.
+    for transformation, source_row, target_row in ((1760, 9301, 9302), (1761, 9303, 9304)):
+        await conn.execute(
+            'INSERT INTO "Transformations" ("Id", "TransformationGroupId", "Name", "Expression", "ExpressionLanguage", "Deleted")'
+            " OVERRIDING SYSTEM VALUE VALUES ($1, 3, 'Person.AssessmentLearningExperience.type', $2, 'JSONata', false)",
+            transformation,
+            '{ "Person": Assessment. { "AssessmentLearningExperience": [{ "type": Assessment Identifier }] } }',
+        )
+        await conn.execute(
+            'INSERT INTO "TransformationAttributes" ("Id", "TransformationId", "AttributeId", "EntityId", "EntityIdPath", "AttributeType", "Deleted")'
+            " OVERRIDING SYSTEM VALUE VALUES ($1, $3, 93, NULL, '12,-93', 'Source', false), ($2, $3, 54, NULL, '4,3,-54', 'Target', false)",
+            source_row,
+            target_row,
+            transformation,
+        )
+
+
+async def test_cleanup_deletes_the_copy_of_1760_and_group_3_exports(seed_conn):
+    conn, url = seed_conn
+    await _add_1760_and_its_copy(conn)
+
+    results = await cleanup.cleanup(conn, apply=True)
+    after = await _measure(url)
+
+    assert [tuple(row.values()) for row in results["public"]["transformation_1761"]] == [(1761, 3, [9303, 9304])]
+    deleted = 'SELECT "Id", "Deleted" FROM "{}" WHERE "Id" = ANY($1::int[]) ORDER BY "Id"'
+    assert [tuple(r) for r in await conn.fetch(deleted.format("Transformations"), [1760, 1761])] == [
+        (1760, False),
+        (1761, True),
+    ]
+    assert [
+        tuple(r) for r in await conn.fetch(deleted.format("TransformationAttributes"), [9301, 9302, 9303, 9304])
+    ] == [(9301, False), (9302, False), (9303, True), (9304, True)]
+    assert not any(key.startswith("MAPPING_TARGET_SHARED") for key in after["public"].refusals)
+    assert after["public"].groups_exported == 3
+
+    # Bringing the copy back is enough to refuse group 3 again, so this rule is what cleared it.
+    await conn.execute('UPDATE "Transformations" SET "Deleted" = false WHERE "Id" = 1761')
+    await conn.execute('UPDATE "TransformationAttributes" SET "Deleted" = false WHERE "Id" IN (9303, 9304)')
+    restored = await _measure(url)
+    assert [
+        refused for key, refused in restored["public"].refusals.items() if key.startswith("MAPPING_TARGET_SHARED")
+    ] == [[("group 3 (4 -> 1 v1.0)", "Mappings[Person,AssessmentLearningExperience,type]")]]
+    assert restored["public"].groups_exported == 2
+
+
+@pytest.mark.parametrize(
+    "make_it_differ",
+    [
+        pytest.param('UPDATE "Transformations" SET "Expression" = \'{ "a": b }\' WHERE "Id" = 1761', id="expression"),
+        pytest.param('UPDATE "Transformations" SET "Notes" = \'kept on purpose\' WHERE "Id" = 1761', id="notes"),
+        pytest.param('UPDATE "TransformationAttributes" SET "AttributeId" = 92 WHERE "Id" = 9303', id="mapping-row"),
+        pytest.param(
+            'UPDATE "TransformationAttributes" SET "Deleted" = true WHERE "Id" = 9301', id="original-row-gone"
+        ),
+        pytest.param('UPDATE "Transformations" SET "Deleted" = true WHERE "Id" = 1760', id="original-gone"),
+    ],
+)
+async def test_cleanup_keeps_1761_once_it_differs_from_1760(seed_conn, make_it_differ):
+    # The rule is for the exact copy the decision named; one that now differs is a mapping someone meant.
+    conn, url = seed_conn
+    await _add_1760_and_its_copy(conn)
+    await conn.execute(make_it_differ)
+
+    results = await cleanup.cleanup(conn, apply=True)
+
+    assert results["public"]["transformation_1761"] == []
+    assert await conn.fetchval('SELECT "Deleted" FROM "Transformations" WHERE "Id" = 1761') is False
+    assert (
+        await conn.fetchval('SELECT count(*) FROM "TransformationAttributes" WHERE "Id" IN (9303, 9304) AND "Deleted"')
+        == 0
+    )

@@ -15,6 +15,10 @@ DataModels table, in this order:
     value_3649_extension
                       clear Extension on value 3649 (Kindergarten, model 1): a stray flag with no
                       notes, which its twin in model 4 and every other Kindergarten value don't have
+    transformation_1761
+                      soft-delete transformation 1761 in group 3, and its mapping rows: a copy of
+                      1760, so two mappings write one target. Only while it still matches 1760 in
+                      every field and mapping row
 
 Overlay models (a BaseDataModelId, or live inclusion rows) are left alone in every rule: converting
 them is #1388's. The ExtendedBy, cross-model and ownerless associations export also refuses are
@@ -160,6 +164,39 @@ WHERE v."Id" = 3649 AND v."ValueSetId" = 290 AND v."DataModelId" = 1 AND v."Valu
   AND v."Deleted" IS NOT TRUE AND v."Extension" = true
   AND trim(coalesce(v."ExtensionNotes", '')) = ''
 RETURNING v."Id", v."ValueSetId"
+""",
+    ),
+    (
+        "transformation_1761",
+        """
+WITH copy AS (
+    SELECT t."Id" FROM {schema}."Transformations" t
+    JOIN {schema}."Transformations" o ON o."Id" = 1760 AND o."TransformationGroupId" = 3 AND o."Deleted" = false
+    WHERE t."Id" = 1761 AND t."TransformationGroupId" = 3 AND t."Deleted" = false
+      AND (t."Name", t."Description", t."UseConsiderations", t."Alignment", t."Expression", t."ExpressionLanguage", t."Notes")
+          IS NOT DISTINCT FROM
+          (o."Name", o."Description", o."UseConsiderations", o."Alignment", o."Expression", o."ExpressionLanguage", o."Notes")
+      AND ARRAY(
+          SELECT ROW(ta."AttributeType"::text, ta."AttributeId", ta."EntityId", ta."EntityIdPath")::text
+          FROM {schema}."TransformationAttributes" ta WHERE ta."TransformationId" = t."Id" AND ta."Deleted" = false ORDER BY 1
+      ) = ARRAY(
+          SELECT ROW(ta."AttributeType"::text, ta."AttributeId", ta."EntityId", ta."EntityIdPath")::text
+          FROM {schema}."TransformationAttributes" ta WHERE ta."TransformationId" = o."Id" AND ta."Deleted" = false ORDER BY 1
+      )
+),
+rows AS (
+    UPDATE {schema}."TransformationAttributes" ta SET "Deleted" = true
+    FROM copy WHERE ta."TransformationId" = copy."Id" AND ta."Deleted" = false
+    RETURNING ta."Id"
+),
+transformation AS (
+    UPDATE {schema}."Transformations" t SET "Deleted" = true
+    FROM copy WHERE t."Id" = copy."Id"
+    RETURNING t."Id", t."TransformationGroupId"
+)
+SELECT transformation."Id", transformation."TransformationGroupId",
+       ARRAY(SELECT rows."Id" FROM rows ORDER BY rows."Id") AS "MappingRowIds"
+FROM transformation
 """,
     ),
 ]
