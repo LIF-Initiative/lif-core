@@ -15,7 +15,6 @@ Callers reach it through portability_converter, the converter module for every f
 import json
 from collections.abc import Iterator
 from dataclasses import dataclass
-from datetime import datetime
 from typing import Any, NamedTuple, Optional, Union
 
 from lif.mdr_portability import (
@@ -28,7 +27,8 @@ from lif.mdr_portability import (
 )
 from lif.mdr_portability.errors import error_group
 from lif.mdr_portability.v1.models import Association as FileAssociation
-from lif.mdr_portability.v1.models import AttributeKey, EntityKey
+from lif.mdr_portability.v1.models import AttributeKey, EntityKey, ModelIdentity
+from lif.mdr_services.portability_helpers import find_model, to_json, without_nulls
 from lif.mdr_sql_model.core import (
     Attribute,
     Constraint,
@@ -107,7 +107,7 @@ async def export_model(session: AsyncSession, data_model_id: int) -> ModelFile:
         "Associations": [_export_association(association, rows) for association in _list_own_associations(rows)],
     }
     # Through the parser, so stored values the format does not allow are refused by name.
-    file = parse_model_file(json.dumps(_without_nulls(content), default=_to_json).encode("utf-8"))
+    file = parse_model_file(json.dumps(without_nulls(content), default=to_json).encode("utf-8"))
     check_model_file(file)
     return file
 
@@ -487,22 +487,6 @@ def _export_association(association: AnyAssociation, rows: _ModelRows) -> dict:
     }
 
 
-def _without_nulls(item: Any) -> Any:
-    # Optional fields are left out when NULL, as the canonical form writes them (§9).
-    if isinstance(item, dict):
-        return {key: _without_nulls(value) for key, value in item.items() if value is not None}
-    if isinstance(item, list):
-        return [_without_nulls(entry) for entry in item]
-    return item
-
-
-def _to_json(value: Any) -> str:
-    # Stored timestamps are timezone-aware, so isoformat writes an RFC 3339 offset (§9).
-    if isinstance(value, datetime):
-        return value.isoformat()
-    raise TypeError(f"{type(value).__name__} is not JSON serializable")
-
-
 async def import_model(session: AsyncSession, file: ModelFile) -> int:
     """Write a portable file as a new model, and return its Id.
 
@@ -515,16 +499,12 @@ async def import_model(session: AsyncSession, file: ModelFile) -> int:
     except PortabilityErrorGroup as group:
         errors.extend(group.exceptions)
     details = file.Details
-    existing = (
-        await session.execute(
-            select(DataModel.Id).where(
-                DataModel.Name == details.Name,
-                DataModel.DataModelVersion == details.Version,
-                DataModel.ContributorOrganization == details.ContributorOrganization,
-                DataModel.Deleted.is_not(True),
-            )
-        )
-    ).first()
+    existing = await find_model(
+        session,
+        ModelIdentity(
+            Name=details.Name, Version=details.Version, ContributorOrganization=details.ContributorOrganization
+        ),
+    )
     if existing is not None:
         errors.append(
             PortabilityError(
