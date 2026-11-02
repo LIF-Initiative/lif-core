@@ -124,3 +124,33 @@ def test_add_with_no_inserted_id_answers_a_fixed_404(caplog):
         caplog,
         "Add Exception: ResourceNotFoundException",
     )
+
+
+# A ValueError used to be re-raised out of the app. The client got a plain 500, but uvicorn then
+# logged "Exception in ASGI application" with the message, and a pydantic ValidationError quotes the input.
+# TestClient re-raises whatever escapes the app, so these fail if the error escapes.
+@pytest.mark.parametrize(
+    "path, payload, service_function, detail",
+    [
+        ("/query", {"filter": _FILTER, "selected_fields": ["Person.Name"]}, "query", "Error processing query"),
+        ("/update", _UPDATE, "update", "Error processing update"),
+        ("/add", _RECORD, "add", "Error adding record"),
+        ("/save", {"lif_query_filter": _FILTER, "lif_fragments": []}, "save", "Error saving record"),
+    ],
+)
+def test_a_value_error_answers_the_fixed_500_instead_of_escaping(path, payload, service_function, detail):
+    with patch.object(core, service_function, AsyncMock(side_effect=ValueError(f"bad value {SENTINEL}"))):
+        response = TestClient(core.app).post(path, json=payload)
+
+    assert response.status_code == 500
+    assert response.json() == {"detail": detail}
+
+
+def test_a_stored_record_that_fails_validation_answers_a_fixed_500(caplog):
+    """The case from the #1454 review: the record Mongo returns fails LIFRecord's validation."""
+    collection = MagicMock()
+    collection.find_one_and_update = AsyncMock(return_value={"Person": SENTINEL})
+
+    response = _post("/update", _UPDATE, collection, caplog)
+
+    _assert_fixed_response(response, 500, "Error processing update", caplog, "Update Exception: ValidationError")

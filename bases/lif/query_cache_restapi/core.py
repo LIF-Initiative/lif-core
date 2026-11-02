@@ -23,8 +23,6 @@ async def do_load(lif_query: LIFQuery) -> List[LIFRecord]:
     logger.info("CALL RECEIVED TO /query API")
     try:
         return await query(lif_query)
-    except ValueError:
-        raise
     except Exception:
         raise HTTPException(status_code=500, detail="Error processing query")
 
@@ -34,8 +32,6 @@ async def do_run_update(lif_update: LIFUpdate) -> LIFRecord:
     logger.info("CALL RECEIVED TO /update API")
     try:
         return await update(lif_update)
-    except ValueError:
-        raise
     except InvalidInputException as e:
         raise HTTPException(status_code=422, detail=str(e))
     except ResourceNotFoundException:
@@ -49,8 +45,6 @@ async def do_add_record(lif_record: LIFRecord) -> LIFRecord:
     logger.info("CALL RECEIVED TO /add API")
     try:
         return await add(lif_record=lif_record)
-    except ValueError:
-        raise
     except ResourceNotFoundException:
         raise HTTPException(status_code=404, detail="Failed to add record, no inserted ID returned")
     except Exception:
@@ -62,8 +56,6 @@ async def do_save_record(lif_query_filter: LIFQueryFilter, lif_fragments: List[L
     logger.info("CALL RECEIVED TO /save API")
     try:
         return await save(lif_query_filter=lif_query_filter, lif_fragments=lif_fragments)
-    except ValueError:
-        raise
     except ResourceNotFoundException:
         raise HTTPException(status_code=404, detail="Record not found")
     except Exception:
