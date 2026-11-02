@@ -214,6 +214,56 @@ async def test_cleanup_names_a_blank_group_and_skips_a_mapped_attribute(seed_con
     assert await conn.fetchval('SELECT "Name" FROM "TransformationsGroup" WHERE "Id" = 9003') == " "
 
 
+async def test_cleanup_skips_an_attribute_an_overlay_includes(seed_conn):
+    # A base model's attribute in no association, which overlay 17 still includes; and one whose
+    # inclusion row is deleted, which goes like any other.
+    conn, url = seed_conn
+    included, formerly = [
+        row["Id"]
+        for row in await conn.fetch(
+            'SELECT a."Id" FROM "Attributes" a WHERE a."DataModelId" = 15 AND a."Deleted" = false AND NOT EXISTS ('
+            ' SELECT 1 FROM "EntityAttributeAssociation" x WHERE x."AttributeId" = a."Id" AND x."Deleted" = false)'
+            ' ORDER BY a."Id" LIMIT 2'
+        )
+    ]
+    await conn.execute(
+        'INSERT INTO "ExtInclusionsFromBaseDM" ("Id", "ExtDataModelId", "ElementType", "IncludedElementId", "Deleted")'
+        " OVERRIDING SYSTEM VALUE VALUES (9401, 17, 'Attribute', $1, false), (9402, 17, 'Attribute', $2, true)",
+        included,
+        formerly,
+    )
+
+    results = await cleanup.cleanup(conn, apply=True)
+
+    public = results["public"]
+    assert [row["Id"] for row in public["unassociated_skipped"]] == [included]
+    deleted = {row["Id"] for row in public["unassociated"]}
+    assert included not in deleted and formerly in deleted
+    assert await conn.fetchval('SELECT "Deleted" FROM "Attributes" WHERE "Id" = $1', included) is False
+
+
+async def test_cleanup_names_a_group_blank_by_python_s_strip(seed_conn):
+    # The exporter's blank check is str.strip(), which strips more than space, tab, CR and LF.
+    conn, url = seed_conn
+    names = {9011: "\xa0", 9012: "\f\v", 9013: "　 ", 9014: "\xa0x"}
+    await conn.executemany(
+        'INSERT INTO "TransformationsGroup" ("Id", "SourceDataModelId", "TargetDataModelId", "GroupVersion", "Name", "Deleted")'
+        # One version each: a pair of models has one live group per version.
+        " OVERRIDING SYSTEM VALUE VALUES ($1, 11, 7, $2, $3, false)",
+        [(group, f"{group}.0", name) for group, name in names.items()],
+    )
+    assert [group for group, name in names.items() if not name.strip()] == [9011, 9012, 9013]
+
+    results = await cleanup.cleanup(conn, apply=True)
+
+    assert [(row["Id"], row["old_name"], row["Name"]) for row in results["public"]["group_name"]] == [
+        (9011, "\xa0", "Schema.org_ELM"),
+        (9012, "\f\v", "Schema.org_ELM"),
+        (9013, "　 ", "Schema.org_ELM"),
+    ]
+    assert await conn.fetchval('SELECT "Name" FROM "TransformationsGroup" WHERE "Id" = 9014') == "\xa0x"
+
+
 async def test_cleanup_keeps_1189_once_it_has_an_expression(seed_conn):
     # The rule is for the empty row the decision named; one someone has since filled in is kept.
     conn, url = seed_conn

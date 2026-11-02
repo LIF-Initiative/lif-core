@@ -5,10 +5,12 @@ Applies the cleanup rules decided on #1393, in `public` and then every `tenant_*
 DataModels table, in this order:
 
     unassociated      soft-delete a live attribute that is in no live association (§11: dropped on
-                      migration). One that a live mapping row still uses is skipped and listed.
+                      migration). One that a live mapping row or a live inclusion row still uses
+                      is skipped and listed.
     no_data_type      set DataType to 'string' where it is NULL (§11), after the deletes above
     group_name        set a blank group Name to '<source model Name>_<target model Name>', the
-                      pattern every named group follows
+                      pattern every named group follows. Blank means what the exporter's
+                      str.strip() leaves empty
     model_26_org      set model 26 (R1 Demo Source Data Model) ContributorOrganization to 'LIF'
     transformation_1189
                       soft-delete transformation 1189 in group 3: no expression, no source, no target
@@ -78,12 +80,20 @@ WHERE a."Deleted" = false
 """
 )
 
-_MAPPED = """
-EXISTS (
+# Still in use, so the first rule keeps it: a live mapping row maps it, or an overlay includes it.
+_IN_USE = """
+(EXISTS (
     SELECT 1 FROM {schema}."TransformationAttributes" ta
     WHERE ta."AttributeId" = u."Id" AND ta."Deleted" = false
-)
+) OR EXISTS (
+    SELECT 1 FROM {schema}."ExtInclusionsFromBaseDM" i
+    WHERE i."ElementType" = 'Attribute' AND i."IncludedElementId" = u."Id" AND i."Deleted" = false
+))
 """
+
+# The characters str.strip() strips, as regex escapes for a bracket expression. The exporter
+# refuses a group when `not (group.Name or "").strip()` (mapping_group_converter.py).
+_PY_WHITESPACE = "".join(f"\\u{ord(c):04x}" for c in map(chr, range(0x110000)) if c.isspace())
 
 # (rule, SQL). Each statement returns one row per changed row.
 RULES: list[tuple[str, str]] = [
@@ -96,7 +106,7 @@ WITH unassociated AS ("""
 UPDATE {schema}."Attributes" a SET "Deleted" = true
 FROM unassociated u
 WHERE a."Id" = u."Id" AND NOT """
-        + _MAPPED
+        + _IN_USE
         + """
 RETURNING a."Id", a."DataModelId"
 """,
@@ -121,7 +131,9 @@ WITH blank AS (
     JOIN {schema}."DataModels" s ON s."Id" = g."SourceDataModelId"
     JOIN {schema}."DataModels" t ON t."Id" = g."TargetDataModelId"
     WHERE g."Deleted" IS NOT TRUE
-      AND trim(BOTH E' \\t\\r\\n' FROM g."Name") = ''
+      AND g."Name" ~ '^["""
+        + _PY_WHITESPACE
+        + """]*$'
       AND trim(coalesce(s."Name", '')) <> '' AND trim(coalesce(t."Name", '')) <> ''
 )
 UPDATE {schema}."TransformationsGroup" g SET "Name" = blank.new_name
@@ -201,14 +213,14 @@ FROM transformation
     ),
 ]
 
-# Unassociated attributes the first rule skips, because a live mapping row uses them.
+# Unassociated attributes the first rule skips, because they are still in use.
 SKIPPED_SQL = (
     """
 WITH unassociated AS ("""
     + _UNASSOCIATED
     + """)
 SELECT u."Id", u."DataModelId" FROM unassociated u WHERE """
-    + _MAPPED
+    + _IN_USE
     + """ ORDER BY u."Id"
 """
 )
