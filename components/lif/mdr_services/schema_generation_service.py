@@ -278,9 +278,13 @@ async def find_children(
                                 # cur.execute('select "Value" FROM public."ValueSetValues"  where "ValueSetId" = ' + str(attribute_data["ValueSetId"]))
                                 # rows = cur.fetchall()
                                 # valueset_values = [row[0] for row in rows]
-                                query = select(ValueSetValue.Value).where(
-                                    ValueSetValue.ValueSetId == attribute_with_assoc_md.ValueSetId,
-                                    ValueSetValue.Deleted == False,
+                                query = (
+                                    select(ValueSetValue.Value)
+                                    .where(
+                                        ValueSetValue.ValueSetId == attribute_with_assoc_md.ValueSetId,
+                                        ValueSetValue.Deleted == False,
+                                    )
+                                    .order_by(ValueSetValue.Id)
                                 )
                                 result = await session.execute(query)
                                 values = result.scalars().all()
@@ -298,9 +302,13 @@ async def find_children(
                                                 parent_properties[entity_name]["properties"][attribute_key]["ValueSet"][
                                                     key
                                                 ] = value
-                                        query = select(ValueSetValue).where(
-                                            ValueSetValue.ValueSetId == attribute_with_assoc_md.ValueSetId,
-                                            ValueSetValue.Deleted == False,
+                                        query = (
+                                            select(ValueSetValue)
+                                            .where(
+                                                ValueSetValue.ValueSetId == attribute_with_assoc_md.ValueSetId,
+                                                ValueSetValue.Deleted == False,
+                                            )
+                                            .order_by(ValueSetValue.Id)
                                         )
                                         result = await session.execute(query)
                                         valueset_values_full = result.scalars().all()
@@ -827,9 +835,13 @@ async def generate_openapi_schema(
                     )
                     # Adding enums
                     if attribute_with_assoc_md.ValueSetId:
-                        query = select(ValueSetValue.Value).where(
-                            ValueSetValue.ValueSetId == attribute_with_assoc_md.ValueSetId,
-                            ValueSetValue.Deleted == False,
+                        query = (
+                            select(ValueSetValue.Value)
+                            .where(
+                                ValueSetValue.ValueSetId == attribute_with_assoc_md.ValueSetId,
+                                ValueSetValue.Deleted == False,
+                            )
+                            .order_by(ValueSetValue.Id)
                         )
                         result = await session.execute(query)
                         values = result.fetchall()
@@ -853,9 +865,13 @@ async def generate_openapi_schema(
                                         openapi_spec["components"]["schemas"][parent_entity.Name]["properties"][
                                             attribute_key
                                         ]["ValueSet"][key] = value
-                                query = select(ValueSetValue).where(
-                                    ValueSetValue.ValueSetId == attribute_with_assoc_md.ValueSetId,
-                                    ValueSetValue.Deleted == False,
+                                query = (
+                                    select(ValueSetValue)
+                                    .where(
+                                        ValueSetValue.ValueSetId == attribute_with_assoc_md.ValueSetId,
+                                        ValueSetValue.Deleted == False,
+                                    )
+                                    .order_by(ValueSetValue.Id)
                                 )
                                 result = await session.execute(query)
                                 valueset_values_full = result.scalars().all()
