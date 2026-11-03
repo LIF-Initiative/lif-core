@@ -8,6 +8,8 @@ and returns query results.
 from datetime import datetime, timezone
 from typing import Dict, List
 
+import traceback
+
 import httpx
 from pydantic import BaseModel, Field
 
@@ -228,8 +230,8 @@ class LIFQueryPlannerService:
         except httpx.HTTPStatusError as e:
             raise e
         except Exception as e:
-            msg = f"LIF Query Planner error: {e}"
-            logger.exception(msg)
+            msg = f"LIF Query Planner error: {type(e).__name__}"
+            log_failure(msg, e)
             raise LIFException(msg) from e
 
     # -------------------------------------------------------------------------
@@ -287,8 +289,8 @@ class LIFQueryPlannerService:
         except httpx.HTTPStatusError as e:
             raise e
         except Exception as e:
-            msg = f"LIF Query Planner error: {e}"
-            logger.exception(msg)
+            msg = f"LIF Query Planner error: {type(e).__name__}"
+            log_failure(msg, e)
             raise LIFException(msg) from e
 
     # -------------------------------------------------------------------------
@@ -374,9 +376,20 @@ class LIFQueryPlannerService:
         except httpx.HTTPStatusError as e:
             raise e
         except Exception as e:
-            msg = f"LIF Query Planner error: {e}"
-            logger.exception(msg)
+            msg = f"LIF Query Planner error: {type(e).__name__}"
+            log_failure(msg, e)
             raise LIFException(msg) from e
+
+
+def log_failure(msg: str, error: Exception) -> None:
+    """Log a failure with its stack but not the exception's message, nor its chained causes (#1351).
+
+    The messages can quote learner data: a cache or orchestrator 422 body echoes the request's
+    filter, and pydantic's ValidationError quotes the value it rejected. `logger.exception` would
+    print them in the traceback, including through `raise ... from e`.
+    """
+    stack = "".join(traceback.format_tb(error.__traceback__)).rstrip()
+    logger.error("%s\n%s", msg, stack)
 
 
 async def query_lif_cache(lif_cache_query_url: str, query: LIFQuery, timeout: int) -> List[LIFRecord]:
@@ -403,11 +416,11 @@ async def query_lif_cache(lif_cache_query_url: str, query: LIFQuery, timeout: in
         logger.info(f"Queried LIF Cache and found {len(lif_records)} records.")
         return lif_records
     except httpx.HTTPStatusError as e:
-        msg = f"LIF Cache query HTTP error: {e.response.status_code} - {e.response.text}"
+        msg = f"LIF Cache query HTTP error: {e.response.status_code} ({len(e.response.text)}-byte body)"
         logger.error(msg)
         raise LIFException(msg) from e
     except Exception as e:
-        msg = f"LIF Cache query error: {e}"
+        msg = f"LIF Cache query error: {type(e).__name__}"
         logger.error(msg)
         raise LIFException(msg) from e
 
@@ -434,11 +447,11 @@ async def post_orchestrator_job(
         )
         return orchestrator_job_request_response
     except httpx.HTTPStatusError as e:
-        msg: str = f"Orchestrator job post HTTP error: {e.response.status_code} - {e.response.text}"
+        msg: str = f"Orchestrator job post HTTP error: {e.response.status_code} ({len(e.response.text)}-byte body)"
         logger.error(msg)
         raise LIFException(e) from e
     except Exception as e:
-        msg = f"Orchestrator job post error: {e}"
+        msg = f"Orchestrator job post error: {type(e).__name__}"
         logger.error(msg)
         raise LIFException(msg) from e
 

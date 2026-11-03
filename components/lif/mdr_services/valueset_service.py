@@ -4,7 +4,6 @@ from fastapi import HTTPException
 from lif.mdr_sql_model.core import (
     Attribute,
     DataModel,
-    DataModelType,
     Entity,
     EntityAttributeAssociation,
     ValueSet,
@@ -13,6 +12,7 @@ from lif.mdr_sql_model.core import (
 )
 from lif.mdr_dto.valueset_dto import CreateValueSetDTO, CreateValueSetWithValuesDTO, UpdateValueSetDTO, ValueSetDTO
 from lif.mdr_services.helper_service import check_datamodel_by_id
+from lif.mdr_services.model_converter import is_overlay
 from lif.mdr_services.value_set_values_service import create_value_set_values
 from lif.mdr_utils.logger_config import get_logger
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -212,7 +212,7 @@ async def get_paginated_value_sets_by_data_model_id(
     data_model_id_list: List[int] = []
     data_model = await check_datamodel_by_id(session=session, id=data_model_id)
     data_model_id_list.append(data_model.Id)
-    if data_model.Type == DataModelType.OrgLIF or data_model.Type == DataModelType.PartnerLIF:
+    if await is_overlay(session, data_model):
         base_data_model = await check_datamodel_by_id(session=session, id=data_model.BaseDataModelId)
         data_model_id_list.append(base_data_model.Id)
 
@@ -246,7 +246,7 @@ async def get_value_sets_by_data_model_id_and_attributes(
     data_model = await check_datamodel_by_id(session=session, id=data_model_id)
     data_model_id_list: List[int] = []
     data_model_id_list.append(data_model.Id)
-    if data_model.Type == DataModelType.OrgLIF or data_model.Type == DataModelType.PartnerLIF:
+    if await is_overlay(session, data_model):
         base_data_model = await check_datamodel_by_id(session=session, id=data_model.BaseDataModelId)
         data_model_id_list.append(base_data_model.Id)
 

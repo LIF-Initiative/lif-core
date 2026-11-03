@@ -429,10 +429,12 @@ async def run_semantic_search(
         return [response_json] if response_json else [{"result": "No matches found."}]
 
     except GraphQLClientException as e:
-        logger.error(f"LIF query tool error: {e}")
+        # The type, not the message: it can carry the error body or a GraphQL error quoting a
+        # learner value. The MCP caller still gets the message (#1351).
+        logger.error(f"LIF query tool error: {type(e).__name__}")
         raise ToolError(f"LIF query tool error: {e}")
     except Exception as e:
-        logger.error(f"LIF query tool error: {e}")
+        logger.error(f"LIF query tool error: {type(e).__name__}")
         raise ToolError(f"LIF query tool error: {e}")
 
 
@@ -447,8 +449,8 @@ async def run_mutation(filter: BaseModel, input: BaseModel, graphql_url: str) ->
     try:
         return await execute_graphql_mutation(query=graphql_mutation, url=graphql_url)
     except GraphQLClientException as e:
-        logger.error(f"LIF mutation tool error: {e}")
+        logger.error(f"LIF mutation tool error: {type(e).__name__}")
         raise ToolError(f"LIF mutation tool error: {e}")
     except Exception as e:
-        logger.error(f"LIF mutation tool error: {e}")
+        logger.error(f"LIF mutation tool error: {type(e).__name__}")
         raise ToolError(f"LIF mutation tool error: {e}")
