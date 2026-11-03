@@ -15,7 +15,13 @@ from pathlib import Path
 import pytest
 from sqlmodel import func, select
 
-from lif.mdr_portability import PortabilityErrorCode, PortabilityErrorGroup, dump_canonical, parse_model_file
+from lif.mdr_portability import (
+    PortabilityErrorCode,
+    PortabilityErrorGroup,
+    check_model_file,
+    dump_canonical,
+    parse_model_file,
+)
 from lif.mdr_services.model_converter import export_model, import_model
 from lif.mdr_sql_model.core import (
     AccessType,
@@ -584,6 +590,14 @@ def _reference_an_attribute(content):
             association["Reference"] = True
 
 
+def _place_an_attribute_twice_under_one_parent(content):
+    # A role for an attribute: Person.ssn under Person again, as taxId. The file rules allow it (§5.4).
+    # Assumes the reference target model already places Person.ssn under Person (as ssn), so this is a second one.
+    parent, child = {"Entity": "Person"}, {"Attribute": "Person.ssn"}
+    assert any(a["Parent"] == parent and a["Child"] == child for a in content["Associations"])
+    content["Associations"].append({"Parent": parent, "Child": child, "Name": "taxId"})
+
+
 def _use_a_missing_value_set(content):
     for attribute in content["Attributes"]:
         if attribute["UniqueName"] == "Person.lunchStatus":
@@ -628,6 +642,7 @@ def _remove_value_name(content):
         (_add_cycle, Code.ASSOCIATION_CYCLE),
         (_reference_an_attribute, Code.REFERENCE_INVALID),
         (_use_a_missing_value_set, Code.ELEMENT_REFERENCE_UNRESOLVED),
+        (_place_an_attribute_twice_under_one_parent, Code.FIELD_INVALID),
     ],
 )
 async def test_a_refused_import_writes_nothing(test_db_session, mutate, code):
@@ -639,6 +654,25 @@ async def test_a_refused_import_writes_nothing(test_db_session, mutate, code):
     await session.commit()
     assert {error.code for error in exc_info.value.exceptions} == {code}
     assert [await _count_rows(session, model_class) for model_class in tables] == counts
+
+
+async def test_import_refuses_an_attribute_placed_twice_under_one_parent(test_db_session):
+    # The file is valid, but the attribute association index has no Name, so the second row can't be stored.
+    session, tag = test_db_session, "attribute_role"
+    file = parse_model_file(_model_content(tag, _place_an_attribute_twice_under_one_parent))
+    check_model_file(file)
+
+    with pytest.raises(PortabilityErrorGroup) as exc_info:
+        await import_model(session, file)
+
+    assert [(error.code, error.element, error.reason) for error in exc_info.value.exceptions] == [
+        (
+            Code.FIELD_INVALID,
+            "Associations[Person, taxId]",
+            "the attribute 'Person.ssn' is already under 'Person' as 'ssn'; an attribute can be placed under a "
+            "parent only once until attribute associations are stored by Name",
+        )
+    ]
 
 
 async def test_import_refuses_a_model_that_is_already_installed(test_db_session):
