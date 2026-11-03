@@ -1,0 +1,28 @@
+name: Deploy LIF Control Plane API to Amazon ECS
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["main"]
+    paths:
+      - .github/workflows/lif_control_plane_api.yml
+      - bases/lif/control_plane_restapi/**
+      - cloudformation/dev-lif-control-plane-api.params
+      - cloudformation/lif-control-plane-api-taskdef-includes.yml
+      - components/lif/auth/**
+      - components/lif/logging/**
+      - projects/lif_control_plane_api/**
+      - .github/workflows/_deploy-service.yml
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    uses: ./.github/workflows/_deploy-service.yml
+    with:
+      service_name: control-plane-api
+      working_dir: ./projects/lif_control_plane_api
+      ecr_repository: lif/dev/lif_control_plane_api
+      ecs_services: '["control-plane-api-FARGATE"]'
