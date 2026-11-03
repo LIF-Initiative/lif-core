@@ -71,7 +71,8 @@
       "Name": "Competency",
       "LevelOfAccess": "Public",
       "Queryable": true,
-      "Modifiable": false
+      "Modifiable": false,
+      "Array": true
     },
     {
       "UniqueName": "Competency.Classifier",

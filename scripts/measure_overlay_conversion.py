@@ -22,6 +22,27 @@ before any of it is designed against real data. For each overlay model it report
 Counts are entity/attribute where both apply. After the table it lists the override and clash
 names, and any ExtendedBy links declared by a model that is not an overlay.
 
+A second table holds the checks the conversion's write side needs. The "render set" is what the
+model's schema shows: the live elements its live inclusion rows name.
+
+    odd types       kept attributes (included, or own and associated) with a NULL DataType, an
+                    'entity' DataType, or a TargetEntityId; export refuses these
+    flag conflicts  elements with several live inclusion rows that disagree on the flags
+    ext base        ExtendedBy rows of the model with both ends in its base (copied with the model)
+    ext own         ExtendedBy rows of the model with an end in the model itself
+    ext other       ExtendedBy rows of the model with both ends in one other model, which owns them
+    ext no owner    ExtendedBy rows of the model with ends in two models, neither of them this one
+    ext absent      ExtendedBy rows of the model with a missing or soft-deleted end
+    ext null cross  rows with no ExtendedBy and one end in the model, the other in another model; the
+                    other model's schema shows them (model 1's shows 17's Common.Contact attributes)
+    ... shown       of those, the ones the render set displays (both ends in it)
+    cross overlay   ExtendedBy rows of another overlay with both ends in this model's render set
+    paths outside   live mapping rows on the model's side with a node outside the render set
+    paths invalid   live mapping rows on the model's side whose EntityIdPath is not a list of IDs
+
+After it, each "ext no owner" and "ext null cross" row is listed with its ends, since the conversion
+has to place each one.
+
 Reads `public` and every `tenant_*` schema with a DataModels table in one read-only transaction.
 It changes nothing and exits 0; it exits 1 only when it cannot connect or find a schema.
 
@@ -77,6 +98,7 @@ FROM {schema}."Entities" WHERE "DataModelId" = $1 AND "Deleted" IS NOT TRUE
 UNION ALL
 SELECT 'Attribute', a."UniqueName", v."DataModelId",
        EXISTS (SELECT 1 FROM {schema}."EntityAttributeAssociation" x
+               JOIN {schema}."Entities" e ON e."Id" = x."EntityId" AND e."Deleted" IS NOT TRUE
                WHERE x."AttributeId" = a."Id" AND x."Deleted" IS NOT TRUE)
 FROM {schema}."Attributes" a
 LEFT JOIN {schema}."ValueSets" v ON v."Id" = a."ValueSetId"
@@ -107,6 +129,63 @@ LEFT JOIN {schema}."TransformationAttributes" ta ON ta."TransformationId" = t."I
 WHERE g."Deleted" IS NOT TRUE AND $1 IN (g."SourceDataModelId", g."TargetDataModelId")
 """
 
+# Attributes the conversion keeps: the live ones the model includes, and its own ones associated to a live
+# entity, as export reads them
+# (its own unassociated ones are dropped, Q1).
+ODD_TYPES_SQL = """
+SELECT count(*) FILTER (WHERE a."DataType" IS NULL) AS null_type,
+       count(*) FILTER (WHERE a."DataType" = 'entity') AS entity_type,
+       count(*) FILTER (WHERE a."TargetEntityId" IS NOT NULL) AS target
+FROM {schema}."Attributes" a
+WHERE a."Deleted" IS NOT TRUE
+  AND (a."Id" IN (SELECT i."IncludedElementId" FROM {schema}."ExtInclusionsFromBaseDM" i
+                  WHERE i."ExtDataModelId" = $1 AND i."ElementType"::text = 'Attribute' AND i."Deleted" IS NOT TRUE)
+       OR (a."DataModelId" = $1
+           AND EXISTS (SELECT 1 FROM {schema}."EntityAttributeAssociation" x
+                       JOIN {schema}."Entities" e ON e."Id" = x."EntityId" AND e."Deleted" IS NOT TRUE
+                       WHERE x."AttributeId" = a."Id" AND x."Deleted" IS NOT TRUE)))
+"""
+
+FLAG_CONFLICTS_SQL = """
+SELECT count(*) AS n FROM (
+    SELECT 1 FROM {schema}."ExtInclusionsFromBaseDM"
+    WHERE "ExtDataModelId" = $1 AND "Deleted" IS NOT TRUE
+    GROUP BY "ElementType", "IncludedElementId"
+    HAVING count(DISTINCT concat_ws('|', COALESCE("LevelOfAccess"::text, '-'),
+                                         COALESCE("Queryable"::text, '-'), COALESCE("Modifiable"::text, '-'))) > 1
+) conflicts
+"""
+
+# Every live association that is ExtendedBy, or that links two models, with the models of its ends. An
+# end that is missing or soft-deleted has no model, and such a row counts as absent.
+EXTENDED_ASSOCIATIONS_SQL = """
+SELECT 'Entity' AS "ElementType", x."Id", x."ExtendedByDataModelId",
+       x."ParentEntityId" AS "ParentId", p."DataModelId" AS "ParentModelId",
+       x."ChildEntityId" AS "ChildId", c."DataModelId" AS "ChildModelId"
+FROM {schema}."EntityAssociation" x
+LEFT JOIN {schema}."Entities" p ON p."Id" = x."ParentEntityId" AND p."Deleted" IS NOT TRUE
+LEFT JOIN {schema}."Entities" c ON c."Id" = x."ChildEntityId" AND c."Deleted" IS NOT TRUE
+WHERE x."Deleted" IS NOT TRUE AND (x."ExtendedByDataModelId" IS NOT NULL OR p."DataModelId" <> c."DataModelId")
+UNION ALL
+SELECT 'Attribute', x."Id", x."ExtendedByDataModelId",
+       x."EntityId", p."DataModelId", x."AttributeId", c."DataModelId"
+FROM {schema}."EntityAttributeAssociation" x
+LEFT JOIN {schema}."Entities" p ON p."Id" = x."EntityId" AND p."Deleted" IS NOT TRUE
+LEFT JOIN {schema}."Attributes" c ON c."Id" = x."AttributeId" AND c."Deleted" IS NOT TRUE
+WHERE x."Deleted" IS NOT TRUE AND (x."ExtendedByDataModelId" IS NOT NULL OR p."DataModelId" <> c."DataModelId")
+ORDER BY 1, 2
+"""
+
+# The live mapping rows on the model's side of each live group it is in.
+MAPPING_ROWS_SQL = """
+SELECT ta."Id", ta."EntityId", ta."AttributeId", ta."EntityIdPath"
+FROM {schema}."TransformationsGroup" g
+JOIN {schema}."Transformations" t ON t."TransformationGroupId" = g."Id" AND t."Deleted" IS NOT TRUE
+JOIN {schema}."TransformationAttributes" ta ON ta."TransformationId" = t."Id" AND ta."Deleted" IS NOT TRUE
+WHERE g."Deleted" IS NOT TRUE
+  AND $1 = CASE ta."AttributeType"::text WHEN 'Source' THEN g."SourceDataModelId" WHEN 'Target' THEN g."TargetDataModelId" END
+"""
+
 COLUMNS = (
     "schema",
     "model",
@@ -125,6 +204,24 @@ COLUMNS = (
     "groups",
     "rules",
     "mapping rows",
+)
+
+CHECK_COLUMNS = (
+    "schema",
+    "model",
+    "odd types",
+    "flag conflicts",
+    "ext base",
+    "ext own",
+    "ext other",
+    "ext other shown",
+    "ext no owner",
+    "ext no owner shown",
+    "ext absent",
+    "ext null cross",
+    "cross overlay",
+    "paths outside",
+    "paths invalid",
 )
 
 
@@ -173,6 +270,82 @@ def measure_model(model_id: int, base_id: int | None, inclusions: list, own: lis
     }
 
 
+def _path_nodes(row) -> list[tuple[str, int]] | None:
+    """The (kind, Id) nodes a mapping row names, or None when its EntityIdPath is not a list of IDs.
+    With no path, the row names its entity and attribute directly."""
+    if not row["EntityIdPath"]:
+        return [
+            (kind, row[column])
+            for kind, column in (("Entity", "EntityId"), ("Attribute", "AttributeId"))
+            if row[column] is not None
+        ]
+    try:
+        ids = [int(segment) for segment in row["EntityIdPath"].split(",")]
+    except ValueError:
+        return None
+    # A negative Id is the attribute that ends the path.
+    return [("Attribute", -i) if i < 0 else ("Entity", i) for i in ids]
+
+
+def check_model(
+    model_id: int, base_id: int | None, overlay_ids: set, inclusions: list, associations: list, mapping_rows: list
+) -> dict:
+    """The write-side checks that need no further query (see the module docstring)."""
+    shown = {
+        (row["ElementType"], row["ElementId"])
+        for row in inclusions
+        if row["OwnerId"] is not None and not row["ElementDeleted"]
+    }
+    kinds = {
+        name: Counter()
+        for name in ("base", "own", "other", "other shown", "no owner", "no owner shown", "absent", "null cross")
+    }
+    cross_overlay = Counter()
+    no_owner, null_cross = [], []
+    for row in associations:
+        kind, parent_model, child_model = row["ElementType"], row["ParentModelId"], row["ChildModelId"]
+        displayed = ("Entity", row["ParentId"]) in shown and (kind, row["ChildId"]) in shown
+        if row["ExtendedByDataModelId"] is None:
+            # The query returns these only when the ends' models differ.
+            if model_id in (parent_model, child_model):
+                kinds["null cross"][kind] += 1
+                null_cross.append(row)
+            continue
+        if row["ExtendedByDataModelId"] != model_id:
+            if row["ExtendedByDataModelId"] in overlay_ids and displayed:
+                cross_overlay[kind] += 1
+            continue
+        if parent_model is None or child_model is None:
+            kinds["absent"][kind] += 1
+        elif model_id in (parent_model, child_model):
+            kinds["own"][kind] += 1
+        elif parent_model == child_model == base_id:
+            kinds["base"][kind] += 1
+        elif parent_model == child_model:
+            kinds["other"][kind] += 1
+            kinds["other shown"][kind] += displayed
+        else:
+            kinds["no owner"][kind] += 1
+            kinds["no owner shown"][kind] += displayed
+            no_owner.append(row)
+
+    outside = invalid = 0
+    for row in mapping_rows:
+        nodes = _path_nodes(row)
+        if nodes is None:
+            invalid += 1
+        elif any(node not in shown for node in nodes):
+            outside += 1
+    return {
+        **{f"ext {name}": _pair(counts) for name, counts in kinds.items()},
+        "cross overlay": _pair(cross_overlay),
+        "paths outside": outside,
+        "paths invalid": invalid,
+        "no owner rows": no_owner,
+        "null cross rows": null_cross,
+    }
+
+
 async def measure_schema(conn: asyncpg.Connection, schema: str) -> tuple[list[dict], dict[int, Counter]]:
     """One result per overlay model in the schema, plus ExtendedBy counts by declaring model."""
     identifier = '"' + schema.replace('"', '""') + '"'
@@ -180,16 +353,33 @@ async def measure_schema(conn: asyncpg.Connection, schema: str) -> tuple[list[di
     for row in await conn.fetch(EXTENDED_BY_SQL.format(schema=identifier)):
         extended.setdefault(row["ExtendedByDataModelId"], Counter())[row["ElementType"]] += row["n"]
 
+    associations = await conn.fetch(EXTENDED_ASSOCIATIONS_SQL.format(schema=identifier))
+    overlays = await conn.fetch(OVERLAYS_SQL.format(schema=identifier))
+    overlay_ids = {model["Id"] for model in overlays}
     results = []
-    for model in await conn.fetch(OVERLAYS_SQL.format(schema=identifier)):
+    for model in overlays:
         model_id, base_id = model["Id"], model["BaseDataModelId"]
+        inclusions = await conn.fetch(INCLUSIONS_SQL.format(schema=identifier), model_id)
         result = measure_model(
             model_id,
             base_id,
-            await conn.fetch(INCLUSIONS_SQL.format(schema=identifier), model_id),
+            inclusions,
             await conn.fetch(OWN_ELEMENTS_SQL.format(schema=identifier), model_id),
             await conn.fetch(BASE_NAMES_SQL.format(schema=identifier), base_id) if base_id is not None else [],
         )
+        result.update(
+            check_model(
+                model_id,
+                base_id,
+                overlay_ids,
+                inclusions,
+                associations,
+                await conn.fetch(MAPPING_ROWS_SQL.format(schema=identifier), model_id),
+            )
+        )
+        odd = (await conn.fetch(ODD_TYPES_SQL.format(schema=identifier), model_id))[0]
+        result["odd types"] = f"{odd['null_type']}/{odd['entity_type']}/{odd['target']}"
+        result["flag conflicts"] = (await conn.fetch(FLAG_CONFLICTS_SQL.format(schema=identifier), model_id))[0]["n"]
         mappings = (await conn.fetch(MAPPINGS_SQL.format(schema=identifier), model_id))[0]
         result.update(
             {
@@ -204,7 +394,6 @@ async def measure_schema(conn: asyncpg.Connection, schema: str) -> tuple[list[di
             }
         )
         results.append(result)
-    overlay_ids = {int(r["model"].split()[0]) for r in results}
     return results, {m: c for m, c in extended.items() if m not in overlay_ids}
 
 
@@ -217,10 +406,10 @@ async def measure(conn: asyncpg.Connection) -> dict[str, tuple[list[dict], dict[
         return {schema: await measure_schema(conn, schema) for schema in schemas}
 
 
-def format_rows(rows: list[dict]) -> str:
+def format_rows(rows: list[dict], columns: tuple[str, ...] = COLUMNS) -> str:
     """An aligned table with a row count, like psql's default output."""
-    cells = [COLUMNS] + [tuple(str(row[c]) for c in COLUMNS) for row in rows]
-    widths = [max(len(line[i]) for line in cells) for i in range(len(COLUMNS))]
+    cells = [columns] + [tuple(str(row[c]) for c in columns) for row in rows]
+    widths = [max(len(line[i]) for line in cells) for i in range(len(columns))]
     lines = [" | ".join(value.ljust(width) for value, width in zip(line, widths)).rstrip() for line in cells]
     lines.insert(1, "-+-".join("-" * width for width in widths))
     lines.append(f"({len(rows)} row{'' if len(rows) == 1 else 's'})")
@@ -252,11 +441,21 @@ async def main(argv: list[str]) -> int:
         print(f"=== {schema}: {len(models)} overlay model{'' if len(models) == 1 else 's'}")
         if models:
             print(format_rows(models))
+            print(format_rows(models, CHECK_COLUMNS))
         for row in models:
             for label, title in (("override names", "overrides"), ("clash names", "clashes")):
                 if row[label]:
                     names = ", ".join(f"{kind} {name}" for kind, name in row[label])
                     print(f"{row['model']} {title}: {names}")
+            for label, association in [
+                *(("no-owner", a) for a in row["no owner rows"]),
+                *(("ExtendedBy-NULL cross-model", a) for a in row["null cross rows"]),
+            ]:
+                print(
+                    f"{row['model']} {label} {association['ElementType']} association {association['Id']}: "
+                    f"entity {association['ParentId']} (model {association['ParentModelId']}) -> "
+                    f"{association['ElementType'].lower()} {association['ChildId']} (model {association['ChildModelId']})"
+                )
         for model_id, counts in sorted(other_extended.items()):
             print(f"ExtendedBy links declared by non-overlay model {model_id}: {_pair(counts)}")
     return 0

@@ -21,7 +21,8 @@ Services load OpenAPI schema from MDR at startup. Key design decisions:
 **Configuration via `LIFSchemaConfig`:**
 - All schema-related config should use `LIFSchemaConfig.from_environment()` (not direct `os.getenv()`)
 - Provides centralized validation and consistent defaults
-- Key env vars: `OPENAPI_DATA_MODEL_ID`, `LIF_MDR_API_URL`, `USE_OPENAPI_DATA_MODEL_FROM_FILE`
+- Key env vars: `OPENAPI_DATA_MODEL_NAME`, `OPENAPI_DATA_MODEL_VERSION`, `OPENAPI_DATA_MODEL_CONTRIBUTOR_ORGANIZATION`, `LIF_MDR_API_URL`, `USE_OPENAPI_DATA_MODEL_FROM_FILE`
+- The model is named by its portable identity (name, version, contributor organization) and resolved to an ID by `mdr_client.resolve_data_model_id` in the tenant MDR routes the service to. A missing or ambiguous identity fails startup. `OPENAPI_DATA_MODEL_ID` still works as a fallback when no identity var is set; if both are set, the identity wins (#1392).
 
 **SchemaStateManager component** (`components/lif/schema_state_manager/`):
 - Shared component for services that need schema data (semantic search, GraphQL)

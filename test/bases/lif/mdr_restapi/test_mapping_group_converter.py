@@ -378,3 +378,15 @@ async def test_export_refuses_an_overlay_model(test_db_session):
     with pytest.raises(PortabilityErrorGroup) as exc_info:
         await export_mapping_group(session, group_id)
     assert _codes(exc_info.value) == [Code.NOT_MIGRATED]
+
+
+async def test_export_refuses_an_overlay_model_found_by_its_base(test_db_session):
+    # An overlay built on a base model but with no inclusion rows, as model 28 is on demo.
+    session = test_db_session
+    models, _, group_id, _ = await _imported(session, "overlay_base")
+    models["Target"].BaseDataModelId = models["Source"].Id
+    session.add(models["Target"])
+    await session.commit()
+    with pytest.raises(PortabilityErrorGroup) as exc_info:
+        await export_mapping_group(session, group_id)
+    assert _codes(exc_info.value) == [Code.NOT_MIGRATED]

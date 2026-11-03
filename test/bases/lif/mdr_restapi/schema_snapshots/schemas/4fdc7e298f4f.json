@@ -1,0 +1,97 @@
+{
+  "components": {
+    "schemas": {
+      "person": {
+        "properties": {
+          "employment": {
+            "properties": {
+              "preferences": {
+                "properties": {
+                  "preferred_org_types": {
+                    "ActivationDate": "2025-10-08T22:14:00+00:00",
+                    "Array": "Yes",
+                    "Common": null,
+                    "Contributor": "MDRUser",
+                    "ContributorOrganization": null,
+                    "CreationDate": null,
+                    "DataModelId": 26,
+                    "DataType": "string",
+                    "DeprecationDate": null,
+                    "Description": null,
+                    "Example": null,
+                    "Extension": false,
+                    "ExtensionNotes": null,
+                    "Id": 1895,
+                    "Name": "preferred_org_types",
+                    "Notes": null,
+                    "Required": "No",
+                    "SourceModel": null,
+                    "TargetEntityId": null,
+                    "UniqueName": "person.employment.preferences.preferred_org_types",
+                    "UseConsiderations": null,
+                    "ValueSetId": null,
+                    "x-mutable": false,
+                    "x-queryable": false
+                  }
+                },
+                "required": [],
+                "type": "object",
+                "use_recommendations": "",
+                "x-mutable": false,
+                "x-queryable": false
+              }
+            },
+            "required": [
+              "preferences"
+            ],
+            "type": "object",
+            "use_recommendations": "",
+            "x-mutable": false,
+            "x-queryable": false
+          },
+          "id": {
+            "ActivationDate": "2025-10-08T22:12:00+00:00",
+            "Array": "No",
+            "Common": null,
+            "Contributor": "MDRUser",
+            "ContributorOrganization": null,
+            "CreationDate": null,
+            "DataModelId": 26,
+            "DataType": "string",
+            "DeprecationDate": null,
+            "Description": null,
+            "Example": null,
+            "Extension": false,
+            "ExtensionNotes": null,
+            "Id": 1894,
+            "Name": "id",
+            "Notes": null,
+            "Required": "Yes",
+            "SourceModel": null,
+            "TargetEntityId": null,
+            "UniqueName": "person.id",
+            "UseConsiderations": null,
+            "ValueSetId": null,
+            "x-mutable": false,
+            "x-queryable": false
+          }
+        },
+        "required": [
+          "id",
+          "employment"
+        ],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      }
+    }
+  },
+  "info": {
+    "description": "OpenAPI Spec",
+    "title": "Machine-Readable Schema for R1 Demo Source Data Model",
+    "version": "1.0"
+  },
+  "openapi": "3.0.0",
+  "paths": {}
+}

@@ -82,6 +82,76 @@ def test_measure_model_tells_an_override_from_a_clash():
     assert result["unassociated"] == 1
 
 
+def _association(kind, association_id, extended_by, parent, parent_model, child, child_model):
+    return {
+        "ElementType": kind,
+        "Id": association_id,
+        "ExtendedByDataModelId": extended_by,
+        "ParentId": parent,
+        "ParentModelId": parent_model,
+        "ChildId": child,
+        "ChildModelId": child_model,
+    }
+
+
+def _mapping_row(path, entity=None, attribute=None):
+    return {"Id": 1, "EntityId": entity, "AttributeId": attribute, "EntityIdPath": path}
+
+
+def test_check_model_sorts_extended_by_rows_by_where_their_ends_are():
+    # Model 17 on base 1 shows entities 132 (model 1) and 40 (own), and attributes 1745 (model 16) and 7 (model 1).
+    inclusions = [
+        _inclusion("Entity", 132, 1, "Credential"),
+        _inclusion("Entity", 40, 17, "Own"),
+        _inclusion("Attribute", 1745, 16, "image.id"),
+        _inclusion("Attribute", 7, 1, "Credential.name"),
+    ]
+    associations = [
+        _association("Entity", 1, 17, 132, 1, 133, 1),  # both ends in the base
+        _association("Attribute", 2, 17, 40, 17, 7, 1),  # an end in the model
+        _association("Attribute", 3, 17, 900, 16, 901, 16),  # both ends in model 16, not shown
+        _association("Attribute", 4, 17, 132, 1, 1745, 16),  # ends in two other models, shown: like 1846
+        _association("Attribute", 5, 17, 132, 1, 999, None),  # soft-deleted end
+        _association("Attribute", 6, 18, 132, 1, 7, 1),  # another overlay's row inside this render set
+        _association("Attribute", 7, 18, 132, 1, 8, 1),  # another overlay's row, attribute 8 not shown
+        _association("Attribute", 8, 25, 132, 1, 7, 1),  # a non-overlay's row is not cross-overlay
+        _association("Attribute", 9, None, 132, 1, 41, 17),  # no ExtendedBy, base entity -> own attribute
+        _association("Attribute", 10, None, 132, 1, 902, 16),  # no ExtendedBy, but no end in this model
+    ]
+    result = measure.check_model(17, 1, {17, 18}, inclusions, associations, [])
+    assert {k: v for k, v in result.items() if k.startswith(("ext ", "cross"))} == {
+        "ext base": "1/0",
+        "ext own": "0/1",
+        "ext other": "0/1",
+        "ext other shown": "0/0",
+        "ext no owner": "0/1",
+        "ext no owner shown": "0/1",
+        "ext absent": "0/1",
+        "ext null cross": "0/1",
+        "cross overlay": "0/1",
+    }
+    assert [row["Id"] for row in result["no owner rows"]] == [4]
+    assert [row["Id"] for row in result["null cross rows"]] == [9]
+
+
+def test_check_model_finds_mapping_nodes_outside_the_render_set():
+    inclusions = [
+        _inclusion("Entity", 10, 1, "A"),
+        _inclusion("Entity", 11, 1, "A.B"),
+        _inclusion("Attribute", 20, 1, "A.B.c"),
+        _inclusion("Attribute", 21, 1, "A.d", deleted=True),
+    ]
+    rows = [
+        _mapping_row("10,11,-20"),  # inside
+        _mapping_row("10,12,-20"),  # entity 12 is not included
+        _mapping_row("10,-21"),  # attribute 21 is soft-deleted, so absent
+        _mapping_row(None, entity=10, attribute=20),  # no path: its own entity and attribute, inside
+        _mapping_row("10,x,-20"),  # not a list of IDs
+    ]
+    result = measure.check_model(17, 1, {17}, inclusions, [], rows)
+    assert (result["paths outside"], result["paths invalid"]) == (2, 1)
+
+
 @pytest.fixture(scope="module")
 def seed_url():
     try:
@@ -163,5 +233,84 @@ async def test_measure_reports_the_seed_overlays_in_every_schema(seed_url):
         }, schema
         assert [row["override names"] for row in models] == [[("Attribute", "Criteria.identifier")], []]
         assert [row["clash names"] for row in models] == [[("Attribute", "image.id")], []]
+        checks = {
+            row["model"]: {c: row[c] for c in measure.CHECK_COLUMNS if c not in ("schema", "model")} for row in models
+        }
+        # 17's 15/150 ExtendedBy rows: 13/75 own an end, 0/59 lie in model 16, 0/1 (association 1846) has no
+        # owner, and 2/15 have a soft-deleted end. 18's 0/1 lies in model 25. None of the other-model rows is
+        # shown, so the conversion copies none of them (#1388).
+        assert checks == {
+            "17 StateU LIF": {
+                "odd types": "0/0/0",
+                "flag conflicts": 0,
+                "ext base": "0/0",
+                "ext own": "13/75",
+                "ext other": "0/59",
+                "ext other shown": "0/0",
+                "ext no owner": "0/1",
+                "ext no owner shown": "0/1",
+                "ext absent": "2/15",
+                "ext null cross": "0/8",
+                "cross overlay": "0/0",
+                "paths outside": 0,
+                "paths invalid": 0,
+            },
+            "18 Org2 LIF": {
+                "odd types": "0/0/0",
+                "flag conflicts": 0,
+                "ext base": "0/0",
+                "ext own": "1/14",
+                "ext other": "0/1",
+                "ext other shown": "0/0",
+                "ext no owner": "0/0",
+                "ext no owner shown": "0/0",
+                "ext absent": "0/0",
+                "ext null cross": "0/0",
+                "cross overlay": "0/0",
+                "paths outside": 0,
+                "paths invalid": 0,
+            },
+        }, schema
+        assert [
+            [
+                (a["Id"], a["ParentId"], a["ParentModelId"], a["ChildId"], a["ChildModelId"])
+                for a in row["no owner rows"]
+            ]
+            for row in models
+        ] == [[(1846, 132, 1, 1745, 16)], []]
+        # Model 1's own associations, with no ExtendedBy, to attributes model 17 owns. Model 1's schema shows them.
+        assert [
+            [(a["Id"], a["ParentModelId"], a["ChildModelId"]) for a in row["null cross rows"]] for row in models
+        ] == [[(i, 1, 17) for i in (1263, 1282, 1284, 1285, 1286, 1288, 1315, 1619)], []]
         # Model 25 is a source model, not an overlay, yet declares two ExtendedBy attribute links.
         assert {m: measure._pair(c) for m, c in other_extended.items()} == {25: "0/2"}
+
+
+async def test_measure_does_not_count_an_association_to_a_soft_deleted_entity(seed_url):
+    # Export, and #1444's cleanup, only count an attribute as associated through a live entity.
+    conn = await asyncpg.connect(seed_url)
+    transaction = conn.transaction()
+    await transaction.start()
+    try:
+        # Copies of seed rows: a model-17 attribute with no DataType, associated only to a soft-deleted entity.
+        for table, changes in (
+            ("Entities", """"UniqueName" = 'Soft.deleted', "Deleted" = true"""),
+            ("Attributes", """"UniqueName" = 'Soft.deleted', "DataType" = NULL, "Deleted" = false"""),
+            (
+                "EntityAttributeAssociation",
+                '"EntityId" = 900000, "AttributeId" = 900000, "ExtendedByDataModelId" = NULL, "Deleted" = false',
+            ),
+        ):
+            model = "" if table == "EntityAttributeAssociation" else 'WHERE "DataModelId" = 17'
+            await conn.execute(
+                f'CREATE TEMP TABLE copy_row AS SELECT * FROM "{table}" {model} ORDER BY "Id" LIMIT 1;'
+                f' UPDATE copy_row SET "Id" = 900000, {changes};'
+                f' INSERT INTO "{table}" OVERRIDING SYSTEM VALUE SELECT * FROM copy_row; DROP TABLE copy_row'
+            )
+        models, _ = await measure.measure_schema(conn, "public")
+    finally:
+        await transaction.rollback()
+        await conn.close()
+
+    model_17 = next(row for row in models if row["model"] == "17 StateU LIF")
+    assert (model_17["odd types"], model_17["unassociated"]) == ("0/0/0", 15)

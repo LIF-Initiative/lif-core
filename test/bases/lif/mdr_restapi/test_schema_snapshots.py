@@ -7,11 +7,18 @@ for every non-deleted model in projects/lif_mdr_database/backup.sql, across all 
 combinations of include_attr_md / include_entity_md / public_only / full_export.
 
 Fixtures live in schema_snapshots/: manifest.json maps model -> flag combination ->
-schema file, and identical outputs share one file under schemas/.
+schema file named by the sha256 of its canonical JSON, and identical outputs share one
+file under schemas/. Outputs over MAX_STORED_BYTES are pinned by that digest alone and
+not stored (Issue #1438), so the repo doesn't carry tens of MB per large model.
 
 To regenerate after an intended change (the run fails on purpose; review the diff):
 
     LIF_UPDATE_SCHEMA_SNAPSHOTS=1 uv run pytest test/bases/lif/mdr_restapi/test_schema_snapshots.py
+
+To diff outputs that are only pinned by digest, dump every output on the base and on
+the branch, then compare the two directories with diff -r:
+
+    LIF_SCHEMA_SNAPSHOTS_DUMP_DIR=/tmp/before uv run pytest test/bases/lif/mdr_restapi/test_schema_snapshots.py
 """
 
 import difflib
@@ -32,6 +39,8 @@ SNAPSHOT_DIR = Path(__file__).parent / "schema_snapshots"
 MANIFEST_PATH = SNAPSHOT_DIR / "manifest.json"
 SCHEMAS_DIR = SNAPSHOT_DIR / "schemas"
 UPDATE = os.getenv("LIF_UPDATE_SCHEMA_SNAPSHOTS") == "1"
+DUMP_DIR = os.getenv("LIF_SCHEMA_SNAPSHOTS_DUMP_DIR")
+MAX_STORED_BYTES = 1_000_000
 
 FLAG_NAMES = ("include_attr_md", "include_entity_md", "public_only", "full_export")
 FLAG_MATRIX = [dict(zip(FLAG_NAMES, values)) for values in itertools.product([False, True], repeat=4)]
@@ -43,6 +52,10 @@ def _flag_key(flags: dict) -> str:
 
 def _canonical(schema) -> str:
     return json.dumps(schema, indent=2, sort_keys=True, ensure_ascii=False) + "\n"
+
+
+def _blob_name(canonical: str) -> str:
+    return hashlib.sha256(canonical.encode()).hexdigest()[:12] + ".json"
 
 
 def _load_manifest() -> dict:
@@ -90,21 +103,23 @@ async def test_regenerate_schema_snapshots(seed_db_session):
         schemas = {}
         for flags in FLAG_MATRIX:
             canonical = _canonical(await _generate(seed_db_session, data_model_id, flags))
-            blob_name = hashlib.sha256(canonical.encode()).hexdigest()[:12] + ".json"
+            blob_name = _blob_name(canonical)
             blobs[blob_name] = canonical
             schemas[_flag_key(flags)] = blob_name
         manifest[str(data_model_id)] = {"name": name, "type": model_type, "schemas": schemas}
 
+    stored = {name: canonical for name, canonical in blobs.items() if len(canonical.encode()) <= MAX_STORED_BYTES}
     SCHEMAS_DIR.mkdir(parents=True, exist_ok=True)
     for stale in SCHEMAS_DIR.glob("*.json"):
-        if stale.name not in blobs:
+        if stale.name not in stored:
             stale.unlink()
-    for blob_name, canonical in blobs.items():
+    for blob_name, canonical in stored.items():
         (SCHEMAS_DIR / blob_name).write_text(canonical)
     MANIFEST_PATH.write_text(_canonical(manifest))
 
     pytest.fail(
-        f"Schema snapshots regenerated ({len(manifest)} models, {len(blobs)} distinct schemas). "
+        f"Schema snapshots regenerated ({len(manifest)} models, {len(blobs)} distinct schemas, "
+        f"{len(blobs) - len(stored)} over {MAX_STORED_BYTES} bytes pinned by digest only). "
         "Review the diff, then re-run without LIF_UPDATE_SCHEMA_SNAPSHOTS."
     )
 
@@ -118,6 +133,18 @@ async def test_snapshots_cover_every_live_seed_model(seed_db_session):
 
 
 @pytest.mark.skipif(UPDATE, reason="regenerating snapshots")
+def test_stored_snapshots_match_their_names():
+    # The match test compares digests, so a stored file is only what reviewers diff;
+    # keep it identical to the digest its name pins.
+    referenced = {blob for entry in _load_manifest().values() for blob in entry["schemas"].values()}
+    for path in SCHEMAS_DIR.glob("*.json"):
+        canonical = path.read_text()
+        assert _blob_name(canonical) == path.name, f"{path.name} does not hash to its name"
+        assert len(canonical.encode()) <= MAX_STORED_BYTES, f"{path.name} is over {MAX_STORED_BYTES} bytes"
+        assert path.name in referenced, f"{path.name} is not referenced by manifest.json"
+
+
+@pytest.mark.skipif(UPDATE, reason="regenerating snapshots")
 @pytest.mark.parametrize("data_model_id", _manifest_model_ids())
 async def test_generated_schema_matches_snapshot(seed_db_session, data_model_id):
     entry = _load_manifest()[str(data_model_id)]
@@ -126,10 +153,21 @@ async def test_generated_schema_matches_snapshot(seed_db_session, data_model_id)
     failures = []
     for flags in FLAG_MATRIX:
         key = _flag_key(flags)
-        expected = (SCHEMAS_DIR / entry["schemas"][key]).read_text()
-        actual = await _generate(seed_db_session, data_model_id, flags)
-        if actual != json.loads(expected):
-            failures.append(f"--- {key}\n{_diff_excerpt(expected, _canonical(actual))}")
+        actual = _canonical(await _generate(seed_db_session, data_model_id, flags))
+        if DUMP_DIR:
+            dump_path = Path(DUMP_DIR) / str(data_model_id) / f"{key}.json"
+            dump_path.parent.mkdir(parents=True, exist_ok=True)
+            dump_path.write_text(actual)
+        if _blob_name(actual) == entry["schemas"][key]:
+            continue
+        expected_path = SCHEMAS_DIR / entry["schemas"][key]
+        if expected_path.exists():
+            failures.append(f"--- {key}\n{_diff_excerpt(expected_path.read_text(), actual)}")
+        else:
+            failures.append(
+                f"--- {key}\nPinned by digest only (over {MAX_STORED_BYTES} bytes); to diff, dump the base "
+                "and this branch with LIF_SCHEMA_SNAPSHOTS_DUMP_DIR and compare with diff -r."
+            )
 
     assert not failures, (
         f"Generated schema for model {data_model_id} ({entry['name']}) changed in "

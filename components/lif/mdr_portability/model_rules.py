@@ -21,6 +21,7 @@ def check_model_file(file: ModelFile) -> None:
         *_check_for_reference_flag_on_attribute_child(file),
         *_check_for_duplicate_association_names(file),
         *_check_for_duplicate_top_level_names(file),
+        *_check_for_array_on_entities_with_a_parent(file),
         *_check_for_containment_cycles(file),
         *_check_for_unassociated_attributes(file),
     ]
@@ -121,11 +122,7 @@ def _check_for_duplicate_top_level_names(file: ModelFile) -> Iterator[Portabilit
     # the same Name would appear under the same key. A reference does not give its child a parent: the
     # child exists in its own right (§5.4). Entities with the same UniqueName are refused as
     # DUPLICATE_KEY, so each UniqueName is counted once here.
-    contained_entity_names = {
-        association.Child.Entity
-        for association in file.Associations
-        if isinstance(association.Child, EntityKey) and not association.Reference
-    }
+    contained_entity_names = _get_contained_entity_names(file)
     # For each Name, the entities with no parent that have it: UniqueName -> position of the first.
     top_level_entities_by_name: dict[str, dict[str, int]] = {}
     for position, entity in enumerate(file.Entities):
@@ -140,6 +137,28 @@ def _check_for_duplicate_top_level_names(file: ModelFile) -> Iterator[Portabilit
                 _get_item_path("Entities", first_unique_name, first_position),
                 f"{len(positions)} entities with no parent have the Name {name!r}: {', '.join(map(repr, positions))}",
             )
+
+
+def _check_for_array_on_entities_with_a_parent(file: ModelFile) -> Iterator[PortabilityError]:
+    # An entity's own Array is for its top-level schema. An entity with a parent takes its list setting
+    # from each association instead (§5.3, §5.4), so its own would mean nothing.
+    contained_entity_names = _get_contained_entity_names(file)
+    for position, entity in enumerate(file.Entities):
+        if entity.Array and entity.UniqueName in contained_entity_names:
+            yield PortabilityError(
+                PortabilityErrorCode.FIELD_INVALID,
+                f"{_get_item_path('Entities', entity.UniqueName, position)}.Array",
+                "Array is allowed only on an entity with no parent; set it on the entity's associations instead",
+            )
+
+
+def _get_contained_entity_names(file: ModelFile) -> set[str]:
+    # The entities that are the child of a containing association (§5.4).
+    return {
+        association.Child.Entity
+        for association in file.Associations
+        if isinstance(association.Child, EntityKey) and not association.Reference
+    }
 
 
 def _check_for_containment_cycles(file: ModelFile) -> Iterator[PortabilityError]:

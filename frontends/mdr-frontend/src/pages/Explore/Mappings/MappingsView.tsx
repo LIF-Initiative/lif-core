@@ -2565,7 +2565,7 @@ const MappingsView: React.FC = () => {
                                 )}
                             {liveVersion?.status === 'tie' && (
                                 <span className="status-badge status-badge--soon">
-                                    Two versions are live
+                                    More than one version is live
                                 </span>
                             )}
                             {liveVersion?.status === 'error' && (

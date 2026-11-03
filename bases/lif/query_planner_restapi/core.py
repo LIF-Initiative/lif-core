@@ -228,8 +228,8 @@ async def do_run_query_sync(
     except HTTPException:
         raise
     except Exception as e:
-        # The log keeps the message for operators; the caller gets none of it, since a cache
-        # failure's message carries the cache's response body (#1340, as #1291 and #1309 did for GraphQL).
+        # The log keeps the message for operators; the caller gets none of it (#1340, as #1291 and
+        # #1309 did for GraphQL). Since #1351 the service's messages carry no response body either.
         logger.error(f"Error processing query: {e}")
         raise HTTPException(status_code=500, detail="Error processing query")
 

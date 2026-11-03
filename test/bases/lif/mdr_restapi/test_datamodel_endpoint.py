@@ -5,6 +5,16 @@ import pytest
 from deepdiff import DeepDiff
 
 
+def _flag_values(node):
+    """Every x-mutable / x-queryable value anywhere in a generated schema."""
+    if isinstance(node, dict):
+        found = {v for k, v in node.items() if k in ("x-mutable", "x-queryable")}
+        return found.union(*(_flag_values(v) for v in node.values()))
+    if isinstance(node, list):
+        return set().union(*(_flag_values(v) for v in node))
+    return set()
+
+
 @pytest.mark.asyncio
 async def test_create_source_schema_datamodel_without_upload_success(async_client_mdr, mdr_api_headers):
     # Create data model without OpenAPI schema upload
@@ -220,5 +230,9 @@ async def test_create_source_schema_datamodel_with_upload_success(async_client_m
                 "root['components']['schemas']['person']['properties']['employment']['properties']['preferences']['properties']['preferred_org_types']['EntityAttributeAssociationId']",
                 "root['components']['schemas']['person']['properties']['employment']['properties']['preferences']['properties']['preferred_org_types']['EntityId']",
             ],
+            # A self-contained model emits its elements' flags (#1395). This file carries none, and
+            # upload stores them only on inclusion rows, so they come back as the defaults (below).
+            exclude_regex_paths=[r"\['x-(mutable|queryable)'\]$"],
         )
         assert not diff, f"Retrieved schema does not match original: {diff}"
+        assert _flag_values(retrieved_schema) == {False}
