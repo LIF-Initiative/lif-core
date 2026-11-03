@@ -10,7 +10,9 @@ on:
       - cloudformation/dev-lif-control-plane-api.params
       - cloudformation/lif-control-plane-api-taskdef-includes.yml
       - components/lif/auth/**
+      - components/lif/developer_keys/**
       - components/lif/logging/**
+      - components/lif/tenant_routing/**
       - projects/lif_control_plane_api/**
       - .github/workflows/_deploy-service.yml
 
