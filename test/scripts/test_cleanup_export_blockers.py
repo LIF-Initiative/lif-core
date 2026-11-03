@@ -8,10 +8,12 @@ Each test gets a fresh copy of backup.sql from a template database. They need a 
 """
 
 import importlib.util
+import json
 import os
 import pathlib
 import subprocess
 import sys
+from datetime import datetime, timezone
 from itertools import count
 from urllib.parse import urlparse
 
@@ -312,7 +314,7 @@ async def test_cleanup_deletes_the_copy_of_1760_and_group_3_exports(seed_conn):
     results = await cleanup.cleanup(conn, apply=True)
     after = await _measure(url)
 
-    assert [tuple(row.values()) for row in results["public"]["transformation_1761"]] == [(1761, 3, [9303, 9304])]
+    assert [tuple(row.values()) for row in results["public"]["transformation_1761"]] == [(1761, 3, [9303, 9304], None)]
     deleted = 'SELECT "Id", "Deleted" FROM "{}" WHERE "Id" = ANY($1::int[]) ORDER BY "Id"'
     assert [tuple(r) for r in await conn.fetch(deleted.format("Transformations"), [1760, 1761])] == [
         (1760, False),
@@ -339,6 +341,13 @@ async def test_cleanup_deletes_the_copy_of_1760_and_group_3_exports(seed_conn):
     [
         pytest.param('UPDATE "Transformations" SET "Expression" = \'{ "a": b }\' WHERE "Id" = 1761', id="expression"),
         pytest.param('UPDATE "Transformations" SET "Notes" = \'kept on purpose\' WHERE "Id" = 1761', id="notes"),
+        pytest.param('UPDATE "Transformations" SET "Contributor" = \'someone\' WHERE "Id" = 1761', id="contributor"),
+        pytest.param(
+            'UPDATE "Transformations" SET "ActivationDate" = \'2024-01-01\' WHERE "Id" = 1761', id="activation-date"
+        ),
+        pytest.param(
+            'UPDATE "TransformationAttributes" SET "EntityIdPath" = \'4,-54\' WHERE "Id" = 9304', id="row-path"
+        ),
         pytest.param('UPDATE "TransformationAttributes" SET "AttributeId" = 92 WHERE "Id" = 9303', id="mapping-row"),
         pytest.param(
             'UPDATE "TransformationAttributes" SET "Deleted" = true WHERE "Id" = 9301', id="original-row-gone"
@@ -360,3 +369,24 @@ async def test_cleanup_keeps_1761_once_it_differs_from_1760(seed_conn, make_it_d
         await conn.fetchval('SELECT count(*) FROM "TransformationAttributes" WHERE "Id" IN (9303, 9304) AND "Deleted"')
         == 0
     )
+
+
+async def test_cleanup_deletes_1761_whose_target_row_has_its_own_metadata_and_prints_it(seed_conn):
+    # Dev's 1761: its target row carries placeholder metadata 1760's doesn't. Its rows map the same
+    # attributes at the same paths, so it is still the copy; the metadata it drops is printed.
+    conn, url = seed_conn
+    await _add_1760_and_its_copy(conn)
+    await conn.execute(
+        'UPDATE "TransformationAttributes" SET "Notes" = \'TAT Notes\', "Contributor" = \'TAT Contributor\','
+        ' "ActivationDate" = \'2021-06-15T00:00:00Z\' WHERE "Id" = 9304'
+    )
+
+    results = await cleanup.cleanup(conn, apply=True)
+
+    [row] = results["public"]["transformation_1761"]
+    assert (row["Id"], row["MappingRowIds"]) == (1761, [9303, 9304])
+    dropped = json.loads(row["DroppedRowMetadata"])
+    # The date is the same instant, written in the server's time zone.
+    assert datetime.fromisoformat(dropped["9304"].pop("ActivationDate")) == datetime(2021, 6, 15, tzinfo=timezone.utc)
+    assert dropped == {"9304": {"Notes": "TAT Notes", "Contributor": "TAT Contributor"}}
+    assert await conn.fetchval('SELECT "Deleted" FROM "Transformations" WHERE "Id" = 1761') is True
