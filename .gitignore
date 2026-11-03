@@ -234,3 +234,6 @@ pnpm-lock.yaml
 
 # Claude Code personal overrides (shared config lives in .claude/settings.json)
 .claude/settings.local.json
+
+# macOS Finder metadata, in any folder
+.DS_Store

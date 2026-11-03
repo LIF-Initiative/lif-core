@@ -5,6 +5,9 @@ import { DataModelCreateFields, DataModelEditFields } from "./CreateFields";
 import { SimpleTree, transformData } from "./SimpleTree";
 import { CrudDialog } from "../Dialog/Dialog";
 import ModelTree from "../ModelExplorer/ModelExplorer";
+import ImportPortableFileDialog from "../PortableFile/ImportPortableFileDialog";
+import { useToast } from "@/context/ToastContext";
+import { importPortableModel } from "@/services/portableService";
 import { errorToString } from "@/utils/errorUtils";
 import { trackEvent } from "@/utils/analytics";
 
@@ -171,6 +174,16 @@ const DataModelSelector: React.FC<DataModelSelectorProps> = ({
     onEdit: undefined
   });
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [isImportDialogOpen, setIsImportDialogOpen] = useState(false);
+  const { showToast } = useToast();
+
+  // Open the imported model: the modelId effect reloads the list and selects it.
+  const handleModelImported = (result: { Id: number }, file: File) => {
+    const path = `${routePath}${result.Id}`;
+    setModelPath(path);
+    navigate(path);
+    showToast(`Imported ${file.name} as a new model`, 'success');
+  };
   const handleDialogOpenChange = (open: boolean) => {
     setIsCreateDialogOpen(open);
     if (!open) { 
@@ -215,6 +228,8 @@ const DataModelSelector: React.FC<DataModelSelectorProps> = ({
               searchFilter
               headerStr={`Data Model Selector`}
               onAddNew={handleOnAddNew}
+              onImport={() => setIsImportDialogOpen(true)}
+              importLabel="Import a portable model file"
               data={treeData}
               initiallyExpandedIds={[17, "iP2"]}
               typeHandlers={{
@@ -235,6 +250,14 @@ const DataModelSelector: React.FC<DataModelSelectorProps> = ({
             isEditMode={!!crudDialog.isEditMode}
             itemToEdit={crudDialog.itemToEdit}
             onEdit={crudDialog.onEdit}
+          />
+          <ImportPortableFileDialog
+            open={isImportDialogOpen}
+            onOpenChange={setIsImportDialogOpen}
+            title="Import a Portable Model File"
+            description="Import a model exported as a portable file, from this install or another. It is created as a new model; nothing existing is changed."
+            importFile={importPortableModel}
+            onImported={handleModelImported}
           />
         </Box>
         {selectedModel && (
