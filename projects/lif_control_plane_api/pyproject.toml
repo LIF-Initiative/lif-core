@@ -13,6 +13,7 @@ dependencies = [
     "fastapi~=0.115",
     "pyjwt[crypto]~=2.10",
     "sqlalchemy[asyncio]~=2.0.0",
+    "sqlmodel~=0.0.27",
     "uvicorn~=0.34",
 ]
 
@@ -26,4 +27,6 @@ packages = ["lif"]
 [tool.polylith.bricks]
 "../../bases/lif/control_plane_restapi" = "lif/control_plane_restapi"
 "../../components/lif/auth" = "lif/auth"
+"../../components/lif/developer_keys" = "lif/developer_keys"
 "../../components/lif/logging" = "lif/logging"
+"../../components/lif/tenant_routing" = "lif/tenant_routing"

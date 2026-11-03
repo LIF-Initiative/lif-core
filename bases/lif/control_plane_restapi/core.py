@@ -1,7 +1,7 @@
 """LIF control-plane API (EPIC #1041, ADR 0002 / ADR 0006).
 
-The service and its own database, without the developer-key endpoints yet (#1182). The key table
-waits on the workspace and owner questions in #1190.
+The service, its own database, and the developer-key endpoints (#1182), with keys owned by a Cognito
+`sub` and scoped to a workspace (ADR 0008).
 
 Config: ``CONTROL_PLANE__DATABASE_URL`` (required) and Cognito via ``CONTROL_PLANE_AUTH__*``
 (``lif.auth.cognito``). Nothing from the MDR domain is imported or configured here.
@@ -12,10 +12,11 @@ import os
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 from sqlalchemy import text
-from sqlalchemy.ext.asyncio import AsyncEngine, create_async_engine
+from sqlalchemy.ext.asyncio import AsyncEngine, async_sessionmaker, create_async_engine
 
 from lif.auth import AuthMiddleware
 from lif.auth.cognito import CognitoAuthConfig, cognito_strategy
+from lif.control_plane_restapi.api_key_endpoints import router as api_key_router
 from lif.logging import get_logger
 
 logger = get_logger(__name__)
@@ -49,6 +50,9 @@ def create_app(engine: AsyncEngine, cognito_config: CognitoAuthConfig) -> FastAP
         logger.warning(f"Cognito auth NOT configured ({unset} unset): non-public paths return 401")
     strategies = [] if missing else [cognito_strategy(cognito_config)]
     app.add_middleware(AuthMiddleware, strategies=strategies)
+
+    app.state.sessions = async_sessionmaker(engine, expire_on_commit=False)
+    app.include_router(api_key_router)
 
     @app.get("/health-check")
     async def health_check():
