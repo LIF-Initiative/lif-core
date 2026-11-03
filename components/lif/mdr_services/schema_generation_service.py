@@ -96,10 +96,16 @@ async def find_children(
     full_export,
     property_key_map=None,
     is_overlay=False,
+    path=(),
 ):
+    # The embedded entities from the root down to this parent. A child already on it closes a
+    # cycle, which would otherwise recurse until Python's limit and surface as a bare 500.
+    path = (*path, parent)
     if parent in tree:
         parent_properties = parent_schema["properties"]
         for x in tree[parent]:
+            if x in path:
+                raise HTTPException(status_code=400, detail=await _cycle_detail(session, (*path, x)))
             if is_overlay:
                 child_association_query = select(EntityAssociation).where(
                     EntityAssociation.ParentEntityId == parent,
@@ -331,10 +337,22 @@ async def find_children(
                     full_export=full_export,
                     property_key_map=property_key_map,
                     is_overlay=is_overlay,
+                    path=path,
                 )
 
 
-async def find_ancestors(session, child_id, is_overlay, data_model_id, included_entity_ids, public_only=False):
+async def _cycle_detail(session: AsyncSession, entity_ids) -> str:
+    names = []
+    for entity_id in entity_ids:
+        entity = await session.get(Entity, entity_id)
+        names.append(entity.Name if entity else str(entity_id))
+    return (
+        "Embedded associations form a cycle: " + " -> ".join(names) + ". Make one of them a Reference or "
+        "delete it; the schema cannot nest an entity inside itself."
+    )
+
+
+async def find_ancestors(session, child_id, is_overlay, data_model_id, included_entity_ids, public_only=False, path=()):
     """
     Recursively fetch every ancestor chain for a given entity.
 
@@ -354,6 +372,9 @@ async def find_ancestors(session, child_id, is_overlay, data_model_id, included_
         ancestor to the direct parent of `child_id`. An empty list indicates that the
         entity has no qualifying ancestors.
     """
+    if child_id in path:
+        raise HTTPException(status_code=400, detail=await _cycle_detail(session, (child_id, *reversed(path))))
+    path = (*path, child_id)
     ancestors = []
     ancestor_id = child_id
     if is_overlay:
@@ -383,7 +404,7 @@ async def find_ancestors(session, child_id, is_overlay, data_model_id, included_
         parent_id = entity_association.ParentEntityId
         logger.debug(f"Finding ancestors for parent_id : {parent_id}")
         parent_ancestors = await find_ancestors(
-            session, parent_id, is_overlay, data_model_id, included_entity_ids, public_only
+            session, parent_id, is_overlay, data_model_id, included_entity_ids, public_only, path
         )
         logger.debug(f"Found ancestors for parent_id {parent_id} : {parent_ancestors}")
         if len(parent_ancestors) == 0:
