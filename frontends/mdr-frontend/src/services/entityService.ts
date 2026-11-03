@@ -1,4 +1,5 @@
 import api from "./api";
+import { isOverlayModel } from "../utils/modelUtils";
 
 const apiBaseUrl = import.meta.env.VITE_API_URL;
 
@@ -171,7 +172,7 @@ export interface CreateEntityAssociationParams {
 // Generate a template for creating an entity association
 export const tmplCreateEntityAssociation = (parEntityId: number, model: any): CreateEntityAssociationParams => {
   if (!model?.Id || !model?.Type) console.warn(`templateCreateEntityAssociation has invalid model: ${model.Id}`);
-  const isExt = ["OrgLIF", "PartnerLIF"].includes(model?.Type);
+  const isExt = isOverlayModel(model);
   return {
     ParentEntityId: parEntityId,
     ChildEntityId: 0,

@@ -205,12 +205,11 @@ def test_run_query_logs_failure_reason_when_orchestrator_submission_fails(mock_p
 def test_orchestrator_timeout_type_survives_the_empty_message_wrapping(mock_post, caplog):
     """Issue #1204: the real failure chain, not a mocked stand-in.
 
-    `post_orchestrator_job` renders the reason as f"...: {e}", and transport timeouts
-    carry an EMPTY message, so it logs "Orchestrator job post error: " and re-raises a
-    LIFException carrying that same empty message. This test lets that real erasure
-    happen -- it patches the transport, not `post_orchestrator_job` -- and pins that
-    `logger.exception` still surfaces the httpx type through the `raise ... from e`
-    chain. A test that mocks `post_orchestrator_job` cannot show this: it would assert
+    Transport timeouts carry an EMPTY message, so when `post_orchestrator_job` rendered the
+    reason as f"...: {e}" it logged "Orchestrator job post error: " with nothing after it. Since
+    #1351 it renders the exception's type instead. This test patches the transport, not
+    `post_orchestrator_job`, and pins that `logger.exception` still surfaces the httpx type
+    through the `raise ... from e` chain. A test that mocks `post_orchestrator_job` cannot show this: it would assert
     against an exception the production path never raises here.
     """
     query = LIFQuery(
@@ -263,16 +262,15 @@ def test_orchestrator_timeout_type_survives_the_empty_message_wrapping(mock_post
         asyncio.run(service.run_query(query, first_run=True))
 
     messages = [r.getMessage() for r in caplog.records]
-    # The upstream handler still erases the reason -- pinned so a future "cleanup" there
-    # cannot quietly become the only record of the failure.
-    assert "Orchestrator job post error: " in messages
+    # The upstream handler names the type, not the message (#1351), so the timeout is no longer erased.
+    assert "Orchestrator job post error: ReadTimeout" in messages
 
     submission_failures = [r for r in caplog.records if "Orchestrator submission failed" in r.getMessage()]
     assert submission_failures
     record = submission_failures[0]
     assert record.exc_info is not None
-    # The immediate exception is the LIFException with the empty message; the httpx type
-    # survives only as its __cause__, which is what logger.exception renders.
+    # The immediate exception is the LIFException; the httpx type also survives as its
+    # __cause__, which is what logger.exception renders.
     assert isinstance(record.exc_info[1], LIFException)
     assert isinstance(record.exc_info[1].__cause__, httpx.ReadTimeout)
     assert "ReadTimeout" in caplog.text

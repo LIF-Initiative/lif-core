@@ -10,6 +10,7 @@ import { errorToString } from "@/utils/errorUtils";
 import { downloadBlobFile } from "@/utils/downloadJsonFile";
 import { describePortableFailure, exportPortableModel, type PortableFailure } from "@/services/portableService";
 import PortableFailureDialog from "../PortableFile/PortableFailureDialog";
+import { isOverlayModel } from "@/utils/modelUtils";
 
 const FileDEBUG = false;
 const debugLog = (...args: any[]) => { if(FileDEBUG) console.log(...args); };
@@ -156,7 +157,7 @@ const ModelTree: React.FC<ModelTreeProps> = ({
     try {
       let modelParams: string = "";
       let modelFilter: string = ""
-      if (model.Type === "OrgLIF") {
+      if (model.Type === "OrgLIF" && isOverlayModel(model)) {
         if (location.pathname.includes("/only")) {
           modelFilter = " (Only)";
         } else if (location.pathname.includes("/public")) {
@@ -175,9 +176,9 @@ const ModelTree: React.FC<ModelTreeProps> = ({
       modelData = await getModelDetails(model.Id, modelParams);
       const dModel = modelData?.DataModel;
       const isOrganizationView = location.pathname.includes("/only");
-      useBaseData = dModel?.Type === "OrgLIF" && modelParams === "" && !isOrganizationView;
+      useBaseData = dModel?.Type === "OrgLIF" && isOverlayModel(dModel) && modelParams === "" && !isOrganizationView;
       debugLog(" -Model:", dModel);
-      fetchInclusion = ["OrgLIF", "PartnerLIF"].includes(dModel?.Type);
+      fetchInclusion = isOverlayModel(dModel);
       setUseInclusion(fetchInclusion);
       setShowPublicToggles(fetchInclusion && modelParams === "");
       setShowInclusionToggles(fetchInclusion && modelParams === "" && !isOrganizationView);
@@ -847,8 +848,9 @@ const ModelTree: React.FC<ModelTreeProps> = ({
       // What types of models to pull data from
       let selectedTypes: string[] = [];
       switch (model.Type) {
-        case "OrgLIF": selectedTypes = ["OrgLIF", "BaseLIF", "PartnerLIF"]; break;
-        case "PartnerLIF": selectedTypes = ["PartnerLIF", "BaseLIF"]; break;
+        // A converted model (no base) offers only its own elements, so no cross-model association can be built.
+        case "OrgLIF": selectedTypes = isOverlayModel(model) ? ["OrgLIF", "BaseLIF", "PartnerLIF"] : []; break;
+        case "PartnerLIF": selectedTypes = isOverlayModel(model) ? ["PartnerLIF", "BaseLIF"] : []; break;
         case "BaseLIF":
         case "SourceSchema":
           break;

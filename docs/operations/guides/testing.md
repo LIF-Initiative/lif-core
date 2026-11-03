@@ -29,6 +29,7 @@ Write tests that earn their keep. Every test should justify its existence by ver
 `test/bases/lif/mdr_restapi/test_schema_snapshots.py` pins what `generate_openapi_schema` returns for every non-deleted model in `projects/lif_mdr_database/backup.sql`, across all 16 combinations of `include_attr_md`, `include_entity_md`, `public_only` and `full_export`. It is the baseline for the pass criterion in [ADR data_model/0004](../../design/adr/data_model/0004-retire-overlays-variants-as-copies.md): a converted model must generate the same schema as before. Any change to generated output fails the test, and so does adding or removing a live seed model.
 
 - Fixtures live in `test/bases/lif/mdr_restapi/schema_snapshots/`. `manifest.json` maps model → flag combination → file. Identical outputs share one file under `schemas/`, named by content hash.
+- Outputs over 1 MB (`MAX_STORED_BYTES`) are not stored: the hash in `manifest.json` pins them on its own. The test compares the hash of every generated output to the manifest, so the regression signal is the same; only the review diff is missing for those outputs.
 - Each output is JSON-encoded the way the `/datamodels/open_api_schema` endpoint encodes it. A combination the generator rejects with an `HTTPException` (today, some Org2 LIF and StateU LIF combinations return 404) is recorded as `{"x-snapshot-http-error": ...}`.
 - The tests run against their own freshly loaded copy of the seed, so other tests' writes don't affect them. They need a local PostgreSQL server and skip without one, like the other `mdr_restapi` tests.
 
@@ -39,6 +40,18 @@ LIF_UPDATE_SCHEMA_SNAPSHOTS=1 uv run pytest test/bases/lif/mdr_restapi/test_sche
 ```
 
 The run rewrites the fixtures, deletes files nothing references any more, and then fails on purpose so the update can't pass unnoticed. It also refuses to run when `CI` is set. Review the fixture diff, re-run without the variable, and say in the PR why the generated schema changed.
+
+To diff an output that is pinned only by its hash, dump every generated output on the base branch and on yours, then compare the two directories:
+
+```bash
+git switch main
+LIF_SCHEMA_SNAPSHOTS_DUMP_DIR=/tmp/schemas-before uv run pytest test/bases/lif/mdr_restapi/test_schema_snapshots.py
+git switch -
+LIF_SCHEMA_SNAPSHOTS_DUMP_DIR=/tmp/schemas-after uv run pytest test/bases/lif/mdr_restapi/test_schema_snapshots.py
+diff -r /tmp/schemas-before /tmp/schemas-after
+```
+
+Each run writes `<dir>/<model id>/<flag combination>.json` for every model and combination, whether or not it matches the snapshot.
 
 ## Integration Tests
 

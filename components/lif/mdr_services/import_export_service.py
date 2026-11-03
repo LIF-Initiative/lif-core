@@ -49,6 +49,7 @@ from lif.mdr_services.entity_attribute_association_service import (
     get_entity_attribute_associations_by_data_model_id,
 )
 from lif.mdr_services.entity_service import create_entity, get_list_of_entities_for_data_model
+from lif.mdr_services.model_converter import is_overlay
 from lif.mdr_services.transformation_service import get_transformations_by_data_model_id
 from lif.mdr_services.value_set_values_service import get_list_of_values_for_value_set
 from lif.mdr_services.valueset_service import create_value_set_with_values, get_paginated_value_sets_by_data_model_id
@@ -85,7 +86,7 @@ async def export_datamodel(session: AsyncSession, id: int):
 
     base_model_dto: SingleDataModelExportDTO = None
 
-    if data_model.Type == DataModelType.OrgLIF or data_model.Type == DataModelType.PartnerLIF:
+    if await is_overlay(session, data_model):
         base_model = await get_base_model_for_given_orglif(session=session, extended_data_model_id=data_model.Id)
         (
             entity_list,

@@ -15,7 +15,6 @@ Callers reach it through portability_converter, the converter module for every f
 import json
 from collections.abc import Iterator
 from dataclasses import dataclass
-from datetime import datetime
 from typing import Any, NamedTuple, Optional, Union
 
 from lif.mdr_portability import (
@@ -31,7 +30,8 @@ from lif.mdr_portability.errors import error_group
 # Named apart from this module's _get_association_path, which names a stored row on export.
 from lif.mdr_portability.model_rules import _get_association_path as _get_file_association_path
 from lif.mdr_portability.v1.models import Association as FileAssociation
-from lif.mdr_portability.v1.models import AttributeKey, EntityKey
+from lif.mdr_portability.v1.models import AttributeKey, EntityKey, ModelIdentity
+from lif.mdr_services.portability_helpers import find_model, to_json, without_nulls
 from lif.mdr_sql_model.core import (
     Attribute,
     Constraint,
@@ -110,7 +110,7 @@ async def export_model(session: AsyncSession, data_model_id: int) -> ModelFile:
         "Associations": [_export_association(association, rows) for association in _list_own_associations(rows)],
     }
     # Through the parser, so stored values the format does not allow are refused by name.
-    file = parse_model_file(json.dumps(_without_nulls(content), default=_to_json).encode("utf-8"))
+    file = parse_model_file(json.dumps(without_nulls(content), default=to_json).encode("utf-8"))
     check_model_file(file)
     return file
 
@@ -490,22 +490,6 @@ def _export_association(association: AnyAssociation, rows: _ModelRows) -> dict:
     }
 
 
-def _without_nulls(item: Any) -> Any:
-    # Optional fields are left out when NULL, as the canonical form writes them (§9).
-    if isinstance(item, dict):
-        return {key: _without_nulls(value) for key, value in item.items() if value is not None}
-    if isinstance(item, list):
-        return [_without_nulls(entry) for entry in item]
-    return item
-
-
-def _to_json(value: Any) -> str:
-    # Stored timestamps are timezone-aware, so isoformat writes an RFC 3339 offset (§9).
-    if isinstance(value, datetime):
-        return value.isoformat()
-    raise TypeError(f"{type(value).__name__} is not JSON serializable")
-
-
 def _check_for_attribute_roles(file: ModelFile) -> Iterator[PortabilityError]:
     # The format lets a parent hold one child under several Names (§5.4), but the attribute association
     # table's unique index (uq_association_entity_attribute_active_v2) has no Name, so an attribute can be
@@ -540,16 +524,12 @@ async def import_model(session: AsyncSession, file: ModelFile) -> int:
         errors.extend(group.exceptions)
     errors.extend(_check_for_attribute_roles(file))
     details = file.Details
-    existing = (
-        await session.execute(
-            select(DataModel.Id).where(
-                DataModel.Name == details.Name,
-                DataModel.DataModelVersion == details.Version,
-                DataModel.ContributorOrganization == details.ContributorOrganization,
-                DataModel.Deleted.is_not(True),
-            )
-        )
-    ).first()
+    existing = await find_model(
+        session,
+        ModelIdentity(
+            Name=details.Name, Version=details.Version, ContributorOrganization=details.ContributorOrganization
+        ),
+    )
     if existing is not None:
         errors.append(
             PortabilityError(

@@ -27,8 +27,7 @@ from lif.mdr_portability import (
 )
 from lif.mdr_portability.crosswalk_rules import check_crosswalk_file
 from lif.mdr_portability.errors import error_group
-from lif.mdr_services.mapping_group_converter import _find_model, _without_nulls
-from lif.mdr_services.model_converter import _to_json
+from lif.mdr_services.portability_helpers import find_model, to_json, without_nulls
 from lif.mdr_sql_model.core import DataModel, TransformationGroup, ValueSet, ValueSetValue, ValueSetValueMapping
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -118,7 +117,7 @@ async def export_crosswalk(session: AsyncSession, source_value_set_id: int, targ
     content = {"Format": {"Type": "lif-mdr-crosswalk", "Version": 1}, "Details": details, "Entries": entries}
     # Through the parser, so stored values the format does not allow (a blank Name or ValueName, an
     # incomplete model identity) are refused by name, then the rule that a source maps once (§7).
-    file = parse_crosswalk_file(json.dumps(_without_nulls(content), default=_to_json).encode("utf-8"))
+    file = parse_crosswalk_file(json.dumps(without_nulls(content), default=to_json).encode("utf-8"))
     check_crosswalk_file(file)
     return file
 
@@ -157,7 +156,7 @@ async def import_crosswalk(session: AsyncSession, file: CrosswalkFile) -> int:
     for side, key in (("Source", file.Details.Source), ("Target", file.Details.Target)):
         element = f"Details.{side}"
         identity = key.Model
-        model = await _find_model(session, identity)
+        model = await find_model(session, identity)
         if model is None:
             errors.append(
                 PortabilityError(

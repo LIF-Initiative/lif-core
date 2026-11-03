@@ -43,9 +43,10 @@ def _raise_on_graphql_errors(body: dict) -> None:
     errors = body.get("errors")
     if errors:
         messages = "; ".join(e.get("message", str(e)) for e in errors)
-        msg = f"GraphQL errors: {messages}"
-        logger.error(msg)
-        raise GraphQLClientException(msg)
+        # The count, not the messages: they can quote a learner value (#1351). The caller
+        # still gets them, so the MCP client can correct its query.
+        logger.error(f"GraphQL response carried {len(errors)} GraphQL error(s)")
+        raise GraphQLClientException(f"GraphQL errors: {messages}")
 
 
 async def graphql_query(query: str, url: str = "", api_key: str = "", timeout_read: float = 0) -> dict:
@@ -73,13 +74,12 @@ async def graphql_query(query: str, url: str = "", api_key: str = "", timeout_re
         response.raise_for_status()
         body = response.json()
     except httpx.HTTPStatusError as e:
-        msg = f"GraphQL HTTP error {e.response.status_code}: {e.response.text}"
-        logger.error(msg)
-        raise GraphQLClientException(msg)
+        # The log gets the body's size, not the body: a 422 echoes the request (#1351).
+        logger.error(f"GraphQL HTTP error {e.response.status_code} ({len(e.response.text)}-byte body)")
+        raise GraphQLClientException(f"GraphQL HTTP error {e.response.status_code}: {e.response.text}")
     except Exception as e:
-        msg = f"GraphQL client error: {e}"
-        logger.error(msg)
-        raise GraphQLClientException(msg)
+        logger.error(f"GraphQL client error: {type(e).__name__}")
+        raise GraphQLClientException(f"GraphQL client error: {e}")
 
     _raise_on_graphql_errors(body)
     return body
@@ -107,13 +107,12 @@ async def graphql_mutation(query: str, url: str = "", api_key: str = "") -> dict
         response.raise_for_status()
         body = response.json()
     except httpx.HTTPStatusError as e:
-        msg = f"GraphQL HTTP error {e.response.status_code}: {e.response.text}"
-        logger.error(msg)
-        raise GraphQLClientException(msg)
+        # The log gets the body's size, not the body: a 422 echoes the request (#1351).
+        logger.error(f"GraphQL HTTP error {e.response.status_code} ({len(e.response.text)}-byte body)")
+        raise GraphQLClientException(f"GraphQL HTTP error {e.response.status_code}: {e.response.text}")
     except Exception as e:
-        msg = f"GraphQL client error: {e}"
-        logger.error(msg)
-        raise GraphQLClientException(msg)
+        logger.error(f"GraphQL client error: {type(e).__name__}")
+        raise GraphQLClientException(f"GraphQL client error: {e}")
 
     _raise_on_graphql_errors(body)
     return body
