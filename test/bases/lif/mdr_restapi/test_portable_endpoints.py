@@ -21,7 +21,8 @@ from sqlalchemy import text
 from sqlmodel import select
 
 from lif.mdr_portability import dump_canonical, parse_crosswalk_file, parse_mapping_group_file, parse_model_file
-from lif.mdr_sql_model.core import ValueSet
+from lif.mdr_services.crosswalk_converter import _lock_crosswalk_pair
+from lif.mdr_sql_model.core import DataModel, DataModelType, ValueSet
 
 FIXTURES = Path(__file__).parents[3] / "components/lif/mdr_portability/fixtures"
 
@@ -241,17 +242,95 @@ async def test_a_conflict_alongside_another_refusal_is_a_422(client):
     assert {code for code, _ in _codes(response)} == {"MODEL_EXISTS", "DUPLICATE_KEY"}
 
 
-async def test_a_concurrent_duplicate_caught_by_the_database_is_a_conflict(client):
+# The bodies the UI shows for a database refusal, written out so a changed message fails a test.
+CONFLICT = {"detail": "Another import of the same content finished first; nothing was written."}
+SERVER_FAILURE = {"detail": "The import failed on the server, and nothing was written."}
+
+
+def _integrity_error(constraint_name: str) -> IntegrityError:
+    """An IntegrityError shaped as SQLAlchemy raises it over asyncpg: the constraint is on the driver's cause."""
+    cause = type("UniqueViolationError", (Exception,), {"constraint_name": constraint_name})()
+    driver_error = Exception("duplicate key value violates unique constraint")
+    driver_error.__cause__ = cause
+    return IntegrityError("INSERT", {}, driver_error)
+
+
+@pytest.mark.parametrize(
+    "constraint, status, body",
+    [
+        # A concurrent import of the same key, refused by the index behind MODEL_EXISTS or GROUP_EXISTS.
+        ("datamodels_active_ux", 409, CONFLICT),
+        ("ux_transformationsgroup_model_id_version_active", 409, CONFLICT),
+        # Anything else is a failure on the server, not a conflict.
+        ("uq_association_entity_attribute_active_v2", 500, SERVER_FAILURE),
+        ("fk_entities_datamodelid", 500, SERVER_FAILURE),
+    ],
+)
+async def test_only_the_installed_content_indexes_are_a_conflict(client, constraint, status, body):
     http_client, _, _ = client
     from lif.mdr_services import portability_converter
 
     with mock.patch.object(
-        portability_converter, "import_model", mock.AsyncMock(side_effect=IntegrityError("INSERT", {}, Exception()))
+        portability_converter, "import_model", mock.AsyncMock(side_effect=_integrity_error(constraint))
     ):
-        response = await http_client.post("/portable/models", content=_reference_files("race")["source"])
+        response = await http_client.post("/portable/models", content=_reference_files(f"race-{status}")["source"])
 
-    assert response.status_code == 409
-    assert isinstance(response.json()["detail"], str)
+    assert response.status_code == status
+    assert response.json() == body
+
+
+async def test_a_real_violation_of_the_model_index_is_read_as_a_conflict(client):
+    # The race itself can't be timed in a test, so write the duplicate row behind the converter's check: the
+    # database's own UniqueViolationError then reaches the endpoint, constraint name and all.
+    http_client, _, _ = client
+    from lif.mdr_services import portability_converter
+
+    files = _reference_files("real-race")
+    assert (await http_client.post("/portable/models", content=files["source"])).status_code == 201
+    details = json.loads(files["source"])["Details"]
+
+    async def insert_a_duplicate(session, _file):
+        session.add(
+            DataModel(
+                Name=details["Name"],
+                DataModelVersion=details["Version"],
+                ContributorOrganization=details["ContributorOrganization"],
+                Type=DataModelType.SourceSchema,
+                Deleted=False,
+            )
+        )
+        await session.flush()
+
+    with mock.patch.object(portability_converter, "import_model", insert_a_duplicate):
+        response = await http_client.post("/portable/models", content=files["source"])
+
+    assert response.status_code == 409, response.text
+    assert response.json() == CONFLICT
+
+
+async def test_an_attribute_placed_twice_under_one_parent_is_refused_by_name(client, pg_conn):
+    # One attribute twice under one parent, under two Names. The model rules accept it, but the attribute
+    # association index has no Name, so import refuses it by name instead of failing on the insert (#1449 review).
+    http_client, _, _ = client
+    content = json.loads(_reference_files("attribute-role")["source"])
+    first = next(association for association in content["Associations"] if "Attribute" in association["Child"])
+    parent, attribute, second_name = first["Parent"]["Entity"], first["Child"]["Attribute"], f"{first['Name']}Alt"
+    content["Associations"].append({**first, "Name": second_name})
+
+    for _attempt in range(2):
+        response = await http_client.post("/portable/models", content=json.dumps(content).encode())
+        assert response.status_code == 422, response.text
+        assert response.json() == {
+            "detail": [
+                {
+                    "code": "FIELD_INVALID",
+                    "element": f"Associations[{parent}, {second_name}]",
+                    "reason": f"the attribute {attribute!r} is already under {parent!r} as {first['Name']!r}; an "
+                    "attribute can be placed under a parent only once until attribute associations are stored by Name",
+                }
+            ]
+        }
+    assert _count_models(pg_conn, content["Details"]["Name"]) == 0
 
 
 async def test_exporting_a_missing_model_group_or_value_set_is_a_404(client):
@@ -264,13 +343,11 @@ async def test_exporting_a_missing_model_group_or_value_set_is_a_404(client):
 
 
 async def test_a_crosswalk_import_waits_for_another_import_of_the_same_pair(client):
-    from lif.mdr_restapi.portable_endpoints import lock_crosswalk_pair
-
     http_client, _, sessions = client
     files = _reference_files("lock")
     await _import_reference_files(http_client, files, order=("source", "target"))
     async with AsyncSession(sessions[1].bind) as other_import:
-        await lock_crosswalk_pair(other_import, parse_crosswalk_file(files["crosswalk"]))
+        await _lock_crosswalk_pair(other_import, parse_crosswalk_file(files["crosswalk"]))
 
         waiting = asyncio.create_task(http_client.post("/portable/crosswalks", content=files["crosswalk"]))
         await asyncio.sleep(0.2)
@@ -282,8 +359,6 @@ async def test_a_crosswalk_import_waits_for_another_import_of_the_same_pair(clie
 
 
 async def test_a_crosswalk_import_does_not_wait_for_an_import_into_another_tenant(client, pg_conn):
-    from lif.mdr_restapi.portable_endpoints import lock_crosswalk_pair
-
     http_client, _, sessions = client
     files = _reference_files("tenant-lock")
     await _import_reference_files(http_client, files, order=("source", "target"))
@@ -292,7 +367,7 @@ async def test_a_crosswalk_import_does_not_wait_for_an_import_into_another_tenan
     async with AsyncSession(sessions[1].bind) as other_tenant:
         # SET LOCAL ends with the transaction, so the pooled connection keeps its own search_path.
         await other_tenant.execute(text("SET LOCAL search_path TO portable_lock_other_tenant"))
-        await lock_crosswalk_pair(other_tenant, parse_crosswalk_file(files["crosswalk"]))
+        await _lock_crosswalk_pair(other_tenant, parse_crosswalk_file(files["crosswalk"]))
 
         response = await asyncio.wait_for(
             http_client.post("/portable/crosswalks", content=files["crosswalk"]), timeout=5

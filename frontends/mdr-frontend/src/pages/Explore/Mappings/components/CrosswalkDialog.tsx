@@ -91,7 +91,8 @@ const CrosswalkDialog: React.FC<CrosswalkDialogProps> = ({ open, onOpenChange, s
   };
 
   return (
-    <Dialog.Root open={open} onOpenChange={(next) => { if (!next) close(); }}>
+    // Escape and an outside click are ignored while exporting, so a failure is never lost with the dialog.
+    <Dialog.Root open={open} onOpenChange={(next) => { if (!next && !exporting) close(); }}>
       <Dialog.Content maxWidth="720px" style={{ maxHeight: "85vh", overflow: "auto" }}>
         <Dialog.Title>Crosswalks</Dialog.Title>
         <Dialog.Description size="2" mb="3">

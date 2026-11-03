@@ -1,4 +1,10 @@
 const MAX_FILENAME_LENGTH = 255;
+// Linux and macOS allow 255 UTF-8 bytes and Windows 255 UTF-16 units; a character is never fewer bytes than units.
+// Browsers shorten a name near that limit themselves, cutting into the suffix (by 11 bytes in Chrome, 5 in Firefox,
+// likely room for their .crdownload and .part download files), so the name is kept well under it.
+const MAX_FILENAME_BYTES = 200;
+// Held back from a capped suffix so the name always keeps at least its first character (at most 4 bytes in UTF-8).
+const MAX_CHARACTER_BYTES = 4;
 const WINDOWS_RESERVED_NAMES = new Set([
   'CON', 'PRN', 'AUX', 'NUL',
   'COM1', 'COM2', 'COM3', 'COM4', 'COM5', 'COM6', 'COM7', 'COM8', 'COM9',
@@ -33,10 +39,29 @@ export const downloadBlobFile = (blob: Blob, name: string, suffix: string = '.js
 
 /** The filename downloadBlobFile saves as: name and suffix made safe, shortening the name to fit. */
 export const toDownloadFilename = (name: string, suffix: string = '.json'): string => {
-  const safeSuffix = cleanFilenamePart(suffix);
+  // A suffix too long to fit, such as one with a very long version, keeps its end: the part that says what the file is.
+  const safeSuffix = fitToBytes(cleanFilenamePart(suffix), MAX_FILENAME_BYTES - MAX_CHARACTER_BYTES, true);
   let base = cleanFilenamePart(name).replace(/^[.\s]+|[.\s]+$/g, '') || 'data';
   if (isWindowsReservedName(base)) base = `_${base}`; // Prevent reserved Windows device names
-  return `${base.slice(0, Math.max(MAX_FILENAME_LENGTH - safeSuffix.length, 1))}${safeSuffix}`;
+  return `${fitToBytes(base, MAX_FILENAME_BYTES - getByteLength(safeSuffix))}${safeSuffix}`;
+};
+
+const encoder = new TextEncoder();
+const getByteLength = (text: string): number => encoder.encode(text).length;
+
+/** The most whole characters from the start of text, or from its end, that fit in maxBytes of UTF-8. */
+const fitToBytes = (text: string, maxBytes: number, keepEnd: boolean = false): string => {
+  const characters = Array.from(text); // Code points, so a surrogate pair is never split
+  if (keepEnd) characters.reverse();
+  const kept: string[] = [];
+  let bytes = 0;
+  for (const character of characters) {
+    bytes += getByteLength(character);
+    if (bytes > maxBytes) break;
+    kept.push(character);
+  }
+  if (keepEnd) kept.reverse();
+  return kept.join('');
 };
 
 const saveBlob = (blob: Blob, safeFilename: string): void => {

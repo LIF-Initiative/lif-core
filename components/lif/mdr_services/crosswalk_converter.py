@@ -30,6 +30,7 @@ from lif.mdr_portability.errors import error_group
 from lif.mdr_services.mapping_group_converter import _find_model, _without_nulls
 from lif.mdr_services.model_converter import _to_json
 from lif.mdr_sql_model.core import DataModel, TransformationGroup, ValueSet, ValueSetValue, ValueSetValueMapping
+from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import aliased
 from sqlmodel import select
@@ -122,13 +123,29 @@ async def export_crosswalk(session: AsyncSession, source_value_set_id: int, targ
     return file
 
 
+async def _lock_crosswalk_pair(session: AsyncSession, file: CrosswalkFile) -> None:
+    """Hold a lock on the crosswalk's key until the transaction ends.
+
+    Value mappings have no unique index, so two imports of one pair could both pass CROSSWALK_EXISTS.
+    With this lock the second waits for the first to commit, then sees its rows and is refused. Advisory
+    locks are database-wide, so the key starts with the schema the session writes to, and imports into
+    different tenants don't wait on each other.
+    """
+    # cspell:ignore xact hashtextextended - PostgreSQL function names
+    key = f"lif-mdr-crosswalk:{file.Details.model_dump_json()}"
+    await session.execute(
+        text("SELECT pg_advisory_xact_lock(hashtextextended(current_schema() || ':' || :key, 0))"), {"key": key}
+    )
+
+
 async def import_crosswalk(session: AsyncSession, file: CrosswalkFile) -> int:
     """Write a portable file as new value mappings, and return how many were created.
 
     Create-only: if any live value mapping already maps the source value set to the target one, the
-    file is refused with CROSSWALK_EXISTS. That check takes no lock, so a caller that can run two
-    imports of one pair at once must serialize them, as for import_mapping_group's GROUP_EXISTS.
+    file is refused with CROSSWALK_EXISTS. Value mappings have no unique index to back that check, so
+    the import first takes a lock on the pair that is held until the caller's transaction ends.
     """
+    await _lock_crosswalk_pair(session, file)
     errors: list[PortabilityError] = []
     try:
         check_crosswalk_file(file)

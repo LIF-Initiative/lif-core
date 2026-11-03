@@ -274,8 +274,10 @@ const MappingsView: React.FC = () => {
     const [sourceJsonSchema, setSourceJsonSchema] = useState<any | null>(null);
     const [forkBump, setForkBump] = useState<'major' | 'minor'>('major');
     const [forkPreview, setForkPreview] = useState<string>('');
+    // A refused export (such as NOT_MIGRATED for an overlay model) lists every reason in a dialog.
+    const [portableFailure, setPortableFailure] = useState<PortableFailure | null>(null);
     // Aggregate dialog open state
-    const anyDialogOpen = deleteDialogOpen || exprDialogOpen || editGroupOpen || importDialogOpen || forkDialogOpen || activateDialogOpen || bulkDialogOpen || crosswalkDialogOpen || crosswalkImportOpen;
+    const anyDialogOpen = deleteDialogOpen || exprDialogOpen || editGroupOpen || importDialogOpen || forkDialogOpen || activateDialogOpen || bulkDialogOpen || crosswalkDialogOpen || crosswalkImportOpen || !!portableFailure;
     // Detach sources dialog state
     const [detachDialogOpen, setDetachDialogOpen] = useState(false);
     const [pendingDetach, setPendingDetach] = useState<null | { transId: number; srcAttrIds: number[]; willDelete: boolean }>(null);
@@ -2211,9 +2213,6 @@ const MappingsView: React.FC = () => {
         setEditGroupOpen(true);
     }, [group]);
 
-
-    // A refused export (such as NOT_MIGRATED for an overlay model) lists every reason in a dialog.
-    const [portableFailure, setPortableFailure] = useState<PortableFailure | null>(null);
     const onExportGroup = useCallback(async () => {
         if (!group) return;
         try {
@@ -2323,6 +2322,8 @@ const MappingsView: React.FC = () => {
             }}
             onWheel={(e) => {
                 if (anyDialogOpen) return; // disable background scroll while modal open
+                // A dropdown renders in a portal, but React still delivers its wheel events here.
+                if (!containerRef.current?.contains(e.target as Node)) return;
                 const delta = e.deltaY;
                 const bounds = containerRef.current?.getBoundingClientRect();
                 if (!bounds) return;

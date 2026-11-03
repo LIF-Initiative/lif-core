@@ -3,6 +3,9 @@ import { errorToString } from "../utils/errorUtils";
 
 const apiBaseUrl = import.meta.env.VITE_API_URL;
 
+/** An import checks and writes a whole file in one request, so it gets longer than the API's default 30 seconds. */
+const IMPORT_TIMEOUT_MS = 5 * 60 * 1000;
+
 /** One reason the MDR API refused a portable file: its code, the element it concerns, and why. */
 export interface Refusal {
     code: string;
@@ -60,6 +63,7 @@ const exportFile = async (path: string): Promise<Blob> => {
 const importFile = async <T>(path: string, file: File): Promise<T> => {
     const result = await api.post<T>(`${apiBaseUrl}${path}`, file, {
         headers: { "Content-Type": "application/json" },
+        timeout: IMPORT_TIMEOUT_MS,
     });
     return result.data;
 };

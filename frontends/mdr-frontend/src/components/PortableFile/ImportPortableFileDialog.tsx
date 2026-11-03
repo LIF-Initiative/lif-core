@@ -52,7 +52,8 @@ function ImportPortableFileDialog<T>({
   };
 
   return (
-    <Dialog.Root open={open} onOpenChange={(next) => { if (!next) close(); }}>
+    // Escape and an outside click are ignored while importing, so the result is never lost with the dialog.
+    <Dialog.Root open={open} onOpenChange={(next) => { if (!next && !importing) close(); }}>
       <Dialog.Content maxWidth="800px" style={{ maxHeight: "85vh", overflow: "auto" }}>
         <Dialog.Title>{title}</Dialog.Title>
         <Dialog.Description size="2" mb="3">{description}</Dialog.Description>

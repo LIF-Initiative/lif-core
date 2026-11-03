@@ -27,6 +27,9 @@ from lif.mdr_portability import (
     parse_model_file,
 )
 from lif.mdr_portability.errors import error_group
+
+# Named apart from this module's _get_association_path, which names a stored row on export.
+from lif.mdr_portability.model_rules import _get_association_path as _get_file_association_path
 from lif.mdr_portability.v1.models import Association as FileAssociation
 from lif.mdr_portability.v1.models import AttributeKey, EntityKey
 from lif.mdr_sql_model.core import (
@@ -503,6 +506,27 @@ def _to_json(value: Any) -> str:
     raise TypeError(f"{type(value).__name__} is not JSON serializable")
 
 
+def _check_for_attribute_roles(file: ModelFile) -> Iterator[PortabilityError]:
+    # The format lets a parent hold one child under several Names (§5.4), but the attribute association
+    # table's unique index (uq_association_entity_attribute_active_v2) has no Name, so an attribute can be
+    # stored under a parent only once. Entity roles are stored apart by Relationship. Refuse the later
+    # associations here, naming them, rather than let the insert fail (#1434).
+    first_names: dict[tuple[str, str], str] = {}
+    for position, association in enumerate(file.Associations):
+        if not isinstance(association.Child, AttributeKey):
+            continue
+        parent, attribute = association.Parent.Entity, association.Child.Attribute
+        if (parent, attribute) not in first_names:
+            first_names[(parent, attribute)] = association.Name
+            continue
+        yield PortabilityError(
+            Code.FIELD_INVALID,
+            _get_file_association_path(association, position),
+            f"the attribute {attribute!r} is already under {parent!r} as {first_names[(parent, attribute)]!r}; "
+            "an attribute can be placed under a parent only once until attribute associations are stored by Name",
+        )
+
+
 async def import_model(session: AsyncSession, file: ModelFile) -> int:
     """Write a portable file as a new model, and return its Id.
 
@@ -514,6 +538,7 @@ async def import_model(session: AsyncSession, file: ModelFile) -> int:
         check_model_file(file)
     except PortabilityErrorGroup as group:
         errors.extend(group.exceptions)
+    errors.extend(_check_for_attribute_roles(file))
     details = file.Details
     existing = (
         await session.execute(

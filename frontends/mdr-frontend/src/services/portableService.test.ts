@@ -34,6 +34,7 @@ describe("portable imports", () => {
         expect(url).toMatch(/\/portable\/models$/);
         expect(body).toBe(file);
         expect(config?.headers).toEqual({ "Content-Type": "application/json" });
+        expect(config?.timeout).toBe(5 * 60 * 1000);
     });
 
     it("returns how many value mappings a crosswalk created", async () => {

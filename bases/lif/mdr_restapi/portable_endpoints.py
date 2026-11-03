@@ -9,7 +9,7 @@ a refusal, so a refused import writes nothing.
 """
 
 from collections.abc import Awaitable, Callable
-from typing import Any, cast
+from typing import Any, Optional, cast
 
 from fastapi import APIRouter, Depends, Request, Response
 from fastapi.responses import JSONResponse
@@ -30,7 +30,6 @@ from lif.mdr_services.datamodel_service import get_datamodel_by_id
 from lif.mdr_services.valueset_service import get_value_set_by_id
 from lif.mdr_utils.database_setup import get_session
 from lif.mdr_utils.logger_config import get_logger
-from sqlalchemy import text
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -42,6 +41,10 @@ Code = PortabilityErrorCode
 # Create-only refusals: the file is fine, and what it describes is already installed.
 EXISTS_CODES = {Code.MODEL_EXISTS, Code.GROUP_EXISTS, Code.CROSSWALK_EXISTS}
 
+# The unique indexes behind MODEL_EXISTS and GROUP_EXISTS. A concurrent import of the same key can pass the
+# converter's check and then be refused by one of these; any other integrity error is a failure on the server.
+EXISTS_INDEXES = {"datamodels_active_ux", "ux_transformationsgroup_model_id_version_active"}
+
 # OpenAPI descriptions of what the schema can't show: checks on the raw bytes, rules that span elements,
 # and checks against the installed rows. Codes are from the spec's §10.
 # Plain text, not a link: a relative link in Swagger UI would resolve against the API host.
@@ -51,7 +54,8 @@ IMPORT_RESPONSES = """
 **Responses.** 201 with the result on success. Otherwise nothing is written, and `detail` lists every
 refusal as `{code, element, reason}`: 409 when each one is `MODEL_EXISTS`, `GROUP_EXISTS` or
 `CROSSWALK_EXISTS` (the file is fine, and its content is already installed), and 422 for anything else.
-A 409 whose `detail` is a string means a concurrent import of the same content finished first.
+A 409 whose `detail` is a string means a concurrent import of the same content finished first. A 500 means
+the import failed on the server, and nothing was written.
 """
 
 FILE_CHECKS = """
@@ -84,8 +88,12 @@ IMPORT_MODEL_DESCRIPTION = f"""Import a model file as a new model ({SPEC} §5). 
 - `Array` is set on an entity that has a parent; set it on the entity's associations instead
   (`FIELD_INVALID`).
 
-**Against this install.** A live model with the same `Name`, `Version` and `ContributorOrganization`
-exists (`MODEL_EXISTS`). To import another version, change `Details.Version` in the file.
+**Against this install.**
+
+- a live model with the same `Name`, `Version` and `ContributorOrganization` exists (`MODEL_EXISTS`). To
+  import another version, change `Details.Version` in the file.
+- one attribute is placed under one parent more than once, under different `Name`s (`FIELD_INVALID`). The
+  format allows it, but attribute associations are not yet stored by `Name`, so only entities can have roles.
 {IMPORT_RESPONSES}"""
 
 IMPORT_MAPPING_GROUP_DESCRIPTION = f"""Import a mapping-group file as a new transformation group ({SPEC} §6).
@@ -168,28 +176,13 @@ def refusal_response(group: PortabilityErrorGroup) -> JSONResponse:
     )
 
 
+def get_constraint_name(error: IntegrityError) -> Optional[str]:
+    """The constraint the database refused, from the driver's exception (asyncpg's, under SQLAlchemy's)."""
+    return getattr(getattr(error.orig, "__cause__", None), "constraint_name", None)
+
+
 def file_response(file) -> Response:
     return Response(content=dump_canonical(file), media_type="application/json")
-
-
-async def lock_crosswalk_pair(session: AsyncSession, file: CrosswalkFile) -> None:
-    """Hold a lock on the crosswalk's key until the transaction ends.
-
-    Value mappings have no unique index, so two imports of one pair could both pass CROSSWALK_EXISTS.
-    With this lock the second waits for the first to commit, then sees its rows and is refused. Advisory
-    locks are database-wide, so the key starts with the schema the session writes to, and imports into
-    different tenants don't wait on each other.
-    """
-    # cspell:ignore xact hashtextextended - PostgreSQL function names
-    key = f"lif-mdr-crosswalk:{file.Details.model_dump_json()}"
-    await session.execute(
-        text("SELECT pg_advisory_xact_lock(hashtextextended(current_schema() || ':' || :key, 0))"), {"key": key}
-    )
-
-
-async def import_crosswalk_file(session: AsyncSession, file: CrosswalkFile) -> int:
-    await lock_crosswalk_pair(session, file)
-    return await portability_converter.import_crosswalk(session, file)
 
 
 async def import_file(
@@ -206,13 +199,20 @@ async def import_file(
     except PortabilityErrorGroup as group:
         await session.rollback()
         return refusal_response(group)
-    except IntegrityError:
-        # A concurrent import of the same key got past the create-only check; the unique index refused it.
+    except IntegrityError as error:
         await session.rollback()
-        logger.exception("Portable import failed due to a database integrity error")
+        constraint = get_constraint_name(error)
+        if constraint in EXISTS_INDEXES:
+            # A concurrent import of the same key got past the create-only check; the unique index refused it.
+            logger.info("Portable import refused by %s: a concurrent import finished first", constraint)
+            return JSONResponse(
+                status_code=409,
+                content={"detail": "Another import of the same content finished first; nothing was written."},
+            )
+        # Anything else is a failure on the server, such as a converter bug, not a problem with the file.
+        logger.exception("Portable import failed: the database refused constraint %s", constraint)
         return JSONResponse(
-            status_code=409,
-            content={"detail": "Another import of the same content finished first; nothing was written."},
+            status_code=500, content={"detail": "The import failed on the server, and nothing was written."}
         )
     return JSONResponse(status_code=201, content={result_key: result})
 
@@ -287,4 +287,6 @@ async def export_crosswalk(
 )
 async def import_crosswalk(request: Request, session: AsyncSession = Depends(get_session)):
     # A crosswalk is many value mapping rows, so the response is how many were created, not an Id.
-    return await import_file(session, request, parse_crosswalk_file, import_crosswalk_file, result_key="Created")
+    return await import_file(
+        session, request, parse_crosswalk_file, portability_converter.import_crosswalk, result_key="Created"
+    )
