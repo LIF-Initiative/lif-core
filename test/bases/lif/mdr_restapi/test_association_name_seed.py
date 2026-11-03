@@ -6,6 +6,10 @@ result, so every stored value must equal what the Python rule gives for the same
 
 Only rows with a Name are judged: other tests in the session insert associations directly, bypassing
 the services that compute Name (test_association_name_writes.py covers those services).
+
+A model whose associations were generated from its source vocabulary (CTDL, model 10) stores the
+source's own property names and cardinality, which the portable-file spec (§5.4) does not check
+against the naming rule; for those rows only a non-NULL Name and Array are checked.
 """
 
 import pytest
@@ -28,21 +32,32 @@ SEED_SCHEMAS = ("public", "tenant_lif_team")
 MIN_ROWS = 100
 
 
+# Models whose association Name and Array come from the source vocabulary, not from the V1.7 rule.
+# See projects/lif_mdr_database/data_models/ctdl/README.md.
+GENERATED_NAME_MODELS = (10,)
+
+
 @pytest.mark.parametrize("schema", SEED_SCHEMAS)
 def test_stored_entity_association_name_and_array_match_the_python_rule(pg_conn, schema):
     with pg_conn.cursor() as cur:
         cur.execute(
-            f'SELECT ea."Id", ea."Relationship", ea."Placement", c."Name", c."Array", ea."Name", ea."Array" '
-            f'FROM "{schema}"."EntityAssociation" ea JOIN "{schema}"."Entities" c ON c."Id" = ea."ChildEntityId" '
-            'WHERE ea."Name" IS NOT NULL'
+            f'SELECT ea."Id", ea."Relationship", ea."Placement", c."Name", c."Array", ea."Name", ea."Array", '
+            f'p."DataModelId" FROM "{schema}"."EntityAssociation" ea '
+            f'JOIN "{schema}"."Entities" c ON c."Id" = ea."ChildEntityId" '
+            f'JOIN "{schema}"."Entities" p ON p."Id" = ea."ParentEntityId" '
+            'WHERE ea."Name" IS NOT NULL OR p."DataModelId" IN %s',
+            (GENERATED_NAME_MODELS,),
         )
         rows = cur.fetchall()
     assert len(rows) >= MIN_ROWS
-    mismatches = [
-        row
-        for row in rows
-        if (row[5], row[6]) != (entity_association_name(row[1], row[2], row[3]), association_array(row[4]))
-    ]
+    mismatches = []
+    for row in rows:
+        expected_array = association_array(row[4])
+        if row[7] in GENERATED_NAME_MODELS:
+            if row[5] is None or row[6] is None:
+                mismatches.append(row)
+        elif (row[5], row[6]) != (entity_association_name(row[1], row[2], row[3]), expected_array):
+            mismatches.append(row)
     assert mismatches == []
 
 
