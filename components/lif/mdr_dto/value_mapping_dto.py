@@ -19,7 +19,7 @@ class CreateValueSetValueMappingDTO(BaseModel):
     DeprecationDate: Optional[datetime] = None
     Contributor: Optional[str] = None
     ContributorOrganization: Optional[str] = None
-    TransformationGroupId: int
+    TransformationGroupId: Optional[int] = None
 
 
 class ValueSetValueMappingDTO(BaseModel):
