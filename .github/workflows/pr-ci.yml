@@ -62,6 +62,15 @@ jobs:
       - name: Tests
         run: uv run pytest test
 
+      # The Dagster orchestrator is its own uv project, so the root run above can't collect
+      # its tests/ (#1341). Runs on every PR, not path-filtered: it packages bricks from
+      # components/, and a paths: list would have to track them. --locked as above.
+      - name: Orchestrator tests
+        working-directory: orchestrators/dagster/lif-orchestrator
+        run: |
+          uv sync --locked
+          uv run --locked pytest tests
+
       # Mirrors the cspell pre-commit hook, which had no CI counterpart -- the only gate
       # a PR could pass while a local run failed (#1217). Runs the same hook through
       # pre-commit so the config, version and verdict are identical, and scopes it to the

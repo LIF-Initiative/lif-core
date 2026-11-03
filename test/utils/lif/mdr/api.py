@@ -374,6 +374,29 @@ async def delete_transformation_group(
     return response.json()
 
 
+async def activate_transformation_group(
+    *, async_client_mdr: AsyncClient, transformation_group_id: str, headers: dict = HEADER_MDR_API_KEY_GRAPHQL
+) -> dict:
+    """Helper to activate a transformation group now (POST /transformation_groups/{id}/activate).
+
+    The Translator only applies the active group version for a pair (#1350), and new or imported
+    groups start inactive, so a test must activate its group before translating through it.
+
+    Args:
+        async_client_mdr: An instance of AsyncClient to make HTTP requests to the MDR API
+        transformation_group_id: The ID of the transformation group to activate
+        headers: Optional headers to include in the request (default is HEADER_MDR_API_KEY_GRAPHQL)
+
+    Returns:
+        The activated transformation group as a dictionary
+    """
+    response = await async_client_mdr.post(
+        f"/transformation_groups/{transformation_group_id}/activate", headers=headers
+    )
+    assert response.status_code == 200, str(response.text) + str(response.headers)
+    return response.json()
+
+
 async def update_transformation(
     *,
     async_client_mdr: AsyncClient,

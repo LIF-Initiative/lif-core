@@ -1,5 +1,10 @@
+import logging
+import traceback
+
+from graphql import GraphQLError
 from strawberry import Schema
 from strawberry.schema.config import StrawberryConfig
+from strawberry.types import ExecutionContext
 
 from lif.openapi_to_graphql.type_factory import (
     build_root_mutation_type,
@@ -8,6 +13,24 @@ from lif.openapi_to_graphql.type_factory import (
     create_mutable_input_type,
     create_type,
 )
+
+# Strawberry's own logger name, so the records route as they did before.
+error_logger = logging.getLogger("strawberry.execution")
+
+
+class _RedactingSchema(Schema):
+    """Logs each GraphQL error's path, type and stack, but not its message or the query (#1351).
+
+    Strawberry's default log quotes the query document, which holds the learner identifier in the
+    filter, and the message, which can quote a learner value (graphql-core's serialization errors
+    do). What the client receives is unchanged.
+    """
+
+    def process_errors(self, errors: list[GraphQLError], execution_context: ExecutionContext | None = None) -> None:
+        for error in errors:
+            original = error.original_error or error
+            stack = "".join(traceback.format_tb(original.__traceback__)).rstrip()
+            error_logger.error("GraphQL error at %s: %s\n%s", error.path, type(original).__name__, stack)
 
 
 def generate_graphql_root_types(
@@ -87,7 +110,7 @@ async def generate_graphql_schema(
         query_planner_update_url=query_planner_update_url,
         created_types={},
     )
-    schema_graph = Schema(
+    schema_graph = _RedactingSchema(
         query=root_query_type, mutation=root_mutation_type, config=StrawberryConfig(auto_camel_case=True)
     )
 

@@ -174,6 +174,7 @@ def add_fragment_items_to_list(list_to_update: list, new_items: list):
         if isinstance(new_item, dict):
             list_to_update.append(new_item)
         else:
-            msg = f"Input should be a valid dictionary: {new_item}"
+            # The type, not the item: the item is a learner value (#1351).
+            msg = f"Input should be a valid dictionary, got {type(new_item).__name__}"
             logger.error(msg)
             raise ValueError(msg)
