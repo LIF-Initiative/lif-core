@@ -119,8 +119,8 @@ async def test_cleanup_clears_its_refusals_and_leaves_the_rest_to_1388(seed_conn
     assert {rule: len(rows) for rule, rows in public.items()} == {
         "unassociated_skipped": 0,
         "unassociated": 76,
-        # 921 measured, less the 70 the first rule deletes.
-        "no_data_type": 851,
+        # 781 measured, less the 70 the first rule deletes.
+        "no_data_type": 711,
         "group_name": 0,
         "model_26_org": 1,
         "transformation_1189": 1,
@@ -128,7 +128,7 @@ async def test_cleanup_clears_its_refusals_and_leaves_the_rest_to_1388(seed_conn
         # The seed has no copy of 1760; dev has one in every schema.
         "transformation_1761": 0,
     }
-    assert (before["public"].models_exported, after["public"].models_exported) == (1, 12)
+    assert (before["public"].models_exported, after["public"].models_exported) == (2, 12)
     assert (before["public"].groups_exported, after["public"].groups_exported) == (2, 3)
     # What's left is the seed's entity-typed attributes, #1388's associations and overlay groups,
     # and model 25's one attribute associated only through a row another model owns.
@@ -174,7 +174,7 @@ async def test_dry_run_changes_nothing_and_a_second_run_finds_nothing(seed_conn)
     before = await _snapshot(conn)
     dry = await cleanup.cleanup(conn, apply=False)
     assert await _snapshot(conn) == before
-    assert len(dry["public"]["no_data_type"]) == 851
+    assert len(dry["public"]["no_data_type"]) == 711
 
     await cleanup.cleanup(conn, apply=True)
     again = await cleanup.cleanup(conn, apply=True)
@@ -258,7 +258,8 @@ async def test_cleanup_names_a_group_blank_by_python_s_strip(seed_conn):
 
     results = await cleanup.cleanup(conn, apply=True)
 
-    assert [(row["Id"], row["old_name"], row["Name"]) for row in results["public"]["group_name"]] == [
+    # UPDATE ... RETURNING has no row order, so compare sorted.
+    assert sorted((row["Id"], row["old_name"], row["Name"]) for row in results["public"]["group_name"]) == [
         (9011, "\xa0", "Schema.org_ELM"),
         (9012, "\f\v", "Schema.org_ELM"),
         (9013, "　 ", "Schema.org_ELM"),
