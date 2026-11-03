@@ -34,14 +34,20 @@ def require_env(name: str) -> str:
 def create_app(engine: AsyncEngine, cognito_config: CognitoAuthConfig) -> FastAPI:
     app = FastAPI(title="LIF Control Plane API", description="LIF control-plane service", version="0.1.0")
 
-    # Fail closed: without a user pool nobody can be authenticated, so with no strategies every
-    # non-public path is refused. An empty pool is never handed to cognito_strategy, which would
-    # try to fetch JWKS for it on every request that carries a token.
-    if not cognito_config.is_enabled:
-        logger.warning(
-            "Cognito auth NOT configured (CONTROL_PLANE_AUTH__USER_POOL_ID unset): non-public paths return 401"
-        )
-    strategies = [cognito_strategy(cognito_config)] if cognito_config.is_enabled else []
+    # Fail closed: without a user pool nobody can be authenticated, and without a client ID
+    # decode_cognito_jwt skips the aud/client_id check, so a token from any app client in the pool
+    # would pass. Either way there are no strategies, so every non-public path is refused. An empty
+    # pool is never handed to cognito_strategy, which would try to fetch JWKS for it on every
+    # request that carries a token.
+    missing = [
+        name
+        for name, value in (("USER_POOL_ID", cognito_config.user_pool_id), ("CLIENT_ID", cognito_config.client_id))
+        if not value
+    ]
+    if missing:
+        unset = ", ".join(f"CONTROL_PLANE_AUTH__{name}" for name in missing)
+        logger.warning(f"Cognito auth NOT configured ({unset} unset): non-public paths return 401")
+    strategies = [] if missing else [cognito_strategy(cognito_config)]
     app.add_middleware(AuthMiddleware, strategies=strategies)
 
     @app.get("/health-check")

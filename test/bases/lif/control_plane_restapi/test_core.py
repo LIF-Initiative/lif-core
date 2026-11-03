@@ -35,7 +35,7 @@ async def _client(engine, cognito_config) -> AsyncClient:
 @pytest.fixture
 def cognito_on(monkeypatch):
     monkeypatch.setattr(cognito_core, "decode_cognito_jwt", lambda token, config: {"sub": "user-1"})
-    return CognitoAuthConfig(user_pool_id="us-east-1_ABC")
+    return CognitoAuthConfig(user_pool_id="us-east-1_ABC", client_id="client-1")
 
 
 async def test_health_check_is_public_and_ok_when_the_database_answers(cognito_on):
@@ -64,6 +64,21 @@ async def test_without_a_cognito_pool_fails_closed_without_contacting_cognito(mo
     monkeypatch.setattr(cognito_core, "decode_cognito_jwt", decode)
 
     async with await _client(_engine(), CognitoAuthConfig()) as client:
+        protected = await client.get("/anything", headers={"Authorization": "Bearer some.token"})
+        health = await client.get("/health-check")
+
+    assert protected.status_code == 401
+    assert health.status_code == 200
+    decode.assert_not_called()
+
+
+async def test_a_pool_without_a_client_id_fails_closed(monkeypatch):
+    # Without a client ID, decode_cognito_jwt would skip the aud/client_id check and accept a token
+    # from any app client in the pool, so the service refuses everything instead.
+    decode = mock.Mock(side_effect=AssertionError("must not verify without a client ID"))
+    monkeypatch.setattr(cognito_core, "decode_cognito_jwt", decode)
+
+    async with await _client(_engine(), CognitoAuthConfig(user_pool_id="us-east-1_ABC")) as client:
         protected = await client.get("/anything", headers={"Authorization": "Bearer some.token"})
         health = await client.get("/health-check")
 

@@ -12,7 +12,7 @@ So far it's the service and its own database, without the key endpoints (#1182).
 | `/docs`, `/openapi.json` | public | FastAPI docs |
 
 ## Auth
-Cognito JWTs only, through `lif.auth`'s `AuthMiddleware` with `cognito_strategy` (configured with `CONTROL_PLANE_AUTH__USER_POOL_ID` / `__REGION` / `__CLIENT_ID`). **It fails closed:** with no user pool configured, the middleware has no strategies, so every non-public path returns `401`, and the service never tries to verify a token against an empty pool.
+Cognito JWTs only, through `lif.auth`'s `AuthMiddleware` with `cognito_strategy` (configured with `CONTROL_PLANE_AUTH__USER_POOL_ID` / `__REGION` / `__CLIENT_ID`). **It fails closed:** if the user pool or the client ID isn't configured, the middleware has no strategies, so every non-public path returns `401`. The service never tries to verify a token against an empty pool, and never accepts one without checking its client ID (with no client ID, `decode_cognito_jwt` would accept a token from any app client in the pool).
 
 ## Config
 - `CONTROL_PLANE__DATABASE_URL` (required): an async SQLAlchemy URL, e.g. `postgresql+asyncpg://user:pass@host:5432/db`. Startup fails, naming the variable, if it's missing (#1179).
