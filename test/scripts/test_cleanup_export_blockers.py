@@ -390,3 +390,65 @@ async def test_cleanup_deletes_1761_whose_target_row_has_its_own_metadata_and_pr
     assert datetime.fromisoformat(dropped["9304"].pop("ActivationDate")) == datetime(2021, 6, 15, tzinfo=timezone.utc)
     assert dropped == {"9304": {"Notes": "TAT Notes", "Contributor": "TAT Contributor"}}
     assert await conn.fetchval('SELECT "Deleted" FROM "Transformations" WHERE "Id" = 1761') is True
+
+
+async def test_cleanup_leaves_a_null_data_type_that_points_at_an_entity(seed_conn):
+    # Under §11 such an attribute becomes an association to the entity, so it isn't a string.
+    conn, url = seed_conn
+    row = await conn.fetchrow(
+        'SELECT a."Id", a."DataModelId" FROM "Attributes" a WHERE a."DataModelId" NOT IN (17, 18) AND a."Deleted" = false'
+        ' AND a."DataType" IS NULL AND EXISTS (SELECT 1 FROM "EntityAttributeAssociation" x'
+        ' JOIN "Entities" e ON e."Id" = x."EntityId" AND e."Deleted" = false'
+        ' WHERE x."AttributeId" = a."Id" AND x."Deleted" = false) ORDER BY a."Id" LIMIT 1'
+    )
+    assert row is not None
+    entity = await conn.fetchval(
+        'SELECT "Id" FROM "Entities" WHERE "DataModelId" = $1 AND "Deleted" = false ORDER BY "Id" LIMIT 1',
+        row["DataModelId"],
+    )
+    await conn.execute('UPDATE "Attributes" SET "TargetEntityId" = $2 WHERE "Id" = $1', row["Id"], entity)
+
+    results = await cleanup.cleanup(conn, apply=True)
+
+    assert row["Id"] not in [r["Id"] for r in results["public"]["no_data_type"]]
+    assert await conn.fetchval('SELECT "DataType" FROM "Attributes" WHERE "Id" = $1', row["Id"]) is None
+    assert await conn.fetchval('SELECT "Deleted" FROM "Attributes" WHERE "Id" = $1', row["Id"]) is False
+
+
+async def test_cleanup_leaves_blank_groups_on_overlays_deleted_or_unnamed_models(seed_conn):
+    conn, url = seed_conn
+    await conn.execute('UPDATE "DataModels" SET "Deleted" = true WHERE "Id" = 15')
+    await conn.execute('UPDATE "DataModels" SET "Name" = E\'\\u00a0\' WHERE "Id" = 11')
+    await conn.execute('UPDATE "DataModels" SET "Name" = E\'\\t\' WHERE "Id" = 7')
+    await conn.execute(
+        'INSERT INTO "TransformationsGroup" ("Id", "SourceDataModelId", "TargetDataModelId", "GroupVersion", "Name", "Deleted") OVERRIDING SYSTEM VALUE'
+        # From overlay 17, to overlay 18, from deleted model 15, from model 11 (Name only an NBSP), and
+        # to model 7 (Name only a tab).
+        " VALUES (9021, 17, 1, '9.0', '', false), (9025, 1, 18, '9.0', '', false), (9022, 15, 1, '9.0', '', false),"
+        " (9023, 11, 1, '9.0', '', false), (9024, 1, 7, '9.0', '', false)"
+    )
+
+    results = await cleanup.cleanup(conn, apply=True)
+
+    assert results["public"]["group_name"] == []
+    names = await conn.fetch('SELECT "Name" FROM "TransformationsGroup" WHERE "Id" BETWEEN 9021 AND 9025')
+    assert [row["Name"] for row in names] == [""] * 5
+
+
+async def test_a_failed_rollback_keeps_the_error_that_caused_it():
+    class Transaction:
+        async def start(self):
+            pass
+
+        async def rollback(self):
+            raise ConnectionError("connection dropped")
+
+    class Connection:
+        def transaction(self):
+            return Transaction()
+
+        async def fetch(self, sql):
+            raise RuntimeError("a rule failed")
+
+    with pytest.raises(RuntimeError, match="a rule failed"):
+        await cleanup.cleanup(Connection(), apply=False)

@@ -7,10 +7,13 @@ DataModels table, in this order:
     unassociated      soft-delete a live attribute that is in no live association (§11: dropped on
                       migration). One that a live mapping row or a live inclusion row still uses
                       is skipped and listed.
-    no_data_type      set DataType to 'string' where it is NULL (§11), after the deletes above
+    no_data_type      set DataType to 'string' where it is NULL (§11), after the deletes above. One
+                      with a TargetEntityId is left: under §11 it becomes an association to the
+                      entity, not a string
     group_name        set a blank group Name to '<source model Name>_<target model Name>', the
                       pattern every named group follows. Blank means what the exporter's
-                      str.strip() leaves empty
+                      str.strip() leaves empty. Only when both models are live and not overlays,
+                      and neither model's Name is blank
     model_26_org      set model 26 (R1 Demo Source Data Model) ContributorOrganization to 'LIF'
     transformation_1189
                       soft-delete transformation 1189 in group 3: no expression, no source, no target
@@ -45,6 +48,7 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import contextlib
 import os
 import sys
 
@@ -118,7 +122,7 @@ RETURNING a."Id", a."DataModelId"
         "no_data_type",
         """
 UPDATE {schema}."Attributes" a SET "DataType" = 'string'
-WHERE a."Deleted" = false AND a."DataType" IS NULL
+WHERE a."Deleted" = false AND a."DataType" IS NULL AND a."TargetEntityId" IS NULL
   AND a."DataModelId" IN ("""
         + _OWN_MODELS
         + """)
@@ -137,7 +141,18 @@ WITH blank AS (
       AND g."Name" ~ '^["""
         + _PY_WHITESPACE
         + """]*$'
-      AND trim(coalesce(s."Name", '')) <> '' AND trim(coalesce(t."Name", '')) <> ''
+      AND coalesce(s."Name", '') !~ '^["""
+        + _PY_WHITESPACE
+        + """]*$'
+      AND coalesce(t."Name", '') !~ '^["""
+        + _PY_WHITESPACE
+        + """]*$'
+      AND s."Id" IN ("""
+        + _OWN_MODELS
+        + """)
+      AND t."Id" IN ("""
+        + _OWN_MODELS
+        + """)
 )
 UPDATE {schema}."TransformationsGroup" g SET "Name" = blank.new_name
 FROM blank
@@ -256,7 +271,10 @@ async def cleanup(conn: asyncpg.Connection, apply: bool) -> dict[str, dict[str, 
             raise RuntimeError("No schema has a DataModels table")
         results = {schema: await clean_schema(conn, schema) for schema in schemas}
     except BaseException:
-        await transaction.rollback()
+        # Keep the error that got us here: a failed rollback (the connection dropped, say) would
+        # replace it, and PostgreSQL rolls the transaction back anyway when the connection goes.
+        with contextlib.suppress(Exception):
+            await transaction.rollback()
         raise
     if apply:
         await transaction.commit()
