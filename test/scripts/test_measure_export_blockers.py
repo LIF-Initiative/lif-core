@@ -124,6 +124,9 @@ async def test_measure_writes_nothing_and_counts_a_failed_export(seed_url, monke
     async def failing_export_model(session, data_model_id):
         if data_model_id == 1:
             raise RuntimeError("converter bug")
+        if data_model_id == 3:
+            # No message: the error is still recorded, and the run goes on.
+            raise AssertionError()
         if data_model_id == 2:
             # The transaction is read-only, so this fails, and the savepoint keeps the run going.
             await session.execute(text('UPDATE "DataModels" SET "Notes" = \'changed\' WHERE "Id" = 2'))
@@ -134,6 +137,8 @@ async def test_measure_writes_nothing_and_counts_a_failed_export(seed_url, monke
 
     public = results["public"]
     assert public.refusals["ERROR: RuntimeError"] == [("model 1 LIF", "converter bug")]
+    [(label, message)] = public.refusals["ERROR: AssertionError"]
+    assert label.startswith("model 3 ") and message == ""
     [(label, message)] = public.refusals["ERROR: DBAPIError"]
     assert label == "model 2 HR Open"
     assert "read-only transaction" in message

@@ -11,7 +11,8 @@ For each schema it prints how many models and groups export and how many are ref
 refusal reason with the number of elements it names and the models or groups it names them in.
 Names inside a reason (a value set, a model) are folded into `…` so the same rule counts as one
 reason. Overlay models are refused on that alone and are #1388's to convert; they are listed apart
-and not counted as cleanup. An export that fails with anything other than a refusal is counted as an
+and not counted as cleanup. A group whose source or target is an overlay is #1388's too, but it is
+counted as refused, under the overlay reason. An export that fails with anything other than a refusal is counted as an
 `ERROR` reason, so one broken row can't hide the rest of the schema.
 
 Reads `public` and every `tenant_*` schema with a DataModels table, each in a read-only transaction
@@ -102,7 +103,7 @@ async def _try_export(session: AsyncSession, result: SchemaResult, label: str, e
         for error in group.exceptions:
             result.refusals[reason_key(error.code.value, error.reason)].append((label, error.element))
     except Exception as error:  # noqa: BLE001 - a crash is a blocker too, and the run goes on
-        result.refusals[f"ERROR: {type(error).__name__}"].append((label, str(error).splitlines()[0][:200]))
+        result.refusals[f"ERROR: {type(error).__name__}"].append((label, (str(error).splitlines() or [""])[0][:200]))
     return False
 
 
