@@ -7,6 +7,7 @@ the 'person' collection. It includes utilities for field projection cleanup
 and filter conversion.
 """
 
+import traceback
 from typing import Any, Dict, List
 
 from pymongo import ReturnDocument
@@ -141,6 +142,15 @@ def extract_updated_fields(update_fields):
     return result
 
 
+def log_failure(label: str, error: Exception) -> None:
+    """Log a failure's type and stack, but not its message (#1351).
+
+    The message can quote the filter or a learner value: a Mongo DuplicateKeyError quotes the key.
+    """
+    stack = "".join(traceback.format_tb(error.__traceback__)).rstrip()
+    logger.error("%s: %s\n%s", label, type(error).__name__, stack)
+
+
 # -------------------------------------------------------------------------
 # Main function to run a query (ASYNC)
 # -------------------------------------------------------------------------
@@ -176,7 +186,7 @@ async def query(query: LIFQuery) -> List[LIFRecord]:
         logger.info(f"===> QUERY CACHE RETURNING {len(results)} record(s)")
         return results
     except Exception as e:
-        logger.exception("Query Exception: %s", e)
+        log_failure("Query Exception", e)
         raise
 
 
@@ -258,10 +268,10 @@ async def update(lif_update: LIFUpdate) -> LIFRecord:
             # ty doesn't model pydantic's populate_by_name aliasing; `person` is the
             # field name (alias "Person") and is valid at runtime.
             return LIFRecord(person=doc[PERSON_KEY_PASCAL])  # ty: ignore[unknown-argument]
-        raise ResourceNotFoundException(resource_id=None, message=f"No matching record after update: {filter_dict}")
+        raise ResourceNotFoundException(resource_id=None, message="No matching record after update")
 
     except Exception as e:
-        logger.exception("Update Exception: %s", e)
+        log_failure("Update Exception", e)
         raise
 
 
@@ -288,7 +298,7 @@ async def add(lif_record: LIFRecord) -> LIFRecord:
             return lif_record
         raise ResourceNotFoundException("Failed to add record, no inserted ID returned.")
     except Exception as e:
-        logger.exception("Add Exception: %s", e)
+        log_failure("Add Exception", e)
         raise
 
 
@@ -312,7 +322,7 @@ async def save(lif_query_filter: LIFQueryFilter, lif_fragments: List[LIFFragment
         async for doc in cursor:
             results.append(doc)
         if len(results) > 1:
-            raise ValueError(f"Cannot save -- multiple records found for the given filter: {lif_query_filter}")
+            raise ValueError("Cannot save -- multiple records found for the given filter")
 
         person_identifiers: LIFPersonIdentifiers = LIFPersonIdentifiers(
             Identifier=lif_query_filter.root.person.Identifier
@@ -334,5 +344,5 @@ async def save(lif_query_filter: LIFQueryFilter, lif_fragments: List[LIFFragment
         )
         logger.debug(f"MONGO UPDATE RESPONSE: {mongo_update_response}")
     except Exception as e:
-        logger.exception("Save Exception: %s", e)
+        log_failure("Save Exception", e)
         raise

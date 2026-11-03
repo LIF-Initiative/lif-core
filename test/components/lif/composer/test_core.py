@@ -1,7 +1,11 @@
 import datetime
 import json
+import logging
+
+import pytest
 
 from lif.composer.core import (
+    add_fragment_items_to_list,
     compose_json_with_fragment_list,
     compose_json_with_single_fragment,
     compose_with_fragment_list,
@@ -407,3 +411,14 @@ def test_compose_with_fragment_list_does_not_mutate_the_input_record():
     )
 
     assert lif_record.person[0]["identifier"] == [identifier_1_dict]
+
+
+def test_a_non_object_item_is_refused_without_logging_its_value(caplog):
+    # The item is a learner value, and the message is logged and reaches the Query Cache's response (#1351).
+    with caplog.at_level(logging.INFO, logger="lif.composer.core"):
+        with pytest.raises(ValueError) as raised:
+            add_fragment_items_to_list([], ["Marigold"])
+
+    assert "Input should be a valid dictionary, got str" in caplog.text
+    assert "Marigold" not in caplog.text
+    assert "Marigold" not in str(raised.value)
