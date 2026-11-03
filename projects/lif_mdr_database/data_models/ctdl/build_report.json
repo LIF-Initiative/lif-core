@@ -15,6 +15,47 @@
     "schemes": 36,
     "concepts": 457
   },
+  "crosswalk": {
+    "source_set": "AudienceLevel",
+    "target_set_id": 52,
+    "rows": [
+      {
+        "source_value": "audLevel:SecondaryLevel",
+        "target_value_id": 1569,
+        "old_mapping_id": 1087
+      },
+      {
+        "source_value": "audLevel:PostSecondaryLevel",
+        "target_value_id": 1570,
+        "old_mapping_id": 1088
+      },
+      {
+        "source_value": "audLevel:AssociatesDegreeLevel",
+        "target_value_id": 1571,
+        "old_mapping_id": 1089
+      },
+      {
+        "source_value": "audLevel:BachelorsDegreeLevel",
+        "target_value_id": 1572,
+        "old_mapping_id": 1090
+      },
+      {
+        "source_value": "audLevel:MastersDegreeLevel",
+        "target_value_id": 1574,
+        "old_mapping_id": 1091
+      },
+      {
+        "source_value": "audLevel:DoctoralDegreeLevel",
+        "target_value_id": 1576,
+        "old_mapping_id": 1092
+      },
+      {
+        "source_value": "audLevel:ProfessionalLevel",
+        "target_value_id": 1579,
+        "old_mapping_id": 1093
+      }
+    ]
+  },
   "entities": {
     "from_file": 140,
     "retained_deprecated": 2,
@@ -514,7 +555,7 @@
       ]
     }
   },
-  "expected_by_work_order_6_1": {
+  "expected_counts": {
     "entities": 142,
     "associations": 7763,
     "reference_rows": 5402,

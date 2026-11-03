@@ -1,23 +1,25 @@
 #!/usr/bin/env python3
 """Generate the SQL that rebuilds MDR DataModelId 10 (CTDL) from the CTDL authority file.
 
-Executes claude_CTDL-work-order-v7 (rationale: claude_CTDL-gap-analysis-v2). Reads three inputs
-from this directory, verifies the two source files against the hashes pinned in the work order's
-§0, and writes:
+The rules it applies are written up in README.md beside it ("Rules"); comments below name the
+README heading each rule comes from. Reads three inputs from this directory, verifies the two
+source files against their pinned SHA-256 hashes, and writes:
 
-  ctdl_model_10_update.sql   one transaction: Phase 1 cleanup (soft deletes by explicit row id),
-                             then Phase 2 build (value sets, entities, attributes, references);
+  ctdl_model_10_update.sql   one transaction: Phase 1 cleanup (soft deletes by explicit row id,
+                             guarded to model 10), then Phase 2 build (value sets, entities,
+                             attributes, references, the CTDL -> LIF crosswalk);
                              idempotent -- a second run finds every row already in place
-  build_report.json          every count the work order's §6.1 / §7 asks for, as computed here
+  build_report.json          every count the README's "Verification" section expects, as computed here
 
 Inputs:
-  CTDL-authority-20260927.json           credreg.net CTDL JSON-LD, release 20260927 (§0)
+  CTDL-authority-20260927.json           credreg.net CTDL JSON-LD, release 20260927
   CTDL-registry-publishing-schema.json   Credential Registry publishing schema; read for the
-                                         per-property `multivalue` flag only (§0, §4.4)
+                                         per-property `multivalue` flag only (README: Array)
   model_10_before.json                   DataModelId 10 as the seed held it before this build;
-                                         the rows to soft-delete, and the only source for the
-                                         ten attributes carried onto the two retained
-                                         deprecated classes (§2.4, §5.2)
+                                         the rows to soft-delete, the crosswalk to rebuild, and
+                                         the only source for the ten attributes carried onto the
+                                         two retained deprecated classes (README: Retained
+                                         deprecated classes)
 
 Run with plain Python (stdlib only): `python3 build_ctdl_model.py`.
 """
@@ -35,7 +37,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 DM = 10
 SOURCE_MODEL = "CTDL"
 ORG = "LIF"
-BUILD_DATE = "2026-10-29"
+BUILD_DATE = "2026-11-02"
 
 AUTHORITY_FILE = "CTDL-authority-20260927.json"
 AUTHORITY_SHA256 = "5d4410b2350e62a39bd0a57dffec2bcf7c34183102a0a821fdd88b74dd6c4ff9"
@@ -44,10 +46,10 @@ REGISTRY_SHA256 = "ae2d046ec8e93884006a413ea795e63485d3d48fad7616a21dd742f3e5863
 BEFORE_FILE = "model_10_before.json"
 
 # ---------------------------------------------------------------------------------------------
-# Work-order constants
+# Rule constants (README: Rules)
 # ---------------------------------------------------------------------------------------------
 
-# §4.2: the DataType map. DataType is copied verbatim into the OpenAPI `type`, so only these values
+# README "Typing": the DataType map. DataType is copied verbatim into the OpenAPI `type`, so only these values
 # are ever written. Dates and durations keep their source format in Notes.
 LITERAL_TYPES = {
     "xsd:string": "string",
@@ -67,13 +69,13 @@ LITERAL_TYPES = {
     "schema:Duration": "string",
 }
 FORMAT_NOTED = {"xsd:date", "xsd:dateTime", "xsd:duration", "schema:Date", "schema:Duration"}
-# §4.2 / §4.6: rdfs:Resource and schema:WebPage are strings, but the work order counts their rows with the
-# "no resolvable range" set (140 rows / 13 properties), so they carry the `[out of model]` Notes line.
+# README "Typing": rdfs:Resource and schema:WebPage are strings, counted with the "no resolvable range"
+# rows (140 rows / 13 properties), so they carry the `[out of model]` Notes line.
 CONCEPT = "skos:Concept"
-# §4.2: skos:ConceptScheme is not skos:Concept. Those rows are strings, never enums.
+# README "Typing": skos:ConceptScheme is not skos:Concept. Those rows are strings, never enums.
 CONCEPT_SCHEME = "skos:ConceptScheme"
 
-# §5.1: Required exists solely so references render. ctid and name wherever present, plus these.
+# README "Required": Required exists solely so references render. ctid and name wherever present, plus these.
 REQUIRED_GENERAL = {"ceterms:ctid", "ceterms:name"}
 REQUIRED_BY_CLASS = {
     "ceterms:AlignmentObject": ["ceterms:targetNode", "ceterms:targetNodeName"],
@@ -88,14 +90,16 @@ REQUIRED_BY_CLASS = {
     "schema:MonetaryAmount": ["schema:value", "schema:description"],
     "elm:Note": ["elm:noteLiteral"],
     "ceterms:DurationProfile": ["ceterms:exactDuration", "ceterms:minimumDuration", "ceterms:maximumDuration"],
-    "ceterms:Assessment": ["ceterms:hasRegulatoryInformation"],  # a reference row; marking it does nothing (§5.1)
+    "ceterms:Assessment": [
+        "ceterms:hasRegulatoryInformation"
+    ],  # a reference row; marking it does nothing (README: Required)
 }
 
-# §3.1: foreign parents that are not modeled get the suffix; these three foreign classes are (§5.3).
+# README "Hierarchy" and "Foreign classes": foreign parents that are not modeled get the suffix; these three are modeled.
 MODELED_FOREIGN_CLASSES = {"schema:QuantitativeValue", "schema:MonetaryAmount", "elm:Note"}
 FOREIGN_SUFFIX = " [foreign — not modeled]"
 
-# §5.2: the two deprecated classes retained by decision, outside the authority file.
+# README "Retained deprecated classes": the two deprecated classes retained by decision, outside the authority file.
 DEPRECATION_DATE = "2021-10-29T00:00:00Z"
 RETAINED_CLASSES = {
     # old entity id -> (new entity name, successor)
@@ -143,7 +147,9 @@ def _read(name: str, expected_sha256: str | None = None) -> Any:
     if expected_sha256 is not None:
         actual = hashlib.sha256(raw).hexdigest()
         if actual != expected_sha256:
-            raise SystemExit(f"{name}: SHA-256 {actual} does not match §0 ({expected_sha256}); refusing to build")
+            raise SystemExit(
+                f"{name}: SHA-256 {actual} does not match the pinned hash ({expected_sha256}); refusing to build"
+            )
     return json.loads(raw)
 
 
@@ -175,7 +181,7 @@ assert len(rows) == 7753, len(rows)
 
 
 def resolves(range_term: str) -> bool:
-    """§4.6 resolving predicate: a range resolves if and only if it is the @id of an rdfs:Class node
+    """The resolving predicate (README: References): a range resolves if and only if it is the @id of an rdfs:Class node
     in the authority file, i.e. a class DataModel 10 contains. Literals, skos:Concept,
     skos:ConceptScheme, rdfs:Resource, rdf:Statement, and every ceasn/qdata/asn class are
     unresolved."""
@@ -193,13 +199,13 @@ def ranges_of(prop_id: str) -> list[str]:
 
 
 def is_reference(prop_id: str) -> bool:
-    """§4: a domain row is a reference association when at least one range resolves; otherwise it
+    """README "References": a domain row is a reference association when at least one range resolves; otherwise it
     is attribute-typed. Applied per range, not per property."""
     return any(resolves(r) for r in ranges_of(prop_id))
 
 
 def local_name(term: str) -> str:
-    """§4.1 naming: bare local name for ceterms terms; every other namespace keeps its prefix."""
+    """README "Naming": bare local name for ceterms terms; every other namespace keeps its prefix."""
     prefix, _, local = term.partition(":")
     return local if prefix == "ceterms" else term
 
@@ -232,7 +238,7 @@ def ancestors(class_id: str) -> set[str]:
 
 
 # Whether a class ends up with at least one Required attribute-typed row, so a reference to it
-# renders as a non-empty object (§5.1, §6.3 step 5). Computed before attributes are emitted.
+# renders as a non-empty object (README: Required). Computed before attributes are emitted.
 def required_props_for(class_id: str) -> set[str]:
     own = {p for p in classes[class_id].get("meta:domainFor", [])}
     picks = {p for p in REQUIRED_GENERAL if p in own}
@@ -246,9 +252,10 @@ has_required = {c: bool(required_props_for(c)) for c in classes}
 def reference_child(prop_id: str) -> tuple[str, list[str], list[str]]:
     """Which permitted target becomes EntityAssociation.ChildEntityId.
 
-    The work order writes one reference association per domain row with "multiple permitted
-    targets" (§4.3). The table holds one ChildEntityId, so the full permitted list is recorded in
-    the association's Notes and one target is chosen for the column, deterministically:
+    A CTDL property may permit several target classes, but one reference association is written
+    per domain row and the table holds one ChildEntityId, so the full permitted list is recorded in
+    the association's Notes and one target is chosen for the column, deterministically (README:
+    References):
 
       1. the candidate that is an rdfs:subClassOf ancestor (within the file) of the most other
          candidates -- e.g. Organization over its two subclasses, Credential over its 50 subtypes;
@@ -259,7 +266,7 @@ def reference_child(prop_id: str) -> tuple[str, list[str], list[str]]:
     """
     all_ranges = ranges_of(prop_id)
     permitted = [r for r in all_ranges if resolves(r)]
-    # §7.4: an unresolved range is a class-like term the model lacks. Literal and skos:Concept
+    # README "References": an unresolved range is a class-like term the model lacks. Literal and skos:Concept
     # ranges on a reference row are attribute kinds the reference cannot carry; they are noted
     # separately as dropped, not as unresolved.
     unresolved = [r for r in all_ranges if not resolves(r) and r not in LITERAL_TYPES and r != CONCEPT]
@@ -274,7 +281,7 @@ def reference_child(prop_id: str) -> tuple[str, list[str], list[str]]:
 
 
 def data_type_for(prop_id: str) -> tuple[str, list[str]]:
-    """§4.2 / §4.3 / §4.6 typing for an attribute-typed row: (DataType, extra Notes lines)."""
+    """README "Typing": typing for an attribute-typed row: (DataType, extra Notes lines)."""
     rs = ranges_of(prop_id)
     notes: list[str] = []
     kinds: set[str] = set()
@@ -290,12 +297,12 @@ def data_type_for(prop_id: str) -> tuple[str, list[str]]:
     if formats:
         notes.append("format: " + "; ".join(formats))
     if kinds == {"unresolved"}:
-        # §4.6: no literal, concept or in-model range -> string, with the ranges in Notes.
+        # No literal, concept or in-model range -> string, with the ranges in Notes.
         notes.append("rangeIncludes: " + "; ".join(f"{r} [out of model]" for r in rs))
         return "string", notes
     if len(kinds) == 1:
         return next(iter(kinds)), notes
-    # §4.3: more than one kind (all-literal mixes, and leftSource / rightSource with
+    # More than one kind (all-literal mixes, and leftSource / rightSource with
     # rdf:Property + rdfs:Class + rdfs:Literal + skos:Concept) -> the widest type, string, with
     # every declared range enumerated.
     notes.append("rangeIncludes: " + "; ".join(rs))
@@ -303,8 +310,8 @@ def data_type_for(prop_id: str) -> tuple[str, list[str]]:
 
 
 def array_value(prop_id: str) -> str | None:
-    """§4.4: Array follows the Registry's multivalue on attribute rows; properties the Registry
-    lacks get null."""
+    """README "Array": the Attributes row's Array follows the Registry's multivalue; properties the
+    Registry lacks get null there (their association's Array is false)."""
     flag = multivalue.get(prop_id)
     if flag is True:
         return "Yes"
@@ -356,10 +363,12 @@ def id_list(items: list[dict]) -> str:
     return ",".join(str(x["Id"]) for x in items)
 
 
-w("-- CTDL (MDR DataModelId 10) rebuild from CTDL-authority-20260927.json, per claude_CTDL-work-order-v7.")
+w(
+    "-- CTDL (MDR DataModelId 10) rebuild from CTDL-authority-20260927.json. The rules are in README.md beside this file."
+)
 w(f"-- Generated by build_ctdl_model.py on {BUILD_DATE}. Do not edit by hand; rerun the generator.")
-w("-- One transaction. Idempotent: soft deletes name the exact rows, and every insert is guarded by the")
-w("-- live-row lookup the database's own unique indexes use.")
+w("-- One transaction. Idempotent: soft deletes name the exact rows and touch model 10 only, and every insert is")
+w("-- guarded by the live-row lookup the database's own unique indexes use.")
 w("BEGIN;")
 w("SET search_path TO public;")
 w("SET standard_conforming_strings = on;")
@@ -367,36 +376,64 @@ w("SET standard_conforming_strings = on;")
 # ---- Phase 1: cleanup ---------------------------------------------------------------------------
 banner("Phase 1 -- cleanup (soft deletes; nothing cascades, so each table is named)")
 
+# Every row is named by id AND guarded by its model-10 ownership, so the SQL cannot touch another model's
+# rows on a database whose ids differ from the seed's. The assertions confirm the guards match every
+# inventoried row, so none is silently skipped.
 group = before["transformation_group"]
-assert group["Id"] == 9
-w("-- §2.2 transformation group 9 (CTDL_LIF): already soft-deleted in the seed; asserted here, not re-deleted.")
-w('UPDATE "TransformationsGroup" SET "Deleted" = true WHERE "Id" = 9 AND "Deleted" IS NOT TRUE;')
+assert group["Id"] == 9 and group["SourceDataModelId"] == DM
+assert all(t["TransformationGroupId"] == 9 for t in before["transformations"])
+assert {ta["TransformationId"] for ta in before["transformation_attributes"]} <= {
+    t["Id"] for t in before["transformations"]
+}
+assert all(vs["DataModelId"] == DM for vs in before["value_sets"])
+assert {v["ValueSetId"] for v in before["value_set_values"]} <= {vs["Id"] for vs in before["value_sets"]}
+assert all(v["DataModelId"] == DM for v in before["value_set_values"])
+assert {m["SourceValueId"] for m in before["value_set_value_mappings"]} <= {v["Id"] for v in before["value_set_values"]}
+assert all(e["DataModelId"] == DM for e in before["entities"])
+assert all(a["DataModelId"] == DM for a in before["attributes"])
+assert {x["EntityId"] for x in before["entity_attribute_associations"]} <= {e["Id"] for e in before["entities"]}
+MODEL_ENTITIES = f'(SELECT "Id" FROM "Entities" WHERE "DataModelId" = {DM})'
+MODEL_VALUES = f'(SELECT "Id" FROM "ValueSetValues" WHERE "DataModelId" = {DM})'
+GROUP_TRANSFORMATIONS = '(SELECT "Id" FROM "Transformations" WHERE "TransformationGroupId" = 9)'
+w("-- Transformation group 9 (CTDL_LIF): already soft-deleted in the seed; asserted here, not re-deleted.")
+w(
+    f'UPDATE "TransformationsGroup" SET "Deleted" = true WHERE "Id" = 9 AND "SourceDataModelId" = {DM} AND "Deleted" IS NOT TRUE;'
+)
 w(
     f'UPDATE "Transformations" SET "Deleted" = true WHERE "Id" IN ({id_list(before["transformations"])}) '
-    'AND "Deleted" IS NOT TRUE;'
+    'AND "TransformationGroupId" = 9 AND "Deleted" IS NOT TRUE;'
 )
 w(
     f'UPDATE "TransformationAttributes" SET "Deleted" = true WHERE "Id" IN ({id_list(before["transformation_attributes"])}) '
-    'AND "Deleted" IS NOT TRUE;'
+    f'AND "TransformationId" IN {GROUP_TRANSFORMATIONS} AND "Deleted" IS NOT TRUE;'
 )
-w("-- §2.3 the 27 value sets, their 112 values, and the 115 mapping rows sourced from them. LIF set 52 stays.")
+w("-- The 27 value sets, their 112 values, and the 115 mapping rows sourced from them. LIF set 52 stays; the")
+w("-- 7 live rows that mapped the old CTDL set 118 into it are rebuilt from the new AudienceLevel set in Phase 2.")
 w(
     f'UPDATE "ValueSetValueMapping" SET "Deleted" = true WHERE "Id" IN ({id_list(before["value_set_value_mappings"])}) '
-    'AND "Deleted" IS NOT TRUE;'
+    f'AND "SourceValueId" IN {MODEL_VALUES} AND "Deleted" IS NOT TRUE;'
 )
 w(
-    f'UPDATE "ValueSetValues" SET "Deleted" = true WHERE "Id" IN ({id_list(before["value_set_values"])}) AND "Deleted" IS NOT TRUE;'
+    f'UPDATE "ValueSetValues" SET "Deleted" = true WHERE "Id" IN ({id_list(before["value_set_values"])}) '
+    f'AND "DataModelId" = {DM} AND "Deleted" IS NOT TRUE;'
 )
-w(f'UPDATE "ValueSets" SET "Deleted" = true WHERE "Id" IN ({id_list(before["value_sets"])}) AND "Deleted" IS NOT TRUE;')
-w("-- §2.4 the 14 existing entities, their 140 attributes and 140 attribute associations.")
+w(
+    f'UPDATE "ValueSets" SET "Deleted" = true WHERE "Id" IN ({id_list(before["value_sets"])}) '
+    f'AND "DataModelId" = {DM} AND "Deleted" IS NOT TRUE;'
+)
+w("-- The 14 existing entities, their 140 attributes and 140 attribute associations.")
 w(
     f'UPDATE "EntityAttributeAssociation" SET "Deleted" = true WHERE "Id" IN ({id_list(before["entity_attribute_associations"])}) '
-    'AND "Deleted" IS NOT TRUE;'
+    f'AND "EntityId" IN {MODEL_ENTITIES} AND "Deleted" IS NOT TRUE;'
 )
 w(
-    f'UPDATE "Attributes" SET "Deleted" = true WHERE "Id" IN ({id_list(before["attributes"])}) AND "Deleted" IS NOT TRUE;'
+    f'UPDATE "Attributes" SET "Deleted" = true WHERE "Id" IN ({id_list(before["attributes"])}) '
+    f'AND "DataModelId" = {DM} AND "Deleted" IS NOT TRUE;'
 )
-w(f'UPDATE "Entities" SET "Deleted" = true WHERE "Id" IN ({id_list(before["entities"])}) AND "Deleted" IS NOT TRUE;')
+w(
+    f'UPDATE "Entities" SET "Deleted" = true WHERE "Id" IN ({id_list(before["entities"])}) '
+    f'AND "DataModelId" = {DM} AND "Deleted" IS NOT TRUE;'
+)
 assert len(before["entities"]) == 14 and len(before["attributes"]) == 140
 assert len(before["value_sets"]) == 27 and len(before["value_set_values"]) == 112
 assert len(before["value_set_value_mappings"]) == 115
@@ -419,13 +456,16 @@ banner("Phase 2 -- DataModels row 10 keeps its id, name and version; Notes recor
 model_notes = "\n".join(
     [
         f"Rebuilt {BUILD_DATE} from {AUTHORITY_FILE} (credreg.net CTDL JSON-LD with meta properties, release 20260927;"
-        f" SHA-256 {AUTHORITY_SHA256}) per claude_CTDL-work-order-v7: 140 classes, 418 properties, 7,753 domain rows,"
+        f" SHA-256 {AUTHORITY_SHA256}): 140 classes, 418 properties, 7,753 domain rows,"
         " 36 concept schemes, 457 concepts; plus the deprecated ceterms:Competency and ceterms:CompetencyFramework"
-        " retained by decision.",
+        " retained by decision. Generator, rules and verification: projects/lif_mdr_database/data_models/ctdl/ in"
+        " the lif-core repository.",
         f"Array on attribute rows follows `multivalue` in {REGISTRY_FILE} (Credential Registry publishing schema;"
-        f" SHA-256 {REGISTRY_SHA256}), not CTDL, which declares no cardinality. Rows for the 15 properties the"
-        " Registry lacks carry Array null. For reference associations, multivalue is recorded in the association"
-        " Notes, never as Array.",
+        f" SHA-256 {REGISTRY_SHA256}), not CTDL, which declares no cardinality. The three attribute rows whose"
+        " property the Registry lacks carry Array null. Every association carries a boolean Array: on an attribute"
+        " association it mirrors the attribute row (false where that is null); on a reference association it follows"
+        " the property's multivalue (false where the Registry lacks the property), which the association Notes"
+        " also record.",
         "Required exists solely so references render: the schema generator copies only a referenced entity's"
         " required properties. ctid and name are Required wherever present, with a substitute pair on classes"
         " that have neither. Required does not assert CTDL cardinality.",
@@ -503,8 +543,9 @@ BEGIN
     RETURN v_id;
 END $fn$ LANGUAGE plpgsql;
 
--- One attribute row per domain row (§1.5), plus its single attribute association. Array is written to
--- the Attributes row, which the schema generator reads, and mirrored on the association (§4.4).
+-- One attribute row per domain row, plus its single attribute association. Array is written to the
+-- Attributes row, which the schema generator reads, and mirrored on the association as a boolean: a NULL
+-- association Array means "not computed yet" to the MDR, so an unknown multivalue becomes false (README: Array).
 CREATE OR REPLACE FUNCTION public.ctdl_tmp_attr(
     p_entity text, p_name text, p_unique_name text, p_description text, p_use text, p_datatype text,
     p_valueset text, p_required text, p_array text, p_notes text, p_assoc_notes text, p_deprecation timestamptz
@@ -523,7 +564,7 @@ BEGIN
             RAISE EXCEPTION 'Value set % not found for attribute %', p_valueset, p_unique_name;
         END IF;
     END IF;
-    v_assoc_array := CASE p_array WHEN 'Yes' THEN true WHEN 'No' THEN false ELSE NULL END;
+    v_assoc_array := COALESCE(p_array = 'Yes', false);
 
     SELECT "Id" INTO v_id FROM public."Attributes"
      WHERE "DataModelId" = {DM} AND "UniqueName" = p_unique_name AND "Deleted" IS NOT TRUE LIMIT 1;
@@ -559,10 +600,10 @@ BEGIN
     RETURN v_id;
 END $fn$ LANGUAGE plpgsql;
 
--- One Reference association per class-ranged domain row (§4, §4.5). Relationship stays NULL: the
--- association's Name is the key the generator reads. Array is never written on a reference (§4.4).
+-- One Reference association per class-ranged domain row. Relationship stays NULL: the association's Name
+-- is the key the generator reads. Array follows the Registry's multivalue, false when unknown (README: Array).
 CREATE OR REPLACE FUNCTION public.ctdl_tmp_ref(
-    p_parent text, p_child text, p_name text, p_notes text
+    p_parent text, p_child text, p_name text, p_notes text, p_array boolean
 ) RETURNS bigint AS $fn$
 DECLARE v_id bigint; v_pid bigint; v_cid bigint;
 BEGIN
@@ -579,21 +620,51 @@ BEGIN
         INSERT INTO public."EntityAssociation"
             ("ParentEntityId","ChildEntityId","Relationship","Placement","Notes","ContributorOrganization",
              "Deleted","Extension","ExtendedByDataModelId","Name","Array")
-        VALUES (v_pid, v_cid, NULL, 'Reference', p_notes, {q(ORG)}, false, false, NULL, p_name, NULL)
+        VALUES (v_pid, v_cid, NULL, 'Reference', p_notes, {q(ORG)}, false, false, NULL, p_name, p_array)
         RETURNING "Id" INTO v_id;
     ELSE
         UPDATE public."EntityAssociation"
            SET "ChildEntityId" = v_cid, "Relationship" = NULL, "Placement" = 'Reference', "Notes" = p_notes,
-               "Array" = NULL, "ContributorOrganization" = {q(ORG)}
+               "Array" = p_array, "ContributorOrganization" = {q(ORG)}
          WHERE "Id" = v_id;
+    END IF;
+    RETURN v_id;
+END $fn$ LANGUAGE plpgsql;
+
+-- The one live CTDL -> LIF crosswalk in the pre-build seed (CTDL value set 118 -> LIF value set 52), rebuilt
+-- from the new AudienceLevel set: the source value is found by its concept CURIE, the target is the row the old
+-- mapping named, checked to be a live value of set 52. Group-less, like the old rows (README: Value sets).
+CREATE OR REPLACE FUNCTION public.ctdl_tmp_mapping(
+    p_source_set text, p_source_value text, p_target_set bigint, p_target_value_id bigint
+) RETURNS bigint AS $fn$
+DECLARE v_id bigint; v_src bigint;
+BEGIN
+    SELECT v."Id" INTO v_src FROM public."ValueSetValues" v JOIN public."ValueSets" s ON s."Id" = v."ValueSetId"
+     WHERE s."DataModelId" = {DM} AND s."Name" = p_source_set AND s."Deleted" IS NOT TRUE
+       AND v."Value" = p_source_value AND v."Deleted" IS NOT TRUE LIMIT 1;
+    IF v_src IS NULL THEN
+        RAISE EXCEPTION 'Source value % not found in value set %', p_source_value, p_source_set;
+    END IF;
+    IF NOT EXISTS (
+        SELECT 1 FROM public."ValueSetValues" v JOIN public."ValueSets" s ON s."Id" = v."ValueSetId"
+         WHERE v."Id" = p_target_value_id AND s."Id" = p_target_set AND v."Deleted" IS NOT TRUE AND s."Deleted" IS NOT TRUE
+    ) THEN
+        RAISE EXCEPTION 'Target value % is not a live value of value set %', p_target_value_id, p_target_set;
+    END IF;
+    SELECT "Id" INTO v_id FROM public."ValueSetValueMapping"
+     WHERE "SourceValueId" = v_src AND "TargetValueId" = p_target_value_id AND "Deleted" IS NOT TRUE LIMIT 1;
+    IF v_id IS NULL THEN
+        INSERT INTO public."ValueSetValueMapping" ("SourceValueId","TargetValueId","ContributorOrganization","Deleted")
+        VALUES (v_src, p_target_value_id, {q(ORG)}, false)
+        RETURNING "Id" INTO v_id;
     END IF;
     RETURN v_id;
 END $fn$ LANGUAGE plpgsql;
 """
 )
 
-# ---- value sets (§4.8) --------------------------------------------------------------------------
-banner("Phase 2 -- 36 concept schemes as value sets (after §2.3 freed the names)")
+# ---- value sets (README: Value sets) ------------------------------------------------------------
+banner("Phase 2 -- 36 concept schemes as value sets (after Phase 1 freed the names)")
 value_count = 0
 scheme_by_local: dict[str, str] = {}
 for scheme_id, node in schemes.items():
@@ -634,8 +705,35 @@ assert value_count == 457, value_count
 assert sum(1 for c in concepts.values() for s in c.get("skos:inScheme", []) if s in schemes) == 457
 report["value_sets"] = {"schemes": len(schemes), "concepts": value_count}
 
-# ---- entities (§3) ------------------------------------------------------------------------------
-banner("Phase 2 -- 142 entities: 140 classes from the file plus the two retained deprecated classes (§5.2)")
+# ---- the CTDL -> LIF crosswalk (README: Value sets) ----------------------------------------------
+banner("Phase 2 -- the courseApplicableEducationLevel crosswalk: new AudienceLevel values -> LIF value set 52")
+LIF_EDUCATION_LEVEL_SET = 52
+OLD_CROSSWALK_SET = 118
+old_values = {v["Id"]: v for v in before["value_set_values"]}
+old_crosswalk = [
+    m
+    for m in before["value_set_value_mappings"]
+    if not m["Deleted"] and old_values[m["SourceValueId"]]["ValueSetId"] == OLD_CROSSWALK_SET
+]
+audience_level = {
+    c for c, node in concepts.items() if scheme_by_local["AudienceLevel"] in node.get("skos:inScheme", [])
+}
+crosswalk_report = []
+for m in old_crosswalk:
+    # The old set stored the concept as `audLevel-X`; the new set stores the CURIE `audLevel:X`.
+    curie = old_values[m["SourceValueId"]]["Value"].replace("audLevel-", "audLevel:", 1)
+    assert curie in audience_level, curie
+    w(f"SELECT public.ctdl_tmp_mapping('AudienceLevel', {q(curie)}, {LIF_EDUCATION_LEVEL_SET}, {m['TargetValueId']});")
+    crosswalk_report.append({"source_value": curie, "target_value_id": m["TargetValueId"], "old_mapping_id": m["Id"]})
+assert len(crosswalk_report) == 7, crosswalk_report
+report["crosswalk"] = {
+    "source_set": "AudienceLevel",
+    "target_set_id": LIF_EDUCATION_LEVEL_SET,
+    "rows": crosswalk_report,
+}
+
+# ---- entities (README: Hierarchy) ---------------------------------------------------------------
+banner("Phase 2 -- 142 entities: 140 classes from the file plus the two retained deprecated classes")
 entity_name: dict[str, str] = {c: local_name(c) for c in classes}
 assert len(set(entity_name.values())) == len(entity_name)
 hierarchy_notes = 0
@@ -659,7 +757,7 @@ for class_id, node in classes.items():
         no_subclass += 1
         no_in_model_parent += 1
     if class_id in MODELED_FOREIGN_CLASSES:
-        notes.append("retained by exception: foreign class shipped in the CTDL serialization (work order §5.3)")
+        notes.append("retained by exception: foreign class shipped in the CTDL serialization")
     if node.get("owl:equivalentClass"):
         notes.append("equivalentClass: " + "; ".join(node["owl:equivalentClass"]))
     if node.get("vs:term_status"):
@@ -703,10 +801,10 @@ report["entities"] = {
     "propertyless": [entity_name[c] for c in propertyless],
 }
 
-# ---- attribute rows and reference rows (§4) -------------------------------------------------------
+# ---- attribute rows and reference rows (README: References, Typing, Array, Required) -------------
 banner("Phase 2 -- 7,753 domain rows: attribute-typed rows become Attributes, class-ranged rows become references")
 
-# §4.1 safety: no class holds two properties sharing a bare name.
+# README "Naming" safety: no class holds two properties sharing a bare name.
 for class_id, node in classes.items():
     names = [local_name(p) for p in node.get("meta:domainFor", [])]
     assert len(names) == len(set(names)), class_id
@@ -769,7 +867,10 @@ for class_id, prop_id in rows:
             mixed_multi_range[prop_id] = "reference"
         flag = multivalue.get(prop_id)
         ref_multivalue_counts["multivalue" if flag is True else "single" if flag is False else "null"] += 1
-        w(f"SELECT public.ctdl_tmp_ref({q(owner)}, {q(entity_name[child])}, {q(name)}, {q(chr(10).join(notes))});")
+        w(
+            f"SELECT public.ctdl_tmp_ref({q(owner)}, {q(entity_name[child])}, {q(name)}, {q(chr(10).join(notes))},"
+            f" {'true' if flag is True else 'false'});"
+        )
         continue
 
     attribute_rows += 1
@@ -827,8 +928,8 @@ assert ref_multivalue_counts == collections.Counter({"multivalue": 4929, "single
 never_placed = sorted(set(props) - placed_props)
 assert len(never_placed) == 13, never_placed
 
-# ---- the ten retained attributes (§5.2) -----------------------------------------------------------
-banner("Phase 2 -- the ten attributes carried onto the retained deprecated classes (§5.2)")
+# ---- the ten retained attributes (README: Retained deprecated classes) ---------------------------
+banner("Phase 2 -- the ten attributes carried onto the retained deprecated classes")
 before_attrs = {a["Id"]: a for a in before["attributes"]}
 before_owner = {x["AttributeId"]: x["EntityId"] for x in before["entity_attribute_associations"] if not x["Deleted"]}
 retained_attribute_report = []
@@ -843,7 +944,7 @@ for old_entity_id, items in RETAINED_ATTRIBUTES.items():
         notes = [
             f"source: Attributes row {old_attr_id} ({old['UniqueName']}) in the pre-build seed; this class has no"
             f" domain row for {prop_id} in {AUTHORITY_FILE}",
-            "typedBy: work order §4.2 (the pre-build row had no DataType)",
+            "typedBy: the DataType map in build_ctdl_model.py (the pre-build row had no DataType)",
         ]
         array = array_value(prop_id)
         w(
@@ -866,7 +967,8 @@ assert len(retained_attribute_report) == 10
 
 # ---- end ------------------------------------------------------------------------------------------
 banner("Done")
-w("DROP FUNCTION IF EXISTS public.ctdl_tmp_ref(text,text,text,text);")
+w("DROP FUNCTION IF EXISTS public.ctdl_tmp_mapping(text,text,bigint,bigint);")
+w("DROP FUNCTION IF EXISTS public.ctdl_tmp_ref(text,text,text,text,boolean);")
 w("DROP FUNCTION IF EXISTS public.ctdl_tmp_attr(text,text,text,text,text,text,text,text,text,text,text,timestamptz);")
 w("DROP FUNCTION IF EXISTS public.ctdl_tmp_entity(text,text,text,text,timestamptz);")
 w("DROP FUNCTION IF EXISTS public.ctdl_tmp_valueset(text,text,text,text,jsonb);")
@@ -929,7 +1031,7 @@ report["mixed_multi_range_properties"] = {
         "unresolved": [r for r in ranges_of("ceterms:isSimilarTo") if not resolves(r)],
     },
 }
-report["expected_by_work_order_6_1"] = {
+report["expected_counts"] = {
     "entities": 142,
     "associations": 7753 + 10,
     "reference_rows": 5402,
