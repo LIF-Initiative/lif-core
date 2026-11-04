@@ -21,6 +21,7 @@ from sqlalchemy.ext.asyncio import create_async_engine  # noqa: E402
 
 import lif.auth.cognito as cognito_core  # noqa: E402
 from lif.auth.cognito import CognitoAuthConfig  # noqa: E402
+from lif.auth.principal import Principal  # noqa: E402
 from lif.control_plane_restapi import core  # noqa: E402
 
 MIGRATION = (
@@ -143,17 +144,23 @@ async def test_issue_list_and_revoke(engine):
         assert listed.json()[0]["RevokedDate"] is not None
 
 
-@pytest.mark.parametrize("auth_method", ["api_key", None])
-def test_only_a_cognito_user_owns_keys(auth_method):
-    # Cognito is the only strategy today, so no request reaches this. It guards ADR 0008 decision 1
-    # if another strategy (an API key, a local login) is ever added to the middleware.
-    from fastapi import HTTPException
+@pytest.mark.parametrize(
+    ("method", "path"),
+    [
+        ("post", "/api-keys/?workspace=tenant_team_a"),
+        ("get", "/api-keys/?workspace=tenant_team_a"),
+        ("delete", "/api-keys/1"),
+    ],
+)
+async def test_only_a_cognito_user_owns_keys(no_db, monkeypatch, method, path):
+    # Cognito is the only strategy today. This swaps in one that authenticates a non-Cognito caller
+    # (as an API-key or local-login strategy would) to pin ADR 0008 decision 1 at the endpoints: the
+    # caller is refused before the database, even though its claims would pass the membership check.
+    def service_strategy(request):
+        return Principal(id="service:x", method="api_key", claims={"cognito:groups": ["Team-A"]})
 
-    from lif.control_plane_restapi.api_key_endpoints import _require_owner_sub
-
-    request = mock.Mock()
-    request.state.auth_method = auth_method
-    request.state.principal = "service:x"
-    with pytest.raises(HTTPException) as exc:
-        _require_owner_sub(request)
-    assert exc.value.status_code == 400
+    monkeypatch.setattr(core, "cognito_strategy", lambda config: service_strategy)
+    async with _client(no_db) as client:
+        kwargs = {"json": {"Label": "x"}} if method == "post" else {}
+        resp = await client.request(method.upper(), path, headers=_auth("anything"), **kwargs)
+    assert resp.status_code == 400
