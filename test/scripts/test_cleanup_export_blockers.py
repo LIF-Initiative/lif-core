@@ -127,6 +127,8 @@ async def test_cleanup_clears_its_refusals_and_leaves_the_rest_to_1388(seed_conn
         "value_3649_extension": 1,
         # The seed has no copy of 1760; dev has one in every schema.
         "transformation_1761": 0,
+        # The seed has no groups 28 or 29; dev does (#1388).
+        "transformations_through_deleted": 0,
     }
     assert (before["public"].models_exported, after["public"].models_exported) == (2, 12)
     assert (before["public"].groups_exported, after["public"].groups_exported) == (2, 3)
@@ -453,3 +455,145 @@ async def test_a_failed_rollback_keeps_the_error_that_caused_it():
 
     with pytest.raises(RuntimeError, match="a rule failed"):
         await cleanup.cleanup(Connection(), apply=False)
+
+
+# Dev's broken rows on overlay 17 (#1388, item 1): groups 28 (5 -> 17) and 29 (6 -> 17), whose target
+# paths go through entity 391, which is soft-deleted; 1600's also ends at attribute 1961, deleted
+# too. The seed has none of them. (transformation, group, source row, target row, target path)
+_THROUGH_DELETED = [
+    (1590, 28, 9401, 9402, "391,244,-1283"),
+    (1591, 28, 9403, 9404, "391,244,-1898"),
+    (1592, 28, 9405, 9406, "391,245,-1898"),
+    (1593, 28, 9407, 9408, "391,245,-1899"),
+    (1594, 28, 9409, 9410, "391,244,-1900"),
+    (1595, 28, 9411, 9412, "391,244,-1899"),
+    (1600, 29, 9413, 9414, "391,-1961"),
+]
+
+
+async def _add_groups_28_and_29(conn):
+    await conn.execute(
+        'INSERT INTO "Entities" ("Id", "DataModelId", "Name", "UniqueName", "Deleted") OVERRIDING SYSTEM VALUE'
+        " VALUES (391, 1, 'TammieTestEntity2', 'TammieTestEntity2', true)"
+    )
+    await conn.execute(
+        'INSERT INTO "Attributes" ("Id", "DataModelId", "Name", "UniqueName", "DataType", "Deleted") OVERRIDING SYSTEM VALUE'
+        " VALUES (1961, 1, 'TammieTestAttribute2', 'TammieTestEntity2.TammieTestAttribute2', 'string', true)"
+    )
+    await conn.execute(
+        'INSERT INTO "TransformationsGroup" ("Id", "SourceDataModelId", "TargetDataModelId", "GroupVersion", "Name", "Deleted")'
+        " OVERRIDING SYSTEM VALUE VALUES (28, 5, 17, '1.0', 'EagleApps_StateU LIF', false),"
+        " (29, 6, 17, '1.0', 'Ed-Fi v5_StateU LIF', false)"
+    )
+    for transformation, group, source_row, target_row, target_path in _THROUGH_DELETED:
+        await conn.execute(
+            'INSERT INTO "Transformations" ("Id", "TransformationGroupId", "Name", "Expression", "ExpressionLanguage", "Deleted")'
+            " OVERRIDING SYSTEM VALUE VALUES ($1, $2, 'broken', '{ \"a\": b }', 'JSONata', false)",
+            transformation,
+            group,
+        )
+        await conn.execute(
+            'INSERT INTO "TransformationAttributes" ("Id", "TransformationId", "AttributeId", "EntityIdPath", "AttributeType", "Deleted")'
+            " OVERRIDING SYSTEM VALUE VALUES ($1, $3, 93, '12,-93', 'Source', false), ($2, $3, $4, $5, 'Target', false)",
+            source_row,
+            target_row,
+            transformation,
+            int(target_path.rsplit("-", 1)[1]),
+            target_path,
+        )
+
+
+_DELETED = 'SELECT "Id" FROM "{}" WHERE "Id" = ANY($1::int[]) AND "Deleted" ORDER BY "Id"'
+
+
+async def test_cleanup_deletes_the_transformations_through_deleted_nodes(seed_conn):
+    conn, url = seed_conn
+    await _add_groups_28_and_29(conn)
+
+    results = await cleanup.cleanup(conn, apply=True)
+
+    assert sorted(tuple(row.values()) for row in results["public"]["transformations_through_deleted"]) == [
+        (transformation, group, [source_row, target_row], None)
+        for transformation, group, source_row, target_row, _ in _THROUGH_DELETED
+    ]
+    transformations = [t for t, *_ in _THROUGH_DELETED]
+    rows = [r for _, _, source, target, _ in _THROUGH_DELETED for r in (source, target)]
+    assert [r["Id"] for r in await conn.fetch(_DELETED.format("Transformations"), transformations)] == transformations
+    assert [r["Id"] for r in await conn.fetch(_DELETED.format("TransformationAttributes"), rows)] == rows
+    # The groups stay: only their broken mappings go.
+    assert await conn.fetchval('SELECT count(*) FROM "TransformationsGroup" WHERE "Id" IN (28, 29) AND "Deleted"') == 0
+
+    again = await cleanup.cleanup(conn, apply=True)
+    assert again["public"]["transformations_through_deleted"] == []
+
+
+async def test_cleanup_keeps_a_transformation_once_its_path_is_live_again(seed_conn):
+    # Restoring 391 mends 1590-1595. 1600 still ends at deleted attribute 1961, so it still goes.
+    conn, url = seed_conn
+    await _add_groups_28_and_29(conn)
+    await conn.execute('UPDATE "Entities" SET "Deleted" = false WHERE "Id" = 391')
+
+    results = await cleanup.cleanup(conn, apply=True)
+
+    assert [row["Id"] for row in results["public"]["transformations_through_deleted"]] == [1600]
+    assert [r["Id"] for r in await conn.fetch(_DELETED.format("Transformations"), list(range(1590, 1601)))] == [1600]
+
+
+_ALL_SEVEN = [1590, 1591, 1592, 1593, 1594, 1595, 1600]
+
+
+@pytest.mark.parametrize(
+    ("make_it_differ", "deleted"),
+    [
+        pytest.param(
+            'UPDATE "Transformations" SET "TransformationGroupId" = 29 WHERE "Id" = 1590',
+            _ALL_SEVEN[1:],
+            id="other-group",
+        ),
+        pytest.param(
+            # Broken the same way, in group 28, but not one #1388 named.
+            'INSERT INTO "Transformations" ("Id", "TransformationGroupId", "Name", "Deleted") OVERRIDING SYSTEM VALUE'
+            " VALUES (1596, 28, 'broken', false);"
+            ' INSERT INTO "TransformationAttributes" ("Id", "TransformationId", "AttributeId", "EntityIdPath",'
+            ' "AttributeType", "Deleted") OVERRIDING SYSTEM VALUE'
+            " VALUES (9415, 1596, 1283, '391,244,-1283', 'Target', false)",
+            _ALL_SEVEN,
+            id="other-id",
+        ),
+        pytest.param(
+            'UPDATE "TransformationAttributes" SET "Deleted" = true WHERE "Id" = 9402',
+            _ALL_SEVEN[1:],
+            id="broken-row-already-gone",
+        ),
+    ],
+)
+async def test_cleanup_keeps_a_transformation_it_was_not_decided_for(seed_conn, make_it_differ, deleted):
+    # The rule is for the seven transformations #1388 named, in their own groups, while a live row breaks.
+    conn, url = seed_conn
+    await _add_groups_28_and_29(conn)
+    await conn.execute(make_it_differ)
+
+    results = await cleanup.cleanup(conn, apply=True)
+
+    assert [row["Id"] for row in results["public"]["transformations_through_deleted"]] == deleted
+    kept = [t for t in (1590, 1596) if t not in deleted]
+    assert (
+        await conn.fetchval('SELECT count(*) FROM "Transformations" WHERE "Id" = ANY($1::int[]) AND "Deleted"', kept)
+        == 0
+    )
+
+
+async def test_cleanup_reads_a_named_path_without_failing(seed_conn):
+    # Old rows carry dotted names in EntityIdPath ("Person.Contact.Address"). They aren't Ids, so
+    # they break nothing, and the cast must not abort the run. Both of 1590's rows get one, so the
+    # rule has to read them: no Id path of 1590's can match first.
+    conn, url = seed_conn
+    await _add_groups_28_and_29(conn)
+    await conn.execute(
+        'UPDATE "TransformationAttributes" SET "EntityIdPath" = \'Person.Contact.Address\' WHERE "Id" IN (9401, 9402)'
+    )
+
+    results = await cleanup.cleanup(conn, apply=True)
+
+    assert [row["Id"] for row in results["public"]["transformations_through_deleted"]] == _ALL_SEVEN[1:]
+    assert await conn.fetchval('SELECT "Deleted" FROM "Transformations" WHERE "Id" = 1590') is False

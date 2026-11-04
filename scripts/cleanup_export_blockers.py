@@ -27,9 +27,15 @@ DataModels table, in this order:
                       same attributes at the same paths. The rows' own metadata (Notes,
                       Contributor, dates, Extension) is not compared: on dev, 1761's target row
                       carries placeholder values 1760's doesn't. The rule prints what it drops
+    transformations_through_deleted
+                      soft-delete transformations 1590-1595 (group 28) and 1600 (group 29), and their
+                      mapping rows: mappings into overlay 17 whose paths go through entity 391 or
+                      attribute 1961, both soft-deleted, so #1388's conversion would refuse on them
+                      (decided on #1388). Only while one of the transformation's live mapping rows
+                      still goes through a soft-deleted entity or attribute. Prints what it drops
 
-Overlay models (a BaseDataModelId, or live inclusion rows) are left alone in every rule: converting
-them is #1388's. The ExtendedBy, cross-model and ownerless associations export also refuses are
+Overlay models (a BaseDataModelId, or live inclusion rows) are left alone in every rule but the
+last, which clears #1388's way: converting them is #1388's. The ExtendedBy, cross-model and ownerless associations export also refuses are
 #1388's too, and are not touched.
 
 One transaction for every schema. Each rule prints the Ids it changed, with the old value where
@@ -230,6 +236,49 @@ SELECT transformation."Id", transformation."TransformationGroupId",
        ARRAY(SELECT rows."Id" FROM rows ORDER BY rows."Id") AS "MappingRowIds",
        (SELECT jsonb_object_agg(rows."Id", rows.metadata) FROM rows WHERE rows.metadata <> '{{}}') AS "DroppedRowMetadata"
 FROM transformation
+""",
+    ),
+    (
+        "transformations_through_deleted",
+        """
+WITH broken AS (
+    SELECT t."Id" FROM {schema}."Transformations" t
+    WHERE t."Deleted" = false
+      AND ((t."TransformationGroupId" = 28 AND t."Id" BETWEEN 1590 AND 1595)
+           OR (t."TransformationGroupId" = 29 AND t."Id" = 1600))
+      AND EXISTS (
+          SELECT 1 FROM {schema}."TransformationAttributes" ta
+          CROSS JOIN LATERAL (
+              -- A path is entity Ids and negated attribute Ids. Old rows hold dotted names instead;
+              -- CASE keeps the cast from running on them.
+              SELECT CASE WHEN trim(node) ~ '^-?[0-9]+$' THEN trim(node)::bigint END AS id
+              FROM unnest(string_to_array(ta."EntityIdPath", ',')) AS node
+          ) n
+          WHERE ta."TransformationId" = t."Id" AND ta."Deleted" = false
+            AND (EXISTS (SELECT 1 FROM {schema}."Entities" e WHERE e."Id" = n.id AND n.id > 0 AND e."Deleted" = true)
+                 OR EXISTS (SELECT 1 FROM {schema}."Attributes" a WHERE a."Id" = -n.id AND n.id < 0 AND a."Deleted" = true))
+      )
+),
+rows AS (
+    UPDATE {schema}."TransformationAttributes" ta SET "Deleted" = true
+    FROM broken WHERE ta."TransformationId" = broken."Id" AND ta."Deleted" = false
+    RETURNING ta."Id", ta."TransformationId", jsonb_strip_nulls(jsonb_build_object(
+        'Notes', ta."Notes", 'Contributor', ta."Contributor", 'ContributorOrganization', ta."ContributorOrganization",
+        'ActivationDate', ta."ActivationDate", 'DeprecationDate', ta."DeprecationDate",
+        'Extension', NULLIF(ta."Extension", false), 'ExtensionNotes', ta."ExtensionNotes"
+    )) AS metadata
+),
+transformation AS (
+    UPDATE {schema}."Transformations" t SET "Deleted" = true
+    FROM broken WHERE t."Id" = broken."Id"
+    RETURNING t."Id", t."TransformationGroupId"
+)
+SELECT transformation."Id", transformation."TransformationGroupId",
+       ARRAY(SELECT rows."Id" FROM rows WHERE rows."TransformationId" = transformation."Id" ORDER BY rows."Id") AS "MappingRowIds",
+       (SELECT jsonb_object_agg(rows."Id", rows.metadata) FROM rows
+        WHERE rows."TransformationId" = transformation."Id" AND rows.metadata <> '{{}}') AS "DroppedRowMetadata"
+FROM transformation
+ORDER BY transformation."Id"
 """,
     ),
 ]
