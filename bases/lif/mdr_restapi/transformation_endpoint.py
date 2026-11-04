@@ -252,7 +252,7 @@ async def get_all_transformation_groups(
     return {"total": total_count, "data": transformations}
 
 
-@router.get("/{transformation_group_id}/export")
+@router.get("/{transformation_group_id}/export", deprecated=True)  # use GET /portable/mapping_groups/{id} (#1408)
 async def export_transformation_group(transformation_group_id: int, session: AsyncSession = Depends(get_session)):
     try:
         total_count, group_data = await transformation_service.get_paginated_transformations_for_a_group(
@@ -278,7 +278,9 @@ async def export_transformation_group(transformation_group_id: int, session: Asy
     return Response(content=payload, media_type="application/json", headers=headers)
 
 
-@router.post("/{transformation_group_id}/import", response_model=ImportTransformationGroupResultDTO)
+@router.post(
+    "/{transformation_group_id}/import", response_model=ImportTransformationGroupResultDTO, deprecated=True
+)  # use POST /portable/mapping_groups (#1408)
 async def import_transformation_group(
     transformation_group_id: int,
     data: ImportTransformationGroupRequestDTO,
