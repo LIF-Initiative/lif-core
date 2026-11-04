@@ -98,9 +98,30 @@ compatibility. This includes:
   (`docs/design/adr/general/0007-single-auth-brick-with-provider-adapters.md`),
   `docs/operations/guides/auth-configuration.md`
 
+#### MDR UI: mapping groups import only as portable files
+
+- **Action Required:** a mapping group file exported before this change can no longer be imported
+  from the Mappings tab. Export the group again from its source install (the export now writes a
+  portable `.lif-mdr-mapping-group.json` file), or post the old file to the deprecated
+  `POST /transformation_groups/{id}/import` route, which still accepts it.
+- **Impact:** the Mappings tab's group import and export use `/portable/mapping_groups`. The old
+  import dialog, including its "report missing paths" option, is removed. An imported group
+  arrives inactive, at the version in its file.
+- **Related:** #1408, `docs/specs/mdr-portable-file-format.md`
+
 ### Deprecation Notices
 
-*No deprecations currently pending*
+#### MDR API: the pre-portable import and export routes
+
+- **Deprecated:** `GET /import_export/export/{data_model_id}`, `GET /import_export/export/multiple/`,
+  `POST /import_export/import/`, `POST /import_export/clone/`,
+  `GET /transformation_groups/{id}/export` and `POST /transformation_groups/{id}/import`. They are
+  marked deprecated in OpenAPI and still work; no removal date is set.
+- **Replacement:** `GET`/`POST /portable/models`, `/portable/mapping_groups` and
+  `/portable/crosswalks`, which exchange portable files (`docs/specs/mdr-portable-file-format.md`).
+  `/import_export/clone/` has no portable equivalent: re-importing a model's own file into the
+  same install is refused as `MODEL_EXISTS`.
+- **Related:** #1408
 
 ---
 

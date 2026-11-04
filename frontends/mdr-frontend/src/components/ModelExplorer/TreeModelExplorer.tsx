@@ -36,6 +36,7 @@ export interface TreeModelExplorerProps {
   onEditModel: () => Promise<void>;
   onAddNew: (a: any) => void;
   onFuncDownload: (a:any, b:any, c:any) => void;
+  onPortableExport?: () => void; // optional: download the model as a portable file
   triggerModal: (node: TreeNode, addKind: string, isSelect?: any) => void;
   triggerCheckbox: (node: TreeNode, field: "pub" | "inc", newVal: boolean) => void;
   initiallyExpandedIds?: Array<string>; // nodes expanded on mount
@@ -95,6 +96,7 @@ export const TreeModelExplorer: React.FC<TreeModelExplorerProps> = (props) => {
     onEditModel,
     onAddNew,
     onFuncDownload,
+    onPortableExport,
     triggerModal,
     triggerCheckbox,
     initiallyExpandedIds,
@@ -256,6 +258,15 @@ export const TreeModelExplorer: React.FC<TreeModelExplorerProps> = (props) => {
             <button type="button" className="openapi-dl-btn" title={`Standard OpenAPI schema for ${modelNode?.label}`}
               onClick={() => onFuncDownload(modelNode?.id, 'bare', openApiPublicOnly)}
             >Standard</button>
+            {onPortableExport && (
+              <>
+                <span className="openapi-dl-header">Portable file:</span>
+                <button type="button" className="openapi-dl-btn"
+                  title={`${modelNode?.label} as a portable model file, to import into another install`}
+                  onClick={onPortableExport}
+                >Export</button>
+              </>
+            )}
             {['OrgLIF'].includes(modelNode?.subtype ?? '') && (
             <label htmlFor="openapi-dl-pub" className="openapi-dl-pub" title={`Only include elements marked as public?`}>
               <input type="checkbox" id="openapi-dl-pub" checked={openApiPublicOnly}

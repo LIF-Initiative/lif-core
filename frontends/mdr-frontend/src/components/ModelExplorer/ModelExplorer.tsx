@@ -7,6 +7,9 @@ import { TreeModelExplorer, transformData } from "./TreeModelExplorer";
 import ObjectDetails from "../ObjectDetails/ObjectDetails";
 import { useToast } from "@/context/ToastContext";
 import { errorToString } from "@/utils/errorUtils";
+import { downloadBlobFile } from "@/utils/downloadJsonFile";
+import { describePortableFailure, exportPortableModel, type PortableFailure } from "@/services/portableService";
+import PortableFailureDialog from "../PortableFile/PortableFailureDialog";
 import { isOverlayModel } from "@/utils/modelUtils";
 
 const FileDEBUG = false;
@@ -826,6 +829,19 @@ const ModelTree: React.FC<ModelTreeProps> = ({
   };
 
 
+  // HANDLE PORTABLE EXPORT: a refusal (most often NOT_MIGRATED) lists every reason in a dialog
+  const [portableFailure, setPortableFailure] = useState<PortableFailure | null>(null);
+  const handlePortableExport = async () => {
+    try {
+      const file = await exportPortableModel(model.Id);
+      const fileName = downloadBlobFile(file, model.Name, `_${model.DataModelVersion}.lif-mdr-model.json`);
+      showToast(`${fileName} downloaded successfully`, 'success');
+    } catch (e) {
+      setPortableFailure(describePortableFailure(e));
+    }
+  };
+
+
   // HANDLE SELECT DIALOG
   const getSelectDialogOptions = async (type: "entity" | "attribute" | "valueSet", idFilter: any[]) => {
     try {
@@ -1109,6 +1125,7 @@ const ModelTree: React.FC<ModelTreeProps> = ({
             onEditModel={handleEditModel}
             onAddNew={handleOnAddNew}
             onFuncDownload={handleDownloadWithToast}
+            onPortableExport={handlePortableExport}
             headerString={treeHeader}
             triggerModal={async (n, k, s) => {
               // Menu onSelect callers don't await this, so report failures here instead of leaving an unhandled rejection.
@@ -1203,6 +1220,12 @@ const ModelTree: React.FC<ModelTreeProps> = ({
         onConfirm={handleDeleteConfirm}
       />
 
+      <PortableFailureDialog
+        title={`${model.Name} can't be exported`}
+        failure={portableFailure}
+        action="export"
+        onClose={() => setPortableFailure(null)}
+      />
       <SimpleAlertDialog
         isOpen={!!dialogOptions.alertDialog}
         onClose={() => setDialogOptions({})}
