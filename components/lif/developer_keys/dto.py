@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class CreateDeveloperApiKeyDTO(BaseModel):
@@ -18,9 +18,7 @@ class DeveloperApiKeyDTO(BaseModel):
     LastUsedDate: Optional[datetime] = None
     RevokedDate: Optional[datetime] = None
 
-    class Config:
-        orm_mode = True
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class CreatedDeveloperApiKeyDTO(BaseModel):
