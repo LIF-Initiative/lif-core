@@ -141,3 +141,19 @@ async def test_issue_list_and_revoke(engine):
 
         listed = await client.get("/api-keys/?workspace=tenant_team_a", headers=_auth("alice"))
         assert listed.json()[0]["RevokedDate"] is not None
+
+
+@pytest.mark.parametrize("auth_method", ["api_key", None])
+def test_only_a_cognito_user_owns_keys(auth_method):
+    # Cognito is the only strategy today, so no request reaches this. It guards ADR 0008 decision 1
+    # if another strategy (an API key, a local login) is ever added to the middleware.
+    from fastapi import HTTPException
+
+    from lif.control_plane_restapi.api_key_endpoints import _require_owner_sub
+
+    request = mock.Mock()
+    request.state.auth_method = auth_method
+    request.state.principal = "service:x"
+    with pytest.raises(HTTPException) as exc:
+        _require_owner_sub(request)
+    assert exc.value.status_code == 400
