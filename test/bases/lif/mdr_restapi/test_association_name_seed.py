@@ -2,7 +2,8 @@
 
 V1.7 backfills association Name/Array in SQL, and the create paths will compute them with
 lif.mdr_services.association_name. backup.sql (loaded by conftest's postgres_server) holds V1.7's
-result, so every stored value must equal what the Python rule gives for the same row.
+result, so every stored value must equal what the Python rule gives for the same row. V1.11 then set
+Reference associations to Array false (#1471), and backup.sql holds that too.
 
 Only rows with a Name are judged: other tests in the session insert associations directly, bypassing
 the services that compute Name (test_association_name_writes.py covers those services).
@@ -15,7 +16,7 @@ against the naming rule; for those rows only a non-NULL Name and Array are check
 import pytest
 from sqlmodel import select
 
-from lif.mdr_services.association_name import association_array, entity_association_name
+from lif.mdr_services.association_name import association_array, entity_association_array, entity_association_name
 from lif.mdr_services.schema_generation_service import ENTITY_FIELDS_NOT_EMITTED, generate_openapi_schema
 from lif.mdr_sql_model.core import (
     AccessType,
@@ -52,7 +53,7 @@ def test_stored_entity_association_name_and_array_match_the_python_rule(pg_conn,
     assert len(rows) >= MIN_ROWS
     mismatches = []
     for row in rows:
-        expected_array = association_array(row[4])
+        expected_array = entity_association_array(row[2], row[4])
         if row[7] in GENERATED_NAME_MODELS:
             if row[5] is None or row[6] is None:
                 mismatches.append(row)

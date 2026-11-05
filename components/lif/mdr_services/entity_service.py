@@ -11,7 +11,7 @@ from lif.mdr_sql_model.core import (
     ExtInclusionsFromBaseDM,
 )
 from lif.mdr_dto.entity_dto import ChildEntityDTO, CreateEntityDTO, EntityDTO, UpdateEntityDTO
-from lif.mdr_services.association_name import association_array, entity_association_name, recomputed
+from lif.mdr_services.association_name import entity_association_array, entity_association_name, recomputed
 from lif.mdr_services.attribute_service import soft_delete_attribute
 from lif.mdr_services.helper_service import check_datamodel_by_id
 from lif.mdr_services.model_converter import is_overlay
@@ -124,7 +124,9 @@ async def update_entity(session: AsyncSession, id: int, data: UpdateEntityDTO):
                 entity_association_name(association.Relationship, association.Placement, entity.Name),
             )
             association.Array = recomputed(
-                association.Array, association_array(array_before), association_array(entity.Array)
+                association.Array,
+                entity_association_array(association.Placement, array_before),
+                entity_association_array(association.Placement, entity.Array),
             )
             session.add(association)
 
