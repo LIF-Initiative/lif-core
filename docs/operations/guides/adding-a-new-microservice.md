@@ -38,26 +38,30 @@ __all__ = ["core"]
 Minimum scaffold:
 
 ```python
-from http import HTTPStatus
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from lif.datatypes.core import HealthCheckResponse
+from lif.auth import ApiKeyConfig, AuthMiddleware, api_key_strategy
 from lif.logging import get_logger
-from lif.mdr_auth.core import AuthMiddleware
-from lif.mdr_utils.config import get_settings
 from lif.my_new_service import my_endpoints
 
 logger = get_logger(__name__)
-settings = get_settings()
 app = FastAPI(title="LIF My New Service", description="...", version="1.0.0")
 
-app.add_middleware(AuthMiddleware)
+# Inbound auth (ADR 0007): lif.auth's middleware, with one strategy per kind of caller.
+# MY_NEW_SERVICE_AUTH__API_KEYS="key1:caller1,key2:caller2". An unknown key, or no key on a
+# non-public path, gets a 401, so with no keys configured every non-public path is refused.
+auth_config = ApiKeyConfig.from_environment(prefix="MY_NEW_SERVICE_AUTH")
+app.add_middleware(
+    AuthMiddleware,
+    strategies=[api_key_strategy(auth_config)],
+    public_paths=auth_config.public_paths,  # default: /health, /health-check
+    public_prefixes=auth_config.public_path_prefixes,  # default: /docs, /openapi.json
+)
 # ...CORS setup omitted; copy from an existing service...
 
-@app.get("/health-check", response_model=HealthCheckResponse)
+@app.get("/health-check")
 async def health_check():
-    return HealthCheckResponse(status=HTTPStatus.OK, message="API is healthy")
+    return {"status": "ok"}
 
 app.include_router(my_endpoints.router, prefix="")
 ```
@@ -65,7 +69,8 @@ app.include_router(my_endpoints.router, prefix="")
 ### Common pitfalls in `core.py`
 
 - **Logger consistency.** Use `from lif.logging import get_logger` (matches `advisor_restapi`, `api_graphql`, `semantic_search_mcp_server`, etc.). Don't mix in `from lif.mdr_utils.logger_config import get_logger` — that's the MDR-internal logger with a different output format. Pick one and use it consistently across all files in your base.
-- **AuthMiddleware vs raw FastAPI auth.** If the service is internal-only, use `AuthMiddleware` from `lif.mdr_auth.core` — it handles API-key, Cognito JWT, and legacy HS256 callers consistently with the rest of LIF. Don't reinvent.
+- **AuthMiddleware vs raw FastAPI auth.** Use `AuthMiddleware` from `lif.auth` ([ADR 0007](../../design/adr/general/0007-single-auth-brick-with-provider-adapters.md)) and pass it the strategies your callers need. Don't reinvent. `api_key_strategy` covers service callers. For Cognito users, add `cognito_strategy(CognitoAuthConfig.from_environment(prefix=...))` from `lif.auth.cognito`, as `bases/lif/control_plane_restapi/core.py` does; it imports `jwt`, so the project also needs `pyjwt[crypto]`. `strategies` is required: `app.add_middleware(AuthMiddleware)` on its own fails at startup.
+- **Don't import `lif.mdr_auth`.** It's MDR's own wiring (its strategies and tenant step). A new service that packages it inherits the MDR domain.
 
 ## Step 2: Create the project
 
@@ -105,11 +110,8 @@ Add `httpx` or `requests` if you'll call other services. Add `pyjwt` if you need
 ```toml
 [tool.polylith.bricks]
 "../../bases/lif/my_new_service" = "lif/my_new_service"
-"../../components/lif/datatypes" = "lif/datatypes"
+"../../components/lif/auth" = "lif/auth"
 "../../components/lif/logging" = "lif/logging"
-"../../components/lif/mdr_auth" = "lif/mdr_auth"
-"../../components/lif/mdr_utils" = "lif/mdr_utils"
-"../../components/lif/tenant_routing" = "lif/tenant_routing"
 ```
 
 **Only list bricks your code actually imports.** Dead entries here are confusing and review-flag bait. After you have the code written, run:
@@ -132,21 +134,12 @@ Three sections: what the service does, how to build it, example curl calls.
 
 ## Step 3: Wire into auth (if internal-only)
 
-If your service is called by other services using a service API key:
+Each service keeps its own accept-list. There's no shared one to edit. The scaffold's `ApiKeyConfig.from_environment(prefix="MY_NEW_SERVICE_AUTH")` reads (`components/lif/auth/api_key.py`):
 
-1. Add a config entry in `components/lif/mdr_utils/config.py`:
-   ```python
-   mdr__auth__service_api_key__my_new_service: str = "changeme7"
-   ```
-2. Add the key to the `API_KEYS` dict in `components/lif/mdr_auth/core.py`:
-   ```python
-   API_KEYS = {
-       ...
-       settings.mdr__auth__service_api_key__my_new_service: "my-new-service",
-   }
-   ```
+- `MY_NEW_SERVICE_AUTH__API_KEYS`: comma-separated `key:caller` pairs. The caller name becomes the request's principal id, for logging.
+- `MY_NEW_SERVICE_AUTH__PUBLIC_PATHS` and `MY_NEW_SERVICE_AUTH__PUBLIC_PATH_PREFIXES`: optional. Set them only to change the defaults.
 
-**Semantic clarification on the key naming:** `mdr__auth__service_api_key__my_new_service` is added to a *server-side* accept-list. Every service running `AuthMiddleware` will accept this key. Naming it `..._my_new_service` is conventional but technically "this is the key callers use *when they identify as* my-new-service." It's not "the key my-new-service presents to others" — that's a separate-but-related concern; see the comment on PR #920 for the conversation.
+To let another service call yours, add a `key:that-service` pair to your list, and have the caller send the key in the `X-API-Key` header. For example, `graphql_client` sends `LIF_GRAPHQL_API_KEY` to GraphQL, which accepts `GRAPHQL_AUTH__API_KEYS` (`bases/lif/api_graphql/core.py`).
 
 ## Step 4: Add to docker-compose
 
@@ -161,10 +154,8 @@ lif-my-new-service:
   environment:
     CORS_ALLOW_ORIGINS: ${CORS_ALLOW_ORIGINS:-http://localhost:3000,...}
     CORS_ALLOW_CREDENTIALS: ${CORS_ALLOW_CREDENTIALS:-true}
-    MDR__AUTH__SERVICE_API_KEY__MY_NEW_SERVICE: ${MDR__AUTH__SERVICE_API_KEY__MY_NEW_SERVICE:-changeme7}
-    MDR__AUTH__METHODS_TO_REQUIRE_AUTH: ${MDR__AUTH__METHODS_TO_REQUIRE_AUTH:-GET,POST,PUT,DELETE}
-    MDR__AUTH__PUBLIC_ALLOWLIST_EXACT: ${MDR__AUTH__PUBLIC_ALLOWLIST_EXACT:-/health-check}
-    MDR__AUTH__PUBLIC_ALLOWLIST_STARTS_WITH: ${MDR__AUTH__PUBLIC_ALLOWLIST_STARTS_WITH:-/docs,/openapi.json}
+    # "key:caller" pairs; empty means every non-public path returns 401
+    MY_NEW_SERVICE_AUTH__API_KEYS: ${MY_NEW_SERVICE_AUTH__API_KEYS:-}
   ports:
     - "80NN:80NN"  # pick an unused port; see existing services for the assigned range
   networks:
@@ -179,7 +170,7 @@ lif-my-new-service:
     # whatever your service actually needs at startup
 ```
 
-**Don't** list `MDR__AUTH__SERVICE_API_KEY__*` for keys your service doesn't actually call with — it confuses readers about who calls what.
+**Don't** put a key in `MY_NEW_SERVICE_AUTH__API_KEYS` for a caller that doesn't actually call your service. It confuses readers about who calls what.
 
 ## Step 5: Add a GitHub Actions deploy workflow
 
@@ -223,8 +214,9 @@ Use `httpx.AsyncClient(transport=ASGITransport(app=app), ...)` to exercise the a
 □ pyproject.toml dependencies trimmed to what's actually imported
 □ pyproject.toml [tool.polylith.bricks] matches actual imports (no dead entries)
 □ Logger imports consistent (lif.logging throughout)
-□ /health-check endpoint in the public allowlist
-□ Service API key added to config + API_KEYS dict (if internal-only)
+□ AuthMiddleware from lif.auth, with strategies; nothing imported from lif.mdr_auth
+□ /health-check endpoint public (it is by default)
+□ Callers' keys in <SERVICE>_AUTH__API_KEYS (if internal-only)
 □ docker-compose service entry with env vars and healthcheck
 □ GitHub Actions workflow file
 □ CloudFormation template + registration in {env}.aws files
