@@ -23,8 +23,8 @@ Add a new microservice the rest of LIF can build, deploy alongside, and call. Th
 ### 1. Base — `bases/lif/<service>/`
 `__init__.py` (exposes `core`), `core.py` (FastAPI app), one or more `*_endpoints.py` route modules.
 - **Logger consistency:** `from lif.logging import get_logger` throughout. Do **not** mix in `lif.mdr_utils.logger_config` (different format).
-- **Auth:** internal-only services use `AuthMiddleware` from `lif.mdr_auth.core` — don't reinvent JWT/API-key handling.
-- `/health-check` returns `HealthCheckResponse` and is in the public allowlist.
+- **Auth:** use `AuthMiddleware` from `lif.auth` (ADR 0007) with the strategies your callers need, e.g. `api_key_strategy(ApiKeyConfig.from_environment(prefix="<SERVICE>_AUTH"))`. `strategies` is required. Don't reinvent JWT/API-key handling, and don't import `lif.mdr_auth` (MDR's own wiring).
+- `/health-check` returns `{"status": "ok"}` and is public by default (`DEFAULT_PUBLIC_PATHS`).
 
 ### 2. Project — `projects/lif_<service>/`
 `pyproject.toml`, `Dockerfile2`, `build.sh`, `build-docker.sh`, `README.md`.
@@ -42,11 +42,11 @@ Every `lif.X` import needs a matching brick line; every brick line needs ≥1 im
 - **If a Dagster job will use a new component**, add it to `[tool.polylith.bricks]` in **all three** `projects/dagster_*/pyproject.toml` files (per CLAUDE.md), not just the orchestrator.
 
 ### 4. Auth wiring (if internal-only)
-- Add `mdr__auth__service_api_key__<service>` to `components/lif/mdr_utils/config.py`.
-- Add it to the `API_KEYS` dict in `components/lif/mdr_auth/core.py` (server-side accept-list — every `AuthMiddleware` service will accept it).
+- The service keeps its own accept-list: `<SERVICE>_AUTH__API_KEYS` as `key:caller` pairs. There's no shared list to edit.
+- Each caller sends its key in `X-API-Key`.
 
 ### 5. docker-compose — `deployments/advisor-demo-docker/docker-compose.yml`
-Follow an existing service block: env vars (CORS, `MDR__AUTH__*`, the allowlist for `/health-check` + `/docs`), the chosen port, network(s), and a `/health-check` healthcheck. Don't list service-API-key env vars your service doesn't actually call with.
+Follow an existing service block: env vars (CORS, `<SERVICE>_AUTH__API_KEYS`), the chosen port, network(s), and a `/health-check` healthcheck. Don't list a key for a caller that doesn't actually call the service.
 
 ### 6. CI + CloudFormation
 - **GitHub Actions:** copy `.github/workflows/lif_advisor_api.yml`; set the `paths:` triggers to your project/base/components. Remember **feature branches don't auto-deploy** — dev `:latest` rebuilds only on push-to-main or manual `workflow_dispatch`.
