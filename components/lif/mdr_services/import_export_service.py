@@ -28,7 +28,7 @@ from lif.mdr_dto.import_export_dto import (
 )
 from lif.mdr_dto.value_set_values_dto import CreateValuesWithValueSetDTO
 from lif.mdr_dto.valueset_dto import CreateValueSetDTO, CreateValueSetWithValuesDTO
-from lif.mdr_services.association_name import association_array, entity_association_name
+from lif.mdr_services.association_name import association_array, entity_association_array, entity_association_name
 from lif.mdr_services.attribute_service import create_attribute, get_list_of_attributes_for_data_model
 from lif.mdr_services.datamodel_constraints_service import (
     create_data_model_constraint,
@@ -538,7 +538,7 @@ async def clone_entity_association(session: AsyncSession, entity_id_map: dict[in
         new_association.Name = entity_association_name(
             new_association.Relationship, new_association.Placement, child_entity.Name
         )
-        new_association.Array = association_array(child_entity.Array)
+        new_association.Array = entity_association_array(new_association.Placement, child_entity.Array)
         session.add(new_association)
         await session.commit()
 

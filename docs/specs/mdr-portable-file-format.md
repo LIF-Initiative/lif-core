@@ -563,8 +563,11 @@ existing content onto the simplified model is migration work, not this spec's.
   today's key, `<Relationship>Ref<Name>`, or `Ref<Name>` with no relationship, so the 24 published
   `Ref` keys do not change in the same step as the conversion. Retiring them is a separate, later
   step. For an attribute child: the attribute's `Name`.
-- **`Array`.** Each association takes its child's current `Array` value. An entity with no parent
-  keeps its own: all 9 of model 1's are lists.
+- **`Array`.** Each containing association takes its child's current `Array` value. A reference
+  association is `false`, since the generator emits a reference as a single object whatever its
+  child's `Array` (#1471). V1.7 first gave references their child's value too, and V1.11 reset
+  those. A reference can still be a list when its file says so. An entity with no parent keeps its
+  own: all 9 of model 1's are lists.
 - **`DataType`.** An attribute with no `DataType` gets `string`. The generator writes a NULL
   `DataType` as `"type": ""` today, or, for an array, as `"type": "array"` with `"format": ""`
   (`schema_generation_service.py`). So the generated `type`, or an array's `format`, becomes

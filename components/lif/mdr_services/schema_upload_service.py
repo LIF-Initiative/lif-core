@@ -5,7 +5,7 @@ from lif.mdr_utils.logger_config import get_logger
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
 
-from lif.mdr_services.association_name import association_array, entity_association_name
+from lif.mdr_services.association_name import association_array, entity_association_array, entity_association_name
 from lif.mdr_services.entity_service import get_unique_entity
 from lif.mdr_services.entity_attribute_association_service import check_existing_association
 from lif.mdr_services.entity_association_service import get_entity_association_by_parent_child_relationship
@@ -118,7 +118,7 @@ async def create_reference_entity_association_if_needed(
             ExtensionNotes=None,
             ExtendedByDataModelId=None,
             Name=entity_association_name(relationship, "Reference", referenced_entity.Name),
-            Array=association_array(referenced_entity.Array),
+            Array=entity_association_array("Reference", referenced_entity.Array),
         )
         session.add(entity_association)
 
@@ -579,7 +579,7 @@ async def create_entity_and_children_if_needed(
                 association_data["Name"] = entity_association_name(
                     association_data["Relationship"], association_data["Placement"], child_entity.Name
                 )
-                association_data["Array"] = association_array(child_entity.Array)
+                association_data["Array"] = entity_association_array(association_data["Placement"], child_entity.Array)
 
                 ea_creation_date = parse_dt(prop.get("EntityAssociationCreationDate"))
                 ea_activation_date = parse_dt(prop.get("EntityAssociationActivationDate"))
