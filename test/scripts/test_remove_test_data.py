@@ -178,14 +178,34 @@ async def test_a_pin_matches_only_with_its_model_and_unique_name(seed_conn):
         " (380, 1, 'BeachEnt1', 'UniconTestIgnore.Base.BeachEnt1', false),"
         " (381, 18, 'partner.beach.ent_a', 'partner.beach.ent_a', false),"
         " (382, 17, 'partner.beach.ent_b', 'partner.beach.ent_b', false),"
-        " (386, 1, 'TammieTestEntity', 'TammieTestEntity', false)"
+        " (397, 1, 'SomeoneElsesEntity', 'SomeoneElsesEntity', false)"
     )
 
     results = await removal.cleanup(seed_conn, apply=True)
 
     assert 381 in _ids(results, "entities")
     # Wrong name, wrong model, and a row nobody pinned.
-    assert await _deleted(seed_conn, "Entities", [380, 382, 386]) == []
+    assert await _deleted(seed_conn, "Entities", [380, 382, 397]) == []
+
+
+async def test_it_removes_the_dev_test_rows_on_model_1(seed_conn):
+    """Tammie's rows on dev (confirmed for removal): a nested entity chain and its attributes."""
+    await seed_conn.execute(
+        'INSERT INTO "Entities" ("Id", "DataModelId", "Name", "UniqueName", "Deleted") OVERRIDING SYSTEM VALUE VALUES'
+        " (386, 1, 'TammieTestEntity', 'TammieTestEntity', false),"
+        " (387, 1, 'TammeTestLvl1', 'TammeTestLvl1', false),"
+        " (390, 1, 'TammeTestLvl4', 'TammeTestLvl4', false)"
+    )
+    await seed_conn.execute(
+        'INSERT INTO "Attributes" ("Id", "DataModelId", "Name", "UniqueName", "Deleted") OVERRIDING SYSTEM VALUE VALUES'
+        " (1959, 1, 'TammieTestAttribute', 'TammieTestAttribute', false),"
+        " (1960, 1, 'TammieTestAttLvl4', 'TammieTestAttLvl4', false)"
+    )
+
+    await removal.cleanup(seed_conn, apply=True)
+
+    assert await _deleted(seed_conn, "Entities", [386, 387, 390]) == [386, 387, 390]
+    assert await _deleted(seed_conn, "Attributes", [1959, 1960]) == [1959, 1960]
 
 
 async def _add_mappings(conn):
