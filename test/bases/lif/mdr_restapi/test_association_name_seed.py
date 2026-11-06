@@ -8,9 +8,9 @@ Reference associations to Array false (#1471), and backup.sql holds that too.
 Only rows with a Name are judged: other tests in the session insert associations directly, bypassing
 the services that compute Name (test_association_name_writes.py covers those services).
 
-A model whose associations were generated from its source vocabulary (CTDL, model 10) stores the
-source's own property names and cardinality, which the portable-file spec (§5.4) does not check
-against the naming rule; for those rows only a non-NULL Name and Array are checked.
+A model whose associations were generated from its source vocabulary (CEDS, model 4; CTDL, model 10)
+stores the source's own property names and cardinality, which the portable-file spec (§5.4) does not
+check against the naming rule; for those rows only a non-NULL Name and Array are checked.
 """
 
 import pytest
@@ -34,8 +34,8 @@ MIN_ROWS = 100
 
 
 # Models whose association Name and Array come from the source vocabulary, not from the V1.7 rule.
-# See projects/lif_mdr_database/data_models/ctdl/README.md.
-GENERATED_NAME_MODELS = (10,)
+# See projects/lif_mdr_database/data_models/ceds/README.md and data_models/ctdl/README.md.
+GENERATED_NAME_MODELS = (4, 10)
 
 
 @pytest.mark.parametrize("schema", SEED_SCHEMAS)
