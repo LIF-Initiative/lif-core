@@ -49,6 +49,18 @@ def association_array(child_array):
     return child_array == "Yes"
 
 
+def entity_association_array(placement, child_array):
+    """EntityAssociation.Array: a Reference child is single, whatever its own Array (#1471).
+
+    A Reference association can still be a list, when its Array is set some other way (a model
+    import writes it from the file). Any other child is a list under this parent when its own Array
+    is ``'Yes'``. V1.7 applied the second rule to references too; V1.11 reset those copies.
+    """
+    if placement == "Reference":
+        return False
+    return association_array(child_array)
+
+
 def recomputed(stored, before, after):
     """The value an update stores: the rule's new value while the stored one is still the rule's.
 

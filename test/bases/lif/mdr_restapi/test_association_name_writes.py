@@ -22,7 +22,7 @@ from lif.mdr_sql_model.core import (
     EntityAssociation,
     EntityAttributeAssociation,
 )
-from lif.mdr_services.association_name import association_array, entity_association_name
+from lif.mdr_services.association_name import entity_association_array, entity_association_name
 from lif.mdr_services.attribute_service import update_attribute
 from lif.mdr_services.entity_association_service import create_entity_association, update_entity_association
 from lif.mdr_services.entity_attribute_association_service import create_entity_attribute_association
@@ -149,6 +149,35 @@ async def test_update_paths_leave_values_that_did_not_come_from_the_rule(test_db
     assert await _entity_association(session, reference_id) == ("RefOrganization", False)
 
 
+async def test_a_reference_is_single_even_when_its_child_is_a_list(test_db_session, request):
+    """A Reference association's Array is false unless set some other way, whatever its child's (#1471)."""
+    session = test_db_session
+    _dm, rows, (embedded_id, reference_id, _attribute_association_id) = await _seed(session, request.node.name)
+
+    # A new reference to a child whose Array is Yes.
+    to_course = await create_entity_association(
+        session,
+        CreateEntityAssociationDTO(
+            ParentEntityId=rows["course"].Id,
+            ChildEntityId=rows["course"].Id,
+            Relationship="prerequisite",
+            Placement="Reference",
+        ),
+    )
+    assert await _entity_association(session, to_course.Id) == ("prerequisiteRefCourse", False)
+
+    # The child becoming a list leaves its reference single.
+    organization_id = (await session.get(EntityAssociation, reference_id)).ChildEntityId
+    await update_entity(session, organization_id, UpdateEntityDTO(Array="Yes"))
+    assert await _entity_association(session, reference_id) == ("issuedByRefOrganization", False)
+
+    # Turning a reference into an embedding gives it the child's Array, and back again.
+    await update_entity_association(session, reference_id, UpdateEntityAssociationDTO(Placement="Embedded"))
+    assert await _entity_association(session, reference_id) == ("issuedByOrganization", True)
+    await update_entity_association(session, embedded_id, UpdateEntityAssociationDTO(Placement="Reference"))
+    assert await _entity_association(session, embedded_id) == ("enrolledInRefCourse", False)
+
+
 async def test_upload_stores_the_key_each_child_was_uploaded_under(test_db_session, request):
     session = test_db_session
     source, _rows, _ids = await _seed(session, request.node.name)
@@ -197,7 +226,7 @@ async def test_upload_stores_the_key_each_child_was_uploaded_under(test_db_sessi
     for relationship, placement, child_name, child_array, name, array in entity_rows:
         assert (name, array) == (
             entity_association_name(relationship, placement, child_name),
-            association_array(child_array),
+            entity_association_array(placement, child_array),
         )
     # A full export carries each association's Relationship, so every child keeps its key.
     assert sorted((row[4], row[5]) for row in entity_rows) == [

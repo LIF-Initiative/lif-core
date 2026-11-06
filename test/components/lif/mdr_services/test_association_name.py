@@ -5,7 +5,12 @@ V1.7 backfills the same rules in SQL; test_association_name_seed.py checks the t
 
 import pytest
 
-from lif.mdr_services.association_name import association_array, entity_association_name, recomputed
+from lif.mdr_services.association_name import (
+    association_array,
+    entity_association_array,
+    entity_association_name,
+    recomputed,
+)
 from lif.mdr_sql_model.core import EntityPlacementType
 
 # (relationship, placement, child name, expected Name)
@@ -48,6 +53,24 @@ def test_placement_may_be_the_model_enum():
 )
 def test_association_array_is_true_only_for_yes(child_array, expected):
     assert association_array(child_array) is expected
+
+
+@pytest.mark.parametrize(
+    ("placement", "child_array", "expected"),
+    [
+        # A Reference child is single unless set otherwise, whatever the child's own Array (#1471).
+        ("Reference", "Yes", False),
+        ("Reference", "No", False),
+        (EntityPlacementType.Reference, "Yes", False),
+        # An Embedded child, or one with no placement, follows its own Array.
+        ("Embedded", "Yes", True),
+        (EntityPlacementType.Embedded, "Yes", True),
+        (None, "Yes", True),
+        ("Embedded", "No", False),
+    ],
+)
+def test_entity_association_array_is_false_for_a_reference(placement, child_array, expected):
+    assert entity_association_array(placement, child_array) is expected
 
 
 @pytest.mark.parametrize(

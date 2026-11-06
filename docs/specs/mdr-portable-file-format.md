@@ -536,7 +536,7 @@ existing content onto the simplified model is migration work, not this spec's.
 | An attribute using another model's value set | The value set, copied into the model | 1 attribute |
 | The `Ref` property keys (`<relationship>Ref<Type>`) | The required association `Name`, plus `"Reference": true`. Retired in a separate step after model 17 is converted; until then a reference association's `Name` keeps the `Ref` spelling (*Migration defaults*) | 24 `Ref` keys in `lif-schema.json`; 21 sample-data, query and config files |
 | `Placement` (`Embedded` / `Reference` / NULL) | `"Reference": true` for `Reference`; absent for `Embedded` and NULL. The schema generator already treats NULL as `Embedded`; the Jinja generation code does not (`jinja_helper_service.py`) | 96 `Reference`, 36 `Embedded`, 78 NULL |
-| Free-text `Required` and `Array` (`Yes` / `No` / NULL / `""`) on entities and attributes | Booleans: `Yes` becomes `true`; everything else is absent, as the schema generator already reads it (`== "Yes"`). `Required` stays on the element; `Array` moves to every association whose child is that element, but stays on top-level entities | Entities: `Required` 7 `Yes`, `Array` 92 `Yes`. Attributes: `Required` 295 `Yes`, `Array` 232 `Yes`. All other values are `No`, NULL or `""` |
+| Free-text `Required` and `Array` (`Yes` / `No` / NULL / `""`) on entities and attributes | Booleans: `Yes` becomes `true`; everything else is absent, as the schema generator already reads it (`== "Yes"`). `Required` stays on the element; `Array` moves to every embedded association whose child is that element, but stays on top-level entities; a reference association is `false` (*Migration defaults*) | Entities: `Required` 7 `Yes`, `Array` 92 `Yes`. Attributes: `Required` 295 `Yes`, `Array` 232 `Yes`. All other values are `No`, NULL or `""` |
 | `Relationship` and the `has*`/`relevant*` naming rule | The required association `Name` | 212 entity associations and 2,544 attribute associations need a `Name`; 163 entity associations have no relationship today (115 NULL, 48 empty) |
 | Attributes with `DataType = 'entity'` and `TargetEntityId` (`V1.6`) | An association to the entity; an attribute with no target is dropped | 109 attributes. 41 have a target, all in Open Badges v3. 68 have none (CLR v2: 55, CASE: 13) |
 | Attributes with no `DataType` (NULL) | `string`, which schema upload already writes when a schema gives no type | 921 attributes in 11 models: CEDS 168, CTDL 140, Schema.org 102, EagleApps 98, OSID / CampusAPI 93, ELM 75, HR Open 72, PESC v1.8 62, CLR v2 48, Open Badges v2 36, CLR v1 27 |
@@ -563,8 +563,11 @@ existing content onto the simplified model is migration work, not this spec's.
   today's key, `<Relationship>Ref<Name>`, or `Ref<Name>` with no relationship, so the 24 published
   `Ref` keys do not change in the same step as the conversion. Retiring them is a separate, later
   step. For an attribute child: the attribute's `Name`.
-- **`Array`.** Each association takes its child's current `Array` value. An entity with no parent
-  keeps its own: all 9 of model 1's are lists.
+- **`Array`.** Each containing association takes its child's current `Array` value. A reference
+  association is `false`, since the generator emits a reference as a single object whatever its
+  child's `Array` (#1471). V1.7 first gave references their child's value too, and V1.11 reset
+  those. A reference can still be a list when its file says so. An entity with no parent keeps its
+  own: all 9 of model 1's are lists.
 - **`DataType`.** An attribute with no `DataType` gets `string`. The generator writes a NULL
   `DataType` as `"type": ""` today, or, for an array, as `"type": "array"` with `"format": ""`
   (`schema_generation_service.py`). So the generated `type`, or an array's `format`, becomes

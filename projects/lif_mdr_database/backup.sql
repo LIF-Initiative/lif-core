@@ -9591,10 +9591,10 @@ COPY public."EntityAssociation" ("Id", "ParentEntityId", "ChildEntityId", "Relat
 30	4	192	\N	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	EmploymentLearningExperience	t
 31	4	193	\N	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	MilitaryLearningExperience	t
 35	4	237	\N	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	Name	t
-60	1	41	demonstrates	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	demonstratesRefCompetency	t
-62	1	212	awardedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	awardedByRefOrganization	t
-70	3	4	assertedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	assertedByRefPerson	t
-71	3	212	assertedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	assertedByRefOrganization	t
+60	1	41	demonstrates	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	demonstratesRefCompetency	f
+62	1	212	awardedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	awardedByRefOrganization	f
+70	3	4	assertedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	assertedByRefPerson	f
+71	3	212	assertedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	assertedByRefOrganization	f
 38	4	240	\N	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	Residency	t
 42	4	244	\N	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	Birth	t
 43	4	245	\N	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	Death	t
@@ -9610,19 +9610,19 @@ COPY public."EntityAssociation" ("Id", "ParentEntityId", "ChildEntityId", "Relat
 4	41	42	\N	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	ProficiencyDefinition	f
 7	41	45	\N	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	CompetencyAlignments	t
 9	41	46	\N	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	Accessibility	t
-76	41	129	requires	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	requiresRefCredential	t
+76	41	129	requires	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	requiresRefCredential	f
 5	42	43	\N	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	ProficiencyLevel	t
 13	73	75	\N	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	AuditHistory	t
 12	76	74	\N	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	LegalCode	t
 34	76	215	\N	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	Accreditation	t
 36	76	238	\N	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	Identifier	t
 39	76	241	\N	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	Contact	t
-88	80	212	assertedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	assertedByRefOrganization	t
+88	80	212	assertedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	assertedByRefOrganization	f
 17	129	130	\N	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	Requirements	t
 19	129	132	\N	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	Image	t
 20	129	133	\N	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	CredentialAlignments	t
-91	129	304	aligned	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	alignedRefProgram	t
-95	134	129	InstanceOf	Reference	Specification of the Credential	\N	\N	\N	\N	LIF	f	f	\N	\N	InstanceOfRefCredential	t
+91	129	304	aligned	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	alignedRefProgram	f
+95	134	129	InstanceOf	Reference	Specification of the Credential	\N	\N	\N	\N	LIF	f	f	\N	\N	InstanceOfRefCredential	f
 18	130	131	\N	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	Criteria	t
 22	134	135	\N	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	Identity	t
 23	134	136	\N	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	Evidence	t
@@ -9638,45 +9638,45 @@ COPY public."EntityAssociation" ("Id", "ParentEntityId", "ChildEntityId", "Relat
 41	241	243	\N	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	Telephone	t
 27	192	189	\N	\N	\N	\N	\N	\N	\N	LIF	t	f	\N	\N	EmploymentTypeStatus	t
 10	4	47	\N	Embedded	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	Proficiency	t
-115	193	4	assertedBy	Reference	Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	assertedByRefPerson	t
-73	3	47		Reference	Not labelled on diagram	\N	\N	\N	\N	LIF	f	f	\N	\N	RefProficiency	t
-83	80	3		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefAssessmentLearningExperience	t
-84	80	193		Reference	Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	RefMilitaryLearningExperience	t
-85	80	305		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefProgramLearningExperience	t
-68	3	192		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefEmploymentLearningExperience	t
-132	305	3		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefAssessmentLearningExperience	t
-64	3	3		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefAssessmentLearningExperience	t
-65	3	193		Reference	Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	RefMilitaryLearningExperience	t
-99	192	193		Reference	Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	RefMilitaryLearningExperience	t
-100	192	305		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefProgramLearningExperience	t
-66	3	305		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefProgramLearningExperience	t
-67	3	80		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefCourseLearningExperience	t
-98	192	3		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefAssessmentLearningExperience	t
-113	193	3		Reference	Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	RefAssessmentLearningExperience	t
-96	192	185		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefPosition	t
-63	3	1		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefAssessment	t
-80	80	77		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefCourse	t
-74	44	212	offeredBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	offeredByRefOrganization	t
-61	1	212	offeredBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	offeredByRefOrganization	t
-69	3	212	offeredBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	offeredByRefOrganization	t
-89	80	134		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefCredentialAward	t
-72	3	134		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefCredentialAward	t
-93	129	212	issuedBy	Reference	\N	\N	\N	\N	\N	LIF	t	f	\N	\N	issuedByRefOrganization	t
-78	77	212	approvedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	approvedByRefOrganization	t
-87	80	4	assertedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	assertedByRefPerson	t
-103	192	4	assertedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	assertedByRefPerson	t
-81	80	80		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefCourseLearningExperience	t
-124	47	41	entailed	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	entailedRefCompetency	t
-125	41	41	entailed	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	entailedRefCompetency	t
-126	304	41	demonstrates	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	demonstratesRefCompetency	t
+115	193	4	assertedBy	Reference	Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	assertedByRefPerson	f
+73	3	47		Reference	Not labelled on diagram	\N	\N	\N	\N	LIF	f	f	\N	\N	RefProficiency	f
+83	80	3		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefAssessmentLearningExperience	f
+84	80	193		Reference	Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	RefMilitaryLearningExperience	f
+85	80	305		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefProgramLearningExperience	f
+68	3	192		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefEmploymentLearningExperience	f
+132	305	3		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefAssessmentLearningExperience	f
+64	3	3		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefAssessmentLearningExperience	f
+65	3	193		Reference	Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	RefMilitaryLearningExperience	f
+99	192	193		Reference	Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	RefMilitaryLearningExperience	f
+100	192	305		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefProgramLearningExperience	f
+66	3	305		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefProgramLearningExperience	f
+67	3	80		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefCourseLearningExperience	f
+98	192	3		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefAssessmentLearningExperience	f
+113	193	3		Reference	Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	RefAssessmentLearningExperience	f
+96	192	185		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefPosition	f
+63	3	1		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefAssessment	f
+80	80	77		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefCourse	f
+74	44	212	offeredBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	offeredByRefOrganization	f
+61	1	212	offeredBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	offeredByRefOrganization	f
+69	3	212	offeredBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	offeredByRefOrganization	f
+89	80	134		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefCredentialAward	f
+72	3	134		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefCredentialAward	f
+93	129	212	issuedBy	Reference	\N	\N	\N	\N	\N	LIF	t	f	\N	\N	issuedByRefOrganization	f
+78	77	212	approvedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	approvedByRefOrganization	f
+87	80	4	assertedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	assertedByRefPerson	f
+103	192	4	assertedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	assertedByRefPerson	f
+81	80	80		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefCourseLearningExperience	f
+124	47	41	entailed	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	entailedRefCompetency	f
+125	41	41	entailed	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	entailedRefCompetency	f
+126	304	41	demonstrates	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	demonstratesRefCompetency	f
 141	73	74	basis	Embedded	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	basisLegalCode	t
 142	73	74	withdrawalProcess	Embedded	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	withdrawalProcessLegalCode	t
-116	193	212	assertedBy	Reference	Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	assertedByRefOrganization	t
-136	305	212	assertedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	assertedByRefOrganization	t
-135	305	4	assertedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	assertedByRefPerson	t
+116	193	212	assertedBy	Reference	Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	assertedByRefOrganization	f
+136	305	212	assertedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	assertedByRefOrganization	f
+135	305	4	assertedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	assertedByRefPerson	f
 150	4	339	\N	Embedded	Test notes for association	2025-08-17 16:50:35.49+00	2025-08-17 16:50:35.49+00	2025-08-17 16:50:35.491+00	Mary Gwozdz	Unicon	t	f	\N	\N	TestUpdateLIFEntity	t
-151	340	341	\N	Reference	Test updated notes for association	2025-08-17 16:50:35.49+00	2025-08-17 16:50:35.49+00	2025-08-17 16:50:35.491+00	Mary Gwozdz	Unicon	t	f	\N	\N	RefTestChildSourceEntity	t
-155	340	341	\N	Reference	Test updated notes for association	2025-08-17 16:50:35.49+00	2025-08-17 16:50:35.49+00	2025-08-17 16:50:35.491+00	Mary Gwozdz	Unicon	f	f	\N	\N	RefTestChildSourceEntity	t
+151	340	341	\N	Reference	Test updated notes for association	2025-08-17 16:50:35.49+00	2025-08-17 16:50:35.49+00	2025-08-17 16:50:35.491+00	Mary Gwozdz	Unicon	t	f	\N	\N	RefTestChildSourceEntity	f
+155	340	341	\N	Reference	Test updated notes for association	2025-08-17 16:50:35.49+00	2025-08-17 16:50:35.49+00	2025-08-17 16:50:35.491+00	Mary Gwozdz	Unicon	f	f	\N	\N	RefTestChildSourceEntity	f
 147	4	336	\N	\N	\N	\N	\N	\N	\N	Org2	f	t	\N	18	Org2ExtensionEntity	t
 153	344	345	\N	Embedded	Test notes for association	2025-08-17 16:50:35.49+00	2025-08-17 16:50:35.49+00	\N	Mary Gwozdz	Org2	t	t	\N	18	TestPartnerChildEntity	t
 14	77	78	\N	\N	\N	\N	\N	\N	\N	LIF	t	f	\N	\N	Grade	t
@@ -9686,46 +9686,46 @@ COPY public."EntityAssociation" ("Id", "ParentEntityId", "ChildEntityId", "Relat
 140	212	241		Embedded	Abhishek: We (Mary and Abhishek) moved out contact from Person so that we can use the same entity in Person and Organizarion entities.	\N	\N	\N	\N	LIF	f	f	\N	\N	Contact	t
 139	4	241		Embedded	Abhishek: We (Mary and Abhishek) moved out contact from Person so that we can use the same entity in Person and Organizarion entities	\N	\N	\N	\N	LIF	f	f	\N	\N	Contact	t
 119	212	238		Embedded	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	Identifier	t
-118	193	47		Reference	Not labelled on diagram. Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	RefProficiency	t
-138	305	47		Reference	Not labelled on diagram	\N	\N	\N	\N	LIF	f	f	\N	\N	RefProficiency	t
+118	193	47		Reference	Not labelled on diagram. Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	RefProficiency	f
+138	305	47		Reference	Not labelled on diagram	\N	\N	\N	\N	LIF	f	f	\N	\N	RefProficiency	f
 143	212	215		Embedded	2024-10-04: Abhishek: We have same entity in Organization so we are moving this entity to common and  creating inter-entity link.	\N	\N	\N	\N	LIF	f	f	\N	\N	Accreditation	t
-111	193	80		Reference	Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	RefCourseLearningExperience	t
-130	305	80		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefCourseLearningExperience	t
-112	193	192		Reference	Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	RefEmploymentLearningExperience	t
-131	305	192		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefEmploymentLearningExperience	t
-109	193	193		Reference	Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	RefMilitaryLearningExperience	t
-110	193	305		Reference	Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	RefProgramLearningExperience	t
-133	305	193		Reference	Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	RefMilitaryLearningExperience	t
-129	305	305		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefProgramLearningExperience	t
+111	193	80		Reference	Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	RefCourseLearningExperience	f
+130	305	80		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefCourseLearningExperience	f
+112	193	192		Reference	Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	RefEmploymentLearningExperience	f
+131	305	192		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefEmploymentLearningExperience	f
+109	193	193		Reference	Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	RefMilitaryLearningExperience	f
+110	193	305		Reference	Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	RefProgramLearningExperience	f
+133	305	193		Reference	Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	RefMilitaryLearningExperience	f
+129	305	305		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefProgramLearningExperience	f
 122	47	42		Reference	Competency is the proficiency definition; link appears elsewhere	\N	\N	\N	\N	LIF	f	f	\N	\N	RefProficiencyDefinition	f
-128	305	304		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefProgram	t
-114	193	212	offeredBy	Reference	Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	offeredByRefOrganization	t
-134	305	212	offeredBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	offeredByRefOrganization	t
-137	305	134		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefCredentialAward	t
-117	193	134		Reference	Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	RefCredentialAward	t
-104	192	212	assertedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	assertedByRefOrganization	t
+128	305	304		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefProgram	f
+114	193	212	offeredBy	Reference	Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	offeredByRefOrganization	f
+134	305	212	offeredBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	offeredByRefOrganization	f
+137	305	134		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefCredentialAward	f
+117	193	134		Reference	Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	RefCredentialAward	f
+104	192	212	assertedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	assertedByRefOrganization	f
 160	129	215		Embedded	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	Accreditation	t
-77	77	212	accreditedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	accreditedByRefOrganization	t
-106	192	47		Reference	Not labelled on diagram	\N	\N	\N	\N	LIF	f	f	\N	\N	RefProficiency	t
-101	192	80		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefCourseLearningExperience	t
-102	192	212	offeredBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	offeredByRefOrganization	t
-123	47	134		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefCredentialAward	t
-105	192	134		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefCredentialAward	t
-107	192	212	approvedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	approvedByRefOrganization	t
+77	77	212	accreditedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	accreditedByRefOrganization	f
+106	192	47		Reference	Not labelled on diagram	\N	\N	\N	\N	LIF	f	f	\N	\N	RefProficiency	f
+101	192	80		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefCourseLearningExperience	f
+102	192	212	offeredBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	offeredByRefOrganization	f
+123	47	134		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefCredentialAward	f
+105	192	134		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefCredentialAward	f
+107	192	212	approvedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	approvedByRefOrganization	f
 181	375	376	\N	Embedded	\N	2025-10-08 22:13:00+00	2025-10-08 22:13:00+00	\N	MDRUser	\N	f	f	\N	\N	employment	f
 182	376	377	\N	Embedded	\N	2025-10-08 22:13:00+00	2025-10-08 22:13:00+00	\N	MDRUser	\N	f	f	\N	\N	preferences	f
 183	377	378	\N	Embedded	\N	2025-10-08 22:14:00+00	2025-10-08 22:14:00+00	\N	MDRUser	\N	t	f	\N	\N	preferred_org_types	t
 120	4	238		Embedded	We put this as an array as any of this kind of links can have one DB primary key and/ or other key from the data sources.\nPlease check Person workbook for the definition of Identifier entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	Identifier	t
-92	129	212	issuedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	issuedByRefOrganization	t
-82	80	192		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefEmploymentLearningExperience	t
-97	192	192		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefEmploymentLearningExperience	t
-86	80	212	offeredBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	offeredByRefOrganization	t
-121	185	212	offeredBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	offeredByRefOrganization	t
+92	129	212	issuedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	issuedByRefOrganization	f
+82	80	192		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefEmploymentLearningExperience	f
+97	192	192		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefEmploymentLearningExperience	f
+86	80	212	offeredBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	offeredByRefOrganization	f
+121	185	212	offeredBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	offeredByRefOrganization	f
 79	77	238		Embedded	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	Identifier	t
-90	80	47		Reference	Not labelled on diagram	\N	\N	\N	\N	LIF	f	f	\N	\N	RefProficiency	t
-127	304	212	offeredBy	Reference	This field is not a duplicate with ProgramLearningExperience.offerredByOrganization because the experience may be offerred by a different organization than the one that offers the program even though this will be the same organization in many cases.	\N	\N	\N	\N	LIF	f	f	\N	\N	offeredByRefOrganization	t
-184	238	212	issuedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	issuedByRefOrganization	t
-94	134	212	issuedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	issuedByRefOrganization	t
+90	80	47		Reference	Not labelled on diagram	\N	\N	\N	\N	LIF	f	f	\N	\N	RefProficiency	f
+127	304	212	offeredBy	Reference	This field is not a duplicate with ProgramLearningExperience.offerredByOrganization because the experience may be offerred by a different organization than the one that offers the program even though this will be the same organization in many cases.	\N	\N	\N	\N	LIF	f	f	\N	\N	offeredByRefOrganization	f
+184	238	212	issuedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	issuedByRefOrganization	f
+94	134	212	issuedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	issuedByRefOrganization	f
 50	331	321	\N	\N	\N	\N	\N	\N	\N	StateU	f	f	\N	\N	credentialSubject	f
 51	321	322	\N	\N	\N	\N	\N	\N	\N	StateU	f	f	\N	\N	source	f
 52	321	323	\N	\N	\N	\N	\N	\N	\N	StateU	f	f	\N	\N	identifier	t
@@ -9751,14 +9751,14 @@ COPY public."EntityAssociation" ("Id", "ParentEntityId", "ChildEntityId", "Relat
 146	4	337	\N	\N	\N	\N	\N	\N	\N	StateU	t	t	\N	17	StateUExtensionEntity	t
 149	337	336	\N	\N	\N	\N	\N	\N	\N	StateU	t	t	\N	17	Org2ExtensionEntity	t
 148	337	338	\N	\N	\N	\N	\N	\N	\N	StateU	t	t	\N	17	StateUChildExtEntity	t
-176	359	212	offeredBy	Reference	\N	\N	\N	\N		StateU	f	t	\N	17	offeredByRefOrganization	t
-178	129	373	\N	Reference	\N	\N	\N	\N	\N	StateU	f	t	\N	17	Refimage	t
-174	361	362	offeredBy	Reference	\N	\N	\N	\N		StateU	f	t	\N	17	offeredByRefRemunerationPackage	t
+176	359	212	offeredBy	Reference	\N	\N	\N	\N		StateU	f	t	\N	17	offeredByRefOrganization	f
+178	129	373	\N	Reference	\N	\N	\N	\N	\N	StateU	f	t	\N	17	Refimage	f
+174	361	362	offeredBy	Reference	\N	\N	\N	\N		StateU	f	t	\N	17	offeredByRefRemunerationPackage	f
 180	4	374	\N	Embedded	\N	\N	\N	\N	\N	StateU	f	f	\N	17	Interactions	t
 179	134	373	\N	Embedded	\N	\N	\N	\N	\N	StateU	f	f	\N	17	image	t
 197	64	411	CFPackageURI	Reference	\N	\N	\N	\N	\N	LIF	t	f	\N	\N	CFPackageURIRefCFPackage	f
-198	64	65	licenseURI	Reference	\N	\N	\N	\N	\N	LIF	t	f	\N	\N	licenseURIRefCFLicense	t
-199	67	65	licenseURI	Reference	\N	\N	\N	\N	\N	LIF	t	f	\N	\N	licenseURIRefCFLicense	t
+198	64	65	licenseURI	Reference	\N	\N	\N	\N	\N	LIF	t	f	\N	\N	licenseURIRefCFLicense	f
+199	67	65	licenseURI	Reference	\N	\N	\N	\N	\N	LIF	t	f	\N	\N	licenseURIRefCFLicense	f
 222	411	64	CFDocument	Embedded	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	CFDocumentCFDocument	f
 223	411	67	CFItems	Embedded	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	CFItemsCFItem	t
 224	411	68	CFAssociations	Embedded	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	CFAssociationsCFAssociation	t
@@ -9771,14 +9771,14 @@ COPY public."EntityAssociation" ("Id", "ParentEntityId", "ChildEntityId", "Relat
 231	413	409	CFAssociationGroupings	Embedded	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	CFAssociationGroupingsCFAssociationGrouping	t
 232	407	414	CFRubricCriteria	Embedded	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	CFRubricCriteriaCFRubricCriterion	t
 233	414	410	CFRubricCriterionLevels	Embedded	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	CFRubricCriterionLevelsCFRubricCriterionLevel	t
-200	64	415	subjectURI	Reference	\N	\N	\N	\N	\N	LIF	t	f	\N	\N	subjectURIRefCFSubject	t
-201	67	415	subjectURI	Reference	\N	\N	\N	\N	\N	LIF	t	f	\N	\N	subjectURIRefCFSubject	t
+200	64	415	subjectURI	Reference	\N	\N	\N	\N	\N	LIF	t	f	\N	\N	subjectURIRefCFSubject	f
+201	67	415	subjectURI	Reference	\N	\N	\N	\N	\N	LIF	t	f	\N	\N	subjectURIRefCFSubject	f
 202	67	64	CFDocumentURI	Reference	\N	\N	\N	\N	\N	LIF	t	f	\N	\N	CFDocumentURIRefCFDocument	f
 203	68	64	CFDocumentURI	Reference	\N	\N	\N	\N	\N	LIF	t	f	\N	\N	CFDocumentURIRefCFDocument	f
-204	67	412	CFItemTypeURI	Reference	\N	\N	\N	\N	\N	LIF	t	f	\N	\N	CFItemTypeURIRefCFItemType	t
-205	67	408	conceptKeywordsURI	Reference	\N	\N	\N	\N	\N	LIF	t	f	\N	\N	conceptKeywordsURIRefCFConcept	t
-206	68	409	CFAssociationGroupingURI	Reference	\N	\N	\N	\N	\N	LIF	t	f	\N	\N	CFAssociationGroupingURIRefCFAssociationGrouping	t
-207	414	67	CFItemURI	Reference	\N	\N	\N	\N	\N	LIF	t	f	\N	\N	CFItemURIRefCFItem	t
+204	67	412	CFItemTypeURI	Reference	\N	\N	\N	\N	\N	LIF	t	f	\N	\N	CFItemTypeURIRefCFItemType	f
+205	67	408	conceptKeywordsURI	Reference	\N	\N	\N	\N	\N	LIF	t	f	\N	\N	conceptKeywordsURIRefCFConcept	f
+206	68	409	CFAssociationGroupingURI	Reference	\N	\N	\N	\N	\N	LIF	t	f	\N	\N	CFAssociationGroupingURIRefCFAssociationGrouping	f
+207	414	67	CFItemURI	Reference	\N	\N	\N	\N	\N	LIF	t	f	\N	\N	CFItemURIRefCFItem	f
 274	494	497	\N	\N	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	f	\N	\N	Alignment	f
 275	494	500	\N	\N	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	f	\N	\N	Criteria	f
 277	494	505	\N	\N	\N	2026-08-20 14:49:19.831672+00	\N	\N	\N	LIF	f	f	\N	\N	IdentifierEntry	f
@@ -53754,10 +53754,10 @@ COPY tenant_lif_team."EntityAssociation" ("Id", "ParentEntityId", "ChildEntityId
 30	4	192	\N	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	EmploymentLearningExperience	t
 31	4	193	\N	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	MilitaryLearningExperience	t
 35	4	237	\N	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	Name	t
-60	1	41	demonstrates	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	demonstratesRefCompetency	t
-62	1	212	awardedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	awardedByRefOrganization	t
-70	3	4	assertedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	assertedByRefPerson	t
-71	3	212	assertedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	assertedByRefOrganization	t
+60	1	41	demonstrates	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	demonstratesRefCompetency	f
+62	1	212	awardedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	awardedByRefOrganization	f
+70	3	4	assertedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	assertedByRefPerson	f
+71	3	212	assertedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	assertedByRefOrganization	f
 38	4	240	\N	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	Residency	t
 42	4	244	\N	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	Birth	t
 43	4	245	\N	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	Death	t
@@ -53773,19 +53773,19 @@ COPY tenant_lif_team."EntityAssociation" ("Id", "ParentEntityId", "ChildEntityId
 4	41	42	\N	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	ProficiencyDefinition	f
 7	41	45	\N	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	CompetencyAlignments	t
 9	41	46	\N	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	Accessibility	t
-76	41	129	requires	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	requiresRefCredential	t
+76	41	129	requires	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	requiresRefCredential	f
 5	42	43	\N	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	ProficiencyLevel	t
 13	73	75	\N	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	AuditHistory	t
 12	76	74	\N	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	LegalCode	t
 34	76	215	\N	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	Accreditation	t
 36	76	238	\N	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	Identifier	t
 39	76	241	\N	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	Contact	t
-88	80	212	assertedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	assertedByRefOrganization	t
+88	80	212	assertedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	assertedByRefOrganization	f
 17	129	130	\N	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	Requirements	t
 19	129	132	\N	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	Image	t
 20	129	133	\N	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	CredentialAlignments	t
-91	129	304	aligned	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	alignedRefProgram	t
-95	134	129	InstanceOf	Reference	Specification of the Credential	\N	\N	\N	\N	LIF	f	f	\N	\N	InstanceOfRefCredential	t
+91	129	304	aligned	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	alignedRefProgram	f
+95	134	129	InstanceOf	Reference	Specification of the Credential	\N	\N	\N	\N	LIF	f	f	\N	\N	InstanceOfRefCredential	f
 18	130	131	\N	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	Criteria	t
 22	134	135	\N	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	Identity	t
 23	134	136	\N	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	Evidence	t
@@ -53801,95 +53801,95 @@ COPY tenant_lif_team."EntityAssociation" ("Id", "ParentEntityId", "ChildEntityId
 41	241	243	\N	\N	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	Telephone	t
 27	192	189	\N	\N	\N	\N	\N	\N	\N	LIF	t	f	\N	\N	EmploymentTypeStatus	t
 10	4	47	\N	Embedded	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	Proficiency	t
-115	193	4	assertedBy	Reference	Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	assertedByRefPerson	t
-73	3	47		Reference	Not labelled on diagram	\N	\N	\N	\N	LIF	f	f	\N	\N	RefProficiency	t
-83	80	3		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefAssessmentLearningExperience	t
-84	80	193		Reference	Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	RefMilitaryLearningExperience	t
-85	80	305		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefProgramLearningExperience	t
-68	3	192		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefEmploymentLearningExperience	t
-132	305	3		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefAssessmentLearningExperience	t
-64	3	3		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefAssessmentLearningExperience	t
-65	3	193		Reference	Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	RefMilitaryLearningExperience	t
-99	192	193		Reference	Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	RefMilitaryLearningExperience	t
-100	192	305		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefProgramLearningExperience	t
-66	3	305		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefProgramLearningExperience	t
-67	3	80		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefCourseLearningExperience	t
-98	192	3		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefAssessmentLearningExperience	t
-113	193	3		Reference	Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	RefAssessmentLearningExperience	t
-96	192	185		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefPosition	t
-63	3	1		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefAssessment	t
-80	80	77		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefCourse	t
-74	44	212	offeredBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	offeredByRefOrganization	t
-61	1	212	offeredBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	offeredByRefOrganization	t
-69	3	212	offeredBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	offeredByRefOrganization	t
-89	80	134		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefCredentialAward	t
-72	3	134		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefCredentialAward	t
-93	129	212	issuedBy	Reference	\N	\N	\N	\N	\N	LIF	t	f	\N	\N	issuedByRefOrganization	t
-78	77	212	approvedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	approvedByRefOrganization	t
-87	80	4	assertedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	assertedByRefPerson	t
-103	192	4	assertedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	assertedByRefPerson	t
-81	80	80		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefCourseLearningExperience	t
-124	47	41	entailed	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	entailedRefCompetency	t
-125	41	41	entailed	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	entailedRefCompetency	t
-126	304	41	demonstrates	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	demonstratesRefCompetency	t
+115	193	4	assertedBy	Reference	Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	assertedByRefPerson	f
+73	3	47		Reference	Not labelled on diagram	\N	\N	\N	\N	LIF	f	f	\N	\N	RefProficiency	f
+83	80	3		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefAssessmentLearningExperience	f
+84	80	193		Reference	Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	RefMilitaryLearningExperience	f
+85	80	305		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefProgramLearningExperience	f
+68	3	192		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefEmploymentLearningExperience	f
+132	305	3		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefAssessmentLearningExperience	f
+64	3	3		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefAssessmentLearningExperience	f
+65	3	193		Reference	Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	RefMilitaryLearningExperience	f
+99	192	193		Reference	Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	RefMilitaryLearningExperience	f
+100	192	305		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefProgramLearningExperience	f
+66	3	305		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefProgramLearningExperience	f
+67	3	80		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefCourseLearningExperience	f
+98	192	3		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefAssessmentLearningExperience	f
+113	193	3		Reference	Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	RefAssessmentLearningExperience	f
+96	192	185		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefPosition	f
+63	3	1		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefAssessment	f
+80	80	77		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefCourse	f
+74	44	212	offeredBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	offeredByRefOrganization	f
+61	1	212	offeredBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	offeredByRefOrganization	f
+69	3	212	offeredBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	offeredByRefOrganization	f
+89	80	134		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefCredentialAward	f
+72	3	134		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefCredentialAward	f
+93	129	212	issuedBy	Reference	\N	\N	\N	\N	\N	LIF	t	f	\N	\N	issuedByRefOrganization	f
+78	77	212	approvedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	approvedByRefOrganization	f
+87	80	4	assertedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	assertedByRefPerson	f
+103	192	4	assertedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	assertedByRefPerson	f
+81	80	80		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefCourseLearningExperience	f
+124	47	41	entailed	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	entailedRefCompetency	f
+125	41	41	entailed	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	entailedRefCompetency	f
+126	304	41	demonstrates	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	demonstratesRefCompetency	f
 141	73	74	basis	Embedded	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	basisLegalCode	t
 142	73	74	withdrawalProcess	Embedded	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	withdrawalProcessLegalCode	t
-116	193	212	assertedBy	Reference	Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	assertedByRefOrganization	t
-136	305	212	assertedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	assertedByRefOrganization	t
-135	305	4	assertedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	assertedByRefPerson	t
+116	193	212	assertedBy	Reference	Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	assertedByRefOrganization	f
+136	305	212	assertedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	assertedByRefOrganization	f
+135	305	4	assertedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	assertedByRefPerson	f
 150	4	339	\N	Embedded	Test notes for association	2025-08-17 16:50:35.49+00	2025-08-17 16:50:35.49+00	2025-08-17 16:50:35.491+00	Mary Gwozdz	Unicon	t	f	\N	\N	TestUpdateLIFEntity	t
-151	340	341	\N	Reference	Test updated notes for association	2025-08-17 16:50:35.49+00	2025-08-17 16:50:35.49+00	2025-08-17 16:50:35.491+00	Mary Gwozdz	Unicon	t	f	\N	\N	RefTestChildSourceEntity	t
-155	340	341	\N	Reference	Test updated notes for association	2025-08-17 16:50:35.49+00	2025-08-17 16:50:35.49+00	2025-08-17 16:50:35.491+00	Mary Gwozdz	Unicon	f	f	\N	\N	RefTestChildSourceEntity	t
+151	340	341	\N	Reference	Test updated notes for association	2025-08-17 16:50:35.49+00	2025-08-17 16:50:35.49+00	2025-08-17 16:50:35.491+00	Mary Gwozdz	Unicon	t	f	\N	\N	RefTestChildSourceEntity	f
+155	340	341	\N	Reference	Test updated notes for association	2025-08-17 16:50:35.49+00	2025-08-17 16:50:35.49+00	2025-08-17 16:50:35.491+00	Mary Gwozdz	Unicon	f	f	\N	\N	RefTestChildSourceEntity	f
 147	4	336	\N	\N	\N	\N	\N	\N	\N	Org2	f	t	\N	18	Org2ExtensionEntity	t
 153	344	345	\N	Embedded	Test notes for association	2025-08-17 16:50:35.49+00	2025-08-17 16:50:35.49+00	\N	Mary Gwozdz	Org2	t	t	\N	18	TestPartnerChildEntity	t
 14	77	78	\N	\N	\N	\N	\N	\N	\N	LIF	t	f	\N	\N	Grade	t
-178	129	373	\N	Reference	\N	\N	\N	\N	\N	StateU	f	t	\N	17	Refimage	t
+178	129	373	\N	Reference	\N	\N	\N	\N	\N	StateU	f	t	\N	17	Refimage	f
 157	344	345	\N	Embedded	Test notes for association	2025-08-17 16:50:35.49+00	2025-08-17 16:50:35.49+00	\N	Mary Gwozdz	Org2	t	t	\N	18	TestPartnerChildEntity	t
 154	346	347	\N	Embedded	Test notes for association	2025-08-17 16:50:35.49+00	2025-08-17 16:50:35.49+00	2025-08-17 16:50:35.491+00	Mary Gwozdz	Unicon	t	f	\N	\N	TestChildLIFEntity	t
 161	41	238	\N	Embedded	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	Identifier	t
 140	212	241		Embedded	Abhishek: We (Mary and Abhishek) moved out contact from Person so that we can use the same entity in Person and Organizarion entities.	\N	\N	\N	\N	LIF	f	f	\N	\N	Contact	t
 139	4	241		Embedded	Abhishek: We (Mary and Abhishek) moved out contact from Person so that we can use the same entity in Person and Organizarion entities	\N	\N	\N	\N	LIF	f	f	\N	\N	Contact	t
 119	212	238		Embedded	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	Identifier	t
-118	193	47		Reference	Not labelled on diagram. Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	RefProficiency	t
-138	305	47		Reference	Not labelled on diagram	\N	\N	\N	\N	LIF	f	f	\N	\N	RefProficiency	t
+118	193	47		Reference	Not labelled on diagram. Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	RefProficiency	f
+138	305	47		Reference	Not labelled on diagram	\N	\N	\N	\N	LIF	f	f	\N	\N	RefProficiency	f
 143	212	215		Embedded	2024-10-04: Abhishek: We have same entity in Organization so we are moving this entity to common and  creating inter-entity link.	\N	\N	\N	\N	LIF	f	f	\N	\N	Accreditation	t
-111	193	80		Reference	Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	RefCourseLearningExperience	t
-130	305	80		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefCourseLearningExperience	t
-112	193	192		Reference	Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	RefEmploymentLearningExperience	t
-131	305	192		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefEmploymentLearningExperience	t
-109	193	193		Reference	Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	RefMilitaryLearningExperience	t
-110	193	305		Reference	Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	RefProgramLearningExperience	t
-133	305	193		Reference	Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	RefMilitaryLearningExperience	t
-129	305	305		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefProgramLearningExperience	t
+111	193	80		Reference	Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	RefCourseLearningExperience	f
+130	305	80		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefCourseLearningExperience	f
+112	193	192		Reference	Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	RefEmploymentLearningExperience	f
+131	305	192		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefEmploymentLearningExperience	f
+109	193	193		Reference	Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	RefMilitaryLearningExperience	f
+110	193	305		Reference	Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	RefProgramLearningExperience	f
+133	305	193		Reference	Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	RefMilitaryLearningExperience	f
+129	305	305		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefProgramLearningExperience	f
 122	47	42		Reference	Competency is the proficiency definition; link appears elsewhere	\N	\N	\N	\N	LIF	f	f	\N	\N	RefProficiencyDefinition	f
-128	305	304		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefProgram	t
-114	193	212	offeredBy	Reference	Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	offeredByRefOrganization	t
-134	305	212	offeredBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	offeredByRefOrganization	t
-137	305	134		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefCredentialAward	t
-117	193	134		Reference	Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	RefCredentialAward	t
-104	192	212	assertedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	assertedByRefOrganization	t
+128	305	304		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefProgram	f
+114	193	212	offeredBy	Reference	Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	offeredByRefOrganization	f
+134	305	212	offeredBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	offeredByRefOrganization	f
+137	305	134		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefCredentialAward	f
+117	193	134		Reference	Please check Employment workbook for the definition of MilitaryLearningExperience entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	RefCredentialAward	f
+104	192	212	assertedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	assertedByRefOrganization	f
 160	129	215		Embedded	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	Accreditation	t
-77	77	212	accreditedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	accreditedByRefOrganization	t
-106	192	47		Reference	Not labelled on diagram	\N	\N	\N	\N	LIF	f	f	\N	\N	RefProficiency	t
-101	192	80		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefCourseLearningExperience	t
-102	192	212	offeredBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	offeredByRefOrganization	t
-123	47	134		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefCredentialAward	t
-105	192	134		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefCredentialAward	t
-107	192	212	approvedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	approvedByRefOrganization	t
+77	77	212	accreditedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	accreditedByRefOrganization	f
+106	192	47		Reference	Not labelled on diagram	\N	\N	\N	\N	LIF	f	f	\N	\N	RefProficiency	f
+101	192	80		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefCourseLearningExperience	f
+102	192	212	offeredBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	offeredByRefOrganization	f
+123	47	134		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefCredentialAward	f
+105	192	134		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefCredentialAward	f
+107	192	212	approvedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	approvedByRefOrganization	f
 181	375	376	\N	Embedded	\N	2025-10-08 22:13:00+00	2025-10-08 22:13:00+00	\N	MDRUser	\N	f	f	\N	\N	employment	f
 182	376	377	\N	Embedded	\N	2025-10-08 22:13:00+00	2025-10-08 22:13:00+00	\N	MDRUser	\N	f	f	\N	\N	preferences	f
 183	377	378	\N	Embedded	\N	2025-10-08 22:14:00+00	2025-10-08 22:14:00+00	\N	MDRUser	\N	t	f	\N	\N	preferred_org_types	t
 120	4	238		Embedded	We put this as an array as any of this kind of links can have one DB primary key and/ or other key from the data sources.\nPlease check Person workbook for the definition of Identifier entity.	\N	\N	\N	\N	LIF	f	f	\N	\N	Identifier	t
-92	129	212	issuedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	issuedByRefOrganization	t
-82	80	192		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefEmploymentLearningExperience	t
-97	192	192		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefEmploymentLearningExperience	t
-86	80	212	offeredBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	offeredByRefOrganization	t
-121	185	212	offeredBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	offeredByRefOrganization	t
+92	129	212	issuedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	issuedByRefOrganization	f
+82	80	192		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefEmploymentLearningExperience	f
+97	192	192		Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	RefEmploymentLearningExperience	f
+86	80	212	offeredBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	offeredByRefOrganization	f
+121	185	212	offeredBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	offeredByRefOrganization	f
 79	77	238		Embedded	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	Identifier	t
-90	80	47		Reference	Not labelled on diagram	\N	\N	\N	\N	LIF	f	f	\N	\N	RefProficiency	t
-127	304	212	offeredBy	Reference	This field is not a duplicate with ProgramLearningExperience.offerredByOrganization because the experience may be offerred by a different organization than the one that offers the program even though this will be the same organization in many cases.	\N	\N	\N	\N	LIF	f	f	\N	\N	offeredByRefOrganization	t
-184	238	212	issuedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	issuedByRefOrganization	t
-94	134	212	issuedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	issuedByRefOrganization	t
+90	80	47		Reference	Not labelled on diagram	\N	\N	\N	\N	LIF	f	f	\N	\N	RefProficiency	f
+127	304	212	offeredBy	Reference	This field is not a duplicate with ProgramLearningExperience.offerredByOrganization because the experience may be offerred by a different organization than the one that offers the program even though this will be the same organization in many cases.	\N	\N	\N	\N	LIF	f	f	\N	\N	offeredByRefOrganization	f
+184	238	212	issuedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	issuedByRefOrganization	f
+94	134	212	issuedBy	Reference	\N	\N	\N	\N	\N	LIF	f	f	\N	\N	issuedByRefOrganization	f
 50	331	321	\N	\N	\N	\N	\N	\N	\N	StateU	f	f	\N	\N	credentialSubject	f
 51	321	322	\N	\N	\N	\N	\N	\N	\N	StateU	f	f	\N	\N	source	f
 52	321	323	\N	\N	\N	\N	\N	\N	\N	StateU	f	f	\N	\N	identifier	t
@@ -53915,8 +53915,8 @@ COPY tenant_lif_team."EntityAssociation" ("Id", "ParentEntityId", "ChildEntityId
 146	4	337	\N	\N	\N	\N	\N	\N	\N	StateU	t	t	\N	17	StateUExtensionEntity	t
 149	337	336	\N	\N	\N	\N	\N	\N	\N	StateU	t	t	\N	17	Org2ExtensionEntity	t
 148	337	338	\N	\N	\N	\N	\N	\N	\N	StateU	t	t	\N	17	StateUChildExtEntity	t
-176	359	212	offeredBy	Reference	\N	\N	\N	\N		StateU	f	t	\N	17	offeredByRefOrganization	t
-174	361	362	offeredBy	Reference	\N	\N	\N	\N		StateU	f	t	\N	17	offeredByRefRemunerationPackage	t
+176	359	212	offeredBy	Reference	\N	\N	\N	\N		StateU	f	t	\N	17	offeredByRefOrganization	f
+174	361	362	offeredBy	Reference	\N	\N	\N	\N		StateU	f	t	\N	17	offeredByRefRemunerationPackage	f
 180	4	374	\N	Embedded	\N	\N	\N	\N	\N	StateU	f	f	\N	17	Interactions	t
 179	134	373	\N	Embedded	\N	\N	\N	\N	\N	StateU	f	f	\N	17	image	t
 \.

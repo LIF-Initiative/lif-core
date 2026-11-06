@@ -7,7 +7,7 @@ from lif.mdr_dto.entity_association_dto import (
     EntityAssociationDTO,
     UpdateEntityAssociationDTO,
 )
-from lif.mdr_services.association_name import association_array, entity_association_name, recomputed
+from lif.mdr_services.association_name import entity_association_array, entity_association_name, recomputed
 from lif.mdr_services.entity_service import get_entity_by_id
 from lif.mdr_services.helper_service import check_datamodel_by_id, check_entity_by_id
 from lif.mdr_services.model_converter import is_overlay
@@ -119,7 +119,7 @@ async def create_entity_association(session: AsyncSession, data: CreateEntityAss
         Extension=data.Extension,
         ExtendedByDataModelId=data.ExtendedByDataModelId,
         Name=entity_association_name(data.Relationship, data.Placement, child_entity.Name),
-        Array=association_array(child_entity.Array),
+        Array=entity_association_array(data.Placement, child_entity.Array),
     )
     session.add(entity_association)
     await session.commit()
@@ -197,7 +197,7 @@ async def update_entity_association(session: AsyncSession, association_id: int, 
     # they are still the rule's (#1386). So read the rule's inputs before the edit applies.
     old_child = await session.get(Entity, entity_association.ChildEntityId)
     name_before = entity_association_name(entity_association.Relationship, entity_association.Placement, old_child.Name)
-    array_before = association_array(old_child.Array)
+    array_before = entity_association_array(entity_association.Placement, old_child.Array)
 
     for key, value in dto.dict(exclude_unset=True).items():
         setattr(entity_association, key, value)
@@ -208,7 +208,11 @@ async def update_entity_association(session: AsyncSession, association_id: int, 
         name_before,
         entity_association_name(entity_association.Relationship, entity_association.Placement, child_entity.Name),
     )
-    entity_association.Array = recomputed(entity_association.Array, array_before, association_array(child_entity.Array))
+    entity_association.Array = recomputed(
+        entity_association.Array,
+        array_before,
+        entity_association_array(entity_association.Placement, child_entity.Array),
+    )
 
     session.add(entity_association)
     await session.commit()
