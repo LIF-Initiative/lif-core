@@ -119,8 +119,8 @@ async def test_cleanup_clears_its_refusals_and_leaves_the_rest_to_1388(seed_conn
     assert {rule: len(rows) for rule, rows in public.items()} == {
         "unassociated_skipped": 0,
         "unassociated": 76,
-        # 781 measured, less the 70 the first rule deletes.
-        "no_data_type": 711,
+        # 613 measured, less the 70 the first rule deletes.
+        "no_data_type": 543,
         "group_name": 0,
         "model_26_org": 1,
         "transformation_1189": 1,
@@ -130,7 +130,7 @@ async def test_cleanup_clears_its_refusals_and_leaves_the_rest_to_1388(seed_conn
         # The seed has no groups 28 or 29; dev does (#1388).
         "transformations_through_deleted": 0,
     }
-    assert (before["public"].models_exported, after["public"].models_exported) == (2, 12)
+    assert (before["public"].models_exported, after["public"].models_exported) == (3, 12)
     assert (before["public"].groups_exported, after["public"].groups_exported) == (2, 3)
     # What's left is the seed's entity-typed attributes, #1388's associations and overlay groups,
     # and model 25's one attribute associated only through a row another model owns.
@@ -176,7 +176,7 @@ async def test_dry_run_changes_nothing_and_a_second_run_finds_nothing(seed_conn)
     before = await _snapshot(conn)
     dry = await cleanup.cleanup(conn, apply=False)
     assert await _snapshot(conn) == before
-    assert len(dry["public"]["no_data_type"]) == 711
+    assert len(dry["public"]["no_data_type"]) == 543
 
     await cleanup.cleanup(conn, apply=True)
     again = await cleanup.cleanup(conn, apply=True)
@@ -291,9 +291,16 @@ async def test_cleanup_keeps_3649_extension_once_it_has_notes(seed_conn):
     assert await conn.fetchval('SELECT "Extension" FROM "ValueSetValues" WHERE "Id" = 3649') is True
 
 
+# A live source path in the seed: CEDS v14 AssessmentResult.AssessmentResultScoreValue, on entity 18,
+# which the rebuild kept. (attribute id, entity id path)
+_CEDS_SOURCE = (6034, "18,-6034")
+
+
 async def _add_1760_and_its_copy(conn):
     # What dev has in group 3 (CEDS to LIF): 1760, and 1761 copying it field for field, both mapping
-    # source attribute 93 to target attribute 54. The seed has neither.
+    # one CEDS source attribute to target attribute 54. The seed has neither. Dev's source is
+    # attribute 93 (entity 12), which the CEDS v14 rebuild (#1435) retired, so the live _CEDS_SOURCE
+    # stands in for it.
     for transformation, source_row, target_row in ((1760, 9301, 9302), (1761, 9303, 9304)):
         await conn.execute(
             'INSERT INTO "Transformations" ("Id", "TransformationGroupId", "Name", "Expression", "ExpressionLanguage", "Deleted")'
@@ -303,10 +310,11 @@ async def _add_1760_and_its_copy(conn):
         )
         await conn.execute(
             'INSERT INTO "TransformationAttributes" ("Id", "TransformationId", "AttributeId", "EntityId", "EntityIdPath", "AttributeType", "Deleted")'
-            " OVERRIDING SYSTEM VALUE VALUES ($1, $3, 93, NULL, '12,-93', 'Source', false), ($2, $3, 54, NULL, '4,3,-54', 'Target', false)",
+            " OVERRIDING SYSTEM VALUE VALUES ($1, $3, $4, NULL, $5, 'Source', false), ($2, $3, 54, NULL, '4,3,-54', 'Target', false)",
             source_row,
             target_row,
             transformation,
+            *_CEDS_SOURCE,
         )
 
 
@@ -494,12 +502,13 @@ async def _add_groups_28_and_29(conn):
         )
         await conn.execute(
             'INSERT INTO "TransformationAttributes" ("Id", "TransformationId", "AttributeId", "EntityIdPath", "AttributeType", "Deleted")'
-            " OVERRIDING SYSTEM VALUE VALUES ($1, $3, 93, '12,-93', 'Source', false), ($2, $3, $4, $5, 'Target', false)",
+            " OVERRIDING SYSTEM VALUE VALUES ($1, $3, $6, $7, 'Source', false), ($2, $3, $4, $5, 'Target', false)",
             source_row,
             target_row,
             transformation,
             int(target_path.rsplit("-", 1)[1]),
             target_path,
+            *_CEDS_SOURCE,
         )
 
 
