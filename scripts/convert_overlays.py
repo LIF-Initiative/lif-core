@@ -16,7 +16,11 @@ Each schema's undo record (the Id map, every row inserted or soft-deleted, and t
 column updated in place) is written to `<undo-dir>/<schema>.json`, on a dry run too. Copy the directory
 out of the container before it stops.
 
-ROLLBACK unless --apply. Exits 1 if any schema refused or failed its checks.
+Each schema's transaction first locks every table the conversion reads or writes (EXCLUSIVE: reads go
+on, writes wait until it commits or rolls back), so an MDR edit can't commit mid-run and be lost. A
+schema that can't get the locks within LOCK_TIMEOUT is skipped and reported. Pause MDR edits anyway.
+
+ROLLBACK unless --apply. Exits 1 if any schema refused, failed its checks or couldn't lock.
 
 Usage, in an image with the MDR API's packages (the mdr-api container has them):
     POSTGRESQL_HOST=... POSTGRESQL_USER=... POSTGRESQL_PASSWORD=... POSTGRESQL_DB=... \\
@@ -38,11 +42,22 @@ import sys
 
 from sqlalchemy import text
 from sqlalchemy.engine import URL
+from sqlalchemy.exc import DBAPIError
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 
 from lif.mdr_services.overlay_converter import ConversionFailed, Report, convert_overlays
 
 OVERLAYS = [17, 18]
+
+# Every table the conversion reads or writes. Locked for the whole transaction so no edit commits
+# between the conversion reading a row and committing (an inclusion row added mid-run would be deleted
+# without its element copied). Reads go on; writes wait. A schema that can't get the locks in time is
+# rolled back and reported.
+LOCKED_TABLES = ("DataModels", "Entities", "Attributes", "EntityAssociation", "EntityAttributeAssociation",
+                 "ExtInclusionsFromBaseDM", "ValueSets", "ValueSetValues", "TransformationsGroup", "Transformations",
+                 "TransformationAttributes")  # fmt: skip
+LOCK_TIMEOUT = "10s"
+LOCK_NOT_AVAILABLE = "55P03"
 
 SCHEMAS_SQL = r"""
 SELECT table_schema FROM information_schema.tables
@@ -133,6 +148,14 @@ async def convert_schema(engine, schema: str, apply: bool, undo_dir: pathlib.Pat
         try:
             # `public` stays on the path for its enum types, as in the API's tenant sessions.
             await session.execute(text(f"SET LOCAL search_path TO {identifier}, public"))
+            await session.execute(text(f"SET LOCAL lock_timeout = '{LOCK_TIMEOUT}'"))
+            try:
+                tables = ", ".join(f'"{table}"' for table in LOCKED_TABLES)
+                await session.execute(text(f"LOCK TABLE {tables} IN EXCLUSIVE MODE"))
+            except DBAPIError as e:
+                if getattr(e.orig, "sqlstate", None) != LOCK_NOT_AVAILABLE:
+                    raise
+                return False, [f"  not started: another transaction is writing; no locks within {LOCK_TIMEOUT}"]
             overlays = await _overlays_left(session)
             if not overlays:
                 return True, ["  already converted, skipped"]

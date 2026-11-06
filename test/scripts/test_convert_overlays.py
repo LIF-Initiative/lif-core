@@ -13,11 +13,13 @@ import pathlib
 import subprocess
 import sys
 from itertools import count
+from unittest import mock
 from urllib.parse import urlparse
 
 import asyncpg
 import pytest
 import testing.postgresql
+from sqlalchemy import text
 from sqlalchemy.ext.asyncio import create_async_engine
 
 _ROOT = pathlib.Path(__file__).resolve().parents[2]
@@ -158,3 +160,22 @@ async def test_apply_commits_and_a_re_run_skips(seed_copy, tmp_path):
         ["  already converted, skipped"],
     )
     assert await _snapshot(conn) == after
+
+
+async def test_it_does_not_start_while_another_transaction_is_writing(seed_copy, tmp_path):
+    """The run locks every table it reads or writes, so an edit can't commit mid-run and be lost."""
+    conn, engine = seed_copy
+    await _cleaned(conn)
+    before = await _snapshot(conn)
+
+    async with engine.connect() as other:
+        # An MDR edit in flight: its row lock is held until it commits.
+        await other.execute(text('UPDATE "Entities" SET "Notes" = "Notes" WHERE "Id" = 4'))
+        with mock.patch.object(runner, "LOCK_TIMEOUT", "1s"):
+            ok, lines = await runner.convert_schema(engine, "public", apply=True, undo_dir=tmp_path)
+        await other.rollback()
+
+    assert not ok
+    assert lines == ["  not started: another transaction is writing; no locks within 1s"]
+    assert await _snapshot(conn) == before
+    assert not list(tmp_path.iterdir())
