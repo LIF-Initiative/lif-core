@@ -107,6 +107,16 @@ class IdMap:
 
 
 @dataclass
+class Changes:
+    """Every row the conversion writes, for the undo record: inserted copies, soft-deleted rows, and the
+    old values of every column it updates in place."""
+
+    inserted: dict[str, list[int]] = field(default_factory=dict)
+    soft_deleted: dict[str, list[int]] = field(default_factory=dict)
+    updated: dict[str, list[dict]] = field(default_factory=dict)
+
+
+@dataclass
 class ModelReport:
     model_id: int
     id_map: IdMap
@@ -120,6 +130,7 @@ class Report:
     moved_attributes: dict[int, int]  # attribute Id -> the base model step 0 moved it to
     models: list[ModelReport]
     compared: dict[int, list[str]]  # model -> combinations compared
+    changes: Changes
 
 
 def flag_key(flags: dict) -> str:
@@ -287,7 +298,12 @@ def _quoted(columns: Iterable[str]) -> str:
 
 
 async def _copy_row(
-    session: AsyncSession, table: str, columns: tuple[str, ...], row_id: int, overrides: dict[str, Any]
+    session: AsyncSession,
+    changes: Changes,
+    table: str,
+    columns: tuple[str, ...],
+    row_id: int,
+    overrides: dict[str, Any],
 ) -> int:
     """Insert a copy of one row with ``overrides`` set; return the new Id. Copies soft-deleted rows too."""
     names = list(columns) + list(overrides)
@@ -297,20 +313,35 @@ async def _copy_row(
         f'INSERT INTO "{table}" ({_quoted(names)}, "Deleted") '
         f'SELECT {", ".join(selected)}, false FROM "{table}" WHERE "Id" = :row_id RETURNING "Id"'
     )
-    return await _scalar(session, sql, row_id=row_id, **params)
+    new_id = await _scalar(session, sql, row_id=row_id, **params)
+    changes.inserted.setdefault(table, []).append(new_id)
+    return new_id
 
 
-async def _soft_delete(session: AsyncSession, table: str, where: str, **params) -> list[int]:
+async def _soft_delete(session: AsyncSession, changes: Changes, table: str, where: str, **params) -> list[int]:
     rows = await _rows(
         session, f'UPDATE "{table}" SET "Deleted" = true WHERE "Deleted" = false AND ({where}) RETURNING "Id"', **params
     )
-    return sorted(row["Id"] for row in rows)
+    deleted = sorted(row["Id"] for row in rows)
+    changes.soft_deleted.setdefault(table, []).extend(deleted)
+    return deleted
+
+
+async def _update_row(session: AsyncSession, changes: Changes, table: str, row_id: int, values: dict[str, Any]) -> None:
+    """Update one row in place, recording the columns' old values."""
+    old = (await _rows(session, f'SELECT "Id", {_quoted(values)} FROM "{table}" WHERE "Id" = :row_id', row_id=row_id))[
+        0
+    ]
+    changes.updated.setdefault(table, []).append(old)
+    sets = ", ".join(f'"{name}" = :v_{i}' for i, name in enumerate(values))
+    params = {f"v_{i}": value for i, value in enumerate(values.values())}
+    await session.execute(text(f'UPDATE "{table}" SET {sets} WHERE "Id" = :row_id'), {**params, "row_id": row_id})
 
 
 # --- Step 0: move overlay-owned base content to the base ----------------------------------------------
 
 
-async def move_base_content(session: AsyncSession, overlay_ids: list[int]) -> dict[int, int]:
+async def move_base_content(session: AsyncSession, changes: Changes, overlay_ids: list[int]) -> dict[int, int]:
     """Step 0 (v3 §2): attributes an overlay owns but its base associates directly (ExtendedBy NULL) are
     base content with the wrong DataModelId (§11). Move them to the base; return attribute Id -> base.
     Refuses any that don't fit."""
@@ -374,9 +405,7 @@ async def move_base_content(session: AsyncSession, overlay_ids: list[int]) -> di
     if reasons:
         raise ConversionFailed(reasons)
     for attribute_id, base_id in moved.items():
-        await session.execute(
-            text('UPDATE "Attributes" SET "DataModelId" = :base WHERE "Id" = :a'), {"base": base_id, "a": attribute_id}
-        )
+        await _update_row(session, changes, "Attributes", attribute_id, {"DataModelId": base_id})
     return moved
 
 
@@ -439,7 +468,7 @@ def _map_path(path: str, ids: IdMap) -> Optional[str]:
     return ",".join(nodes)
 
 
-async def convert_model(session: AsyncSession, model_id: int, full_schema: dict) -> ModelReport:
+async def convert_model(session: AsyncSession, changes: Changes, model_id: int, full_schema: dict) -> ModelReport:
     """Steps 1-8 for one overlay. ``full_schema`` is its FULL schema from before the conversion."""
     reasons: list[str] = []
     model = (await _rows(session, 'SELECT * FROM "DataModels" WHERE "Id" = :m', m=model_id))[0]
@@ -473,10 +502,20 @@ async def convert_model(session: AsyncSession, model_id: int, full_schema: dict)
     own_shown_entities = [e for e, owner in entity_owner.items() if owner == model_id]
     own_shown_attributes = [a for a, owner in attribute_owner.items() if owner == model_id]
     soft_deleted["Entities"] = await _soft_delete(
-        session, "Entities", '"DataModelId" = :m AND NOT ("Id" = ANY(:ids))', m=model_id, ids=own_shown_entities
+        session,
+        changes,
+        "Entities",
+        '"DataModelId" = :m AND NOT ("Id" = ANY(:ids))',
+        m=model_id,
+        ids=own_shown_entities,
     )
     soft_deleted["Attributes"] = await _soft_delete(
-        session, "Attributes", '"DataModelId" = :m AND NOT ("Id" = ANY(:ids))', m=model_id, ids=own_shown_attributes
+        session,
+        changes,
+        "Attributes",
+        '"DataModelId" = :m AND NOT ("Id" = ANY(:ids))',
+        m=model_id,
+        ids=own_shown_attributes,
     )
     for kind, table, owner in (("Entity", "Entities", entity_owner), ("Attribute", "Attributes", attribute_owner)):
         rows = await _rows(
@@ -506,12 +545,10 @@ async def convert_model(session: AsyncSession, model_id: int, full_schema: dict)
         for element_id in sorted(owner):
             overrides = element_overrides(kind, element_id)
             if owner[element_id] == model_id:
-                sets = ", ".join(f'"{name}" = :{name}' for name in overrides)
-                await session.execute(text(f'UPDATE "{table}" SET {sets} WHERE "Id" = :row_id'),
-                                      {**overrides, "row_id": element_id})  # fmt: skip
+                await _update_row(session, changes, table, element_id, overrides)
                 id_map[element_id] = element_id
             else:
-                id_map[element_id] = await _copy_row(session, table, columns, element_id, overrides)
+                id_map[element_id] = await _copy_row(session, changes, table, columns, element_id, overrides)
                 copied["entities" if kind == "Entity" else "attributes"] += 1
 
     # Step 4: value sets used from another model, then entity targets.
@@ -527,7 +564,9 @@ async def convert_model(session: AsyncSession, model_id: int, full_schema: dict)
     for value_set_id in sorted(
         {a["ValueSetId"] for a in shown_attributes if a["ValueSetId"] and a["ValueSetModelId"] != model_id}
     ):
-        new_id = await _copy_row(session, "ValueSets", VALUE_SET_COLUMNS, value_set_id, {"DataModelId": model_id})
+        new_id = await _copy_row(
+            session, changes, "ValueSets", VALUE_SET_COLUMNS, value_set_id, {"DataModelId": model_id}
+        )
         ids.value_sets[value_set_id] = new_id
         copied["value_sets"] += 1
         for value in await _rows(
@@ -536,7 +575,12 @@ async def convert_model(session: AsyncSession, model_id: int, full_schema: dict)
             v=value_set_id,
         ):
             ids.values[value["Id"]] = await _copy_row(
-                session, "ValueSetValues", VALUE_COLUMNS, value["Id"], {"ValueSetId": new_id, "DataModelId": model_id}
+                session,
+                changes,
+                "ValueSetValues",
+                VALUE_COLUMNS,
+                value["Id"],
+                {"ValueSetId": new_id, "DataModelId": model_id},
             )
             copied["values"] += 1
     for attribute in shown_attributes:
@@ -552,9 +596,7 @@ async def convert_model(session: AsyncSession, model_id: int, full_schema: dict)
                 continue
             updates["TargetEntityId"] = ids.entities[attribute["TargetEntityId"]]
         if updates:
-            sets = ", ".join(f'"{name}" = :{name}' for name in updates)
-            await session.execute(text(f'UPDATE "Attributes" SET {sets} WHERE "Id" = :row_id'),
-                                  {**updates, "row_id": attribute["Id"]})  # fmt: skip
+            await _update_row(session, changes, "Attributes", attribute["Id"], updates)
 
     # Step 5: associations. One whose parent is the model's own is rewritten in place; any other is
     # copied between the model's rows, and the original is soft-deleted only if the model declared it.
@@ -582,17 +624,16 @@ async def convert_model(session: AsyncSession, model_id: int, full_schema: dict)
             if extension:
                 overrides.update({"Extension": False, "ExtensionNotes": None})
             if entity_owner.get(row["parent"]) == model_id:
-                sets = ", ".join(f'"{name}" = :{name}' for name in overrides)
-                await session.execute(text(f'UPDATE "{table}" SET {sets} WHERE "Id" = :row_id'),
-                                      {**overrides, "row_id": row["Id"]})  # fmt: skip
+                await _update_row(session, changes, table, row["Id"], overrides)
                 id_map[row["Id"]] = row["Id"]
             else:
-                id_map[row["Id"]] = await _copy_row(session, table, columns, row["Id"], overrides)
+                id_map[row["Id"]] = await _copy_row(session, changes, table, columns, row["Id"], overrides)
                 copied["entity_associations" if table == "EntityAssociation" else "attribute_associations"] += 1
         kept = [old for old, new in id_map.items() if old == new]
         copies = [new for old, new in id_map.items() if old != new]
         soft_deleted[table] = await _soft_delete(
             session,
+            changes,
             table,
             f'("ExtendedByDataModelId" = :m OR "{parent}" IN (SELECT "Id" FROM "Entities" WHERE "DataModelId" = :m)) '
             'AND NOT ("Id" = ANY(:kept)) AND NOT ("Id" = ANY(:copies))',
@@ -605,18 +646,18 @@ async def convert_model(session: AsyncSession, model_id: int, full_schema: dict)
 
     # Step 7: the model row and its inclusion rows.
     soft_deleted["ExtInclusionsFromBaseDM"] = await _soft_delete(
-        session, "ExtInclusionsFromBaseDM", '"ExtDataModelId" = :m', m=model_id
+        session, changes, "ExtInclusionsFromBaseDM", '"ExtDataModelId" = :m', m=model_id
     )
-    await session.execute(
-        text(
-            'UPDATE "DataModels" SET "BaseDataModelId" = NULL, "CopiedFromName" = :name, '
-            '"CopiedFromVersion" = :version, "CopiedFromContributorOrganization" = :organization WHERE "Id" = :m'
-        ),
+    await _update_row(
+        session,
+        changes,
+        "DataModels",
+        model_id,
         {
-            "name": base["Name"],
-            "version": base["DataModelVersion"],
-            "organization": base["ContributorOrganization"],
-            "m": model_id,
+            "BaseDataModelId": None,
+            "CopiedFromName": base["Name"],
+            "CopiedFromVersion": base["DataModelVersion"],
+            "CopiedFromContributorOrganization": base["ContributorOrganization"],
         },
     )
 
@@ -647,12 +688,12 @@ async def convert_model(session: AsyncSession, model_id: int, full_schema: dict)
         ):
             reasons.append(f"{where}: path {row['EntityIdPath']!r} goes through a row the schema doesn't show")
             continue
-        await session.execute(
-            text(
-                'UPDATE "TransformationAttributes" SET "EntityId" = :e, "AttributeId" = :a, "EntityIdPath" = :p '
-                'WHERE "Id" = :row_id'
-            ),
-            {"e": entity_id, "a": attribute_id, "p": path, "row_id": row["Id"]},
+        await _update_row(
+            session,
+            changes,
+            "TransformationAttributes",
+            row["Id"],
+            {"EntityId": entity_id, "AttributeId": attribute_id, "EntityIdPath": path},
         )
         updated.append(row["Id"])
     if reasons:
@@ -688,8 +729,9 @@ async def convert_overlays(session: AsyncSession, overlay_ids: list[int]) -> Rep
         if model_id not in baseline:
             baseline[model_id] = await generate_matrix(session, model_id)
 
-    moved = await move_base_content(session, overlay_ids)
-    reports = [await convert_model(session, model_id, baseline[model_id][FULL]) for model_id in overlay_ids]
+    changes = Changes()
+    moved = await move_base_content(session, changes, overlay_ids)
+    reports = [await convert_model(session, changes, model_id, baseline[model_id][FULL]) for model_id in overlay_ids]
 
     failures: list[str] = []
     expected_by_model = {}
@@ -728,4 +770,5 @@ async def convert_overlays(session: AsyncSession, overlay_ids: list[int]) -> Rep
             failures.append(f"group {group['Id']}: export refuses: {e}")
     if failures:
         raise ConversionFailed(failures)
-    return Report(moved, reports, {model_id: sorted(expected_by_model[model_id]) for model_id in compared_ids})
+    compared = {model_id: sorted(expected_by_model[model_id]) for model_id in compared_ids}
+    return Report(moved, reports, compared, changes)
