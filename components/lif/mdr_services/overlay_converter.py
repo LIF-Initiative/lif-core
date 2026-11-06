@@ -11,7 +11,7 @@ names every entity, attribute and association it renders, so clashes, overrides 
 
 The conversion checks itself before the caller commits. It generates every live model it touches in all
 16 flag combinations before and after, and the "after" must equal the "before" rewritten through the
-conversion's Id map (decided on #1388: D1, per key). Every caller runs it in one transaction and rolls
+conversion's Id map (decided on #1388: D1, per key), with `required` compared as a set. Every caller runs it in one transaction and rolls
 back on ``ConversionFailed``.
 
 Per overlay, after step 0 has run once for all of them:
@@ -137,8 +137,21 @@ def flag_key(flags: dict) -> str:
     return "attr{:d}-entity{:d}-public{:d}-full{:d}".format(*(flags[name] for name in FLAG_NAMES))
 
 
+def _required_as_set(node: Any) -> Any:
+    if isinstance(node, dict):
+        return {
+            k: sorted(v) if k == "required" and isinstance(v, list) else _required_as_set(v) for k, v in node.items()
+        }
+    if isinstance(node, list):
+        return [_required_as_set(v) for v in node]
+    return node
+
+
 def canonical(schema: Any) -> str:
-    return json.dumps(schema, indent=2, sort_keys=True, ensure_ascii=False, default=str)
+    """The schema as compared: every `required` list sorted, since own elements keep their Ids and the
+    copies get new ones, so the order `required` lists them in can change (decided on #1388: compare it
+    as a set). Every other list keeps its order."""
+    return json.dumps(_required_as_set(schema), indent=2, sort_keys=True, ensure_ascii=False, default=str)
 
 
 def _diff(expected: Any, actual: Any, limit: int = 30) -> str:

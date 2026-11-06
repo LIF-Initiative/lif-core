@@ -64,10 +64,6 @@ async def session(cleaned_seed):
     await engine.dispose()
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="own elements keep their Ids, so `required` order changes; decision open on #1388 (the order question)",
-)
 async def test_the_seed_converts_and_passes_every_check(session):
     try:
         report = await convert_overlays(session, [17, 18])

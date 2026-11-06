@@ -7,7 +7,14 @@ ExtendedBy, Extension) and that it changes nothing else.
 
 import pytest
 
-from lif.mdr_services.overlay_converter import IdMap, _map_path, render_set, rewrite_base_schema, rewrite_overlay_schema
+from lif.mdr_services.overlay_converter import (
+    IdMap,
+    _map_path,
+    canonical,
+    render_set,
+    rewrite_base_schema,
+    rewrite_overlay_schema,
+)
 
 
 def _schema():
@@ -183,3 +190,20 @@ def test_the_base_rewrite_moves_only_step_0s_attributes_to_the_base():
 )
 def test_map_path(path, expected):
     assert _map_path(path, IdMap(entities={4: 2004, 342: 342}, attributes={54: 3054, 1833: 1833})) == expected
+
+
+def _person(required, enum=("a", "b")):
+    return {"Person": {"required": list(required), "properties": {"kind": {"enum": list(enum)}}}}
+
+
+def test_the_comparison_reads_required_as_a_set():
+    """Own elements keep their Ids and copies get new ones, so `required` can come out in another order (#1388)."""
+    assert canonical(_person(["name", "id"])) == canonical(_person(["id", "name"]))
+
+
+def test_the_comparison_still_catches_a_changed_required():
+    assert canonical(_person(["name", "id"])) != canonical(_person(["name"]))
+
+
+def test_the_comparison_keeps_the_order_of_every_other_list():
+    assert canonical(_person(["id"], enum=("a", "b"))) != canonical(_person(["id"], enum=("b", "a")))
