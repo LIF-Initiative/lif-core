@@ -98,11 +98,12 @@ async def test_measure_reports_what_the_seed_refuses(seed_url):
     assert list(results) == ["public", "tenant_lif_team"]
     public = results["public"]
     assert public.overlays == ["model 17 StateU LIF", "model 18 Org2 LIF"]
-    # Model 10 (CTDL, rebuilt in #1446) and model 13 export; the other 17 are refused.
-    assert (public.models, public.models_exported, public.models_refused) == (21, 2, 17)
+    # Model 4 (CEDS v14, rebuilt in #1435), model 10 (CTDL, rebuilt in #1446) and model 13 export; the
+    # other 16 are refused.
+    assert (public.models, public.models_exported, public.models_refused) == (21, 3, 16)
     assert (public.groups, public.groups_exported, public.groups_refused) == (9, 2, 7)
     assert _counts(public) == {
-        "NOT_MIGRATED: the attribute has no DataType; migration sets string": 781,
+        "NOT_MIGRATED: the attribute has no DataType; migration sets string": 613,
         "NOT_MIGRATED: the attribute has DataType entity; it becomes an association to the entity": 190,
         "NOT_MIGRATED: the attribute is in no association; migration drops it": 77,
         "NOT_MIGRATED: the association is declared with ExtendedByDataModelId": 62,

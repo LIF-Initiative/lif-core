@@ -1,0 +1,227 @@
+{
+  "retirement": {
+    "entities": 19,
+    "entities_with_replacement_note": 12,
+    "entities_kept": {
+      "14": "AssessmentForm",
+      "15": "AssessmentPerformanceLevel",
+      "18": "AssessmentResult",
+      "19": "AssessmentRegistration",
+      "198": "Employment",
+      "307": "ProgramParticipation"
+    },
+    "attributes": 187,
+    "entity_attribute_associations": 187,
+    "value_sets": 9,
+    "value_set_values": 583,
+    "value_set_value_mappings": 583,
+    "legacy_value_sets_kept": 67,
+    "legacy_value_sets_remediated": {
+      "277": "StateAbbreviation"
+    }
+  },
+  "remediated_value_sets": {
+    "StateAbbreviation": {
+      "id": 277,
+      "legacy_values_kept": 62,
+      "values_added": 3
+    }
+  },
+  "value_sets": {
+    "schemes": 965,
+    "values": 11810,
+    "values_by_load_rule": {
+      "full": 7177,
+      "full_large": 4450,
+      "capped": 183
+    },
+    "members_in_source": 19546,
+    "large_schemes_in_source": {
+      "CountryCode": 249,
+      "EmploymentNAICSCode": 1012,
+      "FinancialAccountRevenueCode": 104,
+      "FinancialExpenditureObjectCode": 154,
+      "ISO6392LanguageCode": 487,
+      "ISO6393LanguageCode": 7916,
+      "ISO6395LanguageFamily": 115,
+      "SCEDCourseCode": 1753,
+      "TribalAffiliation": 577
+    },
+    "empty_schemes": [
+      "NCESCollegeCourseMapCode",
+      "CIPCode"
+    ],
+    "duplicate_codes_dropped": [
+      {
+        "scheme": "K12StaffClassification",
+        "code": "SchoolCounselors",
+        "dropped": "NI000087190680",
+        "kept": "NI000087140646"
+      },
+      {
+        "scheme": "EnrollmentStatus",
+        "code": "01814",
+        "dropped": "NI000094928212",
+        "kept": "NI000094928295"
+      },
+      {
+        "scheme": "ISO6392LanguageCode",
+        "code": "dgr",
+        "dropped": "NI000317140844",
+        "kept": "NI000317190684"
+      }
+    ],
+    "value_names_disambiguated": [
+      {
+        "scheme": "FinancialAccountRevenueCode",
+        "code": "2100",
+        "value_name": "Unrestricted Grants-in-Aid (2100)"
+      },
+      {
+        "scheme": "FinancialAccountRevenueCode",
+        "code": "2200",
+        "value_name": "Restricted Grants-in-Aid (2200)"
+      },
+      {
+        "scheme": "FinancialAccountRevenueCode",
+        "code": "2800",
+        "value_name": "Revenue in Lieu of Taxes (2800)"
+      },
+      {
+        "scheme": "FinancialAccountRevenueCode",
+        "code": "2900",
+        "value_name": "Revenue for/on Behalf of the School District (2900)"
+      },
+      {
+        "scheme": "FinancialAccountRevenueCode",
+        "code": "3100",
+        "value_name": "Unrestricted Grants-in-Aid (3100)"
+      },
+      {
+        "scheme": "FinancialAccountRevenueCode",
+        "code": "3200",
+        "value_name": "Restricted Grants-in-Aid (3200)"
+      },
+      {
+        "scheme": "FinancialAccountRevenueCode",
+        "code": "3800",
+        "value_name": "Revenue in Lieu of Taxes (3800)"
+      },
+      {
+        "scheme": "FinancialAccountRevenueCode",
+        "code": "3900",
+        "value_name": "Revenue for/on Behalf of the School District (3900)"
+      },
+      {
+        "scheme": "FinancialAccountRevenueCode",
+        "code": "4800",
+        "value_name": "Revenue in Lieu of Taxes (4800)"
+      },
+      {
+        "scheme": "FinancialAccountRevenueCode",
+        "code": "4900",
+        "value_name": "Revenue for/on Behalf of the School District (4900)"
+      },
+      {
+        "scheme": "SCEDCourseCode",
+        "code": "12054",
+        "value_name": "Business Law (12054)"
+      },
+      {
+        "scheme": "SCEDCourseCode",
+        "code": "04164",
+        "value_name": "Business Law (04164)"
+      },
+      {
+        "scheme": "FinancialAccountBalanceSheetCode",
+        "code": "451",
+        "value_name": "Loans Payable (451)"
+      },
+      {
+        "scheme": "FinancialAccountBalanceSheetCode",
+        "code": "521",
+        "value_name": "Loans Payable (521)"
+      },
+      {
+        "scheme": "PESCAwardLevelType",
+        "code": "4.2",
+        "value_name": "Master's Degree (4.2)"
+      },
+      {
+        "scheme": "PESCAwardLevelType",
+        "code": "IPEDS7",
+        "value_name": "Master's Degree (IPEDS7)"
+      },
+      {
+        "scheme": "CompetencyDefinitionEducationLevel",
+        "code": "73085",
+        "value_name": "Doctor's degree-research/scholarship (73085)"
+      },
+      {
+        "scheme": "CompetencyDefinitionEducationLevel",
+        "code": "73082",
+        "value_name": "Doctor's degree-research/scholarship (73082)"
+      },
+      {
+        "scheme": "HighestLevelOfEducationCompleted",
+        "code": "73082",
+        "value_name": "Doctor's degree-research/scholarship (73082)"
+      },
+      {
+        "scheme": "HighestLevelOfEducationCompleted",
+        "code": "73085",
+        "value_name": "Doctor's degree-research/scholarship (73085)"
+      }
+    ],
+    "deprecated_schemes": 1,
+    "deprecated_values": 25
+  },
+  "entities": {
+    "total": 402,
+    "kept_ids": 6,
+    "new": 396,
+    "subclass_of_notes": 398,
+    "restriction_notes": 18
+  },
+  "attributes": {
+    "total": 1973,
+    "shared_by_several_classes": 187,
+    "associations": 2277,
+    "data_types": {
+      "string": 727,
+      "enum": 994,
+      "number": 252
+    }
+  },
+  "references": {
+    "properties": 351,
+    "associations": 473,
+    "self_references": 6
+  },
+  "deprecated_properties": [
+    "CredentialIssuanceDate",
+    "hasEarlyLearningEmploymentSeparationReason",
+    "hasEarlyLearningOrganization"
+  ],
+  "xlsx_cross_check": {
+    "Classes": {
+      "only_in_rdf": [],
+      "only_in_xlsx": [],
+      "technical_name_differs": []
+    },
+    "Concept Schemes": {
+      "only_in_rdf": [],
+      "only_in_xlsx": [],
+      "technical_name_differs": []
+    },
+    "Properties": {
+      "only_in_rdf": [],
+      "only_in_xlsx": [],
+      "technical_name_differs": []
+    },
+    "Named Individuals": {
+      "only_in_rdf": 0,
+      "only_in_xlsx": 0
+    }
+  }
+}
