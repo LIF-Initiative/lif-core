@@ -1,12 +1,13 @@
 """Tests for the runner of #1388's overlay conversion.
 
 The runner writes to every schema of a live MDR, so these pin what it must not do: start before #1479's
-cleanup, touch a schema that's already converted, or leave anything behind on a dry run, whatever the
-conversion's outcome. Each test gets a fresh copy of backup.sql. They need a local PostgreSQL (`initdb`
+cleanup, touch a schema that's already converted, or leave anything behind on a dry run; and that a
+dry run still writes its undo record and --apply commits. Each test gets a fresh copy of backup.sql. They need a local PostgreSQL (`initdb`
 and `psql`) and skip without one.
 """
 
 import importlib.util
+import json
 import os
 import pathlib
 import subprocess
@@ -114,11 +115,46 @@ async def test_a_converted_schema_is_skipped(seed_copy, tmp_path):
     assert await _snapshot(conn) == before
 
 
-async def test_a_dry_run_leaves_the_schema_as_it_was(seed_copy, tmp_path):
+def _undo(tmp_path):
+    return json.loads((tmp_path / "public.json").read_text())
+
+
+async def _overlays_left(conn):
+    return await conn.fetchval(
+        'SELECT count(*) FROM "ExtInclusionsFromBaseDM" WHERE "Deleted" = false AND "ExtDataModelId" IN (17, 18)'
+    )
+
+
+async def test_a_dry_run_converts_writes_the_undo_record_and_leaves_the_schema_as_it_was(seed_copy, tmp_path):
     conn, engine = seed_copy
     await _cleaned(conn)
     before = await _snapshot(conn)
 
-    await runner.convert_schema(engine, "public", apply=False, undo_dir=tmp_path)
+    ok, _ = await runner.convert_schema(engine, "public", apply=False, undo_dir=tmp_path)
 
+    assert ok
     assert await _snapshot(conn) == before
+    undo = _undo(tmp_path)
+    assert (undo["schema"], undo["committed"]) == ("public", False)
+    assert sorted(undo["id_maps"]) == ["17", "18"]
+
+
+async def test_apply_commits_and_a_re_run_skips(seed_copy, tmp_path):
+    conn, engine = seed_copy
+    await _cleaned(conn)
+    assert await _overlays_left(conn) > 0
+
+    ok, _ = await runner.convert_schema(engine, "public", apply=True, undo_dir=tmp_path)
+
+    assert ok
+    assert _undo(tmp_path)["committed"] is True
+    assert await _overlays_left(conn) == 0
+    bases = await conn.fetch('SELECT "BaseDataModelId" FROM "DataModels" WHERE "Id" IN (17, 18)')
+    assert [row[0] for row in bases] == [None, None]
+    after = await _snapshot(conn)
+
+    assert await runner.convert_schema(engine, "public", apply=True, undo_dir=tmp_path) == (
+        True,
+        ["  already converted, skipped"],
+    )
+    assert await _snapshot(conn) == after
