@@ -72,8 +72,9 @@ SEED_ATTRIBUTES = [
     (1835, 18, "TestNewPartnerAttribute"),
     *((1840 + n, 18, f"TestAttribute{n if n > 1 else ''}") for n in range(1, 11)),
 ]
-# Only on dev: the beach rows (partner.beach and its base and source-schema copies) and three more
-# partner test entities. Demo reuses some of these Ids for other rows, which the UniqueName keeps out.
+# Only on dev: the beach rows (partner.beach and its base and source-schema copies), three more
+# partner test entities, and Tammie's test rows on model 1. Demo reuses some of these Ids for other
+# rows, which the UniqueName keeps out.
 DEV_ENTITIES = [
     (380, 1, "base.beach.ent_a"),
     (381, 18, "partner.beach.ent_a"),

@@ -194,6 +194,8 @@ async def test_it_removes_the_dev_test_rows_on_model_1(seed_conn):
         'INSERT INTO "Entities" ("Id", "DataModelId", "Name", "UniqueName", "Deleted") OVERRIDING SYSTEM VALUE VALUES'
         " (386, 1, 'TammieTestEntity', 'TammieTestEntity', false),"
         " (387, 1, 'TammeTestLvl1', 'TammeTestLvl1', false),"
+        " (388, 1, 'TammeTestLvl2', 'TammeTestLvl2', false),"
+        " (389, 1, 'TammeTestLvl3', 'TammeTestLvl3', false),"
         " (390, 1, 'TammeTestLvl4', 'TammeTestLvl4', false)"
     )
     await seed_conn.execute(
@@ -204,7 +206,7 @@ async def test_it_removes_the_dev_test_rows_on_model_1(seed_conn):
 
     await removal.cleanup(seed_conn, apply=True)
 
-    assert await _deleted(seed_conn, "Entities", [386, 387, 390]) == [386, 387, 390]
+    assert await _deleted(seed_conn, "Entities", [386, 387, 388, 389, 390]) == [386, 387, 388, 389, 390]
     assert await _deleted(seed_conn, "Attributes", [1959, 1960]) == [1959, 1960]
 
 
