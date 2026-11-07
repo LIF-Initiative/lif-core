@@ -72,8 +72,9 @@ SEED_ATTRIBUTES = [
     (1835, 18, "TestNewPartnerAttribute"),
     *((1840 + n, 18, f"TestAttribute{n if n > 1 else ''}") for n in range(1, 11)),
 ]
-# Only on dev: the beach rows (partner.beach and its base and source-schema copies) and three more
-# partner test entities. Demo reuses some of these Ids for other rows, which the UniqueName keeps out.
+# Only on dev: the beach rows (partner.beach and its base and source-schema copies), three more
+# partner test entities, and Tammie's test rows on model 1. Demo reuses some of these Ids for other
+# rows, which the UniqueName keeps out.
 DEV_ENTITIES = [
     (380, 1, "base.beach.ent_a"),
     (381, 18, "partner.beach.ent_a"),
@@ -81,6 +82,11 @@ DEV_ENTITIES = [
     (383, 18, "partner.beach.ent_c"),
     (384, 1, "base.beach.ent_b"),
     (385, 1, "base.beach.ent_c"),
+    (386, 1, "TammieTestEntity"),
+    (387, 1, "TammeTestLvl1"),
+    (388, 1, "TammeTestLvl2"),
+    (389, 1, "TammeTestLvl3"),
+    (390, 1, "TammeTestLvl4"),
     (392, 18, "TestPartnerEntity1"),
     (393, 18, "TestPartnerEntity2"),
     (394, 18, "TestPartnerEntity3"),
@@ -90,6 +96,8 @@ DEV_ATTRIBUTES = [
     (1956, 1, "base.beach.att.a_a"),
     (1957, 18, "partner.beach.att_abc"),
     (1958, 1, "base.beach.att_abc"),
+    (1959, 1, "TammieTestAttribute"),
+    (1960, 1, "TammieTestAttLvl4"),
     (1963, 18, "TestPartnerAttribute4"),
     (1964, 18, "added.from.partner.lif.flow.beach.ent2"),
     (1965, 18, "partner.addedliteral.beachattb"),
