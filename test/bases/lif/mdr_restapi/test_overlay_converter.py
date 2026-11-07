@@ -71,6 +71,27 @@ async def test_the_seed_converts_and_passes_every_check(session):
         pytest.fail("\n\n".join(e.reasons))
 
     assert sorted(report.compared) == [1, 16, 17, 18]
+    models = {m.model_id: m for m in report.models}
+    assert models[17].copied == {"entities": 24, "attributes": 115, "value_sets": 1, "values": 62,
+                                 "entity_associations": 36, "attribute_associations": 187}  # fmt: skip
+    assert models[18].copied == {"entities": 13, "attributes": 42, "value_sets": 1, "values": 62,
+                                 "entity_associations": 14, "attribute_associations": 42}  # fmt: skip
+    # 17's own elements its schema doesn't show (step 6): 337 and 338, 1826 (decided on #1388), and the
+    # attributes nothing associates.
+    assert models[17].soft_deleted["Entities"] == [337, 338]
+    assert sorted(models[17].soft_deleted["Attributes"]) == [1810, 1811, 1812, 1816, 1817, 1820, 1821, 1822, 1823,
+                                                             1824, 1826, 1827, 1863, 1878, 1879, 1882]  # fmt: skip
+    assert {table: len(ids) for table, ids in models[17].soft_deleted.items()} == {
+        "Entities": 2, "Attributes": 16, "EntityAssociation": 7, "EntityAttributeAssociation": 83,
+        "ExtInclusionsFromBaseDM": 206,
+    }  # fmt: skip
+    assert {table: len(ids) for table, ids in models[18].soft_deleted.items()} == {
+        "Entities": 0, "Attributes": 0, "EntityAssociation": 1, "EntityAttributeAssociation": 0,
+        "ExtInclusionsFromBaseDM": 73,
+    }  # fmt: skip
+    # Group 25's rows on step 0's attributes, and group 26's row.
+    assert sorted(models[17].updated_mapping_rows) == [2747, 2749, 2751, 2753, 2755]
+    assert models[18].updated_mapping_rows == []
     left = await session.execute(
         text('SELECT count(*) FROM "ExtInclusionsFromBaseDM" WHERE "Deleted" = false AND "ExtDataModelId" IN (17, 18)')
     )
