@@ -3,8 +3,9 @@
 SQL migrations for the control plane's own database (ADR 0006 decision 1: its own logical
 database, login and migration set, separate from MDR's).
 
-There are none yet. The first one, the developer-key table, waits on the workspace and owner
-questions in #1190.
+- `V1.0__developer_api_keys.sql`: the developer-key table, one row per key across every workspace,
+  with a unique `KeyHash` (ADR 0006, ADR 0008). The model that reads it is
+  `lif.developer_keys.WorkspaceDeveloperApiKey`.
 
 **Local compose** mounts this folder as the `lif-control-plane-database` container's
 `/docker-entrypoint-initdb.d`, so the Postgres image runs every `*.sql` file here, in file-name

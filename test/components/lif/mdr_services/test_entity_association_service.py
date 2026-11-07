@@ -70,13 +70,14 @@ async def test_update_ignores_ids_the_client_did_not_send(fake_session, monkeypa
 
 
 async def test_update_recomputes_name_and_array_from_the_child(fake_session, monkeypatch, existing_association):
-    """#1386: a Placement edit changes the key the child is stored under, so Name follows it."""
+    """#1386: a Placement edit changes the key the child is stored under, so Name follows it. #1471: a
+    reference is single, so Array turns false although the child (Array Yes) is a list."""
     monkeypatch.setattr(svc, "get_entity_association_by_id", AsyncMock(return_value=existing_association))
 
     await svc.update_entity_association(fake_session, 9, UpdateEntityAssociationDTO(Placement="Reference"))
 
     fake_session.get.assert_awaited_with(svc.Entity, 5)
-    assert (existing_association.Name, existing_association.Array) == ("parentOfRefCourse", True)
+    assert (existing_association.Name, existing_association.Array) == ("parentOfRefCourse", False)
 
 
 async def test_update_leaves_a_name_and_array_that_did_not_come_from_the_rule(

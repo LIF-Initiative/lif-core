@@ -118,7 +118,8 @@ async def test_inlined_reference_creates_reference_association(patched_lookups):
     assert assoc.Relationship == "issuedBy"
     assert assoc.Placement == "Reference"
     # #1386: Name is the key the reference was uploaded under.
-    assert (assoc.Name, assoc.Array) == ("issuedByRefOrganization", True)
+    # A reference is single, whatever the referenced entity's Array (#1471).
+    assert (assoc.Name, assoc.Array) == ("issuedByRefOrganization", False)
 
 
 async def test_plain_reference_has_no_relationship(patched_lookups):
@@ -149,3 +150,25 @@ async def test_embedded_child_does_not_create_reference_association(patched_look
     await svc.create_reference_associations_for_children(session, "Person", entity_md, 7, {}, "SourceSchema")
 
     assert _added_associations(session) == []
+
+
+# --- child pass -----------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize(("placement", "expected_array"), [("Reference", False), ("Embedded", True)])
+async def test_a_child_uploaded_with_a_placement_takes_that_placement_s_array(monkeypatch, placement, expected_array):
+    """A child property carrying EntityAssociationPlacement: a Reference one is single (#1471), an
+    Embedded one follows the child's Array."""
+    parent = types.SimpleNamespace(Id=1, Name="Person", Array=None)
+    child = types.SimpleNamespace(Id=2, Name="Course", Array="Yes")
+    create_children = svc.create_entity_and_children_if_needed
+    monkeypatch.setattr(svc, "create_entity_if_needed", AsyncMock(return_value=parent))
+    monkeypatch.setattr(svc, "create_entity_and_children_if_needed", AsyncMock(return_value=child))
+    monkeypatch.setattr(svc, "get_entity_association_by_parent_child_relationship", AsyncMock(return_value=None))
+    session = MagicMock()
+    entity_md = {"properties": {"Course": {"type": "object", "EntityAssociationPlacement": placement}}}
+
+    await create_children(session, "Person", entity_md, 7, None, "UniconQA", "SourceSchema")
+
+    [assoc] = _added_associations(session)
+    assert (assoc.ChildEntityId, assoc.Placement, assoc.Array) == (2, placement, expected_array)

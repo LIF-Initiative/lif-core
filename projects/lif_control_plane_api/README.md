@@ -1,6 +1,6 @@
 # Control Plane API
 
-The **Control Plane API** is the LIF service that will own developer keys, and later identity and admin, outside MDR (EPIC #1041). So far it's the service and its own database, with a health check and Cognito auth; the key endpoints come next (#1182, #1190). See [`bases/lif/control_plane_restapi/README.md`](../../bases/lif/control_plane_restapi/README.md).
+The **Control Plane API** is the LIF service that will own developer keys, and later identity and admin, outside MDR (EPIC #1041). So far it's the service and its own database, with a health check, Cognito auth, and the developer-key endpoints (#1182, ADR 0008). See [`bases/lif/control_plane_restapi/README.md`](../../bases/lif/control_plane_restapi/README.md).
 
 # Example usage
 

@@ -47,6 +47,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- MDR: a Reference association's `Array` is `false` unless it is set otherwise (a model import writes
+  it from the file), whatever the referenced entity's `Array`. Create and edit paths give a new or
+  edited reference `false`, and database migration `V1.11` resets the values `V1.7` copied onto
+  references from their child entity: 77 in `public` and in `tenant_lif_team` on the seed (87 and 79
+  with deleted rows). The generated schema doesn't change, since it already emits a reference as a
+  single object; the portable export stops writing `"Array": true` on those references. CTDL's
+  references, whose `Array` came from its vocabulary, are kept (issue #1471)
 - Identity Mapper `POST .../mappings` answers `409` when a natural-key collision with a concurrent
   save survives the one retry, instead of the generic `500` with a correlation UUID, so a caller can
   tell a retryable conflict from a datastore failure
