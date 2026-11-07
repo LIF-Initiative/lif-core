@@ -1,0 +1,19 @@
+Environment:
+  # Cognito (#1384, ADR 0007): the same pool and SPA client as mdr-api and LDE, so a token the MDR UI
+  # mints validates here. Without the pool or the client ID the service fails closed: every
+  # non-public path returns 401.
+  - Name: CONTROL_PLANE_AUTH__USER_POOL_ID
+    Value:
+      Fn::Sub: "{{resolve:ssm:/${EnvironmentName}/mdr/CognitoUserPoolId}}"
+  - Name: CONTROL_PLANE_AUTH__CLIENT_ID
+    Value:
+      Fn::Sub: "{{resolve:ssm:/${EnvironmentName}/mdr/CognitoSpaClientId}}"
+  - Name: CONTROL_PLANE_AUTH__REGION
+    Value:
+      Fn::Sub: "${AWS::Region}"
+Secrets:
+  # The control plane's own database (ADR 0002), as one SQLAlchemy async URL
+  # (postgresql+asyncpg://user:password@host:port/db). Required: the service won't start without it.
+  - Name: CONTROL_PLANE__DATABASE_URL
+    ValueFrom:
+      Fn::Sub: "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${EnvironmentName}/${ServiceName}/DatabaseUrl"
