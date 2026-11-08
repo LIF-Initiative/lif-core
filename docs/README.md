@@ -23,6 +23,8 @@ Every doc answers one of these questions:
 
 If a doc doesn't fit one of these, the structure is wrong — open an issue rather than inventing a seventh category.
 
+**The developer handbook is not a seventh layer.** `developer-handbook/` is a guided reading path *over* the layers above, for a developer starting feature work: it explains how the parts fit together and links into the overview, specs, design and operations docs for the detail. Its rule: **connect, don't duplicate.** If a handbook section grows into reference material, move that material to its layer and link it.
+
 ---
 
 ## Directory layout
@@ -43,6 +45,7 @@ docs/
   agents/             — MCP servers, AGENTS.md companion guidance, agent-context for this repo
   external/           — Non-technical artifact archive: one-pagers, briefings, decks (mixed formats)
   external_refs/      — Reference material from outside LIF (CEDS standards, etc.)
+  developer-handbook/ — Onboarding path for new developers (backend/); links into the layers above
   media/              — Images, diagrams, supporting assets
 ```
 
@@ -56,15 +59,16 @@ Walk this decision tree top-to-bottom and stop at the first match:
 
 1. **Is it a one-pager, briefing, slide deck, or other artifact aimed at a non-engineering audience?** → `external/`
 2. **Is it reference material from outside LIF (a published standard, a third-party schema, etc.)?** → `external_refs/`
-3. **Is it explaining what LIF is, why it exists, or what the system looks like at a glance?** → `overview/`
-4. **Is it defining a contract — data model rules, integration interface, behavior guarantee?** → `specs/`
-5. **Is it an architectural decision (status, alternatives, consequences)?** → `design/adr/`
-6. **Is it the design of one specific service or component?** → `design/components/`
-7. **Is it a cross-cutting design topic (auth, schema loading, observability)?** → `design/cross-cutting/`
-8. **Is it a runbook or how-to for deploying, operating, or extending the system?** → `operations/guides/`
-9. **Is it a proposal that hasn't been accepted yet?** → `operations/proposals/`
-10. **Is it about MCP, agent integration, or AI-facing surfaces?** → `agents/`
-11. **None of the above?** Open an issue describing the doc; the structure may be missing a category.
+3. **Is it part of the guided onboarding path for new developers (how the parts fit, a first-change walkthrough)?** → `developer-handbook/` (and link out for the detail)
+4. **Is it explaining what LIF is, why it exists, or what the system looks like at a glance?** → `overview/`
+5. **Is it defining a contract — data model rules, integration interface, behavior guarantee?** → `specs/`
+6. **Is it an architectural decision (status, alternatives, consequences)?** → `design/adr/`
+7. **Is it the design of one specific service or component?** → `design/components/`
+8. **Is it a cross-cutting design topic (auth, schema loading, observability)?** → `design/cross-cutting/`
+9. **Is it a runbook or how-to for deploying, operating, or extending the system?** → `operations/guides/`
+10. **Is it a proposal that hasn't been accepted yet?** → `operations/proposals/`
+11. **Is it about MCP, agent integration, or AI-facing surfaces?** → `agents/`
+12. **None of the above?** Open an issue describing the doc; the structure may be missing a category.
 
 ---
 

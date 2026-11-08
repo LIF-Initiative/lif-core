@@ -89,6 +89,7 @@ Depending on what you're doing:
 
 | Goal | Read |
 |---|---|
+| Start developing on LIF | [`docs/developer-handbook/`](docs/developer-handbook/README.md): a guided path from setup to your first change |
 | Understand a specific service | [`docs/overview/services-overview.md`](docs/overview/services-overview.md), then the service's own `README.md` |
 | Add a new data source | [`docs/operations/guides/add-data-source.md`](docs/operations/guides/add-data-source.md) |
 | Add a new microservice | [`docs/operations/guides/adding-a-new-microservice.md`](docs/operations/guides/adding-a-new-microservice.md) |

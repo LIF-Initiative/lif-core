@@ -16,6 +16,7 @@ LIF Core (Learner Information Framework) is a modular monorepo for aggregating l
 
 - [`ARCHITECTURE.md`](ARCHITECTURE.md) — repo-root landing page with polylith primer + service-map Mermaid diagram.
 - [`docs/INDEX.md`](docs/INDEX.md) — curated one-line-per-doc index of everything under `docs/`.
+- [`docs/developer-handbook/`](docs/developer-handbook/README.md) — onboarding path for new developers: local stack, request trace, recipes, traps.
 - [`docs/overview/services-overview.md`](docs/overview/services-overview.md) — per-service responsibilities, endpoints, and inter-service flows.
 - [`docs/design/cross-cutting/self-serve-tenant-auth.md`](docs/design/cross-cutting/self-serve-tenant-auth.md) — Cognito sign-up → schema-per-tenant → workspace selection → invite tokens (#882/#883/#884).
 - [`docs/specs/data-model-rules.md`](docs/specs/data-model-rules.md) — PascalCase entities vs camelCase scalars and the files that must follow the convention.

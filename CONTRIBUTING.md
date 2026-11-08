@@ -23,6 +23,9 @@ feedback to help improve this project.
 2. Set up the dev environment per [CLAUDE.md → Setup](CLAUDE.md#setup)
    (`uv sync` plus the two `pre-commit install` invocations).
 
+New to LIF? The [developer handbook](docs/developer-handbook/README.md) walks you through the
+local stack, the codebase and the common changes.
+
 ---
 
 ## How to Contribute

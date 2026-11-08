@@ -330,7 +330,17 @@
         "Trovares",
         "learnerinfoframework",
         "lineterm",
-        "outerjoin"
+        "outerjoin",
+        "pgtest",
+        "PYTHONDONTWRITEBYTECODE",
+        "hardlink",
+        "virtualenv",
+        "pgaudit",
+        "printjson",
+        "autonumber",
+        "asdict",
+        "dataclasses",
+        "Credentialaward"
     ],
     "ignorePaths": [
         ".git/",
