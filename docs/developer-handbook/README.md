@@ -24,6 +24,18 @@ A developer who knows Python and web APIs but is new to LIF, Polylith, the MDR a
 | [9. Environments and deployment](backend/09-environments-and-deploys.md) | dev and demo, what a merge deploys |
 | [10. Extending LIF](backend/10-extending-lif.md) | Which parts run on their own; where a new feature plugs in |
 
+**Frontend** ([start here](frontend/00-start-here.md)): the MDR UI and the Advisor app.
+
+| Chapter | |
+|---|---|
+| [0. Start here](frontend/00-start-here.md) | The two apps, how a single-page app works, the MDR in brief, glossary |
+| [1. Your development environment](frontend/01-dev-environment.md) | Install, configure, run against the backend, log in |
+| [2. The MDR UI](frontend/02-mdr-ui.md) | Layout, how screens call the MDR, login, workspaces, features |
+| [3. Follow a click](frontend/03-follow-a-click.md) | One button traced to the database and back |
+| [4. The Advisor app](frontend/04-advisor-app.md) | The chat client, call by call |
+| [5. Recipes](frontend/05-recipes.md) | Call an endpoint, test a helper, add a page or a setting |
+| [6. Checks, CI and shipping](frontend/06-checks-ci-and-shipping.md) | What to run, what CI misses, how it ships |
+
 ## How it relates to the rest of `docs/`
 
 The handbook is an onboarding path *over* the other layers, not a seventh layer of content. It explains

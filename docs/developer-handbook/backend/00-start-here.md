@@ -3,7 +3,8 @@
 Start here — what LIF is, how this handbook is organized, and the words you'll meet.
 
 Written for a developer who knows Python and web APIs but is new to LIF, Polylith, the MDR and
-Dagster, and has no AWS access.
+Dagster, and has no AWS access. Frontend work has
+[its own handbook](../frontend/00-start-here.md).
 
 *Checked against main `2967cb9`, November 2026.*
 

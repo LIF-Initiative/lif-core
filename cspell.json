@@ -340,7 +340,8 @@
         "autonumber",
         "asdict",
         "dataclasses",
-        "Credentialaward"
+        "Credentialaward",
+        "xyflow"
     ],
     "ignorePaths": [
         ".git/",

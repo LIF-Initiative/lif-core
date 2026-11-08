@@ -137,6 +137,13 @@
 - [`backend/08-debugging-and-traps.md`](developer-handbook/backend/08-debugging-and-traps.md) — Where to look first, a symptom table, and the traps the team keeps relearning.
 - [`backend/09-environments-and-deploys.md`](developer-handbook/backend/09-environments-and-deploys.md) — dev and demo (hosted on AWS for demos to date; AWS isn't required), what a merge to main deploys, who to ask.
 - [`backend/10-extending-lif.md`](developer-handbook/backend/10-extending-lif.md) — Which services run without the full system (MDR alone, MDR + Translator, read path without orchestration, …) and where new features plug in.
+- [`frontend/00-start-here.md`](developer-handbook/frontend/00-start-here.md) — The two web apps, how a single-page app reaches the APIs, the MDR in four sentences, reading order, glossary.
+- [`frontend/01-dev-environment.md`](developer-handbook/frontend/01-dev-environment.md) — Install and run either app, build-time configuration, running against the backend, CORS, logging in.
+- [`frontend/02-mdr-ui.md`](developer-handbook/frontend/02-mdr-ui.md) — MDR UI layout and routes, how a screen calls the MDR, login and tokens, workspaces, features.
+- [`frontend/03-follow-a-click.md`](developer-handbook/frontend/03-follow-a-click.md) — The Activate button traced from the screen through the service, endpoint and database, and back.
+- [`frontend/04-advisor-app.md`](developer-handbook/frontend/04-advisor-app.md) — The Advisor app: each call in a conversation, what the Advisor API does with it, token refresh.
+- [`frontend/05-recipes.md`](developer-handbook/frontend/05-recipes.md) — Step-by-step: call an MDR endpoint, test a helper, add a page or a build-time setting, check lint warnings.
+- [`frontend/06-checks-ci-and-shipping.md`](developer-handbook/frontend/06-checks-ci-and-shipping.md) — Checks to run, what CI misses (Advisor type-check), traps, how a merge ships.
 
 ---
 
