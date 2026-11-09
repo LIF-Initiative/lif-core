@@ -49,7 +49,7 @@ This runs the application and automatically refreshes the browser as you change 
     ```
     npm run dev
     ```
-3.  open a web browser and visit <http://localhost:5174>
+3.  open a web browser and visit <http://localhost:5173> (the dev server's port; compose serves the app on 5174)
 
 ### Docker
 
