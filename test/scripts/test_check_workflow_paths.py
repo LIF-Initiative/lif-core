@@ -43,7 +43,7 @@ def test_coverage_is_directional(brick, paths, expected, why):
     assert guard.covered(brick, paths) is expected, why
 
 
-def _make_repo(tmp_path, workflow_paths, dockerfile=None, bricks=("components/lif/foo",)):
+def _make_repo(tmp_path, workflow_paths, dockerfile=None, bricks=("components/lif/foo",), push=True):
     """A minimal repo: one project packaging `bricks`, one deploy workflow for it."""
     project = tmp_path / "projects" / "svc"
     project.mkdir(parents=True)
@@ -58,8 +58,9 @@ def _make_repo(tmp_path, workflow_paths, dockerfile=None, bricks=("components/li
     workflows = tmp_path / ".github" / "workflows"
     workflows.mkdir(parents=True)
     listed = "".join(f"      - {p}\n" for p in workflow_paths)
+    trigger = f"  push:\n    paths:\n{listed}" if push else "  workflow_dispatch:\n"
     (workflows / "svc.yml").write_text(
-        f"on:\n  push:\n    paths:\n{listed}jobs:\n  deploy:\n    steps:\n{build}      - run: echo projects/svc\n"
+        f"on:\n{trigger}jobs:\n  deploy:\n    steps:\n{build}      - run: echo projects/svc\n"
     )
     return tmp_path
 
@@ -77,11 +78,17 @@ def test_a_covering_workflow_passes_and_a_drifted_one_is_reported(tmp_path):
     assert _missing(drifted) == {"svc.yml": ["components/lif/foo"]}
 
 
+def test_a_workflow_with_no_push_trigger_is_listed_as_manual_only(tmp_path):
+    """Nothing rebuilds on a merge, so there is no filter to drift. Listed, not counted as covered."""
+    rows, unauditable, _not_projects, _brick_free, manual_only = guard.audit(_make_repo(tmp_path, [], push=False))
+    assert (rows, unauditable, manual_only) == ([], [], ["svc.yml"])
+
+
 def test_a_named_dockerfile_that_packages_no_bricks_needs_no_brick_paths(tmp_path):
     """dagster.yml builds Dockerfile.dagster: pip install plus two YAML copies. Requiring
     the project's bricks in its filter only forces rebuilds nobody needs."""
     body = "FROM python:3.13-slim\nRUN pip install dagster\nCOPY projects/svc/dagster.yaml /opt/\n"
-    rows, unauditable, _not_projects, brick_free = guard.audit(
+    rows, unauditable, _not_projects, brick_free, _manual_only = guard.audit(
         _make_repo(tmp_path, ["projects/svc/**"], dockerfile=("Dockerfile.web", body))
     )
     assert not rows and not unauditable
@@ -105,7 +112,7 @@ def test_a_named_dockerfile_that_packages_bricks_is_still_audited(tmp_path, copy
 
 
 def test_a_named_dockerfile_that_does_not_exist_is_reported(tmp_path):
-    rows, unauditable, _not_projects, _brick_free = guard.audit(
+    rows, unauditable, _not_projects, _brick_free, _manual_only = guard.audit(
         _make_repo(tmp_path, ["projects/svc/**"], dockerfile=("Dockerfile.gone", None))
     )
     assert not rows
@@ -115,7 +122,7 @@ def test_a_named_dockerfile_that_does_not_exist_is_reported(tmp_path):
 def test_dagster_workflows_are_classified_by_the_image_they_build():
     """Live repo, but only its classification, which a new brick can't change. The code
     location copies bases/ and components/; the webserver/daemon image copies neither."""
-    rows, _unauditable, _not_projects, brick_free = guard.audit()
+    rows, _unauditable, _not_projects, brick_free, _manual_only = guard.audit()
     assert "dagster_code_location.yml" in {name for name, _p, _b, _m in rows}
     assert ("dagster.yml", "projects/dagster_oss_ecs/Dockerfile.dagster") in brick_free
 
@@ -124,7 +131,7 @@ def test_an_unreadable_project_is_reported_not_skipped(monkeypatch):
     """Dropping a workflow silently would let drift disable the drift detector."""
     monkeypatch.setattr(guard, "project_bricks", lambda project, repo: None)
     monkeypatch.setattr(guard, "NO_BRICK_PROJECTS", set())
-    rows, unauditable, _not_projects, _brick_free = guard.audit()
+    rows, unauditable, _not_projects, _brick_free, _manual_only = guard.audit()
     assert not rows
     assert unauditable, "an unreadable project must surface, not vanish from the denominator"
 
@@ -135,5 +142,5 @@ def test_non_project_deploys_are_recorded_not_silently_dropped():
     A heuristic that removes a workflow from the denominator without saying so is how
     a drift check quietly stops checking something.
     """
-    _rows, _unauditable, not_projects, _brick_free = guard.audit()
+    _rows, _unauditable, not_projects, _brick_free, _manual_only = guard.audit()
     assert "lif_mdr_frontend.yml" in not_projects, "frontend deploys build from frontends/, not projects/"
