@@ -586,6 +586,10 @@ existing content onto the simplified model is migration work, not this spec's.
   DataModelId but associated directly from a base entity (ExtendedBy NULL) are base content with
   the wrong DataModelId. Migration sets it to the base model. Ids are unchanged. In the seed: 8 of
   model 17's attributes, set to model 1.
+- **A value set used from another model.** Converting the overlay copies it into the model with
+  its live values and points the attribute at the copy. Value mappings stay on the original, so
+  the copy starts with no crosswalk. In the seed: model 1's value set 287 (62 values, used by
+  attribute 1310), which models 17 and 18 each get their own copy of.
 - **An overlay's `ExtendedBy` rows inside other models.** An association an overlay declares
   (`ExtendedByDataModelId`) between two elements of a model it does not overlay is soft-deleted
   when the overlay is converted. If the overlay's schema shows it, it is first copied between the

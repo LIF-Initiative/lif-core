@@ -129,6 +129,12 @@ def undo_record(schema: str, report: Report, committed: bool) -> dict:
     }
 
 
+def write_undo_record(undo_dir: pathlib.Path, schema: str, report: Report, committed: bool) -> None:
+    undo_dir.mkdir(parents=True, exist_ok=True)
+    record = undo_record(schema, report, committed)
+    (undo_dir / f"{schema}.json").write_text(json.dumps(record, indent=2, default=str))
+
+
 def summary(report: Report) -> list[str]:
     lines = [f"  step 0 moved {len(report.moved_attributes)} attributes: {sorted(report.moved_attributes)}"]
     for model in report.models:
@@ -166,15 +172,19 @@ async def convert_schema(engine, schema: str, apply: bool, undo_dir: pathlib.Pat
                 report = await convert_overlays(session, overlays)
             except ConversionFailed as e:
                 return False, ["  failed, rolled back:", *(f"    - {reason}" for reason in e.reasons)]
-            undo_dir.mkdir(parents=True, exist_ok=True)
-            record = undo_record(schema, report, apply)
-            (undo_dir / f"{schema}.json").write_text(json.dumps(record, indent=2, default=str))
+            # Written before the commit and marked committed only once it has, so a failed commit
+            # leaves a record that says so.
+            write_undo_record(undo_dir, schema, report, committed=False)
             if apply:
                 await session.commit()
-            return True, summary(report)
+        except Exception as e:  # noqa: BLE001 - one schema's error mustn't stop the others
+            return False, [f"  failed, rolled back: {type(e).__name__}: {e}"]
         finally:
             # A no-op after a commit; otherwise every change in this schema is discarded.
             await session.rollback()
+        if apply:
+            write_undo_record(undo_dir, schema, report, committed=True)
+        return True, summary(report)
 
 
 async def main(argv: list[str]) -> int:

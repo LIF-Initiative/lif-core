@@ -179,3 +179,55 @@ async def test_it_does_not_start_while_another_transaction_is_writing(seed_copy,
     assert lines == ["  not started: another transaction is writing; no locks within 1s"]
     assert await _snapshot(conn) == before
     assert not list(tmp_path.iterdir())
+
+
+async def test_an_unexpected_error_rolls_back_that_schema_and_is_reported(seed_copy, tmp_path):
+    """Not only ConversionFailed: a KeyError or a DB error fails one schema, so main() goes on to the next."""
+    conn, engine = seed_copy
+    await _cleaned(conn)
+    before = await _snapshot(conn)
+
+    async def half_a_conversion(session, overlays):
+        await session.execute(text('UPDATE "DataModels" SET "BaseDataModelId" = NULL WHERE "Id" = 17'))
+        raise KeyError(1820)
+
+    with mock.patch.object(runner, "convert_overlays", half_a_conversion):
+        ok, lines = await runner.convert_schema(engine, "public", apply=True, undo_dir=tmp_path)
+
+    assert (ok, lines) == (False, ["  failed, rolled back: KeyError: 1820"])
+    assert await _snapshot(conn) == before
+    assert not list(tmp_path.iterdir())
+
+
+async def test_a_failed_commit_leaves_an_undo_record_that_says_it_did_not_commit(seed_copy, tmp_path):
+    conn, engine = seed_copy
+    await _cleaned(conn)
+    before = await _snapshot(conn)
+
+    with mock.patch.object(runner.AsyncSession, "commit", side_effect=RuntimeError("connection lost")):
+        ok, lines = await runner.convert_schema(engine, "public", apply=True, undo_dir=tmp_path)
+
+    assert (ok, lines) == (False, ["  failed, rolled back: RuntimeError: connection lost"])
+    assert _undo(tmp_path)["committed"] is False
+    assert await _snapshot(conn) == before
+
+
+async def test_a_tenant_schema_converts_its_own_rows_and_leaves_public_alone(seed_copy, tmp_path):
+    """The conversion's SQL is unqualified, so it must resolve to the tenant first, as in the API's sessions."""
+    conn, engine = seed_copy
+    await _cleaned(conn)
+    await conn.execute("SELECT public.clone_lif_schema('tenant_t1489')")
+    public_before = await _snapshot(conn)
+
+    ok, lines = await runner.convert_schema(engine, "tenant_t1489", apply=True, undo_dir=tmp_path)
+
+    assert ok, lines
+    assert await _snapshot(conn) == public_before
+    assert await _overlays_left(conn) > 0
+    await conn.execute("SET search_path TO tenant_t1489, public")
+    assert await _overlays_left(conn) == 0
+    assert _undo_for(tmp_path, "tenant_t1489")["committed"] is True
+
+
+def _undo_for(tmp_path, schema):
+    return json.loads((tmp_path / f"{schema}.json").read_text())

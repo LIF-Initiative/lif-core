@@ -14,6 +14,10 @@ The conversion checks itself before the caller commits. It generates every live 
 conversion's Id map (decided on #1388: D1, per key), with `required` compared as a set. Every caller runs it in one transaction and rolls
 back on ``ConversionFailed``.
 
+The comparison covers only the models it generates, so the conversion also refuses when a live row of
+any other model still uses a row it soft-deleted or changed in place, and when any live mapping row
+still goes through a row it soft-deleted (``outside_references``).
+
 Per overlay, after step 0 has run once for all of them:
 
     1  render set     the entities, attributes and associations the overlay's schema shows
@@ -360,6 +364,7 @@ async def move_base_content(session: AsyncSession, changes: Changes, overlay_ids
     Refuses any that don't fit."""
     moved: dict[int, int] = {}
     reasons: list[str] = []
+    claimed: dict[tuple[int, str], str] = {}  # (base, UniqueName) -> the candidate that moves there first
     for overlay_id in overlay_ids:
         base_id = await _scalar(session, 'SELECT "BaseDataModelId" FROM "DataModels" WHERE "Id" = :m', m=overlay_id)
         candidates = await _rows(
@@ -389,6 +394,12 @@ async def move_base_content(session: AsyncSession, changes: Changes, overlay_ids
                 unique_name=attribute["UniqueName"],
             ):
                 reasons.append(f"{name}: its UniqueName is already live in base model {base_id}")
+            if (base_id, attribute["UniqueName"]) in claimed:
+                reasons.append(
+                    f"{name}: {claimed[(base_id, attribute['UniqueName'])]} would also move to base model {base_id} "
+                    "with the same UniqueName"
+                )
+            claimed.setdefault((base_id, attribute["UniqueName"]), f"attribute {attribute_id} (model {overlay_id})")
             if attribute["ValueSetId"] is not None and attribute["ValueSetModelId"] != base_id:
                 reasons.append(f"{name}: uses value set {attribute['ValueSetId']} from outside the base model")
             if attribute["TargetEntityId"] is not None or (attribute["DataType"] or "").lower() == "entity":
@@ -728,6 +739,102 @@ async def _models_to_compare(session: AsyncSession, overlay_ids: list[int], rend
     return sorted(m for m in models if m is not None)
 
 
+async def outside_references(session: AsyncSession, changes: Changes, compared_ids: list[int]) -> list[str]:
+    """Live rows, after the conversion, that use a row it soft-deleted or changed in place, where the
+    self-check can't see the effect: their model isn't one it compares. A mapping row using a
+    soft-deleted element is always reported, since the comparison doesn't read mapping rows.
+
+    A row belongs to the model that declares it: an association to its ``ExtendedByDataModelId``, or
+    with none to its parent's model; an inclusion row to its overlay; an attribute to its model.
+    """
+    inserted = {table: set(ids) for table, ids in changes.inserted.items()}
+
+    def touched(table: str) -> list[int]:
+        updated = {row["Id"] for row in changes.updated.get(table, [])} - inserted.get(table, set())
+        return sorted(updated | set(changes.soft_deleted.get(table, [])))
+
+    entities, attributes = touched("Entities"), touched("Attributes")
+    deleted_entities = changes.soft_deleted.get("Entities", [])
+    deleted_attributes = changes.soft_deleted.get("Attributes", [])
+    params = {"e": entities, "a": attributes, "compared": compared_ids}
+    queries = (
+        """
+        SELECT 'EntityAssociation ' || x."Id" AS what, coalesce(x."ExtendedByDataModelId", p."DataModelId") AS owner,
+               'uses entity ' || CASE WHEN x."ParentEntityId" = ANY(:e) THEN x."ParentEntityId"
+                                      ELSE x."ChildEntityId" END AS how
+        FROM "EntityAssociation" x JOIN "Entities" p ON p."Id" = x."ParentEntityId"
+        WHERE x."Deleted" = false AND (x."ParentEntityId" = ANY(:e) OR x."ChildEntityId" = ANY(:e))
+        """,
+        """
+        SELECT 'EntityAttributeAssociation ' || x."Id" AS what,
+               coalesce(x."ExtendedByDataModelId", e."DataModelId") AS owner,
+               CASE WHEN x."AttributeId" = ANY(:a) THEN 'uses attribute ' || x."AttributeId"
+                    ELSE 'uses entity ' || x."EntityId" END AS how
+        FROM "EntityAttributeAssociation" x JOIN "Entities" e ON e."Id" = x."EntityId"
+        WHERE x."Deleted" = false AND (x."EntityId" = ANY(:e) OR x."AttributeId" = ANY(:a))
+        """,
+        """
+        SELECT 'attribute ' || "Id" AS what, "DataModelId" AS owner, 'targets entity ' || "TargetEntityId" AS how
+        FROM "Attributes" WHERE "Deleted" = false AND "TargetEntityId" = ANY(:e)
+        """,
+        """
+        SELECT 'inclusion row ' || "Id" AS what, "ExtDataModelId" AS owner,
+               'includes ' || lower("ElementType"::text) || ' ' || "IncludedElementId" AS how
+        FROM "ExtInclusionsFromBaseDM"
+        WHERE "Deleted" = false AND (("ElementType"::text = 'Entity' AND "IncludedElementId" = ANY(:e))
+                                  OR ("ElementType"::text = 'Attribute' AND "IncludedElementId" = ANY(:a)))
+        """,
+    )
+    reasons = []
+    for sql in queries:
+        for row in await _rows(
+            session,
+            f"SELECT * FROM ({sql}) r WHERE NOT (coalesce(r.owner, 0) = ANY(:compared)) ORDER BY r.what",
+            **params,
+        ):
+            reasons.append(f"{row['what']} (model {row['owner']}) {row['how']}, which the conversion changes")
+
+    # A soft-deleted association whose model the self-check doesn't compare.
+    for table, parent in (("EntityAssociation", "ParentEntityId"), ("EntityAttributeAssociation", "EntityId")):
+        for row in await _rows(
+            session,
+            f"""
+            SELECT x."Id", coalesce(x."ExtendedByDataModelId", p."DataModelId") AS owner
+            FROM "{table}" x JOIN "Entities" p ON p."Id" = x."{parent}"
+            WHERE x."Id" = ANY(:ids)
+              AND NOT (coalesce(x."ExtendedByDataModelId", p."DataModelId", 0) = ANY(:compared))
+            ORDER BY x."Id"
+            """,
+            ids=changes.soft_deleted.get(table, []),
+            compared=compared_ids,
+        ):
+            reasons.append(f"{table} {row['Id']} (model {row['owner']}) is soft-deleted by the conversion")
+
+    # A live mapping row on any side that still goes through a soft-deleted element.
+    path_nodes = [str(e) for e in deleted_entities] + [f"-{a}" for a in deleted_attributes]
+    for row in await _rows(
+        session,
+        """
+        SELECT ta."Id", g."Id" AS "group", ta."EntityIdPath" FROM "TransformationAttributes" ta
+        JOIN "Transformations" t ON t."Id" = ta."TransformationId" AND t."Deleted" = false
+        JOIN "TransformationsGroup" g ON g."Id" = t."TransformationGroupId" AND g."Deleted" = false
+        WHERE ta."Deleted" = false
+          AND (ta."EntityId" = ANY(:e) OR ta."AttributeId" = ANY(:a)
+               OR EXISTS (SELECT 1 FROM unnest(string_to_array(replace(ta."EntityIdPath", ' ', ''), ',')) n
+                          WHERE n = ANY(:nodes)))
+        ORDER BY ta."Id"
+        """,
+        e=deleted_entities,
+        a=deleted_attributes,
+        nodes=path_nodes,
+    ):
+        reasons.append(
+            f"mapping row {row['Id']} (group {row['group']}) goes through {row['EntityIdPath']!r}, "
+            "a row the conversion soft-deletes"
+        )
+    return reasons
+
+
 async def convert_overlays(session: AsyncSession, overlay_ids: list[int]) -> Report:
     """Convert the overlays, in order, and check the result. Raises ``ConversionFailed`` with every
     reason; the caller rolls back. Commits nothing."""
@@ -746,7 +853,7 @@ async def convert_overlays(session: AsyncSession, overlay_ids: list[int]) -> Rep
     moved = await move_base_content(session, changes, overlay_ids)
     reports = [await convert_model(session, changes, model_id, baseline[model_id][FULL]) for model_id in overlay_ids]
 
-    failures: list[str] = []
+    failures = await outside_references(session, changes, compared_ids)
     expected_by_model = {}
     for report in reports:
         expected_by_model[report.model_id] = {

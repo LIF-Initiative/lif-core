@@ -9,6 +9,7 @@ baseline); these tests pin what it did.
 import importlib.util
 import pathlib
 import sys
+from unittest import mock
 from urllib.parse import urlparse
 
 import asyncpg
@@ -19,6 +20,7 @@ from sqlalchemy.orm import sessionmaker
 
 from fastapi.encoders import jsonable_encoder
 
+from lif.mdr_services import overlay_converter
 from lif.mdr_services.overlay_converter import (
     Changes,
     ConversionFailed,
@@ -166,3 +168,93 @@ async def test_it_refuses_a_mapping_row_through_a_row_the_schema_hides(session):
 
     with pytest.raises(ConversionFailed, match=f"mapping row {row_id} \\(group 25.*'4,337,-1820'"):
         await convert_model(session, Changes(), 17, full)
+
+
+async def test_it_refuses_when_another_model_still_uses_a_row_it_soft_deletes(session):
+    """bjagg's probe on #1489: a live association from a model-2 entity to attribute 1820, which 17 owns
+    and hides. Model 2 isn't compared, so without this check 1820 is soft-deleted and the run passes."""
+    association_id = (
+        await session.execute(
+            text(
+                'INSERT INTO "EntityAttributeAssociation" ("EntityId", "AttributeId", "Deleted") '
+                'SELECT "Id", 1820, false FROM "Entities" WHERE "DataModelId" = 2 AND "Deleted" = false '
+                'ORDER BY "Id" LIMIT 1 RETURNING "Id"'
+            )
+        )
+    ).scalar()
+
+    with pytest.raises(ConversionFailed) as failed:
+        await convert_overlays(session, [17, 18])
+
+    assert (
+        f"EntityAttributeAssociation {association_id} (model 2) uses attribute 1820, which the conversion changes"
+        in failed.value.reasons
+    )
+
+
+async def test_it_refuses_a_mapping_row_on_another_side_through_a_row_it_soft_deletes(session):
+    """Step 8 re-points only the overlay's side; a row on another side through 1820 would be left dangling."""
+    row_id = (
+        await session.execute(
+            text(
+                'INSERT INTO "TransformationAttributes" ("TransformationId", "AttributeId", "EntityId", "EntityIdPath", '
+                '"AttributeType", "Deleted") SELECT t."Id", 1820, 4, \'4,-1820\', \'Source\', false '
+                'FROM "Transformations" t JOIN "TransformationsGroup" g ON g."Id" = t."TransformationGroupId" '
+                'WHERE g."Id" = 25 AND t."Deleted" = false ORDER BY t."Id" LIMIT 1 RETURNING "Id"'
+            )
+        )
+    ).scalar()
+
+    with pytest.raises(ConversionFailed) as failed:
+        await convert_overlays(session, [17, 18])
+
+    assert any(
+        reason.startswith(f"mapping row {row_id} (group 25) goes through '4,-1820'") for reason in failed.value.reasons
+    )
+
+
+async def test_step_0_refuses_two_candidates_with_one_unique_name(session):
+    """All 8 candidates are 17's on the seed. Give 18 a ninth with 1288's UniqueName: both would move to
+    model 1, which already shows both, so the comparison alone wouldn't catch it."""
+    copy_id = (
+        await session.execute(
+            text(
+                'INSERT INTO "Attributes" ("Name", "UniqueName", "DataModelId", "DataType", "Deleted") '
+                'SELECT "Name", "UniqueName", 18, "DataType", false FROM "Attributes" WHERE "Id" = 1288 RETURNING "Id"'
+            )
+        )
+    ).scalar()
+    await session.execute(
+        text(
+            'INSERT INTO "EntityAttributeAssociation" ("EntityId", "AttributeId", "Deleted") '
+            'SELECT "EntityId", :copy, false FROM "EntityAttributeAssociation" '
+            'WHERE "AttributeId" = 1288 AND "Deleted" = false AND "ExtendedByDataModelId" IS NULL'
+        ),
+        {"copy": copy_id},
+    )
+    await session.execute(
+        text(
+            'INSERT INTO "ExtInclusionsFromBaseDM" ("ExtDataModelId", "ElementType", "IncludedElementId", '
+            '"LevelOfAccess", "Queryable", "Modifiable", "Deleted") '
+            'SELECT 18, "ElementType", :copy, "LevelOfAccess", "Queryable", "Modifiable", false '
+            'FROM "ExtInclusionsFromBaseDM" WHERE "ExtDataModelId" = 17 AND "ElementType"::text = \'Attribute\' '
+            'AND "IncludedElementId" = 1288 AND "Deleted" = false LIMIT 1'
+        ),
+        {"copy": copy_id},
+    )
+
+    with pytest.raises(ConversionFailed, match=f"attribute {copy_id} .* attribute 1288 \\(model 17\\) would also move"):
+        await move_base_content(session, Changes(), [17, 18])
+
+
+@pytest.mark.parametrize(
+    ("constant", "column"), [("ATTRIBUTE_COLUMNS", "Description"), ("ENTITY_ASSOCIATION_COLUMNS", "Relationship")]
+)
+async def test_the_self_check_fails_a_conversion_that_loses_a_copied_column(session, constant, column):
+    """The comparison is the main safety net: break the copies and it must refuse."""
+    kept = tuple(c for c in getattr(overlay_converter, constant) if c != column)
+
+    with mock.patch.object(overlay_converter, constant, kept), pytest.raises(ConversionFailed) as failed:
+        await convert_overlays(session, [17, 18])
+
+    assert any("differs from the rewritten baseline" in reason for reason in failed.value.reasons)
