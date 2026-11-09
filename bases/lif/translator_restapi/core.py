@@ -44,7 +44,7 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
             "status_code": "422",
             "path": request.url.path,
             "message": "Validation error.",
-            "detail": exc.errors(),
+            "detail": [{"loc": e["loc"], "msg": e["msg"], "type": e["type"]} for e in exc.errors()],
         },
     )
 
