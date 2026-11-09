@@ -1,0 +1,18 @@
+name: Deploy LIF Control Plane API to Amazon ECS
+
+on:
+  # Manual only until the AWS resources exist (#1182): a push trigger would start a deploy that fails.
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    uses: ./.github/workflows/_deploy-service.yml
+    with:
+      service_name: control-plane-api
+      working_dir: ./projects/lif_control_plane_api
+      ecr_repository: lif/dev/lif_control_plane_api
+      ecs_services: '["control-plane-api-FARGATE"]'
