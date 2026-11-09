@@ -23,6 +23,7 @@ from lif.mdr_portability import (
     parse_model_file,
 )
 from lif.mdr_services.model_converter import export_model, import_model
+from lif.mdr_services.schema_generation_service import generate_openapi_schema
 from lif.mdr_sql_model.core import (
     AccessType,
     Attribute,
@@ -542,8 +543,8 @@ async def test_a_model_round_trips_between_installs_byte_for_byte(test_db_sessio
 
 
 async def test_import_stores_what_the_schema_generator_reads(test_db_session):
-    # Until the generator reads Array from the association (#1429), an element's Array is true when any
-    # association places it as a list, and Required and Array are stored as Yes or No.
+    # Required and Array are stored as Yes or No. Only an entity with no parent takes Array from the
+    # file (§5.3); every other list setting stays on the association, which the generator reads (#1429).
     session, tag = test_db_session, "stored"
     model_id = await import_model(session, parse_model_file(_model_file(tag)))
     await session.commit()
@@ -554,10 +555,11 @@ async def test_import_stores_what_the_schema_generator_reads(test_db_session):
         entity.UniqueName: entity
         for entity in (await session.execute(select(Entity).where(Entity.DataModelId == model_id))).scalars()
     }
-    assert (entities["Person.Contact"].Required, entities["Person.Contact"].Array) == ("Yes", "Yes")
+    assert (entities["Person.Contact"].Required, entities["Person.Contact"].Array) == ("Yes", "No")
     assert (entities["Organization"].Required, entities["Organization"].Array) == ("No", "No")
-    # A list under Person, single under Organization: stored as a list.
-    assert entities["Identifier"].Array == "Yes"
+    assert entities["Competency"].Array == "Yes"
+    # A list under Person and single under Organization, which only the associations can say.
+    assert entities["Identifier"].Array == "No"
     assert entities["Person.Contact"].LevelOfAccess == AccessType.Restricted
     assert entities["Person.Contact"].Modifiable
 
@@ -572,6 +574,8 @@ async def test_import_stores_what_the_schema_generator_reads(test_db_session):
     contact = associations[(entities["Person"].Id, "Contact")]
     assert (accredited_by.Placement, accredited_by.Relationship) == (EntityPlacementType.Reference, None)
     assert (contact.Placement, contact.Array) == (EntityPlacementType.Embedded, True)
+    assert associations[(entities["Person"].Id, "Identifier")].Array is True
+    assert associations[(entities["Organization"].Id, "Identifier")].Array is False
 
 
 async def _count_rows(session, model_class) -> int:
@@ -713,7 +717,7 @@ def _place_an_attribute_in_a_list(content):
             association["Array"] = True
 
 
-async def test_an_attribute_placed_as_a_list_is_stored_as_one_and_round_trips(test_db_session):
+async def test_an_attribute_placed_as_a_list_is_stored_on_its_association_and_round_trips(test_db_session):
     session, tag = test_db_session, "attribute_list"
     file = _model_file(tag, _place_an_attribute_in_a_list)
     model_id = await import_model(session, parse_model_file(file))
@@ -728,8 +732,43 @@ async def test_an_attribute_placed_as_a_list_is_stored_as_one_and_round_trips(te
             select(EntityAttributeAssociation).where(EntityAttributeAssociation.AttributeId == attribute.Id)
         )
     ).scalar_one()
-    assert (attribute.Array, association.Array) == ("Yes", True)
+    assert (attribute.Array, association.Array) == ("No", True)
     assert dump_canonical(await export_model(session, model_id)) == file
+
+
+def _place_lists_for_the_generator(content):
+    _place_an_attribute_in_a_list(content)
+    for association in content["Associations"]:
+        if association["Name"] == "AccreditedBy":
+            association["Array"] = True
+
+
+@pytest.mark.parametrize("include_attr_md", [False, True])
+async def test_an_imported_model_generates_cardinality_per_parent_from_its_associations(
+    test_db_session, include_attr_md
+):
+    # Issue #1429: Identifier is a list under Person and single under Organization, and the generated
+    # schema says so under each. A Reference marked as a list (Course's AccreditedBy) doesn't make the
+    # entity it references a list.
+    session, tag = test_db_session, f"cardinality_attr{include_attr_md:d}"
+    model_id = await import_model(session, parse_model_file(_model_file(tag, _place_lists_for_the_generator)))
+    await session.commit()
+
+    schemas = (await generate_openapi_schema(session, model_id, include_attr_md, include_entity_md=False))[
+        "components"
+    ]["schemas"]
+
+    assert schemas["Person"]["properties"]["Identifier"]["type"] == "array"
+    assert schemas["Organization"]["properties"]["Identifier"]["type"] == "object"
+    assert schemas["Person"]["properties"]["Contact"]["type"] == "array"
+    assert schemas["Competency"]["type"] == "array"
+    assert schemas["Organization"]["type"] == "object"
+    assert schemas["Course"]["properties"]["AccreditedBy"]["type"] == "object"
+    lunch_status = schemas["Person"]["properties"]["lunchStatus"]
+    if include_attr_md:
+        assert lunch_status["Array"] == "Yes"
+    else:
+        assert lunch_status["type"] == "array"
 
 
 def _set_version(version):
@@ -771,5 +810,6 @@ async def test_a_root_entity_keeps_its_list_setting_through_export_and_import(te
         entity.UniqueName: entity.Array
         for entity in (await session.execute(select(Entity).where(Entity.DataModelId == model_id))).scalars()
     }
-    assert (stored["Course"], stored["Organization"], stored["Student"]) == ("Yes", "No", "Yes")
+    # Student's list setting stays on its association; its own Array isn't set from it (#1429).
+    assert (stored["Course"], stored["Organization"], stored["Student"]) == ("Yes", "No", "No")
     assert dump_canonical(await export_model(session, model_id)) == dump_canonical(file_b)

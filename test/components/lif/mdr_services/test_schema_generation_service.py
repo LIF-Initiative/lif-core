@@ -56,6 +56,7 @@ class _Attr:
         self.Queryable = False
         self.Modifiable = False
         self.AssociationName = None
+        self.AssociationArray = None
 
     def dict(self):
         return {
@@ -328,6 +329,7 @@ async def test_generate_openapi_schema_enum_values_on_attribute(fake_session, mo
             self.Queryable = False
             self.Modifiable = False
             self.AssociationName = None
+            self.AssociationArray = None
 
         def dict(self):
             return {
@@ -426,7 +428,7 @@ async def test_generate_openapi_schema_has_sub_entity_required_fields(fake_sessi
         # build df_entity (include both entities)
         _FetchallResult([RowIN(101, "CompetencyFramework"), RowIN(202, "Association")]),
         # find_children: get detailed association rows via .scalars().all()
-        _ScalarListResult([types.SimpleNamespace(Relationship=None, Name=None)]),
+        _ScalarListResult([types.SimpleNamespace(Relationship=None, Name=None, Array=None)]),
         # enums for attributes (none)
         _FetchallResult([]),
         _FetchallResult([]),
@@ -514,7 +516,7 @@ async def test_generate_openapi_schema_has_sub_entity_required_entity(fake_sessi
         # build df_entity (include both entities)
         _FetchallResult([RowIN(101, "CompetencyFramework"), RowIN(202, "Association")]),
         # find_children: get detailed association rows via .scalars().all()
-        _ScalarListResult([types.SimpleNamespace(Relationship=None, Name=None)]),
+        _ScalarListResult([types.SimpleNamespace(Relationship=None, Name=None, Array=None)]),
         # enums for attributes (none)
         _FetchallResult([]),
         _FetchallResult([]),
@@ -589,6 +591,7 @@ async def test_generate_openapi_schema_full_export(fake_session, monkeypatch):
             self.Queryable = False
             self.Modifiable = False
             self.AssociationName = None
+            self.AssociationArray = None
 
         def dict(self):
             return {
@@ -646,6 +649,7 @@ async def test_generate_openapi_schema_full_export(fake_session, monkeypatch):
                     ChildEntityId=200,
                     Relationship=None,
                     Name=None,
+                    Array=None,
                     Placement="Embedded",
                     Notes=None,
                     CreationDate=None,
@@ -740,6 +744,7 @@ async def test_generate_openapi_schema_full_export_parent_and_child_valuesets(fa
             self.Queryable = False
             self.Modifiable = False
             self.AssociationName = None
+            self.AssociationArray = None
 
         def dict(self):
             return {
@@ -771,6 +776,7 @@ async def test_generate_openapi_schema_full_export_parent_and_child_valuesets(fa
             self.Queryable = False
             self.Modifiable = False
             self.AssociationName = None
+            self.AssociationArray = None
 
         def dict(self):
             return {
@@ -827,6 +833,7 @@ async def test_generate_openapi_schema_full_export_parent_and_child_valuesets(fa
                     ChildEntityId=400,
                     Relationship=None,
                     Name=None,
+                    Array=None,
                     Placement="Embedded",
                     Notes=None,
                     CreationDate=None,
@@ -1054,7 +1061,7 @@ async def test_find_children_records_the_key_it_writes(monkeypatch):
     the threading (generate_openapi_schema -> find_children -> add_ref) could break
     and every other test would still pass while production still 500s.
     """
-    assoc = types.SimpleNamespace(Relationship="CFItems", Name=None, ParentEntityId=1, ChildEntityId=2)
+    assoc = types.SimpleNamespace(Relationship="CFItems", Name=None, Array=None, ParentEntityId=1, ChildEntityId=2)
 
     class _Associations:
         def scalars(self):
@@ -1098,3 +1105,100 @@ async def test_find_children_records_the_key_it_writes(monkeypatch):
         "the recorded key must be the key actually written -- if these can differ, add_ref "
         "navigates a structure that does not exist"
     )
+
+
+def test_get_array_takes_the_associations_value_when_it_differs():
+    """Issue #1429: a child's cardinality is its association's, which can differ by parent."""
+    assert svc._get_array(True, "No") == "Yes"
+    assert svc._get_array(False, "Yes") == "No"
+    assert svc._get_array(True, None) == "Yes"
+
+
+def test_get_array_keeps_the_elements_value_when_they_agree_or_the_association_is_null():
+    """A model whose associations still hold the rule's value must generate exactly as before, and a
+    NULL association (rows an older MDR image created, until V1.9) falls back to the element."""
+    assert svc._get_array(True, "Yes") == "Yes"
+    assert svc._get_array(False, "No") == "No"
+    assert svc._get_array(False, None) is None
+    assert svc._get_array(False, "") == ""
+    assert svc._get_array(None, "Yes") == "Yes"
+    assert svc._get_array(None, None) is None
+
+
+async def _find_child(monkeypatch, association_array, attribute, include_attr_md=False, include_entity_md=False):
+    """Run find_children for one parent (1) and one Embedded child (2), and return the child's schema.
+
+    The child entity's own Array is "No", so any list in the output came from the association.
+    """
+    association = types.SimpleNamespace(
+        Relationship=None, Name="Child", Array=association_array, ParentEntityId=1, ChildEntityId=2
+    )
+    session = MagicMock()
+    session.execute = AsyncMock(return_value=_ScalarListResult([association]))
+    child_entity = types.SimpleNamespace(
+        Name="Child", Array="No", UseConsiderations=None, Queryable=False, Modifiable=False
+    )
+    monkeypatch.setattr(svc, "get_entity_by_id", AsyncMock(return_value=child_entity))
+    monkeypatch.setattr(svc, "get_attributes_with_association_metadata_for_entity", AsyncMock(return_value=[attribute]))
+
+    parent_schema = {"properties": {}, "required": []}
+    await svc.find_children(
+        {1: [2]},
+        1,
+        parent_schema,
+        df_entity=pd.DataFrame([{"Id": 1, "Name": "Parent"}, {"Id": 2, "Name": "Child"}]),
+        session=session,
+        include_attr_md=include_attr_md,
+        data_model_id=17,
+        data_model=types.SimpleNamespace(Type="BaseLIF"),
+        include_entity_md=include_entity_md,
+        public_only=False,
+        full_export=False,
+    )
+    return parent_schema["properties"]["Child"], session
+
+
+def _attribute(association_array):
+    attribute = _Attr(5, "tag", "No")
+    attribute.AssociationArray = association_array
+    return attribute
+
+
+@pytest.mark.parametrize("association_array, expected_type", [(True, "array"), (False, "object")])
+async def test_find_children_takes_a_child_entity_cardinality_from_its_association(
+    monkeypatch, association_array, expected_type
+):
+    """Issue #1429: a shared entity can be a list under one parent and single under another."""
+    child, _ = await _find_child(monkeypatch, association_array, _attribute(None), include_entity_md=True)
+
+    assert child["type"] == expected_type
+    # The entity metadata says the same, so the two can't disagree.
+    assert child["Array"] == ("Yes" if association_array else "No")
+
+
+@pytest.mark.parametrize("association_array", [True, False])
+async def test_find_children_takes_an_attributes_cardinality_from_its_association(monkeypatch, association_array):
+    """Issue #1429: an attribute's list setting is its association's, in both output shapes.
+
+    GraphQL reads the emitted "Array" (include_attr_md=true); callers without metadata read the
+    type the generator rewrites to "array".
+    """
+    with_md, _ = await _find_child(monkeypatch, None, _attribute(association_array), include_attr_md=True)
+    without_md, _ = await _find_child(monkeypatch, None, _attribute(association_array), include_attr_md=False)
+
+    assert with_md["properties"]["tag"]["Array"] == ("Yes" if association_array else "No")
+    assert "AssociationArray" not in with_md["properties"]["tag"]
+    if association_array:
+        assert without_md["properties"]["tag"]["type"] == "array"
+        assert without_md["properties"]["tag"]["format"] == "string"
+    else:
+        assert without_md["properties"]["tag"]["type"] == "string"
+
+
+async def test_find_children_reads_only_embedded_associations(monkeypatch):
+    """Issue #1429: a Reference on the same parent and child is emitted by add_ref, so find_children
+    must not read it too, now that it reads the association's Array."""
+    _, session = await _find_child(monkeypatch, None, _attribute(None))
+
+    query = str(session.execute.await_args_list[0].args[0])
+    assert '"EntityAssociation"."Placement" IS NULL OR "EntityAssociation"."Placement" = ' in query
