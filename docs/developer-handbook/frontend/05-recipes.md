@@ -89,8 +89,9 @@ A new `VITE_*` value has to be added everywhere the app is built. For the MDR UI
 
 The last two are deploy paths: changing them changes the team's dev and demo hosting directly, so ask a
 maintainer before editing them (backend [chapter 6](../backend/06-how-we-work.md)), and ask one to set any
-new values there. For the Advisor app it's the `Dockerfile`, the compose service `lif-advisor-app`, and
-`.github/workflows/lif_advisor_app.yml`.
+new values there. For the Advisor app it's the `Dockerfile`, the compose service `lif-advisor-app`,
+`.github/workflows/lif_advisor_app.yml`, and `frontends/lif_advisor_app/build-push.sh`, which builds the
+demo image and passes each build arg by name (`--build-arg`), so a new variable needs a line there too.
 
 ## See your change in a browser
 
@@ -111,7 +112,7 @@ tell you if you added some. Compare the total with `main`'s:
 
 ```bash
 cd frontends/mdr-frontend
-npx eslint . | tail -1          # ✖ 696 problems (0 errors, 696 warnings) on main
+npx eslint . | grep '^✖'   # ✖ 696 problems (0 errors, 696 warnings) on main
 ```
 
 If your branch's number is higher, run `npx eslint` on the files you changed and look at the lines you

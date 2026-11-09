@@ -27,9 +27,10 @@ Run the same commands in a container. That's how this handbook checked them:
 # install and run the tests
 docker run --rm -v "$PWD":/app -w /app -u "$(id -u):$(id -g)" -e HOME=/tmp node:20 sh -c 'npm ci && npm test'
 
-# the dev server: --network host lets the browser reach it on :5173 and lets it reach the APIs on localhost
-docker run --rm --name mdr-ui-dev --network host -v "$PWD":/app -w /app -u "$(id -u):$(id -g)" -e HOME=/tmp \
-  -e VITE_API_URL=http://localhost:8012 node:20 npx vite --port 5173
+# the dev server: --host 0.0.0.0 makes Vite listen beyond the container's own localhost, so -p can reach it.
+# The browser, not the dev server, calls the APIs, so VITE_API_URL stays http://localhost:8012.
+docker run --rm --name mdr-ui-dev -p 5173:5173 -v "$PWD":/app -w /app -u "$(id -u):$(id -g)" -e HOME=/tmp \
+  -e VITE_API_URL=http://localhost:8012 node:20 npx vite --host 0.0.0.0 --port 5173 --strictPort
 # stop it with Ctrl-C, or `docker stop mdr-ui-dev` from another terminal
 ```
 
@@ -80,7 +81,14 @@ To rebuild a compose-served app after a change: `docker compose up -d --build li
 
 The MDR API only answers browsers from the origins listed in its `CORS_ALLOW_ORIGINS` (set on
 `lif-mdr-api` in the compose file; locally `http://localhost:3000`, `:5173`, `:8080` and the team's two
-hosted origins). A dev server on any other port gets every API call blocked.
+hosted origins). A dev server on any other port gets every API call blocked. The Learner Data Export API
+(`lif-learner-data-export-api`) has the same list, so the Export Playground's calls fail the same way.
+
+Both apps' dev servers default to 5173: the MDR UI by Vite's default, the Advisor app in its
+`vite.config.ts`. Whichever starts second moves to 5174, which isn't in the list. So start the MDR UI
+first, or start the Advisor app with `npm run dev -- --port 5174`. The Advisor API allows any origin, so
+the Advisor app works on any port. (5174 is also the Advisor app's port in compose, where it's a
+container rather than a dev server.)
 
 What that looks like: the page itself loads, because Vite serves it, but every API call fails. The app
 shows a vague failure, because axios reports a generic `Network Error` with no status. The browser's

@@ -24,7 +24,7 @@ MappingsView.tsx        onActivateVersion     →  activateTransformationGroup(g
 transformationsService   POST /transformation_groups/{id}/activate   (via the axios instance)
 MDR API                  activate_transformation_group  (bases/lif/mdr_restapi/transformation_endpoint.py)
 mdr_services             activate_transformation_group  (components/lif/mdr_services/transformation_service.py)
-PostgreSQL               the group's ActivationDate set; the pair's other live versions deprecated
+PostgreSQL               ActivationDate set if the group wasn't live; the pair's other live versions deprecated
    … and back: response → local state updated → live version re-read → toast
 ```
 
@@ -97,10 +97,12 @@ The optional `activation_date` (schedule a future activation) isn't used by the 
 
 `activate_transformation_group` decides what activating means:
 
-- the group must exist, and its `GroupVersion` must be dotted numbers (`1`, `1.2`), or it's a `422`;
+- a missing or deleted group is a `404`, and a `GroupVersion` that isn't dotted numbers (`1`, `1.2`) is a
+  `422`;
 - it locks the pair's rows first, so two people activating different versions at once can't both win
   (#1414);
-- it sets this group's `ActivationDate` to now and clears its `DeprecationDate`;
+- if the group isn't live yet, it sets its `ActivationDate` to now and clears its `DeprecationDate`. A group
+  that's already live keeps its `ActivationDate`, and if it's the pair's only live version, nothing changes;
 - it sets a `DeprecationDate` on the pair's other live versions, at exactly the same moment, so there's no
   gap with nothing live.
 

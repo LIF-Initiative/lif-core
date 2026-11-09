@@ -108,11 +108,13 @@ workspace again brings them back in line. The proper fix, a `GET /tenants/curren
 ## Features worth knowing before you change them
 
 - **Mappings** (`pages/Explore/Mappings/`): a source model column, a target column, and wires between
-  them (`@xyflow/react`, `useMappingWires`). Dialogs handle creating, forking, **activating** and editing
+  them: SVG paths that `hooks/useMappingWires.ts` computes and `components/Wires.tsx` draws (`@xyflow/react`
+  isn't involved). Dialogs handle creating, forking, **activating** and editing
   transformation groups. Activation matters: only an activated group is used by the Translator. The whole
   activate flow is [chapter 3](03-follow-a-click.md).
-- **Expression editor**: evaluates JSONata in the browser with the same `jsonata` library the backend uses
-  (`utils/jsonataUtils.ts`), so you can try an expression against sample data.
+- **Expression editor**: evaluates JSONata in the browser with the JavaScript `jsonata` package
+  (`utils/jsonataUtils.ts`), so you can try an expression against sample data. The Translator runs the same
+  language with `jsonata-python`, a separate implementation, so an edge case can behave differently there.
 - **Bulk transformations preview**: combines a group's expressions into one output and checks it against the
   target model's JSON Schema in the browser (`utils/schemaValidation.ts`), the same check the Translator makes.
 - **Portable files**: export and import models and mapping groups (`components/PortableFile`,

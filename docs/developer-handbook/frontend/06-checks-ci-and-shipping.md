@@ -52,8 +52,9 @@ Frontend PRs follow the same issue, commit and PR rules as the backend (backend 
 ## Shipping
 
 To date (November 2026), the team hosts both apps on AWS for its dev and demo environments. That's how
-we've deployed for demos, not a requirement: the MDR UI builds to static files (`dist/`) that any static
-host can serve, and the Advisor app is a container. Cognito sign-in is optional too: without it, the MDR UI
+we've deployed for demos, not a requirement: both apps build to static files (`dist/`) that any static host
+can serve. The team happens to host the MDR UI on S3 + CloudFront and the Advisor app as an nginx container
+on ECS. Cognito sign-in is optional too: without it, the MDR UI
 uses username and password ([chapter 1](01-dev-environment.md)).
 
 - **MDR UI → dev:** `.github/workflows/lif_mdr_frontend.yml`, on a push to `main` touching
@@ -61,6 +62,8 @@ uses username and password ([chapter 1](01-dev-environment.md)).
   syncs `dist/` to S3, and invalidates CloudFront.
 - **MDR UI → demo:** `scripts/release-demo-frontend.sh`, during demo promotion.
 - **Advisor app → dev:** `.github/workflows/lif_advisor_app.yml` builds an image and updates its ECS service.
+- **Advisor app → demo:** `frontends/lif_advisor_app/build-push.sh demo`, run by hand with admin credentials
+  during promotion. The image bakes in its API URL, so the dev image can't be promoted.
 - Like the backend, merging is the deploy to dev, and demo is promoted by hand (backend [chapter 9](../backend/09-environments-and-deploys.md)).
 
 ## Where to go next

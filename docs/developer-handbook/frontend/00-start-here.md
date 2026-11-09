@@ -13,8 +13,8 @@ What the two LIF web apps are, how a web app like this fits together, the few MD
 | What it is | The editor for the MDR: data models, entities, attributes, value sets, mappings and transformations, workspaces, API keys, an export playground | A demo chat client for the Advisor, an LLM agent that answers questions about a learner's LIF record |
 | Talks to | MDR API (`VITE_API_URL`, :8012 locally) and the Learner Data Export API (`VITE_LDE_API_URL`, :8013) | Advisor API (`VITE_LIF_ADVISOR_API_URL`, :8004) |
 | Size (Nov 2026) | 89 TypeScript files | 17 TypeScript files |
-| Stack | React 18, TypeScript, Vite, Radix UI Themes, React Router 6, axios, `@xyflow/react`, `jsonata`, `ajv` | React 18, TypeScript, Vite, Tailwind, axios, `react-markdown` |
-| Local URL | http://localhost:5173 | http://localhost:5174 |
+| Stack | React 18, TypeScript, Vite, Radix UI Themes, React Router 6, axios, `jsonata`, `ajv` | React 18, TypeScript, Vite, Tailwind, axios, `react-markdown` |
+| Local URL | http://localhost:5173 (dev server and compose) | dev server http://localhost:5173, compose http://localhost:5174 |
 | Team's demo hosting (AWS, to date) | Static site on S3 + CloudFront | Container on ECS |
 
 They share nothing: separate `package.json`, lock file, lint config, and conventions. There's no shared
@@ -27,7 +27,7 @@ What the less common libraries in the MDR UI are for:
 | **Radix UI Themes** | The UI components: dialogs, buttons, layout (`Dialog`, `Flex`, `Box`…) |
 | **React Router 6** | Which page shows for which URL (chapter 2) |
 | **axios** | HTTP calls to the APIs |
-| **`@xyflow/react`** | The wires between source and target fields in the mapping editor |
+| **`@xyflow/react`** | Nothing that runs: it's in `package.json`, but only two unused types come from it (`types.ts`). The mapping editor's wires are SVG paths the app draws itself (chapter 2) |
 | **`jsonata`** | Running mapping expressions in the browser, with the same language the backend uses |
 | **`ajv`** | Checking a mapping's previewed output against the target model's JSON Schema, the same check the Translator makes (`utils/schemaValidation.ts`) |
 
