@@ -23,7 +23,7 @@ chapter says what each part needs, which combinations have been run, and where a
 | Part | Depends on | Calls per request | Runs alone? |
 |---|---|---|---|
 | **MDR API** (+ MDR UI) | its PostgreSQL (seeded by the restore job) | nothing | **Yes** |
-| **Translator** | the MDR | the MDR (both schemas and the active mappings, every request) | With the MDR |
+| **Translator** | the MDR | the MDR (the active mappings every request; the two schemas at most every 5 minutes, `TRANSLATOR_CACHE_TTL_SECONDS`) | With the MDR |
 | **Query Cache** | MongoDB | MongoDB | **Yes** |
 | **Query Planner** | the Query Cache, the Orchestrator API, its sources YAML | the Query Cache; the Orchestrator API only when a path is missing | With the cache |
 | **GraphQL API** | the MDR at startup (to build its schema), or a bundled schema file; the Query Planner | the Query Planner | With the planner and cache |
@@ -65,8 +65,8 @@ curl -s -X POST localhost:8007/translate/source/26/target/17 \
 # {"Person":[{"EmploymentPreferences":[{"organizationTypes":["Non-Profit","Private Sector"]}]}]}
 ```
 
-The Translator's log shows three MDR calls per request (both schemas, then the active mappings), so the
-MDR must stay up. The Translator has no inbound auth ([chapter 5](05-cross-cutting.md)).
+The Translator's log shows three MDR calls on a cold cache (both schemas, then the active mappings), and
+then one per request (the active mappings) while it has the schemas cached, so the MDR must stay up. The Translator has no inbound auth ([chapter 5](05-cross-cutting.md)).
 
 ### The read path without orchestration
 

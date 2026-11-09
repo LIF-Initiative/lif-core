@@ -31,8 +31,7 @@ uv run pre-commit install --hook-type commit-msg   # enforces the commit message
 The first `uv sync` is large: the semantic-search bricks pull in PyTorch.
 
 Either push branches to the main repo (if you have write access) or work from a fork
-([`CONTRIBUTING.md`](../../../CONTRIBUTING.md) → Getting Started). The team does both: of the last 30 merged PRs (November 2026), 23
-came from branches in the main repo and 7 from forks.
+([`CONTRIBUTING.md`](../../../CONTRIBUTING.md) → Getting Started). The team does both.
 
 ## The checks
 
@@ -58,18 +57,21 @@ A full local run on a machine without PostgreSQL (main `2967cb9`, November 2026)
 `LIF_UPDATE_SCHEMA_SNAPSHOTS=1`, and one needs `psql`.)
 
 So about a fifth of the suite needs a real PostgreSQL server: the MDR tests under
-`test/bases/lif/mdr_restapi/`, which include the Translator ↔ MDR end-to-end tests. They use
+`test/bases/lif/mdr_restapi/`, which include the Translator ↔ MDR end-to-end tests, plus
+`test/bases/lif/control_plane_restapi/`, `test/components/lif/developer_keys/`,
+`test/components/lif/mdr_services/test_schema_drift_service.py` and six files under `test/scripts/`. They use
 `testing.postgresql`, which starts its own throwaway server by running `initdb`. If `initdb` isn't on
 your `PATH`, those tests **skip, and pytest still exits 0**. CI's runner has Postgres, so they do run
 there.
 
 So a green local run can hide a failure that CI will catch. If you change `mdr_client`, `translator`,
-`mdr_services`, `mdr_restapi` or the seed, either:
+`mdr_services`, `mdr_restapi`, `developer_keys`, `control_plane_restapi`, the scripts under `scripts/` or the
+seed, either:
 
-- install PostgreSQL locally and put its `bin/` on `PATH` (on Debian/Ubuntu it lives in
-  `/usr/lib/postgresql/<version>/bin`, not on the default `PATH`: on a clean Ubuntu 24.04, after
-  `apt-get install postgresql`, `which initdb` finds nothing and it's in `/usr/lib/postgresql/16/bin`).
-  Run the tests as your normal user (`initdb` refuses root). Or
+- install PostgreSQL locally. On Debian/Ubuntu that's enough: `testing.postgresql` finds `initdb` under
+  `/usr/lib/postgresql/*/bin` itself, even though it isn't on `PATH` (that's why CI needs no setup). With a
+  Homebrew-style or custom install, put its `bin/` on `PATH`. `psql` must be on `PATH` either way, for the
+  seed load. Run the tests as your normal user (`initdb` refuses root). Or
 - run them in a container that has Postgres and a non-root user (`initdb` refuses to run as root, and
   needs a real user entry for your uid). Checked 11-07 on main `2967cb9`, the whole
   `test/bases/lif/mdr_restapi/` folder: **373 passed, 1 skipped, in 31 minutes** (the skip is the
@@ -209,7 +211,7 @@ Both databases keep their data on anonymous Docker volumes, so `docker compose u
   ```bash
   docker compose rm -sfv lif-mdr-database lif-mdr-database-restore
   docker compose up -d lif-mdr-database lif-mdr-database-restore
-  docker restart lif-mdr-api    # then restart anything that loaded a schema at startup:
+  docker restart lif-mdr-api    # then the services that load a schema (and the Translator, to clear its cache):
   docker restart lif-graphql-api-org1 lif-graphql-api-org2 lif-graphql-api-org3 advisor-demo-docker-lif-translator-org1-1
   ```
 

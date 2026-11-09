@@ -6,7 +6,7 @@ from urllib.parse import urlparse, urlunparse
 from fastapi import HTTPException, Request, status
 from lif.mdr_utils.logger_config import get_logger
 
-from sqlalchemy import text
+from sqlalchemy import event, text
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
 
@@ -144,7 +144,8 @@ async def get_session(request: Request) -> AsyncGenerator[AsyncSession, None]:
             # and demo, no ordinary caller reads public at all — it is a clone
             # template, not a live schema. Verify a migration against
             # information_schema per schema, not against flyway_schema_history.
-            await session.execute(text(f'SET search_path TO "{tenant_schema}", public'))
+            set_search_path = f'SET search_path TO "{tenant_schema}", public'
+            await session.execute(text(set_search_path))
         elif tenant_schema:
             logger.error("Refusing to SET search_path to invalid tenant_schema %r", tenant_schema)
             raise HTTPException(
@@ -155,5 +156,16 @@ async def get_session(request: Request) -> AsyncGenerator[AsyncSession, None]:
             # leftover search_path the pooled connection carried over from
             # a prior tenant-scoped request. Reset to PG's default so this
             # branch behaves as if it had a fresh connection.
-            await session.execute(text("SET search_path TO public"))
+            set_search_path = "SET search_path TO public"
+            await session.execute(text(set_search_path))
+        # The SET above only reaches the connection of the session's first transaction. A commit hands
+        # that connection back to the pool, and the session's next transaction (e.g. a refresh after
+        # commit) may check out another one whose search_path is `public` or another tenant's. That
+        # either fails ("Could not refresh instance") or reads another schema's row with the same Id
+        # (#1477). Repeat the SET at the start of every later transaction on this session.
+        event.listen(
+            session.sync_session,
+            "after_begin",
+            lambda _session, _transaction, connection: connection.exec_driver_sql(set_search_path),
+        )
         yield session

@@ -27,7 +27,7 @@ Docker Compose ([chapter 1](01-dev-environment.md)). **To date (November 2026), 
 shared dev and demo environments on AWS**, so you'll see AWS names in the repo and in this handbook: ECS,
 CloudFormation, SSM, Cognito, S3. That is how we've been deploying for demo purposes, not a requirement
 of LIF. The deploy scripts and CloudFormation templates are a reference to adapt, not something an adopter
-must use ([`docs/operations/guides/deploying-lif-at-your-institution.md`](../../operations/guides/deploying-lif-at-your-institution.md), #1004).
+must use ([`docs/operations/guides/deploying-lif-at-your-institution.md`](../../operations/guides/deploying-lif-at-your-institution.md)).
 
 Two features do use an AWS service directly today, both through Amazon Cognito, and neither is on the
 query path:
