@@ -321,11 +321,20 @@ async def clone_datamodel(session: AsyncSession, data: CreateCloneDTO):
     if data.data_model_type == DataModelType.OrgLIF or data.data_model_type == DataModelType.PartnerLIF:
         base_data_model_id = data.source_data_model_id
 
+    source_data_model = await get_datamodel_by_id(session=session, id=data.source_data_model_id)
+    # CopiedFrom* is left out (#1386 Q5).
     new_data_model = DataModel(
         Name=data.data_model_name,
         Type=data.data_model_type,
         DataModelVersion=data.data_model_version,
         BaseDataModelId=base_data_model_id,
+        Description=source_data_model.Description,
+        UseConsiderations=source_data_model.UseConsiderations,
+        Notes=source_data_model.Notes,
+        Contributor=source_data_model.Contributor,
+        State=source_data_model.State,
+        Tags=source_data_model.Tags,
+        Deleted=False,
     )
     session.add(new_data_model)
     await session.commit()
@@ -333,14 +342,18 @@ async def clone_datamodel(session: AsyncSession, data: CreateCloneDTO):
 
     entity_id_map = await clone_entities(session, data.source_data_model_id, new_data_model.Id)
     value_set_id_map = await clone_value_sets(session, data.source_data_model_id, new_data_model.Id)
-    attribute_id_map = await clone_attributes(session, data.source_data_model_id, new_data_model.Id, value_set_id_map)
+    attribute_id_map = await clone_attributes(
+        session, data.source_data_model_id, new_data_model.Id, value_set_id_map, entity_id_map
+    )
 
     logger.info(f"entity_id_map: {entity_id_map}")
     logger.info(f"value_set_id_map: {value_set_id_map}")
     logger.info(f"attribute_id_map: {attribute_id_map}")
 
-    await clone_entity_attribute_association(session, entity_id_map, attribute_id_map, data.source_data_model_id)
-    await clone_entity_association(session, entity_id_map, data.source_data_model_id)
+    await clone_entity_attribute_association(
+        session, entity_id_map, attribute_id_map, data.source_data_model_id, new_data_model.Id
+    )
+    await clone_entity_association(session, entity_id_map, data.source_data_model_id, new_data_model.Id)
     await clone_value_set_values(session, data.source_data_model_id, new_data_model.Id, value_set_id_map)
 
     transformation_group_id_map = await clone_transformation_group(
@@ -369,6 +382,10 @@ async def clone_entities(session: AsyncSession, source_data_model_id: int, new_d
             Name=entity.Name,
             UniqueName=entity.UniqueName,
             Description=entity.Description,
+            UseConsiderations=entity.UseConsiderations,
+            Required=entity.Required,
+            Array=entity.Array,
+            SourceModel=entity.SourceModel,
             DataModelId=new_data_model_id,
             Notes=entity.Notes,
             Contributor=entity.Contributor,
@@ -376,6 +393,7 @@ async def clone_entities(session: AsyncSession, source_data_model_id: int, new_d
             Extension=entity.Extension,
             ExtensionNotes=entity.ExtensionNotes,
             Tags=entity.Tags,
+            Common=entity.Common,
             LevelOfAccess=entity.LevelOfAccess,
             Queryable=entity.Queryable,
             Modifiable=entity.Modifiable,
@@ -391,7 +409,11 @@ async def clone_entities(session: AsyncSession, source_data_model_id: int, new_d
 
 
 async def clone_attributes(
-    session: AsyncSession, source_data_model_id: int, new_data_model_id: int, value_set_id_map: dict[int, int]
+    session: AsyncSession,
+    source_data_model_id: int,
+    new_data_model_id: int,
+    value_set_id_map: dict[int, int],
+    entity_id_map: dict[int, int],
 ):
     attribute_id_map = {}
     # Fetch attributes associated with the source entity
@@ -406,18 +428,27 @@ async def clone_attributes(
             DataModelId=new_data_model_id,  # Assuming the same DataModel
             DataType=attribute.DataType,
             UniqueName=attribute.UniqueName,
+            Description=attribute.Description,
+            UseConsiderations=attribute.UseConsiderations,
+            Required=attribute.Required,
+            Array=attribute.Array,
+            SourceModel=attribute.SourceModel,
+            Example=attribute.Example,
             Notes=attribute.Notes,
             Contributor=attribute.Contributor,
             ContributorOrganization=attribute.ContributorOrganization,
             Extension=attribute.Extension,
             ExtensionNotes=attribute.ExtensionNotes,
             Tags=attribute.Tags,
+            Common=attribute.Common,
             LevelOfAccess=attribute.LevelOfAccess,
             Queryable=attribute.Queryable,
             Modifiable=attribute.Modifiable,
         )
         if attribute.ValueSetId:
             new_attribute.ValueSetId = value_set_id_map[attribute.ValueSetId]
+        if attribute.TargetEntityId:
+            new_attribute.TargetEntityId = entity_id_map.get(attribute.TargetEntityId, attribute.TargetEntityId)
         session.add(new_attribute)
         await session.commit()
         await session.refresh(new_attribute)
@@ -429,7 +460,11 @@ async def clone_attributes(
 
 
 async def clone_entity_attribute_association(
-    session: AsyncSession, entity_id_map: dict[int, int], attribute_id_map: dict[int, int], source_data_model_id: int
+    session: AsyncSession,
+    entity_id_map: dict[int, int],
+    attribute_id_map: dict[int, int],
+    source_data_model_id: int,
+    new_data_model_id: int,
 ):
     # Query for associations where the parent entity belongs to the given data model
     entity_query = (
@@ -479,8 +514,10 @@ async def clone_entity_attribute_association(
         new_association = EntityAttributeAssociation(
             EntityId=entity_id,
             AttributeId=attribute_id,
+            Notes=association.Notes,
             Contributor=association.Contributor,
             ContributorOrganization=association.ContributorOrganization,
+            ExtendedByDataModelId=_clone_extended_by(association, source_data_model_id, new_data_model_id),
         )
         # Recomputed from the cloned attribute rather than copied (#1386).
         attribute = await session.get(Attribute, attribute_id)
@@ -490,7 +527,9 @@ async def clone_entity_attribute_association(
         await session.commit()
 
 
-async def clone_entity_association(session: AsyncSession, entity_id_map: dict[int, int], source_data_model_id: int):
+async def clone_entity_association(
+    session: AsyncSession, entity_id_map: dict[int, int], source_data_model_id: int, new_data_model_id: int
+):
     # Use aliased entities to avoid conflicts
     ParentEntity = aliased(Entity)
     ChildEntity = aliased(Entity)
@@ -528,10 +567,14 @@ async def clone_entity_association(session: AsyncSession, entity_id_map: dict[in
         new_association = EntityAssociation(
             ParentEntityId=parent_entity_id,
             ChildEntityId=child_entity_id,
+            Relationship=association.Relationship,
+            Placement=association.Placement,
+            Notes=association.Notes,
             Contributor=association.Contributor,
             ContributorOrganization=association.ContributorOrganization,
             Extension=association.Extension,
             ExtensionNotes=association.ExtensionNotes,
+            ExtendedByDataModelId=_clone_extended_by(association, source_data_model_id, new_data_model_id),
         )
         # Recomputed from the cloned row and child rather than copied (#1386).
         child_entity = await session.get(Entity, child_entity_id)
@@ -541,6 +584,14 @@ async def clone_entity_association(session: AsyncSession, entity_id_map: dict[in
         new_association.Array = entity_association_array(new_association.Placement, child_entity.Array)
         session.add(new_association)
         await session.commit()
+
+
+def _clone_extended_by(association, source_data_model_id: int, new_data_model_id: int):
+    # An association the source model declared moves to the clone; one another model declared (an
+    # overlay's addition) still belongs to that model.
+    if association.ExtendedByDataModelId == source_data_model_id:
+        return new_data_model_id
+    return association.ExtendedByDataModelId
 
 
 async def clone_value_sets(session: AsyncSession, source_data_model_id: int, new_data_model_id: int):
@@ -555,11 +606,13 @@ async def clone_value_sets(session: AsyncSession, source_data_model_id: int, new
             Name=value_set.Name,
             DataModelId=new_data_model_id,
             Description=value_set.Description,
+            UseConsiderations=value_set.UseConsiderations,
             Notes=value_set.Notes,
             Contributor=value_set.Contributor,
             ContributorOrganization=value_set.ContributorOrganization,
             Extension=value_set.Extension,
             ExtensionNotes=value_set.ExtensionNotes,
+            Tags=value_set.Tags,
         )
         session.add(new_value_set)
         await session.commit()
@@ -679,7 +732,7 @@ async def clone_transformations(session: AsyncSession, transformation_group_id_m
             # Store the mapping between source and new entity IDs
             transformation_id_map[transformation.Id] = new_transformation.Id
 
-        return transformation_id_map
+    return transformation_id_map
 
 
 async def clone_transformation_attributes(
