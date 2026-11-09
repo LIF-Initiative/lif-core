@@ -83,8 +83,9 @@ LIF runs **one stack per organization**. In the local demo
 | Query Cache | :8001 | :8101 | :8201 | `bases/lif/query_cache_restapi/`, `components/lif/query_cache_service/` |
 | MongoDB | :27017 | :27018 | :27019 | seeded from `projects/mongodb/sample_data/advisor-demo-orgN/` |
 
-Shared, and only wired for org1 locally: the **Orchestrator API** (:8005), **Dagster** (webserver,
-daemon, code location, Postgres), the **Translator**, the **MDR**, and the **example data source**.
+Wired for org1 only, locally: the **Orchestrator API** (:8005), **Dagster** (webserver, daemon, code
+location, Postgres), the **Translator**, and the **example data source**. The **MDR** is shared by all
+three orgs: it's on every org network, and each `lif-graphql-api-orgN` depends on it.
 
 > **Port note.** Host ports for the per-org services come from the compose file; the GraphQL API listens on
 > 8000 *inside* its container and is published as 8010/8110/8210.
@@ -107,7 +108,7 @@ There is no hand-written GraphQL schema. At startup (`lifespan`), the service:
    input types from fields marked `x-queryable`, and mutation input types from fields marked `x-mutable`,
 3. mounts the result at `/graphql`.
 
-That is the only route the service has. If `GRAPHQL_AUTH__API_KEYS` is set, `lif.auth` middleware
+That is the service's only API route (FastAPI's default `/docs`, `/redoc` and `/openapi.json` are served too). If `GRAPHQL_AUTH__API_KEYS` is set, `lif.auth` middleware
 requires an `X-API-Key` header (see [`docs/operations/guides/graphql-api-keys.md`](../../operations/guides/graphql-api-keys.md)); locally it is usually
 unset, so there is no auth.
 
@@ -245,8 +246,8 @@ raw data to the Translator at `/translate/source/{source_schema_id}/target/{targ
 
 **Where:** `bases/lif/translator_restapi/core.py`, `components/lif/translator/core.py`
 
-For every request the Translator fetches the source schema, target schema, and the **transformation**
-(the JSONata mappings) from the MDR. The transformation is the pair's **active transformation group**:
+For every request the Translator fetches the **transformation** (the JSONata mappings) from the MDR, and
+the source and target schemas when they're not in its 5-minute schema cache. The transformation is the pair's **active transformation group**:
 since #1350, a group only counts when it has an `ActivationDate` in the past and no past
 `DeprecationDate` (`get_active_transformations_for_data_models` in
 `components/lif/mdr_services/transformation_service.py`). If there is none, the Translator returns 404
@@ -302,7 +303,8 @@ Two things to know:
 
 - **Only `x-mutable` fields can be changed.** In model 17 today that is just `Interactions`
   (`PersonMutableInput` has no other field: check with introspection, as in "Try it yourself").
-- **A mutation appends.** The cache `$push`es the new items onto the list; it never replaces them.
+- **A mutation appends lists.** The cache `$push`es list fields' new items and `$set`s scalar fields. In
+  model 17 today the only mutable field, `Interactions`, is a list, so a mutation appends.
 
 ```bash
 curl -s localhost:8010/graphql -H 'content-type: application/json' -d '{"query":"mutation { updatePerson(filter:{Identifier:[{identifier:\"100005\", identifierType:\"SCHOOL_ASSIGNED_NUMBER\"}]}, input:{Interactions:[{interactionId:\"my-test-1\", summary:\"test\"}]}) { Interactions { interactionId summary } } }"}'

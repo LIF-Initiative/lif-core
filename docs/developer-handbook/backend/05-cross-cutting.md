@@ -27,7 +27,7 @@ raises `AuthError` (my kind, but invalid → 401). The middleware puts the resul
 |---|---|
 | GraphQL API | API key (`GRAPHQL_AUTH__API_KEYS`), **off when unset**, which it is locally |
 | MDR API | JWT, API keys per service, Cognito when configured, plus tenant selection (`lif.mdr_auth`) |
-| Learner Data Export API | Cognito or developer key in the team's AWS environments (`LDE_AUTH__MODE=composite`) |
+| Learner Data Export API | Cognito in the team's AWS environments (`LDE_AUTH__MODE=composite`). Developer keys aren't accepted yet: that strategy is a stub that returns `None` (`learner_data_export_api/core.py`) |
 | Control-plane API, Advisor API, Example Data Source | yes (`lif.auth`) |
 | Query Planner, Query Cache, Orchestrator, Translator, Identity Mapper, Semantic Search | **none**: in the team's AWS environments they rely on not being reachable from outside the private network (Query Planner auth is #1108). Locally most of their ports *are* published to your machine, so anything on it can call them |
 
@@ -58,7 +58,8 @@ team's AWS-hosted dev and demo they come from each service's `cloudformation/*-t
 Services that need the data model load it **from the MDR at startup** and **fail loudly if the MDR is
 configured but unreachable**. There is no silent fallback to a bundled file.
 `USE_OPENAPI_DATA_MODEL_FROM_FILE=true` forces the bundled file, for development only. Because the schema
-is read once at startup, **restart a service after changing its model**. The pattern and the
+is read once at startup, **restart a service after changing its model**. (The Translator is different: it
+caches each schema for `TRANSLATOR_CACHE_TTL_SECONDS`, default 300, so it picks up a change within 5 minutes.) The pattern and the
 `SchemaStateManager` component: [`docs/design/cross-cutting/schema-loading.md`](../../design/cross-cutting/schema-loading.md).
 
 ## Timeouts
@@ -82,8 +83,8 @@ this several times (#1269, #1319, #1340, #1351), and the comments left behind sh
 - **Don't log a GraphQL query document**: its filter holds the learner's identifier.
 - **Don't put an exception's message in a response**, and be careful logging one: many messages quote the
   value that failed.
-- **Log the shape, not the content**: counts, field names, sizes (`_shape(...)`, `summarize_query_plan`,
-  "`(393-byte body)`").
+- **Log the shape, not the content**: counts, field names, sizes (`_shape(...)` in the orchestrator's `lif_job.py`,
+  `summarize_query_plan` in `query_planner_service/util.py`, "`(393-byte body)`").
 - **Watch URLs.** uvicorn's access log records the full path and query string, so an identifier in a URL
   (`/users/100006`) is logged by default (#1372, open).
 

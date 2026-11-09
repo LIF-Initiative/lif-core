@@ -58,8 +58,9 @@ The local MDR is seeded from `projects/lif_mdr_database/backup.sql`. It holds 21
 | 26 | R1 Demo Source Data Model | `SourceSchema` | The example source system's shape ([chapter 4](04-follow-the-data.md)'s translation) |
 | 25 | Test2UpdatedSourceModel | `SourceSchema` | Test data |
 
-Services pick their model by **name, version and contributor organization**, not by Id. In the compose
-file: `OPENAPI_DATA_MODEL_NAME=StateU LIF`, `OPENAPI_DATA_MODEL_VERSION=1.0`,
+The GraphQL API, semantic search and the Learner Data Export API pick their model by **name, version and
+contributor organization**, not by Id. The Translator works by Id: its caller passes the source and target
+Ids in the URL (the planner's sources config sends 26 → 17). In the compose file: `OPENAPI_DATA_MODEL_NAME=StateU LIF`, `OPENAPI_DATA_MODEL_VERSION=1.0`,
 `OPENAPI_DATA_MODEL_CONTRIBUTOR_ORGANIZATION=StateU`.
 
 ### Overlays are on their way out (changing: #1388)

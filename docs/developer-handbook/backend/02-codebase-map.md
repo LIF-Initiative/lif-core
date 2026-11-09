@@ -2,7 +2,7 @@
 
 How the repo is laid out (Polylith), how a service is assembled from it, and why one edit can ship in many services.
 
-*Checked against main `2967cb9`, November 2026.* Counts come from the `projects/*/pyproject.toml` brick lists.
+*Checked against main `2967cb9`, November 2026.* Counts are the folders under `components/lif/`, `bases/lif/` and `projects/`.
 
 ---
 
@@ -14,9 +14,9 @@ kinds of folder:
 
 | Folder | What it holds | How many | Example |
 |---|---|---|---|
-| `components/lif/<name>/` | Reusable logic: a client, a service, a data type, a helper | 44 | `query_planner_service`, `composer`, `mdr_client` |
+| `components/lif/<name>/` | Reusable logic: a client, a service, a data type, a helper | 41 | `query_planner_service`, `composer`, `mdr_client` |
 | `bases/lif/<name>/` | An entry point that turns components into something runnable: a FastAPI app, an MCP server | 13 | `query_planner_restapi`, `api_graphql` |
-| `projects/<name>/` | A deployable: picks one base plus the components it needs, and has its own `pyproject.toml`, `uv.lock` and Dockerfile | 20 (16 with Python bricks) | `lif_query_planner_api` |
+| `projects/<name>/` | A deployable: picks one base plus the components it needs, and has its own `pyproject.toml`, `uv.lock` and Dockerfile | 19 (16 with Python bricks) | `lif_query_planner_api` |
 
 Every brick lives in the `lif` namespace (`workspace.toml`), so whatever folder it's in, you import it
 as `lif.<brick>`: `from lif.composer.core import compose_with_fragment_list`.
@@ -63,14 +63,17 @@ dependency in a *project* won't show up locally.
 plus its own third-party `dependencies`. The `hatch-polylith-bricks` build hook copies those bricks into
 the project's wheel, and the project's Dockerfile installs the wheel.
 
-Most services build with `projects/<name>/Dockerfile2`. It exports the project's `uv.lock` as a
-constraints file and installs the wheel against it, so the image gets the versions in that lock.
+Local compose builds `projects/<name>/Dockerfile2`. It exports the project's `uv.lock` as a constraints
+file and installs the wheel against it. The deploy workflows build the default `Dockerfile` instead, after
+`build.sh` (`uv export --frozen` to a `requirements.txt`, then `uv build`), and it installs the wheel plus
+that `requirements.txt`. Either way the image gets the versions in the project's lock.
 
 > **Two rules that follow:**
 > 1. A third-party library a brick needs must be in **each project's** `dependencies` (and its `uv.lock`),
 >    not just the root `pyproject.toml`. Locally it will import fine either way.
 > 2. A new brick a service needs must be added to **that project's** brick list. For Dagster, that means
->    all three `projects/dagster_*/pyproject.toml` (#1455: nothing checks this yet).
+>    all three `projects/dagster_*/pyproject.toml` plus `orchestrators/dagster/lif-orchestrator/pyproject.toml`
+>    (#1455: nothing checks this yet).
 
 **The Dagster projects are different.** `projects/dagster_*` have no `uv.lock`, and their images install
 from PyPI without one. That is how the images drifted to versions that don't work together (#1490,
@@ -135,7 +138,7 @@ before `auth` replaced them; they aren't in git.
 | `mdr_restapi` | `lif_mdr_api` | 8012 | `lif_mdr_api.yml` |
 | `identity_mapper_restapi` | `lif_identity_mapper_api` | not published (compose network only) | `lif_identity_mapper_api.yml` |
 | `learner_data_export_api` | `lif_learner_data_export_api` | 8013 | `lif_learner_data_export_api.yml` |
-| `control_plane_restapi` | `lif_control_plane_api` | 8014 | none on `main` yet (PR #1464) |
+| `control_plane_restapi` | `lif_control_plane_api` | 8014 | `lif_control_plane_api.yml` (manual only, `workflow_dispatch`, until its AWS stack exists, #1182) |
 | `example_data_source_rest_api` | `lif_example_data_source_rest_api` | 8011 | `lif_example_data_source_rest_api.yml` |
 | `advisor_restapi` | `lif_advisor_api` | 8004 | `lif_advisor_api.yml` |
 | `semantic_search_mcp_server` | `lif_semantic_search_mcp_server` | 8003 | `lif_semantic_search_mcp_server.yml` |

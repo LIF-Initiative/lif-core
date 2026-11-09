@@ -25,9 +25,9 @@ The field lives in the MDR, so this is mostly data, not code ([chapter 3](03-dat
    Verified 11-07 on the local stack with a test field `preferredPronouns` on `Name`: both calls returned
    201; model 17's generated schema showed the field at once; GraphQL showed it only after a restart (next
    step); a query returned it (`null`, since no data has it yet). A reseed ([chapter 1](01-dev-environment.md)) removed it again.
-2. **Restart the services that load the schema** (`docker restart lif-graphql-api-org1 …`, the Translator,
-   semantic search): they read
-   it once at startup.
+2. **Restart the services that load the schema** (`docker restart lif-graphql-api-org1 …`, semantic
+   search): they read it once at startup. The Translator picks it up within 5 minutes (its schema cache), or
+   restart it to see it at once.
 3. **Seed data**, if the demo should show it: `projects/mongodb/sample_data/<org>/`. The integration tests
    read these files, so they'll expect the new value.
 4. **Places that list fields by hand**, which a new field won't reach on its own:
@@ -66,11 +66,14 @@ The field lives in the MDR, so this is mostly data, not code ([chapter 3](03-dat
 
 The pieces, as [chapter 4](04-follow-the-data.md) traces them:
 
-1. An adapter class (subclass of `LIFDataSourceAdapter`) registered in `ADAPTER_REGISTRY`: either with
-   `register_adapter(...)` at import time (how `demo_data_source_adapters` does it), or as an entry in the
-   `_EXTERNAL_ADAPTERS` dict in `components/lif/data_source_adapters/__init__.py`. A new module inside those
-   existing bricks needs no brick-list change; a **new brick** must go into all three
-   `projects/dagster_*/pyproject.toml` brick lists.
+1. An adapter class (subclass of `LIFDataSourceAdapter`) registered in `ADAPTER_REGISTRY`: either as an
+   entry in `_CORE_ADAPTERS` in `components/lif/data_source_adapters/__init__.py`, or with
+   `register_adapter(...)` called at startup. `demo_data_source_adapters` provides
+   `register_demo_adapters()`, which the orchestrator's `lif_job.py` calls, so an adapter added to its
+   `DEMO_ADAPTERS` is registered already. A **new brick** needs its own registration call in `lif_job.py`,
+   a line in all four brick lists (the three `projects/dagster_*/pyproject.toml` and
+   `orchestrators/dagster/lif-orchestrator/pyproject.toml`, which CI's orchestrator job uses), and a line
+   in `dagster_code_location.yml`'s `paths:`.
 2. Credentials as environment variables on the **Dagster code-location** container, named
    `ADAPTERS__<ADAPTER_ID>__<INFORMATION_SOURCE_ID>__CREDENTIALS__<KEY>` (upper case, dashes → underscores;
    the keys come from the adapter's `credential_keys`; `get_credentials_for_adapter` in
@@ -97,11 +100,11 @@ The pieces, as [chapter 4](04-follow-the-data.md) traces them:
 local stack starts with, and the data the schema-snapshot tests pin. It is **regenerated with `pg_dump`,
 never edited or merged by hand**. Recent seed changes (November 2026) all followed one of three shapes:
 
-| Change | What ships with the new `backup.sql` | Example |
+| Change | What ships with the change | Example |
 |---|---|---|
 | Rebuild or add a model | A `projects/lif_mdr_database/data_models/<model>/` folder: build script, `*_update.sql`, `*_verify.sql`, README | CEDS (#1435), CTDL (#1446) |
 | Change the MDR's tables | A V1.x migration ("Add an MDR database migration", below) | #1471 |
-| Remove or fix data | A script under `scripts/` | `scripts/remove_test_data.py` (#1388) |
+| Remove or fix data on dev and demo | A script under `scripts/`, run against them (rolls back unless `--apply`); `backup.sql` doesn't change | `scripts/remove_test_data.py` (#1479, #1487) |
 
 The method (written up in [`projects/lif_mdr_database/data_models/ceds/README.md`](../../../projects/lif_mdr_database/data_models/ceds/README.md), "Reproducing or
 re-applying"):
@@ -147,8 +150,8 @@ in `.claude/skills/`. It covers the base and project, the brick lists, `Dockerfi
 ## Add an MDR database migration
 
 **Stop and check with a maintainer first** (the committers are listed in [`docs/COMMITTERS.md`](../../COMMITTERS.md)): this is one
-of the repo's stop-and-ask boundaries ([`agent-behavioral-guidelines.md`](../../../agent-behavioral-guidelines.md)). A missing migration once broke API-key creation on both environments
-(#1123).
+of the repo's stop-and-ask boundaries ([`agent-behavioral-guidelines.md`](../../../agent-behavioral-guidelines.md)). A merged migration does nothing until
+someone applies it: V1.6 sat merged and unapplied on both environments (#1226).
 
 0. **Check the live schema first**: the column or table may already exist
    (`\d "TableName"` in the MDR database, [chapter 1](01-dev-environment.md)). Then check `components/lif/mdr_sql_model/` and
@@ -170,7 +173,8 @@ of the repo's stop-and-ask boundaries ([`agent-behavioral-guidelines.md`](../../
 
 ## Change a shared component
 
-1. Find every project that packages it: `grep -l 'components/lif/<brick>"' projects/*/pyproject.toml`.
+1. Find every project that packages it:
+   `grep -l 'components/lif/<brick>"' projects/*/pyproject.toml orchestrators/dagster/lif-orchestrator/pyproject.toml`.
 2. Name those services in the PR, and run their tests.
 3. Check that each one's deploy workflow `paths:` filter covers the brick, or the change won't ship
    (#1171; `scripts/check_workflow_paths.py`).
