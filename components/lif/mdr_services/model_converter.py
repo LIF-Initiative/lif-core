@@ -626,11 +626,13 @@ async def _import_elements(
     #
     # An entity with no parent carries its own Array in the file (§5.3).
     entities_in_arrays = {entity.UniqueName for entity in file.Entities if entity.Array}
-    # And every entity an association places as a list.
+    # And every entity a containing association places as a list. Not a reference: the generator emits
+    # one as a single object whatever its child's Array (#1471), and an entity only referenced has no
+    # parent, so its own Array would make its top-level schema a list.
     entities_in_arrays |= {
         association.Child.Entity
         for association in file.Associations
-        if isinstance(association.Child, EntityKey) and association.Array
+        if isinstance(association.Child, EntityKey) and association.Array and not association.Reference
     }
     attributes_in_arrays = {
         association.Child.Attribute

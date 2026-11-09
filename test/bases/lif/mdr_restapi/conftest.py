@@ -26,13 +26,16 @@ BACKUP_SQL_PATH = Path(__file__).parent.parent.parent.parent.parent / "projects/
 
 
 def _start_postgres():
-    """Start a throwaway PostgreSQL server (no Docker required), or skip.
+    """Start a throwaway PostgreSQL server (no Docker required), or skip; in CI, fail instead.
 
     Requires PostgreSQL to be installed locally (e.g., `brew install postgresql` on macOS).
     """
     try:
         return testing.postgresql.Postgresql()
     except RuntimeError as e:
+        # CI must prove the database tests ran; skipping there would pass them unproven (#1063).
+        if os.environ.get("CI"):
+            pytest.fail(f"PostgreSQL not available in CI: {e}")
         pytest.skip(f"PostgreSQL not available locally: {e}")
 
 
