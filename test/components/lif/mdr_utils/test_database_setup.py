@@ -88,8 +88,11 @@ def _patch_session(monkeypatch, schema_exists=True):
 
     `schema_exists` controls what the `information_schema.schemata` existence
     probe returns (`.first()` → a row when True, else None). Returns the mock
-    session whose `.execute` records the SQL it was handed.
+    session whose `.execute` records the SQL it was handed. `event` is patched
+    too (SQLAlchemy can't listen on a mock); `database_setup.event.listen`
+    records the listener `get_session` registers.
     """
+    monkeypatch.setattr(database_setup, "event", MagicMock())
     session = AsyncMock()
     result = MagicMock()
     result.first.return_value = (1,) if schema_exists else None
@@ -137,6 +140,7 @@ class TestGetSessionSearchPath:
             await agen.__anext__()
         assert exc_info.value.status_code == 500
         assert not any("SET search_path" in s for s in _executed_sql(session))
+        database_setup.event.listen.assert_not_called()
 
     async def test_no_tenant_resets_to_public(self, monkeypatch):
         # A non-tenant request MUST still issue a SET — otherwise a pooled
@@ -145,6 +149,19 @@ class TestGetSessionSearchPath:
         session = _patch_session(monkeypatch)
         await _drive(_make_request(None))
         assert _executed_sql(session) == ["SET search_path TO public"]
+
+    @pytest.mark.parametrize("tenant_schema", ["tenant_acme", None])
+    async def test_every_later_transaction_repeats_the_set(self, monkeypatch, tenant_schema):
+        # #1477: a commit returns the connection to the pool, so the session's next
+        # transaction may run on a connection with another search_path. The
+        # after_begin listener must issue the same SET as the first transaction.
+        session = _patch_session(monkeypatch)
+        await _drive(_make_request(tenant_schema))
+        target, event_name, listener = database_setup.event.listen.call_args.args
+        assert (target, event_name) == (session.sync_session, "after_begin")
+        connection = MagicMock()
+        listener(session.sync_session, MagicMock(), connection)
+        connection.exec_driver_sql.assert_called_once_with(_executed_sql(session)[-1])
 
     @pytest.mark.parametrize(
         "malicious",
@@ -168,3 +185,4 @@ class TestGetSessionSearchPath:
             await agen.__anext__()
         assert exc_info.value.status_code == 500
         assert session.execute.await_count == 0
+        database_setup.event.listen.assert_not_called()

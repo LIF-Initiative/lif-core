@@ -27,6 +27,10 @@ brick source -- `dagster.yml` builds `Dockerfile.dagster`, a `pip install` plus 
 files -- the project's bricks are not in its image and watching them only forces
 rebuilds nobody needs (#1274 review).
 
+A workflow with no `push:` trigger runs only by hand (`workflow_dispatch`), so nothing
+rebuilds on a merge and there is no filter to drift. It is listed as manual-only, not
+counted as covered; adding the push trigger back puts it under the check again.
+
 A workflow that cannot be audited is reported, never skipped. Silently dropping one
 would let a project rename disable the check while the summary still claimed full
 coverage -- drift disabling the drift detector.
@@ -109,18 +113,27 @@ def covered(brick: str, paths: list[str]) -> bool:
     return False
 
 
+def has_push_trigger(text: str) -> bool:
+    """Whether the workflow runs on push (the block form every workflow here uses)."""
+    return re.search(r"^\s+push:", text, re.M) is not None
+
+
 def audit(
     repo: pathlib.Path = REPO,
-) -> tuple[list[tuple[str, str, list[str], list[str]]], list[tuple[str, str]], list[str], list[tuple[str, str]]]:
-    """Return (rows, unauditable, not_projects, brick_free).
+) -> tuple[
+    list[tuple[str, str, list[str], list[str]]], list[tuple[str, str]], list[str], list[tuple[str, str]], list[str]
+]:
+    """Return (rows, unauditable, not_projects, brick_free, manual_only).
 
     rows are (workflow, project, bricks, missing); brick_free are (workflow, dockerfile)
-    for a workflow whose named image packages no bricks.
+    for a workflow whose named image packages no bricks; manual_only are deploy workflows
+    with no push trigger.
     """
     rows: list[tuple[str, str, list[str], list[str]]] = []
     unauditable: list[tuple[str, str]] = []
     not_projects: list[str] = []
     brick_free: list[tuple[str, str]] = []
+    manual_only: list[str] = []
 
     for workflow in sorted((repo / ".github" / "workflows").glob("*.yml")):
         if workflow.name in NOT_DEPLOY_WORKFLOWS:
@@ -134,6 +147,9 @@ def audit(
             # heuristic that silently removes a workflow from the denominator is how a
             # drift check stops seeing the thing it checks.
             not_projects.append(workflow.name)
+            continue
+        if not has_push_trigger(text):
+            manual_only.append(workflow.name)
             continue
         for project in projects:
             if project in NO_BRICK_PROJECTS:
@@ -154,11 +170,11 @@ def audit(
                 unauditable.append((workflow.name, f"projects/{project} declares no [tool.polylith.bricks]"))
                 continue
             rows.append((workflow.name, project, bricks, [b for b in bricks if not covered(b, workflow_paths(text))]))
-    return rows, unauditable, not_projects, brick_free
+    return rows, unauditable, not_projects, brick_free, manual_only
 
 
 def main() -> int:
-    rows, unauditable, not_projects, brick_free = audit()
+    rows, unauditable, not_projects, brick_free, manual_only = audit()
     if not rows:
         print("check_workflow_paths: no deploy workflows found -- has the layout changed?")
         return 1
@@ -180,6 +196,8 @@ def main() -> int:
     if show_all and brick_free:
         listed = ", ".join(f"{name} builds {dockerfile}" for name, dockerfile in brick_free)
         print(f"  (images that package no bricks, so nothing to check: {listed})")
+    if manual_only:
+        print(f"  (manual-only deploys, no push trigger, so no paths: to check: {', '.join(manual_only)})")
 
     for name, reason in unauditable:
         failures += 1
