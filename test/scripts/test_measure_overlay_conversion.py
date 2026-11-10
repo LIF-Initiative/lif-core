@@ -157,6 +157,9 @@ def seed_url():
     try:
         postgresql = testing.postgresql.Postgresql()
     except RuntimeError as e:
+        # CI must prove the database tests ran; skipping there would pass them unproven (#1063).
+        if os.environ.get("CI"):
+            pytest.fail(f"PostgreSQL not available in CI: {e}")
         pytest.skip(f"PostgreSQL not available locally: {e}")
     with postgresql:
         url = urlparse(postgresql.url())
