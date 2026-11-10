@@ -627,6 +627,7 @@ async def get_filtered_entity_children(
                 "ParentEntityId": entity_id,
                 "Relationship": association.Relationship,
                 "Placement": association.Placement,
+                "AssociationArray": association.Array,
             }
         )
         child_entities.append(dto)

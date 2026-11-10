@@ -52,6 +52,7 @@ class ChildEntityDTO(BaseModel):
     ParentEntityId: Optional[int] = None  # Added for child entities
     Relationship: Optional[str] = None
     Placement: Optional[str] = None
+    AssociationArray: Optional[bool] = None  # Whether the child is a list under this parent (#1429)
 
     class Config:
         orm_mode = True

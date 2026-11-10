@@ -94,11 +94,13 @@ class AttributeWithAssociationMetadataDTO(AttributeDTO):
     AssociationContributorOrganization: Optional[str] = None
     AssociationExtendedByDataModelId: Optional[int] = None
     # Read by the schema generator only (#1395): the element flags it emits as x-mutable /
-    # x-queryable, and the key the attribute appears under in its entity.
+    # x-queryable, the key the attribute appears under in its entity, and whether it is a list there
+    # (#1429).
     LevelOfAccess: Optional[str] = None
     Queryable: Optional[bool] = None
     Modifiable: Optional[bool] = None
     AssociationName: Optional[str] = None
+    AssociationArray: Optional[bool] = None
 
     # AssociationExtension: Optional[bool] = None
     # AssociationExtensionNotes: Optional[str] = None

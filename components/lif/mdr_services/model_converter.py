@@ -619,25 +619,8 @@ def _to_yes_no(flag: bool) -> str:
 async def _import_elements(
     session: AsyncSession, file: ModelFile, data_model_id: int, value_set_ids: dict[str, int]
 ) -> tuple[dict[str, int], dict[str, int]]:
-    # The schema generator still reads Array from the element, not from the association, so an element
-    # is stored as an array when any association places it as one. An element that is a list under one
-    # parent and single under another can't be generated that way until the generator reads the
-    # association (#1429).
-    #
-    # An entity with no parent carries its own Array in the file (§5.3).
-    entities_in_arrays = {entity.UniqueName for entity in file.Entities if entity.Array}
-    # And every entity an association places as a list.
-    entities_in_arrays |= {
-        association.Child.Entity
-        for association in file.Associations
-        if isinstance(association.Child, EntityKey) and association.Array
-    }
-    attributes_in_arrays = {
-        association.Child.Attribute
-        for association in file.Associations
-        if isinstance(association.Child, AttributeKey) and association.Array
-    }
-
+    # Only an entity with no parent carries its own Array in the file (§5.3). Every other list setting
+    # is on the association, which the schema generator reads (#1429).
     def element_fields(element: Any, in_array: bool) -> dict:
         return {
             "UniqueName": element.UniqueName,
@@ -660,10 +643,10 @@ async def _import_elements(
             "DeprecationDate": element.DeprecationDate,
         }
 
-    entities = [Entity(**element_fields(entity, entity.UniqueName in entities_in_arrays)) for entity in file.Entities]
+    entities = [Entity(**element_fields(entity, entity.Array)) for entity in file.Entities]
     attributes = [
         Attribute(
-            **element_fields(attribute, attribute.UniqueName in attributes_in_arrays),
+            **element_fields(attribute, False),
             DataType=attribute.DataType,
             ValueSetId=value_set_ids[attribute.ValueSet.ValueSet] if attribute.ValueSet else None,
             Example=attribute.Example,

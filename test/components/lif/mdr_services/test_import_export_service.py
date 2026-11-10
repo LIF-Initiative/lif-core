@@ -322,12 +322,14 @@ def _association_row(**fields):
         "Extension": False,
         "ExtensionNotes": None,
         "ExtendedByDataModelId": None,
+        "Array": None,
     }
     return types.SimpleNamespace(**{**row, **fields})
 
 
 async def test_clone_recomputes_association_name_and_array_from_the_cloned_child():
-    """#1386 (Q5): Name/Array are recomputed from the cloned row and its cloned child, not copied. Since
+    """#1386 (Q5): Name/Array are recomputed from the cloned row and its cloned child, not copied (Array
+    only while the source's is NULL, #1429). Since
     #1404 the cloned row keeps Relationship and Placement, so an issuedBy Reference keeps its full name,
     and is single even though its child is a list (#1471)."""
     source = _association_row(Relationship="issuedBy", Placement=EntityPlacementType.Reference)
@@ -367,6 +369,31 @@ async def test_clone_embedded_association_to_a_list_child_is_a_list():
 
     entity_clone = entity_session.add.call_args.args[0]
     assert (entity_clone.Name, entity_clone.Array) == ("CFConceptsCFConcept", True)
+
+
+@pytest.mark.parametrize("source_array", [True, False])
+async def test_clone_copies_an_associations_array_that_differs_from_its_child(source_array):
+    """#1429: an imported model keeps a list on the association and stores its child as single (or the
+    reverse), so recomputing from the child would change the clone's schema."""
+    child_array = "No" if source_array else "Yes"
+    entity_session = _clone_helper_session([_association_row(Array=source_array)])
+    entity_session.get.return_value = types.SimpleNamespace(Name="Identifier", Array=child_array)
+    attribute_session = _clone_helper_session([_association_row(Array=source_array)])
+    attribute_session.get.return_value = types.SimpleNamespace(Name="lunchStatus", Array=child_array)
+
+    await svc.clone_entity_association(
+        entity_session, entity_id_map={1: 11, 2: 12}, source_data_model_id=9, new_data_model_id=NEW_DATA_MODEL_ID
+    )
+    await svc.clone_entity_attribute_association(
+        attribute_session,
+        entity_id_map={1: 11},
+        attribute_id_map={3: 13},
+        source_data_model_id=9,
+        new_data_model_id=NEW_DATA_MODEL_ID,
+    )
+
+    for session in (entity_session, attribute_session):
+        assert session.add.call_args.args[0].Array is source_array
 
 
 @pytest.mark.parametrize("declared_by, expected", [(9, NEW_DATA_MODEL_ID), (17, 17), (None, None)])
