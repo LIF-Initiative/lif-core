@@ -128,6 +128,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+- GraphQL API no longer falls back to `LIF_QUERY_TIMEOUT_SECONDS` for its Query Planner client
+  timeout (`LIF_GRAPHQL_CLIENT_TIMEOUT_SECONDS`) or its uvicorn keep-alive
+  (`LIF_GRAPHQL_KEEPALIVE_SECONDS`). That name now belongs to the Query Planner only. A GraphQL
+  task definition must set both new names, or the timeout drops to 20s and keep-alive to 60s;
+  dev's are deployed, demo's stacks need `aws-deploy.sh` before a promotion that includes this
+  (issue #1236)
 - Auth bricks `api_key_auth`, `api_token_auth` and `cognito_auth`, the
   Advisor-only `lif.auth.core`, and MDR's `create_access_token`, `create_refresh_token`,
   `decode_jwt` and its own `AuthMiddleware`, all replaced by `lif.auth` (issue #548)
