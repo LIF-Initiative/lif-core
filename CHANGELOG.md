@@ -134,6 +134,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Dagster code-location images pin SQLAlchemy below 2.1. The runtime stage installs the project wheel
+  from PyPI, so it got SQLAlchemy 2.1, whose `postgresql` dialect needs `psycopg` (v3), and every run
+  failed to launch with `No module named 'psycopg'` (#1383 pinned only the webserver image) (issue #1491)
 - Identity Mapper `save_mappings` rejects a `mapping_id` the caller does not own, or one that
   disagrees with the target system fields sent with it, as a 400 instead of failing the unique
   constraint as a 500 and discarding the rest of the batch
