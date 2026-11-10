@@ -1,8 +1,0 @@
-Environment:
-  - Name: MONGO_HOST
-    Value:
-      Fn::Sub: "mongodb-${OrganizationName}.lif.${EnvironmentName}.aws"
-  - Name: MONGO_DB
-    Value: LIF
-  - Name: MONGO_COLLECTION
-    Value: person

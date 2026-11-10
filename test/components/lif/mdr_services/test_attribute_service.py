@@ -414,6 +414,7 @@ async def test_get_attributes_with_association_metadata_for_entity_base(fake_ses
             Deleted=False,
             ExtendedByDataModelId=None,
             Name="a1",
+            Array=True,
         ),
         types.SimpleNamespace(
             Id=901,
@@ -428,6 +429,7 @@ async def test_get_attributes_with_association_metadata_for_entity_base(fake_ses
             Deleted=False,
             ExtendedByDataModelId=None,
             Name="a2",
+            Array=False,
         ),
     ]
     attr_rows = [
@@ -464,6 +466,9 @@ async def test_get_attributes_with_association_metadata_for_entity_base(fake_ses
     # The schema generator keys each attribute by its association's Name (#1395).
     assert by_id[1].AssociationName == "a1"
     assert by_id[2].AssociationName == "a2"
+    # And takes each one's list setting from its association, not the attribute (#1429).
+    assert by_id[1].AssociationArray is True
+    assert by_id[2].AssociationArray is False
 
 
 async def test_get_attributes_with_association_metadata_for_entity_none(fake_session):
@@ -490,6 +495,7 @@ async def test_get_attributes_with_association_metadata_for_entity_orglif_public
             Deleted=False,
             ExtendedByDataModelId=None,
             Name=None,
+            Array=None,
         ),
         types.SimpleNamespace(
             Id=911,
@@ -504,6 +510,7 @@ async def test_get_attributes_with_association_metadata_for_entity_orglif_public
             Deleted=False,
             ExtendedByDataModelId=999,  # extended by this data model
             Name=None,
+            Array=None,
         ),
     ]
     # ext inclusion returns only attribute 4 (public filtering simulated)

@@ -519,10 +519,13 @@ async def clone_entity_attribute_association(
             ContributorOrganization=association.ContributorOrganization,
             ExtendedByDataModelId=_clone_extended_by(association, source_data_model_id, new_data_model_id),
         )
-        # Recomputed from the cloned attribute rather than copied (#1386).
+        # Name is recomputed from the cloned attribute (#1386). Array is copied, since an imported model
+        # keeps its lists on the association rather than the attribute; it's recomputed only while NULL (#1429).
         attribute = await session.get(Attribute, attribute_id)
         new_association.Name = attribute.Name
-        new_association.Array = association_array(attribute.Array)
+        new_association.Array = association.Array
+        if new_association.Array is None:
+            new_association.Array = association_array(attribute.Array)
         session.add(new_association)
         await session.commit()
 
@@ -576,12 +579,15 @@ async def clone_entity_association(
             ExtensionNotes=association.ExtensionNotes,
             ExtendedByDataModelId=_clone_extended_by(association, source_data_model_id, new_data_model_id),
         )
-        # Recomputed from the cloned row and child rather than copied (#1386).
+        # Name is recomputed from the cloned row and child (#1386). Array is copied, since an imported model
+        # keeps its lists on the association rather than the child; it's recomputed only while NULL (#1429).
         child_entity = await session.get(Entity, child_entity_id)
         new_association.Name = entity_association_name(
             new_association.Relationship, new_association.Placement, child_entity.Name
         )
-        new_association.Array = entity_association_array(new_association.Placement, child_entity.Array)
+        new_association.Array = association.Array
+        if new_association.Array is None:
+            new_association.Array = entity_association_array(new_association.Placement, child_entity.Array)
         session.add(new_association)
         await session.commit()
 
