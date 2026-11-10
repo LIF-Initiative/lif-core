@@ -330,7 +330,8 @@
         "Trovares",
         "learnerinfoframework",
         "lineterm",
-        "outerjoin"
+        "outerjoin",
+        "stackset"
     ],
     "ignorePaths": [
         ".git/",

@@ -125,13 +125,6 @@ Resources:
       ImageScanningConfiguration:
         ScanOnPush: true
 
-  MongodbSeedRepo:
-    Type: AWS::ECR::Repository
-    Properties:
-      RepositoryName: !Sub lif/${EnvironmentName}/mongodb_seed
-      ImageScanningConfiguration:
-        ScanOnPush: true
-
   DagsterCloudAgentRepo:
     Type: AWS::ECR::Repository
     Properties:

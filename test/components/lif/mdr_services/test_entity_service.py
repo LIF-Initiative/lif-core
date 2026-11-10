@@ -427,7 +427,7 @@ async def test_get_entity_children_maps_to_dto(fake_session, monkeypatch):
 
 async def test_get_filtered_entity_children_builds_child_dtos(fake_session, monkeypatch):
     dm_type = getattr(svc, "DataModelType")
-    assoc = types.SimpleNamespace(ChildEntityId=10, Relationship="rel", Placement="pl", Deleted=False)
+    assoc = types.SimpleNamespace(ChildEntityId=10, Relationship="rel", Placement="pl", Array=True, Deleted=False)
     fake_session.execute.return_value = _ScalarListResult([assoc])
     monkeypatch.setattr(
         svc, "get_entity_by_id", AsyncMock(return_value=types.SimpleNamespace(Id=10, Name="Kid", Deleted=False))
@@ -439,3 +439,5 @@ async def test_get_filtered_entity_children_builds_child_dtos(fake_session, monk
     assert out[0]["ParentEntityId"] == 2
     assert out[0]["Relationship"] == "rel"
     assert out[0]["Placement"] == "pl"
+    # Whether the child is a list under this parent comes from the association (#1429).
+    assert out[0]["AssociationArray"] is True

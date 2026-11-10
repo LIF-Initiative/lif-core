@@ -12,7 +12,17 @@ from unittest.mock import ANY, AsyncMock, MagicMock, create_autospec
 import pytest
 from fastapi import HTTPException
 
-from lif.mdr_sql_model.core import AccessType, Attribute, DataModel, DataModelType, DatamodelElementType, Entity
+from lif.mdr_sql_model.core import (
+    AccessType,
+    Attribute,
+    DataModel,
+    DataModelType,
+    DatamodelElementType,
+    Entity,
+    EntityPlacementType,
+    StateType,
+    Transformation,
+)
 from lif.mdr_dto.datamodel_dto import CreateDataModelDTO
 from lif.mdr_dto.import_export_dto import (
     CreateCloneDTO,
@@ -178,6 +188,7 @@ async def test_clone_uniqueness_check_matches_inserted_tuple(monkeypatch):
         "clone_transformation_attributes",
     ):
         monkeypatch.setattr(svc, helper, AsyncMock(return_value={}))
+    monkeypatch.setattr(svc, "get_datamodel_by_id", AsyncMock(return_value=DataModel(Name="Source")))
     session = _clone_session(existing=None)
 
     new_model = await svc.clone_datamodel(session=session, data=_clone_payload())
@@ -194,6 +205,39 @@ async def test_clone_uniqueness_check_matches_inserted_tuple(monkeypatch):
     assert (inserted.Name, inserted.DataModelVersion, inserted.Type) == ("ClonedDM", "2.0", DataModelType.OrgLIF)
     assert inserted.ContributorOrganization is None
     assert inserted.BaseDataModelId == SOURCE_DATA_MODEL_ID  # OrgLIF clones point at their source
+
+
+async def test_clone_inserts_a_live_model_with_the_sources_details(monkeypatch):
+    """#1404: the new DataModel left Deleted unset, so SQLAlchemy inserted NULL into a NOT NULL column
+    and every clone failed. It also dropped the source's descriptive fields."""
+    for helper in (
+        "clone_entities",
+        "clone_value_sets",
+        "clone_attributes",
+        "clone_entity_attribute_association",
+        "clone_entity_association",
+        "clone_value_set_values",
+        "clone_transformation_group",
+        "clone_transformations",
+        "clone_transformation_attributes",
+    ):
+        monkeypatch.setattr(svc, helper, AsyncMock(return_value={}))
+    details = {
+        "Description": "d",
+        "UseConsiderations": "u",
+        "Notes": "n",
+        "Contributor": "c",
+        "State": StateType.Published,
+        "Tags": "t",
+    }
+    source = DataModel(Name="Source", CopiedFromName="Elsewhere", **details)
+    monkeypatch.setattr(svc, "get_datamodel_by_id", AsyncMock(return_value=source))
+
+    new_model = await svc.clone_datamodel(session=_clone_session(existing=None), data=_clone_payload())
+
+    assert new_model.Deleted is False
+    assert {field: getattr(new_model, field) for field in details} == details
+    assert new_model.CopiedFromName is None  # left out, per #1386 Q5
 
 
 def _clone_helper_session(rows):
@@ -219,7 +263,11 @@ async def test_clone_copies_the_v1_7_element_flags():
 
     await svc.clone_entities(entity_session, source_data_model_id=9, new_data_model_id=NEW_DATA_MODEL_ID)
     await svc.clone_attributes(
-        attribute_session, source_data_model_id=9, new_data_model_id=NEW_DATA_MODEL_ID, value_set_id_map={}
+        attribute_session,
+        source_data_model_id=9,
+        new_data_model_id=NEW_DATA_MODEL_ID,
+        value_set_id_map={},
+        entity_id_map={},
     )
 
     for session in (entity_session, attribute_session):
@@ -227,34 +275,179 @@ async def test_clone_copies_the_v1_7_element_flags():
         assert (clone.LevelOfAccess, clone.Queryable, clone.Modifiable) == (AccessType.Restricted, True, True)
 
 
-async def test_clone_recomputes_association_name_and_array_from_the_cloned_child():
-    """#1386 (Q5): Name/Array are recomputed from the cloned row and its cloned child, not copied."""
-    source = types.SimpleNamespace(
-        ParentEntityId=1,
-        ChildEntityId=2,
-        EntityId=1,
-        AttributeId=3,
-        Contributor=None,
-        ContributorOrganization=None,
-        Extension=False,
-        ExtensionNotes=None,
+async def test_clone_copies_the_element_fields_and_remaps_target_entity():
+    """#1404: Required, Array and the descriptive fields were dropped, and TargetEntityId was not copied
+    at all; it must point at the cloned entity, or stay as-is when the entity is in another model."""
+    fields = {"Required": "Yes", "Array": "Yes", "UseConsiderations": "u", "SourceModel": "s", "Common": True}
+    entity_session = _clone_helper_session(
+        [Entity(Id=1, Name="Course", UniqueName="Course", DataModelId=9, Description="d", **fields)]
     )
+    attribute_session = _clone_helper_session(
+        [
+            Attribute(Id=2, Name="a", UniqueName="Course.a", DataModelId=9, TargetEntityId=1, Example="e", **fields),
+            Attribute(Id=3, Name="b", UniqueName="Course.b", DataModelId=9, TargetEntityId=500),
+        ]
+    )
+
+    await svc.clone_entities(entity_session, source_data_model_id=9, new_data_model_id=NEW_DATA_MODEL_ID)
+    await svc.clone_attributes(
+        attribute_session,
+        source_data_model_id=9,
+        new_data_model_id=NEW_DATA_MODEL_ID,
+        value_set_id_map={},
+        entity_id_map={1: 11},
+    )
+
+    entity_clone = entity_session.add.call_args.args[0]
+    assert {field: getattr(entity_clone, field) for field in fields} == fields
+    assert entity_clone.Description == "d"
+    first, second = (call.args[0] for call in attribute_session.add.call_args_list)
+    assert {field: getattr(first, field) for field in fields} == fields
+    assert (first.Example, first.TargetEntityId) == ("e", 11)
+    assert second.TargetEntityId == 500
+
+
+def _association_row(**fields):
+    """A source association row, with the columns both association clones read."""
+    row = {
+        "ParentEntityId": 1,
+        "ChildEntityId": 2,
+        "EntityId": 1,
+        "AttributeId": 3,
+        "Relationship": None,
+        "Placement": None,
+        "Notes": None,
+        "Contributor": None,
+        "ContributorOrganization": None,
+        "Extension": False,
+        "ExtensionNotes": None,
+        "ExtendedByDataModelId": None,
+        "Array": None,
+    }
+    return types.SimpleNamespace(**{**row, **fields})
+
+
+async def test_clone_recomputes_association_name_and_array_from_the_cloned_child():
+    """#1386 (Q5): Name/Array are recomputed from the cloned row and its cloned child, not copied (Array
+    only while the source's is NULL, #1429). Since
+    #1404 the cloned row keeps Relationship and Placement, so an issuedBy Reference keeps its full name,
+    and is single even though its child is a list (#1471)."""
+    source = _association_row(Relationship="issuedBy", Placement=EntityPlacementType.Reference)
     entity_session = _clone_helper_session([source])
-    entity_session.get.return_value = types.SimpleNamespace(Name="Course", Array="Yes")
+    entity_session.get.return_value = types.SimpleNamespace(Name="Organization", Array="Yes")
     attribute_session = _clone_helper_session([source])
     attribute_session.get.return_value = types.SimpleNamespace(Name="title", Array=None)
 
-    await svc.clone_entity_association(entity_session, entity_id_map={1: 11, 2: 12}, source_data_model_id=9)
+    await svc.clone_entity_association(
+        entity_session, entity_id_map={1: 11, 2: 12}, source_data_model_id=9, new_data_model_id=NEW_DATA_MODEL_ID
+    )
     await svc.clone_entity_attribute_association(
-        attribute_session, entity_id_map={1: 11}, attribute_id_map={3: 13}, source_data_model_id=9
+        attribute_session,
+        entity_id_map={1: 11},
+        attribute_id_map={3: 13},
+        source_data_model_id=9,
+        new_data_model_id=NEW_DATA_MODEL_ID,
     )
 
     entity_session.get.assert_awaited_once_with(svc.Entity, 12)
     entity_clone = entity_session.add.call_args.args[0]
-    assert (entity_clone.Name, entity_clone.Array) == ("Course", True)
+    assert (entity_clone.Relationship, entity_clone.Placement) == ("issuedBy", EntityPlacementType.Reference)
+    assert (entity_clone.Name, entity_clone.Array) == ("issuedByRefOrganization", False)
     attribute_session.get.assert_awaited_once_with(svc.Attribute, 13)
     attribute_clone = attribute_session.add.call_args.args[0]
     assert (attribute_clone.Name, attribute_clone.Array) == ("title", False)
+
+
+async def test_clone_embedded_association_to_a_list_child_is_a_list():
+    """An Embedded child whose Array is 'Yes' is a list under its parent, keyed Relationship + child name."""
+    entity_session = _clone_helper_session([_association_row(Relationship="CFConcepts")])
+    entity_session.get.return_value = types.SimpleNamespace(Name="CFConcept", Array="Yes")
+
+    await svc.clone_entity_association(
+        entity_session, entity_id_map={1: 11, 2: 12}, source_data_model_id=9, new_data_model_id=NEW_DATA_MODEL_ID
+    )
+
+    entity_clone = entity_session.add.call_args.args[0]
+    assert (entity_clone.Name, entity_clone.Array) == ("CFConceptsCFConcept", True)
+
+
+@pytest.mark.parametrize("source_array", [True, False])
+async def test_clone_copies_an_associations_array_that_differs_from_its_child(source_array):
+    """#1429: an imported model keeps a list on the association and stores its child as single (or the
+    reverse), so recomputing from the child would change the clone's schema."""
+    child_array = "No" if source_array else "Yes"
+    entity_session = _clone_helper_session([_association_row(Array=source_array)])
+    entity_session.get.return_value = types.SimpleNamespace(Name="Identifier", Array=child_array)
+    attribute_session = _clone_helper_session([_association_row(Array=source_array)])
+    attribute_session.get.return_value = types.SimpleNamespace(Name="lunchStatus", Array=child_array)
+
+    await svc.clone_entity_association(
+        entity_session, entity_id_map={1: 11, 2: 12}, source_data_model_id=9, new_data_model_id=NEW_DATA_MODEL_ID
+    )
+    await svc.clone_entity_attribute_association(
+        attribute_session,
+        entity_id_map={1: 11},
+        attribute_id_map={3: 13},
+        source_data_model_id=9,
+        new_data_model_id=NEW_DATA_MODEL_ID,
+    )
+
+    for session in (entity_session, attribute_session):
+        assert session.add.call_args.args[0].Array is source_array
+
+
+@pytest.mark.parametrize("declared_by, expected", [(9, NEW_DATA_MODEL_ID), (17, 17), (None, None)])
+async def test_clone_remaps_extended_by_only_when_the_source_declared_it(declared_by, expected):
+    """#1404: ExtendedByDataModelId was dropped. One the source model declared moves to the clone; one
+    declared by another model (an overlay's addition) still belongs to that model."""
+    source = _association_row(Notes="n", ExtendedByDataModelId=declared_by)
+    entity_session = _clone_helper_session([source])
+    entity_session.get.return_value = types.SimpleNamespace(Name="Course", Array=None)
+    attribute_session = _clone_helper_session([source])
+    attribute_session.get.return_value = types.SimpleNamespace(Name="title", Array=None)
+
+    await svc.clone_entity_association(
+        entity_session, entity_id_map={1: 11, 2: 12}, source_data_model_id=9, new_data_model_id=NEW_DATA_MODEL_ID
+    )
+    await svc.clone_entity_attribute_association(
+        attribute_session,
+        entity_id_map={1: 11},
+        attribute_id_map={3: 13},
+        source_data_model_id=9,
+        new_data_model_id=NEW_DATA_MODEL_ID,
+    )
+
+    for session in (entity_session, attribute_session):
+        clone = session.add.call_args.args[0]
+        assert (clone.Notes, clone.ExtendedByDataModelId) == ("n", expected)
+
+
+async def test_clone_transformations_returns_an_empty_map_when_there_are_no_groups():
+    """#1335: with no groups the loop never ran and the function returned None, so the next step's
+    .items() raised AttributeError after the rest of the clone had been committed."""
+    assert await svc.clone_transformations(_clone_helper_session([]), transformation_group_id_map={}) == {}
+
+
+async def test_clone_transformations_clones_every_groups_rules():
+    """#1335: the return sat inside the loop over groups, so only the first group's rules were cloned."""
+    groups = {1: [Transformation(Id=10, TransformationGroupId=1)], 2: [Transformation(Id=20, TransformationGroupId=2)]}
+
+    async def execute(query):
+        (group_id,) = [value for value in query.compile().params.values() if value in groups]
+        result = MagicMock()
+        result.scalars.return_value.all.return_value = groups[group_id]
+        return result
+
+    session = _clone_helper_session([])
+    session.execute = AsyncMock(side_effect=execute)
+    next_id = iter([110, 120])
+
+    async def refresh(row):
+        row.Id = next(next_id)
+
+    session.refresh = AsyncMock(side_effect=refresh)
+
+    assert await svc.clone_transformations(session, transformation_group_id_map={1: 101, 2: 102}) == {10: 110, 20: 120}
 
 
 # --- export_datamodel (Issue #1210) --------------------------------------------------------------

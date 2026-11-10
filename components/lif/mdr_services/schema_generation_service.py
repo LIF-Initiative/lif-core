@@ -1,13 +1,13 @@
 from copy import deepcopy
 from fastapi import HTTPException
-from lif.mdr_services.association_name import embedded_property_key, reference_property_key
+from lif.mdr_services.association_name import association_array, embedded_property_key, reference_property_key
 from lif.mdr_sql_model.core import Entity, EntityAssociation, ExtInclusionsFromBaseDM, ValueSet, ValueSetValue
 from lif.mdr_services.attribute_service import get_attributes_with_association_metadata_for_entity
 from lif.mdr_services.datamodel_service import get_datamodel_by_id
 from lif.mdr_services.entity_service import get_entity_by_id
 from lif.mdr_utils.logger_config import get_logger
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlmodel import select
+from sqlmodel import col, select
 from sqlalchemy import and_, or_
 import pandas as pd
 
@@ -24,8 +24,9 @@ INCLUDED_FIELDS_MAP = {
 # Element flags (V1.7, #1386) are emitted only as x-mutable / x-queryable, never as metadata, so
 # include_entity_md / include_attr_md output is what it was before the columns existed (#1395).
 ENTITY_FIELDS_NOT_EMITTED = {"LevelOfAccess", "Queryable", "Modifiable"}
-# AssociationName is emitted as the attribute's property key instead (#1395).
-ATTRIBUTE_FIELDS_NOT_EMITTED = ENTITY_FIELDS_NOT_EMITTED | {"AssociationName"}
+# AssociationName is emitted as the attribute's property key instead (#1395), and AssociationArray
+# as its Array (#1429).
+ATTRIBUTE_FIELDS_NOT_EMITTED = ENTITY_FIELDS_NOT_EMITTED | {"AssociationName", "AssociationArray"}
 
 ATTRIBUTE_ASSOCIATION_FIELDS = [
     "EntityAttributeAssociationId",
@@ -68,7 +69,22 @@ def _non_public_entity_ids():
 
 
 def _attribute_dict(attribute_with_assoc_md):
-    return {k: v for k, v in attribute_with_assoc_md.dict().items() if k not in ATTRIBUTE_FIELDS_NOT_EMITTED}
+    attribute_dict = {k: v for k, v in attribute_with_assoc_md.dict().items() if k not in ATTRIBUTE_FIELDS_NOT_EMITTED}
+    attribute_dict["Array"] = _get_array(attribute_with_assoc_md.AssociationArray, attribute_with_assoc_md.Array)
+    return attribute_dict
+
+
+def _get_array(association_value, element_value):
+    """A child's Array under its parent, from the association's Array (#1429).
+
+    The element's value is kept while it agrees with the association, so a model whose associations
+    still hold the rule's value generates as before, and while the association's is NULL (rows an
+    older MDR image created, until V1.9 fills them). A root entity has no association and keeps its
+    own Array (§5.3).
+    """
+    if association_value is None or association_value == association_array(element_value):
+        return element_value
+    return "Yes" if association_value else "No"
 
 
 def _attribute_key(attribute_with_assoc_md):
@@ -111,6 +127,7 @@ async def find_children(
                     EntityAssociation.ParentEntityId == parent,
                     EntityAssociation.ChildEntityId == x,
                     EntityAssociation.Deleted == False,
+                    or_(col(EntityAssociation.Placement).is_(None), col(EntityAssociation.Placement) == "Embedded"),
                     or_(
                         EntityAssociation.ExtendedByDataModelId == data_model_id,
                         EntityAssociation.ExtendedByDataModelId.is_(None),
@@ -121,6 +138,7 @@ async def find_children(
                     EntityAssociation.ParentEntityId == parent,
                     EntityAssociation.ChildEntityId == x,
                     EntityAssociation.Deleted == False,
+                    or_(col(EntityAssociation.Placement).is_(None), col(EntityAssociation.Placement) == "Embedded"),
                     EntityAssociation.ExtendedByDataModelId.is_(None),
                 )
             child_association_result = await session.execute(child_association_query)
@@ -142,8 +160,9 @@ async def find_children(
                 if property_key_map is not None and entity_name != entity_data.Name:
                     property_key_map[(parent, x)] = entity_name
 
+                array = _get_array(child_association.Array, entity_data.Array)
                 parent_properties[entity_name] = {}
-                parent_properties[entity_name]["type"] = "array" if entity_data.Array == "Yes" else "object"
+                parent_properties[entity_name]["type"] = "array" if array == "Yes" else "object"
                 parent_properties[entity_name]["required"] = []
                 parent_properties[entity_name]["use_recommendations"] = (
                     entity_data.UseConsiderations if entity_data.UseConsiderations else ""
@@ -151,7 +170,7 @@ async def find_children(
                 required_elements = []
                 for key, value in entity_data.__dict__.items():
                     if include_entity_md and key not in ENTITY_FIELDS_NOT_EMITTED:
-                        parent_properties[entity_name][key] = value
+                        parent_properties[entity_name][key] = array if key == "Array" else value
                     if key == "Required" and value == "Yes" and entity_name not in parent_schema["required"]:
                         parent_schema["required"].append(entity_name)
                 if include_entity_md:
@@ -237,7 +256,7 @@ async def find_children(
                             required_elements.append(attribute_key)
                         if attribute_with_assoc_md.DataType != "Entity":
                             if not include_attr_md:
-                                if attribute_with_assoc_md.Array == "Yes":
+                                if attribute_dict["Array"] == "Yes":
                                     attribute_dict["Format"] = attribute_dict["DataType"]
                                     attribute_dict["DataType"] = "array"
                                 else:
@@ -810,7 +829,7 @@ async def generate_openapi_schema(
                     required_elements.append(attribute_key)
                 if attribute_with_assoc_md.DataType != "Entity":
                     if not include_attr_md:
-                        if attribute_with_assoc_md.Array == "Yes":
+                        if attribute_dict["Array"] == "Yes":
                             attribute_dict["Format"] = attribute_dict["DataType"]
                             attribute_dict["DataType"] = "array"
                         else:
