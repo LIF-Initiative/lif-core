@@ -519,6 +519,7 @@ async def get_attributes_with_association_metadata_for_entity(
             attribute_dto.AssociationContributorOrganization = assoc.ContributorOrganization
             attribute_dto.AssociationExtendedByDataModelId = assoc.ExtendedByDataModelId
             attribute_dto.AssociationName = assoc.Name
+            attribute_dto.AssociationArray = assoc.Array
         attribute_dtos.append(attribute_dto)
     return attribute_dtos
 
