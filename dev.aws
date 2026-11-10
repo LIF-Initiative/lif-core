@@ -21,7 +21,6 @@ STACKS['dev-lif-graphql-org1']='service'
 STACKS['dev-lif-semantic-search']='service'
 STACKS['dev-lif-advisor-api']='service'
 STACKS['dev-lif-advisor-app']='service'
-STACKS['dev-lif-mongodb-seed-org1']='scheduled-task'
 STACKS['dev-lif-orchestrator']='service'
 STACKS['dev-lif-example-data-source-rest-api']='service'
 
@@ -32,7 +31,6 @@ STACKS['dev-lif-mongodb-org2']='service'
 STACKS['dev-lif-query-cache-org2']='service'
 STACKS['dev-lif-query-planner-org2']='service'
 STACKS['dev-lif-graphql-org2']='service'
-STACKS['dev-lif-mongodb-seed-org2']='scheduled-task'
 
 # Org3 services (new)
 STACKS['dev-lif-identity-mapper-mariadb-org3']='service'
@@ -41,7 +39,6 @@ STACKS['dev-lif-mongodb-org3']='service'
 STACKS['dev-lif-query-cache-org3']='service'
 STACKS['dev-lif-query-planner-org3']='service'
 STACKS['dev-lif-graphql-org3']='service'
-STACKS['dev-lif-mongodb-seed-org3']='scheduled-task'
 
 STACKS['dev-lif-mdr-cognito']='cognito-selfserve'
 STACKS['dev-lif-mdr-frontend']='s3-hosted-stackset'
@@ -72,7 +69,6 @@ STACK_ORDER=(
   dev-lif-semantic-search
   dev-lif-advisor-api
   dev-lif-advisor-app
-  dev-lif-mongodb-seed-org1
   dev-lif-example-data-source-rest-api
   
   # Org2 infrastructure
@@ -82,7 +78,6 @@ STACK_ORDER=(
   dev-lif-query-cache-org2
   dev-lif-query-planner-org2
   dev-lif-graphql-org2
-  dev-lif-mongodb-seed-org2
   
   # Org3 infrastructure
   dev-lif-identity-mapper-mariadb-org3
@@ -91,7 +86,6 @@ STACK_ORDER=(
   dev-lif-query-cache-org3
   dev-lif-query-planner-org3
   dev-lif-graphql-org3
-  dev-lif-mongodb-seed-org3
  
   dev-lif-orchestrator-api
   dev-lif-mdr-cognito

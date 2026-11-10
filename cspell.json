@@ -341,7 +341,8 @@
         "asdict",
         "dataclasses",
         "Credentialaward",
-        "xyflow"
+        "xyflow",
+        "stackset"
     ],
     "ignorePaths": [
         ".git/",
