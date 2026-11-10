@@ -22,6 +22,8 @@ from lif.mdr_portability import (
     dump_canonical,
     parse_model_file,
 )
+from lif.mdr_dto.import_export_dto import CreateCloneDTO
+from lif.mdr_services.import_export_service import clone_datamodel
 from lif.mdr_services.model_converter import export_model, import_model
 from lif.mdr_services.schema_generation_service import generate_openapi_schema
 from lif.mdr_sql_model.core import (
@@ -769,6 +771,33 @@ async def test_an_imported_model_generates_cardinality_per_parent_from_its_assoc
         assert lunch_status["Array"] == "Yes"
     else:
         assert lunch_status["type"] == "array"
+
+
+async def test_a_clone_of_an_imported_model_keeps_its_cardinality_per_parent(test_db_session):
+    # Issue #1429: the clone copies each association's Array. Recomputing it from the element, which an
+    # import stores as single, would make Person's Identifier and lunchStatus single in the clone.
+    session, tag = test_db_session, "cardinality_clone"
+    source_id = await import_model(session, parse_model_file(_model_file(tag, _place_lists_for_the_generator)))
+    await session.commit()
+    clone = await clone_datamodel(
+        session,
+        CreateCloneDTO(
+            source_data_model_id=source_id,
+            data_model_name=f"Clone of RT_{tag}",
+            data_model_type=DataModelType.SourceSchema,
+            data_model_version="1.0",
+        ),
+    )
+    await session.commit()
+
+    schemas = (await generate_openapi_schema(session, clone.Id, include_attr_md=False, include_entity_md=False))[
+        "components"
+    ]["schemas"]
+
+    assert schemas["Person"]["properties"]["Identifier"]["type"] == "array"
+    assert schemas["Organization"]["properties"]["Identifier"]["type"] == "object"
+    assert schemas["Person"]["properties"]["Contact"]["type"] == "array"
+    assert schemas["Person"]["properties"]["lunchStatus"]["type"] == "array"
 
 
 def _set_version(version):

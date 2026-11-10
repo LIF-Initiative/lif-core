@@ -58,7 +58,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   shared entity or attribute can be a list under one parent and single under another. Both the
   emitted `Array` metadata and `type: array` follow it; a root entity keeps its own `Array`, and a
   reference is still a single object. Seeded models generate unchanged. A model import no longer sets
-  an element's `Array` from its associations; only a root entity takes `Array` from the file
+  an element's `Array` from its associations; only a root entity takes `Array` from the file. A model
+  imported before this change generates differently wherever an association's `Array` disagrees with
+  its element's, such as `Identifier` under `Campus` in some dev models, which becomes a single
+  object. Cloning a model copies each association's `Array` instead of recomputing it from the element
   (issue #1429)
 - Identity Mapper `POST .../mappings` answers `409` when a natural-key collision with a concurrent
   save survives the one retry, instead of the generic `500` with a correlation UUID, so a caller can
