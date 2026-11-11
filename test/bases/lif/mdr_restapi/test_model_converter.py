@@ -738,6 +738,27 @@ async def test_an_attribute_placed_as_a_list_is_stored_on_its_association_and_ro
     assert dump_canonical(await export_model(session, model_id)) == file
 
 
+def _reference_a_list(content):
+    for association in content["Associations"]:
+        if association["Name"] == "AccreditedBy":
+            association["Array"] = True
+
+
+async def test_a_list_reference_leaves_its_child_entity_list_setting_alone(test_db_session):
+    # The generator emits a reference as one object whatever its child's Array (#1471), so a list
+    # reference doesn't make its child a list. Organization has no containing parent, so storing it as
+    # one would make its top-level schema a list, and export would write that (#1063).
+    session, tag = test_db_session, "reference_list"
+    file = _model_file(tag, _reference_a_list)
+    model_id = await import_model(session, parse_model_file(file))
+    await session.commit()
+    organization = (
+        await session.execute(select(Entity).where(Entity.DataModelId == model_id, Entity.UniqueName == "Organization"))
+    ).scalar_one()
+    assert organization.Array == "No"
+    assert dump_canonical(await export_model(session, model_id)) == file
+
+
 def _place_lists_for_the_generator(content):
     _place_an_attribute_in_a_list(content)
     for association in content["Associations"]:
