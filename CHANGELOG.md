@@ -44,6 +44,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `public` and every `tenant_*` schema. The backfill reproduces what the schema generator emits today.
   Applying it is a manual step, and it must reach every schema before an MDR image that selects these
   columns is deployed (issue #1386)
+- MDR: `scripts/convert_overlays.py` converts the overlay models 17 and 18 into self-contained
+  models, in place, in `public` and every `tenant_*` schema. Each model it touches must generate the
+  same schema in all 16 flag combinations before anything commits, and a schema whose check fails is
+  rolled back. It refuses to start until `scripts/remove_test_data.py` has run, writes an undo record
+  per schema, and rolls back unless `--apply`. Running it is a manual step (issue #1388)
 
 ### Changed
 
