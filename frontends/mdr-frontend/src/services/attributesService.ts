@@ -166,6 +166,8 @@ export interface CreateEntityAttributeAssociationParams {
   Extension?: boolean,
   ExtensionNotes?: string | null,
   ExtendedByDataModelId?: number | null,
+  Name?: string | null,
+  Array?: boolean | null,
 };
 // Generate a template for creating an entity attribute association
 export const tmplCreateEntityAttributeAssociation = (parEntityId: number, model: any): CreateEntityAttributeAssociationParams => {

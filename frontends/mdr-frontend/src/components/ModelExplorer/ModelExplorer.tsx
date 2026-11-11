@@ -38,6 +38,11 @@ import {
   entityAssociationFields,
   attributeCreateFields,
   attributeAssociationFields,
+  associationKeyFields,
+  associationArrayCreateFields,
+  withSelectedArray,
+  withCreateArray,
+  toAssociationUpdate,
   valueSetCreateFields,
   valueCreateFields,
   inclusionEditFields,
@@ -622,20 +627,18 @@ const ModelTree: React.FC<ModelTreeProps> = ({
 
     if (n.type === "entity") {
       newDialogOptions.itemToEdit = selectedAssoc;
-      newDialogOptions.itemToEdit.Name = n.label; // for display in dialog
-      newDialogOptions.fields = entityAssociationFields(model);
+      newDialogOptions.fields = [...associationKeyFields(), ...entityAssociationFields(model)];
       newDialogOptions.onEdit = async (id: number, params: EntityParams) => {
         debugLog(` > Updating EA#${id} with params:`, params);
-        const resp: any = await updateEntityAssociation(id, params);
+        const resp: any = await updateEntityAssociation(id, toAssociationUpdate(params));
         if (resp?.Id) { await fetchData(); }
       };
     } else if (n.type === "attribute") {
       newDialogOptions.itemToEdit = selectedAssoc;
-      newDialogOptions.itemToEdit.Name = n.label; // for display in dialog
-      newDialogOptions.fields = attributeAssociationFields(model);
+      newDialogOptions.fields = [...associationKeyFields(), ...attributeAssociationFields(model)];
       newDialogOptions.onEdit = async (id: number, params: AttributeParams) => {
         debugLog(` > Updating EAA#${id} with params:`, params);
-        const resp: any = await updateEntityAttributeAssociation(id, params);
+        const resp: any = await updateEntityAttributeAssociation(id, toAssociationUpdate(params));
         if (resp?.Id) { await fetchData(); }
       };
       newDialogOptions.message = assocNoFieldsText;
@@ -931,10 +934,11 @@ const ModelTree: React.FC<ModelTreeProps> = ({
     };
     switch(kind) {
       case "entity":
-        selectDialogOptions.fields = entityAssociationFields(model);
+        selectDialogOptions.fields = [...associationArrayCreateFields(model), ...entityAssociationFields(model)];
+        selectDialogOptions.onSelected = withSelectedArray;
         selectDialogOptions.onEdit = async (id: number, selected: any, params: any) => {
           let newParams = tmplCreateEntityAssociation(id, model);
-          newParams = updateObjAWithB(newParams, params || {});
+          newParams = withCreateArray(updateObjAWithB(newParams, params || {}), params);
           newParams.ChildEntityId = selected;
           debugLog(`Updating ${node.type}#${id}:`, selected, newParams);
           try {
@@ -956,10 +960,11 @@ const ModelTree: React.FC<ModelTreeProps> = ({
         };
         break;
       case "attribute":
-        selectDialogOptions.fields = attributeAssociationFields(model);
+        selectDialogOptions.fields = [...associationArrayCreateFields(model), ...attributeAssociationFields(model)];
+        selectDialogOptions.onSelected = withSelectedArray;
         selectDialogOptions.onEdit = async (id: number, selected: any, params: any) => {
           let newParams = tmplCreateEntityAttributeAssociation(id, model);
-          newParams = updateObjAWithB(newParams, params || {});
+          newParams = withCreateArray(updateObjAWithB(newParams, params || {}), params);
           newParams.AttributeId = selected;
           debugLog(`Updating ${node.type}#${id}:`, selected, newParams);
           try {
@@ -1210,6 +1215,7 @@ const ModelTree: React.FC<ModelTreeProps> = ({
         itemToEdit={dialogOptions.itemToEdit}
         fields={dialogOptions.fields || []}
         onEdit={dialogOptions.onEdit}
+        onSelected={dialogOptions.onSelected}
       />
 
       <DeleteDialog
