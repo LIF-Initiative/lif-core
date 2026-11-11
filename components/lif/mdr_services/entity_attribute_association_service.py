@@ -7,7 +7,7 @@ from lif.mdr_dto.entity_attribute_association_dto import (
     EntityAttributeAssociationDTO,
     UpdateEntityAttributeAssociationDTO,
 )
-from lif.mdr_services.association_name import association_array, recomputed
+from lif.mdr_services.association_name import association_array, check_name_and_array, recomputed
 from lif.mdr_services.helper_service import check_attribute_by_id, check_datamodel_by_id, check_entity_by_id
 from lif.mdr_services.model_converter import is_overlay
 from lif.mdr_utils.logger_config import get_logger
@@ -64,6 +64,7 @@ async def create_entity_attribute_association(session: AsyncSession, data: Creat
     # checking if provided entity id and attribute id exist or not
     entity = await check_entity_by_id(session=session, id=data.EntityId)
     attribute = await check_attribute_by_id(session=session, id=data.AttributeId)
+    check_name_and_array(data, entity.DataModelId, attribute.DataModelId, data.ExtendedByDataModelId)
 
     # Check if the association already exists
     if await check_existing_association(session, data.EntityId, data.AttributeId, data.ExtendedByDataModelId):
@@ -71,7 +72,9 @@ async def create_entity_attribute_association(session: AsyncSession, data: Creat
 
     # Create the new EntityAssociation
     entity_attribute_association = EntityAttributeAssociation(
-        **data.dict(), Name=attribute.Name, Array=association_array(attribute.Array)
+        **data.dict(exclude={"Name", "Array"}),
+        Name=data.Name if data.Name is not None else attribute.Name,
+        Array=data.Array if data.Array is not None else association_array(attribute.Array),
     )
     session.add(entity_attribute_association)
     await session.commit()
@@ -141,18 +144,32 @@ async def update_entity_attribute_association(
                 detail="EntityAttributeAssociation with the same EntityId and AttributeId already exists.",
             )
 
+    sent = data.dict(exclude_unset=True)
+    if {"Name", "Array"} & sent.keys():
+        entity = await session.get(Entity, sent.get("EntityId", entity_attribute_association.EntityId))
+        new_attribute = await session.get(Attribute, sent.get("AttributeId", entity_attribute_association.AttributeId))
+        check_name_and_array(
+            data,
+            entity.DataModelId,
+            new_attribute.DataModelId,
+            sent.get("ExtendedByDataModelId", entity_attribute_association.ExtendedByDataModelId),
+        )
+
     # Name and Array follow the attribute, which may change here, while they are still the rule's (#1386).
     old_attribute = await session.get(Attribute, entity_attribute_association.AttributeId)
     name_before, array_before = old_attribute.Name, association_array(old_attribute.Array)
 
-    for key, value in data.dict(exclude_unset=True).items():
+    for key, value in sent.items():
         setattr(entity_attribute_association, key, value)
 
+    # A value the request sent stays; a sent null is stored as NULL, which recomputed reads as the rule's.
     attribute = await session.get(Attribute, entity_attribute_association.AttributeId)
-    entity_attribute_association.Name = recomputed(entity_attribute_association.Name, name_before, attribute.Name)
-    entity_attribute_association.Array = recomputed(
-        entity_attribute_association.Array, array_before, association_array(attribute.Array)
-    )
+    if data.Name is None:
+        entity_attribute_association.Name = recomputed(entity_attribute_association.Name, name_before, attribute.Name)
+    if data.Array is None:
+        entity_attribute_association.Array = recomputed(
+            entity_attribute_association.Array, array_before, association_array(attribute.Array)
+        )
 
     session.add(entity_attribute_association)
     await session.commit()

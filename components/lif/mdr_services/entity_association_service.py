@@ -7,7 +7,12 @@ from lif.mdr_dto.entity_association_dto import (
     EntityAssociationDTO,
     UpdateEntityAssociationDTO,
 )
-from lif.mdr_services.association_name import entity_association_array, entity_association_name, recomputed
+from lif.mdr_services.association_name import (
+    check_name_and_array,
+    entity_association_array,
+    entity_association_name,
+    recomputed,
+)
 from lif.mdr_services.entity_service import get_entity_by_id
 from lif.mdr_services.helper_service import check_datamodel_by_id, check_entity_by_id
 from lif.mdr_services.model_converter import is_overlay
@@ -91,6 +96,7 @@ async def create_entity_association(session: AsyncSession, data: CreateEntityAss
 
     parent_entity = await get_entity_by_id(session=session, id=data.ParentEntityId)
     child_entity = await get_entity_by_id(session=session, id=data.ChildEntityId)
+    check_name_and_array(data, parent_entity.DataModelId, child_entity.DataModelId, data.ExtendedByDataModelId)
 
     if parent_entity.Extension or child_entity.Extension:
         data.Extension = True
@@ -118,8 +124,10 @@ async def create_entity_association(session: AsyncSession, data: CreateEntityAss
         ContributorOrganization=data.ContributorOrganization,
         Extension=data.Extension,
         ExtendedByDataModelId=data.ExtendedByDataModelId,
-        Name=entity_association_name(data.Relationship, data.Placement, child_entity.Name),
-        Array=entity_association_array(data.Placement, child_entity.Array),
+        Name=data.Name
+        if data.Name is not None
+        else entity_association_name(data.Relationship, data.Placement, child_entity.Name),
+        Array=data.Array if data.Array is not None else entity_association_array(data.Placement, child_entity.Array),
     )
     session.add(entity_association)
     await session.commit()
@@ -193,26 +201,40 @@ async def update_entity_association(session: AsyncSession, association_id: int, 
                 detail="EntityAssociation with the same ParentEntityId, ChildEntityId and Relationship already exists for base LIF or given data model.",
             )
 
+    sent = dto.dict(exclude_unset=True)
+    if {"Name", "Array"} & sent.keys():
+        parent = await session.get(Entity, sent.get("ParentEntityId", entity_association.ParentEntityId))
+        child = await session.get(Entity, sent.get("ChildEntityId", entity_association.ChildEntityId))
+        check_name_and_array(
+            dto,
+            parent.DataModelId,
+            child.DataModelId,
+            sent.get("ExtendedByDataModelId", entity_association.ExtendedByDataModelId),
+        )
+
     # Name and Array follow the child, Relationship and Placement, any of which may change here, while
     # they are still the rule's (#1386). So read the rule's inputs before the edit applies.
     old_child = await session.get(Entity, entity_association.ChildEntityId)
     name_before = entity_association_name(entity_association.Relationship, entity_association.Placement, old_child.Name)
     array_before = entity_association_array(entity_association.Placement, old_child.Array)
 
-    for key, value in dto.dict(exclude_unset=True).items():
+    for key, value in sent.items():
         setattr(entity_association, key, value)
 
+    # A value the request sent stays; a sent null is stored as NULL, which recomputed reads as the rule's.
     child_entity = await session.get(Entity, entity_association.ChildEntityId)
-    entity_association.Name = recomputed(
-        entity_association.Name,
-        name_before,
-        entity_association_name(entity_association.Relationship, entity_association.Placement, child_entity.Name),
-    )
-    entity_association.Array = recomputed(
-        entity_association.Array,
-        array_before,
-        entity_association_array(entity_association.Placement, child_entity.Array),
-    )
+    if dto.Name is None:
+        entity_association.Name = recomputed(
+            entity_association.Name,
+            name_before,
+            entity_association_name(entity_association.Relationship, entity_association.Placement, child_entity.Name),
+        )
+    if dto.Array is None:
+        entity_association.Array = recomputed(
+            entity_association.Array,
+            array_before,
+            entity_association_array(entity_association.Placement, child_entity.Array),
+        )
 
     session.add(entity_association)
     await session.commit()
