@@ -63,6 +63,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   its element's, such as `Identifier` under `Campus` in some dev models, which becomes a single
   object. Cloning a model copies each association's `Array` instead of recomputing it from the element
   (issue #1429)
+- MDR UI: the client-side JSON Schema and sample records (Mappings defaults and validation, the
+  Expression Editor, Bulk Transformations) follow the generated schema's cardinality rule. An embedded
+  child takes its association's `Array`, a reference is a single object, and a root with no `Array` is
+  single rather than a list. Saved expressions are unchanged; only new default expressions differ.
+  Attribute lists are not yet covered (issues #1429, #1502)
 - Identity Mapper `POST .../mappings` answers `409` when a natural-key collision with a concurrent
   save survives the one retry, instead of the generic `500` with a correlation UUID, so a caller can
   tell a retryable conflict from a datastore failure
