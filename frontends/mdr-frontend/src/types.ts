@@ -183,6 +183,8 @@ export interface ChildEntityDTO extends EntityDTO {
   ParentEntityId?: number | null;
   Relationship?: string | null;
   Placement?: string | null;
+  // Whether the child is a list under this parent; null while unset (#1429)
+  AssociationArray?: boolean | null;
 }
 
 export interface ValueSetDTO {
@@ -303,6 +305,8 @@ export interface EntityTreeNode {
   // Reference to the original object held in DataModelWithDetailsDTO.Entities (same reference, not a copy)
   Entity: EntityWithAttributesDTO | EntityDTO;
   Children: EntityTreeNode[];
+  // Whether this node is a list where it sits, by the generated schema's rule (#1429)
+  IsArray: boolean;
 }
 
 export type DataModelWithDetailsWithTree = DataModelWithDetailsDTO & {

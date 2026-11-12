@@ -75,6 +75,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   its element's, such as `Identifier` under `Campus` in some dev models, which becomes a single
   object. Cloning a model copies each association's `Array` instead of recomputing it from the element
   (issue #1429)
+- MDR UI: the client-side JSON Schema and sample records (Mappings defaults and validation, the
+  Expression Editor, Bulk Transformations) follow the generated schema's cardinality rule. An embedded
+  child takes its association's `Array`, a reference is a single object, and a root with no `Array` is
+  single rather than a list. Saved expressions are unchanged; only new default expressions differ.
+  Attribute lists are not yet covered (issues #1429, #1502)
 - Identity Mapper `POST .../mappings` answers `409` when a natural-key collision with a concurrent
   save survives the one retry, instead of the generic `500` with a correlation UUID, so a caller can
   tell a retryable conflict from a datastore failure
@@ -170,6 +175,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+- Service and Dagster images no longer trust the eMudhra emSign roots Mozilla removed in NSS 3.131.1
+  (emSign Root CA - C1, emSign ECC Root CA - C3, emSign ECC Root CA - G3). `certifi` is 2026.10.23 in
+  every lock file, and each Dockerfile deny-lists the roots Debian's `ca-certificates`
+  (20250419+deb13u1) still ships. emSign Root CA - G1 stays trusted, as in Mozilla's store (issue #1480)
 - docker-compose: the MDR's post-confirm and learner-data-export service keys are passed through
   (`MDR__AUTH__SERVICE_API_KEY__POST_CONFIRM`, `MDR__AUTH__SERVICE_API_KEY__LEARNER_DATA_EXPORT`).
   MDR previously always used their built-in defaults, which could not be overridden from `.env`

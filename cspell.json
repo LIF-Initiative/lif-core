@@ -2,6 +2,8 @@
     "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
     "flagWords": [],
     "words": [
+        "certifi",
+        "Mudhra",
         "mediatypes",
         "hostnames",
         "toplevel",
