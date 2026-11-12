@@ -157,6 +157,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Dagster webserver/daemon images pin Dagster 1.13.26 (`dagster-postgres`/`dagster-docker` 0.29.26),
+  what dev has run since 2026-10-14. They installed the newest Dagster on every build, and from
+  1.13.29 the Orchestrator API's 1.11 client can't submit runs (`POST /jobs` returns 500) (issue #1490)
+- Dagster code-location images pin SQLAlchemy below 2.1. The runtime stage installs the project wheel
+  from PyPI, so it got SQLAlchemy 2.1, whose `postgresql` dialect needs `psycopg` (v3), and every run
+  failed to launch with `No module named 'psycopg'` (#1383 pinned only the webserver image) (issue #1491)
 - Identity Mapper `save_mappings` rejects a `mapping_id` the caller does not own, or one that
   disagrees with the target system fields sent with it, as a 400 instead of failing the unique
   constraint as a 500 and discarding the rest of the batch

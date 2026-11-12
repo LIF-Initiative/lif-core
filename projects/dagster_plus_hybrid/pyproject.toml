@@ -12,6 +12,8 @@ dependencies = [
     "pydantic~=2.11",
     "dagster==1.11.12",
     "dagster-cloud~=1.11",
+    # SQLAlchemy 2.1 defaults postgresql to psycopg (v3); dagster-postgres brings psycopg2 (#1491).
+    "sqlalchemy<2.1",
     "httpx~=0.28",
     "jsonpath-ng~=1.7",
 ]
