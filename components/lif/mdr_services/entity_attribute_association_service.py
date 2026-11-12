@@ -162,7 +162,7 @@ async def update_entity_attribute_association(
     for key, value in sent.items():
         setattr(entity_attribute_association, key, value)
 
-    # A value the request sent stays; a sent null is stored as NULL, which recomputed reads as the rule's.
+    # A value the request sent stays; a sent null, like an unsent field, is recomputed to the rule's value.
     attribute = await session.get(Attribute, entity_attribute_association.AttributeId)
     if data.Name is None:
         entity_attribute_association.Name = recomputed(entity_attribute_association.Name, name_before, attribute.Name)

@@ -221,7 +221,7 @@ async def update_entity_association(session: AsyncSession, association_id: int, 
     for key, value in sent.items():
         setattr(entity_association, key, value)
 
-    # A value the request sent stays; a sent null is stored as NULL, which recomputed reads as the rule's.
+    # A value the request sent stays; a sent null, like an unsent field, is recomputed to the rule's value.
     child_entity = await session.get(Entity, entity_association.ChildEntityId)
     if dto.Name is None:
         entity_association.Name = recomputed(
