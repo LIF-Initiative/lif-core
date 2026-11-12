@@ -1,4 +1,5 @@
 import { DialogField } from "../Dialog/Dialog";
+import { isOverlayModel } from "@/utils/modelUtils";
 
 
 const PatternDenyRegex = "[ ,:~]";
@@ -331,6 +332,40 @@ export const entityAssociationFields = (model: any): DialogField[] => {
 
 export const attributeAssociationFields = (model: any): DialogField[] => {
   return sharedAssociationFields(model);
+};
+
+// Edit only (#1472): the child's key and cardinality under this parent, stored on the association.
+export const associationKeyFields = (): DialogField[] => {
+  return [
+    { name: "Name", type: "text" as const, label: "Name",
+      help: "The key the child appears under in this parent's schema. Clear it to go back to the default key.",
+    },
+    { name: "Array", type: "boolean" as const, label: "List under this parent",
+      help: "Whether the child is a list under this parent. It belongs to this association, not to the child element.",
+    },
+  ];
+};
+
+// The create dialog's Array, for a model that builds its associations within itself (#1472). An overlay's
+// cross-model or ExtendedBy associations can't set it, so its create dialog leaves it to the API.
+export const associationArrayCreateFields = (model: any): DialogField[] => {
+  return isOverlayModel(model) ? [] : associationKeyFields().filter((f) => f.name === "Array");
+};
+
+// Picking the child starts the create dialog's Array at the child's own setting, single for a Reference (#1471).
+export const withSelectedArray = (selected: any, params: any): any => {
+  if (!("Array" in params)) return params;
+  return { ...params, Array: selected?.Array === "Yes" && params.Placement !== "Reference" };
+};
+
+// The create template takes only truthy values it already has, so the dialog's Array is carried over here.
+export const withCreateArray = (newParams: any, params: any): any => {
+  return typeof params?.Array === "boolean" ? { ...newParams, Array: params.Array } : newParams;
+};
+
+// A cleared Name is sent as null, which the API resets to the default key (#1472).
+export const toAssociationUpdate = (params: any): any => {
+  return params.Name === "" ? { ...params, Name: null } : params;
 };
 
 
