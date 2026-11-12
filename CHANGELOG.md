@@ -44,6 +44,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `public` and every `tenant_*` schema. The backfill reproduces what the schema generator emits today.
   Applying it is a manual step, and it must reach every schema before an MDR image that selects these
   columns is deployed (issue #1386)
+- MDR: `scripts/convert_overlays.py` converts the overlay models 17 and 18 into self-contained
+  models, in place, in `public` and every `tenant_*` schema. Each model it touches must generate the
+  same schema in all 16 flag combinations before anything commits, and a schema whose check fails is
+  rolled back. It refuses to start until `scripts/remove_test_data.py` has run, writes an undo record
+  per schema, and rolls back unless `--apply`. Running it is a manual step (issue #1388)
 
 ### Changed
 
@@ -63,6 +68,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   its element's, such as `Identifier` under `Campus` in some dev models, which becomes a single
   object. Cloning a model copies each association's `Array` instead of recomputing it from the element
   (issue #1429)
+- MDR UI: the client-side JSON Schema and sample records (Mappings defaults and validation, the
+  Expression Editor, Bulk Transformations) follow the generated schema's cardinality rule. An embedded
+  child takes its association's `Array`, a reference is a single object, and a root with no `Array` is
+  single rather than a list. Saved expressions are unchanged; only new default expressions differ.
+  Attribute lists are not yet covered (issues #1429, #1502)
 - Identity Mapper `POST .../mappings` answers `409` when a natural-key collision with a concurrent
   save survives the one retry, instead of the generic `500` with a correlation UUID, so a caller can
   tell a retryable conflict from a datastore failure
@@ -164,6 +174,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+- Service and Dagster images no longer trust the eMudhra emSign roots Mozilla removed in NSS 3.131.1
+  (emSign Root CA - C1, emSign ECC Root CA - C3, emSign ECC Root CA - G3). `certifi` is 2026.10.23 in
+  every lock file, and each Dockerfile deny-lists the roots Debian's `ca-certificates`
+  (20250419+deb13u1) still ships. emSign Root CA - G1 stays trusted, as in Mozilla's store (issue #1480)
 - docker-compose: the MDR's post-confirm and learner-data-export service keys are passed through
   (`MDR__AUTH__SERVICE_API_KEY__POST_CONFIRM`, `MDR__AUTH__SERVICE_API_KEY__LEARNER_DATA_EXPORT`).
   MDR previously always used their built-in defaults, which could not be overridden from `.env`
