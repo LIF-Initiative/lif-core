@@ -530,7 +530,7 @@ existing content onto the simplified model is migration work, not this spec's.
 | Constraint and Transformation inclusions | — | 0 rows |
 | `ExtendedByDataModelId` on both association tables | Both ends in one model (§5.4). Until migrated, the declaring model owns the association when it owns an end, or when it is an overlay and both ends are in the model it overlays; see the row below for the rest | 16 + 167 rows |
 | Associations between elements of different models | Both ends in one model | 55: 54 involve models 17 or 18, and 1 links model 1 to model 16 |
-| Associations where neither end is owned by the declaring model, which does not overlay the model they are in | — | 61 rows. 60 link two elements of one other model (59 in model 16, 1 in model 25) and belong to that model. 1 (`Credential.Image` → OB3's `image.id`) links two models and has no owner; export refuses it (`NOT_MIGRATED`) for both, rather than drop it |
+| Associations where neither end is owned by the declaring model, which does not overlay the model they are in | — | 61 rows. 60 link two elements of one other model (59 in model 16, 1 in model 25) and belong to that model. 1 (`Credential.Image` → OB3's `image.id`) links two models and has no owner; export refuses it (`NOT_MIGRATED`) for both, rather than drop it. Converting the overlay that declares them removes them (*Migration defaults*) |
 | `Extension` / `ExtensionNotes` (on 8 tables, including `Entities`, `Attributes`, `ValueSets` and `EntityAssociation`) | — | Set only in models 17 and 18: 80 entities and attributes |
 | Overrides (an element reusing an inherited `UniqueName`) | — (a model sees only its own elements) | 1 (`Criteria.identifier`, model 17) |
 | An attribute using another model's value set | The value set, copied into the model | 1 attribute |
@@ -582,6 +582,23 @@ existing content onto the simplified model is migration work, not this spec's.
   `identifier` under `Credential.Requirements.Criteria`, from model 1 and model 17's override),
   the one model 17's generated schema shows today survives. The schema-match check confirms the
   choice.
+- **Base content stored with an overlay's model.** Attributes stored with an overlay's
+  DataModelId but associated directly from a base entity (ExtendedBy NULL) are base content with
+  the wrong DataModelId. Migration sets it to the base model. Ids are unchanged. In the seed: 8 of
+  model 17's attributes, set to model 1.
+- **A value set used from another model.** Converting the overlay copies it into the model with
+  its live values and points the attribute at the copy. Value mappings stay on the original, so
+  the copy starts with no crosswalk. In the seed: model 1's value set 287 (62 values, used by
+  attribute 1310), which models 17 and 18 each get their own copy of.
+- **An overlay's `ExtendedBy` rows inside other models.** An association an overlay declares
+  (`ExtendedByDataModelId`) between two elements of a model it does not overlay is soft-deleted
+  when the overlay is converted. If the overlay's schema shows it, it is first copied between the
+  overlay's copies of its ends, with no `ExtendedBy`. The other model's schema does not change,
+  since a model that is not an overlay reads only associations with no `ExtendedBy`. In the seed:
+  69 of model 17's rows inside model 16.
+- **The ownerless association** (`Credential.Image` → OB3's `image.id`, 1846 in the seed) is
+  handled the same way: converting model 17 recreates it between 17's copies of both ends, with no
+  `ExtendedBy` and the `Name` `id`, and soft-deletes 1846.
 - **Model 26's organization.** Its NULL `ContributorOrganization` is set to `LIF`. The model keeps
   its ID, so the Query Planner configs that name `source_schema_id: "26"` are unaffected.
 
