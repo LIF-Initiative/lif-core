@@ -49,6 +49,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   same schema in all 16 flag combinations before anything commits, and a schema whose check fails is
   rolled back. It refuses to start until `scripts/remove_test_data.py` has run, writes an undo record
   per schema, and rolls back unless `--apply`. Running it is a manual step (issue #1388)
+- MDR API: the entity and attribute association endpoints read and write the association's `Name` and
+  `Array`, which set the child's key and cardinality under that parent in the generated schema. On
+  create, a value not sent (or `null`) is the rule's, as before. On update, a sent value is kept
+  through later Relationship, Placement or child edits; `null` resets it to the rule's. A blank
+  `Name` is refused, and so is setting either one on an association across data models or with
+  `ExtendedByDataModelId`. An element `Array` edit can still overwrite an association `Array` that
+  equals the rule's value (#1478), and cloning a model recomputes `Name` (#1500) (issue #1472)
 
 ### Changed
 
