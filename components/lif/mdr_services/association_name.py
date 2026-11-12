@@ -6,6 +6,8 @@ these functions so new rows match. No MDR imports here: the services that create
 imported by schema_generation_service, so the rules can't live there.
 """
 
+from fastapi import HTTPException
+
 
 def embedded_property_key(relationship, entity_name):
     """The property key an Embedded child is stored under in its parent's schema.
@@ -70,3 +72,28 @@ def recomputed(stored, before, after):
     #1388 sets Names that resolve collisions), so the edit leaves it alone.
     """
     return after if stored is None or stored == before else stored
+
+
+def check_name_and_array(dto, parent_data_model_id, child_data_model_id, extended_by_data_model_id):
+    """Refuse a Name or Array a create or update request sets where the API doesn't allow it yet (#1472).
+
+    Only the fields the request sent count; a sent null resets the value to the rule's. A Name can't be
+    blank, since it's the child's key in its parent's schema. Neither can be set on an association
+    across data models, or on one with ExtendedByDataModelId, until model types go away. The model ids
+    are the association's after the edit.
+    """
+    sent = {key: value for key, value in dto.dict(exclude_unset=True).items() if key in ("Name", "Array")}
+    if not sent:
+        return
+    if isinstance(sent.get("Name"), str) and not sent["Name"].strip():
+        raise HTTPException(status_code=400, detail="Name can't be blank: it's the child's key in its parent's schema")
+    fields = " and ".join(sorted(sent))
+    if parent_data_model_id != child_data_model_id:
+        raise HTTPException(
+            status_code=400,
+            detail=f"{fields} can't be set on an association whose parent and child are in different data models",
+        )
+    if extended_by_data_model_id is not None:
+        raise HTTPException(
+            status_code=400, detail=f"{fields} can't be set on an association with ExtendedByDataModelId set"
+        )
