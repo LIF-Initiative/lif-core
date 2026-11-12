@@ -415,12 +415,8 @@ class TestStrawberryTypeDecoratesInPlace:
 class TestGraphQLClientTimeoutEnvReads:
     """That type_factory reads LIF_GRAPHQL_CLIENT_TIMEOUT_SECONDS at import.
 
-    The new name must win. The old shared name is accepted only as a TRANSITIONAL
-    fallback (#1203): CI redeploys the image on merge but never updates the
-    CloudFormation stack, so a deployed taskdef still setting only the old name must not
-    silently drop the client from 300s to the 20s default. That fallback is temporary and
-    these tests pin it so its removal is a deliberate, test-visible act rather than a
-    quiet behavior change. The constant is read at module import; CLAUDE.md forbids
+    The old shared name, LIF_QUERY_TIMEOUT_SECONDS, was a transitional fallback (#1203)
+    and is now ignored (#1236). The constant is read at module import; CLAUDE.md forbids
     importlib.reload(), so use a fresh interpreter — the same approach the Query Planner
     timeout tests use.
     """
@@ -442,17 +438,12 @@ class TestGraphQLClientTimeoutEnvReads:
     def test_reads_new_graphql_client_timeout_var(self):
         assert self._timeout_in_subprocess({"LIF_GRAPHQL_CLIENT_TIMEOUT_SECONDS": "42"}) == 42
 
-    def test_new_name_wins_over_the_old_one(self):
-        """Both set: the new name must win, or the rename achieved nothing."""
+    def test_old_query_timeout_var_is_ignored(self):
+        """The Query Planner owns LIF_QUERY_TIMEOUT_SECONDS; GraphQL no longer falls back to it (#1236)."""
         assert (
-            self._timeout_in_subprocess({"LIF_GRAPHQL_CLIENT_TIMEOUT_SECONDS": "42", "LIF_QUERY_TIMEOUT_SECONDS": "99"})
-            == 42
+            self._timeout_in_subprocess({"LIF_QUERY_TIMEOUT_SECONDS": "42", "LIF_GRAPHQL_CLIENT_TIMEOUT_SECONDS": None})
+            == 20
         )
-
-    def test_old_query_timeout_var_is_a_transitional_fallback(self):
-        """Old name alone is honoured — this is what keeps a pre-rename taskdef at 300s
-        instead of silently dropping to 20s. Delete this test when the fallback goes."""
-        assert self._timeout_in_subprocess({"LIF_QUERY_TIMEOUT_SECONDS": "42"}) == 42
 
     def test_default_is_20(self):
         assert self._timeout_in_subprocess({}) == 20
