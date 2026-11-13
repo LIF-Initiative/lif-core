@@ -123,10 +123,11 @@ workspace again brings them back in line. The proper fix, a `GET /tenants/curren
   record in another standard. Locally it has no formats to offer until a mapping *from* StateU LIF is
   activated (backend [chapter 10](../backend/10-extending-lif.md)).
 - **Overlay screens**: Data Extensions, and a model's "only / all / public / extensions / partner" views.
-  An overlay is a model built on top of another one (models 17 and 18 are built on model 1), and these
-  screens show which parts are its own. ADR data_model/0004 retires overlays in favour of self-contained
-  models (backend [chapter 3](../backend/03-data-model-and-mdr.md), "Overlays are on their way out"), so
-  expect these screens to change.
+  An overlay is a model built on top of another one, and these screens show which parts are its own. ADR
+  data_model/0004 retires overlays in favour of self-contained models: on dev, models 17 and 18 have been
+  converted (#1388), and the local seed still has them as overlays of model 1 until #1511 (backend
+  [chapter 3](../backend/03-data-model-and-mdr.md), "Overlays are on their way out"). Expect these screens
+  to change.
 
 ## Where to go next
 
