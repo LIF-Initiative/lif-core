@@ -427,6 +427,7 @@ interface SelectDialogProps {
   itemToEdit: DialogItem;
   fields: DialogField[];
   onEdit: (id: number, selected: any, params: any) => Promise<void>;
+  onSelected?: (selected: any, params: any) => any; // the fields' values once an item is picked
 }
 
 export const SelectDialog: React.FC<SelectDialogProps> = ({
@@ -437,6 +438,7 @@ export const SelectDialog: React.FC<SelectDialogProps> = ({
   itemToEdit,
   fields,
   onEdit,
+  onSelected,
 }) => {
   const [createParams, setCreateParams] = useState<any>({});
   const [itemSelected, setItemSelected] = useState<any>(null);
@@ -506,7 +508,13 @@ export const SelectDialog: React.FC<SelectDialogProps> = ({
             </Text>
             <Select.Root
               value={itemSelected ?? ""}
-              onValueChange={(value) => setItemSelected(value)}
+              onValueChange={(value) => {
+                setItemSelected(value);
+                if (onSelected) {
+                  const selected = itemList?.find((opt) => String(opt.Id) === String(value));
+                  setCreateParams((prev: any) => onSelected(selected, prev));
+                }
+              }}
             >
               <Select.Trigger placeholder={`Select ${type}`} />
               <Select.Content>

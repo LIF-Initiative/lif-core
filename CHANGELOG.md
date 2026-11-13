@@ -44,6 +44,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `public` and every `tenant_*` schema. The backfill reproduces what the schema generator emits today.
   Applying it is a manual step, and it must reach every schema before an MDR image that selects these
   columns is deployed (issue #1386)
+- MDR: `scripts/convert_overlays.py` converts the overlay models 17 and 18 into self-contained
+  models, in place, in `public` and every `tenant_*` schema. Each model it touches must generate the
+  same schema in all 16 flag combinations before anything commits, and a schema whose check fails is
+  rolled back. It refuses to start until `scripts/remove_test_data.py` has run, writes an undo record
+  per schema, and rolls back unless `--apply`. Running it is a manual step (issue #1388)
+- MDR API: the entity and attribute association endpoints read and write the association's `Name` and
+  `Array`, which set the child's key and cardinality under that parent in the generated schema. On
+  create, a value not sent (or `null`) is the rule's, as before. On update, a sent value is kept
+  through later Relationship, Placement or child edits; `null` resets it to the rule's. A blank
+  `Name` is refused, and so is setting either one on an association across data models or with
+  `ExtendedByDataModelId`. An element `Array` edit can still overwrite an association `Array` that
+  equals the rule's value (#1478), and cloning a model recomputes `Name` (#1500) (issue #1472)
 
 ### Changed
 
@@ -63,6 +75,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   its element's, such as `Identifier` under `Campus` in some dev models, which becomes a single
   object. Cloning a model copies each association's `Array` instead of recomputing it from the element
   (issue #1429)
+- MDR UI: the client-side JSON Schema and sample records (Mappings defaults and validation, the
+  Expression Editor, Bulk Transformations) follow the generated schema's cardinality rule. An embedded
+  child takes its association's `Array`, a reference is a single object, and a root with no `Array` is
+  single rather than a list. Saved expressions are unchanged; only new default expressions differ.
+  Attribute lists are not yet covered (issues #1429, #1502)
 - Identity Mapper `POST .../mappings` answers `409` when a natural-key collision with a concurrent
   save survives the one retry, instead of the generic `500` with a correlation UUID, so a caller can
   tell a retryable conflict from a datastore failure
@@ -128,12 +145,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+- GraphQL API no longer falls back to `LIF_QUERY_TIMEOUT_SECONDS` for its Query Planner client
+  timeout (`LIF_GRAPHQL_CLIENT_TIMEOUT_SECONDS`) or its uvicorn keep-alive
+  (`LIF_GRAPHQL_KEEPALIVE_SECONDS`). That name now belongs to the Query Planner only. A GraphQL
+  task definition must set both new names, or the timeout drops to 20s and keep-alive to 60s;
+  dev's are deployed, demo's stacks need `aws-deploy.sh` before a promotion that includes this
+  (issue #1236)
 - Auth bricks `api_key_auth`, `api_token_auth` and `cognito_auth`, the
   Advisor-only `lif.auth.core`, and MDR's `create_access_token`, `create_refresh_token`,
   `decode_jwt` and its own `AuthMiddleware`, all replaced by `lif.auth` (issue #548)
 
 ### Fixed
 
+- Dagster webserver/daemon images pin Dagster 1.13.26 (`dagster-postgres`/`dagster-docker` 0.29.26),
+  what dev has run since 2026-10-14. They installed the newest Dagster on every build, and from
+  1.13.29 the Orchestrator API's 1.11 client can't submit runs (`POST /jobs` returns 500) (issue #1490)
+- Dagster code-location images pin SQLAlchemy below 2.1. The runtime stage installs the project wheel
+  from PyPI, so it got SQLAlchemy 2.1, whose `postgresql` dialect needs `psycopg` (v3), and every run
+  failed to launch with `No module named 'psycopg'` (#1383 pinned only the webserver image) (issue #1491)
 - Identity Mapper `save_mappings` rejects a `mapping_id` the caller does not own, or one that
   disagrees with the target system fields sent with it, as a 400 instead of failing the unique
   constraint as a 500 and discarding the rest of the batch
@@ -158,6 +187,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+- Service and Dagster images no longer trust the eMudhra emSign roots Mozilla removed in NSS 3.131.1
+  (emSign Root CA - C1, emSign ECC Root CA - C3, emSign ECC Root CA - G3). `certifi` is 2026.10.23 in
+  every lock file, and each Dockerfile deny-lists the roots Debian's `ca-certificates`
+  (20250419+deb13u1) still ships. emSign Root CA - G1 stays trusted, as in Mozilla's store (issue #1480)
 - docker-compose: the MDR's post-confirm and learner-data-export service keys are passed through
   (`MDR__AUTH__SERVICE_API_KEY__POST_CONFIRM`, `MDR__AUTH__SERVICE_API_KEY__LEARNER_DATA_EXPORT`).
   MDR previously always used their built-in defaults, which could not be overridden from `.env`

@@ -14,6 +14,8 @@ class EntityAttributeAssociationDTO(BaseModel):
     Contributor: Optional[str] = None
     ContributorOrganization: Optional[str] = None
     ExtendedByDataModelId: Optional[int] = None
+    Name: Optional[str] = None
+    Array: Optional[bool] = None
     # Extension: bool
     # ExtensionNotes: Optional[str]
 
@@ -36,6 +38,9 @@ class CreateEntityAttributeAssociationDTO(BaseModel):
     Extension: Optional[bool] = False
     ExtensionNotes: Optional[str] = None
     ExtendedByDataModelId: Optional[int] = None
+    # Not sent, or null: the rule's value (association_name.py, #1472).
+    Name: Optional[str] = None
+    Array: Optional[bool] = None
 
 
 class UpdateEntityAttributeAssociationDTO(BaseModel):
@@ -52,3 +57,6 @@ class UpdateEntityAttributeAssociationDTO(BaseModel):
     Extension: Optional[bool] = False
     ExtensionNotes: Optional[str] = None
     ExtendedByDataModelId: Optional[int] = None
+    # Not sent: kept, or still the rule's if it was. Null: back to the rule's value (#1472).
+    Name: Optional[str] = None
+    Array: Optional[bool] = None
