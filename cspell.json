@@ -204,6 +204,7 @@
         "pixi",
         "plpgsql",
         "polylith",
+        "Prereqs",
         "provisionable",
         "psql",
         "psycopg",
