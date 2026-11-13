@@ -12,6 +12,7 @@ from lif.mdr_services.overlay_converter import (
     _map_path,
     canonical,
     duplicate_required,
+    duplicates_note,
     render_set,
     rewrite_base_schema,
     rewrite_overlay_schema,
@@ -222,3 +223,13 @@ def test_duplicate_required_is_empty_without_duplicates():
 
 def test_the_comparison_keeps_the_order_of_every_other_list():
     assert canonical(_person(["id"], enum=("a", "b"))) != canonical(_person(["id"], enum=("b", "a")))
+
+
+def test_duplicates_note_names_the_side_that_repeats_a_name():
+    note = duplicates_note(_person(["id", "name", "id"]), _person(["name", "id"]))
+    assert note == "\nexpected repeats a name in required: Person.required: id x2"
+
+
+def test_duplicates_note_is_empty_when_both_sides_repeat_the_same_names():
+    """A duplicate both sides keep isn't why they differ, so it isn't named (#1512 review)."""
+    assert duplicates_note(_person(["id", "id"], enum=("a",)), _person(["id", "id"], enum=("b",))) == ""

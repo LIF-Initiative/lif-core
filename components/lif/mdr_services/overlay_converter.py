@@ -37,6 +37,7 @@ from __future__ import annotations
 import difflib
 import itertools
 import json
+from collections import Counter
 from dataclasses import dataclass, field
 from typing import Any, Iterable, Optional
 
@@ -155,9 +156,10 @@ def _required_sorted(node: Any) -> Any:
 def canonical(schema: Any) -> str:
     """The schema as compared: every `required` list sorted, since own elements keep their Ids and the
     copies get new ones, so the order `required` lists them in can change (decided on #1388). Sorting
-    keeps duplicates, so a name listed twice on one side and once on the other is a difference: a
-    duplicate in `required` is a defect in that schema, not noise (#1506). Every other list keeps its
-    order."""
+    keeps duplicates, so a name listed twice on one side and once on the other is a difference. That
+    keeps to #1388's reading of D1 as "the same schema as JSON Schema", which requires the items in
+    `required` to be unique, so a duplicate is a defect in that schema, not noise (#1506). Every other
+    list keeps its order."""
     return json.dumps(_required_sorted(schema), indent=2, sort_keys=True, ensure_ascii=False, default=str)
 
 
@@ -169,7 +171,7 @@ def duplicate_required(schema: Any, path: str = "") -> list[str]:
         for k, v in schema.items():
             here = f"{path}.{k}" if path else str(k)
             if k == "required" and isinstance(v, list):
-                counts = {name: v.count(name) for name in v if isinstance(name, str)}
+                counts = Counter(name for name in v if isinstance(name, str))
                 found += [f"{here}: {name} x{n}" for name, n in sorted(counts.items()) if n > 1]
             else:
                 found += duplicate_required(v, here)
@@ -177,6 +179,15 @@ def duplicate_required(schema: Any, path: str = "") -> list[str]:
         for i, v in enumerate(schema):
             found += duplicate_required(v, f"{path}[{i}]")
     return found
+
+
+def duplicates_note(expected: Any, after: Any) -> str:
+    """The self-check's line naming repeated `required` names, only when the two sides repeat different
+    ones, so a duplicate both sides share isn't mistaken for why they differ (#1506)."""
+    sides = (("expected", duplicate_required(expected)), ("after", duplicate_required(after)))
+    if sides[0][1] == sides[1][1]:
+        return ""
+    return "".join(f"\n{side} repeats a name in required: {', '.join(found)}" for side, found in sides if found)
 
 
 def _diff(expected: Any, actual: Any, limit: int = 30) -> str:
@@ -890,14 +901,7 @@ async def convert_overlays(session: AsyncSession, overlay_ids: list[int]) -> Rep
         after = await generate_matrix(session, model_id)
         for key, expected in expected_by_model[model_id].items():
             if canonical(after[key]) != canonical(expected):
-                duplicates = "".join(
-                    f"\n{side} repeats a name in required: {', '.join(found)}"
-                    for side, found in (
-                        ("expected", duplicate_required(expected)),
-                        ("after", duplicate_required(after[key])),
-                    )
-                    if found
-                )
+                duplicates = duplicates_note(expected, after[key])
                 failures.append(
                     f"model {model_id}: {key} differs from the rewritten baseline{duplicates}\n"
                     f"{_diff(expected, after[key])}"
