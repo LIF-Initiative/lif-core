@@ -11,9 +11,10 @@ stack; the others are assembled from the code, recent PRs and the existing guide
 
 The field lives in the MDR, so this is mostly data, not code ([chapter 3](03-data-model-and-mdr.md)).
 
-1. **Add it in the MDR.** While model 17 is still an overlay (#1388), the rule is: **add the attribute to
-   base model 1, then include it in model 17.** (After #1388, model 17 holds everything itself and you'd edit
-   it directly.) In the MDR UI, or through the API (endpoints at `http://localhost:8012/docs`; log in with
+1. **Add it in the MDR.** On dev, model 17 holds everything itself (#1388), so you add the attribute to
+   model 17 directly. On the local seed, model 17 is still an overlay until #1511, and the rule is: **add
+   the attribute to base model 1, then include it in model 17.** The steps below are for the local
+   seed. In the MDR UI, or through the API (endpoints at `http://localhost:8012/docs`; log in with
    `POST /login` and send `Authorization: Bearer <access_token>`):
    - `POST /attributes/` with `Name` (camelCase), `UniqueName` (`Person.Name.preferredPronouns`),
      `DataType` (`string`), `DataModelId: 1`, and `EntityId` (the entity in model 1; passing it creates the
@@ -34,8 +35,7 @@ The field lives in the MDR, so this is mostly data, not code ([chapter 3](03-dat
    - the LIF-to-LIF adapter's all-fields queries,
      `components/lif/data_source_adapters/lif_to_lif_adapter/graphql_query_all_fields_org{2,3}.graphql`.
      They are packaged into the Dagster code-location image, so rebuild it after editing them:
-     `docker compose up -d --build dagster-code-location` (which, until #1491 is fixed, also drops the
-     [chapter 1](01-dev-environment.md) workaround: re-apply it);
+     `docker compose up -d --build dagster-code-location`;
    - each planner's `information_sources_config*.yml`, if the field is a new top-level path
      (`Person.<Something>`) that a source supplies.
 5. **Know what fetching won't do.** The planner's cache check is per two-level path ([chapter 4](04-follow-the-data.md), step 3).

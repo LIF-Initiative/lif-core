@@ -77,7 +77,7 @@ that `requirements.txt`. Either way the image gets the versions in the project's
 
 **The Dagster projects are different.** `projects/dagster_*` have no `uv.lock`, and their images install
 from PyPI without one. That is how the images drifted to versions that don't work together (#1490,
-#1491; [chapter 1](01-dev-environment.md)). The job code itself lives in `orchestrators/dagster/lif-orchestrator/`, and the
+#1491, fixed by pinning them in #1504; [chapter 1](01-dev-environment.md)). The job code itself lives in `orchestrators/dagster/lif-orchestrator/`, and the
 `Dockerfile.code_location` copies it in.
 
 ## Blast radius: shared bricks

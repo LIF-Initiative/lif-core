@@ -172,24 +172,11 @@ columns. Table and column names are quoted PascalCase.
 
 ### Known problems on a fresh build (November 2026)
 
-- **Orchestrated queries fail** (anything not already in an org's cache): the Dagster images install
-  versions that don't fit together. See #1490 (unpinned Dagster: `POST /jobs` returns 500) and #1491
-  (SQLAlchemy 2.1 in the code location: runs fail with `No module named 'psycopg'`, the query times out
-  with 408). Until they're fixed, the workaround is to pin the versions inside the running containers:
-
-  ```bash
-  for c in dagster-webserver dagster-daemon; do
-    docker exec $c pip install "dagster==1.11.12" "dagster-graphql==1.11.12" "dagster-webserver==1.11.12" \
-      "dagster-postgres==0.27.12" "dagster-docker==0.27.12" "sqlalchemy<2.1"
-  done
-  docker exec dagster-code-location pip install "sqlalchemy<2.1"
-  docker restart dagster-webserver dagster-daemon dagster-code-location
-  ```
-
-  This is lost when the containers are recreated. To check whether it's applied:
-  `docker exec dagster-webserver pip show dagster | grep Version` should say 1.11.12, and
-  `docker exec dagster-code-location pip show sqlalchemy | grep Version` should start with 2.0.
-  *(Delete this section when #1490/#1491 are fixed.)*
+- **Orchestrated queries fail on a stack built before 11-12** (anything not already in an org's
+  cache): the Dagster images installed versions that don't fit together (#1490: `POST /jobs` returns 500;
+  #1491: runs fail with `No module named 'psycopg'` and the query times out with 408). #1504 pinned
+  them. If your Dagster images are older than that, rebuild them:
+  `docker compose up -d --build dagster-webserver dagster-daemon dagster-code-location`.
 - **A MongoDB container can fail its first start** with
   `AssertionError: Could not shutdown mongod for init db successfully`. Seen on 11-07 both when three
   started together and on a single-org reset. The seed has already loaded by then, so the container exits
@@ -230,7 +217,8 @@ uv run pytest integration_tests/ --org org1 --skip-unavailable
 
 Without `--org`, it runs for all three orgs. Details: [`docs/operations/guides/testing.md`](../../operations/guides/testing.md).
 
-**Expect 6 failures today (November 2026).** On main `2967cb9`, with the Dagster workaround above:
+**Expect 6 failures today (November 2026).** On main `2967cb9`, before #1504, with a manual Dagster
+workaround that #1504 has since made unnecessary (not re-measured since):
 6 failed, 31 passed, 33 skipped for org1, in about 4 minutes. The failures are the data-integrity
 checks in `test_03_query_planner.py` and `test_04_graphql.py`, and the run itself causes them. The
 tests ask for fields the seed records don't have, so the planner re-fetches the learner from the
