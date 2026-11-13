@@ -1,11 +1,17 @@
 FROM python:3.13-slim
+# Distrust the eMudhra emSign roots Mozilla removed in NSS 3.131.1, which Debian's ca-certificates
+# still ships (#1480). certifi 2026.10.23 drops them from Python's own bundle.
+RUN sed -i -E 's@^(mozilla/emSign_(Root_CA_-_C1|ECC_Root_CA_-_C3|ECC_Root_CA_-_G3)\.crt)$@!\1@' /etc/ca-certificates.conf \
+    && update-ca-certificates --fresh > /dev/null
 
+# Pinned to what dev's webserver/daemon have run since 2026-10-14 (#1490). 1.13.29 breaks the
+# Orchestrator API's run submission, so upgrade Dagster deliberately, never by rebuilding.
 RUN pip install \
-    dagster \
-    dagster-graphql \
-    dagster-webserver \
-    dagster-postgres \
-    dagster-docker \
+    dagster==1.13.26 \
+    dagster-graphql==1.13.26 \
+    dagster-webserver==1.13.26 \
+    dagster-postgres==0.29.26 \
+    dagster-docker==0.29.26 \
     "sqlalchemy<2.1"
 
 # Set $DAGSTER_HOME and copy dagster.yaml and workspace.yaml there

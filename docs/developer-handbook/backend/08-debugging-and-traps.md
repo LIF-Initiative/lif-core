@@ -49,8 +49,8 @@ docker exec mongodb-org1 mongosh LIF --quiet --eval 'printjson(db.person.findOne
 | A field is `null`, the planner says `served_from_cache`, and another org has the value | The cache check is per two-level path: the learner already has that path (`Person.Name`), so nothing is fetched | [Chapter 4](04-follow-the-data.md), step 3 |
 | Planner: `Pipeline did not run or failed`, `Sources failed during orchestration`; Dagster: `ConnectionError` in `run_lif_adapter` or `run_translation` | A service the job calls is down or unreachable (the Translator, a source system) | `docker ps -a`; then test the hop from inside the container, e.g. `docker exec dagster-code-location python -c "import urllib.request; print(urllib.request.urlopen('http://lif-translator-org1:8007/health').status)"` |
 | `"Query failed: 408"` | The planner's wait ran out (`LIF_QUERY_TIMEOUT_SECONDS`) | Dagster daemon log: did the run launch at all? |
-| Planner: `orchestrator_submission_failed` | Orchestrator API 500 | Orchestrator log. On a fresh build: #1490 |
-| Dagster: `No module named 'psycopg'` | SQLAlchemy 2.1 in a Dagster image | #1491 |
+| Planner: `orchestrator_submission_failed` | Orchestrator API 500 | Orchestrator log. On Dagster images built before 11-12: #1490, rebuild them ([chapter 1](01-dev-environment.md)) |
+| Dagster: `No module named 'psycopg'` | SQLAlchemy 2.1 in a Dagster image built before 11-12 (#1491) | Rebuild the Dagster images ([chapter 1](01-dev-environment.md)) |
 | Translator 404 `No active transformation group` | The group isn't activated, or your local MDR is an old seed | [Chapter 3](03-data-model-and-mdr.md) (activation); [chapter 1](01-dev-environment.md) (reseeding) |
 | MDR `401` | Missing or wrong `X-API-Key` / login | [Chapter 5](05-cross-cutting.md) |
 | A service won't start: `required variable … is missing` | `.env` is out of date | [Chapter 1](01-dev-environment.md) |

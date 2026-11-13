@@ -45,14 +45,7 @@ from lif.string_utils import (
 logger = get_logger(__name__)
 
 
-# TRANSITIONAL (#1203): fall back to the old shared name while deployed task definitions
-# still carry it. CI builds and redeploys the image on merge but never updates the
-# CloudFormation stack -- `aws-deploy.sh` does, by hand -- so without this fallback the new
-# image would read an unset variable and silently drop from the deployed 300s to the 20s
-# default. Remove the fallback once every environment's taskdef sets the new name.
-LIF_GRAPHQL_CLIENT_TIMEOUT_SECONDS = int(
-    os.getenv("LIF_GRAPHQL_CLIENT_TIMEOUT_SECONDS") or os.getenv("LIF_QUERY_TIMEOUT_SECONDS") or "20"
-)
+LIF_GRAPHQL_CLIENT_TIMEOUT_SECONDS = int(os.getenv("LIF_GRAPHQL_CLIENT_TIMEOUT_SECONDS", "20"))
 
 # Callers name themselves to the Query Planner's statistics in this header (#1272). GraphQL
 # forwards the name it received, so a query that arrives through here -- the MCP server's --

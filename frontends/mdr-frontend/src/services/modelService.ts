@@ -145,11 +145,18 @@ export const getModelDetailsWithTree = async (
   const filterRequiredAttributes = (attrs: EntityWithAttributesDTO['Attributes']) =>
     (attrs || []).filter((a) => isRequiredAttribute(a.Required));
 
+  // The generated schema's rule (#1429): a root is a list only when its own Array is 'Yes'; an
+  // embedded child follows its association's Array, or its own while the association's is unset.
+  const isYes = (array?: string | null) => normalize(array).toLowerCase() === 'yes';
+  const isListUnderParent = (associationArray: boolean | null | undefined, childArray?: string | null) =>
+    associationArray ?? isYes(childArray);
+
   const makeNode = (
     ewa: EntityWithAttributesDTO,
     pathEntityIds: string,
     siblingIndex: number,
-    visitedIds: Set<number>
+    visitedIds: Set<number>,
+    isArray: boolean
   ): EntityTreeNode => {
     // PathId uses comma-separated entity IDs (e.g., "4,238,6") to align with backend EntityIdPath format
     const eid = String(ewa.Entity.Id);
@@ -184,11 +191,14 @@ export const getModelDetailsWithTree = async (
           EntityId: child.Entity.Id,
           Entity: adjustedChild,
           Children: [],
+          // The generated schema writes a reference as a single object, whatever its Array
+          IsArray: false,
         });
         return;
       }
 
-      children.push(makeNode(adjustedChild, pathId, idx + 1, nextVisited));
+      const isArray = isListUnderParent(childEntityDTO.AssociationArray, child.Entity.Array);
+      children.push(makeNode(adjustedChild, pathId, idx + 1, nextVisited, isArray));
     });
 
     return {
@@ -196,11 +206,12 @@ export const getModelDetailsWithTree = async (
       EntityId: ewa.Entity.Id,
       Entity: ewa, // keep reference to the same object
       Children: children,
+      IsArray: isArray,
     };
   };
 
   const tree: EntityTreeNode[] = roots.map((ewa, idx) =>
-    makeNode(ewa, "", idx + 1, new Set())
+    makeNode(ewa, "", idx + 1, new Set(), isYes(ewa.Entity.Array))
   );
 
   // console.log("Entity tree:", tree, "Reference-only promoted roots:", Array.from(referenceOnlyEntityIds));
@@ -211,7 +222,7 @@ export const getModelDetailsWithTree = async (
  * Generate a single hierarchical sample JSON object from a model's EntityTree.
  * Top-level keys are root entity names. Each entity can either be:
  *  - An object of its attributes (and nested entities)
- *  - An array of such objects if Entity.Array === 'Yes' (case-insensitive) OR null (null defaults to Yes).
+ *  - An array of such objects if the node is a list where it sits (EntityTreeNode.IsArray).
  *
  * Parameter 'count' controls ONLY the number of objects created for root-level array entities.
  * Nested array entities ALWAYS get exactly 1 object element (still wrapped in an array to reflect schema).
@@ -297,13 +308,6 @@ export function generateSampleRecords(
     return isArray ? [myGenVal] : myGenVal;
   };
 
-  const isArrayEntity = (wrapper: any) => {
-    const meta = wrapper?.Entity?.Id ? wrapper.Entity : wrapper;
-    const arr = meta?.Array; // 'Yes' | 'No' | null
-    if (arr == null) return true; // default to Yes
-    return String(arr).trim().toLowerCase() === 'yes';
-  };
-
   const buildEntityContent = (node: EntityTreeNode): any => {
     const entityWrapper: any = node.Entity as any;
     const attrs = (entityWrapper.Attributes || []) as any[];
@@ -317,10 +321,9 @@ export function generateSampleRecords(
         const childWrapper: any = child.Entity as any;
         const childMeta = childWrapper.Entity?.Id ? childWrapper.Entity : childWrapper;
         const childName = childMeta.Name || childMeta.UniqueName || `Entity_${child.EntityId}`;
-        const childIsArray = isArrayEntity(childWrapper);
         const childValue = buildEntityObject(child, false); // returns object or array
         obj[childName] = childValue;
-        if (childIsArray && Array.isArray(childValue) && childValue.length === 0) {
+        if (child.IsArray && Array.isArray(childValue) && childValue.length === 0) {
           // ensure at least one element for nested arrays
           childValue.push(buildEntityContent(child));
         }
@@ -330,9 +333,7 @@ export function generateSampleRecords(
   };
 
   const buildEntityObject = (node: EntityTreeNode, isRoot: boolean): any => {
-    const wrapper: any = node.Entity as any;
-    const arrayFlag = isArrayEntity(wrapper);
-    if (!arrayFlag) {
+    if (!node.IsArray) {
       return buildEntityContent(node);
     }
     // Array case
@@ -368,7 +369,7 @@ export function generateSampleRecords(
  *
  * Rules / Mapping:
  *  - Each root entity becomes a top-level property on the returned schema's root object.
- *  - If an entity's Array flag (Entity.Array) is 'Yes' (or null -> default Yes) it is represented as
+ *  - If an entity is a list where it sits (EntityTreeNode.IsArray) it is represented as
  *    { type: 'array', items: <entityObjectSchema> }. Otherwise just the object schema.
  *  - Attributes map to JSON Schema primitive types based on DataType (string/number/integer/boolean/date/datetime/timestamp/enum).
  *  - Enum attributes include an 'enum' keyword populated from associated ValueSet values (when available).
@@ -392,13 +393,6 @@ export function generateJsonSchema(
       : [];
     valueSetMap.set(vs.ValueSet?.Id || vs.ValueSetId || vs.Id, { names });
   });
-
-  const isArrayEntity = (wrapper: any) => {
-    const meta = wrapper?.Entity?.Id ? wrapper.Entity : wrapper;
-    const arr = meta?.Array; // 'Yes' | 'No' | null
-    if (arr == null) return true; // default to Yes
-    return String(arr).trim().toLowerCase() === 'yes';
-  };
 
   const isRequiredAttribute = (required: string | null | undefined) => {
     const r = lc(required).trim();
@@ -474,8 +468,7 @@ export function generateJsonSchema(
   };
 
   const buildNode = (node: EntityTreeNode): any => {
-    const wrapper: any = node.Entity as any;
-    if (isArrayEntity(wrapper)) {
+    if (node.IsArray) {
       return {
         type: 'array',
         items: buildEntitySchema(node),
