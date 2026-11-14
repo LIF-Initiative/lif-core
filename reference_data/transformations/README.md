@@ -23,6 +23,9 @@
   all of its paths; otherwise the whole file is refused and nothing is written.
   Re-running the script is safe: a group already installed is refused with `GROUP_EXISTS` (409).
   An imported group arrives inactive (#1350).
+- **Which schema.** The script imports into `public` unless you pass `--schema <tenant_schema>`,
+  which it sends as `X-API-Tenant-Schema`. The MDR honors that header only for a service key,
+  which is what the script uses.
 - **Old-format** files come from `GET /transformation_groups/{id}/export`. The script skips them.
 
 ### Where the portable file imports
@@ -35,6 +38,11 @@ seed's `public`, Ed-Fi v5 is version `5.0.0`, so the file is refused with `MODEL
 seed's `tenant_lif_team` the versions match, but the seed's StateU LIF lacks most of the
 entities its paths go through: in the old format, 54 of its 83 rules didn't resolve against the
 seed.
+
+On dev, import it with `--schema tenant_lif_team`. Without it, the script imports into dev's
+`public`, whose StateU LIF has no `Organization` entity, so the file is refused there.
+Once #1513 brings the seed's `public` to dev's Ed-Fi v5 and `tenant_lif_team`'s StateU LIF, the
+file is expected to import into the seed's `public` too.
 
 ### Old-format files
 
