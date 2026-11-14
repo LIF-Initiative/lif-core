@@ -59,7 +59,7 @@ A full local run on a machine without PostgreSQL (main `2967cb9`, November 2026)
 So about a fifth of the suite needs a real PostgreSQL server: the MDR tests under
 `test/bases/lif/mdr_restapi/`, which include the Translator ↔ MDR end-to-end tests, plus
 `test/bases/lif/control_plane_restapi/`, `test/components/lif/developer_keys/`,
-`test/components/lif/mdr_services/test_schema_drift_service.py` and six files under `test/scripts/`. They use
+`test/components/lif/mdr_services/test_schema_drift_service.py` and seven files under `test/scripts/`. They use
 `testing.postgresql`, which starts its own throwaway server by running `initdb`. If `initdb` isn't on
 your `PATH`, those tests **skip, and pytest still exits 0**. CI's runner has Postgres, so they do run
 there.
@@ -172,11 +172,17 @@ columns. Table and column names are quoted PascalCase.
 
 ### Known problems on a fresh build (November 2026)
 
-- **Orchestrated queries fail on a stack built before 11-12** (anything not already in an org's
-  cache): the Dagster images installed versions that don't fit together (#1490: `POST /jobs` returns 500;
-  #1491: runs fail with `No module named 'psycopg'` and the query times out with 408). #1504 pinned
-  them. If your Dagster images are older than that, rebuild them:
-  `docker compose up -d --build dagster-webserver dagster-daemon dagster-code-location`.
+- **Orchestrated queries fail on a stack built before 11-13** (anything not already in an org's
+  cache). Two fixes have to be in your images:
+  - The Dagster images installed versions that don't fit together (#1490: `POST /jobs` returns 500;
+    #1491: runs fail with `No module named 'psycopg'` and the query times out with 408). #1504 pinned
+    them (11-12).
+  - With #1504's Dagster 1.13.26 webserver, the Orchestrator API needs graphql-core 3.2.14 or later to
+    parse the webserver's schema. Without it, every job submission fails with a `TypeError` and the Query
+    Planner returns 503. #1515 pinned it (11-13).
+
+  If your images are older than that, rebuild all four:
+  `docker compose up -d --build lif-orchestrator-api-org1 dagster-webserver dagster-daemon dagster-code-location`.
 - **A MongoDB container can fail its first start** with
   `AssertionError: Could not shutdown mongod for init db successfully`. Seen on 11-07 both when three
   started together and on a single-org reset. The seed has already loaded by then, so the container exits
@@ -218,7 +224,7 @@ uv run pytest integration_tests/ --org org1 --skip-unavailable
 Without `--org`, it runs for all three orgs. Details: [`docs/operations/guides/testing.md`](../../operations/guides/testing.md).
 
 **Expect 6 failures today (November 2026).** On main `2967cb9`, before #1504, with a manual Dagster
-workaround that #1504 has since made unnecessary (not re-measured since):
+workaround that #1504 and #1515 have since made unnecessary (not re-measured since):
 6 failed, 31 passed, 33 skipped for org1, in about 4 minutes. The failures are the data-integrity
 checks in `test_03_query_planner.py` and `test_04_graphql.py`, and the run itself causes them. The
 tests ask for fields the seed records don't have, so the planner re-fetches the learner from the

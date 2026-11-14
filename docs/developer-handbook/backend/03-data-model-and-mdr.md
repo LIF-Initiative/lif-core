@@ -63,22 +63,23 @@ contributor organization**, not by Id. The Translator works by Id: its caller pa
 Ids in the URL (the planner's sources config sends 26 → 17). In the compose file: `OPENAPI_DATA_MODEL_NAME=StateU LIF`, `OPENAPI_DATA_MODEL_VERSION=1.0`,
 `OPENAPI_DATA_MODEL_CONTRIBUTOR_ORGANIZATION=StateU`.
 
-### Overlays are on their way out (dev: converted; local seed: not yet, #1511)
+### Overlays are on their way out (dev: converted; demo and the local seed: not yet, #1513)
 
-Models 17 and 18 were **overlays**: they were built on model 1 and added or included parts of it, rather than
-holding everything themselves. ADR data_model/0004
+Models 17 and 18 are **overlays** on demo and in the local seed, and were on dev until #1388: they build
+on model 1 and add or include parts of it, rather than holding everything themselves. ADR data_model/0004
 ([`docs/design/adr/data_model/0004-retire-overlays-variants-as-copies.md`](../../design/adr/data_model/0004-retire-overlays-variants-as-copies.md), Accepted) retires this:
 
 - every model will be **self-contained**, with one kind of model instead of four types;
 - a variant of a model is a **copy**, and **schema diff** shows how two models differ;
 - 17 and 18 are converted once, in place, so they produce the same schema as before (#1388, done:
-  `scripts/convert_overlays.py`, #1489). The conversion is applied on dev, in all 10 schemas. The local
-  seed (`projects/lif_mdr_database/backup.sql`) still has 17 and 18 as overlays until #1511 regenerates it.
+  `scripts/convert_overlays.py`, #1489). The conversion is applied on dev, in all 10 schemas. Demo isn't
+  converted yet, and the local seed (`projects/lif_mdr_database/backup.sql`) still has 17 and 18 as
+  overlays; #1513 converts both.
 
 Older docs and ADRs (metadata_repository/0004, 0008; data_model/0002) describe the overlay model:
 inclusions, extensions, Org LIF vs Partner LIF. Read them as history.
 
-**What that means on an overlay (the local seed, until #1511).** Model 17 shows only what it *includes* from
+**What that means on an overlay (demo and the local seed, until #1513).** Model 17 shows only what it *includes* from
 model 1, plus its own *extensions*:
 
 - Entities like `Person` and `Name` are defined in model 1 (`Entities.DataModelId = 1`). Model 17 includes

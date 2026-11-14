@@ -4,7 +4,7 @@ What happens, service by service and file by file, when a client asks LIF for a 
 
 *Checked against main `2967cb9`, November 2026.* Traced from the code, then watched on the local `advisor-demo-docker` stack:
 every step below, the mutation path and a planner restart were observed. File paths are relative to
-the repo root. Orchestrated queries need Dagster images built after #1504 (11-12; see [chapter 1](01-dev-environment.md)).
+the repo root. Orchestrated queries need the Dagster images and the Orchestrator API built after #1504 and #1515 (11-12 and 11-13; see [chapter 1](01-dev-environment.md)).
 
 ---
 
