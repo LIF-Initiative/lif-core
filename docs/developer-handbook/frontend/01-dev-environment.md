@@ -82,7 +82,8 @@ To rebuild a compose-served app after a change: `docker compose up -d --build li
 The MDR API only answers browsers from the origins listed in its `CORS_ALLOW_ORIGINS` (set on
 `lif-mdr-api` in the compose file; locally `http://localhost:3000`, `:5173`, `:8080` and the team's two
 hosted origins). A dev server on any other port gets every API call blocked. The Learner Data Export API
-(`lif-learner-data-export-api`) has the same list, so the Export Playground's calls fail the same way.
+(`lif-learner-data-export-api`) has the same localhost origins (its hosted ones are the LDE's, not the
+MDR's), so the Export Playground's calls fail the same way.
 
 Both apps' dev servers default to 5173: the MDR UI by Vite's default, the Advisor app in its
 `vite.config.ts`. Whichever starts second moves to 5174, which isn't in the list. So start the MDR UI
