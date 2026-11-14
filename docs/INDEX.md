@@ -124,6 +124,29 @@
 
 ---
 
+## `docs/developer-handbook/` — Developer handbook (onboarding path)
+
+- [`backend/00-start-here.md`](developer-handbook/backend/00-start-here.md) — Backend handbook start: what LIF is (and why AWS isn't required), reading order, glossary.
+- [`backend/01-dev-environment.md`](developer-handbook/backend/01-dev-environment.md) — Tools, checks, the tests that skip without PostgreSQL, the local stack and how to reset its data.
+- [`backend/02-codebase-map.md`](developer-handbook/backend/02-codebase-map.md) — Polylith layout, how a service is assembled from bricks, and the blast radius of shared components.
+- [`backend/03-data-model-and-mdr.md`](developer-handbook/backend/03-data-model-and-mdr.md) — LIF data models in the MDR: tables, the seed's models, overlays (being retired), mappings, tenants, migrations.
+- [`backend/04-follow-the-data.md`](developer-handbook/backend/04-follow-the-data.md) — One GraphQL query traced through planner, cache, orchestrator, Dagster and Translator, with commands to watch it.
+- [`backend/05-cross-cutting.md`](developer-handbook/backend/05-cross-cutting.md) — Auth per service, configuration, schema loading, timeouts, PII-in-logs rules, errors.
+- [`backend/06-how-we-work.md`](developer-handbook/backend/06-how-we-work.md) — Issue to merge: branches, commit format, PRs, required checks, ADRs, where docs go.
+- [`backend/07-recipes.md`](developer-handbook/backend/07-recipes.md) — Step-by-step: add a field, a mapping, a data source, a service, a brick, a migration; change the MDR seed.
+- [`backend/08-debugging-and-traps.md`](developer-handbook/backend/08-debugging-and-traps.md) — Where to look first, a symptom table, and the traps the team keeps relearning.
+- [`backend/09-environments-and-deploys.md`](developer-handbook/backend/09-environments-and-deploys.md) — dev and demo (hosted on AWS for demos to date; AWS isn't required), what a merge to main deploys, who to ask.
+- [`backend/10-extending-lif.md`](developer-handbook/backend/10-extending-lif.md) — Which services run without the full system (MDR alone, MDR + Translator, read path without orchestration, …) and where new features plug in.
+- [`frontend/00-start-here.md`](developer-handbook/frontend/00-start-here.md) — The two web apps, how a single-page app reaches the APIs, the MDR in four sentences, reading order, glossary.
+- [`frontend/01-dev-environment.md`](developer-handbook/frontend/01-dev-environment.md) — Install and run either app, build-time configuration, running against the backend, CORS, logging in.
+- [`frontend/02-mdr-ui.md`](developer-handbook/frontend/02-mdr-ui.md) — MDR UI layout and routes, how a screen calls the MDR, login and tokens, workspaces, features.
+- [`frontend/03-follow-a-click.md`](developer-handbook/frontend/03-follow-a-click.md) — The Activate button traced from the screen through the service, endpoint and database, and back.
+- [`frontend/04-advisor-app.md`](developer-handbook/frontend/04-advisor-app.md) — The Advisor app: each call in a conversation, what the Advisor API does with it, token refresh.
+- [`frontend/05-recipes.md`](developer-handbook/frontend/05-recipes.md) — Step-by-step: call an MDR endpoint, test a helper, add a page or a build-time setting, check lint warnings.
+- [`frontend/06-checks-ci-and-shipping.md`](developer-handbook/frontend/06-checks-ci-and-shipping.md) — Checks to run, what CI misses (Advisor type-check), traps, how a merge ships.
+
+---
+
 ## `docs/agents/` — Agent / MCP / LLM integration
 
 *Currently no committed docs. Two candidate files exist in working trees and will land via separate PRs: `buildathon-mcp-briefing.md` and `mcp-server-optimization-analysis.md`.*

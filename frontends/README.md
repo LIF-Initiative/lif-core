@@ -59,6 +59,8 @@ npm run dev
 
 ## Guidelines for Contributors
 
+New here? Start with the [frontend developer handbook](../docs/developer-handbook/frontend/00-start-here.md).
+
 -   Keep frontend code isolated within its own subdirectory
 -   Use a framework and toolchain suited to the client use case   
 -   Define CI, linting, and formatting tools locally (e.g., ESLint, Prettier)   
