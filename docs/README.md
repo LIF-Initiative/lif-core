@@ -45,7 +45,7 @@ docs/
   agents/             — MCP servers, AGENTS.md companion guidance, agent-context for this repo
   external/           — Non-technical artifact archive: one-pagers, briefings, decks (mixed formats)
   external_refs/      — Reference material from outside LIF (CEDS standards, etc.)
-  developer-handbook/ — Onboarding path for new developers (backend/); links into the layers above
+  developer-handbook/ — Onboarding path for new developers (backend/ and frontend/); links into the layers above
   media/              — Images, diagrams, supporting assets
 ```
 

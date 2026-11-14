@@ -343,6 +343,7 @@
         "asdict",
         "dataclasses",
         "Credentialaward",
+        "xyflow",
         "stackset"
     ],
     "ignorePaths": [
