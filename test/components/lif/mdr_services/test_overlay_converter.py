@@ -11,6 +11,8 @@ from lif.mdr_services.overlay_converter import (
     IdMap,
     _map_path,
     canonical,
+    duplicate_required,
+    duplicates_note,
     render_set,
     rewrite_base_schema,
     rewrite_overlay_schema,
@@ -196,7 +198,7 @@ def _person(required, enum=("a", "b")):
     return {"Person": {"required": list(required), "properties": {"kind": {"enum": list(enum)}}}}
 
 
-def test_the_comparison_reads_required_as_a_set():
+def test_the_comparison_ignores_the_order_of_required():
     """Own elements keep their Ids and copies get new ones, so `required` can come out in another order (#1388)."""
     assert canonical(_person(["name", "id"])) == canonical(_person(["id", "name"]))
 
@@ -205,5 +207,29 @@ def test_the_comparison_still_catches_a_changed_required():
     assert canonical(_person(["name", "id"])) != canonical(_person(["name"]))
 
 
+def test_the_comparison_counts_a_duplicate_in_required():
+    """A name listed twice is a defect in the old schema, and caught row 633 on dev (#1506), so it counts."""
+    assert canonical(_person(["id", "name", "id"])) != canonical(_person(["name", "id"]))
+
+
+def test_duplicate_required_names_each_repeated_name_and_where():
+    schema = {"A": {"required": ["id", "name", "id"], "properties": {"b": {"required": ["x", "x", "x", "y"]}}}}
+    assert duplicate_required(schema) == ["A.required: id x2", "A.properties.b.required: x x3"]
+
+
+def test_duplicate_required_is_empty_without_duplicates():
+    assert duplicate_required(_person(["name", "id"])) == []
+
+
 def test_the_comparison_keeps_the_order_of_every_other_list():
     assert canonical(_person(["id"], enum=("a", "b"))) != canonical(_person(["id"], enum=("b", "a")))
+
+
+def test_duplicates_note_names_the_side_that_repeats_a_name():
+    note = duplicates_note(_person(["id", "name", "id"]), _person(["name", "id"]))
+    assert note == "\nexpected repeats a name in required: Person.required: id x2"
+
+
+def test_duplicates_note_is_empty_when_both_sides_repeat_the_same_names():
+    """A duplicate both sides keep isn't why they differ, so it isn't named (#1512 review)."""
+    assert duplicates_note(_person(["id", "id"], enum=("a",)), _person(["id", "id"], enum=("b",))) == ""

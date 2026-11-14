@@ -37,7 +37,7 @@ are in AWS SSM, wired into each service by `cloudformation/*-taskdef-includes.ym
   list those files in `paths:`, so the workflow still runs and goes green, which looks like the change
   shipped. Say in the PR that a stack deploy is needed.
 - Every deployable project has one such workflow, with two exceptions. `lif_control_plane_api.yml` runs
-  only by hand (`workflow_dispatch`) until its AWS stack exists (#1182). And two Dagster projects have none:
+  only by hand (`workflow_dispatch`), because its stack isn't set up for deploys yet. And two Dagster projects have none:
   `dagster_docker_compose` (local compose) and `dagster_plus_hybrid` (Dagster Cloud). `dagster_oss_ecs`
   deploys to dev through `dagster.yml` and `dagster_code_location.yml`. [Chapter 2](02-codebase-map.md)
   lists them.

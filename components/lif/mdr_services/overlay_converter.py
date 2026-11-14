@@ -11,7 +11,8 @@ names every entity, attribute and association it renders, so clashes, overrides 
 
 The conversion checks itself before the caller commits. It generates every live model it touches in all
 16 flag combinations before and after, and the "after" must equal the "before" rewritten through the
-conversion's Id map (decided on #1388: D1, per key), with `required` compared as a set. Every caller runs it in one transaction and rolls
+conversion's Id map (decided on #1388: D1, per key), with `required` compared regardless of order
+(a name listed twice still counts twice). Every caller runs it in one transaction and rolls
 back on ``ConversionFailed``.
 
 The comparison covers only the models it generates, so the conversion also refuses when a live row of
@@ -36,6 +37,7 @@ from __future__ import annotations
 import difflib
 import itertools
 import json
+from collections import Counter
 from dataclasses import dataclass, field
 from typing import Any, Iterable, Optional
 
@@ -141,21 +143,51 @@ def flag_key(flags: dict) -> str:
     return "attr{:d}-entity{:d}-public{:d}-full{:d}".format(*(flags[name] for name in FLAG_NAMES))
 
 
-def _required_as_set(node: Any) -> Any:
+def _required_sorted(node: Any) -> Any:
     if isinstance(node, dict):
         return {
-            k: sorted(v) if k == "required" and isinstance(v, list) else _required_as_set(v) for k, v in node.items()
+            k: sorted(v) if k == "required" and isinstance(v, list) else _required_sorted(v) for k, v in node.items()
         }
     if isinstance(node, list):
-        return [_required_as_set(v) for v in node]
+        return [_required_sorted(v) for v in node]
     return node
 
 
 def canonical(schema: Any) -> str:
     """The schema as compared: every `required` list sorted, since own elements keep their Ids and the
-    copies get new ones, so the order `required` lists them in can change (decided on #1388: compare it
-    as a set). Every other list keeps its order."""
-    return json.dumps(_required_as_set(schema), indent=2, sort_keys=True, ensure_ascii=False, default=str)
+    copies get new ones, so the order `required` lists them in can change (decided on #1388). Sorting
+    keeps duplicates, so a name listed twice on one side and once on the other is a difference. That
+    keeps to #1388's reading of D1 as "the same schema as JSON Schema", which requires the items in
+    `required` to be unique, so a duplicate is a defect in that schema, not noise (#1506). Every other
+    list keeps its order."""
+    return json.dumps(_required_sorted(schema), indent=2, sort_keys=True, ensure_ascii=False, default=str)
+
+
+def duplicate_required(schema: Any, path: str = "") -> list[str]:
+    """Every `required` list that names something more than once, as `path: name x count`, so the
+    self-check can say why two schemas differ when the diff alone only shows a repeated line (#1506)."""
+    found: list[str] = []
+    if isinstance(schema, dict):
+        for k, v in schema.items():
+            here = f"{path}.{k}" if path else str(k)
+            if k == "required" and isinstance(v, list):
+                counts = Counter(name for name in v if isinstance(name, str))
+                found += [f"{here}: {name} x{n}" for name, n in sorted(counts.items()) if n > 1]
+            else:
+                found += duplicate_required(v, here)
+    elif isinstance(schema, list):
+        for i, v in enumerate(schema):
+            found += duplicate_required(v, f"{path}[{i}]")
+    return found
+
+
+def duplicates_note(expected: Any, after: Any) -> str:
+    """The self-check's line naming repeated `required` names, only when the two sides repeat different
+    ones, so a duplicate both sides share isn't mistaken for why they differ (#1506)."""
+    sides = (("expected", duplicate_required(expected)), ("after", duplicate_required(after)))
+    if sides[0][1] == sides[1][1]:
+        return ""
+    return "".join(f"\n{side} repeats a name in required: {', '.join(found)}" for side, found in sides if found)
 
 
 def _diff(expected: Any, actual: Any, limit: int = 30) -> str:
@@ -869,8 +901,10 @@ async def convert_overlays(session: AsyncSession, overlay_ids: list[int]) -> Rep
         after = await generate_matrix(session, model_id)
         for key, expected in expected_by_model[model_id].items():
             if canonical(after[key]) != canonical(expected):
+                duplicates = duplicates_note(expected, after[key])
                 failures.append(
-                    f"model {model_id}: {key} differs from the rewritten baseline\n{_diff(expected, after[key])}"
+                    f"model {model_id}: {key} differs from the rewritten baseline{duplicates}\n"
+                    f"{_diff(expected, after[key])}"
                 )
 
     for model_id in overlay_ids:

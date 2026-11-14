@@ -77,7 +77,8 @@ that `requirements.txt`. Either way the image gets the versions in the project's
 
 **The Dagster projects are different.** `projects/dagster_*` have no `uv.lock`, and their images install
 from PyPI without one. That is how the images drifted to versions that don't work together (#1490,
-#1491, fixed by pinning them in #1504; [chapter 1](01-dev-environment.md)). The job code itself lives in `orchestrators/dagster/lif-orchestrator/`, and the
+#1491, fixed by pinning them in #1504; the Orchestrator API then needed a newer graphql-core to talk to
+the 1.13 webserver, #1515; [chapter 1](01-dev-environment.md)). The job code itself lives in `orchestrators/dagster/lif-orchestrator/`, and the
 `Dockerfile.code_location` copies it in.
 
 ## Blast radius: shared bricks
@@ -138,7 +139,7 @@ before `auth` replaced them; they aren't in git.
 | `mdr_restapi` | `lif_mdr_api` | 8012 | `lif_mdr_api.yml` |
 | `identity_mapper_restapi` | `lif_identity_mapper_api` | not published (compose network only) | `lif_identity_mapper_api.yml` |
 | `learner_data_export_api` | `lif_learner_data_export_api` | 8013 | `lif_learner_data_export_api.yml` |
-| `control_plane_restapi` | `lif_control_plane_api` | 8014 | `lif_control_plane_api.yml` (manual only, `workflow_dispatch`, until its AWS stack exists, #1182) |
+| `control_plane_restapi` | `lif_control_plane_api` | 8014 | `lif_control_plane_api.yml` (manual only, `workflow_dispatch`: its stack isn't set up for deploys yet) |
 | `example_data_source_rest_api` | `lif_example_data_source_rest_api` | 8011 | `lif_example_data_source_rest_api.yml` |
 | `advisor_restapi` | `lif_advisor_api` | 8004 | `lif_advisor_api.yml` |
 | `semantic_search_mcp_server` | `lif_semantic_search_mcp_server` | 8003 | `lif_semantic_search_mcp_server.yml` |
