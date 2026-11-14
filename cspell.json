@@ -333,6 +333,16 @@
         "learnerinfoframework",
         "lineterm",
         "outerjoin",
+        "pgtest",
+        "PYTHONDONTWRITEBYTECODE",
+        "hardlink",
+        "virtualenv",
+        "pgaudit",
+        "printjson",
+        "autonumber",
+        "asdict",
+        "dataclasses",
+        "Credentialaward",
         "stackset"
     ],
     "ignorePaths": [
