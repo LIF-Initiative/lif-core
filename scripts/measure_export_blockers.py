@@ -1,14 +1,20 @@
 #!/usr/bin/env python3
-"""Read-only count of what keeps each model and mapping group from exporting as a portable file (#1393).
+"""Read-only count of what keeps each model, mapping group and crosswalk from exporting as a portable file (#1393).
 
 Export refuses rows the portable format can't represent (Portability Spec §10, §11). Rather than
-restate those rules in SQL, this runs the converters themselves, `export_model` on every live model
-and `export_mapping_group` on every non-deleted transformation group, in every schema, and counts what
-they refuse. A count is therefore exactly what an export would hit today, and it stays right when a
+restate those rules in SQL, this runs the converters themselves, `export_model` on every live model,
+`export_mapping_group` on every non-deleted transformation group and `export_crosswalk` on every
+crosswalk, in every schema, and counts what they refuse. A count is therefore exactly what an export would hit today, and it stays right when a
 converter's rules change.
 
-For each schema it prints how many models and groups export and how many are refused, then each
-refusal reason with the number of elements it names and the models or groups it names them in.
+A crosswalk has no row of its own (Portability Spec §7): it is the live value mappings from one value
+set to another. So the crosswalks measured are the value-set pairs that have at least one live value
+mapping, live as `export_crosswalk` reads it: the mapping, both of its values, and its group if it has
+one (#1513).
+
+For each schema it prints how many models, groups and crosswalks export and how many are refused, then
+each refusal reason with the number of elements it names and the models, groups or crosswalks it names
+them in.
 Names inside a reason (a value set, a model) are folded into `…` so the same rule counts as one
 reason. Overlay models are refused on that alone and are #1388's to convert; they are listed apart
 and not counted as cleanup. A group whose source or target is an overlay is #1388's too, but it is
@@ -37,14 +43,15 @@ import sys
 from collections import defaultdict
 from dataclasses import dataclass, field
 
-from sqlalchemy import select, text
+from sqlalchemy import distinct, select, text
 from sqlalchemy.engine import URL
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+from sqlalchemy.orm import aliased
 
 from lif.mdr_portability import PortabilityErrorGroup
 from lif.mdr_services.model_converter import is_overlay
-from lif.mdr_services.portability_converter import export_mapping_group, export_model
-from lif.mdr_sql_model.core import DataModel, TransformationGroup
+from lif.mdr_services.portability_converter import export_crosswalk, export_mapping_group, export_model
+from lif.mdr_sql_model.core import DataModel, TransformationGroup, ValueSetValue, ValueSetValueMapping
 
 SCHEMAS_SQL = r"""
 SELECT table_schema FROM information_schema.tables
@@ -73,6 +80,8 @@ class SchemaResult:
     overlays: list[str] = field(default_factory=list)
     groups: int = 0
     groups_exported: int = 0
+    crosswalks: int = 0
+    crosswalks_exported: int = 0
     # reason key -> the refused elements, as (model or group label, element)
     refusals: dict[str, list[tuple[str, str]]] = field(default_factory=lambda: defaultdict(list))
 
@@ -84,6 +93,10 @@ class SchemaResult:
     def groups_refused(self) -> int:
         return self.groups - self.groups_exported
 
+    @property
+    def crosswalks_refused(self) -> int:
+        return self.crosswalks - self.crosswalks_exported
+
 
 def _model_label(model: DataModel) -> str:
     return f"model {model.Id} {model.Name}"
@@ -91,6 +104,36 @@ def _model_label(model: DataModel) -> str:
 
 def _group_label(group: TransformationGroup) -> str:
     return f"group {group.Id} ({group.SourceDataModelId} -> {group.TargetDataModelId} v{group.GroupVersion})"
+
+
+def _crosswalk_label(source_value_set_id: int, target_value_set_id: int) -> str:
+    return f"crosswalk {source_value_set_id} -> {target_value_set_id}"
+
+
+async def crosswalk_pairs(session: AsyncSession) -> list[tuple[int, int]]:
+    """Every (source, target) value-set pair with a live value mapping, as export_crosswalk reads one.
+
+    The pair comes from the values, not the mapping's SourceValueSetId and TargetValueSetId, which are
+    NULL on most of the seed's rows. Value sets and their models aren't filtered: a crosswalk whose value
+    set or model is gone is refused by export, and counted here as refused.
+    """
+    source_value, target_value = aliased(ValueSetValue), aliased(ValueSetValue)
+    query = (
+        select(distinct(source_value.ValueSetId), target_value.ValueSetId)
+        .select_from(ValueSetValueMapping)
+        .join(source_value, source_value.Id == ValueSetValueMapping.SourceValueId)
+        .join(target_value, target_value.Id == ValueSetValueMapping.TargetValueId)
+        .outerjoin(TransformationGroup, TransformationGroup.Id == ValueSetValueMapping.TransformationGroupId)
+        .where(
+            ValueSetValueMapping.Deleted.is_not(True),
+            source_value.Deleted.is_not(True),
+            target_value.Deleted.is_not(True),
+            # A mapping with no group joins no row, so this holds for it too.
+            TransformationGroup.Deleted.is_not(True),
+        )
+        .order_by(source_value.ValueSetId, target_value.ValueSetId)
+    )
+    return [(source_id, target_id) for source_id, target_id in (await session.execute(query)).all()]
 
 
 async def _try_export(session: AsyncSession, result: SchemaResult, label: str, export) -> bool:
@@ -108,7 +151,7 @@ async def _try_export(session: AsyncSession, result: SchemaResult, label: str, e
 
 
 async def measure_schema(session: AsyncSession, schema: str) -> SchemaResult:
-    """Export every live model and non-deleted group in the schema on the session's search_path."""
+    """Export every live model, non-deleted group and crosswalk in the schema on the session's search_path."""
     result = SchemaResult(schema)
     models = (
         (await session.execute(select(DataModel).where(DataModel.Deleted.is_not(True)).order_by(DataModel.Id)))
@@ -139,6 +182,12 @@ async def measure_schema(session: AsyncSession, schema: str) -> SchemaResult:
         label = _group_label(transformation_group)
         if await _try_export(session, result, label, lambda: export_mapping_group(session, transformation_group.Id)):
             result.groups_exported += 1
+
+    for source_id, target_id in await crosswalk_pairs(session):
+        result.crosswalks += 1
+        label = _crosswalk_label(source_id, target_id)
+        if await _try_export(session, result, label, lambda: export_crosswalk(session, source_id, target_id)):
+            result.crosswalks_exported += 1
     return result
 
 
@@ -163,7 +212,8 @@ async def measure(engine) -> list[SchemaResult]:
 def format_result(result: SchemaResult, details: bool) -> list[str]:
     lines = [
         f"=== {result.schema}: models {result.models_exported} export, {result.models_refused} refused,"
-        f" {len(result.overlays)} overlays; groups {result.groups_exported} export, {result.groups_refused} refused"
+        f" {len(result.overlays)} overlays; groups {result.groups_exported} export, {result.groups_refused} refused;"
+        f" crosswalks {result.crosswalks_exported} export, {result.crosswalks_refused} refused"
     ]
     if result.overlays:
         lines.append(f"  overlays (#1388): {', '.join(result.overlays)}")

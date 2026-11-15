@@ -1,4 +1,4 @@
-"""Tests for the #1393 read-only count of what keeps each model and mapping group from exporting.
+"""Tests for the #1393 read-only count of what keeps each model, mapping group and crosswalk from exporting.
 
 The counts decide which data gets cleaned up, in every schema, so a count that drifts from what
 export actually refuses would send the cleanup after the wrong rows. The seed test pins the figures
@@ -16,7 +16,10 @@ from urllib.parse import urlparse
 import pytest
 import testing.postgresql
 from sqlalchemy import text
-from sqlalchemy.ext.asyncio import create_async_engine
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+
+from lif.mdr_portability import PortabilityError, PortabilityErrorCode
+from lif.mdr_portability.errors import error_group
 
 _ROOT = pathlib.Path(__file__).resolve().parents[2]
 _spec = importlib.util.spec_from_file_location(
@@ -105,6 +108,8 @@ async def test_measure_reports_what_the_seed_refuses(seed_url):
     # other 16 are refused.
     assert (public.models, public.models_exported, public.models_refused) == (21, 3, 16)
     assert (public.groups, public.groups_exported, public.groups_refused) == (9, 2, 7)
+    # Every crosswalk in the seed exports, so none adds a refusal below (#1513).
+    assert (public.crosswalks, public.crosswalks_exported, public.crosswalks_refused) == (7, 7, 0)
     assert _counts(public) == {
         "NOT_MIGRATED: the attribute has no DataType; migration sets string": 613,
         "NOT_MIGRATED: the attribute has DataType entity; it becomes an association to the entity": 190,
@@ -158,3 +163,71 @@ async def test_measure_writes_nothing_and_counts_a_failed_export(seed_url, monke
     finally:
         await engine.dispose()
     assert notes != "changed"
+
+
+async def test_measure_counts_a_refused_crosswalk_under_its_reason(seed_url, monkeypatch):
+    export_crosswalk = measure.export_crosswalk
+
+    async def refusing_export_crosswalk(session, source_value_set_id, target_value_set_id):
+        if (source_value_set_id, target_value_set_id) == (343, 347):
+            raise error_group(
+                [
+                    PortabilityError(
+                        PortabilityErrorCode.CROSSWALK_SOURCE_DUPLICATE, "Entries[3].Source", "'Grade 9' maps twice"
+                    )
+                ]
+            )
+        return await export_crosswalk(session, source_value_set_id, target_value_set_id)
+
+    monkeypatch.setattr(measure, "export_crosswalk", refusing_export_crosswalk)
+    public = (await _measure(seed_url))["public"]
+
+    assert (public.crosswalks, public.crosswalks_exported, public.crosswalks_refused) == (7, 6, 1)
+    assert public.refusals["CROSSWALK_SOURCE_DUPLICATE: … maps twice"] == [
+        ("crosswalk 343 -> 347", "Entries[3].Source")
+    ]
+    assert "crosswalks 6 export, 1 refused" in measure.format_result(public, False)[0]
+
+
+async def test_crosswalk_pairs_skip_a_pair_with_no_live_mapping(seed_url):
+    """A pair is a crosswalk only while a mapping, both of its values and its group are all live."""
+    engine = create_async_engine(seed_url)
+    try:
+        async with AsyncSession(engine) as session:
+            async with session.begin():
+                await session.execute(text("SET LOCAL search_path TO public"))
+                pairs = await measure.crosswalk_pairs(session)
+                assert pairs == [(76, 52), (310, 284), (313, 287), (314, 288), (315, 290), (343, 347), (464, 52)]
+
+                # Each pair loses its mappings a different way: the mapping, a source value, a target
+                # value, or the group.
+                await session.execute(
+                    text(
+                        """
+                        UPDATE "ValueSetValueMapping" m SET "Deleted" = true
+                        FROM "ValueSetValues" s WHERE s."Id" = m."SourceValueId" AND s."ValueSetId" = 343
+                        """
+                    )
+                )
+                await session.execute(text('UPDATE "ValueSetValues" SET "Deleted" = true WHERE "ValueSetId" = 310'))
+                await session.execute(text('UPDATE "ValueSetValues" SET "Deleted" = true WHERE "ValueSetId" = 287'))
+                # Put 314's mappings in a group, then delete the group. The transaction is rolled back.
+                await session.execute(
+                    text(
+                        """
+                        UPDATE "ValueSetValueMapping" m
+                        SET "TransformationGroupId" = (SELECT min("Id") FROM "TransformationsGroup")
+                        FROM "ValueSetValues" s WHERE s."Id" = m."SourceValueId" AND s."ValueSetId" = 314
+                        """
+                    )
+                )
+                await session.execute(
+                    text(
+                        'UPDATE "TransformationsGroup" SET "Deleted" = true'
+                        ' WHERE "Id" = (SELECT min("Id") FROM "TransformationsGroup")'
+                    )
+                )
+                assert await measure.crosswalk_pairs(session) == [(76, 52), (315, 290), (464, 52)]
+                await session.rollback()
+    finally:
+        await engine.dispose()
