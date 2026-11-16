@@ -1,3033 +1,950 @@
 {
-  "SourceDataModelId": 17,
-  "TargetDataModelId": 6,
-  "Name": "StateU LIF_Ed-Fi_v5_v1.0",
-  "GroupVersion": "1.0",
-  "Description": null,
-  "Notes": null,
-  "ActivationDate": "2026-06-18T00:00:00Z",
-  "DeprecationDate": null,
-  "Contributor": null,
-  "ContributorOrganization": null,
-  "Transformations": [
+  "Format": {
+    "Type": "lif-mdr-mapping-group",
+    "Version": 1
+  },
+  "Details": {
+    "Source": {
+      "Name": "StateU LIF",
+      "Version": "1.0",
+      "ContributorOrganization": "StateU"
+    },
+    "Target": {
+      "Name": "Ed-Fi v5",
+      "Version": "1.0",
+      "ContributorOrganization": "LIF"
+    },
+    "Version": "1.0",
+    "Name": "StateU LIF_Ed-Fi v5"
+  },
+  "Mappings": [
     {
-      "Id": 1597,
-      "TransformationGroupId": 49,
-      "Name": "Assessment.AssessmentIdentifier",
-      "Expression": "{ \"Assessment\": Assessment. { \"AssessmentIdentifier\": identifier } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
+      "Target": {
+        "Path": "Address,AddressType"
+      },
+      "Sources": [
         {
-          "AttributeId": 2,
-          "EntityId": 1,
-          "AttributeName": "identifier",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Assessment,1:~Assessment.identifier"
+          "Path": "Person,Contact,Address,addressType"
         }
       ],
-      "TargetAttribute": {
-        "AttributeId": 133,
-        "EntityId": 24,
-        "AttributeName": "AssessmentIdentifier",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:Assessment,6:~Assessment.AssessmentIdentifier"
-      }
-    },
-    {
-      "Id": 1598,
-      "TransformationGroupId": 49,
-      "Name": "Assessment.AssessmentTitle",
-      "Expression": "{ \"Assessment\": Assessment. { \"AssessmentTitle\": name } }",
       "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 4,
-          "EntityId": 1,
-          "AttributeName": "name",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Assessment,1:~Assessment.name"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 134,
-        "EntityId": 24,
-        "AttributeName": "AssessmentTitle",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:Assessment,6:~Assessment.AssessmentTitle"
-      }
-    },
-    {
-      "Id": 1599,
-      "TransformationGroupId": 49,
-      "Name": "Assessment.RevisionDate",
-      "Expression": "{ \"Assessment\": Assessment. { \"RevisionDate\": revisionDate } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 6,
-          "EntityId": 1,
-          "AttributeName": "revisionDate",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Assessment,1:~Assessment.revisionDate"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 135,
-        "EntityId": 24,
-        "AttributeName": "RevisionDate",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:Assessment,6:~Assessment.RevisionDate"
-      }
-    },
-    {
-      "Id": 1600,
-      "TransformationGroupId": 49,
-      "Name": "Assessment.AssessedGradeLevel",
-      "Expression": "{ \"Assessment\": Assessment. { \"AssessedGradeLevel\": assessmentLevel } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 14,
-          "EntityId": 1,
-          "AttributeName": "assessmentLevel",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Assessment,1:~Assessment.assessmentLevel"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 138,
-        "EntityId": 24,
-        "AttributeName": "AssessedGradeLevel",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:Assessment,6:~Assessment.AssessedGradeLevel"
-      }
-    },
-    {
-      "Id": 1601,
-      "TransformationGroupId": 49,
-      "Name": "Assessment.AcademicSubject",
-      "Expression": "{ \"Assessment\": Assessment. { \"AcademicSubject\": subject } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 12,
-          "EntityId": 1,
-          "AttributeName": "subject",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Assessment,1:~Assessment.subject"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 137,
-        "EntityId": 24,
-        "AttributeName": "AcademicSubject",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:Assessment,6:~Assessment.AcademicSubject"
-      }
-    },
-    {
-      "Id": 1602,
-      "TransformationGroupId": 49,
-      "Name": "Assessment.AssessmentCategory",
-      "Expression": "{ \"Assessment\": Assessment. { \"AssessmentCategory\": category } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 19,
-          "EntityId": 1,
-          "AttributeName": "category",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Assessment,1:~Assessment.category"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 136,
-        "EntityId": 24,
-        "AttributeName": "AssessmentCategory",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:Assessment,6:~Assessment.AssessmentCategory"
-      }
-    },
-    {
-      "Id": 1603,
-      "TransformationGroupId": 49,
-      "Name": "Assessment.Language",
-      "Expression": "{ \"Assessment\": Assessment. { \"Language\": assessmentLanguage } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 18,
-          "EntityId": 1,
-          "AttributeName": "assessmentLanguage",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Assessment,1:~Assessment.assessmentLanguage"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 140,
-        "EntityId": 24,
-        "AttributeName": "Language",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:Assessment,6:~Assessment.Language"
-      }
-    },
-    {
-      "Id": 1604,
-      "TransformationGroupId": 49,
-      "Name": "Assessment.AssessmentScore",
-      "Expression": "{ \"Assessment\": Assessment. { \"AssessmentScore\": scoreMetricType } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 17,
-          "EntityId": 1,
-          "AttributeName": "scoreMetricType",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Assessment,1:~Assessment.scoreMetricType"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 139,
-        "EntityId": 24,
-        "AttributeName": "AssessmentScore",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:Assessment,6:~Assessment.AssessmentScore"
-      }
-    },
-    {
-      "Id": 1605,
-      "TransformationGroupId": 49,
-      "Name": "StudentAssement.AdministrationDate",
-      "Expression": "{ \"StudentAssement\": Person. { \"AdministrationDate\": AssessmentLearningExperience.startDate } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 57,
-          "EntityId": 3,
-          "AttributeName": "startDate",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Person.AssessmentLearningExperience,1:~Person.AssessmentLearningExperience.startDate"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 141,
-        "EntityId": 25,
-        "AttributeName": "AdministrationDate",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:StudentAssement,6:~StudentAssement.AdministrationDate"
-      }
-    },
-    {
-      "Id": 1606,
-      "TransformationGroupId": 49,
-      "Name": "StudentAssement.AdministrationEndDate",
-      "Expression": "{ \"StudentAssement\": Person. { \"AdministrationEndDate\": AssessmentLearningExperience.endDate } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 58,
-          "EntityId": 3,
-          "AttributeName": "endDate",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Person.AssessmentLearningExperience,1:~Person.AssessmentLearningExperience.endDate"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 142,
-        "EntityId": 25,
-        "AttributeName": "AdministrationEndDate",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:StudentAssement,6:~StudentAssement.AdministrationEndDate"
-      }
-    },
-    {
-      "Id": 1607,
-      "TransformationGroupId": 49,
-      "Name": "StudentAssement.PlatformType",
-      "Expression": "{ \"StudentAssement\": Person. { \"PlatformType\": AssessmentLearningExperience.deliveryDeviceDetails } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 67,
-          "EntityId": 3,
-          "AttributeName": "deliveryDeviceDetails",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Person.AssessmentLearningExperience,1:~Person.AssessmentLearningExperience.deliveryDeviceDetails"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 143,
-        "EntityId": 25,
-        "AttributeName": "PlatformType",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:StudentAssement,6:~StudentAssement.PlatformType"
-      }
-    },
-    {
-      "Id": 1608,
-      "TransformationGroupId": 49,
-      "Name": "StudentAssement.AdministrationEnvironment",
-      "Expression": "{ \"StudentAssement\": Person. { \"AdministrationEnvironment\": AssessmentLearningExperience.experienceLocation } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 68,
-          "EntityId": 3,
-          "AttributeName": "experienceLocation",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Person.AssessmentLearningExperience,1:~Person.AssessmentLearningExperience.experienceLocation"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 144,
-        "EntityId": 25,
-        "AttributeName": "AdministrationEnvironment",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:StudentAssement,6:~StudentAssement.AdministrationEnvironment"
-      }
-    },
-    {
-      "Id": 1609,
-      "TransformationGroupId": 49,
-      "Name": "Course.CourseGPAApplicability",
-      "Expression": "{ \"Course\": Course. { \"CourseGPAApplicability\": courseGPAApplicability } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 500,
-          "EntityId": 77,
-          "AttributeName": "courseGPAApplicability",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Course,1:~Course.Grade.courseGPAApplicability"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 655,
-        "EntityId": 100,
-        "AttributeName": "CourseGPAApplicability",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:Course,6:~Course.CourseGPAApplicability"
-      }
-    },
-    {
-      "Id": 1610,
-      "TransformationGroupId": 49,
-      "Name": "Course.CourseTitle",
-      "Expression": "{ \"Course\": Course. { \"CourseTitle\": name } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 501,
-          "EntityId": 77,
-          "AttributeName": "name",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Course,1:~Course.name"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 656,
-        "EntityId": 100,
-        "AttributeName": "CourseTitle",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:Course,6:~Course.CourseTitle"
-      }
-    },
-    {
-      "Id": 1611,
-      "TransformationGroupId": 49,
-      "Name": "Course.CourseDescription",
-      "Expression": "{ \"Course\": Course. { \"CourseDescription\": description } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 502,
-          "EntityId": 77,
-          "AttributeName": "description",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Course,1:~Course.description"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 657,
-        "EntityId": 100,
-        "AttributeName": "CourseDescription",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:Course,6:~Course.CourseDescription"
-      }
-    },
-    {
-      "Id": 1612,
-      "TransformationGroupId": 49,
-      "Name": "Course.InstructionalTimePlanned",
-      "Expression": "{ \"Course\": Course. { \"InstructionalTimePlanned\": courseSectionTimeRequiredFor } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 505,
-          "EntityId": 77,
-          "AttributeName": "courseSectionTimeRequiredFor",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Course,1:~Course.courseSectionTimeRequiredFor"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 660,
-        "EntityId": 100,
-        "AttributeName": "InstructionalTimePlanned",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:Course,6:~Course.InstructionalTimePlanned"
-      }
-    },
-    {
-      "Id": 1613,
-      "TransformationGroupId": 49,
-      "Name": "Course.LearningStandard",
-      "Expression": "{ \"Course\": Course. { \"LearningStandard\": learningStandard } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 509,
-          "EntityId": 77,
-          "AttributeName": "learningStandard",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Course,1:~Course.learningStandard"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 661,
-        "EntityId": 100,
-        "AttributeName": "LearningStandard",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:Course,6:~Course.LearningStandard"
-      }
-    },
-    {
-      "Id": 1614,
-      "TransformationGroupId": 49,
-      "Name": "Session.BeginDate",
-      "Expression": "{ \"Session\": Course. { \"BeginDate\": courseBeginDate } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 503,
-          "EntityId": 77,
-          "AttributeName": "courseBeginDate",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Course,1:~Course.courseBeginDate"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 658,
-        "EntityId": 101,
-        "AttributeName": "BeginDate",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:Session,6:~Session.BeginDate"
-      }
-    },
-    {
-      "Id": 1615,
-      "TransformationGroupId": 49,
-      "Name": "Session.EndDate",
-      "Expression": "{ \"Session\": Course. { \"EndDate\": courseEndDate } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 504,
-          "EntityId": 77,
-          "AttributeName": "courseEndDate",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Course,1:~Course.courseEndDate"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 659,
-        "EntityId": 101,
-        "AttributeName": "EndDate",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:Session,6:~Session.EndDate"
-      }
-    },
-    {
-      "Id": 1616,
-      "TransformationGroupId": 49,
-      "Name": "Credits.CreditType",
-      "Expression": "{ \"Credits\": Course. { \"CreditType\": courseCreditUnits } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 520,
-          "EntityId": 77,
-          "AttributeName": "courseCreditUnits",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Course,1:~Course.courseCreditUnits"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 666,
-        "EntityId": 102,
-        "AttributeName": "CreditType",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:Credits,6:~Credits.CreditType"
-      }
-    },
-    {
-      "Id": 1617,
-      "TransformationGroupId": 49,
-      "Name": "AssessmentScore.AssessmentReportingMethod",
-      "Expression": "{ \"AssessmentScore\": Course. { \"AssessmentReportingMethod\": assessmentReportingMethod } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 522,
-          "EntityId": 77,
-          "AttributeName": "assessmentReportingMethod",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Course,1:~Course.assessmentReportingMethod"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 667,
-        "EntityId": 103,
-        "AttributeName": "AssessmentReportingMethod",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:AssessmentScore,6:~AssessmentScore.AssessmentReportingMethod"
-      }
-    },
-    {
-      "Id": 1618,
-      "TransformationGroupId": 49,
-      "Name": "Section.EducationalEnvironment",
-      "Expression": "{ \"Section\": Course. { \"EducationalEnvironment\": instructionalDelivery } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 530,
-          "EntityId": 77,
-          "AttributeName": "instructionalDelivery",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Course,1:~Course.instructionalDelivery"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 668,
-        "EntityId": 104,
-        "AttributeName": "EducationalEnvironment",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:Section,6:~Section.EducationalEnvironment"
-      }
-    },
-    {
-      "Id": 1619,
-      "TransformationGroupId": 49,
-      "Name": "Section.SectionIdentifier",
-      "Expression": "{ \"Section\": Person. { \"SectionIdentifier\": CourseLearningExperience.courseSectionID } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 573,
-          "EntityId": 80,
-          "AttributeName": "courseSectionID",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Person.CourseLearningExperience,1:~Person.CourseLearningExperience.courseSectionID"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 671,
-        "EntityId": 104,
-        "AttributeName": "SectionIdentifier",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:Section,6:~Section.SectionIdentifier"
-      }
-    },
-    {
-      "Id": 1620,
-      "TransformationGroupId": 49,
-      "Name": "CourseTranscript.CourseRepeatCode",
-      "Expression": "{ \"CourseTranscript\": Person. { \"CourseRepeatCode\": CourseLearningExperience.courseRepeatCode } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 568,
-          "EntityId": 80,
-          "AttributeName": "courseRepeatCode",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Person.CourseLearningExperience,1:~Person.CourseLearningExperience.courseRepeatCode"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 670,
-        "EntityId": 106,
-        "AttributeName": "CourseRepeatCode",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:CourseTranscript,6:~CourseTranscript.CourseRepeatCode"
-      }
-    },
-    {
-      "Id": 1621,
-      "TransformationGroupId": 49,
-      "Name": "EducationOrganization.NameOfInstitution",
-      "Expression": "{ \"EducationOrganization\": Organization. { \"NameOfInstitution\": name } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 1200,
-          "EntityId": 212,
-          "AttributeName": "name",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Organization,1:~Organization.name"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 1243,
-        "EntityId": 226,
-        "AttributeName": "NameOfInstitution",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:EducationOrganization,6:~EducationOrganization.NameOfInstitution"
-      }
-    },
-    {
-      "Id": 1622,
-      "TransformationGroupId": 49,
-      "Name": "EducationOrganization.ShortNameOfInstitution",
-      "Expression": "{ \"EducationOrganization\": Organization. { \"ShortNameOfInstitution\": shortName } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 1201,
-          "EntityId": 212,
-          "AttributeName": "shortName",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Organization,1:~Organization.shortName"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 1244,
-        "EntityId": 226,
-        "AttributeName": "ShortNameOfInstitution",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:EducationOrganization,6:~EducationOrganization.ShortNameOfInstitution"
-      }
-    },
-    {
-      "Id": 1623,
-      "TransformationGroupId": 49,
-      "Name": "EducationOrganization.EducationOrganizationCategory",
-      "Expression": "{ \"EducationOrganization\": Organization. { \"EducationOrganizationCategory\": organizationType } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 1203,
-          "EntityId": 212,
-          "AttributeName": "organizationType",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Organization,1:~Organization.organizationType"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 1245,
-        "EntityId": 226,
-        "AttributeName": "EducationOrganizationCategory",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:EducationOrganization,6:~EducationOrganization.EducationOrganizationCategory"
-      }
-    },
-    {
-      "Id": 1624,
-      "TransformationGroupId": 49,
-      "Name": "EducationOrganizationIdentificationCode.EducationOrganizationIdentificationSystem",
-      "Expression": "{ \"EducationOrganizationIdentificationCode\": Organization. { \"EducationOrganizationIdentificationSystem\": Identifier.identifier } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 1290,
-          "EntityId": 238,
-          "AttributeName": "identifier",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Organization,1:Common.Identifier,1:~Common.Identifier.identifier"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 1242,
-        "EntityId": 225,
-        "AttributeName": "EducationOrganizationIdentificationSystem",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:EducationOrganizationIdentificationCode,6:~EducationOrganizationIdentificationCode.EducationOrganizationIdentificationSystem"
-      }
-    },
-    {
-      "Id": 1625,
-      "TransformationGroupId": 49,
-      "Name": "BirthData.BirthDate",
-      "Expression": "{ \"BirthData\": Person. { \"BirthDate\": Birth.birthDate } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 1283,
-          "EntityId": 244,
-          "AttributeName": "birthDate",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Person.Birth,1:~Person.Birth.birthDate"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 1507,
-        "EntityId": 272,
-        "AttributeName": "BirthDate",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:BirthData,6:~BirthData.BirthDate"
-      }
-    },
-    {
-      "Id": 1626,
-      "TransformationGroupId": 49,
-      "Name": "BirthData.BirthCity",
-      "Expression": "{ \"BirthData\": Person. { \"BirthCity\": Birth.cityOfBirth } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 1350,
-          "EntityId": 244,
-          "AttributeName": "cityOfBirth",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Person.Birth,1:~Person.Birth.cityOfBirth"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 1540,
-        "EntityId": 272,
-        "AttributeName": "BirthCity",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:BirthData,6:~BirthData.BirthCity"
-      }
-    },
-    {
-      "Id": 1627,
-      "TransformationGroupId": 49,
-      "Name": "BirthData.BirthStateAbbreviation",
-      "Expression": "{ \"BirthData\": Person. { \"BirthStateAbbreviation\": Birth.stateOfBirth } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 1351,
-          "EntityId": 244,
-          "AttributeName": "stateOfBirth",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Person.Birth,1:~Person.Birth.stateOfBirth"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 1541,
-        "EntityId": 272,
-        "AttributeName": "BirthStateAbbreviation",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:BirthData,6:~BirthData.BirthStateAbbreviation"
-      }
-    },
-    {
-      "Id": 1628,
-      "TransformationGroupId": 49,
-      "Name": "BirthData.BirthCountry",
-      "Expression": "{ \"BirthData\": Person. { \"BirthCountry\": Birth.birthCode } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 1352,
-          "EntityId": 244,
-          "AttributeName": "birthCode",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Person.Birth,1:~Person.Birth.birthCode"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 1542,
-        "EntityId": 272,
-        "AttributeName": "BirthCountry",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:BirthData,6:~BirthData.BirthCountry"
-      }
-    },
-    {
-      "Id": 1629,
-      "TransformationGroupId": 49,
-      "Name": "BirthData.MultipleBirthStatus",
-      "Expression": "{ \"BirthData\": Person. { \"MultipleBirthStatus\": Birth.birthIndicator } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 1354,
-          "EntityId": 244,
-          "AttributeName": "birthIndicator",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Person.Birth,1:~Person.Birth.birthIndicator"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 1543,
-        "EntityId": 272,
-        "AttributeName": "MultipleBirthStatus",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:BirthData,6:~BirthData.MultipleBirthStatus"
-      }
-    },
-    {
-      "Id": 1630,
-      "TransformationGroupId": 49,
-      "Name": "BirthData.BirthInternationalProvince",
-      "Expression": "{ \"BirthData\": Person. { \"BirthInternationalProvince\": Birth.birthInternationalProvince } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 1357,
-          "EntityId": 244,
-          "AttributeName": "birthInternationalProvince",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Person.Birth,1:~Person.Birth.birthInternationalProvince"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 1544,
-        "EntityId": 272,
-        "AttributeName": "BirthInternationalProvince",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:BirthData,6:~BirthData.BirthInternationalProvince"
-      }
-    },
-    {
-      "Id": 1631,
-      "TransformationGroupId": 49,
-      "Name": "BirthData.DateEnteredUS",
-      "Expression": "{ \"BirthData\": Person. { \"DateEnteredUS\": Birth.dateEnteredUS } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 1358,
-          "EntityId": 244,
-          "AttributeName": "dateEnteredUS",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Person.Birth,1:~Person.Birth.dateEnteredUS"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 1545,
-        "EntityId": 272,
-        "AttributeName": "DateEnteredUS",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:BirthData,6:~BirthData.DateEnteredUS"
-      }
-    },
-    {
-      "Id": 1632,
-      "TransformationGroupId": 49,
-      "Name": "Citizenship.Visa",
-      "Expression": "{ \"Citizenship\": Person. { \"Visa\": Birth.visa } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 1359,
-          "EntityId": 244,
-          "AttributeName": "visa",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Person.Birth,1:~Person.Birth.visa"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 1546,
-        "EntityId": 281,
-        "AttributeName": "Visa",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:Citizenship,6:~Citizenship.Visa"
-      }
-    },
-    {
-      "Id": 1633,
-      "TransformationGroupId": 49,
-      "Name": "StudentEducationOrganizationAssociation.TribalAffiliation",
-      "Expression": "{ \"StudentEducationOrganizationAssociation\": Person. { \"TribalAffiliation\": Demographics.tribalNationName } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 1286,
-          "EntityId": 248,
-          "AttributeName": "tribalNationName",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Person.Demographics,1:~Person.Demographics.tribalNationName"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 1510,
-        "EntityId": 274,
-        "AttributeName": "TribalAffiliation",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:StudentEducationOrganizationAssociation,6:~StudentEducationOrganizationAssociation.TribalAffiliation"
-      }
-    },
-    {
-      "Id": 1634,
-      "TransformationGroupId": 49,
-      "Name": "StudentEducationOrganizationAssociation.Race",
-      "Expression": "{ \"StudentEducationOrganizationAssociation\": Person. { \"Race\": Culture.americanIndianOrAlaskan } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 1370,
-          "EntityId": 247,
-          "AttributeName": "nativeHawaiianOrOtherPacificIslander",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Person.Culture,1:~Person.Culture.nativeHawaiianOrOtherPacificIslander"
-        },
-        {
-          "AttributeId": 1369,
-          "EntityId": 247,
-          "AttributeName": "blackOrAfricanAmerican",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Person.Culture,1:~Person.Culture.blackOrAfricanAmerican"
-        },
-        {
-          "AttributeId": 1367,
-          "EntityId": 247,
-          "AttributeName": "americanIndianOrAlaskan",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Person.Culture,1:~Person.Culture.americanIndianOrAlaskan"
-        },
-        {
-          "AttributeId": 1371,
-          "EntityId": 247,
-          "AttributeName": "white",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Person.Culture,1:~Person.Culture.white"
-        },
-        {
-          "AttributeId": 1368,
-          "EntityId": 247,
-          "AttributeName": "asian",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Person.Culture,1:~Person.Culture.asian"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 1548,
-        "EntityId": 274,
-        "AttributeName": "Race",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:StudentEducationOrganizationAssociation,6:~StudentEducationOrganizationAssociation.Race"
-      }
-    },
-    {
-      "Id": 1635,
-      "TransformationGroupId": 49,
-      "Name": "StudentEducationOrganizationAssociation.HispanicLatinoEthnicity",
-      "Expression": "{ \"StudentEducationOrganizationAssociation\": Person. { \"HispanicLatinoEthnicity\": Culture.ethnicity } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 1372,
-          "EntityId": 247,
-          "AttributeName": "ethnicity",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Person.Culture,1:~Person.Culture.ethnicity"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 1549,
-        "EntityId": 274,
-        "AttributeName": "HispanicLatinoEthnicity",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:StudentEducationOrganizationAssociation,6:~StudentEducationOrganizationAssociation.HispanicLatinoEthnicity"
-      }
-    },
-    {
-      "Id": 1636,
-      "TransformationGroupId": 49,
-      "Name": "{Multiple}.Sex",
-      "Expression": "{ \"{Multiple}\": Person. { \"Sex\": SexAndGender.sex } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 1362,
-          "EntityId": 246,
-          "AttributeName": "sex",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Person.SexAndGender,1:~Person.SexAndGender.sex"
-        },
-        {
-          "AttributeId": 1363,
-          "EntityId": 246,
-          "AttributeName": "gender",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Person.SexAndGender,1:~Person.SexAndGender.gender"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 1547,
-        "EntityId": 282,
-        "AttributeName": "Sex",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:{Multiple},6:~{Multiple}.Sex"
-      }
-    },
-    {
-      "Id": 1637,
-      "TransformationGroupId": 49,
-      "Name": "Student.UniqueId",
-      "Expression": "{ \"Student\": Person. { \"UniqueId\": Identifier.identifier } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 1290,
-          "EntityId": 238,
-          "AttributeName": "identifier",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Common.Identifier,1:~Common.Identifier.identifier"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 1513,
-        "EntityId": 276,
-        "AttributeName": "UniqueId",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:Student,6:~Student.UniqueId"
-      }
-    },
-    {
-      "Id": 1638,
-      "TransformationGroupId": 49,
-      "Name": "StudentIdentificationCode.StudentIdentificationSystem",
-      "Expression": "{ \"StudentIdentificationCode\": Person. { \"StudentIdentificationSystem\": Identifier.identifierType } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 1291,
-          "EntityId": 238,
-          "AttributeName": "identifierType",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Common.Identifier,1:~Common.Identifier.identifierType"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 1514,
-        "EntityId": 277,
-        "AttributeName": "StudentIdentificationSystem",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:StudentIdentificationCode,6:~StudentIdentificationCode.StudentIdentificationSystem"
-      }
-    },
-    {
-      "Id": 1639,
-      "TransformationGroupId": 49,
-      "Name": "IdentificationDocument.PersonalInformationVerification",
-      "Expression": "{ \"IdentificationDocument\": Person. { \"PersonalInformationVerification\": Identifier.identifierVerification } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 1292,
-          "EntityId": 238,
-          "AttributeName": "identifierVerification",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Common.Identifier,1:~Common.Identifier.identifierVerification"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 1515,
-        "EntityId": 278,
-        "AttributeName": "PersonalInformationVerification",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:IdentificationDocument,6:~IdentificationDocument.PersonalInformationVerification"
-      }
-    },
-    {
-      "Id": 1640,
-      "TransformationGroupId": 49,
-      "Name": "Student.Name",
-      "Expression": "{\n  \"Student\": Person.{\n    \"Name\": Name.firstName & Name.lastName\n  }\n}",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 1284,
-          "EntityId": 237,
-          "AttributeName": "firstName",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Person.Name,1:~Person.Name.firstName"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 1516,
-        "EntityId": 276,
-        "AttributeName": "Name",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:Student,6:~Student.Name"
-      }
-    },
-    {
-      "Id": 1641,
-      "TransformationGroupId": 49,
-      "Name": "ElectronicMail.ElectronicMailAddress",
-      "Expression": "{ \"ElectronicMail\": Person. { \"ElectronicMailAddress\": Contact.Email.emailAddress } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 1288,
-          "EntityId": 242,
-          "AttributeName": "emailAddress",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Common.Contact,1:Common.Contact.Email,17:~Common.Contact.Email.emailAddress"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 1511,
-        "EntityId": 275,
-        "AttributeName": "ElectronicMailAddress",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:ElectronicMail,6:~ElectronicMail.ElectronicMailAddress"
-      }
-    },
-    {
-      "Id": 1642,
-      "TransformationGroupId": 49,
-      "Name": "ElectronicMail.ElectronicMailType",
-      "Expression": "{ \"ElectronicMail\": Person. { \"ElectronicMailType\": Contact.Email.emailAddressType } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 1289,
-          "EntityId": 242,
-          "AttributeName": "emailAddressType",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Common.Contact,1:Common.Contact.Email,1:~Common.Contact.Email.emailAddressType"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 1512,
-        "EntityId": 275,
-        "AttributeName": "ElectronicMailType",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:ElectronicMail,6:~ElectronicMail.ElectronicMailType"
-      }
-    },
-    {
-      "Id": 1643,
-      "TransformationGroupId": 49,
-      "Name": "ElectronicMail.PrimaryEmailAddressIndicator",
-      "Expression": "{ \"ElectronicMail\": Person. { \"PrimaryEmailAddressIndicator\": Contact.Email.primaryEmailAddressIndicator } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 1335,
-          "EntityId": 242,
-          "AttributeName": "primaryEmailAddressIndicator",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Common.Contact,1:Common.Contact.Email,1:~Common.Contact.Email.primaryEmailAddressIndicator"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 1534,
-        "EntityId": 275,
-        "AttributeName": "PrimaryEmailAddressIndicator",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:ElectronicMail,6:~ElectronicMail.PrimaryEmailAddressIndicator"
-      }
-    },
-    {
-      "Id": 1644,
-      "TransformationGroupId": 49,
-      "Name": "Address.AddressType",
       "Expression": "{ \"Address\": Person. { \"AddressType\": Contact.Address.addressType } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 1306,
-          "EntityId": 239,
-          "AttributeName": "addressType",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Common.Contact,1:Common.Contact.Address,1:~Common.Contact.Address.addressType"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 1520,
-        "EntityId": 279,
-        "AttributeName": "AddressType",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:Address,6:~Address.AddressType"
-      }
+      "Name": "Address.AddressType"
     },
     {
-      "Id": 1645,
-      "TransformationGroupId": 49,
-      "Name": "Address.StreetNumberName",
-      "Expression": "{ \"Address\": Person. { \"StreetNumberName\": Contact.Address.addressStreet } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
+      "Target": {
+        "Path": "Address,ApartmentRoomSuiteNumber"
+      },
+      "Sources": [
         {
-          "AttributeId": 1307,
-          "EntityId": 239,
-          "AttributeName": "addressStreet",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Common.Contact,1:Common.Contact.Address,17:~Common.Contact.Address.addressStreet"
+          "Path": "Person,Contact,Address,addressLine2"
         }
       ],
-      "TargetAttribute": {
-        "AttributeId": 1521,
-        "EntityId": 279,
-        "AttributeName": "StreetNumberName",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:Address,6:~Address.StreetNumberName"
-      }
-    },
-    {
-      "Id": 1646,
-      "TransformationGroupId": 49,
-      "Name": "Address.ApartmentRoomSuiteNumber",
+      "ExpressionLanguage": "JSONata",
       "Expression": "{ \"Address\": Person. { \"ApartmentRoomSuiteNumber\": Contact.Address.addressLine2 } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 1308,
-          "EntityId": 239,
-          "AttributeName": "addressLine2",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Common.Contact,1:Common.Contact.Address,1:~Common.Contact.Address.addressLine2"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 1522,
-        "EntityId": 279,
-        "AttributeName": "ApartmentRoomSuiteNumber",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:Address,6:~Address.ApartmentRoomSuiteNumber"
-      }
+      "Name": "Address.ApartmentRoomSuiteNumber"
     },
     {
-      "Id": 1647,
-      "TransformationGroupId": 49,
-      "Name": "Address.City",
+      "Target": {
+        "Path": "Address,City"
+      },
+      "Sources": [
+        {
+          "Path": "Person,Contact,Address,addressCity"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
       "Expression": "{ \"Address\": Person. { \"City\": Contact.Address.addressCity } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 1309,
-          "EntityId": 239,
-          "AttributeName": "addressCity",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Common.Contact,1:Common.Contact.Address,17:~Common.Contact.Address.addressCity"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 1523,
-        "EntityId": 279,
-        "AttributeName": "City",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:Address,6:~Address.City"
-      }
+      "Name": "Address.City"
     },
     {
-      "Id": 1648,
-      "TransformationGroupId": 49,
-      "Name": "Address.StateAbbreviation",
-      "Expression": "{ \"Address\": Person. { \"StateAbbreviation\": Contact.Address.addressState } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
+      "Target": {
+        "Path": "Address,CongressionalDistrict"
+      },
+      "Sources": [
         {
-          "AttributeId": 1310,
-          "EntityId": 239,
-          "AttributeName": "addressState",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Common.Contact,1:Common.Contact.Address,17:~Common.Contact.Address.addressState"
+          "Path": "Person,Residency,congressionalDistrict"
         }
       ],
-      "TargetAttribute": {
-        "AttributeId": 1524,
-        "EntityId": 279,
-        "AttributeName": "StateAbbreviation",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:Address,6:~Address.StateAbbreviation"
-      }
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"Address\": Person. { \"CongressionalDistrict\": Residency.congressionalDistrict } }",
+      "Name": "Address.CongressionalDistrict"
     },
     {
-      "Id": 1649,
-      "TransformationGroupId": 49,
-      "Name": "Address.PostalCode",
-      "Expression": "{ \"Address\": Person. { \"PostalCode\": Contact.Address.addressPostalCode } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
+      "Target": {
+        "Path": "Address,CountyFIPSCode"
+      },
+      "Sources": [
         {
-          "AttributeId": 1311,
-          "EntityId": 239,
-          "AttributeName": "addressPostalCode",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Common.Contact,1:Common.Contact.Address,17:~Common.Contact.Address.addressPostalCode"
+          "Path": "Person,Residency,countyFIPSCode"
         }
       ],
-      "TargetAttribute": {
-        "AttributeId": 1525,
-        "EntityId": 279,
-        "AttributeName": "PostalCode",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:Address,6:~Address.PostalCode"
-      }
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"Address\": Person. { \"CountyFIPSCode\": Residency.countyFIPSCode } }",
+      "Name": "Address.CountyFIPSCode"
     },
     {
-      "Id": 1650,
-      "TransformationGroupId": 49,
-      "Name": "Address.NameOfCounty",
-      "Expression": "{ \"Address\": Person. { \"NameOfCounty\": Contact.Address.addressCountyName } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
+      "Target": {
+        "Path": "Address,DoNotPublishIndicator"
+      },
+      "Sources": [
         {
-          "AttributeId": 1312,
-          "EntityId": 239,
-          "AttributeName": "addressCountyName",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Common.Contact,1:Common.Contact.Address,1:~Common.Contact.Address.addressCountyName"
+          "Path": "Person,Residency,doNotPublishIndicator"
         }
       ],
-      "TargetAttribute": {
-        "AttributeId": 1526,
-        "EntityId": 279,
-        "AttributeName": "NameOfCounty",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:Address,6:~Address.NameOfCounty"
-      }
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"Address\": Person. { \"DoNotPublishIndicator\": Residency.doNotPublishIndicator } }",
+      "Name": "Address.DoNotPublishIndicator"
     },
     {
-      "Id": 1651,
-      "TransformationGroupId": 49,
-      "Name": "Address.Latitude",
+      "Target": {
+        "Path": "Address,Latitude"
+      },
+      "Sources": [
+        {
+          "Path": "Person,Contact,Address,latitude"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
       "Expression": "{ \"Address\": Person. { \"Latitude\": Contact.Address.latitude } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 1316,
-          "EntityId": 239,
-          "AttributeName": "latitude",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Common.Contact,1:Common.Contact.Address,1:~Common.Contact.Address.latitude"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 1527,
-        "EntityId": 279,
-        "AttributeName": "Latitude",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:Address,6:~Address.Latitude"
-      }
+      "Name": "Address.Latitude"
     },
     {
-      "Id": 1652,
-      "TransformationGroupId": 49,
-      "Name": "Address.Longitude",
+      "Target": {
+        "Path": "Address,Locale"
+      },
+      "Sources": [
+        {
+          "Path": "Person,Residency,localType"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"Address\": Person. { \"Locale\": Residency.localType } }",
+      "Name": "Address.Locale"
+    },
+    {
+      "Target": {
+        "Path": "Address,Longitude"
+      },
+      "Sources": [
+        {
+          "Path": "Person,Contact,Address,longitude"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
       "Expression": "{ \"Address\": Person. { \"Longitude\": Contact.Address.longitude } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 1317,
-          "EntityId": 239,
-          "AttributeName": "longitude",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Common.Contact,1:Common.Contact.Address,1:~Common.Contact.Address.longitude"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 1528,
-        "EntityId": 279,
-        "AttributeName": "Longitude",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:Address,6:~Address.Longitude"
-      }
+      "Name": "Address.Longitude"
     },
     {
-      "Id": 1653,
-      "TransformationGroupId": 49,
-      "Name": "Address.Period",
-      "Expression": "{ \"Address\": Person. { \"Period\": Contact.Address.dateEffective } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
+      "Target": {
+        "Path": "Address,NameOfCounty"
+      },
+      "Sources": [
         {
-          "AttributeId": 1320,
-          "EntityId": 239,
-          "AttributeName": "dateEffective",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Common.Contact,1:Common.Contact.Address,17:~Common.Contact.Address.dateEffective"
+          "Path": "Person,Contact,Address,addressCountyName"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"Address\": Person. { \"NameOfCounty\": Contact.Address.addressCountyName } }",
+      "Name": "Address.NameOfCounty"
+    },
+    {
+      "Target": {
+        "Path": "Address,Period"
+      },
+      "Sources": [
+        {
+          "Path": "Person,Contact,Address,dateEffective"
         },
         {
-          "AttributeId": 1321,
-          "EntityId": 239,
-          "AttributeName": "dateExpired",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Common.Contact,1:Common.Contact.Address,17:~Common.Contact.Address.dateExpired"
+          "Path": "Person,Contact,Address,dateExpired"
         }
       ],
-      "TargetAttribute": {
-        "AttributeId": 1533,
-        "EntityId": 279,
-        "AttributeName": "Period",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:Address,6:~Address.Period"
-      }
-    },
-    {
-      "Id": 1654,
-      "TransformationGroupId": 49,
-      "Name": "Address.CongressionalDistrict",
-      "Expression": "{ \"Address\": Person. { \"CongressionalDistrict\": Residency.congressionalDistrict } }",
       "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 1322,
-          "EntityId": 240,
-          "AttributeName": "congressionalDistrict",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Person.Residency,1:~Person.Residency.congressionalDistrict"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 1529,
-        "EntityId": 279,
-        "AttributeName": "CongressionalDistrict",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:Address,6:~Address.CongressionalDistrict"
-      }
+      "Expression": "{ \"Address\": Person. { \"Period\": Contact.Address.dateEffective } }",
+      "Name": "Address.Period"
     },
     {
-      "Id": 1655,
-      "TransformationGroupId": 49,
-      "Name": "Address.CountyFIPSCode",
-      "Expression": "{ \"Address\": Person. { \"CountyFIPSCode\": Residency.countyFIPSCode } }",
+      "Target": {
+        "Path": "Address,PostalCode"
+      },
+      "Sources": [
+        {
+          "Path": "Person,Contact,Address,addressPostalCode"
+        }
+      ],
       "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 1323,
-          "EntityId": 240,
-          "AttributeName": "countyFIPSCode",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Person.Residency,1:~Person.Residency.countyFIPSCode"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 1530,
-        "EntityId": 279,
-        "AttributeName": "CountyFIPSCode",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:Address,6:~Address.CountyFIPSCode"
-      }
+      "Expression": "{ \"Address\": Person. { \"PostalCode\": Contact.Address.addressPostalCode } }",
+      "Name": "Address.PostalCode"
     },
     {
-      "Id": 1656,
-      "TransformationGroupId": 49,
-      "Name": "Address.DoNotPublishIndicator",
-      "Expression": "{ \"Address\": Person. { \"DoNotPublishIndicator\": Residency.doNotPublishIndicator } }",
+      "Target": {
+        "Path": "Address,StateAbbreviation"
+      },
+      "Sources": [
+        {
+          "Path": "Person,Contact,Address,addressState"
+        }
+      ],
       "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 1324,
-          "EntityId": 240,
-          "AttributeName": "doNotPublishIndicator",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Person.Residency,1:~Person.Residency.doNotPublishIndicator"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 1531,
-        "EntityId": 279,
-        "AttributeName": "DoNotPublishIndicator",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:Address,6:~Address.DoNotPublishIndicator"
-      }
+      "Expression": "{ \"Address\": Person. { \"StateAbbreviation\": Contact.Address.addressState } }",
+      "Name": "Address.StateAbbreviation"
     },
     {
-      "Id": 1657,
-      "TransformationGroupId": 49,
-      "Name": "Address.Locale",
-      "Expression": "{ \"Address\": Person. { \"Locale\": Residency.localType } }",
+      "Target": {
+        "Path": "Address,StreetNumberName"
+      },
+      "Sources": [
+        {
+          "Path": "Person,Contact,Address,addressStreet"
+        }
+      ],
       "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 1325,
-          "EntityId": 240,
-          "AttributeName": "localType",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Person.Residency,1:~Person.Residency.localType"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 1532,
-        "EntityId": 279,
-        "AttributeName": "Locale",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:Address,6:~Address.Locale"
-      }
+      "Expression": "{ \"Address\": Person. { \"StreetNumberName\": Contact.Address.addressStreet } }",
+      "Name": "Address.StreetNumberName"
     },
     {
-      "Id": 1658,
-      "TransformationGroupId": 49,
-      "Name": "Telephone.TelephoneNumber",
-      "Expression": "{ \"Telephone\": Person. { \"TelephoneNumber\": Contact.Telephone.telephoneNumber } }",
+      "Target": {
+        "Path": "Assessment,AcademicSubject"
+      },
+      "Sources": [
+        {
+          "Path": "Assessment,subject"
+        }
+      ],
       "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 1340,
-          "EntityId": 243,
-          "AttributeName": "telephoneNumber",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Common.Contact,1:Common.Contact.Telephone,17:~Common.Contact.Telephone.telephoneNumber"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 1535,
-        "EntityId": 280,
-        "AttributeName": "TelephoneNumber",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:Telephone,6:~Telephone.TelephoneNumber"
-      }
+      "Expression": "{ \"Assessment\": Assessment. { \"AcademicSubject\": subject } }",
+      "Name": "Assessment.AcademicSubject"
     },
     {
-      "Id": 1659,
-      "TransformationGroupId": 49,
-      "Name": "Telephone.TelephoneNumberType",
-      "Expression": "{ \"Telephone\": Person. { \"TelephoneNumberType\": Contact.Telephone.telephoneNumberType } }",
+      "Target": {
+        "Path": "Assessment,AssessedGradeLevel"
+      },
+      "Sources": [
+        {
+          "Path": "Assessment,assessmentLevel"
+        }
+      ],
       "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 1341,
-          "EntityId": 243,
-          "AttributeName": "telephoneNumberType",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Common.Contact,1:Common.Contact.Telephone,1:~Common.Contact.Telephone.telephoneNumberType"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 1536,
-        "EntityId": 280,
-        "AttributeName": "TelephoneNumberType",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:Telephone,6:~Telephone.TelephoneNumberType"
-      }
+      "Expression": "{ \"Assessment\": Assessment. { \"AssessedGradeLevel\": assessmentLevel } }",
+      "Name": "Assessment.AssessedGradeLevel"
     },
     {
-      "Id": 1660,
-      "TransformationGroupId": 49,
-      "Name": "Telephone.OrderOfPriority",
-      "Expression": "{ \"Telephone\": Person. { \"OrderOfPriority\": Contact.Telephone.orderOfPriority } }",
+      "Target": {
+        "Path": "Assessment,AssessmentCategory"
+      },
+      "Sources": [
+        {
+          "Path": "Assessment,category"
+        }
+      ],
       "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 1343,
-          "EntityId": 243,
-          "AttributeName": "orderOfPriority",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Common.Contact,1:Common.Contact.Telephone,1:~Common.Contact.Telephone.orderOfPriority"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 1537,
-        "EntityId": 280,
-        "AttributeName": "OrderOfPriority",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:Telephone,6:~Telephone.OrderOfPriority"
-      }
+      "Expression": "{ \"Assessment\": Assessment. { \"AssessmentCategory\": category } }",
+      "Name": "Assessment.AssessmentCategory"
     },
     {
-      "Id": 1661,
-      "TransformationGroupId": 49,
-      "Name": "Telephone.DoNotPublishIndicator",
-      "Expression": "{ \"Telephone\": Person. { \"DoNotPublishIndicator\": Contact.Telephone.doNotPublishIndicator } }",
+      "Target": {
+        "Path": "Assessment,AssessmentIdentifier"
+      },
+      "Sources": [
+        {
+          "Path": "Assessment,identifier"
+        }
+      ],
       "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 1344,
-          "EntityId": 243,
-          "AttributeName": "doNotPublishIndicator",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Common.Contact,1:Common.Contact.Telephone,1:~Common.Contact.Telephone.doNotPublishIndicator"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 1538,
-        "EntityId": 280,
-        "AttributeName": "DoNotPublishIndicator",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:Telephone,6:~Telephone.DoNotPublishIndicator"
-      }
+      "Expression": "{ \"Assessment\": Assessment. { \"AssessmentIdentifier\": identifier } }",
+      "Name": "Assessment.AssessmentIdentifier"
     },
     {
-      "Id": 1662,
-      "TransformationGroupId": 49,
-      "Name": "Telephone.TextMessageCapabilityIndicator",
-      "Expression": "{ \"Telephone\": Person. { \"TextMessageCapabilityIndicator\": Contact.Telephone.textMessageCapabilityIndicator } }",
+      "Target": {
+        "Path": "Assessment,AssessmentScore"
+      },
+      "Sources": [
+        {
+          "Path": "Assessment,scoreMetricType"
+        }
+      ],
       "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 1345,
-          "EntityId": 243,
-          "AttributeName": "textMessageCapabilityIndicator",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Common.Contact,1:Common.Contact.Telephone,1:~Common.Contact.Telephone.textMessageCapabilityIndicator"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 1539,
-        "EntityId": 280,
-        "AttributeName": "TextMessageCapabilityIndicator",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:Telephone,6:~Telephone.TextMessageCapabilityIndicator"
-      }
+      "Expression": "{ \"Assessment\": Assessment. { \"AssessmentScore\": scoreMetricType } }",
+      "Name": "Assessment.AssessmentScore"
     },
     {
-      "Id": 1663,
-      "TransformationGroupId": 49,
-      "Name": "StudentContactAssociation.LegalGuardian",
-      "Expression": "{ \"StudentContactAssociation\": Person. { \"LegalGuardian\": RelationshipContacts.guardian } }",
+      "Target": {
+        "Path": "Assessment,AssessmentTitle"
+      },
+      "Sources": [
+        {
+          "Path": "Assessment,name"
+        }
+      ],
       "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 1393,
-          "EntityId": 249,
-          "AttributeName": "guardian",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Person.RelationshipContacts,1:~Person.RelationshipContacts.guardian"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 1554,
-        "EntityId": 286,
-        "AttributeName": "LegalGuardian",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:StudentContactAssociation,6:~StudentContactAssociation.LegalGuardian"
-      }
+      "Expression": "{ \"Assessment\": Assessment. { \"AssessmentTitle\": name } }",
+      "Name": "Assessment.AssessmentTitle"
     },
     {
-      "Id": 1664,
-      "TransformationGroupId": 49,
-      "Name": "StudentContactAssociation.EmergencyContactStatus",
+      "Target": {
+        "Path": "Assessment,Language"
+      },
+      "Sources": [
+        {
+          "Path": "Assessment,assessmentLanguage"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"Assessment\": Assessment. { \"Language\": assessmentLanguage } }",
+      "Name": "Assessment.Language"
+    },
+    {
+      "Target": {
+        "Path": "Assessment,RevisionDate"
+      },
+      "Sources": [
+        {
+          "Path": "Assessment,revisionDate"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"Assessment\": Assessment. { \"RevisionDate\": revisionDate } }",
+      "Name": "Assessment.RevisionDate"
+    },
+    {
+      "Target": {
+        "Path": "AssessmentScore,AssessmentReportingMethod"
+      },
+      "Sources": [
+        {
+          "Path": "Course,assessmentReportingMethod"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"AssessmentScore\": Course. { \"AssessmentReportingMethod\": assessmentReportingMethod } }",
+      "Name": "AssessmentScore.AssessmentReportingMethod"
+    },
+    {
+      "Target": {
+        "Path": "BirthData,BirthCity"
+      },
+      "Sources": [
+        {
+          "Path": "Person,Birth,cityOfBirth"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"BirthData\": Person. { \"BirthCity\": Birth.cityOfBirth } }",
+      "Name": "BirthData.BirthCity"
+    },
+    {
+      "Target": {
+        "Path": "BirthData,BirthCountry"
+      },
+      "Sources": [
+        {
+          "Path": "Person,Birth,birthCode"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"BirthData\": Person. { \"BirthCountry\": Birth.birthCode } }",
+      "Name": "BirthData.BirthCountry"
+    },
+    {
+      "Target": {
+        "Path": "BirthData,BirthDate"
+      },
+      "Sources": [
+        {
+          "Path": "Person,Birth,birthDate"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"BirthData\": Person. { \"BirthDate\": Birth.birthDate } }",
+      "Name": "BirthData.BirthDate"
+    },
+    {
+      "Target": {
+        "Path": "BirthData,BirthInternationalProvince"
+      },
+      "Sources": [
+        {
+          "Path": "Person,Birth,birthInternationalProvince"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"BirthData\": Person. { \"BirthInternationalProvince\": Birth.birthInternationalProvince } }",
+      "Name": "BirthData.BirthInternationalProvince"
+    },
+    {
+      "Target": {
+        "Path": "BirthData,BirthStateAbbreviation"
+      },
+      "Sources": [
+        {
+          "Path": "Person,Birth,stateOfBirth"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"BirthData\": Person. { \"BirthStateAbbreviation\": Birth.stateOfBirth } }",
+      "Name": "BirthData.BirthStateAbbreviation"
+    },
+    {
+      "Target": {
+        "Path": "BirthData,DateEnteredUS"
+      },
+      "Sources": [
+        {
+          "Path": "Person,Birth,dateEnteredUS"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"BirthData\": Person. { \"DateEnteredUS\": Birth.dateEnteredUS } }",
+      "Name": "BirthData.DateEnteredUS"
+    },
+    {
+      "Target": {
+        "Path": "BirthData,MultipleBirthStatus"
+      },
+      "Sources": [
+        {
+          "Path": "Person,Birth,birthIndicator"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"BirthData\": Person. { \"MultipleBirthStatus\": Birth.birthIndicator } }",
+      "Name": "BirthData.MultipleBirthStatus"
+    },
+    {
+      "Target": {
+        "Path": "Citizenship,Visa"
+      },
+      "Sources": [
+        {
+          "Path": "Person,Birth,visa"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"Citizenship\": Person. { \"Visa\": Birth.visa } }",
+      "Name": "Citizenship.Visa"
+    },
+    {
+      "Target": {
+        "Path": "Course,CourseDescription"
+      },
+      "Sources": [
+        {
+          "Path": "Course,description"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"Course\": Course. { \"CourseDescription\": description } }",
+      "Name": "Course.CourseDescription"
+    },
+    {
+      "Target": {
+        "Path": "Course,CourseGPAApplicability"
+      },
+      "Sources": [
+        {
+          "Path": "Course,courseGPAApplicability"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"Course\": Course. { \"CourseGPAApplicability\": courseGPAApplicability } }",
+      "Name": "Course.CourseGPAApplicability"
+    },
+    {
+      "Target": {
+        "Path": "Course,CourseTitle"
+      },
+      "Sources": [
+        {
+          "Path": "Course,name"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"Course\": Course. { \"CourseTitle\": name } }",
+      "Name": "Course.CourseTitle"
+    },
+    {
+      "Target": {
+        "Path": "Course,InstructionalTimePlanned"
+      },
+      "Sources": [
+        {
+          "Path": "Course,courseSectionTimeRequiredFor"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"Course\": Course. { \"InstructionalTimePlanned\": courseSectionTimeRequiredFor } }",
+      "Name": "Course.InstructionalTimePlanned"
+    },
+    {
+      "Target": {
+        "Path": "Course,LearningStandard"
+      },
+      "Sources": [
+        {
+          "Path": "Course,learningStandard"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"Course\": Course. { \"LearningStandard\": learningStandard } }",
+      "Name": "Course.LearningStandard"
+    },
+    {
+      "Target": {
+        "Path": "CourseTranscript,CourseRepeatCode"
+      },
+      "Sources": [
+        {
+          "Path": "Person,CourseLearningExperience,courseRepeatCode"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"CourseTranscript\": Person. { \"CourseRepeatCode\": CourseLearningExperience.courseRepeatCode } }",
+      "Name": "CourseTranscript.CourseRepeatCode"
+    },
+    {
+      "Target": {
+        "Path": "Credits,CreditType"
+      },
+      "Sources": [
+        {
+          "Path": "Course,courseCreditUnits"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"Credits\": Course. { \"CreditType\": courseCreditUnits } }",
+      "Name": "Credits.CreditType"
+    },
+    {
+      "Target": {
+        "Path": "EducationOrganization,EducationOrganizationCategory"
+      },
+      "Sources": [
+        {
+          "Path": "Organization,organizationType"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"EducationOrganization\": Organization. { \"EducationOrganizationCategory\": organizationType } }",
+      "Name": "EducationOrganization.EducationOrganizationCategory"
+    },
+    {
+      "Target": {
+        "Path": "EducationOrganization,NameOfInstitution"
+      },
+      "Sources": [
+        {
+          "Path": "Organization,name"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"EducationOrganization\": Organization. { \"NameOfInstitution\": name } }",
+      "Name": "EducationOrganization.NameOfInstitution"
+    },
+    {
+      "Target": {
+        "Path": "EducationOrganization,ShortNameOfInstitution"
+      },
+      "Sources": [
+        {
+          "Path": "Organization,shortName"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"EducationOrganization\": Organization. { \"ShortNameOfInstitution\": shortName } }",
+      "Name": "EducationOrganization.ShortNameOfInstitution"
+    },
+    {
+      "Target": {
+        "Path": "EducationOrganizationIdentificationCode,EducationOrganizationIdentificationSystem"
+      },
+      "Sources": [
+        {
+          "Path": "Organization,Identifier,identifier"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"EducationOrganizationIdentificationCode\": Organization. { \"EducationOrganizationIdentificationSystem\": Identifier.identifier } }",
+      "Name": "EducationOrganizationIdentificationCode.EducationOrganizationIdentificationSystem"
+    },
+    {
+      "Target": {
+        "Path": "ElectronicMail,ElectronicMailAddress"
+      },
+      "Sources": [
+        {
+          "Path": "Person,Contact,Email,emailAddress"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"ElectronicMail\": Person. { \"ElectronicMailAddress\": Contact.Email.emailAddress } }",
+      "Name": "ElectronicMail.ElectronicMailAddress"
+    },
+    {
+      "Target": {
+        "Path": "ElectronicMail,ElectronicMailType"
+      },
+      "Sources": [
+        {
+          "Path": "Person,Contact,Email,emailAddressType"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"ElectronicMail\": Person. { \"ElectronicMailType\": Contact.Email.emailAddressType } }",
+      "Name": "ElectronicMail.ElectronicMailType"
+    },
+    {
+      "Target": {
+        "Path": "ElectronicMail,PrimaryEmailAddressIndicator"
+      },
+      "Sources": [
+        {
+          "Path": "Person,Contact,Email,primaryEmailAddressIndicator"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"ElectronicMail\": Person. { \"PrimaryEmailAddressIndicator\": Contact.Email.primaryEmailAddressIndicator } }",
+      "Name": "ElectronicMail.PrimaryEmailAddressIndicator"
+    },
+    {
+      "Target": {
+        "Path": "IdentificationDocument,PersonalInformationVerification"
+      },
+      "Sources": [
+        {
+          "Path": "Person,Identifier,identifierVerification"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"IdentificationDocument\": Person. { \"PersonalInformationVerification\": Identifier.identifierVerification } }",
+      "Name": "IdentificationDocument.PersonalInformationVerification"
+    },
+    {
+      "Target": {
+        "Path": "Section,EducationalEnvironment"
+      },
+      "Sources": [
+        {
+          "Path": "Course,instructionalDelivery"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"Section\": Course. { \"EducationalEnvironment\": instructionalDelivery } }",
+      "Name": "Section.EducationalEnvironment"
+    },
+    {
+      "Target": {
+        "Path": "Section,SectionIdentifier"
+      },
+      "Sources": [
+        {
+          "Path": "Person,CourseLearningExperience,courseSectionID"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"Section\": Person. { \"SectionIdentifier\": CourseLearningExperience.courseSectionID } }",
+      "Name": "Section.SectionIdentifier"
+    },
+    {
+      "Target": {
+        "Path": "Session,BeginDate"
+      },
+      "Sources": [
+        {
+          "Path": "Course,courseBeginDate"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"Session\": Course. { \"BeginDate\": courseBeginDate } }",
+      "Name": "Session.BeginDate"
+    },
+    {
+      "Target": {
+        "Path": "Session,EndDate"
+      },
+      "Sources": [
+        {
+          "Path": "Course,courseEndDate"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"Session\": Course. { \"EndDate\": courseEndDate } }",
+      "Name": "Session.EndDate"
+    },
+    {
+      "Target": {
+        "Path": "Student,Name"
+      },
+      "Sources": [
+        {
+          "Path": "Person,Name,firstName"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{\n  \"Student\": Person.{\n    \"Name\": Name.firstName & Name.lastName\n  }\n}",
+      "Name": "Student.Name"
+    },
+    {
+      "Target": {
+        "Path": "Student,UniqueId"
+      },
+      "Sources": [
+        {
+          "Path": "Person,Identifier,identifier"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"Student\": Person. { \"UniqueId\": Identifier.identifier } }",
+      "Name": "Student.UniqueId"
+    },
+    {
+      "Target": {
+        "Path": "StudentAssement,AdministrationDate"
+      },
+      "Sources": [
+        {
+          "Path": "Person,AssessmentLearningExperience,startDate"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"StudentAssement\": Person. { \"AdministrationDate\": AssessmentLearningExperience.startDate } }",
+      "Name": "StudentAssement.AdministrationDate"
+    },
+    {
+      "Target": {
+        "Path": "StudentAssement,AdministrationEndDate"
+      },
+      "Sources": [
+        {
+          "Path": "Person,AssessmentLearningExperience,endDate"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"StudentAssement\": Person. { \"AdministrationEndDate\": AssessmentLearningExperience.endDate } }",
+      "Name": "StudentAssement.AdministrationEndDate"
+    },
+    {
+      "Target": {
+        "Path": "StudentAssement,AdministrationEnvironment"
+      },
+      "Sources": [
+        {
+          "Path": "Person,AssessmentLearningExperience,experienceLocation"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"StudentAssement\": Person. { \"AdministrationEnvironment\": AssessmentLearningExperience.experienceLocation } }",
+      "Name": "StudentAssement.AdministrationEnvironment"
+    },
+    {
+      "Target": {
+        "Path": "StudentAssement,PlatformType"
+      },
+      "Sources": [
+        {
+          "Path": "Person,AssessmentLearningExperience,deliveryDeviceDetails"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"StudentAssement\": Person. { \"PlatformType\": AssessmentLearningExperience.deliveryDeviceDetails } }",
+      "Name": "StudentAssement.PlatformType"
+    },
+    {
+      "Target": {
+        "Path": "StudentContactAssociation,EmergencyContactStatus"
+      },
+      "Sources": [
+        {
+          "Path": "Person,RelationshipContacts,emergencyContact"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
       "Expression": "{ \"StudentContactAssociation\": Person. { \"EmergencyContactStatus\": RelationshipContacts.emergencyContact } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
-        {
-          "AttributeId": 1394,
-          "EntityId": 249,
-          "AttributeName": "emergencyContact",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Person.RelationshipContacts,1:~Person.RelationshipContacts.emergencyContact"
-        }
-      ],
-      "TargetAttribute": {
-        "AttributeId": 1555,
-        "EntityId": 286,
-        "AttributeName": "EmergencyContactStatus",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:StudentContactAssociation,6:~StudentContactAssociation.EmergencyContactStatus"
-      }
+      "Name": "StudentContactAssociation.EmergencyContactStatus"
     },
     {
-      "Id": 1665,
-      "TransformationGroupId": 49,
-      "Name": "StudentContactAssociation.Relation",
-      "Expression": "{ \"StudentContactAssociation\": Person. { \"Relation\": RelationshipContacts.relationshipType } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
+      "Target": {
+        "Path": "StudentContactAssociation,LegalGuardian"
+      },
+      "Sources": [
         {
-          "AttributeId": 1395,
-          "EntityId": 249,
-          "AttributeName": "relationshipType",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Person.RelationshipContacts,1:~Person.RelationshipContacts.relationshipType"
+          "Path": "Person,RelationshipContacts,guardian"
         }
       ],
-      "TargetAttribute": {
-        "AttributeId": 1556,
-        "EntityId": 286,
-        "AttributeName": "Relation",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:StudentContactAssociation,6:~StudentContactAssociation.Relation"
-      }
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"StudentContactAssociation\": Person. { \"LegalGuardian\": RelationshipContacts.guardian } }",
+      "Name": "StudentContactAssociation.LegalGuardian"
     },
     {
-      "Id": 1666,
-      "TransformationGroupId": 49,
-      "Name": "StudentContactAssociation.PrimaryContactStatus",
+      "Target": {
+        "Path": "StudentContactAssociation,PrimaryContactStatus"
+      },
+      "Sources": [
+        {
+          "Path": "Person,RelationshipContacts,primaryContact"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
       "Expression": "{ \"StudentContactAssociation\": Person. { \"PrimaryContactStatus\": RelationshipContacts.primaryContact } }",
-      "ExpressionLanguage": "JSONata",
-      "Notes": null,
-      "Alignment": null,
-      "CreationDate": null,
-      "ActivationDate": null,
-      "DeprecationDate": null,
-      "Contributor": null,
-      "ContributorOrganization": null,
-      "SourceAttributes": [
+      "Name": "StudentContactAssociation.PrimaryContactStatus"
+    },
+    {
+      "Target": {
+        "Path": "StudentContactAssociation,Relation"
+      },
+      "Sources": [
         {
-          "AttributeId": 1396,
-          "EntityId": 249,
-          "AttributeName": "primaryContact",
-          "AttributeType": "Source",
-          "Notes": null,
-          "CreationDate": null,
-          "ActivationDate": null,
-          "DeprecationDate": null,
-          "Contributor": null,
-          "ContributorOrganization": null,
-          "EntityIdPath": "1:Person,1:Person.RelationshipContacts,1:~Person.RelationshipContacts.primaryContact"
+          "Path": "Person,RelationshipContacts,relationshipType"
         }
       ],
-      "TargetAttribute": {
-        "AttributeId": 1557,
-        "EntityId": 286,
-        "AttributeName": "PrimaryContactStatus",
-        "AttributeType": "Target",
-        "Notes": null,
-        "CreationDate": null,
-        "ActivationDate": null,
-        "DeprecationDate": null,
-        "Contributor": null,
-        "ContributorOrganization": null,
-        "EntityIdPath": "6:StudentContactAssociation,6:~StudentContactAssociation.PrimaryContactStatus"
-      }
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"StudentContactAssociation\": Person. { \"Relation\": RelationshipContacts.relationshipType } }",
+      "Name": "StudentContactAssociation.Relation"
+    },
+    {
+      "Target": {
+        "Path": "StudentEducationOrganizationAssociation,HispanicLatinoEthnicity"
+      },
+      "Sources": [
+        {
+          "Path": "Person,Culture,ethnicity"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"StudentEducationOrganizationAssociation\": Person. { \"HispanicLatinoEthnicity\": Culture.ethnicity } }",
+      "Name": "StudentEducationOrganizationAssociation.HispanicLatinoEthnicity"
+    },
+    {
+      "Target": {
+        "Path": "StudentEducationOrganizationAssociation,Race"
+      },
+      "Sources": [
+        {
+          "Path": "Person,Culture,americanIndianOrAlaskan"
+        },
+        {
+          "Path": "Person,Culture,asian"
+        },
+        {
+          "Path": "Person,Culture,blackOrAfricanAmerican"
+        },
+        {
+          "Path": "Person,Culture,nativeHawaiianOrOtherPacificIslander"
+        },
+        {
+          "Path": "Person,Culture,white"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"StudentEducationOrganizationAssociation\": Person. { \"Race\": Culture.americanIndianOrAlaskan } }",
+      "Name": "StudentEducationOrganizationAssociation.Race"
+    },
+    {
+      "Target": {
+        "Path": "StudentEducationOrganizationAssociation,TribalAffiliation"
+      },
+      "Sources": [
+        {
+          "Path": "Person,Demographics,tribalNationName"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"StudentEducationOrganizationAssociation\": Person. { \"TribalAffiliation\": Demographics.tribalNationName } }",
+      "Name": "StudentEducationOrganizationAssociation.TribalAffiliation"
+    },
+    {
+      "Target": {
+        "Path": "StudentIdentificationCode,StudentIdentificationSystem"
+      },
+      "Sources": [
+        {
+          "Path": "Person,Identifier,identifierType"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"StudentIdentificationCode\": Person. { \"StudentIdentificationSystem\": Identifier.identifierType } }",
+      "Name": "StudentIdentificationCode.StudentIdentificationSystem"
+    },
+    {
+      "Target": {
+        "Path": "Telephone,DoNotPublishIndicator"
+      },
+      "Sources": [
+        {
+          "Path": "Person,Contact,Telephone,doNotPublishIndicator"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"Telephone\": Person. { \"DoNotPublishIndicator\": Contact.Telephone.doNotPublishIndicator } }",
+      "Name": "Telephone.DoNotPublishIndicator"
+    },
+    {
+      "Target": {
+        "Path": "Telephone,OrderOfPriority"
+      },
+      "Sources": [
+        {
+          "Path": "Person,Contact,Telephone,orderOfPriority"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"Telephone\": Person. { \"OrderOfPriority\": Contact.Telephone.orderOfPriority } }",
+      "Name": "Telephone.OrderOfPriority"
+    },
+    {
+      "Target": {
+        "Path": "Telephone,TelephoneNumber"
+      },
+      "Sources": [
+        {
+          "Path": "Person,Contact,Telephone,telephoneNumber"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"Telephone\": Person. { \"TelephoneNumber\": Contact.Telephone.telephoneNumber } }",
+      "Name": "Telephone.TelephoneNumber"
+    },
+    {
+      "Target": {
+        "Path": "Telephone,TelephoneNumberType"
+      },
+      "Sources": [
+        {
+          "Path": "Person,Contact,Telephone,telephoneNumberType"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"Telephone\": Person. { \"TelephoneNumberType\": Contact.Telephone.telephoneNumberType } }",
+      "Name": "Telephone.TelephoneNumberType"
+    },
+    {
+      "Target": {
+        "Path": "Telephone,TextMessageCapabilityIndicator"
+      },
+      "Sources": [
+        {
+          "Path": "Person,Contact,Telephone,textMessageCapabilityIndicator"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"Telephone\": Person. { \"TextMessageCapabilityIndicator\": Contact.Telephone.textMessageCapabilityIndicator } }",
+      "Name": "Telephone.TextMessageCapabilityIndicator"
+    },
+    {
+      "Target": {
+        "Path": "{Multiple},Sex"
+      },
+      "Sources": [
+        {
+          "Path": "Person,SexAndGender,gender"
+        },
+        {
+          "Path": "Person,SexAndGender,sex"
+        }
+      ],
+      "ExpressionLanguage": "JSONata",
+      "Expression": "{ \"{Multiple}\": Person. { \"Sex\": SexAndGender.sex } }",
+      "Name": "{Multiple}.Sex"
     }
-  ],
-  "Tags": null
+  ]
 }
