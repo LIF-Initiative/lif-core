@@ -106,8 +106,9 @@ async def test_public_only_reads_the_element_level_of_access(session):
 
 
 async def test_type_name_does_not_select_the_overlay_path(session):
-    # #1388 converts models 17 and 18 in place: what makes a model an overlay is its inclusion rows.
-    assert await is_overlay_model(session, 17)
+    # What makes a model an overlay is its inclusion rows, not its Type. In the seed, #1513 converted model
+    # 17: it is still Type OrgLIF, with no inclusion rows, so it is not an overlay.
+    assert not await is_overlay_model(session, 17)
     assert not await is_overlay_model(session, MODEL_ID)
 
     before = await generate_openapi_schema(session, MODEL_ID, include_attr_md=True, include_entity_md=False)

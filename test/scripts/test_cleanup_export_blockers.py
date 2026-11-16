@@ -3,7 +3,7 @@
 The cleanup writes to every schema of a live MDR, so the tests check what it must leave alone as
 closely as what it changes: overlays, attributes a mapping still uses, and everything on a dry run.
 The end-to-end test runs the real converters before and after, through measure_export_blockers.py.
-Each test gets a fresh copy of backup.sql from a template database. They need a local PostgreSQL
+Each test gets a fresh copy of the unconverted seed (test/fixtures/backup-unconverted.sql) from a template database. They need a local PostgreSQL
 (`initdb` and `psql`) and skip without one, like the MDR tests.
 """
 
@@ -23,6 +23,9 @@ import testing.postgresql
 from sqlalchemy.ext.asyncio import create_async_engine
 
 _ROOT = pathlib.Path(__file__).resolve().parents[2]
+# The seed as it was before #1513 converted it. This script runs on unconverted data (demo, a fresh
+# install from V1.1), so its tests keep that seed; the committed backup.sql is already converted.
+UNCONVERTED_SEED = _ROOT / "test/fixtures/backup-unconverted.sql"
 
 
 def _load(name):
@@ -46,7 +49,7 @@ def test_format_ids_folds_runs():
 
 @pytest.fixture(scope="module")
 def seed_server():
-    """A local PostgreSQL with backup.sql loaded into a template database named seed."""
+    """A local PostgreSQL with the unconverted seed loaded into a template database named seed."""
     try:
         postgresql = testing.postgresql.Postgresql()
     except RuntimeError as e:
@@ -57,13 +60,10 @@ def seed_server():
         base = ["-h", url.hostname, "-p", str(url.port), "-U", url.username]
         subprocess.run(["psql", *base, "-d", url.path.lstrip("/"), "-c", "CREATE DATABASE seed"], env=env, check=True)
         result = subprocess.run(
-            ["psql", *base, "-d", "seed", "-f", str(_ROOT / "projects/lif_mdr_database/backup.sql")],
-            env=env,
-            capture_output=True,
-            text=True,
+            ["psql", *base, "-d", "seed", "-f", str(UNCONVERTED_SEED)], env=env, capture_output=True, text=True
         )
         if result.returncode != 0:
-            pytest.fail(f"Failed to load backup.sql: {result.stderr}")
+            pytest.fail(f"Failed to load the unconverted seed: {result.stderr}")
         yield url
 
 
