@@ -25,7 +25,8 @@ def mdr_api_headers():
 BACKUP_SQL_PATH = Path(__file__).parent.parent.parent.parent.parent / "projects/lif_mdr_database/backup.sql"
 # The seed as it was before #1513 converted it: models 17 and 18 are still overlays of model 1. Tests of
 # overlay behavior (and of code that still has to handle overlays, on demo or a fresh install from V1.1)
-# load this instead of backup.sql.
+# load this instead of backup.sql. _load_seed replays no migrations, so a migration added after this file
+# was taken has to be applied to it too, or these tests run against an older schema.
 UNCONVERTED_SEED_PATH = Path(__file__).parent.parent.parent.parent.parent / "test/fixtures/backup-unconverted.sql"
 
 
