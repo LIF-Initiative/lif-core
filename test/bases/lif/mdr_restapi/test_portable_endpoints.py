@@ -377,10 +377,21 @@ async def test_a_crosswalk_import_does_not_wait_for_an_import_into_another_tenan
 
 
 async def test_exporting_a_model_that_is_not_migrated_returns_the_refusals(client):
-    http_client, _, _ = client
+    http_client, _, sessions = client
+    session = sessions[1]
 
-    # Seed model 3 (CLR v2) still has attributes with DataType entity (#1513).
-    response = await http_client.get("/portable/models/3")
+    # Every seed model exports since #1513, so give model 3 an attribute in a form the format retired:
+    # DataType entity. The request runs on this session, so it sees the change, which is rolled back.
+    await session.execute(
+        text(
+            'UPDATE "Attributes" SET "DataType" = \'entity\' WHERE "Id" = '
+            '(SELECT min("Id") FROM "Attributes" WHERE "DataModelId" = 3 AND "Deleted" IS NOT TRUE)'
+        )
+    )
+    try:
+        response = await http_client.get("/portable/models/3")
+    finally:
+        await session.rollback()
 
     assert response.status_code == 422
     assert {code for code, _ in _codes(response)} == {"NOT_MIGRATED"}

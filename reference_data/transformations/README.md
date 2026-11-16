@@ -29,12 +29,10 @@
 
 `Ed-Fi-v5_StateU-LIF__v1.0.json` is group 29 exported from dev's `tenant_lif_team` (#1511). It
 names Ed-Fi v5 version `1.0` (`LIF`) and StateU LIF version `1.0` (`StateU`), and its paths need
-that schema's StateU LIF, which has more entities than the StateU LIF in the seed or in dev's
-`public` (#1513). So today it imports only into a schema like dev's `tenant_lif_team`. In the
-seed's `public`, Ed-Fi v5 is version `5.0.0`, so the file is refused with `MODEL_MISSING`; in the
-seed's `tenant_lif_team` the versions match, but the seed's StateU LIF lacks most of the
-entities its paths go through: in the old format, 54 of its 83 rules didn't resolve against the
-seed.
+that schema's StateU LIF, which has more entities than the StateU LIF in dev's `public`. Since
+#1513, the seed's Ed-Fi v5 and StateU LIF are dev's `tenant_lif_team` versions, so the file imports,
+all 83 rules, into both of the seed's schemas as well as into dev's `tenant_lif_team`. It doesn't
+import into dev's `public`, whose StateU LIF has no `Organization` entity.
 
 ### Old-format files
 
@@ -45,9 +43,11 @@ source and target models, then `POST /transformation_groups/{id}/import`, which 
 path by name.
 
 They were written against the StateU LIF (17) in dev's `tenant_lif_team`, like the portable file
-above. Against the seed, measured for #1511, 27 of 32 (CLR v2 / Open Badges v3) and 44 of 70
-(Ed-Fi v5) of their rules don't resolve. The import then aborts, unless
-`allowMissingPaths=true` is passed, which drops those rules.
+above, which the seed has had since #1513. Against the seed, all 70 Ed-Fi v5 rules resolve, and 30 of
+the 32 CLR v2 / Open Badges v3 rules; the other two have no source and target attributes in the file
+itself. With `allowMissingPaths=true` those two are skipped; without it the import aborts. (Before
+#1513, 27 of 32 and 44 of 70 didn't resolve against the seed.) Loading them into the seed and
+exporting them with `GET /portable/mapping_groups/{id}` would convert them to the portable format.
 
 ---
 

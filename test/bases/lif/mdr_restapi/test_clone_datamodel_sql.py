@@ -4,7 +4,8 @@ clone_datamodel used to drop fields that change what the model means: Relationsh
 entity associations, Required and Array on elements, TargetEntityId on attributes. Before that it
 failed outright on Postgres, because the new DataModel's Deleted was inserted as NULL. These tests
 run the clone against the seed and compare the generated schemas, which covers every dropped field
-at once.
+at once. They use the unconverted seed (#1513), whose CASE and Open Badges v3 still have attributes with
+TargetEntityId; the committed seed's CASE came from dev and has none, and its Open Badges v3 is gone.
 """
 
 import pytest
@@ -48,8 +49,8 @@ async def _generate(session, data_model_id: int, flags: dict) -> dict:
 
 
 @pytest.mark.parametrize("source_id", [CASE, OPEN_BADGES_V3], ids=["CASE", "Open Badges v3"])
-async def test_a_clone_generates_the_same_schema_as_its_source(test_db_session, source_id):
-    session = test_db_session
+async def test_a_clone_generates_the_same_schema_as_its_source(unconverted_db_session, source_id):
+    session = unconverted_db_session
     source = await session.get(DataModel, source_id)
     clone = await clone_datamodel(
         session,

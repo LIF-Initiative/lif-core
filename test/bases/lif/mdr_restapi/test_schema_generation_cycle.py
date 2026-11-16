@@ -18,7 +18,9 @@ MODEL_ID = 29
 
 
 @pytest.fixture
-async def session(test_db_session):
+async def session(unconverted_db_session):
+    """Model 29 (Open Badges v3) is gone from the seed since #1513, so these run on the unconverted seed."""
+    test_db_session = unconverted_db_session
     try:
         yield test_db_session
     finally:
