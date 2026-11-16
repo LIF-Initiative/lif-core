@@ -106,8 +106,11 @@ async def test_public_only_reads_the_element_level_of_access(session):
 
 
 async def test_type_name_does_not_select_the_overlay_path(session):
-    # What makes a model an overlay is its inclusion rows, not its Type. In the seed, #1513 converted model
-    # 17: it is still Type OrgLIF, with no inclusion rows, so it is not an overlay.
+    # What makes a model an overlay is its inclusion rows, not its Type. In the seed, model 17 is dev's copy
+    # since #1521: Type SourceSchema, with no inclusion rows, so it is not an overlay. The OrgLIF case is
+    # tested below, by giving MODEL_ID that Type.
+    model_17_type = await session.execute(text('SELECT "Type" FROM "DataModels" WHERE "Id" = 17'))
+    assert model_17_type.scalar_one() == "SourceSchema"
     assert not await is_overlay_model(session, 17)
     assert not await is_overlay_model(session, MODEL_ID)
 
