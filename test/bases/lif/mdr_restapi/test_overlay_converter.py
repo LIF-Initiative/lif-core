@@ -30,6 +30,13 @@ from lif.mdr_services.overlay_converter import (
 )
 from lif.mdr_services.schema_generation_service import generate_openapi_schema
 
+
+@pytest.fixture(scope="module")
+def seed_postgres(unconverted_postgres):
+    """These tests convert the seed's overlays, so they start from the unconverted seed (#1513)."""
+    return unconverted_postgres
+
+
 _ROOT = pathlib.Path(__file__).resolve().parents[4]
 
 

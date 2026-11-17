@@ -28,8 +28,23 @@ def _flags(cur, schema, table):
     return cur.fetchall()
 
 
+def _include_an_element(cur, schema, table):
+    """Give one live element a live inclusion row in its own model, with flags that aren't the defaults.
+
+    The seed no longer has any: #1513 converted models 17 and 18, which held them, so the test adds one.
+    """
+    cur.execute(
+        f'INSERT INTO "{schema}"."ExtInclusionsFromBaseDM" ("ExtDataModelId", "ElementType", "IncludedElementId", '
+        '"LevelOfAccess", "Queryable", "Modifiable", "Deleted") '
+        f'SELECT "DataModelId", %s, "Id", \'Restricted\', true, true, false FROM "{schema}"."{table}" '
+        'WHERE NOT coalesce("Deleted", false) ORDER BY "Id" LIMIT 1',
+        (TABLES[table],),
+    )
+
+
 def _included_element(cur, schema, table):
     """An element whose own model holds a live inclusion row on it, and that row's flags."""
+    _include_an_element(cur, schema, table)
     cur.execute(
         f'SELECT x."Id", i."LevelOfAccess", i."Queryable", i."Modifiable" FROM "{schema}"."{table}" x '
         f'JOIN "{schema}"."ExtInclusionsFromBaseDM" i ON i."IncludedElementId" = x."Id" '

@@ -23,6 +23,11 @@ def mdr_api_headers():
 
 
 BACKUP_SQL_PATH = Path(__file__).parent.parent.parent.parent.parent / "projects/lif_mdr_database/backup.sql"
+# The seed as it was before #1513 converted it: models 17 and 18 are still overlays of model 1. Tests of
+# overlay behavior (and of code that still has to handle overlays, on demo or a fresh install from V1.1)
+# load this instead of backup.sql. _load_seed replays no migrations, so a migration added after this file
+# was taken has to be applied to it too, or these tests run against an older schema.
+UNCONVERTED_SEED_PATH = Path(__file__).parent.parent.parent.parent.parent / "test/fixtures/backup-unconverted.sql"
 
 
 def _start_postgres():
@@ -39,8 +44,8 @@ def _start_postgres():
         pytest.skip(f"PostgreSQL not available locally: {e}")
 
 
-def _load_seed(postgresql):
-    """Initialize the database with backup.sql using the psql command.
+def _load_seed(postgresql, path=BACKUP_SQL_PATH):
+    """Initialize the database with backup.sql (or another seed file) using the psql command.
 
     psycopg2 can't handle COPY ... FROM stdin with inline data.
     """
@@ -60,14 +65,14 @@ def _load_seed(postgresql):
             "-d",
             parsed.path.lstrip("/"),
             "-f",
-            str(BACKUP_SQL_PATH),
+            str(path),
         ],
         env=env,
         capture_output=True,
         text=True,
     )
     if result.returncode != 0:
-        pytest.fail(f"Failed to load backup.sql: {result.stderr}")
+        pytest.fail(f"Failed to load {path.name}: {result.stderr}")
 
 
 def _async_session_maker(postgresql):
@@ -116,6 +121,29 @@ def seed_postgres():
 async def seed_db_session(seed_postgres):
     """A fresh session on the untouched seed database."""
     engine, async_session_maker = _async_session_maker(seed_postgres)
+
+    async with async_session_maker() as session:
+        yield session
+
+    await engine.dispose()
+
+
+@pytest.fixture(scope="module")
+def unconverted_postgres():
+    """A separate PostgreSQL server holding the unconverted seed (models 17 and 18 as overlays).
+
+    Like seed_postgres, it does not touch the MDR environment variables. Tests may write to it, so it is
+    per module.
+    """
+    with _start_postgres() as postgresql:
+        _load_seed(postgresql, UNCONVERTED_SEED_PATH)
+        yield postgresql
+
+
+@pytest.fixture(scope="function")
+async def unconverted_db_session(unconverted_postgres):
+    """A fresh session on the unconverted seed database."""
+    engine, async_session_maker = _async_session_maker(unconverted_postgres)
 
     async with async_session_maker() as session:
         yield session

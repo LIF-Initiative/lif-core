@@ -11,6 +11,15 @@ import pytest
 
 from lif.mdr_services import import_export_service
 
+
+@pytest.fixture
+async def test_db_session(postgres_server, unconverted_db_session):
+    """These tests need overlays, so they run on the unconverted seed (#1513), API client included.
+
+    postgres_server stays a dependency for the MDR environment variables the API reads at import."""
+    yield unconverted_db_session
+
+
 BASE_LIF_ID = 1
 ORG_LIF_ID = 17
 PARTNER_LIF_ID = 18
