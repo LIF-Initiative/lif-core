@@ -76,8 +76,11 @@ class _Attr:
 @pytest.fixture(autouse=True)
 def _self_contained_model(monkeypatch):
     """The generator asks whether the model still has inclusion rows (#1395); these tests build
-    self-contained models, so answer without consuming one of their scripted query results."""
+    self-contained models, so answer without consuming one of their scripted query results.
+    It also exports the model to check the portability rules (#1468), which a scripted session can't
+    serve; the Postgres-backed tests in test/bases/lif/mdr_restapi cover that check."""
     monkeypatch.setattr(svc, "is_overlay_model", AsyncMock(return_value=False))
+    monkeypatch.setattr(svc, "refuse_non_portable_model", AsyncMock(return_value=None))
 
 
 @pytest.fixture
