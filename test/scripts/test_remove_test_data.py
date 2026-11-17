@@ -19,8 +19,8 @@ import pytest
 import testing.postgresql
 
 _ROOT = pathlib.Path(__file__).resolve().parents[2]
-# The seed as it was before #1513 converted it. This script runs on unconverted data (demo, a fresh
-# install from V1.1), so its tests keep that seed; the committed backup.sql is already converted.
+# The seed as it was before #1513 converted it. This script's tests need unconverted data, and the committed
+# backup.sql is converted. The fixture lasts until the overlay code is removed, after #1513.
 UNCONVERTED_SEED = _ROOT / "test/fixtures/backup-unconverted.sql"
 
 
