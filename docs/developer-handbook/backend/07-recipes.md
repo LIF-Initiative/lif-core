@@ -11,21 +11,19 @@ stack; the others are assembled from the code, recent PRs and the existing guide
 
 The field lives in the MDR, so this is mostly data, not code ([chapter 3](03-data-model-and-mdr.md)).
 
-1. **Add it in the MDR.** On dev and the local seed, model 17 holds everything itself (#1388, #1513), so
-   you add the attribute to model 17 directly, with `DataModelId: 17` and an entity in model 17. On demo,
-   model 17 is still an overlay until #1513, and the rule is: **add the attribute to base model 1, then
-   include it in model 17.** The steps below are for that overlay case. In the MDR UI, or through the API (endpoints at `http://localhost:8012/docs`; log in with
+1. **Add it in the MDR.** Model 17 holds everything itself (#1388, #1513), so you add the attribute to
+   model 17 directly. In the MDR UI, or through the API (endpoints at `http://localhost:8012/docs`; log in with
    `POST /login` and send `Authorization: Bearer <access_token>`):
    - `POST /attributes/` with `Name` (camelCase), `UniqueName` (`Person.Name.preferredPronouns`),
-     `DataType` (`string`), `DataModelId: 1`, and `EntityId` (the entity in model 1; passing it creates the
-     attribute and its link to the entity in one step);
-   - `POST /inclusions/` with `ExtDataModelId: 17`, `ElementType: "Attribute"`, `IncludedElementId` (the new
-     attribute's `Id`), `LevelOfAccess` (most of 17's inclusions are `Public`), `CreationDate`, and
+     `DataType` (`string`), `DataModelId: 17`, `EntityId` (the entity in model 17; passing it creates the
+     attribute and its link to the entity in one step), `LevelOfAccess` (`Public` unless it's restricted), and
      `Queryable` / `Modifiable` as needed (these become `x-queryable` / `x-mutable`).
 
-   Verified 11-07 on the local stack with a test field `preferredPronouns` on `Name`: both calls returned
-   201; model 17's generated schema showed the field at once; GraphQL showed it only after a restart (next
-   step); a query returned it (`null`, since no data has it yet). A reseed ([chapter 1](01-dev-environment.md)) removed it again.
+   Checked 11-16 against the local seed with a test field `preferredPronouns` on `Name`: the call returned
+   201 and model 17's generated schema showed the field at once.
+
+   The overlay route this step used to describe (add to model 1, then include it in 17) applied only while 17
+   was an overlay, and demo won't be converted.
 2. **Restart the services that load the schema** (`docker restart lif-graphql-api-org1 …`, semantic
    search): they read it once at startup. The Translator picks it up within 5 minutes (its schema cache), or
    restart it to see it at once.
