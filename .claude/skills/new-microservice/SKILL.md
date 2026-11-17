@@ -31,7 +31,7 @@ Add a new microservice the rest of LIF can build, deploy alongside, and call. Th
 - **Trim dependencies to what you actually import.** A REST API usually needs only `fastapi` + `uvicorn` (+ `httpx`/`pyjwt`/a SQL driver if used). **Do not** pull in `langchain`/`langgraph`/`mcp`/`torch` unless the service genuinely uses them — that bloats the image by hundreds of MB.
 - **PEP 440 `~=` gotcha:** `~=0.275` means `>= 0.275, < 1.0`. To pin a minor range write `~=0.275.0`. (This caused a past prod crash — see CLAUDE.md.)
 - **Docker resolves deps from *this project's* `pyproject.toml`, not `uv.lock`.** A dep declared only at the monorepo root is **absent in the image** (the `boto3` landmine). Declare it here.
-- `Dockerfile2`: copy verbatim, change only `PROJECT_NAME`, the `--port`, and the uvicorn target.
+- `Dockerfile2`: copy verbatim, change only `PROJECT_NAME`, the `--port`, and the uvicorn target. Keep the emSign distrust step after the runtime `FROM` (#1480, #1516). `Dockerfile2` is what local compose builds; CI builds `Dockerfile`, so a deployed service needs that too, copied the same way.
 
 ### 3. `[tool.polylith.bricks]` — must match actual imports
 List only the bricks your code imports. After the code is written, verify:

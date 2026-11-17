@@ -191,6 +191,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   (emSign Root CA - C1, emSign ECC Root CA - C3, emSign ECC Root CA - G3). `certifi` is 2026.10.23 in
   every lock file, and each Dockerfile deny-lists the roots Debian's `ca-certificates`
   (20250419+deb13u1) still ships. emSign Root CA - G1 stays trusted, as in Mozilla's store (issue #1480)
+- Locally built images (`projects/*/Dockerfile2`, the docker-compose Dagster images and the Dagster+
+  hybrid code location) now carry the same emSign deny-list step as the deployed Dockerfiles, so a
+  local `docker compose` or `build-docker.sh` build no longer trusts emSign Root CA - C1 or emSign ECC
+  Root CA - C3 through Debian's `ca-certificates`. To clear out images built before this, see
+  `docs/operations/guides/clearing-stale-local-builds.md` (issue #1516)
 - docker-compose: the MDR's post-confirm and learner-data-export service keys are passed through
   (`MDR__AUTH__SERVICE_API_KEY__POST_CONFIRM`, `MDR__AUTH__SERVICE_API_KEY__LEARNER_DATA_EXPORT`).
   MDR previously always used their built-in defaults, which could not be overridden from `.env`

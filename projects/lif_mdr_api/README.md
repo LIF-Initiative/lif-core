@@ -16,11 +16,11 @@ Composed from `bases/lif/mdr_restapi/` + the `mdr_*` components. See [`../../bas
 cd projects/lif_mdr_api
 bash build.sh
 
-# Docker image — uses Dockerfile2 (the canonical pattern; legacy Dockerfile retained)
+# Docker image for local use — uses Dockerfile2
 bash build-docker.sh
 ```
 
-`Dockerfile2` is the path used by CI and reference deployments — it does a two-stage build pinned to this project's `uv.lock` (the build fails if the lock is stale; run `uv lock` here after changing dependencies). Any new runtime dependency must be added **to this project's `pyproject.toml`, not just the monorepo root** (see [`../../docs/operations/guides/adding-a-new-microservice.md`](../../docs/operations/guides/adding-a-new-microservice.md) for the rationale).
+CI builds `Dockerfile` (after `build.sh`; see `.github/workflows/_deploy-service.yml`). `Dockerfile2` is what local `docker compose` and `build-docker.sh` build — it does a two-stage build pinned to this project's `uv.lock` (the build fails if the lock is stale; run `uv lock` here after changing dependencies). Any new runtime dependency must be added **to this project's `pyproject.toml`, not just the monorepo root** (see [`../../docs/operations/guides/adding-a-new-microservice.md`](../../docs/operations/guides/adding-a-new-microservice.md) for the rationale).
 
 ## Configuration
 

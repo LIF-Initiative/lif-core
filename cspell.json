@@ -345,7 +345,8 @@
         "dataclasses",
         "Credentialaward",
         "xyflow",
-        "stackset"
+        "stackset",
+        "startswith"
     ],
     "ignorePaths": [
         ".git/",
