@@ -10,13 +10,13 @@ rules were enforced. Everything rolls back.
 """
 
 import json
-from typing import cast
 
 import pytest
 from sqlalchemy import text
 
-from lif.mdr_portability import PortabilityError, PortabilityErrorGroup, parse_model_file
+from lif.mdr_portability import PortabilityErrorGroup, list_refusals, parse_model_file
 from lif.mdr_services.model_converter import import_model
+from lif.mdr_services.overlay_converter import FLAG_MATRIX, generate_matrix
 from lif.mdr_services.schema_generation_service import generate_openapi_schema
 
 # Closing Person -> Contact -> Address with Address -> Person. Export walks the model's entities in
@@ -93,12 +93,6 @@ async def _generate(session, data_model_id: int):
     return await generate_openapi_schema(session, data_model_id, include_attr_md=False, include_entity_md=False)
 
 
-def _list_refusals(group: PortabilityErrorGroup) -> list[dict]:
-    # error_group builds a flat group, so every member is a PortabilityError.
-    errors = cast(tuple[PortabilityError, ...], group.exceptions)
-    return [{"code": error.code.value, "element": error.element, "reason": error.reason} for error in errors]
-
-
 async def test_a_model_that_exports_still_generates(session):
     data_model_id = await _import_person_model(session, "exports")
 
@@ -115,7 +109,7 @@ async def test_a_containment_cycle_is_refused_as_export_refuses_it(session):
     with pytest.raises(PortabilityErrorGroup) as info:
         await _generate(session, data_model_id)
 
-    assert _list_refusals(info.value) == [CYCLE_REFUSAL]
+    assert list_refusals(info.value) == [CYCLE_REFUSAL]
 
 
 async def test_two_children_under_one_name_are_refused(session):
@@ -127,7 +121,7 @@ async def test_two_children_under_one_name_are_refused(session):
     with pytest.raises(PortabilityErrorGroup) as info:
         await _generate(session, data_model_id)
 
-    assert _list_refusals(info.value) == [
+    assert list_refusals(info.value) == [
         {
             "code": "ASSOCIATION_NAME_TAKEN",
             "element": "Associations[Person, Contact]",
@@ -137,7 +131,7 @@ async def test_two_children_under_one_name_are_refused(session):
 
 
 async def test_a_model_refused_only_for_its_identity_still_generates(session):
-    # POST /datamodels/ saves a model with no ContributorOrganization, and seed model 26 has none.
+    # POST /datamodels/ saves a model with no ContributorOrganization.
     data_model_id = await _import_person_model(session, "identity")
     await session.execute(
         text('UPDATE "DataModels" SET "ContributorOrganization" = NULL WHERE "Id" = :model'), {"model": data_model_id}
@@ -146,6 +140,19 @@ async def test_a_model_refused_only_for_its_identity_still_generates(session):
     schema = await _generate(session, data_model_id)
 
     assert "Person" in schema["components"]["schemas"]
+
+
+async def test_the_overlay_conversion_records_a_refusal_as_the_endpoint_does(session):
+    # convert_overlays compares these matrices and reports a failed combination; a refusal must be one.
+    data_model_id = await _import_person_model(session, "matrix")
+    await _contain(session, data_model_id, "Address", "Person", "Person")
+
+    schemas = await generate_matrix(session, data_model_id)
+
+    assert len(schemas) == len(FLAG_MATRIX)
+    assert all(
+        schema == {"x-http-error": {"status_code": 422, "detail": [CYCLE_REFUSAL]}} for schema in schemas.values()
+    )
 
 
 @pytest.mark.parametrize("query", ["", "?download=true&include_entity_md=true&include_attr_md=true&full_export=true"])

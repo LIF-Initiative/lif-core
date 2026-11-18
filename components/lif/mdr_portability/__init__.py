@@ -1,5 +1,5 @@
 from lif.mdr_portability.canonical import dump_canonical
-from lif.mdr_portability.errors import PortabilityError, PortabilityErrorCode, PortabilityErrorGroup
+from lif.mdr_portability.errors import PortabilityError, PortabilityErrorCode, PortabilityErrorGroup, list_refusals
 
 # The current format version's models, under version-free names.
 from lif.mdr_portability.v1.models import CrosswalkFile, MappingGroupFile, ModelFile
@@ -15,6 +15,7 @@ __all__ = [
     "PortabilityErrorGroup",
     "check_model_file",
     "dump_canonical",
+    "list_refusals",
     "parse_crosswalk_file",
     "parse_mapping_group_file",
     "parse_model_file",

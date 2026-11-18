@@ -44,11 +44,10 @@ ATTRIBUTE_ASSOCIATION_FIELDS = [
     "AssociationExtendedByDataModelId",
 ]
 
-# Refusals generation lets through until #1513 clears them from the seed, dev and demo (#1468).
+# Refusals generation lets through until #1468 removes them (#1513 clears them from dev and demo).
 # NOT_MIGRATED, which includes overlays, is refused before export checks the model's rules, so those
 # models are generated as before, behind the generator's own guards. MODEL_IDENTITY_INCOMPLETE doesn't
-# change the schema: seed model 26 has it, as does any model POST /datamodels/ saves with no
-# ContributorOrganization.
+# change the schema, and POST /datamodels/ still saves a model with no ContributorOrganization.
 CODES_NOT_YET_REFUSED = {PortabilityErrorCode.NOT_MIGRATED, PortabilityErrorCode.MODEL_IDENTITY_INCOMPLETE}
 
 
