@@ -63,23 +63,22 @@ contributor organization**, not by Id. The Translator works by Id: its caller pa
 Ids in the URL (the planner's sources config sends 26 → 17). In the compose file: `OPENAPI_DATA_MODEL_NAME=StateU LIF`, `OPENAPI_DATA_MODEL_VERSION=1.0`,
 `OPENAPI_DATA_MODEL_CONTRIBUTOR_ORGANIZATION=StateU`.
 
-### Overlays are on their way out (dev: converted; demo and the local seed: not yet, #1513)
+### Overlays are on their way out (dev and the local seed: converted; demo: not yet, #1513)
 
-Models 17 and 18 are **overlays** on demo and in the local seed, and were on dev until #1388: they build
+Models 17 and 18 are **overlays** on demo, and were on dev until #1388 and in the local seed until #1513: they build
 on model 1 and add or include parts of it, rather than holding everything themselves. ADR data_model/0004
 ([`docs/design/adr/data_model/0004-retire-overlays-variants-as-copies.md`](../../design/adr/data_model/0004-retire-overlays-variants-as-copies.md), Accepted) retires this:
 
 - every model will be **self-contained**, with one kind of model instead of four types;
 - a variant of a model is a **copy**, and **schema diff** shows how two models differ;
 - 17 and 18 are converted once, in place, so they produce the same schema as before (#1388, done:
-  `scripts/convert_overlays.py`, #1489). The conversion is applied on dev, in all 10 schemas. Demo isn't
-  converted yet, and the local seed (`projects/lif_mdr_database/backup.sql`) still has 17 and 18 as
-  overlays; #1513 converts both.
+  `scripts/convert_overlays.py`, #1489). The conversion is applied on dev, in all 10 schemas, and in the local
+  seed (`projects/lif_mdr_database/backup.sql`, #1513). Demo isn't converted yet (#1513).
 
 Older docs and ADRs (metadata_repository/0004, 0008; data_model/0002) describe the overlay model:
 inclusions, extensions, Org LIF vs Partner LIF. Read them as history.
 
-**What that means on an overlay (demo and the local seed, until #1513).** Model 17 shows only what it *includes* from
+**What that means on an overlay (demo, until #1513).** Model 17 shows only what it *includes* from
 model 1, plus its own *extensions*:
 
 - Entities like `Person` and `Name` are defined in model 1 (`Entities.DataModelId = 1`). Model 17 includes
@@ -89,8 +88,8 @@ model 1, plus its own *extensions*:
 - So a field added to model 1 doesn't appear in the services until model 17 also includes it. A field
   added to model 17 as an extension appears directly.
 
-**The rule: on dev, model 17 holds everything itself and is edited directly. On the local seed, add new
-fields to model 1, then include them in model 17** ([chapter 7](07-recipes.md) has the steps).
+**The rule: on dev and the local seed, model 17 holds everything itself and is edited directly. On
+demo, add new fields to model 1, then include them in model 17** ([chapter 7](07-recipes.md) has the steps).
 
 ### Two schema files you'll find in the repo
 

@@ -379,8 +379,8 @@ async def test_a_crosswalk_import_does_not_wait_for_an_import_into_another_tenan
 async def test_exporting_a_model_that_is_not_migrated_returns_the_refusals(client):
     http_client, _, _ = client
 
-    # Seed model 1 (LIF) still uses deprecated constructs.
-    response = await http_client.get("/portable/models/1")
+    # Seed model 3 (CLR v2) still has attributes with DataType entity (#1513).
+    response = await http_client.get("/portable/models/3")
 
     assert response.status_code == 422
     assert {code for code, _ in _codes(response)} == {"NOT_MIGRATED"}

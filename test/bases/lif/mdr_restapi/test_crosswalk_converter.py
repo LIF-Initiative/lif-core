@@ -380,12 +380,14 @@ async def test_every_seed_crosswalk_exports_and_round_trips(seed_db_session):
             .order_by(source_value.ValueSetId, target_value.ValueSetId)
         )
     ).all()
-    assert len(pairs) == 7
+    # 343 -> 347 was model 25's test value set, which #1513 removed with the rest of the test data.
+    assert len(pairs) == 6
 
     try:
         files = {pair: dump_canonical(await export_crosswalk(session, *pair)) for pair in pairs}
-        # 716 live rows with live ends, less 2347, whose group 17 is deleted.
-        assert sum(len(json.loads(file)["Entries"]) for file in files.values()) == 715
+        # 714 live rows with live ends. #1513 removed 2347 and 2348, model 25's test mappings (2347's group
+        # 17 was already deleted, so it was never exported).
+        assert sum(len(json.loads(file)["Entries"]) for file in files.values()) == 714
 
         for (source_id, target_id), file_a in files.items():
             values = aliased(ValueSetValue)

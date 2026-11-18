@@ -2,13 +2,13 @@
 
 Every model, mapping group and crosswalk in backup.sql that the converter exports is file A. Importing A
 into an empty install and exporting it gives B; importing B into a second empty install gives C, and
-A == B == C byte for byte. The installs are empty tenant schemas from clone_lif_schema, and the second
-one's sequences start at 1000, so all three hold the same content under different row Ids.
+A == B == C byte for byte. The installs are empty tenant schemas from clone_lif_schema, with their
+sequences started at 500 and 1000, so all three hold the same content under different row Ids.
 
 Content is discovered, not listed: a model, group or crosswalk joins the round trip as soon as it
-exports, and a group or crosswalk once both of its models do. On today's seed only models 4 (CEDS),
-10 (CTDL) and 13 (ANS) export (test/scripts/test_measure_export_blockers.py). Every exportable group
-and crosswalk needs model 1 (LIF), which is NOT_MIGRATED, so none of them round-trip yet.
+exports, and a group or crosswalk once both of its models do. Since #1513 converted the seed, every live
+model in `public` exports except 3, 6, 14 and 29, which still have attributes with DataType entity
+(test/scripts/test_measure_export_blockers.py), so the groups and crosswalks on model 1 round-trip too.
 """
 
 from dataclasses import dataclass
@@ -34,8 +34,10 @@ from lif.mdr_services.portability_converter import (
 from lif.mdr_sql_model.core import DataModel, TransformationGroup, ValueSet, ValueSetValue, ValueSetValueMapping
 
 INSTALLS = ("tenant_rt_one", "tenant_rt_two")
-# The seed models that export today. Raise this as #1388/#1393 migrate more of the seed.
-EXPORTING_MODELS = {4, 10, 13}
+# The seed models that export today. Raise this as #1513 migrates more of the seed.
+EXPORTING_MODELS = {1, 2, 4, 5, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 26}
+# Where each install's sequences start: above the seed's Ids, and apart from each other.
+SEQUENCE_STARTS = {"tenant_rt_one": 500, "tenant_rt_two": 1000}
 
 
 @dataclass
@@ -60,10 +62,10 @@ def database_url(seed_postgres):
     with conn.cursor() as cursor:
         for schema in INSTALLS:
             cursor.execute("SELECT public.clone_lif_schema(%s, false)", (schema,))
-        cursor.execute(
-            "SELECT setval(format('%%I.%%I', schemaname, sequencename), 1000) FROM pg_sequences WHERE schemaname = %s",
-            (INSTALLS[1],),
-        )
+            cursor.execute(
+                "SELECT setval(format('%%I.%%I', schemaname, sequencename), %s) FROM pg_sequences WHERE schemaname = %s",
+                (SEQUENCE_STARTS[schema], schema),
+            )
     conn.close()
     return (
         f"postgresql+asyncpg://{parsed.username}:{parsed.password or ''}@{parsed.hostname}:{parsed.port}{parsed.path}"
