@@ -124,8 +124,8 @@ workspace again brings them back in line. The proper fix, a `GET /tenants/curren
   activated (backend [chapter 10](../backend/10-extending-lif.md)).
 - **Overlay screens**: Data Extensions, and a model's "only / all / public / extensions / partner" views.
   An overlay is a model built on top of another one, and these screens show which parts are its own. ADR
-  data_model/0004 retires overlays in favour of self-contained models: on dev, models 17 and 18 have been
-  converted (#1388), and on demo and in the local seed they're still overlays of model 1 until #1513 (backend
+  data_model/0004 retires overlays in favour of self-contained models: on dev and in the local seed, models 17
+  and 18 have been converted (#1388, #1513), and on demo they're still overlays of model 1 until #1513 (backend
   [chapter 3](../backend/03-data-model-and-mdr.md), "Overlays are on their way out"). Expect these screens
   to change.
 

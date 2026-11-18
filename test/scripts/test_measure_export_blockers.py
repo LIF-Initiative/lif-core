@@ -103,29 +103,29 @@ async def test_measure_reports_what_the_seed_refuses(seed_url):
 
     assert list(results) == ["public", "tenant_lif_team"]
     public = results["public"]
-    assert public.overlays == ["model 17 StateU LIF", "model 18 Org2 LIF"]
-    # Model 4 (CEDS v14, rebuilt in #1435), model 10 (CTDL, rebuilt in #1446) and model 13 export; the
-    # other 16 are refused.
-    assert (public.models, public.models_exported, public.models_refused) == (21, 3, 16)
-    assert (public.groups, public.groups_exported, public.groups_refused) == (9, 2, 7)
-    # Every crosswalk in the seed exports, so none adds a refusal below (#1513).
-    assert (public.crosswalks, public.crosswalks_exported, public.crosswalks_refused) == (7, 7, 0)
+    # #1513 ran #1444's cleanup, removed the test data and model 16, and converted 17 and 18. What's left
+    # in public is models 3 (CLR v2), 6 (Ed-Fi v5), 14 (CASE) and 29 (Open Badges v3), whose seed content
+    # still has attributes with DataType entity; #1513's next step replaces it.
+    assert public.overlays == []
+    assert (public.models, public.models_exported, public.models_refused) == (19, 15, 4)
+    assert (public.groups, public.groups_exported, public.groups_refused) == (6, 6, 0)
+    # Every crosswalk in the seed exports, so none adds a refusal below (#1513). #1520 removed the test
+    # data, which took the 343 -> 347 crosswalk with it.
+    assert (public.crosswalks, public.crosswalks_exported, public.crosswalks_refused) == (6, 6, 0)
     assert _counts(public) == {
-        "NOT_MIGRATED: the attribute has no DataType; migration sets string": 613,
-        "NOT_MIGRATED: the attribute has DataType entity; it becomes an association to the entity": 190,
-        "NOT_MIGRATED: the attribute is in no association; migration drops it": 77,
-        "NOT_MIGRATED: the association is declared with ExtendedByDataModelId": 62,
-        "NOT_MIGRATED: the child … is in another model": 8,
-        "NOT_MIGRATED: … is an overlay; convert it first (ADR data_model/0004)": 6,
-        "NOT_MIGRATED: model N declared it between two models it does not own, so it belongs to no model": 2,
-        "MAPPING_TARGET_MISSING: the transformation has N targets": 1,
-        "MODEL_IDENTITY_INCOMPLETE: Field required": 1,
-        "MODEL_IDENTITY_INCOMPLETE: the model has no ContributorOrganization": 1,
-        "NOT_MIGRATED: the value uses Extension": 1,
+        "NOT_MIGRATED: the attribute has DataType entity; it becomes an association to the entity": 190
     }
-    # Dereck's no-target transformation (1189), and the model with no organization.
-    assert public.refusals["MAPPING_TARGET_MISSING: the transformation has N targets"][0][0] == "group 3 (4 -> 1 v1.0)"
-    assert public.refusals["MODEL_IDENTITY_INCOMPLETE: Field required"][0][0] == "model 26 R1 Demo Source Data Model"
+    labels = {
+        label
+        for label, _ in public.refusals[
+            "NOT_MIGRATED: the attribute has DataType entity; it becomes an association to the entity"
+        ]
+    }
+    assert labels == {"model 3 CLR v2", "model 6 Ed-Fi v5", "model 14 CASE", "model 29 Open Badges v3"}
+
+    tenant = results["tenant_lif_team"]
+    assert (tenant.models, tenant.models_exported, tenant.models_refused, tenant.overlays) == (18, 18, 0, [])
+    assert (tenant.groups, tenant.groups_exported, tenant.groups_refused) == (6, 6, 0)
 
 
 async def test_measure_writes_nothing_and_counts_a_failed_export(seed_url, monkeypatch):
@@ -153,8 +153,9 @@ async def test_measure_writes_nothing_and_counts_a_failed_export(seed_url, monke
     assert label == "model 2 HR Open"
     assert "read-only transaction" in message
     # The rest of the schema, and the next schema, were still measured.
-    assert (public.groups, public.groups_exported) == (9, 2)
-    assert results["tenant_lif_team"].models_exported == 1
+    assert (public.groups, public.groups_exported) == (6, 6)
+    # In tenant_lif_team every model exports, except the three this test breaks.
+    assert results["tenant_lif_team"].models_exported == 15
 
     engine = create_async_engine(seed_url)
     try:
@@ -169,7 +170,7 @@ async def test_measure_counts_a_refused_crosswalk_under_its_reason(seed_url, mon
     export_crosswalk = measure.export_crosswalk
 
     async def refusing_export_crosswalk(session, source_value_set_id, target_value_set_id):
-        if (source_value_set_id, target_value_set_id) == (343, 347):
+        if (source_value_set_id, target_value_set_id) == (315, 290):
             raise error_group(
                 [
                     PortabilityError(
@@ -182,11 +183,11 @@ async def test_measure_counts_a_refused_crosswalk_under_its_reason(seed_url, mon
     monkeypatch.setattr(measure, "export_crosswalk", refusing_export_crosswalk)
     public = (await _measure(seed_url))["public"]
 
-    assert (public.crosswalks, public.crosswalks_exported, public.crosswalks_refused) == (7, 6, 1)
+    assert (public.crosswalks, public.crosswalks_exported, public.crosswalks_refused) == (6, 5, 1)
     assert public.refusals["CROSSWALK_SOURCE_DUPLICATE: … maps twice"] == [
-        ("crosswalk 343 -> 347", "Entries[3].Source")
+        ("crosswalk 315 -> 290", "Entries[3].Source")
     ]
-    assert "crosswalks 6 export, 1 refused" in measure.format_result(public, False)[0]
+    assert "crosswalks 5 export, 1 refused" in measure.format_result(public, False)[0]
 
 
 async def test_crosswalk_pairs_skip_a_pair_with_no_live_mapping(seed_url):
@@ -197,7 +198,7 @@ async def test_crosswalk_pairs_skip_a_pair_with_no_live_mapping(seed_url):
             async with session.begin():
                 await session.execute(text("SET LOCAL search_path TO public"))
                 pairs = await measure.crosswalk_pairs(session)
-                assert pairs == [(76, 52), (310, 284), (313, 287), (314, 288), (315, 290), (343, 347), (464, 52)]
+                assert pairs == [(76, 52), (310, 284), (313, 287), (314, 288), (315, 290), (464, 52)]
 
                 # Each pair loses its mappings a different way: the mapping, a source value, a target
                 # value, or the group.
@@ -205,7 +206,7 @@ async def test_crosswalk_pairs_skip_a_pair_with_no_live_mapping(seed_url):
                     text(
                         """
                         UPDATE "ValueSetValueMapping" m SET "Deleted" = true
-                        FROM "ValueSetValues" s WHERE s."Id" = m."SourceValueId" AND s."ValueSetId" = 343
+                        FROM "ValueSetValues" s WHERE s."Id" = m."SourceValueId" AND s."ValueSetId" = 315
                         """
                     )
                 )
@@ -227,7 +228,7 @@ async def test_crosswalk_pairs_skip_a_pair_with_no_live_mapping(seed_url):
                         ' WHERE "Id" = (SELECT min("Id") FROM "TransformationsGroup")'
                     )
                 )
-                assert await measure.crosswalk_pairs(session) == [(76, 52), (315, 290), (464, 52)]
+                assert await measure.crosswalk_pairs(session) == [(76, 52), (464, 52)]
                 await session.rollback()
     finally:
         await engine.dispose()

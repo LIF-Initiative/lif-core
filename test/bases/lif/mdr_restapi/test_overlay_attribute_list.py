@@ -5,9 +5,20 @@ On the seed, attribute 800 (Credential.expirationDate) is included only in model
 as their base, so both see both attributes' associations.
 """
 
+import pytest
+
 from lif.mdr_services.attribute_service import get_list_of_attributes_for_entity
 from lif.mdr_services.datamodel_service import get_datamodel_with_details_by_id
 from lif.mdr_sql_model.core import DataModelType
+
+
+@pytest.fixture
+async def test_db_session(postgres_server, unconverted_db_session):
+    """These tests need overlays, so they run on the unconverted seed (#1513), API client included.
+
+    postgres_server stays a dependency for the MDR environment variables the API reads at import."""
+    yield unconverted_db_session
+
 
 STATEU, ORG2 = 17, 18
 TYPES = {STATEU: DataModelType.OrgLIF, ORG2: DataModelType.PartnerLIF}

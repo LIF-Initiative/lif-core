@@ -1,7 +1,7 @@
 """Tests for the #1388 read-only count of what converting each overlay model would touch.
 
 The counts size a data conversion of the model every deployed service loads, so a wrong count
-misleads its design. The seed test pins the figures for models 17 and 18 in backup.sql, which agree
+misleads its design. The seed test pins the figures for models 17 and 18 in the unconverted seed (test/fixtures/backup-unconverted.sql), which agree
 with the spec's §11 inventory (docs/specs/mdr-portable-file-format.md). It needs a local PostgreSQL
 (`initdb` and `psql`) and skips without one, like the MDR tests.
 """
@@ -17,6 +17,9 @@ import pytest
 import testing.postgresql
 
 _ROOT = pathlib.Path(__file__).resolve().parents[2]
+# The seed as it was before #1513 converted it. This script runs on unconverted data (demo, a fresh
+# install from V1.1), so its tests keep that seed; the committed backup.sql is already converted.
+UNCONVERTED_SEED = _ROOT / "test/fixtures/backup-unconverted.sql"
 _spec = importlib.util.spec_from_file_location(
     "measure_overlay_conversion", _ROOT / "scripts" / "measure_overlay_conversion.py"
 )
@@ -175,14 +178,14 @@ def seed_url():
                 "-d",
                 url.path.lstrip("/"),
                 "-f",
-                str(_ROOT / "projects/lif_mdr_database/backup.sql"),
+                str(UNCONVERTED_SEED),
             ],
             env={**os.environ, "PGPASSWORD": url.password or ""},
             capture_output=True,
             text=True,
         )
         if result.returncode != 0:
-            pytest.fail(f"Failed to load backup.sql: {result.stderr}")
+            pytest.fail(f"Failed to load the unconverted seed: {result.stderr}")
         yield postgresql.url()
 
 
