@@ -33,6 +33,7 @@ from fastapi import HTTPException
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy import text
 
+from lif.mdr_portability import PortabilityErrorGroup, list_refusals
 from lif.mdr_services.schema_generation_service import generate_openapi_schema
 
 SNAPSHOT_DIR = Path(__file__).parent / "schema_snapshots"
@@ -85,6 +86,9 @@ async def _generate(session, data_model_id: int, flags: dict):
         # Some combinations fail today (e.g. a missing inclusion row on an overlay
         # model); the endpoint returns that error, so it is part of the baseline.
         return {"x-snapshot-http-error": {"status_code": e.status_code, "detail": e.detail}}
+    except PortabilityErrorGroup as group:
+        # A model the portability rules refuse gets the endpoint's 422 (#1468).
+        return {"x-snapshot-http-error": {"status_code": 422, "detail": list_refusals(group)}}
 
 
 def _diff_excerpt(expected: str, actual: str, limit: int = 40) -> str:

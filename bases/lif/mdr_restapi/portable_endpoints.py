@@ -9,7 +9,7 @@ a refusal, so a refused import writes nothing.
 """
 
 from collections.abc import Awaitable, Callable
-from typing import Any, Optional, cast
+from typing import Any, Optional
 
 from fastapi import APIRouter, Depends, Request, Response
 from fastapi.responses import JSONResponse
@@ -17,10 +17,10 @@ from lif.mdr_portability import (
     CrosswalkFile,
     MappingGroupFile,
     ModelFile,
-    PortabilityError,
     PortabilityErrorCode,
     PortabilityErrorGroup,
     dump_canonical,
+    list_refusals,
     parse_crosswalk_file,
     parse_mapping_group_file,
     parse_model_file,
@@ -165,15 +165,9 @@ def document_file_response(file_model: type, description: str) -> dict[int | str
 
 def refusal_response(group: PortabilityErrorGroup) -> JSONResponse:
     """Every refusal by code and element (§10): 409 when each one is a create-only conflict, otherwise 422."""
-    # error_group builds a flat group, so every member is a PortabilityError.
-    errors = cast(tuple[PortabilityError, ...], group.exceptions)
-    status_code = 409 if all(error.code in EXISTS_CODES for error in errors) else 422
-    return JSONResponse(
-        status_code=status_code,
-        content={
-            "detail": [{"code": error.code.value, "element": error.element, "reason": error.reason} for error in errors]
-        },
-    )
+    refusals = list_refusals(group)
+    status_code = 409 if all(Code(refusal["code"]) in EXISTS_CODES for refusal in refusals) else 422
+    return JSONResponse(status_code=status_code, content={"detail": refusals})
 
 
 def get_constraint_name(error: IntegrityError) -> Optional[str]:
