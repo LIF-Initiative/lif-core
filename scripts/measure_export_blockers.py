@@ -4,13 +4,13 @@
 Export refuses rows the portable format can't represent (Portability Spec §10, §11). Rather than
 restate those rules in SQL, this runs the converters themselves, `export_model` on every live model,
 `export_mapping_group` on every non-deleted transformation group and `export_crosswalk` on every
-crosswalk, in every schema, and counts what they refuse. A count is therefore exactly what an export would hit today, and it stays right when a
-converter's rules change.
+crosswalk, in every schema, and counts what they refuse. A count is therefore exactly what the
+converters refuse today, and it stays right when a converter's rules change.
 
 A crosswalk has no row of its own (Portability Spec §7): it is the live value mappings from one value
-set to another. So the crosswalks measured are the value-set pairs that have at least one live value
-mapping, live as `export_crosswalk` reads it: the mapping, both of its values, and its group if it has
-one (#1513).
+set to another. The crosswalk converter lists them, as `list_crosswalk_pairs`, so the pairs measured
+are the ones `export_crosswalk` reads (#1513). A pair whose value set is gone is counted as
+`export_crosswalk` refuses it; through `GET /portable/crosswalks` it is a 404 before the converter runs.
 
 For each schema it prints how many models, groups and crosswalks export and how many are refused, then
 each refusal reason with the number of elements it names and the models, groups or crosswalks it names
@@ -43,15 +43,19 @@ import sys
 from collections import defaultdict
 from dataclasses import dataclass, field
 
-from sqlalchemy import distinct, select, text
+from sqlalchemy import select, text
 from sqlalchemy.engine import URL
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from sqlalchemy.orm import aliased
 
 from lif.mdr_portability import PortabilityErrorGroup
 from lif.mdr_services.model_converter import is_overlay
-from lif.mdr_services.portability_converter import export_crosswalk, export_mapping_group, export_model
-from lif.mdr_sql_model.core import DataModel, TransformationGroup, ValueSetValue, ValueSetValueMapping
+from lif.mdr_services.portability_converter import (
+    export_crosswalk,
+    export_mapping_group,
+    export_model,
+    list_crosswalk_pairs,
+)
+from lif.mdr_sql_model.core import DataModel, TransformationGroup
 
 SCHEMAS_SQL = r"""
 SELECT table_schema FROM information_schema.tables
@@ -110,32 +114,6 @@ def _crosswalk_label(source_value_set_id: int, target_value_set_id: int) -> str:
     return f"crosswalk {source_value_set_id} -> {target_value_set_id}"
 
 
-async def crosswalk_pairs(session: AsyncSession) -> list[tuple[int, int]]:
-    """Every (source, target) value-set pair with a live value mapping, as export_crosswalk reads one.
-
-    The pair comes from the values, not the mapping's SourceValueSetId and TargetValueSetId, which are
-    NULL on most of the seed's rows. Value sets and their models aren't filtered: a crosswalk whose value
-    set or model is gone is refused by export, and counted here as refused.
-    """
-    source_value, target_value = aliased(ValueSetValue), aliased(ValueSetValue)
-    query = (
-        select(distinct(source_value.ValueSetId), target_value.ValueSetId)
-        .select_from(ValueSetValueMapping)
-        .join(source_value, source_value.Id == ValueSetValueMapping.SourceValueId)
-        .join(target_value, target_value.Id == ValueSetValueMapping.TargetValueId)
-        .outerjoin(TransformationGroup, TransformationGroup.Id == ValueSetValueMapping.TransformationGroupId)
-        .where(
-            ValueSetValueMapping.Deleted.is_not(True),
-            source_value.Deleted.is_not(True),
-            target_value.Deleted.is_not(True),
-            # A mapping with no group joins no row, so this holds for it too.
-            TransformationGroup.Deleted.is_not(True),
-        )
-        .order_by(source_value.ValueSetId, target_value.ValueSetId)
-    )
-    return [(source_id, target_id) for source_id, target_id in (await session.execute(query)).all()]
-
-
 async def _try_export(session: AsyncSession, result: SchemaResult, label: str, export) -> bool:
     """Run one export in a savepoint; record its refusals, or its error, and say whether it exported."""
     try:
@@ -183,7 +161,7 @@ async def measure_schema(session: AsyncSession, schema: str) -> SchemaResult:
         if await _try_export(session, result, label, lambda: export_mapping_group(session, transformation_group.Id)):
             result.groups_exported += 1
 
-    for source_id, target_id in await crosswalk_pairs(session):
+    for source_id, target_id in await list_crosswalk_pairs(session):
         result.crosswalks += 1
         label = _crosswalk_label(source_id, target_id)
         if await _try_export(session, result, label, lambda: export_crosswalk(session, source_id, target_id)):

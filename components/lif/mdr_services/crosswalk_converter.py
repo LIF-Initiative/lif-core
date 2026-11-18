@@ -37,33 +37,55 @@ from sqlmodel import select
 Code = PortabilityErrorCode
 
 
-async def _list_live_mappings(
-    session: AsyncSession, source_value_set_id: int, target_value_set_id: int, limit: Optional[int] = None
-):
-    """The live value mappings from one value set to another, with both values' names.
+def _live_mappings(query, source_value, target_value):
+    """Restrict a select to the live value mappings (§2), joined to both of their values.
 
+    A value mapping is live only when it, both of its values, and its group (if it has one) are live.
     The pair is read from the values, not from the mapping's SourceValueSetId and TargetValueSetId,
     which are NULL on most of the seed's rows.
     """
-    source_value, target_value = aliased(ValueSetValue), aliased(ValueSetValue)
-    query = (
-        select(ValueSetValueMapping, source_value.ValueName, target_value.ValueName)
+    return (
+        query.select_from(ValueSetValueMapping)
         .join(source_value, source_value.Id == ValueSetValueMapping.SourceValueId)
         .join(target_value, target_value.Id == ValueSetValueMapping.TargetValueId)
         .outerjoin(TransformationGroup, TransformationGroup.Id == ValueSetValueMapping.TransformationGroupId)
         .where(
-            source_value.ValueSetId == source_value_set_id,
-            target_value.ValueSetId == target_value_set_id,
             ValueSetValueMapping.Deleted.is_not(True),
             source_value.Deleted.is_not(True),
             target_value.Deleted.is_not(True),
             # A mapping with no group joins no row, so this holds for it too.
             TransformationGroup.Deleted.is_not(True),
         )
+    )
+
+
+async def _list_live_mappings(
+    session: AsyncSession, source_value_set_id: int, target_value_set_id: int, limit: Optional[int] = None
+):
+    """The live value mappings from one value set to another, with both values' names."""
+    source_value, target_value = aliased(ValueSetValue), aliased(ValueSetValue)
+    query = (
+        _live_mappings(
+            select(ValueSetValueMapping, source_value.ValueName, target_value.ValueName), source_value, target_value
+        )
+        .where(source_value.ValueSetId == source_value_set_id, target_value.ValueSetId == target_value_set_id)
         .order_by(ValueSetValueMapping.Id)
         .limit(limit)
     )
     return (await session.execute(query)).all()
+
+
+async def list_crosswalk_pairs(session: AsyncSession) -> list[tuple[int, int]]:
+    """Every (source, target) value-set pair with a live value mapping: each crosswalk export_crosswalk can be
+    asked for. Value sets and their models aren't filtered, so export_crosswalk refuses a pair whose value
+    set or model is gone."""
+    source_value, target_value = aliased(ValueSetValue), aliased(ValueSetValue)
+    query = (
+        _live_mappings(select(source_value.ValueSetId, target_value.ValueSetId), source_value, target_value)
+        .distinct()
+        .order_by(source_value.ValueSetId, target_value.ValueSetId)
+    )
+    return [(source_id, target_id) for source_id, target_id in (await session.execute(query)).all()]
 
 
 async def export_crosswalk(session: AsyncSession, source_value_set_id: int, target_value_set_id: int) -> CrosswalkFile:

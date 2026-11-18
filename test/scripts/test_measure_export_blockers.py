@@ -197,7 +197,7 @@ async def test_crosswalk_pairs_skip_a_pair_with_no_live_mapping(seed_url):
         async with AsyncSession(engine) as session:
             async with session.begin():
                 await session.execute(text("SET LOCAL search_path TO public"))
-                pairs = await measure.crosswalk_pairs(session)
+                pairs = await measure.list_crosswalk_pairs(session)
                 assert pairs == [(76, 52), (310, 284), (313, 287), (314, 288), (315, 290), (464, 52)]
 
                 # Each pair loses its mappings a different way: the mapping, a source value, a target
@@ -228,7 +228,7 @@ async def test_crosswalk_pairs_skip_a_pair_with_no_live_mapping(seed_url):
                         ' WHERE "Id" = (SELECT min("Id") FROM "TransformationsGroup")'
                     )
                 )
-                assert await measure.crosswalk_pairs(session) == [(76, 52), (464, 52)]
+                assert await measure.list_crosswalk_pairs(session) == [(76, 52), (464, 52)]
                 await session.rollback()
     finally:
         await engine.dispose()
