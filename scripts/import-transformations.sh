@@ -18,7 +18,8 @@
 #   MDR_URL       The MDR's base URL. Without it, the script needs <env> and uses
 #                 https://mdr-api.<env>.lif.unicon.net.
 #   MDR_API_KEY   An MDR service key. Without it, the script needs <env> and reads the key from
-#                 SSM, at /<env>/learner-data-export-api/MdrApiKey.
+#                 SSM, at /<env>/learner-data-export-api/MdrApiKey. Required when MDR_URL is set,
+#                 so an SSM key never goes to a URL <env> didn't produce.
 #   (`changeme3` is the local stack's compose default, not a real credential.)
 #
 # Options:
@@ -63,6 +64,12 @@ AWS_REGION="${AWS_REGION:-us-east-1}"
 
 if [[ -z "${ENV_NAME}" && ( -z "${MDR_URL:-}" || -z "${MDR_API_KEY:-}" ) && -z "${DRY_RUN}" ]]; then
   echo "Name an <env>, or set both MDR_URL and MDR_API_KEY." >&2
+  echo "${USAGE}" >&2
+  exit 2
+fi
+# A key read from <env>'s SSM goes only to <env>'s own URL, never to an MDR_URL the caller chose.
+if [[ -n "${MDR_URL:-}" && -z "${MDR_API_KEY:-}" && -z "${DRY_RUN}" ]]; then
+  echo "MDR_URL is set, so set MDR_API_KEY too. The script reads SSM only for <env>'s own URL." >&2
   echo "${USAGE}" >&2
   exit 2
 fi
