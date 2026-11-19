@@ -11,6 +11,15 @@ from lif.mdr_services.attribute_service import get_attributes_with_association_m
 from lif.mdr_services.schema_generation_service import generate_openapi_schema
 from lif.mdr_sql_model.core import DataModelType
 
+
+@pytest.fixture
+async def test_db_session(postgres_server, unconverted_db_session):
+    """These tests need overlays, so they run on the unconverted seed (#1513), API client included.
+
+    postgres_server stays a dependency for the MDR environment variables the API reads at import."""
+    yield unconverted_db_session
+
+
 STATEU, ORG2 = 17, 18
 TYPES = {STATEU: DataModelType.OrgLIF, ORG2: DataModelType.PartnerLIF}
 CREDENTIAL, IDENTIFIER = 129, 238

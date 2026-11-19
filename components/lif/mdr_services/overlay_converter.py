@@ -46,6 +46,7 @@ from fastapi.encoders import jsonable_encoder
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from lif.mdr_portability import PortabilityErrorGroup, list_refusals
 from lif.mdr_services.mapping_group_converter import export_mapping_group
 from lif.mdr_services.model_converter import export_model
 from lif.mdr_services.schema_generation_service import generate_openapi_schema
@@ -202,7 +203,8 @@ def _diff(expected: Any, actual: Any, limit: int = 30) -> str:
 async def generate_matrix(session: AsyncSession, data_model_id: int) -> dict[str, Any]:
     """Every flag combination of the model's generated schema, JSON-encoded as the endpoint encodes it.
 
-    A combination that fails is recorded as its error, as the schema snapshots do (#1387).
+    A combination that fails is recorded as its error, as the schema snapshots do (#1387). A model the
+    portability rules refuse is recorded as the endpoint's 422, with every refusal (#1468).
     """
     schemas = {}
     for flags in FLAG_MATRIX:
@@ -211,6 +213,8 @@ async def generate_matrix(session: AsyncSession, data_model_id: int) -> dict[str
             schema = jsonable_encoder(await generate_openapi_schema(session, data_model_id, **flags))
         except HTTPException as e:
             schema = {"x-http-error": {"status_code": e.status_code, "detail": e.detail}}
+        except PortabilityErrorGroup as group:
+            schema = {"x-http-error": {"status_code": 422, "detail": list_refusals(group)}}
         schemas[flag_key(flags)] = schema
     session.expunge_all()
     return schemas

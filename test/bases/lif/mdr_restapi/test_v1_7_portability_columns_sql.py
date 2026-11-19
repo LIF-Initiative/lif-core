@@ -116,6 +116,17 @@ class TestV17Backfill:
             assert array is (attribute_array == "Yes")
 
     def test_flags_come_from_the_models_own_inclusion_row_else_the_default(self, apply_migration, pg_conn, bare_tenant):
+        # The seed's own-element inclusion rows were on models 17 and 18, which #1513 converted, so add one
+        # per element type, with flags that aren't the defaults.
+        with pg_conn.cursor() as cur:
+            for table, element_type in (("Entities", "Entity"), ("Attributes", "Attribute")):
+                cur.execute(
+                    f'INSERT INTO "{bare_tenant}"."ExtInclusionsFromBaseDM" ("ExtDataModelId", "ElementType", '
+                    '"IncludedElementId", "LevelOfAccess", "Queryable", "Modifiable", "Deleted") '
+                    f'SELECT "DataModelId", %s, "Id", \'Restricted\', true, true, false FROM "{bare_tenant}"."{table}" '
+                    'WHERE NOT coalesce("Deleted", false) ORDER BY "Id" LIMIT 1',
+                    (element_type,),
+                )
         apply_migration(V1_7)
         with pg_conn.cursor() as cur:
             for table, element_type in (("Entities", "Entity"), ("Attributes", "Attribute")):
@@ -129,7 +140,7 @@ class TestV17Backfill:
                 )
                 rows = cur.fetchall()
                 with_inclusion = [r for r in rows if r[4] is not None]
-                # The seed's own-element inclusion rows (models 17 and 18) must keep their flags;
+                # Own-element inclusion rows must keep their flags;
                 # they are what a WHERE ... IS NULL backfill would miss if the default came first.
                 assert with_inclusion, table
                 assert any(r[4:] != ("Public", False, False) for r in with_inclusion), table
