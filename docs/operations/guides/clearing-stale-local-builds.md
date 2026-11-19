@@ -18,7 +18,7 @@ Background: [Google's announcement](https://blog.google/security/protecting-chro
 
 The step deny-lists the four roots in `/etc/ca-certificates.conf`, then fails the build if any of them is still trusted under a name its `sed` doesn't match, so a renamed entry can't pass silently. The base images use floating tags or older Debian releases, which is why the step doesn't rely on today's `ca-certificates` already dropping them: the Dagster+ agent's Debian 12 image (`ca-certificates` 20230311+deb12u1) still trusted all four before the step.
 
-Images LIF doesn't build, such as MongoDB, MariaDB and nginx, aren't covered (#1480).
+The images LIF builds on MongoDB, MariaDB, nginx and Flyway bases run none of LIF's Python or Dagster code, and don't get the step (#1480).
 
 A rebuild with a warm cache can keep an old layer, an old base image or an old `certifi`. If you built LIF before these fixes, follow the steps below once. They're optional and don't change the repo.
 
@@ -47,7 +47,8 @@ uv cache clean certifi
 uv sync --locked
 
 # 3. Build outputs: remove wheels and exported requirements left by build.sh
-rm -rf projects/*/dist projects/*/requirements.txt
+# (find, not a glob: zsh stops on a glob that matches nothing)
+find projects -mindepth 2 -maxdepth 2 \( -name dist -o -name requirements.txt \) -exec rm -rf {} +
 
 # 4. Docker: stop each LIF stack and remove the images it built
 for f in deployments/advisor-demo-docker/docker-compose.yml \
