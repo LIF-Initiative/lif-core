@@ -21,7 +21,7 @@ Business logic for the MDR API. Each `*_service.py` module owns a slice of MDR f
 | `portability_helpers.py` | Helpers the three converters share: `find_model`, `without_nulls`, `to_json` (#1430) |
 | `inclusions_service.py` | Reusable attribute groups (Contact, Address, etc.) |
 | `jinja_helper_service.py`, `jinja_translation_service.py` | Jinja-based template + translation generation |
-| `schema_generation_service.py` | Builds OpenAPI schemas from MDR content (the schema `mdr_client` fetches) |
+| `schema_generation_service.py` | Builds OpenAPI schemas from MDR content (the schema `mdr_client` fetches). Refuses a model the portability rules refuse, through `portability_converter.export_model` (#1468) |
 | `schema_upload_service.py` | Accepts a new schema upload and persists it |
 | `search_service.py` | MDR-wide full-text search |
 | `tag_service.py` | Tagging for entities/attributes |

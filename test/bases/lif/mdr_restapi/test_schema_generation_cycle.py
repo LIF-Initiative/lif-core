@@ -19,7 +19,13 @@ MODEL_ID = 29
 
 @pytest.fixture
 async def session(unconverted_db_session):
-    """Model 29 (Open Badges v3) is gone from the seed since #1513, so these run on the unconverted seed."""
+    """Model 29 (Open Badges v3) is gone from the seed since #1513, so these run on the unconverted seed.
+
+    There, model 29 is generated only because schema generation still lets NOT_MIGRATED through
+    (CODES_NOT_YET_REFUSED, #1468). When that pass goes, the portability check refuses model 29, and an
+    embedded cycle with it (ASSOCIATION_CYCLE), before this guard runs. These tests then go with the
+    guard (#1463).
+    """
     test_db_session = unconverted_db_session
     try:
         yield test_db_session

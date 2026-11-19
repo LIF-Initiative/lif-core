@@ -62,18 +62,19 @@ contributor organization**, not by Id. The Translator works by Id: its caller pa
 Ids in the URL (the planner's sources config sends 26 → 17). In the compose file: `OPENAPI_DATA_MODEL_NAME=StateU LIF`, `OPENAPI_DATA_MODEL_VERSION=1.0`,
 `OPENAPI_DATA_MODEL_CONTRIBUTOR_ORGANIZATION=StateU`.
 
-### Overlays are gone (dev and the local seed: converted; demo won't be)
+### Overlays are gone
 
-Models 17 and 18 were **overlays** on dev until #1388 and in the local seed until #1513: they built
+Models 17 and 18 were **overlays** until #1388 converted them, and in the local seed until #1513: they built
 on model 1 and added or included parts of it, rather than holding everything themselves. ADR data_model/0004
 ([`docs/design/adr/data_model/0004-retire-overlays-variants-as-copies.md`](../../design/adr/data_model/0004-retire-overlays-variants-as-copies.md), Accepted) retires this:
 
 - every model will be **self-contained**, with one kind of model instead of four types;
 - a variant of a model is a **copy**, and **schema diff** shows how two models differ;
 - 17 and 18 are converted once, in place, so they produce the same schema as before (#1388, done:
-  `scripts/convert_overlays.py`, #1489). The conversion is applied on dev, in all 10 schemas, and in the local
-  seed (`projects/lif_mdr_database/backup.sql`, #1513). Demo won't be converted. A fresh environment
-  built by Flyway starts from V1.1, which still has the overlays ([`deployment.md`](../../operations/guides/deployment.md)).
+  `scripts/convert_overlays.py`, #1489). The local seed (`projects/lif_mdr_database/backup.sql`) is converted
+  (#1513). An MDR that still holds overlays, such as one deployed before #1388 or a fresh environment built by
+  Flyway from V1.1, keeps them until `scripts/convert_overlays.py` runs on it
+  ([`deployment.md`](../../operations/guides/deployment.md)).
 
 Older docs and ADRs (metadata_repository/0004, 0008; data_model/0002) describe the overlay model:
 inclusions, extensions, Org LIF vs Partner LIF. Read them as history.

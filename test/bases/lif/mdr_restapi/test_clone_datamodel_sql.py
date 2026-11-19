@@ -4,8 +4,10 @@ clone_datamodel used to drop fields that change what the model means: Relationsh
 entity associations, Required and Array on elements, TargetEntityId on attributes. Before that it
 failed outright on Postgres, because the new DataModel's Deleted was inserted as NULL. These tests
 run the clone against the seed and compare the generated schemas, which covers every dropped field
-at once. They use the unconverted seed (#1513), whose CASE and Open Badges v3 still have attributes with
-TargetEntityId; the committed seed's CASE came from dev and has none, and its Open Badges v3 is gone.
+the portable format keeps (Relationship, Placement, Required, Array). They use two of the seed's
+self-contained models, so schema generation's portability check passes on its own merits (#1468).
+TargetEntityId isn't covered: the format retired that form, and no self-contained model in the seed has
+one.
 """
 
 import pytest
@@ -16,8 +18,8 @@ from lif.mdr_services.import_export_service import clone_datamodel
 from lif.mdr_services.schema_generation_service import generate_openapi_schema
 from lif.mdr_sql_model.core import DataModel, DataModelType
 
+CLR_V2_OB3 = 3
 CASE = 14
-OPEN_BADGES_V3 = 29
 
 # The metadata flags and full_export emit row Ids (value sets' too) and dates, which differ between a
 # source and its clone by design.
@@ -48,9 +50,9 @@ async def _generate(session, data_model_id: int, flags: dict) -> dict:
     return _without_required_order(schema)
 
 
-@pytest.mark.parametrize("source_id", [CASE, OPEN_BADGES_V3], ids=["CASE", "Open Badges v3"])
-async def test_a_clone_generates_the_same_schema_as_its_source(unconverted_db_session, source_id):
-    session = unconverted_db_session
+@pytest.mark.parametrize("source_id", [CLR_V2_OB3, CASE], ids=["CLR v2 / Open Badges v3", "CASE"])
+async def test_a_clone_generates_the_same_schema_as_its_source(test_db_session, source_id):
+    session = test_db_session
     source = await session.get(DataModel, source_id)
     clone = await clone_datamodel(
         session,
@@ -61,6 +63,10 @@ async def test_a_clone_generates_the_same_schema_as_its_source(unconverted_db_se
             data_model_version=source.DataModelVersion,
         ),
     )
+    # clone_datamodel sets no ContributorOrganization (CreateCloneDTO has none), so the clone's portable
+    # identity is incomplete and schema generation would refuse it once NOT_MIGRATED's temporary pass is
+    # gone (#1468). Give it one, so the comparison runs; which organization a clone should get is open.
+    clone.ContributorOrganization = source.ContributorOrganization
     await session.commit()
 
     for flags in FLAG_MATRIX:

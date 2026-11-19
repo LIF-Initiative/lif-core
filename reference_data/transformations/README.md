@@ -23,20 +23,19 @@
   all of its paths; otherwise the whole file is refused and nothing is written.
   Re-running the script is safe: a group already installed is refused with `GROUP_EXISTS` (409).
   An imported group arrives inactive (#1350).
-- **Old-format** files come from `GET /transformation_groups/{id}/export`. The script skips them.
+- **Old-format** files come from `GET /transformation_groups/{id}/export`. None are left at this
+  level; the script would skip one.
 
 ### Where the portable files import
 
-All three files name StateU LIF version `1.0` (`StateU`), and their paths need the StateU LIF in
-dev's `tenant_lif_team`, which has more entities than the one in dev's `public`. Since #1513, the
-seed's CLR v2 / Open Badges v3, Ed-Fi v5 and StateU LIF are dev's `tenant_lif_team` versions, so
-every file imports, every rule, into both of the seed's schemas, and into dev's `tenant_lif_team`.
-None of them imports into dev's `public`, whose StateU LIF lacks paths each one uses (no
-`Organization` entity, for one).
+All three files name StateU LIF version `1.0` (`StateU`). Since #1513, the seed's CLR v2 / Open
+Badges v3, Ed-Fi v5 and StateU LIF are the versions the files were written against, so every file
+imports, every rule, into both of the seed's schemas. A schema whose StateU LIF lacks a path a file
+uses, such as the `Organization` entity, refuses that whole file.
 
-- `Ed-Fi-v5_StateU-LIF__v1.0.json` is group 29 exported from dev's `tenant_lif_team` (#1511).
-- The two outbound files were converted from the old format (#1511). Their groups on dev have
-  never had mappings, so there was nothing there to export them from. Each old file was loaded
+- `Ed-Fi-v5_StateU-LIF__v1.0.json` is group 29, exported from dev's `tenant_lif_team` (#1511).
+- The two outbound files were converted from the old format (#1511). Their groups had no mappings
+  in any deployed MDR, so there was nothing to export them from. Each old file was loaded
   into the seed with `POST /transformation_groups/{id}/import` and exported with
   `GET /portable/mapping_groups/{id}`; both of the seed's schemas give the same file. Every
   converted rule has the old rule's name, expression, target and sources. Two old CLR v2 /

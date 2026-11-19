@@ -71,7 +71,9 @@ def test_stored_attribute_association_name_and_array_match_the_python_rule(pg_co
         cur.execute(
             f'SELECT x."Id", a."Name", a."Array", x."Name", x."Array", a."DataModelId" '
             f'FROM "{schema}"."EntityAttributeAssociation" x '
-            f'JOIN "{schema}"."Attributes" a ON a."Id" = x."AttributeId" WHERE x."Name" IS NOT NULL'
+            f'JOIN "{schema}"."Attributes" a ON a."Id" = x."AttributeId" '
+            'WHERE x."Name" IS NOT NULL OR a."DataModelId" IN %s',
+            (GENERATED_NAME_MODELS,),
         )
         rows = cur.fetchall()
     assert len(rows) >= MIN_ROWS
@@ -79,7 +81,7 @@ def test_stored_attribute_association_name_and_array_match_the_python_rule(pg_co
         row
         for row in rows
         if (
-            row[4] is None
+            (row[3] is None or row[4] is None)
             if row[5] in GENERATED_NAME_MODELS
             else (row[3], row[4]) != (row[1], association_array(row[2]))
         )
