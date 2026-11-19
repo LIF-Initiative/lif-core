@@ -12,7 +12,9 @@ from typing import Any, Iterator
 import pytest
 
 SAMPLE_DATA = Path(__file__).resolve().parents[2] / "projects" / "mongodb" / "sample_data"
-SAMPLE_FILES = sorted(SAMPLE_DATA.glob("*/*.json"))
+# Folders of deliberately flawed records (#1525): some of their references are broken on purpose.
+DELIBERATELY_FLAWED = {"dev-single-org-degraded"}
+SAMPLE_FILES = sorted(p for p in SAMPLE_DATA.glob("*/*.json") if p.parent.name not in DELIBERATELY_FLAWED)
 
 
 def _organization_references(node: Any) -> Iterator[dict[str, Any]]:
