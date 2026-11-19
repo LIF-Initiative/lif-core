@@ -37,10 +37,12 @@ from sqlmodel import select
 
 Code = PortabilityErrorCode
 
-_Q = TypeVar("_Q", bound=Select)
+_Query = TypeVar("_Query", bound=Select)
 
 
-def _restrict_to_live_mappings(query: _Q, source_value: type[ValueSetValue], target_value: type[ValueSetValue]) -> _Q:
+def _restrict_to_live_mappings(
+    query: _Query, source_value: type[ValueSetValue], target_value: type[ValueSetValue]
+) -> _Query:
     """Restrict a select to the live value mappings (§2), joined to both of their values.
 
     A value mapping is live only when it, both of its values, and its group (if it has one) are live.

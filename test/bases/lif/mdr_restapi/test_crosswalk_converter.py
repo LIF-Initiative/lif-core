@@ -357,32 +357,14 @@ async def test_a_pair_with_no_live_mappings_exports_no_entries_and_imports_nothi
 
 
 async def test_every_seed_crosswalk_exports_and_round_trips(seed_db_session):
-    """The seed's live value mappings: 7 pairs. Every crosswalk is exported, its rows are soft-deleted
-    and the file is imported back, and exporting again gives the same bytes. Nothing is committed."""
+    """The seed's live value mappings: 6 pairs, as list_crosswalk_pairs finds them. Every crosswalk is
+    exported, its rows are soft-deleted and the file is imported back, and exporting again gives the same
+    bytes. Nothing is committed."""
     session = seed_db_session
-    source_value, target_value = aliased(ValueSetValue), aliased(ValueSetValue)
-    source_set, target_set = aliased(ValueSet), aliased(ValueSet)
-    pairs = (
-        await session.execute(
-            select(source_value.ValueSetId, target_value.ValueSetId)
-            .select_from(ValueSetValueMapping)
-            .join(source_value, source_value.Id == ValueSetValueMapping.SourceValueId)
-            .join(target_value, target_value.Id == ValueSetValueMapping.TargetValueId)
-            .join(source_set, source_set.Id == source_value.ValueSetId)
-            .join(target_set, target_set.Id == target_value.ValueSetId)
-            .where(
-                ValueSetValueMapping.Deleted.is_not(True),
-                source_value.Deleted.is_not(True),
-                target_value.Deleted.is_not(True),
-                source_set.Deleted.is_not(True),
-                target_set.Deleted.is_not(True),
-            )
-            .distinct()
-            .order_by(source_value.ValueSetId, target_value.ValueSetId)
-        )
-    ).all()
+    source_value = aliased(ValueSetValue)
+    pairs = await list_crosswalk_pairs(session)
     # 343 -> 347 was model 25's test value set, which #1513 removed with the rest of the test data.
-    assert len(pairs) == 6
+    assert pairs == [(76, 52), (310, 284), (313, 287), (314, 288), (315, 290), (464, 52)]
 
     try:
         files = {pair: dump_canonical(await export_crosswalk(session, *pair)) for pair in pairs}
