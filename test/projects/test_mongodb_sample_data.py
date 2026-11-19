@@ -21,7 +21,7 @@ def _organization_references(node: Any) -> Iterator[dict[str, Any]]:
     """Yield every object stored under a ``...RefOrganization`` key."""
     if isinstance(node, dict):
         for key, value in node.items():
-            if "reforganization" in key.lower():
+            if "RefOrganization" in key:
                 for ref in value if isinstance(value, list) else [value]:
                     if isinstance(ref, dict) and "identifier" in ref:
                         yield ref
