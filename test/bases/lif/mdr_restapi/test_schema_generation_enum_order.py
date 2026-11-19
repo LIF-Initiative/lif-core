@@ -34,8 +34,9 @@ async def test_enum_values_follow_id_order(session):
     value_ids = [
         await _insert(
             session,
-            f'INSERT INTO "ValueSetValues" ("ValueSetId", "Value", "DataModelId") '
-            f"VALUES ({value_set}, '{value}', {MODEL_ID})",
+            # A value with no ValueName is refused by the portability rules (§5.3), so generation would be too.
+            f'INSERT INTO "ValueSetValues" ("ValueSetId", "ValueName", "Value", "DataModelId") '
+            f"VALUES ({value_set}, '{value}', '{value}', {MODEL_ID})",
         )
         for value in "abc"
     ]

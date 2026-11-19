@@ -4,7 +4,7 @@ import type { PortableFailure } from "@/services/portableService";
 
 export interface RefusalListProps {
   failure: PortableFailure;
-  action: "import" | "export";
+  action: "import" | "export" | "generate";
 }
 
 /** Every reason the MDR API refused a portable file, or its one message. */
@@ -16,6 +16,8 @@ const RefusalList: React.FC<RefusalListProps> = ({ failure, action }) => {
   // 409: every refusal is a create-only conflict, so the file is fine and its content is already installed.
   const summary = action === "export"
     ? `This can't be exported as a portable file, for ${reasons}:`
+    : action === "generate"
+    ? `This model's schema can't be generated, for ${reasons}:`
     : failure.status === 409
       ? "This content is already installed. Nothing was imported:"
       : `The file was refused for ${reasons}. Nothing was imported:`;

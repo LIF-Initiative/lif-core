@@ -820,14 +820,17 @@ const ModelTree: React.FC<ModelTreeProps> = ({
     } else { alertDialog('Edit Model Dialog', 'Unable to get model parameters at this time.'); }
   };
 
-  // HANDLE DOWNLOAD WITH TOAST ERROR HANDLING
+  // HANDLE DOWNLOAD WITH TOAST ERROR HANDLING: a model the portability rules refuse lists every reason in a dialog
+  const [schemaFailure, setSchemaFailure] = useState<PortableFailure | null>(null);
   const handleDownloadWithToast = async (id: number, type?: string, pub?: boolean) => {
     try {
       await downloadOpenApiSchema(id, type, pub);
       showToast("File downloaded successfully", 'success');
     } catch (e) {
       // console.log("Failed to download OpenApi Schema file", e);
-      showToast(errorToString(e), 'error');
+      const failure = describePortableFailure(e);
+      if (failure.kind === "refused") setSchemaFailure(failure);
+      else showToast(errorToString(e), 'error');
     }
   };
 
@@ -1231,6 +1234,12 @@ const ModelTree: React.FC<ModelTreeProps> = ({
         failure={portableFailure}
         action="export"
         onClose={() => setPortableFailure(null)}
+      />
+      <PortableFailureDialog
+        title={`${model.Name}'s schema can't be generated`}
+        failure={schemaFailure}
+        action="generate"
+        onClose={() => setSchemaFailure(null)}
       />
       <SimpleAlertDialog
         isOpen={!!dialogOptions.alertDialog}
