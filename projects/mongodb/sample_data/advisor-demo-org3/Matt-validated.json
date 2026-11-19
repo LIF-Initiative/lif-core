@@ -149,7 +149,7 @@
             "identificationSystem": "Summit Valley University SIS",
             "organizationType": [],
             "informationSourceOrganization": "Summit Valley University",
-            "identifier": "organization-summit-valley-university-org3-001"
+            "identifier": "org-org3-summit-valley-university"
           },
           "RefCourse": {
             "informationSourceId": "Org3",
@@ -175,7 +175,7 @@
             ],
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Summit Valley University",
-            "identifier": "organization-state-university-org3-001"
+            "identifier": "organization-state-university-org3-004"
           },
           "RefCredentialAward": {
             "informationSourceId": "Org3",
@@ -197,7 +197,7 @@
             "identificationSystem": "Summit Valley University SIS",
             "organizationType": [],
             "informationSourceOrganization": "Summit Valley University",
-            "identifier": "organization-summit-valley-university-org3-001"
+            "identifier": "org-org3-summit-valley-university"
           },
           "RefCourse": {
             "informationSourceId": "Org3",
@@ -223,7 +223,7 @@
             ],
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Summit Valley University",
-            "identifier": "organization-state-university-org3-001"
+            "identifier": "organization-state-university-org3-004"
           },
           "RefCredentialAward": {
             "informationSourceId": "Org3",
@@ -245,7 +245,7 @@
             "identificationSystem": "Summit Valley University SIS",
             "organizationType": [],
             "informationSourceOrganization": "Summit Valley University",
-            "identifier": "organization-summit-valley-university-org3-001"
+            "identifier": "org-org3-summit-valley-university"
           },
           "RefCourse": {
             "informationSourceId": "Org3",
@@ -271,7 +271,7 @@
             ],
             "informationSourceId": "Org3",
             "informationSourceOrganization": "Summit Valley University",
-            "identifier": "organization-state-university-org3-001"
+            "identifier": "organization-state-university-org3-004"
           },
           "RefCredentialAward": {
             "informationSourceId": "Org3",
@@ -855,7 +855,7 @@
         "identificationSystem": "summit-valley-university-sis",
         "organizationType": [],
         "informationSourceOrganization": "Summit Valley University",
-        "identifier": "organization-summit-valley-university-org3-001"
+        "identifier": "org-org3-summit-valley-university"
       },
       "Accreditation": [
         {

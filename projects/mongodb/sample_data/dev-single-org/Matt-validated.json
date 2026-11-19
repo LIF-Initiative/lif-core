@@ -2427,7 +2427,7 @@
                 "name": "Cyberz",
                 "informationSourceId": "Single-Org",
                 "informationSourceOrganization": "State University",
-                "identifier": "organization-cyberz-single-org-001"
+                "identifier": "organization-cyberz-single-org-006"
               },
               "informationSourceId": "Single-Org",
               "informationSourceOrganization": "State University",
@@ -2443,7 +2443,7 @@
             ],
             "informationSourceId": "Single-Org",
             "informationSourceOrganization": "State University",
-            "identifier": "organization-employing-organization-single-org-001"
+            "identifier": "organization-employing-organization-single-org-003"
           },
           "OfferedByRefOrganization": {
             "identificationSystem": "stateu-training-provider-id",
@@ -2453,7 +2453,7 @@
             ],
             "informationSourceId": "Single-Org",
             "informationSourceOrganization": "State University",
-            "identifier": "organization-training-provider-single-org-001"
+            "identifier": "organization-training-provider-single-org-007"
           },
           "ApprovedByRefOrganization": [
             {
@@ -2490,7 +2490,7 @@
                 "name": "U S Army",
                 "informationSourceId": "Single-Org",
                 "informationSourceOrganization": "State University",
-                "identifier": "organization-u-s-army-single-org-001"
+                "identifier": "organization-u-s-army-single-org-008"
               },
               "informationSourceId": "Single-Org",
               "informationSourceOrganization": "State University",
@@ -2506,7 +2506,7 @@
             ],
             "informationSourceId": "Single-Org",
             "informationSourceOrganization": "State University",
-            "identifier": "organization-employing-organization-single-org-001"
+            "identifier": "organization-employing-organization-single-org-003"
           },
           "OfferedByRefOrganization": {
             "identificationSystem": "stateu-training-provider-id",
@@ -2516,7 +2516,7 @@
             ],
             "informationSourceId": "Single-Org",
             "informationSourceOrganization": "State University",
-            "identifier": "organization-training-provider-single-org-001"
+            "identifier": "organization-training-provider-single-org-007"
           },
           "ApprovedByRefOrganization": [
             {
@@ -2553,7 +2553,7 @@
                 "name": "U S Army",
                 "informationSourceId": "Single-Org",
                 "informationSourceOrganization": "State University",
-                "identifier": "organization-u-s-army-single-org-001"
+                "identifier": "organization-u-s-army-single-org-008"
               },
               "informationSourceId": "Single-Org",
               "informationSourceOrganization": "State University",
@@ -2569,7 +2569,7 @@
             ],
             "informationSourceId": "Single-Org",
             "informationSourceOrganization": "State University",
-            "identifier": "organization-employing-organization-single-org-001"
+            "identifier": "organization-employing-organization-single-org-003"
           },
           "OfferedByRefOrganization": {
             "identificationSystem": "stateu-training-provider-id",
@@ -2579,7 +2579,7 @@
             ],
             "informationSourceId": "Single-Org",
             "informationSourceOrganization": "State University",
-            "identifier": "organization-training-provider-single-org-001"
+            "identifier": "organization-training-provider-single-org-007"
           },
           "ApprovedByRefOrganization": [
             {
@@ -2616,7 +2616,7 @@
                 "name": "U S Army",
                 "informationSourceId": "Single-Org",
                 "informationSourceOrganization": "State University",
-                "identifier": "organization-u-s-army-single-org-001"
+                "identifier": "organization-u-s-army-single-org-008"
               },
               "informationSourceId": "Single-Org",
               "informationSourceOrganization": "State University",
@@ -2632,7 +2632,7 @@
             ],
             "informationSourceId": "Single-Org",
             "informationSourceOrganization": "State University",
-            "identifier": "organization-employing-organization-single-org-001"
+            "identifier": "organization-employing-organization-single-org-003"
           },
           "OfferedByRefOrganization": {
             "identificationSystem": "stateu-training-provider-id",
@@ -2642,7 +2642,7 @@
             ],
             "informationSourceId": "Single-Org",
             "informationSourceOrganization": "State University",
-            "identifier": "organization-training-provider-single-org-001"
+            "identifier": "organization-training-provider-single-org-007"
           },
           "ApprovedByRefOrganization": [
             {
@@ -3131,6 +3131,16 @@
       "description": "Computing Technology Industry Association — issues vendor-neutral IT certifications such as Security+.",
       "identificationSystem": "comptia-org-id",
       "identifier": "organization-comptia-single-org-011"
+    },
+    {
+      "identificationSystem": "stateu-approving-authority-id",
+      "name": "Approving Authority",
+      "organizationType": [
+        "Regulatory Body"
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "identifier": "organization-approving-authority-single-org-001"
     }
   ],
   "Credential": [
@@ -3858,7 +3868,7 @@
         "organizationType": [],
         "informationSourceId": "Single-Org",
         "informationSourceOrganization": "State University",
-        "identifier": "organization-san-antonio-university-single-org-001"
+        "identifier": "organization-san-antonio-university-single-org-010"
       },
       "Accreditation": [
         {
