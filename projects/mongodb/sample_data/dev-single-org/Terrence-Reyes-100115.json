@@ -1,0 +1,735 @@
+{
+  "Person": [
+    {
+      "Name": [
+        {
+          "middleName": "David",
+          "firstName": "Terrence",
+          "lastName": "Reyes",
+          "identifier": "name-terrence-reyes-single-org-001",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "Identifier": [
+        {
+          "identifier": "100115",
+          "identifierType": "SCHOOL_ASSIGNED_NUMBER",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "Contact": [
+        {
+          "identifier": "contact-terrence-reyes-single-org-001",
+          "Email": [
+            {
+              "emailAddress": [
+                "treyes_lifdemo@stateu.edu"
+              ],
+              "identifier": "email-terrence-reyes-single-org-001",
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University"
+            }
+          ],
+          "Address": [
+            {
+              "addressStreet": "7579 Maple Ave",
+              "addressCity": "Kansas City",
+              "addressState": "Missouri",
+              "addressPostalCode": "64106",
+              "countryCode": "US",
+              "identifier": "address-terrence-reyes-single-org-001",
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University"
+            }
+          ],
+          "Telephone": [
+            {
+              "telephoneNumber": [
+                "+18165550115"
+              ],
+              "identifier": "telephone-terrence-reyes-single-org-001",
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University"
+            }
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "Birth": [
+        {
+          "identifier": "birth-terrence-reyes-single-org-001",
+          "birthDate": "2000-09-28",
+          "cityOfBirth": "Fresno",
+          "stateOfBirth": "California",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "SexAndGender": [
+        {
+          "identifier": "sexandgender-terrence-reyes-single-org-001",
+          "sex": "Male",
+          "gender": "Male",
+          "pronouns": "he/him",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "CourseLearningExperience": [
+        {
+          "identifier": "courselearningexperience-terrence-reyes-c172-single-org-001",
+          "name": "Network and Security - Foundations",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2025-03-09",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2025-04-27",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "Competent",
+          "courseTotal": "3",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "C172-01",
+          "institution": "State University",
+          "department": "College of Information Technology",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Network and Security - Foundations",
+            "identifier": "course-c172-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-terrence-reyes-d315-single-org-002",
+          "name": "Network and Security - Applications",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2025-05-04",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2025-06-29",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "Competent",
+          "courseTotal": "4",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "D315-01",
+          "institution": "State University",
+          "department": "College of Information Technology",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Network and Security - Applications",
+            "identifier": "course-d315-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-terrence-reyes-d316-single-org-003",
+          "name": "IT Foundations",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2025-07-02",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2025-08-06",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "Competent",
+          "courseTotal": "4",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "D316-01",
+          "institution": "State University",
+          "department": "College of Information Technology",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "IT Foundations",
+            "identifier": "course-d316-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-terrence-reyes-d317-single-org-004",
+          "name": "IT Applications",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2025-09-22",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2025-11-03",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "Competent",
+          "courseTotal": "4",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "D317-01",
+          "institution": "State University",
+          "department": "College of Information Technology",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "IT Applications",
+            "identifier": "course-d317-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-terrence-reyes-d322-single-org-005",
+          "name": "Introduction to IT",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2025-11-10",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2025-12-29",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "Competent",
+          "courseTotal": "4",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "D322-01",
+          "institution": "State University",
+          "department": "College of Information Technology",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Introduction to IT",
+            "identifier": "course-d322-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-terrence-reyes-d336-single-org-006",
+          "name": "Business of IT - Applications",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2026-01-05",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2026-03-02",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "Competent",
+          "courseTotal": "4",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "D336-01",
+          "institution": "State University",
+          "department": "College of Information Technology",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Business of IT - Applications",
+            "identifier": "course-d336-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-terrence-reyes-d430-single-org-007",
+          "name": "Fundamentals of Information Security",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2026-03-05",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2026-04-09",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "Not Yet Competent",
+          "courseTotal": "3",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "D430-01",
+          "institution": "State University",
+          "department": "College of Information Technology",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Fundamentals of Information Security",
+            "identifier": "course-d430-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-terrence-reyes-d431-single-org-008",
+          "name": "Digital Forensics in Cybersecurity",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2026-05-27",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2026-07-08",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "Competent",
+          "courseTotal": "3",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "D431-01",
+          "institution": "State University",
+          "department": "College of Information Technology",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Digital Forensics in Cybersecurity",
+            "identifier": "course-d431-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-terrence-reyes-d430-single-org-009",
+          "name": "Fundamentals of Information Security",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2026-07-15",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2026-09-02",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "Competent",
+          "courseTotal": "3",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "D430-02",
+          "institution": "State University",
+          "department": "College of Information Technology",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Fundamentals of Information Security",
+            "identifier": "course-d430-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-terrence-reyes-d433-single-org-010",
+          "name": "Threat Hunting and Detection",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2026-09-05",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "enrollmentStatusType": "In Progress",
+          "courseTotal": "3",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "D433-01",
+          "institution": "State University",
+          "department": "College of Information Technology",
+          "currentlyAttendingIndicator": "true",
+          "RefCourse": {
+            "name": "Threat Hunting and Detection",
+            "identifier": "course-d433-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        }
+      ],
+      "ProgramLearningExperience": [
+        {
+          "identifier": "programlearningexperience-terrence-reyes-bs-cyber-single-org-001",
+          "name": "Bachelor of Science in Cybersecurity",
+          "type": "Bachelor's degree program",
+          "participationStatus": "In Progress",
+          "startDate": "2025-03-09",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "RefProgram": {
+            "name": "Bachelor of Science in Cybersecurity",
+            "identifier": "program-bs-cybersecurity-single-org-002",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        }
+      ],
+      "informationSourceId": "Single-Org"
+    }
+  ],
+  "Course": [
+    {
+      "name": "Network and Security - Foundations",
+      "identifier": "course-c172-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "C172",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "Network and Security - Applications",
+      "identifier": "course-d315-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "D315",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "IT Foundations",
+      "identifier": "course-d316-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "D316",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "IT Applications",
+      "identifier": "course-d317-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "D317",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "Introduction to IT",
+      "identifier": "course-d322-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "D322",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "Business of IT - Applications",
+      "identifier": "course-d336-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "D336",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "Fundamentals of Information Security",
+      "identifier": "course-d430-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "D430",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "Digital Forensics in Cybersecurity",
+      "identifier": "course-d431-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "D431",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "Threat Hunting and Detection",
+      "identifier": "course-d433-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "D433",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    }
+  ],
+  "Organization": [
+    {
+      "name": "State University",
+      "description": "State University (StateU) is an accredited online university offering online bachelor's and master's degree programs. The programs are competency-based, student-focused, online, nonprofit university.",
+      "Contact": [
+        {
+          "Address": [
+            {
+              "addressCity": "Dallas",
+              "countryCode": "US",
+              "addressState": "Texas",
+              "addressStreet": "632 East Hwy 3",
+              "addressPostalCode": "75001",
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University",
+              "identifier": "address-state-university-single-org-001"
+            }
+          ],
+          "Email": [
+            {
+              "emailAddress": [
+                "credentials@stateu.edu"
+              ],
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University",
+              "identifier": "email-state-university-single-org-001"
+            }
+          ],
+          "websiteAddress": "https://www.stateu.edu/",
+          "Telephone": [
+            {
+              "telephoneNumber": [
+                "111-222-3333"
+              ],
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University",
+              "identifier": "telephone-state-university-single-org-001"
+            }
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "contact-state-university-single-org-001"
+        }
+      ],
+      "imageUrl": "https://assets.stateu.edu/99da0cfd314920b5cf8cb6c8727e7675",
+      "Identifier": [
+        {
+          "identifier": "833333326",
+          "identifierType": "Federal employer identification number",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        },
+        {
+          "identifier": "23323331",
+          "identifierType": "Dun and Bradstreet number",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        },
+        {
+          "identifier": "https://credentialfinder.org/organization/000/State_University",
+          "identifierType": "credentialfinder.org",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "identificationSystem": "State University SIS",
+      "organizationType": [
+        "University"
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "identifier": "organization-state-university-single-org-001"
+    }
+  ],
+  "Program": [
+    {
+      "name": "Bachelor of Science in Cybersecurity",
+      "description": "Undergraduate degree program in cybersecurity and information assurance.",
+      "identifier": "program-bs-cybersecurity-single-org-002",
+      "programIdentifierSystem": "State University SIS",
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "instructionalProgramCode": "11.1003",
+      "instructionalProgramUse": "CIP 2020",
+      "creditsRequired": "120",
+      "postSecondaryProgramLevel": "Bachelor's Degree",
+      "normalTimeCompletion": "4",
+      "normalTimeCompletionUnits": "Years",
+      "deliveryType": "Online",
+      "distanceEducationProgram": "true",
+      "offeredByRefOrganization": {
+        "name": "State University",
+        "identifier": "organization-state-university-single-org-001",
+        "informationSourceId": "Single-Org",
+        "informationSourceOrganization": "State University"
+      }
+    }
+  ],
+  "informationSourceId": "Single-Org"
+}

@@ -1,0 +1,780 @@
+{
+  "Person": [
+    {
+      "Name": [
+        {
+          "firstName": "Diego",
+          "lastName": "Ibrahim",
+          "identifier": "name-diego-ibrahim-single-org-001",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "Identifier": [
+        {
+          "identifier": "100114",
+          "identifierType": "SCHOOL_ASSIGNED_NUMBER",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "Contact": [
+        {
+          "identifier": "contact-diego-ibrahim-single-org-001",
+          "Email": [
+            {
+              "emailAddress": [
+                "dibrahim_lifdemo@stateu.edu"
+              ],
+              "identifier": "email-diego-ibrahim-single-org-001",
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University"
+            }
+          ],
+          "Address": [
+            {
+              "addressStreet": "1146 Highland Ave",
+              "addressCity": "Pittsburgh",
+              "addressState": "Pennsylvania",
+              "addressPostalCode": "15222",
+              "countryCode": "US",
+              "identifier": "address-diego-ibrahim-single-org-001",
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University"
+            }
+          ],
+          "Telephone": [
+            {
+              "telephoneNumber": [
+                "+14125550114"
+              ],
+              "identifier": "telephone-diego-ibrahim-single-org-001",
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University"
+            }
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "Birth": [
+        {
+          "identifier": "birth-diego-ibrahim-single-org-001",
+          "birthDate": "2005-04-13",
+          "cityOfBirth": "Pittsburgh",
+          "stateOfBirth": "Pennsylvania",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "SexAndGender": [
+        {
+          "identifier": "sexandgender-diego-ibrahim-single-org-001",
+          "sex": "Male",
+          "gender": "Male",
+          "pronouns": "he/him",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "CourseLearningExperience": [
+        {
+          "identifier": "courselearningexperience-diego-ibrahim-cna101-single-org-001",
+          "name": "Nurse Aide Fundamentals",
+          "type": "Postsecondary course",
+          "startDate": "2025-01-13",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2025-05-09",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "C+",
+          "experienceNumericalGrade": "2.3",
+          "courseTotal": "30",
+          "creditUnitType": "Clock hours",
+          "courseSectionNumber": "CNA101-01",
+          "institution": "State University",
+          "department": "College of Health Professions",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Nurse Aide Fundamentals",
+            "identifier": "course-cna101-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-diego-ibrahim-cna102-single-org-002",
+          "name": "Basic Patient Care Skills",
+          "type": "Postsecondary course",
+          "startDate": "2025-01-13",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2025-05-09",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "B-",
+          "experienceNumericalGrade": "2.7",
+          "courseTotal": "30",
+          "creditUnitType": "Clock hours",
+          "courseSectionNumber": "CNA102-01",
+          "institution": "State University",
+          "department": "College of Health Professions",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Basic Patient Care Skills",
+            "identifier": "course-cna102-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-diego-ibrahim-cna103-single-org-003",
+          "name": "Infection Control and Safety",
+          "type": "Postsecondary course",
+          "startDate": "2025-05-26",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2025-08-08",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "B",
+          "experienceNumericalGrade": "3.0",
+          "courseTotal": "30",
+          "creditUnitType": "Clock hours",
+          "courseSectionNumber": "CNA103-01",
+          "institution": "State University",
+          "department": "College of Health Professions",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Infection Control and Safety",
+            "identifier": "course-cna103-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-diego-ibrahim-cna110-single-org-004",
+          "name": "CNA Clinical Practicum",
+          "type": "Postsecondary course",
+          "startDate": "2025-05-26",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2025-08-08",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "B+",
+          "experienceNumericalGrade": "3.3",
+          "courseTotal": "30",
+          "creditUnitType": "Clock hours",
+          "courseSectionNumber": "CNA110-01",
+          "institution": "State University",
+          "department": "College of Health Professions",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "CNA Clinical Practicum",
+            "identifier": "course-cna110-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-diego-ibrahim-c165-single-org-005",
+          "name": "Integrated Physical Sciences",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2026-01-28",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2026-03-25",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "Competent",
+          "courseTotal": "3",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "C165-01",
+          "institution": "State University",
+          "department": "College of Health Professions",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Integrated Physical Sciences",
+            "identifier": "course-c165-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-diego-ibrahim-d265-single-org-006",
+          "name": "Critical Thinking: Reason and Evidence",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2026-03-26",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2026-05-28",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "Competent",
+          "courseTotal": "3",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "D265-01",
+          "institution": "State University",
+          "department": "College of Health Professions",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Critical Thinking: Reason and Evidence",
+            "identifier": "course-d265-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-diego-ibrahim-d269-single-org-007",
+          "name": "Composition: Writing with a Strategy",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2026-06-04",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2026-07-30",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "Competent",
+          "courseTotal": "3",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "D269-01",
+          "institution": "State University",
+          "department": "College of Health Professions",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Composition: Writing with a Strategy",
+            "identifier": "course-d269-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-diego-ibrahim-d311-single-org-008",
+          "name": "Microbiology with Lab",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2026-08-02",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2026-09-13",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "Competent",
+          "courseTotal": "4",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "D311-01",
+          "institution": "State University",
+          "department": "College of Health Professions",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Microbiology with Lab",
+            "identifier": "course-d311-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-diego-ibrahim-d312-single-org-009",
+          "name": "Anatomy and Physiology I with Lab",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2026-09-16",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "enrollmentStatusType": "In Progress",
+          "courseTotal": "4",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "D312-01",
+          "institution": "State University",
+          "department": "College of Health Professions",
+          "currentlyAttendingIndicator": "true",
+          "RefCourse": {
+            "name": "Anatomy and Physiology I with Lab",
+            "identifier": "course-d312-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        }
+      ],
+      "ProgramLearningExperience": [
+        {
+          "identifier": "programlearningexperience-diego-ibrahim-cna-single-org-001",
+          "name": "Certified Nursing Assistant (CNA) Program",
+          "type": "Certificate program",
+          "participationStatus": "Completed",
+          "startDate": "2025-01-13",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2025-08-08",
+          "RefProgram": {
+            "name": "Certified Nursing Assistant (CNA) Program",
+            "identifier": "program-cna-single-org-002",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "programlearningexperience-diego-ibrahim-bsn-single-org-001",
+          "name": "Bachelor of Science in Nursing (BSN)",
+          "type": "Bachelor's degree program",
+          "participationStatus": "In Progress",
+          "startDate": "2026-01-28",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "RefProgram": {
+            "name": "Bachelor of Science in Nursing (BSN)",
+            "identifier": "program-bsn-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        }
+      ],
+      "CredentialAward": [
+        {
+          "identifier": "credentialaward-diego-ibrahim-cna-single-org-001",
+          "name": "Certified Nursing Assistant (CNA) Program",
+          "awardIssueDate": "2025-09-02",
+          "credentialAwardee": "Diego Ibrahim",
+          "awardStatus": "Completed",
+          "InstanceOfRefCredential": {
+            "name": "Certified Nursing Assistant (CNA) Program",
+            "identifier": "credential-cna-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "issuedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org"
+    }
+  ],
+  "Course": [
+    {
+      "name": "Nurse Aide Fundamentals",
+      "identifier": "course-cna101-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "CNA101",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "Basic Patient Care Skills",
+      "identifier": "course-cna102-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "CNA102",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "Infection Control and Safety",
+      "identifier": "course-cna103-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "CNA103",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "CNA Clinical Practicum",
+      "identifier": "course-cna110-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "CNA110",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "Integrated Physical Sciences",
+      "identifier": "course-c165-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "C165",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "Critical Thinking: Reason and Evidence",
+      "identifier": "course-d265-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "D265",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "Composition: Writing with a Strategy",
+      "identifier": "course-d269-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "D269",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "Microbiology with Lab",
+      "identifier": "course-d311-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "D311",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "Anatomy and Physiology I with Lab",
+      "identifier": "course-d312-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "D312",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    }
+  ],
+  "Organization": [
+    {
+      "name": "State University",
+      "description": "State University (StateU) is an accredited online university offering online bachelor's and master's degree programs. The programs are competency-based, student-focused, online, nonprofit university.",
+      "Contact": [
+        {
+          "Address": [
+            {
+              "addressCity": "Dallas",
+              "countryCode": "US",
+              "addressState": "Texas",
+              "addressStreet": "632 East Hwy 3",
+              "addressPostalCode": "75001",
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University",
+              "identifier": "address-state-university-single-org-001"
+            }
+          ],
+          "Email": [
+            {
+              "emailAddress": [
+                "credentials@stateu.edu"
+              ],
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University",
+              "identifier": "email-state-university-single-org-001"
+            }
+          ],
+          "websiteAddress": "https://www.stateu.edu/",
+          "Telephone": [
+            {
+              "telephoneNumber": [
+                "111-222-3333"
+              ],
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University",
+              "identifier": "telephone-state-university-single-org-001"
+            }
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "contact-state-university-single-org-001"
+        }
+      ],
+      "imageUrl": "https://assets.stateu.edu/99da0cfd314920b5cf8cb6c8727e7675",
+      "Identifier": [
+        {
+          "identifier": "833333326",
+          "identifierType": "Federal employer identification number",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        },
+        {
+          "identifier": "23323331",
+          "identifierType": "Dun and Bradstreet number",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        },
+        {
+          "identifier": "https://credentialfinder.org/organization/000/State_University",
+          "identifierType": "credentialfinder.org",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "identificationSystem": "State University SIS",
+      "organizationType": [
+        "University"
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "identifier": "organization-state-university-single-org-001"
+    }
+  ],
+  "Credential": [
+    {
+      "name": "Certified Nursing Assistant (CNA) Program",
+      "identifier": "credential-cna-single-org-001",
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    }
+  ],
+  "Program": [
+    {
+      "name": "Certified Nursing Assistant (CNA) Program",
+      "description": "Clock-hour program preparing students for the state nurse aide examination.",
+      "identifier": "program-cna-single-org-002",
+      "programIdentifierSystem": "State University SIS",
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "creditsRequired": "120",
+      "postSecondaryProgramLevel": "Postsecondary Certificate (less than 1 year)",
+      "normalTimeCompletion": "1",
+      "normalTimeCompletionUnits": "Years",
+      "deliveryType": "Online",
+      "distanceEducationProgram": "true",
+      "offeredByRefOrganization": {
+        "name": "State University",
+        "identifier": "organization-state-university-single-org-001",
+        "informationSourceId": "Single-Org",
+        "informationSourceOrganization": "State University"
+      }
+    },
+    {
+      "name": "Bachelor of Science in Nursing (BSN)",
+      "description": "Online prelicensure-to-baccalaureate nursing degree program.",
+      "identifier": "program-bsn-single-org-001",
+      "programIdentifierSystem": "State University SIS",
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "instructionalProgramCode": "51.3801",
+      "instructionalProgramUse": "CIP 2020",
+      "creditsRequired": "120",
+      "postSecondaryProgramLevel": "Bachelor's Degree",
+      "normalTimeCompletion": "4",
+      "normalTimeCompletionUnits": "Years",
+      "deliveryType": "Online",
+      "distanceEducationProgram": "true",
+      "offeredByRefOrganization": {
+        "name": "State University",
+        "identifier": "organization-state-university-single-org-001",
+        "informationSourceId": "Single-Org",
+        "informationSourceOrganization": "State University"
+      }
+    }
+  ],
+  "informationSourceId": "Single-Org"
+}

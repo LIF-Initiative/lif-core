@@ -21,5 +21,5 @@ router = APIRouter()
 
 @router.get("/personas", response_model=list[dict[str, Any]])
 async def list_demo_personas() -> list[dict[str, Any]]:
-    """Return the curated demo learners (the same six the Advisor app uses)."""
+    """Return the curated demo learners (the same set the Advisor app uses)."""
     return get_demo_personas_as_dicts()

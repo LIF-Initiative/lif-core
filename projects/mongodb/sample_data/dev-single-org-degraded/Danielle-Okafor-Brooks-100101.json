@@ -1,0 +1,643 @@
+{
+  "Person": [
+    {
+      "Name": [
+        {
+          "middleName": "Adaeze",
+          "firstName": "Danielle",
+          "lastName": "Okafor-Brooks",
+          "identifier": "name-danielle-okafor-brooks-single-org-001",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "nameType": "Legal"
+        },
+        {
+          "firstName": "Danielle",
+          "lastName": "Brooks",
+          "nameType": "Married",
+          "startDate": "2021-06-19",
+          "identifier": "name-danielle-okafor-brooks-single-org-002",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        },
+        {
+          "middleName": "Adaeze",
+          "firstName": "Danielle",
+          "lastName": "Okafor",
+          "nameType": "Former",
+          "endDate": "2021-06-18",
+          "identifier": "name-danielle-okafor-brooks-single-org-003",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        },
+        {
+          "firstName": "Dani",
+          "lastName": "Brooks",
+          "nameType": "Preferred",
+          "identifier": "name-danielle-okafor-brooks-single-org-004",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "Identifier": [
+        {
+          "identifier": "100101",
+          "identifierType": "SCHOOL_ASSIGNED_NUMBER",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "Contact": [
+        {
+          "identifier": "contact-danielle-okafor-brooks-single-org-001",
+          "Email": [
+            {
+              "emailAddress": [
+                "dokaforbrooks_lifdemo@stateu.edu"
+              ],
+              "identifier": "email-danielle-okafor-brooks-single-org-001",
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University"
+            }
+          ],
+          "Address": [
+            {
+              "addressStreet": "6647 Highland Ave",
+              "addressCity": "Sacramento",
+              "addressState": "California",
+              "addressPostalCode": "95814",
+              "countryCode": "US",
+              "identifier": "address-danielle-okafor-brooks-single-org-001",
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University"
+            }
+          ],
+          "Telephone": [
+            {
+              "telephoneNumber": [
+                "+19165550101"
+              ],
+              "identifier": "telephone-danielle-okafor-brooks-single-org-001",
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University"
+            }
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "Birth": [
+        {
+          "identifier": "birth-danielle-okafor-brooks-single-org-001",
+          "birthDate": "1998-10-05",
+          "cityOfBirth": "Des Moines",
+          "stateOfBirth": "Iowa",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "SexAndGender": [
+        {
+          "identifier": "sexandgender-danielle-okafor-brooks-single-org-001",
+          "sex": "Female",
+          "gender": "Female",
+          "pronouns": "she/her",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "CourseLearningExperience": [
+        {
+          "identifier": "courselearningexperience-danielle-okafor-brooks-crcm1-single-org-001",
+          "name": "Regulatory Compliance Fundamentals",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2025-07-17",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2025-09-11",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "Competent",
+          "courseTotal": "3",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "CRCM1-01",
+          "institution": "State University",
+          "department": "College of Business",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Regulatory Compliance Fundamentals",
+            "identifier": "course-crcm1-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-danielle-okafor-brooks-crcm2-single-org-002",
+          "name": "Consumer Lending and Deposit Regulations",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2025-09-13",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2025-10-18",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "Competent",
+          "courseTotal": "3",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "CRCM2-01",
+          "institution": "State University",
+          "department": "College of Business",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Consumer Lending and Deposit Regulations",
+            "identifier": "course-crcm2-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-danielle-okafor-brooks-c200-single-org-003",
+          "name": "Managing Organizations and Leading People",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2026-02-10",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2026-03-24",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "Competent",
+          "courseTotal": "3",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "C200-01",
+          "institution": "State University",
+          "department": "College of Business",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Managing Organizations and Leading People",
+            "identifier": "course-c200-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-danielle-okafor-brooks-c201-single-org-004",
+          "name": "Business Acumen",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2026-03-31",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2026-05-12",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "Competent",
+          "courseTotal": "3",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "C201-01",
+          "institution": "State University",
+          "department": "College of Business",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Business Acumen",
+            "identifier": "course-c201-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-danielle-okafor-brooks-c202-single-org-005",
+          "name": "Managing Human Capital",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2026-05-13",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2026-07-01",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "Competent",
+          "courseTotal": "3",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "C202-01",
+          "institution": "State University",
+          "department": "College of Business",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Managing Human Capital",
+            "identifier": "course-c202-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-danielle-okafor-brooks-c203-single-org-006",
+          "name": "Becoming an Effective Leader",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2026-09-11",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "enrollmentStatusType": "In Progress",
+          "courseTotal": "3",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "C203-01",
+          "institution": "State University",
+          "department": "College of Business",
+          "currentlyAttendingIndicator": "true",
+          "RefCourse": {
+            "name": "Becoming an Effective Leader",
+            "identifier": "course-c203-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        }
+      ],
+      "ProgramLearningExperience": [
+        {
+          "identifier": "programlearningexperience-danielle-okafor-brooks-crcm-single-org-001",
+          "name": "Certified Regulatory Compliance Manager (CRCM) Preparation",
+          "type": "Certificate program",
+          "participationStatus": "Completed",
+          "startDate": "2025-07-17",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2025-10-18",
+          "RefProgram": {
+            "name": "Certified Regulatory Compliance Manager (CRCM) Preparation",
+            "identifier": "program-crcm-prep-single-org-002",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "programlearningexperience-danielle-okafor-brooks-ms-mgmt-single-org-001",
+          "name": "Master of Science (MS): Management and Leadership",
+          "type": "Master's degree program",
+          "participationStatus": "In Progress",
+          "startDate": "2026-02-10",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "RefProgram": {
+            "name": "Master of Science (MS): Management and Leadership",
+            "identifier": "program-ms-management-leadership-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        }
+      ],
+      "CredentialAward": [
+        {
+          "identifier": "credentialaward-danielle-okafor-brooks-crcm-single-org-001",
+          "name": "Certified Regulatory Compliance Manager (CRCM) Preparation",
+          "awardIssueDate": "2025-10-31",
+          "credentialAwardee": "Danielle Okafor-Brooks",
+          "awardStatus": "Completed",
+          "InstanceOfRefCredential": {
+            "name": "Certified Regulatory Compliance Manager (CRCM) Preparation",
+            "identifier": "credential-crcm-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "issuedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org"
+    }
+  ],
+  "Course": [
+    {
+      "name": "Regulatory Compliance Fundamentals",
+      "identifier": "course-crcm1-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "CRCM1",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "Consumer Lending and Deposit Regulations",
+      "identifier": "course-crcm2-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "CRCM2",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "Managing Organizations and Leading People",
+      "identifier": "course-c200-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "C200",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "Business Acumen",
+      "identifier": "course-c201-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "C201",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "Managing Human Capital",
+      "identifier": "course-c202-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "C202",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "Becoming an Effective Leader",
+      "identifier": "course-c203-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "C203",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    }
+  ],
+  "Organization": [
+    {
+      "name": "State University",
+      "description": "State University (StateU) is an accredited online university offering online bachelor's and master's degree programs. The programs are competency-based, student-focused, online, nonprofit university.",
+      "Contact": [
+        {
+          "Address": [
+            {
+              "addressCity": "Dallas",
+              "countryCode": "US",
+              "addressState": "Texas",
+              "addressStreet": "632 East Hwy 3",
+              "addressPostalCode": "75001",
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University",
+              "identifier": "address-state-university-single-org-001"
+            }
+          ],
+          "Email": [
+            {
+              "emailAddress": [
+                "credentials@stateu.edu"
+              ],
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University",
+              "identifier": "email-state-university-single-org-001"
+            }
+          ],
+          "websiteAddress": "https://www.stateu.edu/",
+          "Telephone": [
+            {
+              "telephoneNumber": [
+                "111-222-3333"
+              ],
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University",
+              "identifier": "telephone-state-university-single-org-001"
+            }
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "contact-state-university-single-org-001"
+        }
+      ],
+      "imageUrl": "https://assets.stateu.edu/99da0cfd314920b5cf8cb6c8727e7675",
+      "Identifier": [
+        {
+          "identifier": "833333326",
+          "identifierType": "Federal employer identification number",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        },
+        {
+          "identifier": "23323331",
+          "identifierType": "Dun and Bradstreet number",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        },
+        {
+          "identifier": "https://credentialfinder.org/organization/000/State_University",
+          "identifierType": "credentialfinder.org",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "identificationSystem": "State University SIS",
+      "organizationType": [
+        "University"
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "identifier": "organization-state-university-single-org-001"
+    }
+  ],
+  "Credential": [
+    {
+      "name": "Certified Regulatory Compliance Manager (CRCM) Preparation",
+      "identifier": "credential-crcm-single-org-001",
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    }
+  ],
+  "Program": [
+    {
+      "name": "Certified Regulatory Compliance Manager (CRCM) Preparation",
+      "description": "Professional preparation for the CRCM examination.",
+      "identifier": "program-crcm-prep-single-org-002",
+      "programIdentifierSystem": "State University SIS",
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "creditsRequired": "6",
+      "postSecondaryProgramLevel": "Professional Certificate",
+      "normalTimeCompletion": "1",
+      "normalTimeCompletionUnits": "Years",
+      "deliveryType": "Online",
+      "distanceEducationProgram": "true",
+      "offeredByRefOrganization": {
+        "name": "State University",
+        "identifier": "organization-state-university-single-org-001",
+        "informationSourceId": "Single-Org",
+        "informationSourceOrganization": "State University"
+      }
+    },
+    {
+      "name": "Master of Science (MS): Management and Leadership",
+      "description": "Graduate program in organizational management and leadership.",
+      "identifier": "program-ms-management-leadership-single-org-001",
+      "programIdentifierSystem": "State University SIS",
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "instructionalProgramCode": "52.0201",
+      "instructionalProgramUse": "CIP 2020",
+      "creditsRequired": "30",
+      "postSecondaryProgramLevel": "Master's Degree",
+      "normalTimeCompletion": "2",
+      "normalTimeCompletionUnits": "Years",
+      "deliveryType": "Online",
+      "distanceEducationProgram": "true",
+      "offeredByRefOrganization": {
+        "name": "State University",
+        "identifier": "organization-state-university-single-org-001",
+        "informationSourceId": "Single-Org",
+        "informationSourceOrganization": "State University"
+      }
+    }
+  ],
+  "informationSourceId": "Single-Org"
+}

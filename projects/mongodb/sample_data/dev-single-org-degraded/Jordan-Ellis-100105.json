@@ -1,0 +1,846 @@
+{
+  "Person": [
+    {
+      "Name": [
+        {
+          "firstName": "Jordan",
+          "lastName": "Ellis",
+          "identifier": "name-jordan-ellis-single-org-001",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "Identifier": [
+        {
+          "identifier": "100105",
+          "identifierType": "SCHOOL_ASSIGNED_NUMBER",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "Contact": [
+        {
+          "identifier": "contact-jordan-ellis-single-org-001",
+          "Email": [
+            {
+              "emailAddress": [
+                "jellis_lifdemo@stateu.edu"
+              ],
+              "identifier": "email-jordan-ellis-single-org-001",
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University"
+            },
+            {
+              "emailAddress": [
+                "jordan.ellis.home@example.com"
+              ],
+              "identifier": "email-jordan-ellis-single-org-002",
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University"
+            },
+            {
+              "emailAddress": [
+                "jellis@students.stateu.edu"
+              ],
+              "identifier": "email-jordan-ellis-single-org-003",
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University"
+            }
+          ],
+          "Address": [
+            {
+              "addressStreet": "3332 Park Ave",
+              "addressCity": "Salt Lake City",
+              "addressState": "Utah",
+              "addressPostalCode": "84111",
+              "countryCode": "US",
+              "identifier": "address-jordan-ellis-single-org-001",
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University"
+            }
+          ],
+          "Telephone": [
+            {
+              "telephoneNumber": [
+                "+18015550105"
+              ],
+              "identifier": "telephone-jordan-ellis-single-org-001",
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University"
+            }
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "Birth": [
+        {
+          "identifier": "birth-jordan-ellis-single-org-001",
+          "birthDate": "1998-02-03",
+          "cityOfBirth": "Salt Lake City",
+          "stateOfBirth": "Utah",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "SexAndGender": [
+        {
+          "identifier": "sexandgender-jordan-ellis-single-org-001",
+          "sex": "NotSelected",
+          "gender": "Non-Binary",
+          "pronouns": "they/them",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "CourseLearningExperience": [
+        {
+          "identifier": "courselearningexperience-jordan-ellis-d401-single-org-001",
+          "name": "Assistive Technology for Diverse Learners",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2024-10-24",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2024-11-28",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "Competent",
+          "courseTotal": "3",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "D401-01",
+          "institution": "State University",
+          "department": "Teachers College",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Assistive Technology for Diverse Learners",
+            "identifier": "course-d401-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-jordan-ellis-d402-single-org-002",
+          "name": "Universal Design for Learning",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2024-11-30",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2025-01-18",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "Competent",
+          "courseTotal": "3",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "D402-01",
+          "institution": "State University",
+          "department": "Teachers College",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Universal Design for Learning",
+            "identifier": "course-d402-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-jordan-ellis-d403-single-org-003",
+          "name": "Digital Tools for Differentiated Instruction",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2025-01-20",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2025-03-24",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "Competent",
+          "courseTotal": "3",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "D403-01",
+          "institution": "State University",
+          "department": "Teachers College",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Digital Tools for Differentiated Instruction",
+            "identifier": "course-d403-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-jordan-ellis-d404-single-org-004",
+          "name": "Accessible Digital Content",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2025-03-27",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2025-05-15",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "Competent",
+          "courseTotal": "3",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "D404-01",
+          "institution": "State University",
+          "department": "Teachers College",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Accessible Digital Content",
+            "identifier": "course-d404-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-jordan-ellis-d091-single-org-005",
+          "name": "Introduction to Curriculum, Instruction, and Assessment",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2025-12-13",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2026-01-24",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "Competent",
+          "courseTotal": "3",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "D091-01",
+          "institution": "State University",
+          "department": "Teachers College",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Introduction to Curriculum, Instruction, and Assessment",
+            "identifier": "course-d091-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-jordan-ellis-d094-single-org-006",
+          "name": "Educational Psychology and Development of Children and Adolescents",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2026-01-27",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2026-03-17",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "Competent",
+          "courseTotal": "4",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "D094-01",
+          "institution": "State University",
+          "department": "Teachers College",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Educational Psychology and Development of Children and Adolescents",
+            "identifier": "course-d094-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-jordan-ellis-d095-single-org-007",
+          "name": "Managing Engaging Learning Environments",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2026-03-24",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2026-05-12",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "Competent",
+          "courseTotal": "3",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "D095-01",
+          "institution": "State University",
+          "department": "Teachers College",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Managing Engaging Learning Environments",
+            "identifier": "course-d095-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-jordan-ellis-d168-single-org-008",
+          "name": "Fundamentals of Diverse Learners",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2026-05-13",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2026-06-24",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "Competent",
+          "courseTotal": "3",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "D168-01",
+          "institution": "State University",
+          "department": "Teachers College",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Fundamentals of Diverse Learners",
+            "identifier": "course-d168-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-jordan-ellis-d169-single-org-009",
+          "name": "Schools as Communities of Care",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2026-06-27",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2026-08-29",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "Competent",
+          "courseTotal": "3",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "D169-01",
+          "institution": "State University",
+          "department": "Teachers College",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Schools as Communities of Care",
+            "identifier": "course-d169-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-jordan-ellis-d307-single-org-010",
+          "name": "Technology-Enhanced Learning",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2026-08-30",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "enrollmentStatusType": "In Progress",
+          "courseTotal": "3",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "D307-01",
+          "institution": "State University",
+          "department": "Teachers College",
+          "currentlyAttendingIndicator": "true",
+          "RefCourse": {
+            "name": "Technology-Enhanced Learning",
+            "identifier": "course-d307-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        }
+      ],
+      "ProgramLearningExperience": [
+        {
+          "identifier": "programlearningexperience-jordan-ellis-edtech-cert-single-org-001",
+          "name": "Educational Technology for Inclusive Classrooms Certificate",
+          "type": "Certificate program",
+          "participationStatus": "Completed",
+          "startDate": "2024-10-24",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2025-05-15",
+          "RefProgram": {
+            "name": "Educational Technology for Inclusive Classrooms Certificate",
+            "identifier": "program-edtech-inclusive-cert-single-org-002",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "programlearningexperience-jordan-ellis-ba-elem-ed-single-org-001",
+          "name": "Bachelor of Arts in Elementary Education",
+          "type": "Bachelor's degree program",
+          "participationStatus": "In Progress",
+          "startDate": "2025-12-13",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "RefProgram": {
+            "name": "Bachelor of Arts in Elementary Education",
+            "identifier": "program-ba-elementary-education-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        }
+      ],
+      "CredentialAward": [
+        {
+          "identifier": "credentialaward-jordan-ellis-edtech-cert-single-org-001",
+          "name": "Educational Technology for Inclusive Classrooms Certificate",
+          "awardIssueDate": "2025-06-02",
+          "credentialAwardee": "Jordan Ellis",
+          "awardStatus": "Completed",
+          "InstanceOfRefCredential": {
+            "name": "Educational Technology for Inclusive Classrooms Certificate",
+            "identifier": "credential-edtech-cert-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "issuedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org"
+    }
+  ],
+  "Course": [
+    {
+      "name": "Assistive Technology for Diverse Learners",
+      "identifier": "course-d401-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "D401",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "Universal Design for Learning",
+      "identifier": "course-d402-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "D402",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "Digital Tools for Differentiated Instruction",
+      "identifier": "course-d403-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "D403",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "Accessible Digital Content",
+      "identifier": "course-d404-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "D404",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "Introduction to Curriculum, Instruction, and Assessment",
+      "identifier": "course-d091-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "D091",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "Educational Psychology and Development of Children and Adolescents",
+      "identifier": "course-d094-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "D094",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "Managing Engaging Learning Environments",
+      "identifier": "course-d095-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "D095",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "Fundamentals of Diverse Learners",
+      "identifier": "course-d168-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "D168",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "Schools as Communities of Care",
+      "identifier": "course-d169-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "D169",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "Technology-Enhanced Learning",
+      "identifier": "course-d307-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "D307",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    }
+  ],
+  "Organization": [
+    {
+      "name": "State University",
+      "description": "State University (StateU) is an accredited online university offering online bachelor's and master's degree programs. The programs are competency-based, student-focused, online, nonprofit university.",
+      "Contact": [
+        {
+          "Address": [
+            {
+              "addressCity": "Dallas",
+              "countryCode": "US",
+              "addressState": "Texas",
+              "addressStreet": "632 East Hwy 3",
+              "addressPostalCode": "75001",
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University",
+              "identifier": "address-state-university-single-org-001"
+            }
+          ],
+          "Email": [
+            {
+              "emailAddress": [
+                "credentials@stateu.edu"
+              ],
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University",
+              "identifier": "email-state-university-single-org-001"
+            }
+          ],
+          "websiteAddress": "https://www.stateu.edu/",
+          "Telephone": [
+            {
+              "telephoneNumber": [
+                "111-222-3333"
+              ],
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University",
+              "identifier": "telephone-state-university-single-org-001"
+            }
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "contact-state-university-single-org-001"
+        }
+      ],
+      "imageUrl": "https://assets.stateu.edu/99da0cfd314920b5cf8cb6c8727e7675",
+      "Identifier": [
+        {
+          "identifier": "833333326",
+          "identifierType": "Federal employer identification number",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        },
+        {
+          "identifier": "23323331",
+          "identifierType": "Dun and Bradstreet number",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        },
+        {
+          "identifier": "https://credentialfinder.org/organization/000/State_University",
+          "identifierType": "credentialfinder.org",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "identificationSystem": "State University SIS",
+      "organizationType": [
+        "University"
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "identifier": "organization-state-university-single-org-001"
+    }
+  ],
+  "Credential": [
+    {
+      "name": "Educational Technology for Inclusive Classrooms Certificate",
+      "identifier": "credential-edtech-cert-single-org-001",
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    }
+  ],
+  "Program": [
+    {
+      "name": "Educational Technology for Inclusive Classrooms Certificate",
+      "description": "Graduate-level certificate in technology for inclusive instruction.",
+      "identifier": "program-edtech-inclusive-cert-single-org-002",
+      "programIdentifierSystem": "State University SIS",
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "creditsRequired": "12",
+      "postSecondaryProgramLevel": "Postsecondary Certificate",
+      "normalTimeCompletion": "1",
+      "normalTimeCompletionUnits": "Years",
+      "deliveryType": "Online",
+      "distanceEducationProgram": "true",
+      "offeredByRefOrganization": {
+        "name": "State University",
+        "identifier": "organization-state-university-single-org-001",
+        "informationSourceId": "Single-Org",
+        "informationSourceOrganization": "State University"
+      }
+    },
+    {
+      "name": "Bachelor of Arts in Elementary Education",
+      "description": "Undergraduate teacher-preparation program leading to licensure, grades K-8.",
+      "identifier": "program-ba-elementary-education-single-org-001",
+      "programIdentifierSystem": "State University SIS",
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "instructionalProgramCode": "13.1202",
+      "instructionalProgramUse": "CIP 2020",
+      "creditsRequired": "120",
+      "postSecondaryProgramLevel": "Bachelor's Degree",
+      "normalTimeCompletion": "4",
+      "normalTimeCompletionUnits": "Years",
+      "deliveryType": "Online",
+      "distanceEducationProgram": "true",
+      "offeredByRefOrganization": {
+        "name": "State University",
+        "identifier": "organization-state-university-single-org-001",
+        "informationSourceId": "Single-Org",
+        "informationSourceOrganization": "State University"
+      }
+    }
+  ],
+  "informationSourceId": "Single-Org"
+}

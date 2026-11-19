@@ -1,0 +1,691 @@
+{
+  "Person": [
+    {
+      "Name": [
+        {
+          "middleName": "Allen",
+          "firstName": "Bryce",
+          "lastName": "Hollis",
+          "identifier": "name-bryce-hollis-single-org-001",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "Identifier": [
+        {
+          "identifier": "100109",
+          "identifierType": "SCHOOL_ASSIGNED_NUMBER",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "Contact": [
+        {
+          "identifier": "contact-bryce-hollis-single-org-001",
+          "Email": [
+            {
+              "emailAddress": [
+                "bhollis_lifdemo@stateu.edu"
+              ],
+              "identifier": "email-bryce-hollis-single-org-001",
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University"
+            }
+          ],
+          "Address": [
+            {
+              "addressStreet": "9319 Mill Rd",
+              "addressCity": "Salt Lake City",
+              "addressState": "Utah",
+              "addressPostalCode": "84111",
+              "countryCode": "US",
+              "identifier": "address-bryce-hollis-single-org-001",
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University"
+            }
+          ],
+          "Telephone": [
+            {
+              "telephoneNumber": [
+                "+18015550109"
+              ],
+              "identifier": "telephone-bryce-hollis-single-org-001",
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University"
+            }
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "Birth": [
+        {
+          "identifier": "birth-bryce-hollis-single-org-001",
+          "birthDate": "1992-06-06",
+          "cityOfBirth": "Salt Lake City",
+          "stateOfBirth": "Utah",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "SexAndGender": [
+        {
+          "identifier": "sexandgender-bryce-hollis-single-org-001",
+          "sex": "Male",
+          "gender": "Male",
+          "pronouns": "he/him",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "CourseLearningExperience": [
+        {
+          "identifier": "courselearningexperience-bryce-hollis-acc201-single-org-001",
+          "name": "Principles of Financial Accounting",
+          "type": "Postsecondary course",
+          "startDate": "2024-05-27",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2024-08-09",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "A-",
+          "experienceNumericalGrade": "3.7",
+          "courseTotal": "3",
+          "creditUnitType": "Semester credit hours",
+          "courseSectionNumber": "ACC201-01",
+          "institution": "",
+          "department": "Transfer Credit",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Principles of Financial Accounting",
+            "identifier": "course-acc201-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "",
+            "identifier": "organization-unknown-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-bryce-hollis-c200-single-org-002",
+          "name": "Managing Organizations and Leading People",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2025-05-09",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2025-07-11",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "Competent",
+          "courseTotal": "3",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "C200-01",
+          "institution": "State University",
+          "department": "College of Business / IT",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Managing Organizations and Leading People",
+            "identifier": "course-c200-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-bryce-hollis-c202-single-org-003",
+          "name": "Managing Human Capital",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2025-07-14",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2025-09-15",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "Competent",
+          "courseTotal": "3",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "C202-01",
+          "institution": "State University",
+          "department": "College of Business / IT",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Managing Human Capital",
+            "identifier": "course-c202-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-bryce-hollis-c213-single-org-004",
+          "name": "Accounting for Decision Makers",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2025-09-22",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2025-11-03",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "Competent",
+          "courseTotal": "3",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "C213-01",
+          "institution": "State University",
+          "department": "College of Business / IT",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Accounting for Decision Makers",
+            "identifier": "course-c213-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-bryce-hollis-c214-single-org-005",
+          "name": "Financial Management",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2025-11-05",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2025-12-31",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "Not Yet Competent",
+          "courseTotal": "3",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "C214-01",
+          "institution": "State University",
+          "department": "College of Business / IT",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Financial Management",
+            "identifier": "course-c214-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-bryce-hollis-c207-single-org-006",
+          "name": "Data-Driven Decision Making",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2026-01-03",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2026-02-28",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "Competent",
+          "courseTotal": "3",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "C207-01",
+          "institution": "State University",
+          "department": "College of Business / IT",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Data-Driven Decision Making",
+            "identifier": "course-c207-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-bryce-hollis-c214-single-org-007",
+          "name": "Financial Management",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2026-04-08",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2026-05-13",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "Competent",
+          "courseTotal": "3",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "C214-02",
+          "institution": "State University",
+          "department": "College of Business / IT",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Financial Management",
+            "identifier": "course-c214-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-bryce-hollis-mgt2-single-org-008",
+          "name": "IT Project Management",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2026-05-16",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2026-07-11",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "Competent",
+          "courseTotal": "4",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "MGT2-01",
+          "institution": "State University",
+          "department": "College of Business / IT",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "IT Project Management",
+            "identifier": "course-mgt2-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-bryce-hollis-d336-single-org-009",
+          "name": "Business of IT - Applications",
+          "type": "Competency-based postsecondary course",
+          "startDate": "2026-09-21",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "enrollmentStatusType": "In Progress",
+          "courseTotal": "4",
+          "creditUnitType": "Competency units",
+          "courseSectionNumber": "D336-01",
+          "institution": "State University",
+          "department": "College of Business / IT",
+          "currentlyAttendingIndicator": "true",
+          "RefCourse": {
+            "name": "Business of IT - Applications",
+            "identifier": "course-d336-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        }
+      ],
+      "ProgramLearningExperience": [
+        {
+          "identifier": "programlearningexperience-bryce-hollis-mba-it-single-org-001",
+          "name": "Master of Business Administration (MBA): IT Management",
+          "type": "Master's degree program",
+          "participationStatus": "In Progress",
+          "startDate": "2025-05-09",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "RefProgram": {
+            "name": "Master of Business Administration (MBA): IT Management",
+            "identifier": "program-mba-it-management-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        }
+      ],
+      "informationSourceId": "Single-Org"
+    }
+  ],
+  "Course": [
+    {
+      "name": "Principles of Financial Accounting",
+      "identifier": "course-acc201-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "ACC201",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "Managing Organizations and Leading People",
+      "identifier": "course-c200-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "C200",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "Managing Human Capital",
+      "identifier": "course-c202-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "C202",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "Accounting for Decision Makers",
+      "identifier": "course-c213-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "C213",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "Financial Management",
+      "identifier": "course-c214-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "C214",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "Data-Driven Decision Making",
+      "identifier": "course-c207-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "C207",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "IT Project Management",
+      "identifier": "course-mgt2-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "MGT2",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "Business of IT - Applications",
+      "identifier": "course-d336-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "D336",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    }
+  ],
+  "Organization": [
+    {
+      "name": "State University",
+      "description": "State University (StateU) is an accredited online university offering online bachelor's and master's degree programs. The programs are competency-based, student-focused, online, nonprofit university.",
+      "Contact": [
+        {
+          "Address": [
+            {
+              "addressCity": "Dallas",
+              "countryCode": "US",
+              "addressState": "Texas",
+              "addressStreet": "632 East Hwy 3",
+              "addressPostalCode": "75001",
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University",
+              "identifier": "address-state-university-single-org-001"
+            }
+          ],
+          "Email": [
+            {
+              "emailAddress": [
+                "credentials@stateu.edu"
+              ],
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University",
+              "identifier": "email-state-university-single-org-001"
+            }
+          ],
+          "websiteAddress": "https://www.stateu.edu/",
+          "Telephone": [
+            {
+              "telephoneNumber": [
+                "111-222-3333"
+              ],
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University",
+              "identifier": "telephone-state-university-single-org-001"
+            }
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "contact-state-university-single-org-001"
+        }
+      ],
+      "imageUrl": "https://assets.stateu.edu/99da0cfd314920b5cf8cb6c8727e7675",
+      "Identifier": [
+        {
+          "identifier": "833333326",
+          "identifierType": "Federal employer identification number",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        },
+        {
+          "identifier": "23323331",
+          "identifierType": "Dun and Bradstreet number",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        },
+        {
+          "identifier": "https://credentialfinder.org/organization/000/State_University",
+          "identifierType": "credentialfinder.org",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "identificationSystem": "State University SIS",
+      "organizationType": [
+        "University"
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "identifier": "organization-state-university-single-org-001"
+    },
+    {
+      "name": "",
+      "identifier": "organization-unknown-single-org-001",
+      "organizationType": [
+        "Postsecondary Institution"
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    }
+  ],
+  "Program": [
+    {
+      "name": "Master of Business Administration (MBA): IT Management",
+      "description": "Graduate business program with a concentration in IT management.",
+      "identifier": "program-mba-it-management-single-org-001",
+      "programIdentifierSystem": "State University SIS",
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "instructionalProgramCode": "52.0201",
+      "instructionalProgramUse": "CIP 2020",
+      "creditsRequired": "36",
+      "postSecondaryProgramLevel": "Master's Degree",
+      "normalTimeCompletion": "2",
+      "normalTimeCompletionUnits": "Years",
+      "deliveryType": "Online",
+      "distanceEducationProgram": "true",
+      "offeredByRefOrganization": {
+        "name": "State University",
+        "identifier": "organization-state-university-single-org-001",
+        "informationSourceId": "Single-Org",
+        "informationSourceOrganization": "State University"
+      }
+    }
+  ],
+  "informationSourceId": "Single-Org"
+}
