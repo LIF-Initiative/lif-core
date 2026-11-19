@@ -11,10 +11,10 @@ stack; the others are assembled from the code, recent PRs and the existing guide
 
 The field lives in the MDR, so this is mostly data, not code ([chapter 3](03-data-model-and-mdr.md)).
 
-1. **Add it in the MDR.** On dev, model 17 holds everything itself (#1388), so you add the attribute to
-   model 17 directly. On demo and the local seed, model 17 is still an overlay until #1513, and the rule is: **add
-   the attribute to base model 1, then include it in model 17.** The steps below are for the local
-   seed. In the MDR UI, or through the API (endpoints at `http://localhost:8012/docs`; log in with
+1. **Add it in the MDR.** On dev and the local seed, model 17 holds everything itself (#1388, #1513), so
+   you add the attribute to model 17 directly, with `DataModelId: 17` and an entity in model 17. On demo,
+   model 17 is still an overlay until #1513, and the rule is: **add the attribute to base model 1, then
+   include it in model 17.** The steps below are for that overlay case. In the MDR UI, or through the API (endpoints at `http://localhost:8012/docs`; log in with
    `POST /login` and send `Authorization: Bearer <access_token>`):
    - `POST /attributes/` with `Name` (camelCase), `UniqueName` (`Person.Name.preferredPronouns`),
      `DataType` (`string`), `DataModelId: 1`, and `EntityId` (the entity in model 1; passing it creates the

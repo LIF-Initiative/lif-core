@@ -8,8 +8,9 @@ psql --host=$POSTGRES_HOST --port=$POSTGRES_PORT --username=$POSTGRES_USER --dbn
 echo 'SQL Backup restored successfully!'
 
 # Apply incremental Flyway migrations (V1.2+) on top of the baseline.
-# backup.sql is a pg_dump snapshot of V1.1's content, so V1.1 is skipped
-# here to avoid re-running it. The migrations directory is mounted read-only
+# backup.sql takes V1.1's place locally (it began as V1.1's content and has
+# since moved past it; see docs/operations/guides/deployment.md), so V1.1 is
+# skipped here. The migrations directory is mounted read-only
 # by docker-compose from sam/mdr-database/flyway/flyway-files/flyway/sql/mdr.
 # Every V1.2+ migration added to that directory will automatically apply to
 # local dev — no edits to this script needed per migration.
