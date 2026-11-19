@@ -10,11 +10,12 @@ Model names carry the test name, since the fixture database is shared across the
 import json
 
 import pytest
+from sqlalchemy import text
 from sqlalchemy.orm import aliased
 from sqlmodel import func, select
 
 from lif.mdr_portability import PortabilityErrorCode, PortabilityErrorGroup, dump_canonical, parse_crosswalk_file
-from lif.mdr_services.crosswalk_converter import export_crosswalk, import_crosswalk
+from lif.mdr_services.crosswalk_converter import export_crosswalk, import_crosswalk, list_crosswalk_pairs
 from lif.mdr_sql_model.core import (
     DataModel,
     DataModelType,
@@ -406,5 +407,51 @@ async def test_every_seed_crosswalk_exports_and_round_trips(seed_db_session):
 
             await import_crosswalk(session, parse_crosswalk_file(file_a))
             assert dump_canonical(await export_crosswalk(session, source_id, target_id)) == file_a
+    finally:
+        await session.rollback()
+
+
+async def test_crosswalk_pairs_skip_a_pair_with_no_live_mapping(seed_db_session):
+    """A pair is a crosswalk only while a mapping, both of its values and its group are all live."""
+    session = seed_db_session
+    try:
+        assert await list_crosswalk_pairs(session) == [
+            (76, 52),
+            (310, 284),
+            (313, 287),
+            (314, 288),
+            (315, 290),
+            (464, 52),
+        ]
+
+        # Each pair loses its mappings a different way: the mapping, a source value, a target value, or
+        # the group.
+        await session.execute(
+            text(
+                """
+                UPDATE "ValueSetValueMapping" m SET "Deleted" = true
+                FROM "ValueSetValues" s WHERE s."Id" = m."SourceValueId" AND s."ValueSetId" = 315
+                """
+            )
+        )
+        await session.execute(text('UPDATE "ValueSetValues" SET "Deleted" = true WHERE "ValueSetId" = 310'))
+        await session.execute(text('UPDATE "ValueSetValues" SET "Deleted" = true WHERE "ValueSetId" = 287'))
+        # Put 314's mappings in a group, then delete the group.
+        await session.execute(
+            text(
+                """
+                UPDATE "ValueSetValueMapping" m
+                SET "TransformationGroupId" = (SELECT min("Id") FROM "TransformationsGroup")
+                FROM "ValueSetValues" s WHERE s."Id" = m."SourceValueId" AND s."ValueSetId" = 314
+                """
+            )
+        )
+        await session.execute(
+            text(
+                'UPDATE "TransformationsGroup" SET "Deleted" = true'
+                ' WHERE "Id" = (SELECT min("Id") FROM "TransformationsGroup")'
+            )
+        )
+        assert await list_crosswalk_pairs(session) == [(76, 52), (464, 52)]
     finally:
         await session.rollback()

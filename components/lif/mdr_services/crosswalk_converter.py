@@ -16,7 +16,7 @@ Callers reach it through portability_converter, the converter module for every f
 """
 
 import json
-from typing import Optional
+from typing import Optional, TypeVar
 
 from lif.mdr_portability import (
     CrosswalkFile,
@@ -32,12 +32,15 @@ from lif.mdr_sql_model.core import DataModel, TransformationGroup, ValueSet, Val
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import aliased
+from sqlalchemy.sql import Select
 from sqlmodel import select
 
 Code = PortabilityErrorCode
 
+_Q = TypeVar("_Q", bound=Select)
 
-def _live_mappings(query, source_value, target_value):
+
+def _restrict_to_live_mappings(query: _Q, source_value: type[ValueSetValue], target_value: type[ValueSetValue]) -> _Q:
     """Restrict a select to the live value mappings (§2), joined to both of their values.
 
     A value mapping is live only when it, both of its values, and its group (if it has one) are live.
@@ -65,7 +68,7 @@ async def _list_live_mappings(
     """The live value mappings from one value set to another, with both values' names."""
     source_value, target_value = aliased(ValueSetValue), aliased(ValueSetValue)
     query = (
-        _live_mappings(
+        _restrict_to_live_mappings(
             select(ValueSetValueMapping, source_value.ValueName, target_value.ValueName), source_value, target_value
         )
         .where(source_value.ValueSetId == source_value_set_id, target_value.ValueSetId == target_value_set_id)
@@ -81,7 +84,7 @@ async def list_crosswalk_pairs(session: AsyncSession) -> list[tuple[int, int]]:
     set or model is gone."""
     source_value, target_value = aliased(ValueSetValue), aliased(ValueSetValue)
     query = (
-        _live_mappings(select(source_value.ValueSetId, target_value.ValueSetId), source_value, target_value)
+        _restrict_to_live_mappings(select(source_value.ValueSetId, target_value.ValueSetId), source_value, target_value)
         .distinct()
         .order_by(source_value.ValueSetId, target_value.ValueSetId)
     )

@@ -16,7 +16,7 @@ from urllib.parse import urlparse
 import pytest
 import testing.postgresql
 from sqlalchemy import text
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+from sqlalchemy.ext.asyncio import create_async_engine
 
 from lif.mdr_portability import PortabilityError, PortabilityErrorCode
 from lif.mdr_portability.errors import error_group
@@ -188,47 +188,3 @@ async def test_measure_counts_a_refused_crosswalk_under_its_reason(seed_url, mon
         ("crosswalk 315 -> 290", "Entries[3].Source")
     ]
     assert "crosswalks 5 export, 1 refused" in measure.format_result(public, False)[0]
-
-
-async def test_crosswalk_pairs_skip_a_pair_with_no_live_mapping(seed_url):
-    """A pair is a crosswalk only while a mapping, both of its values and its group are all live."""
-    engine = create_async_engine(seed_url)
-    try:
-        async with AsyncSession(engine) as session:
-            async with session.begin():
-                await session.execute(text("SET LOCAL search_path TO public"))
-                pairs = await measure.list_crosswalk_pairs(session)
-                assert pairs == [(76, 52), (310, 284), (313, 287), (314, 288), (315, 290), (464, 52)]
-
-                # Each pair loses its mappings a different way: the mapping, a source value, a target
-                # value, or the group.
-                await session.execute(
-                    text(
-                        """
-                        UPDATE "ValueSetValueMapping" m SET "Deleted" = true
-                        FROM "ValueSetValues" s WHERE s."Id" = m."SourceValueId" AND s."ValueSetId" = 315
-                        """
-                    )
-                )
-                await session.execute(text('UPDATE "ValueSetValues" SET "Deleted" = true WHERE "ValueSetId" = 310'))
-                await session.execute(text('UPDATE "ValueSetValues" SET "Deleted" = true WHERE "ValueSetId" = 287'))
-                # Put 314's mappings in a group, then delete the group. The transaction is rolled back.
-                await session.execute(
-                    text(
-                        """
-                        UPDATE "ValueSetValueMapping" m
-                        SET "TransformationGroupId" = (SELECT min("Id") FROM "TransformationsGroup")
-                        FROM "ValueSetValues" s WHERE s."Id" = m."SourceValueId" AND s."ValueSetId" = 314
-                        """
-                    )
-                )
-                await session.execute(
-                    text(
-                        'UPDATE "TransformationsGroup" SET "Deleted" = true'
-                        ' WHERE "Id" = (SELECT min("Id") FROM "TransformationsGroup")'
-                    )
-                )
-                assert await measure.list_crosswalk_pairs(session) == [(76, 52), (464, 52)]
-                await session.rollback()
-    finally:
-        await engine.dispose()
