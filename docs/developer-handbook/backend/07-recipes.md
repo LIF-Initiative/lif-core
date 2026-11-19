@@ -16,14 +16,20 @@ The field lives in the MDR, so this is mostly data, not code ([chapter 3](03-dat
    `POST /login` and send `Authorization: Bearer <access_token>`):
    - `POST /attributes/` with `Name` (camelCase), `UniqueName` (`Person.Name.preferredPronouns`),
      `DataType` (`string`), `DataModelId: 17`, `EntityId` (the entity in model 17; passing it creates the
-     attribute and its link to the entity in one step), `LevelOfAccess` (`Public` unless it's restricted), and
-     `Queryable` / `Modifiable` as needed (these become `x-queryable` / `x-mutable`).
+     attribute and its link to the entity in one step).
+
+   The new attribute gets the default element flags: `LevelOfAccess` `Public`, `Queryable` and `Modifiable`
+   `false`, so it has no `x-queryable` or `x-mutable`. Neither `POST /attributes/` nor `PUT /attributes/{id}`
+   can set them yet: `CreateAttributeDTO` and `UpdateAttributeDTO` (`components/lif/mdr_dto/attribute_dto.py`)
+   have no such fields, and Pydantic drops unknown fields without an error, so sending them changes nothing.
+   The portable format does carry them on elements (Portability Spec §5.3). Until the DTOs take them, a field
+   that has to be restricted, queryable or mutable needs those columns set in the database.
 
    Checked 11-16 against the local seed with a test field `preferredPronouns` on `Name`: the call returned
    201 and model 17's generated schema showed the field at once.
 
-   The overlay route this step used to describe (add to model 1, then include it in 17) applied only while 17
-   was an overlay, and demo won't be converted.
+   The overlay route this step used to describe (add to model 1, then include it in 17, where the inclusion
+   row carried the flags) applied only while 17 was an overlay.
 2. **Restart the services that load the schema** (`docker restart lif-graphql-api-org1 …`, semantic
    search): they read it once at startup. The Translator picks it up within 5 minutes (its schema cache), or
    restart it to see it at once.

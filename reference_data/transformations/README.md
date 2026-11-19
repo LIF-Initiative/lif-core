@@ -27,17 +27,14 @@
 
 ### Where the portable file imports
 
-`Ed-Fi-v5_StateU-LIF__v1.0.json` is group 29 exported from dev's `tenant_lif_team` (#1511). It
-names Ed-Fi v5 version `1.0` (`LIF`) and StateU LIF version `1.0` (`StateU`), and its paths need
-that schema's StateU LIF, which has more entities than the StateU LIF in dev's `public`. Since
-#1513, the seed's Ed-Fi v5 and StateU LIF are dev's `tenant_lif_team` versions, so the file imports,
-all 83 rules, into both of the seed's schemas as well as into dev's `tenant_lif_team`. It doesn't
-import into dev's `public`, whose StateU LIF has no `Organization` entity.
+`Ed-Fi-v5_StateU-LIF__v1.0.json` names Ed-Fi v5 version `1.0` (`LIF`) and StateU LIF version `1.0`
+(`StateU`) (#1511). Since #1513, the seed's Ed-Fi v5 and StateU LIF are the versions it was exported
+against, so the file imports, all 83 rules, into both of the seed's schemas. A schema whose StateU LIF
+lacks an entity the paths go through, such as `Organization`, refuses the whole file.
 
 ### Old-format files
 
-The two outbound reference files are still in the old format (#1511). Their groups on dev have
-never had mappings, so there is nothing there to export them from. Load one with the same
+The two outbound reference files are still in the old format (#1511). Load one with the same
 `/import` flow as the test artifact (steps 2–4 below): create an empty group with the file's
 source and target models, then `POST /transformation_groups/{id}/import`, which resolves each
 path by name.
