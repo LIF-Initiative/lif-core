@@ -428,8 +428,8 @@ class PortabilityError(Exception): code, element, reason
 ```
 
 - **One module covers every file kind, in both directions.** Its intended callers are export,
-  import, upload, edit-by-upload (#17), clone and the reference set. Moving the existing
-  conversions onto it is later work.
+  import, upload, edit-by-upload (#17), clone, the reference set, and schema generation, which
+  refuses a model that export refuses (#1468). Moving the existing conversions onto it is later work.
 - **Clone is export, then import.** The caller supplies the copy's new identity, and its
   `CopiedFrom` is set to the source's identity. Because every model file is complete, the copy
   stands alone. Clone copies the model only; copying its mapping groups is a separate operation.

@@ -1,5 +1,7 @@
 from copy import deepcopy
 from fastapi import HTTPException
+from lif.mdr_portability import PortabilityErrorCode, PortabilityErrorGroup
+from lif.mdr_services import portability_converter
 from lif.mdr_services.association_name import association_array, embedded_property_key, reference_property_key
 from lif.mdr_sql_model.core import Entity, EntityAssociation, ExtInclusionsFromBaseDM, ValueSet, ValueSetValue
 from lif.mdr_services.attribute_service import get_attributes_with_association_metadata_for_entity
@@ -41,6 +43,12 @@ ATTRIBUTE_ASSOCIATION_FIELDS = [
     "AssociationContributorOrganization",
     "AssociationExtendedByDataModelId",
 ]
+
+# Refusals generation lets through until #1468 removes them (#1513 clears them from dev and demo).
+# NOT_MIGRATED, which includes overlays, is refused before export checks the model's rules, so those
+# models are generated as before, behind the generator's own guards. MODEL_IDENTITY_INCOMPLETE doesn't
+# change the schema, and POST /datamodels/ still saves a model with no ContributorOrganization.
+CODES_NOT_YET_REFUSED = {PortabilityErrorCode.NOT_MIGRATED, PortabilityErrorCode.MODEL_IDENTITY_INCOMPLETE}
 
 
 async def is_overlay_model(session, data_model_id):
@@ -580,6 +588,21 @@ async def get_all_entity_data_frame(session: AsyncSession):
     return df_entity
 
 
+async def refuse_non_portable_model(session: AsyncSession, data_model_id: int) -> None:
+    """Refuse, with every reason, a model that breaks the portability rules (Portability Spec §5, §10).
+
+    Export checks the rules, so a model it refuses is refused here with the same {code, element, reason}.
+    A model refused only with CODES_NOT_YET_REFUSED is generated.
+    """
+    try:
+        await portability_converter.export_model(session, data_model_id)
+    except PortabilityErrorGroup as group:
+        if all(error.code in CODES_NOT_YET_REFUSED for error in group.exceptions):
+            return
+        logger.info("Schema generation refused model %s: %s", data_model_id, group.exceptions)
+        raise
+
+
 async def generate_openapi_schema(
     session: AsyncSession,
     data_model_id: int,
@@ -594,6 +617,7 @@ async def generate_openapi_schema(
     # Getting data model details
     data_model = await get_datamodel_by_id(session=session, id=data_model_id)
     logger.info(f"-- data_model : {data_model}")
+    await refuse_non_portable_model(session, data_model_id)
 
     data_model_name = data_model.Name
     data_model_version = data_model.DataModelVersion

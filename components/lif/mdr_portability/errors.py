@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import cast
 
 
 class PortabilityErrorCode(str, Enum):
@@ -48,3 +49,10 @@ class PortabilityErrorGroup(ExceptionGroup[PortabilityError]):
 def error_group(errors: list[PortabilityError]) -> PortabilityErrorGroup:
     # The message is only for logs and tracebacks; callers read the errors themselves.
     return PortabilityErrorGroup(f"{len(errors)} portability error{'s' if len(errors) != 1 else ''}", errors)
+
+
+def list_refusals(group: PortabilityErrorGroup) -> list[dict[str, str]]:
+    """Every refusal in the group as {code, element, reason}, the body a refused request returns (spec §10)."""
+    # error_group builds a flat group, so every member is a PortabilityError.
+    errors = cast(tuple[PortabilityError, ...], group.exceptions)
+    return [{"code": error.code.value, "element": error.element, "reason": error.reason} for error in errors]

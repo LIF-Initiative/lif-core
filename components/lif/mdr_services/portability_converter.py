@@ -1,6 +1,7 @@
 """The converter between MDR rows and portable files, for every file kind, in both directions (Portability Spec §8).
 
-Its callers (export, import, upload, edit-by-upload, clone and the reference set) import from here.
+Its callers (export, import, upload, edit-by-upload, clone, the reference set and schema generation)
+import from here.
 Each file kind is converted in its own module; the parsing, refusals and canonical writer they share
 are in lif.mdr_portability.
 """

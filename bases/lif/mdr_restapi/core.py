@@ -4,8 +4,10 @@ from typing import Any, Dict, List
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from lif.auth.jwt import mint_access, mint_refresh, verify
 from lif.mdr_auth.core import JWT_CONFIG, add_mdr_auth
+from lif.mdr_portability import PortabilityErrorGroup
 from lif.mdr_restapi import (
     admin_endpoints,
     attribute_endpoints,
@@ -511,6 +513,13 @@ app.include_router(import_export_endpoints.router, prefix="/import_export")
 
 # Portable files: export and import a model, mapping group or crosswalk by name, with no row IDs (#1408).
 app.include_router(portable_endpoints.router, prefix="/portable")
+
+
+@app.exception_handler(PortabilityErrorGroup)
+async def handle_portability_refusal(request: Request, group: PortabilityErrorGroup) -> JSONResponse:
+    """Any endpoint the portability rules refuse answers as /portable does: every {code, element, reason} (#1468)."""
+    return portable_endpoints.refusal_response(group)
+
 
 app.include_router(generate_jinja_endpoint.router, prefix="/generate_jinja")
 

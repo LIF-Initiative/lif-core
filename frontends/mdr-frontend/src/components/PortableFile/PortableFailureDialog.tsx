@@ -6,11 +6,11 @@ import type { PortableFailure } from "@/services/portableService";
 export interface PortableFailureDialogProps {
   title: string;
   failure: PortableFailure | null;
-  action: "import" | "export";
+  action: "import" | "export" | "generate";
   onClose: () => void;
 }
 
-/** Why a portable export or import failed, with every refusal. Open while failure is set. */
+/** Why a portable export or import, or a schema download, failed, with every refusal. Open while failure is set. */
 const PortableFailureDialog: React.FC<PortableFailureDialogProps> = ({ title, failure, action, onClose }) => (
   <Dialog.Root open={!!failure} onOpenChange={(open) => { if (!open) onClose(); }}>
     <Dialog.Content maxWidth="800px" style={{ maxHeight: "85vh", overflow: "auto" }}>
