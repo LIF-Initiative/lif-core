@@ -47,49 +47,41 @@ wrong-case path silently matches nothing. The full rule: [`docs/specs/data-model
 
 ## The models in the seed
 
-The local MDR is seeded from `projects/lif_mdr_database/backup.sql`. It holds 21 live models:
+The local MDR is seeded from `projects/lif_mdr_database/backup.sql`. It holds 18 live models, the same in `public` and `tenant_lif_team`:
 
 | Id | Name | Type | What it's for |
 |---|---|---|---|
 | 1 | LIF | `BaseLIF` | The base LIF model |
-| 17 | StateU LIF | `OrgLIF` (built on 1) | **What the services load locally**: the demo organization's LIF |
-| 18 | Org2 LIF | `PartnerLIF` (built on 1) | Another organization's LIF |
-| 2–16, 29 | HR Open, CLR v2, CEDS v14, Ed-Fi v5, CTDL, Open Badges v2/v3, … | `SourceSchema` | Other standards, kept so they can be mapped to LIF |
+| 17 | StateU LIF | `SourceSchema` | **What the services load locally**: the demo organization's LIF |
+| 18 | Org2 LIF | `PartnerLIF` | Another organization's LIF |
+| 2–15 | HR Open, CLR v2, CEDS v14, Ed-Fi v5, CTDL, Open Badges v2/v3, … | `SourceSchema` | Other standards, kept so they can be mapped to LIF |
 | 26 | R1 Demo Source Data Model | `SourceSchema` | The example source system's shape ([chapter 4](04-follow-the-data.md)'s translation) |
-| 25 | Test2UpdatedSourceModel | `SourceSchema` | Test data |
 
 The GraphQL API, semantic search and the Learner Data Export API pick their model by **name, version and
 contributor organization**, not by Id. The Translator works by Id: its caller passes the source and target
 Ids in the URL (the planner's sources config sends 26 → 17). In the compose file: `OPENAPI_DATA_MODEL_NAME=StateU LIF`, `OPENAPI_DATA_MODEL_VERSION=1.0`,
 `OPENAPI_DATA_MODEL_CONTRIBUTOR_ORGANIZATION=StateU`.
 
-### Overlays are on their way out (dev and the local seed: converted; demo: not yet, #1513)
+### Overlays are gone
 
-Models 17 and 18 are **overlays** on demo, and were on dev until #1388 and in the local seed until #1513: they build
-on model 1 and add or include parts of it, rather than holding everything themselves. ADR data_model/0004
+Models 17 and 18 were **overlays** until #1388 converted them, and in the local seed until #1513: they built
+on model 1 and added or included parts of it, rather than holding everything themselves. ADR data_model/0004
 ([`docs/design/adr/data_model/0004-retire-overlays-variants-as-copies.md`](../../design/adr/data_model/0004-retire-overlays-variants-as-copies.md), Accepted) retires this:
 
 - every model will be **self-contained**, with one kind of model instead of four types;
 - a variant of a model is a **copy**, and **schema diff** shows how two models differ;
 - 17 and 18 are converted once, in place, so they produce the same schema as before (#1388, done:
-  `scripts/convert_overlays.py`, #1489). The conversion is applied on dev, in all 10 schemas, and in the local
-  seed (`projects/lif_mdr_database/backup.sql`, #1513). Demo isn't converted yet (#1513).
+  `scripts/convert_overlays.py`, #1489). The local seed (`projects/lif_mdr_database/backup.sql`) is converted
+  (#1513). An MDR that still holds overlays, such as one deployed before #1388 or a fresh environment built by
+  Flyway from V1.1, keeps them until `scripts/convert_overlays.py` runs on it
+  ([`deployment.md`](../../operations/guides/deployment.md)).
 
 Older docs and ADRs (metadata_repository/0004, 0008; data_model/0002) describe the overlay model:
 inclusions, extensions, Org LIF vs Partner LIF. Read them as history.
 
-**What that means on an overlay (demo, until #1513).** Model 17 shows only what it *includes* from
-model 1, plus its own *extensions*:
-
-- Entities like `Person` and `Name` are defined in model 1 (`Entities.DataModelId = 1`). Model 17 includes
-  37 of model 1's entities and 169 of its attributes (`ExtInclusionsFromBaseDM`), not all of them: model 1's
-  `Name` has 18 attributes, and model 17's generated `Name` has 6.
-- Some entities exist only in 17, as extensions: `EmploymentPreferences` is one.
-- So a field added to model 1 doesn't appear in the services until model 17 also includes it. A field
-  added to model 17 as an extension appears directly.
-
-**The rule: on dev and the local seed, model 17 holds everything itself and is edited directly. On
-demo, add new fields to model 1, then include them in model 17** ([chapter 7](07-recipes.md) has the steps).
+**The rule: model 17 holds everything itself and is edited directly.** The overlay code
+(`scripts/convert_overlays.py`, the overlay converter and the inclusion screens) is still in the repo,
+and is removed after #1513.
 
 ### Two schema files you'll find in the repo
 

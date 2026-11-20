@@ -10,7 +10,9 @@ the services that compute Name (test_association_name_writes.py covers those ser
 
 A model whose associations were generated from its source vocabulary (CEDS, model 4; CTDL, model 10)
 stores the source's own property names and cardinality, which the portable-file spec (§5.4) does not
-check against the naming rule; for those rows only a non-NULL Name and Array are checked.
+check against the naming rule; for those rows only a non-NULL Name and Array are checked. So does model
+17 (StateU LIF), which #1513 took from dev: its Names and Arrays were set there (role names such as
+awardedByRefOrganization, #1434; Arrays edited since #1472), not derived by the rule.
 """
 
 import pytest
@@ -33,9 +35,10 @@ SEED_SCHEMAS = ("public", "tenant_lif_team")
 MIN_ROWS = 100
 
 
-# Models whose association Name and Array come from the source vocabulary, not from the V1.7 rule.
-# See projects/lif_mdr_database/data_models/ceds/README.md and data_models/ctdl/README.md.
-GENERATED_NAME_MODELS = (4, 10)
+# Models whose association Name and Array don't come from the V1.7 rule: generated from the source
+# vocabulary (4, 10; see projects/lif_mdr_database/data_models/ceds/README.md and data_models/ctdl/README.md),
+# or set on dev and taken into the seed by #1513 (17).
+GENERATED_NAME_MODELS = (4, 10, 17)
 
 
 @pytest.mark.parametrize("schema", SEED_SCHEMAS)
@@ -66,12 +69,23 @@ def test_stored_entity_association_name_and_array_match_the_python_rule(pg_conn,
 def test_stored_attribute_association_name_and_array_match_the_python_rule(pg_conn, schema):
     with pg_conn.cursor() as cur:
         cur.execute(
-            f'SELECT x."Id", a."Name", a."Array", x."Name", x."Array" FROM "{schema}"."EntityAttributeAssociation" x '
-            f'JOIN "{schema}"."Attributes" a ON a."Id" = x."AttributeId" WHERE x."Name" IS NOT NULL'
+            f'SELECT x."Id", a."Name", a."Array", x."Name", x."Array", a."DataModelId" '
+            f'FROM "{schema}"."EntityAttributeAssociation" x '
+            f'JOIN "{schema}"."Attributes" a ON a."Id" = x."AttributeId" '
+            'WHERE x."Name" IS NOT NULL OR a."DataModelId" IN %s',
+            (GENERATED_NAME_MODELS,),
         )
         rows = cur.fetchall()
     assert len(rows) >= MIN_ROWS
-    mismatches = [row for row in rows if (row[3], row[4]) != (row[1], association_array(row[2]))]
+    mismatches = [
+        row
+        for row in rows
+        if (
+            (row[3] is None or row[4] is None)
+            if row[5] in GENERATED_NAME_MODELS
+            else (row[3], row[4]) != (row[1], association_array(row[2]))
+        )
+    ]
     assert mismatches == []
 
 

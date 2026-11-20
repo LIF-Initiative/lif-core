@@ -103,25 +103,15 @@ async def test_measure_reports_what_the_seed_refuses(seed_url):
 
     assert list(results) == ["public", "tenant_lif_team"]
     public = results["public"]
-    # #1513 ran #1444's cleanup, removed the test data and model 16, and converted 17 and 18. What's left
-    # in public is models 3 (CLR v2), 6 (Ed-Fi v5), 14 (CASE) and 29 (Open Badges v3), whose seed content
-    # still has attributes with DataType entity; #1513's next step replaces it.
+    # #1513 cleaned and converted the seed as dev was, then gave models 3, 6, 14 and 17 dev's content and
+    # removed 29, so every model and group exports.
     assert public.overlays == []
-    assert (public.models, public.models_exported, public.models_refused) == (19, 15, 4)
+    assert (public.models, public.models_exported, public.models_refused) == (18, 18, 0)
     assert (public.groups, public.groups_exported, public.groups_refused) == (6, 6, 0)
-    # Every crosswalk in the seed exports, so none adds a refusal below (#1513). #1520 removed the test
-    # data, which took the 343 -> 347 crosswalk with it.
+    # Every crosswalk in the seed exports (#1513). #1520 removed the test data, which took the 343 -> 347
+    # crosswalk with it.
     assert (public.crosswalks, public.crosswalks_exported, public.crosswalks_refused) == (6, 6, 0)
-    assert _counts(public) == {
-        "NOT_MIGRATED: the attribute has DataType entity; it becomes an association to the entity": 190
-    }
-    labels = {
-        label
-        for label, _ in public.refusals[
-            "NOT_MIGRATED: the attribute has DataType entity; it becomes an association to the entity"
-        ]
-    }
-    assert labels == {"model 3 CLR v2", "model 6 Ed-Fi v5", "model 14 CASE", "model 29 Open Badges v3"}
+    assert _counts(public) == {}
 
     tenant = results["tenant_lif_team"]
     assert (tenant.models, tenant.models_exported, tenant.models_refused, tenant.overlays) == (18, 18, 0, [])
