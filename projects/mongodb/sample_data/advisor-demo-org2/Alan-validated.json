@@ -56,7 +56,7 @@
               "name": "Three Trees Compliance",
               "informationSourceId": "Org2",
               "informationSourceOrganization": "Community College",
-              "identifier": "organization-three-trees-compliance-org2-001"
+              "identifier": "organization-three-trees-compliance-org2-005"
             },
             "informationSourceId": "Org2",
             "informationSourceOrganization": "Community College",
@@ -82,7 +82,7 @@
             ],
             "informationSourceId": "Org2",
             "informationSourceOrganization": "Community College",
-            "identifier": "organization-training-provider-org2-001"
+            "identifier": "organization-training-provider-org2-003"
           },
           "ApprovedByRefOrganization": [
             {
@@ -93,7 +93,7 @@
               ],
               "informationSourceId": "Org2",
               "informationSourceOrganization": "Community College",
-              "identifier": "organization-approving-authority-org2-001"
+              "identifier": "organization-approving-authority-org2-008"
             }
           ],
           "informationSourceId": "Org2",
@@ -117,7 +117,7 @@
               "name": "McBradshaw Brothers",
               "informationSourceId": "Org2",
               "informationSourceOrganization": "Community College",
-              "identifier": "organization-mcbradshaw-brothers-org2-001"
+              "identifier": "organization-mcbradshaw-brothers-org2-004"
             },
             "informationSourceId": "Org2",
             "name": "Referenced Employment Experience",
@@ -143,7 +143,7 @@
             ],
             "informationSourceId": "Org2",
             "informationSourceOrganization": "Community College",
-            "identifier": "organization-training-provider-org2-001"
+            "identifier": "organization-training-provider-org2-003"
           },
           "ApprovedByRefOrganization": [
             {
@@ -154,7 +154,7 @@
               ],
               "informationSourceId": "Org2",
               "informationSourceOrganization": "Community College",
-              "identifier": "organization-approving-authority-org2-001"
+              "identifier": "organization-approving-authority-org2-008"
             }
           ],
           "informationSourceId": "Org2",
@@ -520,6 +520,16 @@
       "informationSourceId": "Org2",
       "informationSourceOrganization": "Community College",
       "identifier": "organization-approving-authority-org2-008"
+    },
+    {
+      "informationSourceId": "Org2",
+      "name": "Community College",
+      "identificationSystem": "Community College SIS",
+      "organizationType": [
+        "College"
+      ],
+      "informationSourceOrganization": "Community College",
+      "identifier": "organization-community-college-org2-001"
     }
   ],
   "informationSourceId": "Org2"

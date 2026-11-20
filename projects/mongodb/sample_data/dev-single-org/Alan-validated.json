@@ -1843,7 +1843,7 @@
                 "name": "Three Trees Compliance",
                 "informationSourceId": "Single-Org",
                 "informationSourceOrganization": "State University",
-                "identifier": "organization-three-trees-compliance-single-org-001"
+                "identifier": "organization-three-trees-compliance-single-org-009"
               },
               "informationSourceId": "Single-Org",
               "informationSourceOrganization": "State University",
@@ -1859,7 +1859,7 @@
             ],
             "informationSourceId": "Single-Org",
             "informationSourceOrganization": "State University",
-            "identifier": "organization-employing-organization-single-org-001"
+            "identifier": "organization-employing-organization-single-org-003"
           },
           "OfferedByRefOrganization": {
             "identificationSystem": "stateu-training-provider-id",
@@ -1869,7 +1869,7 @@
             ],
             "informationSourceId": "Single-Org",
             "informationSourceOrganization": "State University",
-            "identifier": "organization-training-provider-single-org-001"
+            "identifier": "organization-training-provider-single-org-007"
           },
           "ApprovedByRefOrganization": [
             {
@@ -1905,7 +1905,7 @@
                 "name": "McBradshaw Brothers",
                 "informationSourceId": "Single-Org",
                 "informationSourceOrganization": "State University",
-                "identifier": "organization-mcbradshaw-brothers-single-org-001"
+                "identifier": "organization-mcbradshaw-brothers-single-org-008"
               },
               "informationSourceId": "Single-Org",
               "name": "Referenced Employment Experience",
@@ -1922,7 +1922,7 @@
             ],
             "informationSourceId": "Single-Org",
             "informationSourceOrganization": "State University",
-            "identifier": "organization-employing-organization-single-org-001"
+            "identifier": "organization-employing-organization-single-org-003"
           },
           "OfferedByRefOrganization": {
             "identificationSystem": "stateu-training-provider-id",
@@ -1932,7 +1932,7 @@
             ],
             "informationSourceId": "Single-Org",
             "informationSourceOrganization": "State University",
-            "identifier": "organization-training-provider-single-org-001"
+            "identifier": "organization-training-provider-single-org-007"
           },
           "ApprovedByRefOrganization": [
             {
@@ -2473,6 +2473,16 @@
       "description": "Professional association that issues corporate compliance and ethics certifications such as the CCEP.",
       "identificationSystem": "scce-org-id",
       "identifier": "organization-scce-single-org-012"
+    },
+    {
+      "identificationSystem": "stateu-approving-authority-id",
+      "name": "Approving Authority",
+      "organizationType": [
+        "Regulatory Body"
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "identifier": "organization-approving-authority-single-org-001"
     }
   ],
   "Credential": [

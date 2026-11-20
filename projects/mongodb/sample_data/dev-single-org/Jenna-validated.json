@@ -1529,7 +1529,7 @@
             ],
             "informationSourceId": "Single-Org",
             "informationSourceOrganization": "State University",
-            "identifier": "organization-employing-organization-single-org-001"
+            "identifier": "organization-employing-organization-single-org-003"
           },
           "OfferedByRefOrganization": {
             "identificationSystem": "stateu-training-provider-id",
@@ -1539,7 +1539,7 @@
             ],
             "informationSourceId": "Single-Org",
             "informationSourceOrganization": "State University",
-            "identifier": "organization-training-provider-single-org-001"
+            "identifier": "organization-training-provider-single-org-007"
           },
           "ApprovedByRefOrganization": [
             {
@@ -1970,6 +1970,16 @@
       "description": "Administers the standardized nurse aide competency examination used for state CNA certification.",
       "identificationSystem": "nnaap-org-id",
       "identifier": "organization-nnaap-single-org-008"
+    },
+    {
+      "identificationSystem": "stateu-approving-authority-id",
+      "name": "Approving Authority",
+      "organizationType": [
+        "Regulatory Body"
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "identifier": "organization-approving-authority-single-org-001"
     }
   ],
   "Credential": [

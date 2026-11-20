@@ -85,7 +85,7 @@
             ],
             "informationSourceId": "Org2",
             "informationSourceOrganization": "Community College",
-            "identifier": "organization-training-provider-org2-001"
+            "identifier": "organization-training-provider-org2-003"
           },
           "ApprovedByRefOrganization": {
             "identificationSystem": "stateu-approving-authority-id",
@@ -95,7 +95,7 @@
             ],
             "informationSourceId": "Org2",
             "informationSourceOrganization": "Community College",
-            "identifier": "organization-approving-authority-org2-001"
+            "identifier": "organization-approving-authority-org2-008"
           },
           "informationSourceId": "Org2",
           "RefCredentialAward": {
@@ -138,7 +138,7 @@
             ],
             "informationSourceId": "Org2",
             "informationSourceOrganization": "Community College",
-            "identifier": "organization-training-provider-org2-001"
+            "identifier": "organization-training-provider-org2-003"
           },
           "ApprovedByRefOrganization": {
             "identificationSystem": "stateu-approving-authority-id",
@@ -148,7 +148,7 @@
             ],
             "informationSourceId": "Org2",
             "informationSourceOrganization": "Community College",
-            "identifier": "organization-approving-authority-org2-001"
+            "identifier": "organization-approving-authority-org2-008"
           },
           "informationSourceId": "Org2",
           "RefCredentialAward": {
@@ -191,7 +191,7 @@
             ],
             "informationSourceId": "Org2",
             "informationSourceOrganization": "Community College",
-            "identifier": "organization-training-provider-org2-001"
+            "identifier": "organization-training-provider-org2-003"
           },
           "ApprovedByRefOrganization": {
             "identificationSystem": "stateu-approving-authority-id",
@@ -201,7 +201,7 @@
             ],
             "informationSourceId": "Org2",
             "informationSourceOrganization": "Community College",
-            "identifier": "organization-approving-authority-org2-001"
+            "identifier": "organization-approving-authority-org2-008"
           },
           "informationSourceId": "Org2",
           "RefCredentialAward": {
@@ -244,7 +244,7 @@
             ],
             "informationSourceId": "Org2",
             "informationSourceOrganization": "Community College",
-            "identifier": "organization-training-provider-org2-001"
+            "identifier": "organization-training-provider-org2-003"
           },
           "ApprovedByRefOrganization": {
             "identificationSystem": "stateu-approving-authority-id",
@@ -254,7 +254,7 @@
             ],
             "informationSourceId": "Org2",
             "informationSourceOrganization": "Community College",
-            "identifier": "organization-approving-authority-org2-001"
+            "identifier": "organization-approving-authority-org2-008"
           },
           "informationSourceId": "Org2",
           "RefCredentialAward": {
@@ -624,6 +624,16 @@
       "description": "State component of the U.S. Army National Guard in which Tracy served part-time.",
       "identificationSystem": "flarng-org-id",
       "identifier": "organization-florida-army-national-guard-org2-014"
+    },
+    {
+      "informationSourceId": "Org2",
+      "name": "Community College",
+      "identificationSystem": "Community College SIS",
+      "organizationType": [
+        "College"
+      ],
+      "informationSourceOrganization": "Community College",
+      "identifier": "organization-community-college-org2-001"
     }
   ],
   "informationSourceId": "Org2"
