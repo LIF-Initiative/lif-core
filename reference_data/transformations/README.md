@@ -2,9 +2,9 @@
 
 | File | What it is | Format | Loaded by |
 |---|---|---|---|
-| `Ed-Fi-v5_StateU-LIF__v1.0.json` | Ed-Fi v5 → StateU LIF, 83 rules | portable | [`scripts/import-transformations.sh`](../../scripts/import-transformations.sh) — see [Where the portable file imports](#where-the-portable-file-imports) |
-| `StateU-LIF_CLR-v2-Open-Badges-v3__v1.0.json` | StateU LIF → CLR v2 / Open Badges v3 | old | By hand — see [Old-format files](#old-format-files) |
-| `StateU-LIF_Ed-Fi-v5-v1.0__v1.0.json` | StateU LIF → Ed-Fi v5 | old | same |
+| `Ed-Fi-v5_StateU-LIF__v1.0.json` | Ed-Fi v5 → StateU LIF, 83 rules | portable | [`scripts/import-transformations.sh`](../../scripts/import-transformations.sh) — see [Where the portable files import](#where-the-portable-files-import) |
+| `StateU-LIF_CLR-v2-Open-Badges-v3__v1.0.json` | StateU LIF → CLR v2 / Open Badges v3, 30 rules | portable | same |
+| `StateU-LIF_Ed-Fi-v5-v1.0__v1.0.json` | StateU LIF → Ed-Fi v5, 70 rules | portable | same |
 | [`test/StateU-LIF_Sample-LDE-Target-Test__v1.0.json`](test/StateU-LIF_Sample-LDE-Target-Test__v1.0.json) | **Test artifact.** StateU LIF → Sample LDE Target Test, 56 rules | old | `POST /transformation_groups/{id}/import` — see below |
 
 > **Why the test artifact sits in `test/`.** It is not one of the reference groups.
@@ -31,33 +31,26 @@
   `--schema <tenant_schema>`, which it sends as `X-API-Tenant-Schema`. The MDR honors that header
   only for a service key with tenant routing enabled. Routing is off on the local stack, so there
   `--schema` does nothing and the import goes to the database's default `search_path`.
-- **Old-format** files come from `GET /transformation_groups/{id}/export`. The script skips them.
+- **Old-format** files come from `GET /transformation_groups/{id}/export`. None are left at this
+  level; the script would skip one.
 
-### Where the portable file imports
+### Where the portable files import
 
-`Ed-Fi-v5_StateU-LIF__v1.0.json` names Ed-Fi v5 version `1.0` (`LIF`) and StateU LIF version `1.0`
-(`StateU`) (#1511). Since #1513, the seed's Ed-Fi v5 and StateU LIF are the versions it was exported
-against, so the file imports, all 83 rules, into both of the seed's schemas. A schema whose StateU LIF
-lacks an entity the paths go through, such as `Organization`, refuses the whole file.
+All three files name StateU LIF version `1.0` (`StateU`). Since #1513, the seed's CLR v2 / Open
+Badges v3, Ed-Fi v5 and StateU LIF are the versions the files were written against, so every file
+imports, every rule, into both of the seed's schemas. A schema whose StateU LIF lacks a path a file
+uses, such as the `Organization` entity, refuses that whole file.
 
-To import it into a tenant schema whose StateU LIF has those entities, pass `--schema` with that
-schema's name. A StateU LIF with no `Organization` entity refuses the file.
-Once #1513 brings the seed's `public` to dev's Ed-Fi v5 and `tenant_lif_team`'s StateU LIF, the
-file is expected to import into the seed's `public` too.
-
-### Old-format files
-
-The two outbound reference files are still in the old format (#1511). Load one with the same
-`/import` flow as the test artifact (steps 2–4 below): create an empty group with the file's
-source and target models, then `POST /transformation_groups/{id}/import`, which resolves each
-path by name.
-
-They were written against the StateU LIF (17) in dev's `tenant_lif_team`, like the portable file
-above, which the seed has had since #1513. Against the seed, all 70 Ed-Fi v5 rules resolve, and 30 of
-the 32 CLR v2 / Open Badges v3 rules; the other two have no source and target attributes in the file
-itself. With `allowMissingPaths=true` those two are skipped; without it the import aborts. (Before
-#1513, 27 of 32 and 44 of 70 didn't resolve against the seed.) Loading them into the seed and
-exporting them with `GET /portable/mapping_groups/{id}` would convert them to the portable format.
+- `Ed-Fi-v5_StateU-LIF__v1.0.json` is group 29, exported from dev's `tenant_lif_team` (#1511).
+- The two outbound files were converted from the old format (#1511). Their groups had no mappings
+  in any deployed MDR, so there was nothing to export them from. Each old file was loaded
+  into the seed with `POST /transformation_groups/{id}/import` and exported with
+  `GET /portable/mapping_groups/{id}`; both of the seed's schemas give the same file. Every
+  converted rule has the old rule's name, expression, target and sources. Two old CLR v2 /
+  Open Badges v3 rules weren't carried over: `AchievementSubject.activityStartDate` and
+  `AchievementSubject.result` had no source or target attributes, and both read
+  `Name.firstName`. The groups take the `<source>_<target>` names the other groups use, in place
+  of the old files' `StateU-LIF_CLR-v2-Open-Badges-v3__v1.0` and `StateU LIF_Ed-Fi_v5_v1.0`.
 
 ---
 
