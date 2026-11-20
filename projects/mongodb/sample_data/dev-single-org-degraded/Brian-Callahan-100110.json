@@ -1,0 +1,798 @@
+{
+  "Person": [
+    {
+      "Name": [
+        {
+          "middleName": "Patrick",
+          "firstName": "Brian",
+          "lastName": "Callahan",
+          "identifier": "name-brian-callahan-single-org-001",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "Identifier": [
+        {
+          "identifier": "100110",
+          "identifierType": "SCHOOL_ASSIGNED_NUMBER",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "Contact": [
+        {
+          "identifier": "contact-brian-callahan-single-org-001",
+          "Email": [
+            {
+              "emailAddress": [
+                "bcallahan_lifdemo@stateu.edu"
+              ],
+              "identifier": "email-brian-callahan-single-org-001",
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University"
+            }
+          ],
+          "Address": [
+            {
+              "addressStreet": "1776 Meadow Ln",
+              "addressCity": "Des Moines",
+              "addressState": "Iowa",
+              "addressPostalCode": "50309",
+              "countryCode": "US",
+              "identifier": "address-brian-callahan-single-org-001",
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University"
+            }
+          ],
+          "Telephone": [
+            {
+              "telephoneNumber": [
+                "+15155550110"
+              ],
+              "identifier": "telephone-brian-callahan-single-org-001",
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University"
+            }
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "Birth": [
+        {
+          "identifier": "birth-brian-callahan-single-org-001",
+          "birthDate": "2002-09-03",
+          "cityOfBirth": "Tacoma",
+          "stateOfBirth": "Washington",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "SexAndGender": [
+        {
+          "identifier": "sexandgender-brian-callahan-single-org-001",
+          "sex": "Male",
+          "gender": "Male",
+          "pronouns": "he/him",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "CourseLearningExperience": [
+        {
+          "identifier": "courselearningexperience-brian-callahan-hit101-single-org-001",
+          "name": "Medical Terminology",
+          "type": "Postsecondary course",
+          "startDate": "2023-01-16",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2023-05-12",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "A",
+          "experienceNumericalGrade": "4.0",
+          "courseTotal": "3",
+          "creditUnitType": "Semester credit hours",
+          "courseSectionNumber": "HIT101-01",
+          "institution": "State University",
+          "department": "Health Information Technology",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Medical Terminology",
+            "identifier": "course-hit101-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-brian-callahan-hit105-single-org-002",
+          "name": "Anatomy and Physiology for Coders",
+          "type": "Postsecondary course",
+          "startDate": "2023-05-29",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2023-08-11",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "A-",
+          "experienceNumericalGrade": "3.7",
+          "courseTotal": "3",
+          "creditUnitType": "Semester credit hours",
+          "courseSectionNumber": "HIT105-01",
+          "institution": "State University",
+          "department": "Health Information Technology",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Anatomy and Physiology for Coders",
+            "identifier": "course-hit105-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-brian-callahan-mbc110-single-org-003",
+          "name": "Medical Coding I (ICD-10-CM)",
+          "type": "Postsecondary course",
+          "startDate": "2023-05-29",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2023-08-11",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "C+",
+          "experienceNumericalGrade": "2.3",
+          "courseTotal": "3",
+          "creditUnitType": "Semester credit hours",
+          "courseSectionNumber": "MBC110-01",
+          "institution": "State University",
+          "department": "Health Information Technology",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Medical Coding I (ICD-10-CM)",
+            "identifier": "course-mbc110-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-brian-callahan-mbc115-single-org-004",
+          "name": "Medical Coding II (CPT and HCPCS)",
+          "type": "Postsecondary course",
+          "startDate": "2023-08-28",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2023-12-15",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "A",
+          "experienceNumericalGrade": "4.0",
+          "courseTotal": "3",
+          "creditUnitType": "Semester credit hours",
+          "courseSectionNumber": "MBC115-01",
+          "institution": "State University",
+          "department": "Health Information Technology",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Medical Coding II (CPT and HCPCS)",
+            "identifier": "course-mbc115-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-brian-callahan-mbc120-single-org-005",
+          "name": "Health Insurance and Reimbursement",
+          "type": "Postsecondary course",
+          "startDate": "2023-08-28",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2023-12-15",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "A",
+          "experienceNumericalGrade": "4.0",
+          "courseTotal": "3",
+          "creditUnitType": "Semester credit hours",
+          "courseSectionNumber": "MBC120-01",
+          "institution": "State University",
+          "department": "Health Information Technology",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Health Insurance and Reimbursement",
+            "identifier": "course-mbc120-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-brian-callahan-hit130-single-org-006",
+          "name": "Pharmacology for Health Information",
+          "type": "Postsecondary course",
+          "startDate": "2024-01-15",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2024-05-10",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "A",
+          "experienceNumericalGrade": "4.0",
+          "courseTotal": "3",
+          "creditUnitType": "Semester credit hours",
+          "courseSectionNumber": "HIT130-01",
+          "institution": "State University",
+          "department": "Health Information Technology",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Pharmacology for Health Information",
+            "identifier": "course-hit130-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-brian-callahan-hit140-single-org-007",
+          "name": "Legal and Ethical Aspects of Health Information",
+          "type": "Postsecondary course",
+          "startDate": "2024-01-15",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2024-05-10",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "A-",
+          "experienceNumericalGrade": "3.7",
+          "courseTotal": "3",
+          "creditUnitType": "Semester credit hours",
+          "courseSectionNumber": "HIT140-01",
+          "institution": "State University",
+          "department": "Health Information Technology",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Legal and Ethical Aspects of Health Information",
+            "identifier": "course-hit140-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-brian-callahan-mbc150-single-org-008",
+          "name": "Electronic Health Records",
+          "type": "Postsecondary course",
+          "startDate": "2024-01-15",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2024-05-10",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "B",
+          "experienceNumericalGrade": "3.0",
+          "courseTotal": "3",
+          "creditUnitType": "Semester credit hours",
+          "courseSectionNumber": "MBC150-01",
+          "institution": "State University",
+          "department": "Health Information Technology",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Electronic Health Records",
+            "identifier": "course-mbc150-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-brian-callahan-mbc160-single-org-009",
+          "name": "Medical Office Procedures",
+          "type": "Postsecondary course",
+          "startDate": "2024-05-27",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2024-08-09",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "B+",
+          "experienceNumericalGrade": "3.3",
+          "courseTotal": "3",
+          "creditUnitType": "Semester credit hours",
+          "courseSectionNumber": "MBC160-01",
+          "institution": "State University",
+          "department": "Health Information Technology",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Medical Office Procedures",
+            "identifier": "course-mbc160-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-brian-callahan-mbc199-single-org-010",
+          "name": "Coding Practicum",
+          "type": "Postsecondary course",
+          "startDate": "2024-05-27",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2024-08-09",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "B-",
+          "experienceNumericalGrade": "2.7",
+          "courseTotal": "3",
+          "creditUnitType": "Semester credit hours",
+          "courseSectionNumber": "MBC199-01",
+          "institution": "State University",
+          "department": "Health Information Technology",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Coding Practicum",
+            "identifier": "course-mbc199-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        }
+      ],
+      "ProgramLearningExperience": [
+        {
+          "identifier": "programlearningexperience-brian-callahan-mbc-cert-single-org-001",
+          "name": "Medical Billing and Coding Certificate",
+          "type": "Certificate program",
+          "participationStatus": "Completed",
+          "startDate": "2023-01-16",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2024-08-09",
+          "RefProgram": {
+            "name": "Medical Billing and Coding Certificate",
+            "identifier": "program-medical-billing-coding-cert-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        }
+      ],
+      "CredentialAward": [
+        {
+          "identifier": "credentialaward-brian-callahan-mbc-cert-single-org-001",
+          "name": "Medical Biling and Coding Certificate",
+          "awardIssueDate": "2024-08-30",
+          "credentialAwardee": "Brian Callahan",
+          "awardStatus": "Completed",
+          "InstanceOfRefCredential": {
+            "name": "Medical Billing and Coding Certificate",
+            "identifier": "credential-mbc-cert-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "issuedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org"
+    }
+  ],
+  "Course": [
+    {
+      "name": "Medical Terminology",
+      "identifier": "course-hit101-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "HIT101",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "Anatomy and Physiology for Coders",
+      "identifier": "course-hit105-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "HIT105",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "Medical Coding I (ICD-10-CM)",
+      "identifier": "course-mbc110-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "MBC110",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "Medical Coding II (CPT and HCPCS)",
+      "identifier": "course-mbc115-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "MBC115",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "Health Insurance and Reimbursement",
+      "identifier": "course-mbc120-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "MBC120",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "Pharmacology for Health Information",
+      "identifier": "course-hit130-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "HIT130",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "Legal and Ethical Aspects of Health Information",
+      "identifier": "course-hit140-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "HIT140",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "Electronic Health Records",
+      "identifier": "course-mbc150-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "MBC150",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "Medical Office Procedures",
+      "identifier": "course-mbc160-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "MBC160",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "Coding Practicum",
+      "identifier": "course-mbc199-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "MBC199",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    }
+  ],
+  "Organization": [
+    {
+      "name": "State University",
+      "description": "State University (StateU) is an accredited online university offering online bachelor's and master's degree programs. The programs are competency-based, student-focused, online, nonprofit university.",
+      "Contact": [
+        {
+          "Address": [
+            {
+              "addressCity": "Dallas",
+              "countryCode": "US",
+              "addressState": "Texas",
+              "addressStreet": "632 East Hwy 3",
+              "addressPostalCode": "75001",
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University",
+              "identifier": "address-state-university-single-org-001"
+            }
+          ],
+          "Email": [
+            {
+              "emailAddress": [
+                "credentials@stateu.edu"
+              ],
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University",
+              "identifier": "email-state-university-single-org-001"
+            }
+          ],
+          "websiteAddress": "https://www.stateu.edu/",
+          "Telephone": [
+            {
+              "telephoneNumber": [
+                "111-222-3333"
+              ],
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University",
+              "identifier": "telephone-state-university-single-org-001"
+            }
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "contact-state-university-single-org-001"
+        }
+      ],
+      "imageUrl": "https://assets.stateu.edu/99da0cfd314920b5cf8cb6c8727e7675",
+      "Identifier": [
+        {
+          "identifier": "833333326",
+          "identifierType": "Federal employer identification number",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        },
+        {
+          "identifier": "23323331",
+          "identifierType": "Dun and Bradstreet number",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        },
+        {
+          "identifier": "https://credentialfinder.org/organization/000/State_University",
+          "identifierType": "credentialfinder.org",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "identificationSystem": "State University SIS",
+      "organizationType": [
+        "University"
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "identifier": "organization-state-university-single-org-001"
+    }
+  ],
+  "Credential": [
+    {
+      "name": "Medical Billing and Coding Certificate",
+      "identifier": "credential-mbc-cert-single-org-001",
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    }
+  ],
+  "Program": [
+    {
+      "name": "Medical Billing and Coding Certificate",
+      "description": "One-year certificate in medical billing, coding, and reimbursement.",
+      "identifier": "program-medical-billing-coding-cert-single-org-001",
+      "programIdentifierSystem": "State University SIS",
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "instructionalProgramCode": "51.0713",
+      "instructionalProgramUse": "CIP 2020",
+      "creditsRequired": "30",
+      "postSecondaryProgramLevel": "Postsecondary Certificate (less than 1 year)",
+      "normalTimeCompletion": "1",
+      "normalTimeCompletionUnits": "Years",
+      "deliveryType": "Online",
+      "distanceEducationProgram": "true",
+      "offeredByRefOrganization": {
+        "name": "State University",
+        "identifier": "organization-state-university-single-org-001",
+        "informationSourceId": "Single-Org",
+        "informationSourceOrganization": "State University"
+      }
+    }
+  ],
+  "informationSourceId": "Single-Org"
+}

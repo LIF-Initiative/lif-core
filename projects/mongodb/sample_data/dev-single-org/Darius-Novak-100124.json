@@ -1,0 +1,780 @@
+{
+  "Person": [
+    {
+      "Name": [
+        {
+          "middleName": "Nicole",
+          "firstName": "Darius",
+          "lastName": "Novak",
+          "identifier": "name-darius-novak-single-org-001",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "Identifier": [
+        {
+          "identifier": "100124",
+          "identifierType": "SCHOOL_ASSIGNED_NUMBER",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "Contact": [
+        {
+          "identifier": "contact-darius-novak-single-org-001",
+          "Email": [
+            {
+              "emailAddress": [
+                "dnovak_lifdemo@stateu.edu"
+              ],
+              "identifier": "email-darius-novak-single-org-001",
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University"
+            }
+          ],
+          "Address": [
+            {
+              "addressStreet": "2275 River Rd",
+              "addressCity": "Boise",
+              "addressState": "Idaho",
+              "addressPostalCode": "83702",
+              "countryCode": "US",
+              "identifier": "address-darius-novak-single-org-001",
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University"
+            }
+          ],
+          "Telephone": [
+            {
+              "telephoneNumber": [
+                "+12085550124"
+              ],
+              "identifier": "telephone-darius-novak-single-org-001",
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University"
+            }
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "Birth": [
+        {
+          "identifier": "birth-darius-novak-single-org-001",
+          "birthDate": "2006-05-09",
+          "cityOfBirth": "Boise",
+          "stateOfBirth": "Idaho",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "SexAndGender": [
+        {
+          "identifier": "sexandgender-darius-novak-single-org-001",
+          "sex": "Male",
+          "gender": "Male",
+          "pronouns": "he/him",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "CourseLearningExperience": [
+        {
+          "identifier": "courselearningexperience-darius-novak-csp101-single-org-001",
+          "name": "Foundations of Customer Success",
+          "type": "Postsecondary course",
+          "startDate": "2024-05-27",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2024-08-09",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "A",
+          "experienceNumericalGrade": "4.0",
+          "courseTotal": "3",
+          "creditUnitType": "Semester credit hours",
+          "courseSectionNumber": "CSP101-01",
+          "institution": "State University",
+          "department": "School of Professional Studies",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Foundations of Customer Success",
+            "identifier": "course-csp101-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-darius-novak-csp110-single-org-002",
+          "name": "Customer Onboarding and Adoption",
+          "type": "Postsecondary course",
+          "startDate": "2024-08-26",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2024-12-13",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "A",
+          "experienceNumericalGrade": "4.0",
+          "courseTotal": "3",
+          "creditUnitType": "Semester credit hours",
+          "courseSectionNumber": "CSP110-01",
+          "institution": "State University",
+          "department": "School of Professional Studies",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Customer Onboarding and Adoption",
+            "identifier": "course-csp110-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-darius-novak-csp120-single-org-003",
+          "name": "Customer Data and Health Metrics",
+          "type": "Postsecondary course",
+          "startDate": "2025-01-13",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2025-05-09",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "B",
+          "experienceNumericalGrade": "3.0",
+          "courseTotal": "3",
+          "creditUnitType": "Semester credit hours",
+          "courseSectionNumber": "CSP120-01",
+          "institution": "State University",
+          "department": "School of Professional Studies",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Customer Data and Health Metrics",
+            "identifier": "course-csp120-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-darius-novak-csp130-single-org-004",
+          "name": "Retention and Renewal Strategy",
+          "type": "Postsecondary course",
+          "startDate": "2025-01-13",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2025-05-09",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "B+",
+          "experienceNumericalGrade": "3.3",
+          "courseTotal": "3",
+          "creditUnitType": "Semester credit hours",
+          "courseSectionNumber": "CSP130-01",
+          "institution": "State University",
+          "department": "School of Professional Studies",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Retention and Renewal Strategy",
+            "identifier": "course-csp130-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-darius-novak-psy101-single-org-005",
+          "name": "Introduction to Psychology",
+          "type": "Postsecondary course",
+          "startDate": "2026-01-12",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2026-05-08",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "B-",
+          "experienceNumericalGrade": "2.7",
+          "courseTotal": "3",
+          "creditUnitType": "Semester credit hours",
+          "courseSectionNumber": "PSY101-01",
+          "institution": "State University",
+          "department": "Department of Psychology",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Introduction to Psychology",
+            "identifier": "course-psy101-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-darius-novak-eng101-single-org-006",
+          "name": "English Composition I",
+          "type": "Postsecondary course",
+          "startDate": "2026-06-01",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2026-08-14",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "B",
+          "experienceNumericalGrade": "3.0",
+          "courseTotal": "3",
+          "creditUnitType": "Semester credit hours",
+          "courseSectionNumber": "ENG101-01",
+          "institution": "State University",
+          "department": "Department of Psychology",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "English Composition I",
+            "identifier": "course-eng101-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-darius-novak-psy220-single-org-007",
+          "name": "Developmental Psychology",
+          "type": "Postsecondary course",
+          "startDate": "2026-06-01",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2026-08-14",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "C",
+          "experienceNumericalGrade": "2.0",
+          "courseTotal": "3",
+          "creditUnitType": "Semester credit hours",
+          "courseSectionNumber": "PSY220-01",
+          "institution": "State University",
+          "department": "Department of Psychology",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Developmental Psychology",
+            "identifier": "course-psy220-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-darius-novak-stat201-single-org-008",
+          "name": "Statistics for the Behavioral Sciences",
+          "type": "Postsecondary course",
+          "startDate": "2026-08-24",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "enrollmentStatusType": "In Progress",
+          "courseTotal": "3",
+          "creditUnitType": "Semester credit hours",
+          "courseSectionNumber": "STAT201-01",
+          "institution": "State University",
+          "department": "Department of Psychology",
+          "currentlyAttendingIndicator": "true",
+          "RefCourse": {
+            "name": "Statistics for the Behavioral Sciences",
+            "identifier": "course-stat201-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-darius-novak-psy230-single-org-009",
+          "name": "Social Psychology",
+          "type": "Postsecondary course",
+          "startDate": "2026-08-24",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "enrollmentStatusType": "In Progress",
+          "courseTotal": "3",
+          "creditUnitType": "Semester credit hours",
+          "courseSectionNumber": "PSY230-01",
+          "institution": "State University",
+          "department": "Department of Psychology",
+          "currentlyAttendingIndicator": "true",
+          "RefCourse": {
+            "name": "Social Psychology",
+            "identifier": "course-psy230-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        }
+      ],
+      "ProgramLearningExperience": [
+        {
+          "identifier": "programlearningexperience-darius-novak-cs-cert-single-org-001",
+          "name": "Customer Success Professional Certificate",
+          "type": "Certificate program",
+          "participationStatus": "Completed",
+          "startDate": "2024-05-27",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2025-05-09",
+          "RefProgram": {
+            "name": "Customer Success Professional Certificate",
+            "identifier": "program-customer-success-cert-single-org-002",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "programlearningexperience-darius-novak-ba-psych-single-org-001",
+          "name": "Bachelor of Arts in Psychology",
+          "type": "Bachelor's degree program",
+          "participationStatus": "In Progress",
+          "startDate": "2026-01-12",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "RefProgram": {
+            "name": "Bachelor of Arts in Psychology",
+            "identifier": "program-ba-psychology-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        }
+      ],
+      "CredentialAward": [
+        {
+          "identifier": "credentialaward-darius-novak-cs-cert-single-org-001",
+          "name": "Customer Success Professional Certificate",
+          "awardIssueDate": "2025-05-31",
+          "credentialAwardee": "Darius Novak",
+          "awardStatus": "Completed",
+          "InstanceOfRefCredential": {
+            "name": "Customer Success Professional Certificate",
+            "identifier": "credential-cs-cert-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "issuedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org"
+    }
+  ],
+  "Course": [
+    {
+      "name": "Foundations of Customer Success",
+      "identifier": "course-csp101-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "CSP101",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "Customer Onboarding and Adoption",
+      "identifier": "course-csp110-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "CSP110",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "Customer Data and Health Metrics",
+      "identifier": "course-csp120-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "CSP120",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "Retention and Renewal Strategy",
+      "identifier": "course-csp130-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "CSP130",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "Introduction to Psychology",
+      "identifier": "course-psy101-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "PSY101",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "English Composition I",
+      "identifier": "course-eng101-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "ENG101",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "Developmental Psychology",
+      "identifier": "course-psy220-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "PSY220",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "Statistics for the Behavioral Sciences",
+      "identifier": "course-stat201-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "STAT201",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "Social Psychology",
+      "identifier": "course-psy230-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "PSY230",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    }
+  ],
+  "Organization": [
+    {
+      "name": "State University",
+      "description": "State University (StateU) is an accredited online university offering online bachelor's and master's degree programs. The programs are competency-based, student-focused, online, nonprofit university.",
+      "Contact": [
+        {
+          "Address": [
+            {
+              "addressCity": "Dallas",
+              "countryCode": "US",
+              "addressState": "Texas",
+              "addressStreet": "632 East Hwy 3",
+              "addressPostalCode": "75001",
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University",
+              "identifier": "address-state-university-single-org-001"
+            }
+          ],
+          "Email": [
+            {
+              "emailAddress": [
+                "credentials@stateu.edu"
+              ],
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University",
+              "identifier": "email-state-university-single-org-001"
+            }
+          ],
+          "websiteAddress": "https://www.stateu.edu/",
+          "Telephone": [
+            {
+              "telephoneNumber": [
+                "111-222-3333"
+              ],
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University",
+              "identifier": "telephone-state-university-single-org-001"
+            }
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "contact-state-university-single-org-001"
+        }
+      ],
+      "imageUrl": "https://assets.stateu.edu/99da0cfd314920b5cf8cb6c8727e7675",
+      "Identifier": [
+        {
+          "identifier": "833333326",
+          "identifierType": "Federal employer identification number",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        },
+        {
+          "identifier": "23323331",
+          "identifierType": "Dun and Bradstreet number",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        },
+        {
+          "identifier": "https://credentialfinder.org/organization/000/State_University",
+          "identifierType": "credentialfinder.org",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "identificationSystem": "State University SIS",
+      "organizationType": [
+        "University"
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "identifier": "organization-state-university-single-org-001"
+    }
+  ],
+  "Credential": [
+    {
+      "name": "Customer Success Professional Certificate",
+      "identifier": "credential-cs-cert-single-org-001",
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    }
+  ],
+  "Program": [
+    {
+      "name": "Customer Success Professional Certificate",
+      "description": "Professional certificate in customer onboarding, retention, and account health.",
+      "identifier": "program-customer-success-cert-single-org-002",
+      "programIdentifierSystem": "State University SIS",
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "creditsRequired": "12",
+      "postSecondaryProgramLevel": "Certificate",
+      "normalTimeCompletion": "1",
+      "normalTimeCompletionUnits": "Years",
+      "deliveryType": "Online",
+      "distanceEducationProgram": "true",
+      "offeredByRefOrganization": {
+        "name": "State University",
+        "identifier": "organization-state-university-single-org-001",
+        "informationSourceId": "Single-Org",
+        "informationSourceOrganization": "State University"
+      }
+    },
+    {
+      "name": "Bachelor of Arts in Psychology",
+      "description": "Four-year undergraduate degree program in psychology.",
+      "identifier": "program-ba-psychology-single-org-001",
+      "programIdentifierSystem": "State University SIS",
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "instructionalProgramCode": "42.0101",
+      "instructionalProgramUse": "CIP 2020",
+      "creditsRequired": "120",
+      "postSecondaryProgramLevel": "Bachelor's Degree",
+      "normalTimeCompletion": "4",
+      "normalTimeCompletionUnits": "Years",
+      "deliveryType": "Online",
+      "distanceEducationProgram": "true",
+      "offeredByRefOrganization": {
+        "name": "State University",
+        "identifier": "organization-state-university-single-org-001",
+        "informationSourceId": "Single-Org",
+        "informationSourceOrganization": "State University"
+      }
+    }
+  ],
+  "informationSourceId": "Single-Org"
+}

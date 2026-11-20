@@ -1,0 +1,540 @@
+{
+  "Person": [
+    {
+      "Name": [
+        {
+          "firstName": "Mei",
+          "lastName": "Abernathy",
+          "identifier": "name-mei-abernathy-single-org-001",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "Identifier": [
+        {
+          "identifier": "100116",
+          "identifierType": "SCHOOL_ASSIGNED_NUMBER",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "Contact": [
+        {
+          "identifier": "contact-mei-abernathy-single-org-001",
+          "Email": [
+            {
+              "emailAddress": [
+                "mabernathy_lifdemo@stateu.edu"
+              ],
+              "identifier": "email-mei-abernathy-single-org-001",
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University"
+            }
+          ],
+          "Address": [
+            {
+              "addressStreet": "147 Mill Rd",
+              "addressCity": "Sacramento",
+              "addressState": "California",
+              "addressPostalCode": "95814",
+              "countryCode": "US",
+              "identifier": "address-mei-abernathy-single-org-001",
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University"
+            }
+          ],
+          "Telephone": [
+            {
+              "telephoneNumber": [
+                "+19165550116"
+              ],
+              "identifier": "telephone-mei-abernathy-single-org-001",
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University"
+            }
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "Birth": [
+        {
+          "identifier": "birth-mei-abernathy-single-org-001",
+          "birthDate": "2006-06-11",
+          "cityOfBirth": "Sacramento",
+          "stateOfBirth": "California",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "SexAndGender": [
+        {
+          "identifier": "sexandgender-mei-abernathy-single-org-001",
+          "sex": "Female",
+          "gender": "Female",
+          "pronouns": "she/her",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "CourseLearningExperience": [
+        {
+          "identifier": "courselearningexperience-mei-abernathy-hit101-single-org-001",
+          "name": "Medical Terminology",
+          "type": "Postsecondary course",
+          "startDate": "2025-05-26",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2025-08-08",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "A-",
+          "experienceNumericalGrade": "3.7",
+          "courseTotal": "3",
+          "creditUnitType": "Semester credit hours",
+          "courseSectionNumber": "HIT101-01",
+          "institution": "State University",
+          "department": "Health Information Technology",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Medical Terminology",
+            "identifier": "course-hit101-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-mei-abernathy-eng101-single-org-002",
+          "name": "English Composition I",
+          "type": "Postsecondary course",
+          "startDate": "2025-05-26",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2025-08-08",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "A",
+          "experienceNumericalGrade": "4.0",
+          "courseTotal": "3",
+          "creditUnitType": "Semester credit hours",
+          "courseSectionNumber": "ENG101-01",
+          "institution": "State University",
+          "department": "Health Information Technology",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "English Composition I",
+            "identifier": "course-eng101-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-mei-abernathy-mat110-single-org-003",
+          "name": "College Algebra",
+          "type": "Postsecondary course",
+          "startDate": "2025-08-25",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2025-12-12",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "B",
+          "experienceNumericalGrade": "3.0",
+          "courseTotal": "3",
+          "creditUnitType": "Semester credit hours",
+          "courseSectionNumber": "MAT110-01",
+          "institution": "State University",
+          "department": "Health Information Technology",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "College Algebra",
+            "identifier": "course-mat110-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-mei-abernathy-hit140-single-org-004",
+          "name": "Legal and Ethical Aspects of Health Information",
+          "type": "Postsecondary course",
+          "startDate": "2025-08-25",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2025-12-12",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "A",
+          "experienceNumericalGrade": "4.0",
+          "courseTotal": "3",
+          "creditUnitType": "Semester credit hours",
+          "courseSectionNumber": "HIT140-01",
+          "institution": "State University",
+          "department": "Health Information Technology",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Legal and Ethical Aspects of Health Information",
+            "identifier": "course-hit140-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-mei-abernathy-hit150-single-org-005",
+          "name": "Health Data Content and Structure",
+          "type": "Postsecondary course",
+          "startDate": "2026-06-01",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "endDate": "2026-08-14",
+          "enrollmentStatusType": "Completed",
+          "experienceGrade": "C+",
+          "experienceNumericalGrade": "2.3",
+          "courseTotal": "3",
+          "creditUnitType": "Semester credit hours",
+          "courseSectionNumber": "HIT150-01",
+          "institution": "State University",
+          "department": "Health Information Technology",
+          "goodStandingIndicator": "true",
+          "currentlyAttendingIndicator": "false",
+          "courseGradeStatusCode": "Final",
+          "RefCourse": {
+            "name": "Health Data Content and Structure",
+            "identifier": "course-hit150-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        },
+        {
+          "identifier": "courselearningexperience-mei-abernathy-hit210-single-org-006",
+          "name": "Healthcare Data and Revenue Cycle",
+          "type": "Postsecondary course",
+          "startDate": "2026-08-24",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "enrollmentStatusType": "In Progress",
+          "courseTotal": "3",
+          "creditUnitType": "Semester credit hours",
+          "courseSectionNumber": "HIT210-01",
+          "institution": "State University",
+          "department": "Health Information Technology",
+          "currentlyAttendingIndicator": "true",
+          "RefCourse": {
+            "name": "Healthcare Data and Revenue Cycle",
+            "identifier": "course-hit210-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        }
+      ],
+      "ProgramLearningExperience": [
+        {
+          "identifier": "programlearningexperience-mei-abernathy-aas-hit-single-org-001",
+          "name": "Associate of Applied Science in Health Information Technology",
+          "type": "Associate degree program",
+          "participationStatus": "In Progress",
+          "startDate": "2025-05-26",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "RefProgram": {
+            "name": "Associate of Applied Science in Health Information Technology",
+            "identifier": "program-aas-hit-single-org-002",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "offeredByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          },
+          "assertedByRefOrganization": {
+            "name": "State University",
+            "identifier": "organization-state-university-single-org-001",
+            "informationSourceId": "Single-Org",
+            "informationSourceOrganization": "State University"
+          }
+        }
+      ],
+      "informationSourceId": "Single-Org"
+    }
+  ],
+  "Course": [
+    {
+      "name": "Medical Terminology",
+      "identifier": "course-hit101-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "HIT101",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "English Composition I",
+      "identifier": "course-eng101-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "ENG101",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "College Algebra",
+      "identifier": "course-mat110-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "MAT110",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "Legal and Ethical Aspects of Health Information",
+      "identifier": "course-hit140-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "HIT140",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "Health Data Content and Structure",
+      "identifier": "course-hit150-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "HIT150",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    },
+    {
+      "name": "Healthcare Data and Revenue Cycle",
+      "identifier": "course-hit210-single-org-001",
+      "Identifier": [
+        {
+          "identifier": "HIT210",
+          "identifierType": "Course Code",
+          "identifierVerification": [
+            "Academic Records"
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University"
+    }
+  ],
+  "Organization": [
+    {
+      "name": "State University",
+      "description": "State University (StateU) is an accredited online university offering online bachelor's and master's degree programs. The programs are competency-based, student-focused, online, nonprofit university.",
+      "Contact": [
+        {
+          "Address": [
+            {
+              "addressCity": "Dallas",
+              "countryCode": "US",
+              "addressState": "Texas",
+              "addressStreet": "632 East Hwy 3",
+              "addressPostalCode": "75001",
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University",
+              "identifier": "address-state-university-single-org-001"
+            }
+          ],
+          "Email": [
+            {
+              "emailAddress": [
+                "credentials@stateu.edu"
+              ],
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University",
+              "identifier": "email-state-university-single-org-001"
+            }
+          ],
+          "websiteAddress": "https://www.stateu.edu/",
+          "Telephone": [
+            {
+              "telephoneNumber": [
+                "111-222-3333"
+              ],
+              "informationSourceId": "Single-Org",
+              "informationSourceOrganization": "State University",
+              "identifier": "telephone-state-university-single-org-001"
+            }
+          ],
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University",
+          "identifier": "contact-state-university-single-org-001"
+        }
+      ],
+      "imageUrl": "https://assets.stateu.edu/99da0cfd314920b5cf8cb6c8727e7675",
+      "Identifier": [
+        {
+          "identifier": "833333326",
+          "identifierType": "Federal employer identification number",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        },
+        {
+          "identifier": "23323331",
+          "identifierType": "Dun and Bradstreet number",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        },
+        {
+          "identifier": "https://credentialfinder.org/organization/000/State_University",
+          "identifierType": "credentialfinder.org",
+          "informationSourceId": "Single-Org",
+          "informationSourceOrganization": "State University"
+        }
+      ],
+      "identificationSystem": "State University SIS",
+      "organizationType": [
+        "University"
+      ],
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "identifier": "organization-state-university-single-org-001"
+    }
+  ],
+  "Program": [
+    {
+      "name": "Associate of Applied Science in Health Information Technology",
+      "description": "Two-year associate degree in health information technology.",
+      "identifier": "program-aas-hit-single-org-002",
+      "programIdentifierSystem": "State University SIS",
+      "informationSourceId": "Single-Org",
+      "informationSourceOrganization": "State University",
+      "instructionalProgramCode": "51.0707",
+      "instructionalProgramUse": "CIP 2020",
+      "creditsRequired": "60",
+      "postSecondaryProgramLevel": "Associate's Degree",
+      "normalTimeCompletion": "2",
+      "normalTimeCompletionUnits": "Years",
+      "deliveryType": "Online",
+      "distanceEducationProgram": "true",
+      "offeredByRefOrganization": {
+        "name": "State University",
+        "identifier": "organization-state-university-single-org-001",
+        "informationSourceId": "Single-Org",
+        "informationSourceOrganization": "State University"
+      }
+    }
+  ],
+  "informationSourceId": "Single-Org"
+}

@@ -32,7 +32,17 @@ sample_data/
     ├── Jenna-validated.json  
     ├── Renee-validated.json  
     ├── Alan-validated.json  
+├──dev-single-org/
+    ├── Alan-validated.json … Tracy-validated.json   (the six personas, each in one file)
+    └── <First>-<Last>-<student number>.json          (24 synthetic learners, 100101–100124)
+├──dev-single-org-degraded/
+    ├── README.md, KEY.md
+    └── 12 deliberately flawed records
 </code> </pre>
+
+Single-org folders
+- `dev-single-org` holds all of each learner's data in one file: the six personas plus 24 synthetic State University learners with 6–10 classes each (#1525).
+- `dev-single-org-degraded` holds 12 deliberately flawed copies of those synthetic learners, for testing how LIF handles bad source data. No script loads it, the flaws are intentional and must not be fixed, and it must never be loaded into a database that also holds `dev-single-org`. See its [README](dev-single-org-degraded/README.md).
 
 Advisor Demo Organizations
 - Advisor Demo Org1 is intended to represent an institution (State University) with the following LIF entities:

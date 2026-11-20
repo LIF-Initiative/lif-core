@@ -1,7 +1,10 @@
 # demo_personas
 
-Single source of truth for the six curated **demo learner personas** used across
-LIF demo surfaces.
+Single source of truth for the curated **demo learner personas** used across
+LIF demo surfaces: the six original personas plus 24 synthetic State University
+learners (#1525), 30 in all. The 24 synthetic learners have records only in the
+`dev-single-org` seed (`projects/mongodb/sample_data/dev-single-org/`), so they
+are listed everywhere but have data only where that seed is loaded.
 
 ## Why
 

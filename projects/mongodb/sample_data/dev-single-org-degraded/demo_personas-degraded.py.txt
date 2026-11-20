@@ -1,0 +1,14 @@
+# Paste into _DEMO_PERSONAS in lif-core components/lif/demo_personas/core.py
+# so the Advisor login and the Learner Data Export picker list these learners.
+    DemoPersona("dokaforbrooks_lifdemo@stateu.edu", "Danielle", "Okafor-Brooks", "100101", "SCHOOL_ASSIGNED_NUMBER", "SCHOOL_ASSIGNED_NUMBER"),  # D01
+    DemoPersona("rnguyen_lifdemo@stateu.edu", "Robert", "Nguyen", "100102", "SCHOOL_ASSIGNED_NUMBER", "SCHOOL_ASSIGNED_NUMBER"),  # D02
+    DemoPersona("mcastilloruiz_lifdemo@stateu.edu", "María Fernanda", "Castillo Ruiz", "100103", "SCHOOL_ASSIGNED_NUMBER", "SCHOOL_ASSIGNED_NUMBER"),  # D03
+    DemoPersona("apetrov_lifdemo@stateu.edu", "Alexander", "Petrov", "100104", "SCHOOL_ASSIGNED_NUMBER", "SCHOOL_ASSIGNED_NUMBER"),  # D04
+    DemoPersona("jellis_lifdemo@stateu.edu", "Jordan", "Ellis", "100105", "SCHOOL_ASSIGNED_NUMBER", "SCHOOL_ASSIGNED_NUMBER"),  # D05
+    DemoPersona("trhodes_lifdemo@stateu.edu", "Tamika", "Rhodes", "100106", "SCHOOL_ASSIGNED_NUMBER", "SCHOOL_ASSIGNED_NUMBER"),  # D06
+    DemoPersona("kwatanabe_lifdemo@stateu.edu", "Kenji", "Watanabe", "100107", "SCHOOL_ASSIGNED_NUMBER", "SCHOOL_ASSIGNED_NUMBER"),  # D07
+    DemoPersona("lmoreno_lifdemo@stateu.edu", "Leticia", "Moreno", "100108", "SCHOOL_ASSIGNED_NUMBER", "SCHOOL_ASSIGNED_NUMBER"),  # D08
+    DemoPersona("bhollis_lifdemo@stateu.edu", "Bryce", "Hollis", "100109", "SCHOOL_ASSIGNED_NUMBER", "SCHOOL_ASSIGNED_NUMBER"),  # D09
+    DemoPersona("bcallahan_lifdemo@stateu.edu", "Brian", "Callahan", "100110", "SCHOOL_ASSIGNED_NUMBER", "SCHOOL_ASSIGNED_NUMBER"),  # D10
+    DemoPersona("mwebb_lifdemo@stateu.edu", "Marcus", "Webb", "100111", "SCHOOL_ASSIGNED_NUMBER", "SCHOOL_ASSIGNED_NUMBER"),  # D11A
+    DemoPersona("mwebb_lifdemo@stateu.edu", "Marcus", "Webb", "100125", "SCHOOL_ASSIGNED_NUMBER", "SCHOOL_ASSIGNED_NUMBER"),  # D11B

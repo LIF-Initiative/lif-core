@@ -75,7 +75,8 @@ projects/mongodb/sample_data/
 ├── advisor-demo-org1/    # Matt, Renee, Sarah, Tracy (4 users)
 ├── advisor-demo-org2/    # Alan, Jenna, Sarah, Tracy (4 users)
 ├── advisor-demo-org3/    # Alan, Jenna, Matt, Renee (4 users)
-└── dev-single-org/       # All 6 users combined
+├── dev-single-org/       # All 6 users combined, plus 24 synthetic learners (30 files)
+└── dev-single-org-degraded/  # 12 deliberately flawed records; never loaded by default
 ```
 
 **Test users (6 total unique):**

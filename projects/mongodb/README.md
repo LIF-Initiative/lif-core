@@ -9,7 +9,7 @@ Docker build for the MongoDB instances backing the LIF Query Cache and Advisor A
 | `Dockerfile` | Image definition — base `mongo` plus seed-data and entrypoint |
 | `entrypoint.sh` | On first start, loads `sample_data/<SEED_DATA_KEY>/` into the database (if set), then always creates the Query Cache's `person_identifier_idx` |
 | `build-docker.sh` | Convenience build script |
-| [`sample_data/`](sample_data/) | Seed datasets for demos + tests (per-org partitions: `advisor-demo-org1`, `-org2`, `-org3`, plus `dev-single-org`) |
+| [`sample_data/`](sample_data/) | Seed datasets for demos + tests (per-org partitions: `advisor-demo-org1`, `-org2`, `-org3`, plus `dev-single-org`, and the deliberately flawed `dev-single-org-degraded`, which nothing loads by default) |
 
 ## Usage
 
