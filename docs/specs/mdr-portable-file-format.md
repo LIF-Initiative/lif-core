@@ -406,10 +406,12 @@ with no entry is unmapped.
 mapping is its own row, with its own descriptive fields, carried on its entry. `Details` is where
 crosswalk-level fields such as a name would go in a later format version.
 
-The seed holds 2,347 live value mappings, but 1,631 of them point at soft-deleted target values
-(model 1) and so count as absent (§2). The remaining 716 cover 7 value-set pairs, every source value
-set maps to exactly one target value set, and no source value maps to more than one target. Nothing in the runtime reads value mappings today: neither the
-Translator nor JSONata does, only the MDR frontend.
+In `public`, the seed holds 1,654 value mappings that aren't deleted, but 940 of them point at
+soft-deleted target values (model 1) and so count as absent (§2). The remaining 714 cover 6
+value-set pairs, every source value set maps to exactly one target value set, and no source value
+maps to more than one target. `tenant_lif_team` has the same 714 live mappings and 6 pairs. Nothing
+in the runtime reads value mappings today: neither the Translator nor JSONata does, only the MDR
+frontend.
 
 ---
 

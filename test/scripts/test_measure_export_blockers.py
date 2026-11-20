@@ -1,4 +1,4 @@
-"""Tests for the #1393 read-only count of what keeps each model and mapping group from exporting.
+"""Tests for the #1393 read-only count of what keeps each model, mapping group and crosswalk from exporting.
 
 The counts decide which data gets cleaned up, in every schema, so a count that drifts from what
 export actually refuses would send the cleanup after the wrong rows. The seed test pins the figures
@@ -17,6 +17,9 @@ import pytest
 import testing.postgresql
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import create_async_engine
+
+from lif.mdr_portability import PortabilityError, PortabilityErrorCode
+from lif.mdr_portability.errors import error_group
 
 _ROOT = pathlib.Path(__file__).resolve().parents[2]
 _spec = importlib.util.spec_from_file_location(
@@ -106,6 +109,9 @@ async def test_measure_reports_what_the_seed_refuses(seed_url):
     assert public.overlays == []
     assert (public.models, public.models_exported, public.models_refused) == (19, 15, 4)
     assert (public.groups, public.groups_exported, public.groups_refused) == (6, 6, 0)
+    # Every crosswalk in the seed exports, so none adds a refusal below (#1513). #1520 removed the test
+    # data, which took the 343 -> 347 crosswalk with it.
+    assert (public.crosswalks, public.crosswalks_exported, public.crosswalks_refused) == (6, 6, 0)
     assert _counts(public) == {
         "NOT_MIGRATED: the attribute has DataType entity; it becomes an association to the entity": 190
     }
@@ -158,3 +164,27 @@ async def test_measure_writes_nothing_and_counts_a_failed_export(seed_url, monke
     finally:
         await engine.dispose()
     assert notes != "changed"
+
+
+async def test_measure_counts_a_refused_crosswalk_under_its_reason(seed_url, monkeypatch):
+    export_crosswalk = measure.export_crosswalk
+
+    async def refusing_export_crosswalk(session, source_value_set_id, target_value_set_id):
+        if (source_value_set_id, target_value_set_id) == (315, 290):
+            raise error_group(
+                [
+                    PortabilityError(
+                        PortabilityErrorCode.CROSSWALK_SOURCE_DUPLICATE, "Entries[3].Source", "'Grade 9' maps twice"
+                    )
+                ]
+            )
+        return await export_crosswalk(session, source_value_set_id, target_value_set_id)
+
+    monkeypatch.setattr(measure, "export_crosswalk", refusing_export_crosswalk)
+    public = (await _measure(seed_url))["public"]
+
+    assert (public.crosswalks, public.crosswalks_exported, public.crosswalks_refused) == (6, 5, 1)
+    assert public.refusals["CROSSWALK_SOURCE_DUPLICATE: … maps twice"] == [
+        ("crosswalk 315 -> 290", "Entries[3].Source")
+    ]
+    assert "crosswalks 5 export, 1 refused" in measure.format_result(public, False)[0]
