@@ -187,10 +187,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
-- Service and Dagster images no longer trust the eMudhra emSign roots Mozilla removed in NSS 3.131.1
+- Service and Dagster images no longer trust the eMudhra emSign roots that certifi 2026.10.23 no longer carries
   (emSign Root CA - C1, emSign ECC Root CA - C3, emSign ECC Root CA - G3). `certifi` is 2026.10.23 in
   every lock file, and each Dockerfile deny-lists the roots Debian's `ca-certificates`
-  (20250419+deb13u1) still ships. emSign Root CA - G1 stays trusted, as in Mozilla's store (issue #1480)
+  (20250419+deb13u1) still ships, C1 and C3. emSign Root CA - G1 stays trusted, as in Mozilla's store (issue #1480)
+- Locally built images (`projects/*/Dockerfile2`, the docker-compose Dagster images and the Dagster+
+  hybrid code location) now carry the same emSign deny-list step as the deployed Dockerfiles, so a
+  local `docker compose` or `build-docker.sh` build no longer trusts emSign Root CA - C1 or emSign ECC
+  Root CA - C3 through Debian's `ca-certificates`. To clear out images built before this, see
+  `docs/operations/guides/clearing-stale-local-builds.md` (issue #1516)
+- The emSign deny-list step in every Dockerfile also distrusts Sectigo's Comodo AAA Services root,
+  which cross-signs the compromised emSign intermediates and which the eMudhra advisory names for
+  Debian, and fails the build if any of the four roots is still trusted under a name its `sed`
+  doesn't match. The Dagster+ hybrid agent image, on Debian 12, gets the step and `certifi`
+  2026.10.23; before this it trusted all four (issue #1516)
 - docker-compose: the MDR's post-confirm and learner-data-export service keys are passed through
   (`MDR__AUTH__SERVICE_API_KEY__POST_CONFIRM`, `MDR__AUTH__SERVICE_API_KEY__LEARNER_DATA_EXPORT`).
   MDR previously always used their built-in defaults, which could not be overridden from `.env`

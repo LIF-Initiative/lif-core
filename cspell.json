@@ -4,6 +4,9 @@
     "words": [
         "certifi",
         "Mudhra",
+        "emsign",
+        "Sectigo",
+        "subshell",
         "mediatypes",
         "hostnames",
         "toplevel",
@@ -345,7 +348,8 @@
         "dataclasses",
         "Credentialaward",
         "xyflow",
-        "stackset"
+        "stackset",
+        "startswith"
     ],
     "ignorePaths": [
         ".git/",

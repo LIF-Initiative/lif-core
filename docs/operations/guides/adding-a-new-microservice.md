@@ -78,8 +78,8 @@ app.include_router(my_endpoints.router, prefix="")
 projects/lif_my_new_service/
 ├── .dockerignore
 ├── .gitignore
-├── Dockerfile             # legacy build (some services still ship this)
-├── Dockerfile2            # current canonical Dockerfile
+├── Dockerfile             # what CI builds and deploys (.github/workflows/_deploy-service.yml)
+├── Dockerfile2            # what local docker compose and build-docker.sh build
 ├── README.md
 ├── build-docker.sh
 ├── build.sh
@@ -124,7 +124,7 @@ grep -rhn '^from lif\.' bases/lif/my_new_service/ | sort -u
 
 ### `Dockerfile2`
 
-Copy verbatim from an existing project (e.g., `projects/lif_advisor_api/Dockerfile2`), changing only `PROJECT_NAME` and the final `--port` and `uvicorn` target.
+Copy verbatim from an existing project (e.g., `projects/lif_advisor_api/Dockerfile2`), changing only `PROJECT_NAME` and the final `--port` and `uvicorn` target. Keep the step right after the runtime stage's `FROM` that distrusts the emSign roots (#1480, #1516); both `Dockerfile` and `Dockerfile2` carry it. A service CI deploys needs a `Dockerfile` too, copied from the same project.
 
 The image is built from *this project's* `pyproject.toml` and `uv.lock` — not the monorepo root. The runtime stage installs the wheel pinned to the versions in the project's `uv.lock`, and the build fails if that lock is stale. This means **a dependency must be declared in *this project's* `pyproject.toml`, not just at the monorepo root, to be available in the Docker image** — then run `uv lock` in the project directory and commit `uv.lock`. Putting `boto3` in the root `pyproject.toml` only is a known landmine.
 
