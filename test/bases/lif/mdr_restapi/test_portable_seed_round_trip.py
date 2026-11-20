@@ -6,9 +6,9 @@ A == B == C byte for byte. The installs are empty tenant schemas from clone_lif_
 sequences started at 500 and 1000, so all three hold the same content under different row Ids.
 
 Content is discovered, not listed: a model, group or crosswalk joins the round trip as soon as it
-exports, and a group or crosswalk once both of its models do. Since #1513 converted the seed, every live
-model in `public` exports except 3, 6, 14 and 29, which still have attributes with DataType entity
-(test/scripts/test_measure_export_blockers.py), so the groups and crosswalks on model 1 round-trip too.
+exports, and a group or crosswalk once both of its models do. Since #1513, every live model, group and
+crosswalk in the seed's `public` exports (test/scripts/test_measure_export_blockers.py), so all of them
+round-trip.
 """
 
 from dataclasses import dataclass
@@ -34,8 +34,8 @@ from lif.mdr_services.portability_converter import (
 from lif.mdr_sql_model.core import DataModel, TransformationGroup, ValueSet, ValueSetValue, ValueSetValueMapping
 
 INSTALLS = ("tenant_rt_one", "tenant_rt_two")
-# The seed models that export today. Raise this as #1513 migrates more of the seed.
-EXPORTING_MODELS = {1, 2, 4, 5, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 26}
+# The seed models that export: every live one since #1513.
+EXPORTING_MODELS = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 26}
 # Where each install's sequences start: above the seed's Ids, and apart from each other.
 SEQUENCE_STARTS = {"tenant_rt_one": 500, "tenant_rt_two": 1000}
 

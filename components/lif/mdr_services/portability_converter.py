@@ -6,7 +6,7 @@ Each file kind is converted in its own module; the parsing, refusals and canonic
 are in lif.mdr_portability.
 """
 
-from lif.mdr_services.crosswalk_converter import export_crosswalk, import_crosswalk
+from lif.mdr_services.crosswalk_converter import export_crosswalk, import_crosswalk, list_crosswalk_pairs
 from lif.mdr_services.mapping_group_converter import export_mapping_group, import_mapping_group
 from lif.mdr_services.model_converter import export_model, import_model
 
@@ -17,4 +17,5 @@ __all__ = [
     "import_crosswalk",
     "import_mapping_group",
     "import_model",
+    "list_crosswalk_pairs",
 ]

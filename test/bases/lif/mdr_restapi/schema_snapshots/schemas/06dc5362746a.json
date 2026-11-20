@@ -1,0 +1,382 @@
+{
+  "components": {
+    "schemas": {
+      "CFAssociation": {
+        "ActivationDate": null,
+        "Array": "No",
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 14,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 1543,
+        "Name": "CFAssociation",
+        "Notes": null,
+        "Required": "No",
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "CFAssociation",
+        "UseConsiderations": null,
+        "properties": {
+          "associationType": {
+            "description": "The type of association. This uses an enumerated vocabulary.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "destinationNodeURI": {
+            "description": "The resolvable URI for the destination node object.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "originNodeURI": {
+            "description": "The resolvable URI for the origin node object.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "uri": {
+            "description": "An unambiguous reference to the CFAssociation using a network-resolvable URI.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "CFDocument": {
+        "ActivationDate": null,
+        "Array": "No",
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 14,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 1544,
+        "Name": "CFDocument",
+        "Notes": null,
+        "Required": "No",
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "CFDocument",
+        "UseConsiderations": null,
+        "properties": {
+          "adoptionStatus": {
+            "description": "The publication status of the document.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "creator": {
+            "description": "The entity with authority that promulgates the competency framework. This is the entity that authorized or created the competency framework. It could be an education agency, higher education institution, professional body. It is the owner of the competency framework.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "description": {
+            "description": "A human readable description of the CFDocument.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "language": {
+            "description": "The default language of the text used for the content in the learning standard document (use ISO 639-2 [ISO 639]).",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "lastChangeDateTime": {
+            "description": "A system generated timestamp of the most recent change to this record. This conforms to ISO 8601 dateTime definition [ISO 8601].",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "licenseURI": {
+            "description": "A link to a legal document controlling permission to do something with the standards document.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "officialSourceURL": {
+            "description": "The URL link to the formal citation of the original achievement standards document created for humans.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "publisher": {
+            "description": "The entity responsible for making the learning standards document available.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "statusEndDate": {
+            "description": "The date the CFDocument status ended or changed to another status.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "statusStartDate": {
+            "description": "The date the CFDocument status started.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "subject": {
+            "description": "The topic or academic subject of the Document (this should use some appropriate K-12, HE, etc. based vocabulary).",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "subjectURI": {
+            "description": "A set of Link URIs denoting the set of subjects for the document as designated by the promulgating agency.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "title": {
+            "description": "The title of the CFDocument.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "uri": {
+            "description": "An unambiguous reference to the CFDocument using a network-resolvable URI.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "version": {
+            "description": "Defines the revision of the document (the nature of this versioning is an implementation issue).",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "CFItem": {
+        "ActivationDate": null,
+        "Array": "No",
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 14,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 1545,
+        "Name": "CFItem",
+        "Notes": null,
+        "Required": "No",
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "CFItem",
+        "UseConsiderations": null,
+        "properties": {
+          "CFItenTypeURL": {
+            "description": "This is the linked data location for the CFItemType.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "URI": {
+            "description": "An unambiguous reference to the CFItem using a network-resolvable URI.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "abbreviatedStatement": {
+            "description": "An abbreviated version of the Full Statement.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "alternativeLabel": {
+            "description": "An alternate 'term' for Competency. Some institutions may want to render their achievements as outcomes, or objectives, etc. Semantically they are the same as Competencies, but diversity of terms is used. This allows for the flexibility for the institution to define their own term for \"Competency\" and not being locked into it.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "conceptKeywords": {
+            "description": "The significant topicality of the CFItem using free-text keywords and phrases.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "educationLevel": {
+            "description": "The education level, grade level or primary instructional level at which a CFItem is intended.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "fullStatement": {
+            "description": "The text of the statement. The textual content that either describes a specific competency or describes a less granular group of competencies within the taxonomy of the standards document.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "humanCodingScheme": {
+            "description": "A human-referenceable code designated by the publisher to identify the item among learning standard items.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "language": {
+            "description": "The default language of the text used for the content in the learning standard document (use ISO 639-2 [ISO 639]).",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "statusEndDate": {
+            "description": "The date the CFItem status ended or changed to another status.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "statusStartDate": {
+            "description": "The date the CFItem status started.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "CFLicense": {
+        "ActivationDate": null,
+        "Array": "No",
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 14,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 1546,
+        "Name": "CFLicense",
+        "Notes": null,
+        "Required": "No",
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "CFLicense",
+        "UseConsiderations": null,
+        "properties": {
+          "licenseText": {
+            "description": "Legal license text used by the organization to convey license permissions. This may include the actual license text, or a link to a web location containing the license as a document or as text.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "CFPckgAssociation": {
+        "ActivationDate": null,
+        "Array": "No",
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 14,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 1547,
+        "Name": "CFPckgAssociation",
+        "Notes": null,
+        "Required": "No",
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "CFPckgAssociation",
+        "UseConsiderations": null,
+        "properties": {
+          "sequenceNumber": {
+            "description": "This is used to order associated objects. Associations can be created through mapping rather than strict hierarchy. As such the presentation of the list cannot be ordered by the objects in the list. They may be different based on the parent being viewed.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      }
+    }
+  },
+  "info": {
+    "description": "OpenAPI Spec",
+    "title": "Machine-Readable Schema for CASE",
+    "version": "1.0"
+  },
+  "openapi": "3.0.0",
+  "paths": {}
+}

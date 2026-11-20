@@ -124,9 +124,12 @@ workspace again brings them back in line. The proper fix, a `GET /tenants/curren
   activated (backend [chapter 10](../backend/10-extending-lif.md)).
 - **Overlay screens**: Data Extensions, and a model's "only / all / public / extensions / partner" views.
   An overlay is a model built on top of another one, and these screens show which parts are its own. ADR
-  data_model/0004 retires overlays in favour of self-contained models: on dev and in the local seed, models 17
-  and 18 have been converted (#1388, #1513), and on demo they're still overlays of model 1 until #1513 (backend
-  [chapter 3](../backend/03-data-model-and-mdr.md), "Overlays are on their way out"). Expect these screens
+  data_model/0004 retires overlays in favour of self-contained models: in the local seed, models 17 and 18
+  have been converted (#1388, #1513; backend [chapter 3](../backend/03-data-model-and-mdr.md), "Overlays are
+  gone"). In the seed, StateU LIF (17) is now Type `SourceSchema`, since the portable format has no `Type`
+  and an imported model is a source schema (#1513). So the tree lists it with the source schemas, not under
+  Org LIF, and Data Extensions (`GET /datamodels/orglif`) shows nothing. Org2 LIF (18), converted in place,
+  is still `PartnerLIF`. Expect these screens
   to change.
 
 ## Where to go next

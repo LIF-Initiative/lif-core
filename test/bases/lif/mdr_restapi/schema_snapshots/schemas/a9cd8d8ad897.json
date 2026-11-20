@@ -1,0 +1,1045 @@
+{
+  "components": {
+    "schemas": {
+      "Achievement": {
+        "ActivationDate": null,
+        "Array": "No",
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 3,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 1496,
+        "Name": "Achievement",
+        "Notes": null,
+        "Required": "No",
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "Achievement",
+        "UseConsiderations": null,
+        "properties": {
+          "AchievementType = Course": {
+            "description": "A Course is a course of study that, typically, has a shared curriculum although it may be taught to different students by different teachers. It is likely that several classes of a single course may be taught in a term.  For example, a school runs Grade 9 English in the spring term. There are four classes, each with a different 30 students, taught by 4 different teachers. However the curriculum for each of those four classes is the same – the course curriculum.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "creditsAvailable": {
+            "description": "Credit hours associated with this entity, or credit hours possible. For example 3.0.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "description": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "humanCode": {
+            "description": "The assigned course code (Subject + Catalog #)",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "level": {
+            "description": "Grade(s) for which the class is attended. The permitted vocabulary should be defined as part of the adoption and deployment process. See the Implementation Guide [OR-IG, 20] for more details on how to define/use such a vocabulary.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "name": {
+            "description": "The title of the course.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "AchievementCredential": {
+        "ActivationDate": null,
+        "Array": "No",
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 3,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 1497,
+        "Name": "AchievementCredential",
+        "Notes": null,
+        "Required": "No",
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "AchievementCredential",
+        "UseConsiderations": null,
+        "properties": {
+          "awardedDate (or issuanceDate)": {
+            "description": "Timestamp of when the credential was awarded. issuanceDate is used to determine the most recent version of a Credential in conjunction with issuer and id. Consequently, the only way to update a Credental is to update the issuanceDate, losing the date when the Credential was originally awarded. awardedDate is meant to keep this original date.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "evidence": {
+            "description": "A description of the work that the recipient did to earn the achievement. This can be a page that links out to other pages if linking directly to the work is infeasible.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "expirationDate": {
+            "description": "If the credential has some notion of expiry, this indicates a timestamp when a credential should no longer be considered valid. After this time, the credential should be considered expired.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "humanCode": {
+            "description": "Achievement is also extensible",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "image": {
+            "description": "The image representing the credential for display purposes in wallets.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "proof": {
+            "description": "If present, one or more embedded cryptographic proofs that can be used to detect tampering and verify the authorship of the credential.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "AchievementSubject": {
+        "ActivationDate": null,
+        "Array": "No",
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 3,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 1498,
+        "Name": "AchievementSubject",
+        "Notes": null,
+        "Required": "No",
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "AchievementSubject",
+        "UseConsiderations": null,
+        "properties": {
+          "activityEndDate": {
+            "description": "Academic session (term) end date.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "activityStartDate": {
+            "description": "Academic session (term) start date.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "identifier": {
+            "description": "Other identifiers for the recipient of the achievement. Either id or at least one identifier MUST be supplied.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "result": {
+            "description": "The set of results being asserted.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "Address": {
+        "ActivationDate": null,
+        "Array": "No",
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 3,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 1499,
+        "Name": "Address",
+        "Notes": null,
+        "Required": "No",
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "Address",
+        "UseConsiderations": null,
+        "properties": {
+          "address": {
+            "description": "The street address. For example, 1600 Amphitheatre Pkwy.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "addressCountry": {
+            "description": "The country. For example, USA. You can also provide the two-letter ISO 3166-1 alpha-2 country code.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "addressLocality": {
+            "description": "The locality. For example, Mountain View.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "addressRegion": {
+            "description": "The region. For example, CA.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "postalCode": {
+            "description": "The postal code. For example, 94043.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "Alignment": {
+        "ActivationDate": null,
+        "Array": "No",
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 3,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 1500,
+        "Name": "Alignment",
+        "Notes": null,
+        "Required": "No",
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "Alignment",
+        "UseConsiderations": null,
+        "properties": {
+          "Target Framework": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "alignmentType": {
+            "description": "Type of alignment, RSD, CredentialEngine,",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "target": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "targetUrl": {
+            "description": "The URL of a node in an established educational framework. When the alignment is to a CASE framework and the CASE Service support the CASE JSON-LD binding, the URL should be the 'uri' of the node document, otherwise the URL should be the CASE Service endpoint URL that returns the node JSON.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "Criteria": {
+        "ActivationDate": null,
+        "Array": "No",
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 3,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 1501,
+        "Name": "Criteria",
+        "Notes": null,
+        "Required": "No",
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "Criteria",
+        "UseConsiderations": null,
+        "properties": {},
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "Evidence": {
+        "ActivationDate": null,
+        "Array": "No",
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 3,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 1502,
+        "Name": "Evidence",
+        "Notes": null,
+        "Required": "No",
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "Evidence",
+        "UseConsiderations": null,
+        "properties": {
+          "description": {
+            "description": "A longer description of the evidence.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "id": {
+            "description": "The URL of a webpage presenting evidence of achievement or the evidence encoded as a Data URI. The schema of the webpage is undefined.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "type": {
+            "description": "The value of the type property MUST be an unordered set. One of the items MUST be the IRI 'Evidence'.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "Issuer": {
+        "ActivationDate": null,
+        "Array": "No",
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 3,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 1503,
+        "Name": "Issuer",
+        "Notes": null,
+        "Required": "No",
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "Issuer",
+        "UseConsiderations": null,
+        "properties": {
+          "Profile": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "OB3": {
+        "ActivationDate": null,
+        "Array": "No",
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 3,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 1504,
+        "Name": "OB3",
+        "Notes": null,
+        "Required": "No",
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "OB3",
+        "UseConsiderations": null,
+        "properties": {
+          "Achievement": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "Profile": {
+        "ActivationDate": null,
+        "Array": "No",
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 3,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 1505,
+        "Name": "Profile",
+        "Notes": null,
+        "Required": "No",
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "Profile",
+        "UseConsiderations": null,
+        "properties": {
+          "description": {
+            "description": "A short description of the individual or organization",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "email": {
+            "description": "A contact email address for the individual or organization.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "id": {
+            "description": "An institution's student identifier for the person, learner, publisher, issuer.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "name": {
+            "description": "Name of the organization.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "sourcedID": {
+            "description": "The individual's or organization's unique 'sourcedId' value, which is used for providing interoperability with other identity systems.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "telephone": {
+            "description": "Primary phone number for the individual or organization.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "ResultDescription": {
+        "ActivationDate": null,
+        "Array": "No",
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 3,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 1506,
+        "Name": "ResultDescription",
+        "Notes": null,
+        "Required": "No",
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "ResultDescription",
+        "UseConsiderations": null,
+        "properties": {
+          "ResultType": {
+            "description": "Enumeration of ResultDescription Result Types",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "ResultsType": {
+        "ActivationDate": null,
+        "Array": "No",
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 3,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 1507,
+        "Name": "ResultsType",
+        "Notes": null,
+        "Required": "No",
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "ResultsType",
+        "UseConsiderations": null,
+        "properties": {
+          "LetterGrade": {
+            "description": "The result is a letter grade",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "achievement": {
+        "ActivationDate": null,
+        "Array": "No",
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 3,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 1508,
+        "Name": "achievement",
+        "Notes": null,
+        "Required": "No",
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "achievement",
+        "UseConsiderations": null,
+        "properties": {
+          "@language": {
+            "description": "The language of the achievement.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "CreditsAvailable": {
+            "description": "When Achievement Type = Degree, then the credits available are the possible credits one could earn in their program/degree.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "Endorsement": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "Name": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "Tag": {
+            "description": "One or more short, human-friendly, searchable, keywords that describe the type of achievement when achievementType = Assessment",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "achievementType": {
+            "description": "The achievement is an assessment if the achievementType = Assessment",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "creator": {
+            "description": "The person or organization that created the achievement definition.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "creditsAvailable": {
+            "description": "Credit hours associated with this entity, or credit hours possible. For example 3.0.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "criteria": {
+            "description": "Criteria describing how to earn the achievement.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "description": {
+            "description": "A short description of the achievement.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "fieldOfStudy": {
+            "description": "Category, subject, area of study, discipline, or general branch of knowledge. Examples include Business, Education, Psychology, and Technology.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "humanCode": {
+            "description": "The Subject part of the humanCode  (Subject + Catalog #)",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "id": {
+            "description": "Icdentifier",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "level": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "name": {
+            "description": "The name of the achievement.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "name / description": {
+            "description": "The name and description of the achievement when the achievementType = competency",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "otherIdentifier": {
+            "description": "Use otherIdentifier for the course section ID.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "specialization": {
+            "description": "Name given to the focus, concentration, or specific area of study defined in the achievement. Examples include 'Entrepreneurship', 'Technical Communication', and 'Finance'.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "tag": {
+            "description": "One or more short, human-friendly, searchable, keywords that describe the type of achievement, when achievementType = Course",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "version": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "achievementCredential": {
+        "ActivationDate": null,
+        "Array": "No",
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 3,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 1509,
+        "Name": "achievementCredential",
+        "Notes": null,
+        "Required": "No",
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "achievementCredential",
+        "UseConsiderations": null,
+        "properties": {
+          "Issuer": {
+            "description": "A description of the individual, entity, or organization that issued the credential.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "expirationDate": {
+            "description": "If the credential has some notion of expiry, this indicates a timestamp when a credential should no longer be considered valid. After this time, the credential should be considered expired.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "issuanceDate": {
+            "description": "Timestamp of when the credential was issued.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "alignment": {
+        "ActivationDate": null,
+        "Array": "No",
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 3,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 1510,
+        "Name": "alignment",
+        "Notes": null,
+        "Required": "No",
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "alignment",
+        "UseConsiderations": null,
+        "properties": {
+          "targetType": {
+            "description": "The type of the alignment target node.  In this case it would be a targetType of CTDL.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "targetURL": {
+            "description": "",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "result": {
+        "ActivationDate": null,
+        "Array": "No",
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 3,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 1511,
+        "Name": "result",
+        "Notes": null,
+        "Required": "No",
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "result",
+        "UseConsiderations": null,
+        "properties": {
+          "achievedLevel": {
+            "description": "If the result represents an achieved rubric criterion level (e.g. Mastered), the value is the id of the RubricCriterionLevel in linked ResultDescription.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "resultDescripton": {
+            "description": "An achievement can have many result descriptions describing possible results. The value of resultDescription is the id of the result description linked to this result. The linked result description must be in the achievement that is being asserted.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "resultDescription": {
+        "ActivationDate": null,
+        "Array": "No",
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 3,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 1512,
+        "Name": "resultDescription",
+        "Notes": null,
+        "Required": "No",
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "resultDescription",
+        "UseConsiderations": null,
+        "properties": {
+          "resultType": {
+            "description": "The type of result this description represents. This is an extensible enumerated vocabulary.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "valueMax": {
+            "description": "The maximum possible value that may be asserted in a linked result.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          },
+          "valueMin": {
+            "description": "The minimum possible value that may be asserted in a linked result.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "resultType": {
+        "ActivationDate": null,
+        "Array": "No",
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 3,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 1513,
+        "Name": "resultType",
+        "Notes": null,
+        "Required": "No",
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "resultType",
+        "UseConsiderations": null,
+        "properties": {},
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      },
+      "rubricCriterionLevel": {
+        "ActivationDate": null,
+        "Array": "No",
+        "Common": null,
+        "Contributor": null,
+        "ContributorOrganization": "LIF",
+        "CreationDate": null,
+        "DataModelId": 3,
+        "Deleted": false,
+        "DeprecationDate": null,
+        "Description": null,
+        "Extension": false,
+        "ExtensionNotes": null,
+        "Id": 1514,
+        "Name": "rubricCriterionLevel",
+        "Notes": null,
+        "Required": "No",
+        "SourceModel": null,
+        "Tags": null,
+        "UniqueName": "rubricCriterionLevel",
+        "UseConsiderations": null,
+        "properties": {
+          "description": {
+            "description": "Description of the rubric criterion level.",
+            "example": "",
+            "format": "",
+            "type": "string",
+            "use_recommendations": ""
+          }
+        },
+        "required": [],
+        "type": "object",
+        "use_recommendations": "",
+        "x-mutable": false,
+        "x-queryable": false
+      }
+    }
+  },
+  "info": {
+    "description": "OpenAPI Spec",
+    "title": "Machine-Readable Schema for CLR v2 / Open Badges v3",
+    "version": "1.0"
+  },
+  "openapi": "3.0.0",
+  "paths": {}
+}
