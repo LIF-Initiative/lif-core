@@ -23,6 +23,14 @@
   all of its paths; otherwise the whole file is refused and nothing is written.
   Re-running the script is safe: a group already installed is refused with `GROUP_EXISTS` (409).
   An imported group arrives inactive (#1350).
+- **Which MDR.** Set `MDR_URL` and `MDR_API_KEY` to point the script at any MDR, for example
+  `MDR_URL=http://localhost:8012 MDR_API_KEY=changeme3` for the local stack. Without them, it
+  takes an environment name and builds the URL and the SSM key path from it. `MDR_URL` needs
+  `MDR_API_KEY` with it: the script won't send an SSM key to a URL the environment didn't produce.
+- **Which schema.** The script imports into the MDR's service schema unless you pass
+  `--schema <tenant_schema>`, which it sends as `X-API-Tenant-Schema`. The MDR honors that header
+  only for a service key with tenant routing enabled. Routing is off on the local stack, so there
+  `--schema` does nothing and the import goes to the database's default `search_path`.
 - **Old-format** files come from `GET /transformation_groups/{id}/export`. None are left at this
   level; the script would skip one.
 
